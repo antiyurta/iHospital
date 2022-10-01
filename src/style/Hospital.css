@@ -1,0 +1,12 @@
+.body {
+    margin: 24px 16px;
+}
+
+/* .ant-col .ant-form-item-label {
+    align-self: center !important;
+} */
+.pagination {
+    justify-content: center;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
