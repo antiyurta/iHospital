@@ -1,24 +1,75 @@
-import { Button, Card, Col, Radio, Row, Collapse, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Radio,
+  Row,
+  Collapse,
+  Tabs,
+  Divider,
+  Segmented,
+  Text,
+} from "antd";
 import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import male from "../../../assets/images/maleAvatar.svg";
 
 const { Panel } = Collapse;
 
-const Tab1Content = (key) => {
-  return <div>ASDASD</div>;
-};
-const items = [
-  {
-    label: "Tab 1",
-    key: "item-1",
-    children: <Tab1Content />,
-  }, // remember to pass the key prop
-  { label: "Tab 2", key: "item-2", children: "Content 2" },
-];
-
 function EMR() {
   const [cardLoading, setCardLoading] = useState(false);
+  const [segmentValue, setSegmentValue] = useState(0);
+  const Tab1Content = (key) => {
+    return (
+      <div className="items-center">
+        <Segmented
+          options={[
+            {
+              value: 0,
+              label: (
+                <div className="whitespace-normal">
+                  <div className="w-24 leading-snug">Төрөлт, өсөлт бойжилт</div>
+                </div>
+              ),
+            },
+            {
+              value: 1,
+              label: (
+                <div className="whitespace-normal">
+                  <div className="w-24 leading-snug">Өвчний түүх</div>
+                </div>
+              ),
+            },
+            { value: 2, label: "Амьдралын хэв маяг" },
+            { value: 2, label: "Амьдралын хэв маяг" },
+            { value: 2, label: "Амьдралын хэв маяг" },
+            { value: 2, label: "Амьдралын хэв маяг" },
+            { value: 2, label: "Амьдралын хэв маяг" },
+          ]}
+          value={segmentValue}
+          onChange={setSegmentValue}
+        />
+        <Divider orientation="left" orientationMargin="0">
+          Left Text with 0 orientationMargin
+        </Divider>
+      </div>
+    );
+  };
+  const Tab2Content = (key) => {
+    return <div>Tab 2</div>;
+  };
+  const items = [
+    {
+      label: "Өвчтөний түүх",
+      key: "item-1",
+      children: <Tab1Content />,
+    },
+    {
+      label: "Ерөнхий үзлэг",
+      key: "item-2",
+      children: <Tab2Content />,
+    },
+  ];
 
   const onChange = (key) => {
     console.log(key);
