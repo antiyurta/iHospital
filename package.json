@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -14,24 +15,10 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
-    "react-router-dom": "^6.4.0",
-    "react-scripts": "5.0.1",
-=======
-<<<<<<< HEAD
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
     "redux-persist": "^6.0.0",
-=======
-<<<<<<< HEAD
-    "react-scripts": "^2.1.3",
-=======
-    "react-router-dom": "^6.4.0",
-    "react-scripts": "5.0.1",
->>>>>>> ebcf3d5f9afb4a57c36886cf6ef9df01bcaecfb3
->>>>>>> c47a7d52313e576e41cdd2c429e7ea3055e006ca
->>>>>>> 37d36bffb42dce6afffb95323db96399fd3d942f
     "web-vitals": "^2.1.4"
   },
   "scripts": {
