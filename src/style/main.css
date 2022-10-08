@@ -301,11 +301,11 @@ body {
   padding-bottom: 33px;
 }
 
-.ant-menu-inline.ant-menu-root .ant-menu-item,
+/* .ant-menu-inline.ant-menu-root .ant-menu-item,
 .ant-menu-inline.ant-menu-root .ant-menu-submenu-title {
   display: block;
   padding-left: 16px !important;
-}
+} */
 
 .ant-layout.ant-layout-has-sider>.ant-layout,
 .ant-layout.ant-layout-has-sider>.ant-layout-content {

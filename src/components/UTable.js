@@ -23,12 +23,19 @@ import TextArea from 'antd/lib/input/TextArea';
 import 'moment/locale/mn';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../features/authReducer';
+
+const DEV_URL = process.env.REACT_APP_DEV_URL;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 const { Search } = Input;
 const { Option } = Select;
 
 function UTable(props) {
     const navigate = useNavigate();
+    const token = useSelector(selectCurrentToken);
     const [data, setData] = useState([]);
     const [meta, setMeta] = useState([]);
     const [view, setView] = useState([]);
@@ -70,7 +77,7 @@ function UTable(props) {
                 </div>
             ),
             onOk() {
-                Delete(props.url + '/' + id)
+                axios.delete(DEV_URL + props.url + '/' + id)
                     .then((response) => {
                         if (response.status === 200) {
                             openNofi('success', 'ADasd', 'adsad');
@@ -85,27 +92,43 @@ function UTable(props) {
     }
     const onStart = async (page) => {
         setSpinner(false);
-        props.params.page = page;
-        props.params.limit = 5;
-        await Get(props.url, props.params)
-            .then((response) => {
-                if (response.status === 200) {
-                    setSpinner(true);
-                    setData(response.data.response.data);
-                    setMeta(response.data.response.meta);
+        await axios.get(
+            DEV_URL + props.url,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "x-api-key": API_KEY
+                },
+                params: {
+                    page: page,
+                    limit: 5,
                 }
-            }).catch((error) => {
-                if (error.response.status === 401) {
-                    localStorage.removeItem('accessToken');
-                    navigate('/login');
-                }
-                openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
-            })
+            }
+        ).then((response) => {
+            if (response.status === 200) {
+                setSpinner(true);
+                setData(response.data.response.data);
+                setMeta(response.data.response.meta);
+            }
+        }).catch((error) => {
+            if (error.response.status === 401) {
+
+            }
+        })
     }
     const onFinish = async (data) => {
         setIsConfirmLoading(true);
         editMode ?
-            await Patch(props.url, id, data).then((response) => {
+            await axios.patch(
+                DEV_URL + props.url + '/' + id,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "x-api-key": API_KEY
+                    },
+                },
+                data
+            ).then((response) => {
                 if (response.status === 200) {
                     openNofi('success', 'ADasd', 'adsad');
                     onStart();
@@ -119,7 +142,16 @@ function UTable(props) {
                 openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
             })
             :
-            await Post(props.url, data).then((response) => {
+            await axios.patch(
+                DEV_URL + props.url,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "x-api-key": API_KEY
+                    },
+                },
+                data
+            ).then((response) => {
                 if (response.status === 201) {
                     openNofi('success', 'asdas', 'dsada');
                     onStart();
@@ -226,6 +258,7 @@ function UTable(props) {
                 </div>
                 <div>
                     <Pagination
+                        size="small"
                         className='pagination'
                         pageSize={5}
                         total={meta.itemCount}
@@ -309,7 +342,7 @@ function UTable(props) {
                                                 name={element.index}
                                                 valuePropName="checked"
                                             >
-                                                <Switch checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                                                <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                                             </Form.Item>
                                         }
                                         {
