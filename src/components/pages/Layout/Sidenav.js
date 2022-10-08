@@ -18,45 +18,25 @@ function Sidenav({ color }) {
   const SideNavItems = [
     {
       key: 1,
+      icon: <SettingOutlined />,
       label: (
-        <>
-          <span
-            className="icon"
-          >
-            <SettingOutlined />
-          </span>
-          Админ
-        </>
+        <p className="font-bold">Админ</p>
       ),
       children: [
         {
           key: '1-1',
+          icon: <ShopOutlined />,
           label: (
-            <NavLink to='/hospital'>
-              <span
-                className="icon"
-                style={{
-                  background: page === "/hospital" ? color : "",
-                }}
-              >
-                <ShopOutlined />
-              </span>
+            <NavLink to='/hospital' className={"font-bold"}>
               Байгууллага
             </NavLink>
           ),
         },
         {
           key: '1-2',
+          icon: <UsergroupAddOutlined />,
           label: (
             <NavLink to='/structure'>
-              <span
-                className="icon"
-                style={{
-                  background: page === "/structure" ? color : "",
-                }}
-              >
-                <UsergroupAddOutlined />
-              </span>
               Тасаг нэгж Албан нэгж
             </NavLink>
           ),
@@ -290,10 +270,7 @@ function Sidenav({ color }) {
 
   return (
     <>
-      <div className="brand" style={{ textAlign: "center" }}>
-        <img src={logo} alt="" />
-      </div>
-      <hr />
+      <img className="h-8 w-40 m-4 bg-transparent" src={logo} alt="logo" />
       <Menu theme="light" mode="inline" items={SideNavItems} />
     </>
   );

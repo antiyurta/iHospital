@@ -58,9 +58,8 @@ const Main = () => {
         />
     );
     return (
-        <Layout className='layout-dashboard'>
+        <Layout>
             <Sider
-                collapsedWidth="30"
                 trigger={
                     React.createElement(
                         collapsed ? RightOutlined : LeftOutlined,
@@ -72,17 +71,16 @@ const Main = () => {
                 collapsible
                 collapsed={collapsed}
                 theme="light"
-                className='sider-primary sidebarA'
             >
                 <Sidenav color={sidenavColor} />
             </Sider>
             <Layout className="site-layout">
-                <Header className={collapsed ? "dad" : "ada"}>
+                <Header>
                     <Row gutter={[24, 0]}>
                         <Col span={22}>
-                            <Button type="primary" onClick={() => setCollapsed(!collapsed)} >
+                            {/* <Button type="primary" onClick={() => setCollapsed(!collapsed)} >
                                 {collapsed ? <MenuUnfoldOutlined style={{ fontSize: '18px' }} /> : <MenuFoldOutlined style={{ fontSize: '18px' }} />}
-                            </Button>
+                            </Button> */}
                         </Col>
                         {
                             <Col span={2}>
@@ -90,8 +88,8 @@ const Main = () => {
                                     <Dropdown overlay={menu} trigger={['click']} arrow={{
                                         pointAtCenter: true,
                                     }}>
-                                        <Button type="link" className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                                            <img style={{ height: 40, width: 40 }} src={male} alt="avatar" />
+                                        <Button type="link" className="ant-dropdown-link h-16 w-16" onClick={(e) => e.preventDefault()}>
+                                            <img src={male} alt="avatar" />
                                         </Button>
                                     </Dropdown>
                                 </div>
@@ -99,7 +97,7 @@ const Main = () => {
                         }
                     </Row>
                 </Header>
-                <Content className={collapsed ? "dad" : "ada"}>{<Outlet />}</Content>
+                <Content className="bg-slate-50">{<Outlet />}</Content>
             </Layout>
         </Layout >
     );
