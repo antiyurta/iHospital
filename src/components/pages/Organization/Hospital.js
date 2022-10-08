@@ -85,14 +85,12 @@ const column =
         }
     ];
 function Hospital() {
-    const params = {
-    }
     return (
         <div className='body'>
             <div className="tabled">
                 <Row gutter={[24, 0]}>
                     <Col xs="24" xl={24}>
-                        <UTable title={'Байгууллага'} url={'organization/hospital'} params={params} column={column} width='80%' />
+                        <UTable title={'Байгууллага'} url={'organization/hospital'} column={column} width='80%' />
                     </Col>
                 </Row>
             </div>
