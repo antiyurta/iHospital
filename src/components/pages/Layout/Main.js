@@ -9,7 +9,9 @@ import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     PoweroffOutlined,
-    UserOutlined
+    UserOutlined,
+    RightOutlined,
+    LeftOutlined
 } from "@ant-design/icons";
 
 const { Header, Content, Sider } = Layout;
@@ -59,7 +61,14 @@ const Main = () => {
         <Layout className='layout-dashboard'>
             <Sider
                 collapsedWidth="30"
-                trigger={null}
+                trigger={
+                    React.createElement(
+                        collapsed ? RightOutlined : LeftOutlined,
+                        {
+                            className: 'trigger',
+                            onClick: () => setCollapsed(!collapsed),
+                        }
+                    )}
                 collapsible
                 collapsed={collapsed}
                 theme="light"
@@ -82,7 +91,7 @@ const Main = () => {
                                         pointAtCenter: true,
                                     }}>
                                         <Button type="link" className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                                            <img style={{ height: 40 }} src={male} alt="avatar" />
+                                            <img style={{ height: 40, width: 40 }} src={male} alt="avatar" />
                                         </Button>
                                     </Dropdown>
                                 </div>

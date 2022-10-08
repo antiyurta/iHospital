@@ -29,10 +29,13 @@ import Directory from './components/pages/reference/Directory';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import History from './components/History';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './features/PrivateRoute';
 //service start
 import Examination from './components/pages/service/Examination';
 //service end
+//emr start
+import EMR from './components/pages/EMR/emr';
+//emr end
 
 function App() {
   return (
@@ -40,6 +43,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route element={<Main />}>
+          <Route path='/emr' element={<EMR />} />
           <Route path='/' element={<Home />} />
           <Route path='/hospital' element={<PrivateRoute><Hospital /></PrivateRoute>} />
           <Route path='/structure' element={<PrivateRoute><Structure /></PrivateRoute>} />

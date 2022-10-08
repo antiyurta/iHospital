@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
     Layout,
     Menu,
@@ -16,7 +16,8 @@ import Logo from '../assets/logo/logo.png';
 import signinbg from '../assets/logo/demo4.png';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import MainContext from "../context/MainContext";
+import { useDispatch } from "react-redux";
+import { login } from "../features/authReducer";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -39,13 +40,13 @@ const MenuNav = [
 ];
 
 function Login() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const MainContextState = useContext(MainContext);
     const onFinish = (values) => {
         axios.post(process.env.REACT_APP_DEV_URL + "authentication/login", values, { headers: { "X-API-KEY": process.env.REACT_APP_API_KEY } })
             .then((response) => {
                 if (response.status === 200) {
-                    localStorage.setItem('accessToken', response.data.response.accessToken);
+                    dispatch(login(response.data.response.accessToken));
                     navigate('/profile');
                 }
             }).catch((err) => {
@@ -113,6 +114,7 @@ function Login() {
                                 <Form.Item>
                                     <Button
                                         type="primary"
+                                        className="bg-sky-700"
                                         htmlType="submit"
                                         style={{ width: "100%" }}
                                     >
