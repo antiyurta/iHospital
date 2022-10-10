@@ -1,8 +1,10 @@
+//EMR -> Явцын үзлэг -> Ерөнхий үзлэг
 import React from "react";
-import { Col, Radio, Row, Divider, Typography, Input } from "antd";
+import { Col, Radio, Row, Divider, Typography, Input, Button } from "antd";
 import { INPUT_HEIGHT } from "../../../constant";
+import { blue } from "@ant-design/colors";
 
-export default function GeneralInspection() {
+export default function GeneralInspection(props) {
   const { TextArea } = Input;
   const { Text } = Typography;
   return (
@@ -225,6 +227,15 @@ export default function GeneralInspection() {
         style={{ padding: 5 }}
         placeholder="Сэтгэцийн байдал"
       />
+      <Row className="mt-2">
+        <Button
+          type="primary"
+          onClick={() => console.log("SAVED TAB 2")}
+          style={{ backgroundColor: blue.primary }}
+        >
+          Хадгалах
+        </Button>
+      </Row>
     </div>
   );
 }
