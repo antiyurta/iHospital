@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Card,
-  Col,
-  Radio,
-  Row,
-  Collapse,
-  Tabs,
-  Tag,
-  Table,
-  Typography,
-} from "antd";
+import { Collapse } from "antd";
 import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
 
 export default function ProgressNotes(props) {

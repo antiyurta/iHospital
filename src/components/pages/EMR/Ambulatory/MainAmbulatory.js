@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Card,
-  Col,
-  Radio,
-  Row,
-  Collapse,
-  Tabs,
-  Tag,
-  Table,
-  Typography,
-} from "antd";
+import { Tabs } from "antd";
 import ProgressNotes from "./ProgressNotes";
 
 export default function MainAmbulatory() {

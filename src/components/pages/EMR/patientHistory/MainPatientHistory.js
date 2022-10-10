@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Card,
-  Col,
-  Radio,
-  Row,
-  Collapse,
-  Tabs,
-  Tag,
-  Table,
-  Typography,
-} from "antd";
+import { Tabs, Tag } from "antd";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
