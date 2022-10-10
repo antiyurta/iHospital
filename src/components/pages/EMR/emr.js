@@ -117,8 +117,8 @@ function EMR() {
               bodyStyle={{
                 paddingTop: 0,
                 paddingBottom: 16,
-                minHeight: 200,
-                maxHeight: 400,
+                minHeight: 400,
+                maxHeight: 600,
                 overflowX: "hidden",
                 overflowY: "scroll",
               }}
