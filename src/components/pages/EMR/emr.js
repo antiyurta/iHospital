@@ -1,62 +1,148 @@
 import {
-  Button,
   Card,
   Col,
   Radio,
   Row,
   Collapse,
   Tabs,
-  Divider,
-  Segmented,
-  Text,
+  Tag,
+  Table,
+  Typography,
 } from "antd";
 import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import male from "../../../assets/images/maleAvatar.svg";
-
-const { Panel } = Collapse;
+import Step1 from "./patientHistory/Step1";
+import Step2 from "./patientHistory/Step2";
+import Step3 from "./patientHistory/Step3";
+import Step4 from "./patientHistory/Step4";
+import Step5 from "./patientHistory/Step5";
+import Step6 from "./patientHistory/Step6";
+import Step7 from "./patientHistory/Step7";
+import Step8 from "./patientHistory/Step8";
+import GeneralInspection from "./GeneralInspection";
 
 function EMR() {
+  const { Panel } = Collapse;
+  const { CheckableTag } = Tag;
+  const { Text } = Typography;
   const [cardLoading, setCardLoading] = useState(false);
-  const [segmentValue, setSegmentValue] = useState(0);
+  const [selectedTags, setSelectedTags] = useState({
+    value: 0,
+    label: "Төрөлт, өсөлт бойжилт",
+  });
+  useEffect(() => {}, []);
+
+  const handleChange = (tag, checked) => {
+    setSelectedTags(tag);
+  };
+
+  const tagsData = [
+    { value: 0, label: "Төрөлт, өсөлт бойжилт" },
+    { value: 1, label: "Өвчний түүх" },
+    { value: 2, label: "Амьдралын хэв маяг" },
+    { value: 3, label: "Амьдралын нөхцөл" },
+    { value: 4, label: "Харшил" },
+    { value: 5, label: "Эмийн хэрэглээ" },
+    { value: 6, label: "Тархвар зүйн асуумж" },
+    { value: 7, label: "Удамшлын асуумж" },
+  ];
+  const columns = [
+    {
+      title: "Огноо",
+      dataIndex: "date",
+      key: "date",
+      className: "bg-white",
+    },
+    {
+      title: "Асуудал",
+      dataIndex: "problem",
+      key: "problem",
+      className: "bg-white",
+    },
+  ];
+  const data = [
+    {
+      key: "1",
+      date: "2022-10-01",
+      problem: "Самарны харшилтай",
+    },
+    {
+      key: "2",
+      date: "2022-09-01",
+      problem: "Тууралт",
+    },
+  ];
   const Tab1Content = (key) => {
     return (
       <div className="items-center">
-        <Segmented
-          options={[
-            {
-              value: 0,
-              label: (
-                <div className="whitespace-normal">
-                  <div className="w-24 leading-snug">Төрөлт, өсөлт бойжилт</div>
-                </div>
-              ),
-            },
-            {
-              value: 1,
-              label: (
-                <div className="whitespace-normal">
-                  <div className="w-24 leading-snug">Өвчний түүх</div>
-                </div>
-              ),
-            },
-            { value: 2, label: "Амьдралын хэв маяг" },
-            { value: 2, label: "Амьдралын хэв маяг" },
-            { value: 2, label: "Амьдралын хэв маяг" },
-            { value: 2, label: "Амьдралын хэв маяг" },
-            { value: 2, label: "Амьдралын хэв маяг" },
-          ]}
-          value={segmentValue}
-          onChange={setSegmentValue}
-        />
-        <Divider orientation="left" orientationMargin="0">
-          Left Text with 0 orientationMargin
-        </Divider>
+        {tagsData.map((tag, index) => {
+          return (
+            <CheckableTag
+              key={tag.value}
+              checked={selectedTags.value == tag.value}
+              onChange={(checked) => handleChange(tag, checked)}
+              color="red"
+              style={{
+                backgroundColor:
+                  selectedTags.value == tag.value ? "#1890ff" : "#d9d9d9",
+                marginBottom: 5,
+              }}
+            >
+              {tag.label}
+            </CheckableTag>
+          );
+        })}
+        {selectedTags.value == tagsData[0].value ? (
+          <Step1 nextBtn={() => handleChange(tagsData[1])} />
+        ) : null}
+        {selectedTags.value == tagsData[1].value ? (
+          <Step2
+            nextBtn={() => handleChange(tagsData[2])}
+            backBtn={() => handleChange(tagsData[0])}
+          />
+        ) : null}
+        {selectedTags.value == tagsData[2].value ? (
+          <Step3
+            nextBtn={() => handleChange(tagsData[3])}
+            backBtn={() => handleChange(tagsData[1])}
+          />
+        ) : null}
+        {selectedTags.value == tagsData[3].value ? (
+          <Step4
+            nextBtn={() => handleChange(tagsData[4])}
+            backBtn={() => handleChange(tagsData[2])}
+          />
+        ) : null}
+        {selectedTags.value == tagsData[4].value ? (
+          <Step5
+            nextBtn={() => handleChange(tagsData[5])}
+            backBtn={() => handleChange(tagsData[3])}
+          />
+        ) : null}
+        {selectedTags.value == tagsData[5].value ? (
+          <Step6
+            nextBtn={() => handleChange(tagsData[6])}
+            backBtn={() => handleChange(tagsData[4])}
+          />
+        ) : null}
+        {selectedTags.value == tagsData[6].value ? (
+          <Step7
+            nextBtn={() => handleChange(tagsData[7])}
+            backBtn={() => handleChange(tagsData[5])}
+          />
+        ) : null}
+        {selectedTags.value == tagsData[7].value ? (
+          <Step8
+            nextBtn={() => console.log("SAVED")}
+            backBtn={() => handleChange(tagsData[6])}
+          />
+        ) : null}
       </div>
     );
   };
   const Tab2Content = (key) => {
-    return <div>Tab 2</div>;
+    return <GeneralInspection />;
   };
   const items = [
     {
@@ -86,7 +172,7 @@ function EMR() {
     <Row gutter={[8, 8]}>
       <Col span={12}>
         <Row gutter={[8, 8]}>
-          <Col span={24}>
+          <Col span={14}>
             <Card
               bordered={false}
               title={
@@ -105,37 +191,53 @@ function EMR() {
                 </Col>
                 <Col span={16}>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">Овог:</span>
-                    <span className="font-bold ml-2 w-3/4">Ширчиндэмбэрэл</span>
+                    <span className="w-1/6">Овог:</span>
+                    <span className="font-bold ml-2">Ширчиндэмбэрэл</span>
                   </label>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">Нэр:</span>
-                    <span className="font-bold ml-2 w-3/4">Амарбат</span>
+                    <span className="w-1/6">Нэр:</span>
+                    <span className="font-bold ml-2">Амарбат</span>
                   </label>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">Хүйс:</span>
-                    <span className="font-bold ml-2 w-3/4">Эр</span>
+                    <span className="w-1/6">Хүйс:</span>
+                    <span className="font-bold ml-2">Эр</span>
                   </label>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">Нас:</span>
-                    <span className="font-bold ml-2 w-3/4">25</span>
+                    <span className="w-1/6">Нас:</span>
+                    <span className="font-bold ml-2">25</span>
                   </label>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">РД:</span>
-                    <span className="font-bold ml-2 w-3/4">ЙЮ97043019</span>
+                    <span className="w-1/6">РД:</span>
+                    <span className="font-bold ml-2">ЙЮ97043019</span>
                   </label>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">Утас:</span>
-                    <span className="font-bold ml-2 w-3/4">86681325</span>
+                    <span className="w-1/6">Утас:</span>
+                    <span className="font-bold ml-2">86681325</span>
                   </label>
                   <label className="w-full flex mb-2">
-                    <span className="w-1/12">Хаяг:</span>
-                    <span className="font-bold ml-2 w-3/4">
+                    <span className="w-1/6">Хаяг:</span>
+                    <span className="font-bold ml-2">
                       Улаанбаатар, Баянзүрх, 8 Хороо, 68-50
                     </span>
                   </label>
                 </Col>
               </Row>
+            </Card>
+          </Col>
+          <Col span={10}>
+            <Card
+              bordered={false}
+              title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
+              className="header-solid h-full"
+              loading={cardLoading}
+            >
+              <Table
+                columns={columns}
+                dataSource={data}
+                pagination={false}
+                size="small"
+                sticky={false}
+              />
             </Card>
           </Col>
           <Col span={24}>
@@ -275,9 +377,6 @@ function EMR() {
           bodyStyle={{
             paddingTop: 0,
             paddingBottom: 16,
-            maxHeight: 200,
-            minHeight: 200,
-            height: 200,
           }}
           extra={
             <>
