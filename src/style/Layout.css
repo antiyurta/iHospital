@@ -15,8 +15,11 @@
 }
 
 .ant-layout {
-  background: #f8fafc !important;
+  background: #ffffff !important;
   height: 100vh !important;
+}
+.ant-layout-header {
+  height: 48px;
 }
 
 .trigger:hover {

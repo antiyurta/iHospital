@@ -36,6 +36,10 @@ import Examination from './components/pages/service/Examination';
 //emr start
 import EMR from './components/pages/EMR/emr';
 //emr end
+// inpatient HEWTENT start
+import Inpatient from './components/pages/Inpatient/inpatient';
+// inpatient HEWTEN end
+
 
 function App() {
   return (
@@ -43,6 +47,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route element={<Main />}>
+          <Route path='/inpatient' element={<Inpatient />} />
           <Route path='/emr' element={<EMR />} />
           <Route path='/' element={<Home />} />
           <Route path='/hospital' element={<PrivateRoute><Hospital /></PrivateRoute>} />
@@ -69,7 +74,7 @@ function App() {
             <Route path='/examination' element={<PrivateRoute><Examination /></PrivateRoute>} />
           </Route>
           <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path='/history' element={  <PrivateRoute><History /></PrivateRoute>} />
+          <Route path='/history' element={<PrivateRoute><History /></PrivateRoute>} />
         </Route>
       </Routes>
     </div>
