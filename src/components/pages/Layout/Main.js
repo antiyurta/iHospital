@@ -1,43 +1,59 @@
 import React, { useState } from "react";
 import '../../../style/Layout.css'
+import '../../../style/Hospital.css'
 import { Button, Layout, Dropdown, Row, Col, Menu } from "antd";
 import Sidenav from "./Sidenav";
 import male from '../../../assets/images/maleAvatar.svg';
-import { useNavigate, Outlet } from "react-router-dom";
-import { Post } from "../../comman";
+import { useNavigate, Outlet, NavLink } from "react-router-dom";
+import { selectCurrentToken, logout } from '../../../features/authReducer';
+import { useDispatch, useSelector } from "react-redux";
 import {
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
     PoweroffOutlined,
     UserOutlined,
     RightOutlined,
     LeftOutlined
 } from "@ant-design/icons";
+import axios from "axios";
+import logo from '../../../assets/logo/logo.png'
 
 const { Header, Content, Sider } = Layout;
-
-const logout = () => {
-    Post('authentication/logout');
-}
+const DEV_URL = process.env.REACT_APP_DEV_URL;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 const Main = () => {
     const [sidenavColor] = useState("#1890ff");
     const [collapsed, setCollapsed] = useState(false);
+    const token = useSelector(selectCurrentToken);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleMenuClick = (e) => {
         if (e.key == 2) {
-            logout();
-            localStorage.removeItem('accessToken');
+            logoutt();
+            dispatch(logout());
             navigate('/login');
         }
     };
+
+    const logoutt = () => {
+        axios.post(DEV_URL + 'authentication/logout',
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "x-api-key": API_KEY
+                },
+            }
+        )
+    }
 
     const menu = (
         <Menu
             onClick={handleMenuClick}
             items={[
                 {
-                    label: 'Тохиргоо',
+                    label: (
+                        <NavLink to='/profile'>
+                            Тохиргоо
+                        </NavLink>),
                     key: '1',
                     icon: <UserOutlined />,
                 },
@@ -45,59 +61,50 @@ const Main = () => {
                     key: '2',
                     label: 'Гарах',
                     icon: <PoweroffOutlined style={{ color: 'red' }} />,
-                },
-                // {
-                //     key: '3',
-                //     label: (
-                //         <button>
-                //             Гарах
-                //         </button>
-                //     )
-                // }
+                }
             ]}
         />
     );
     return (
         <Layout>
-            <Sider
-                trigger={
-                    React.createElement(
-                        collapsed ? RightOutlined : LeftOutlined,
-                        {
-                            className: 'trigger',
-                            onClick: () => setCollapsed(!collapsed),
-                        }
-                    )}
-                collapsible
-                collapsed={collapsed}
-                theme="light"
-            >
-                <Sidenav color={sidenavColor} />
-            </Sider>
-            <Layout className="site-layout">
-                <Header>
-                    <Row gutter={[24, 0]}>
-                        <Col span={22}>
-                            {/* <Button type="primary" onClick={() => setCollapsed(!collapsed)} >
-                                {collapsed ? <MenuUnfoldOutlined style={{ fontSize: '18px' }} /> : <MenuFoldOutlined style={{ fontSize: '18px' }} />}
-                            </Button> */}
-                        </Col>
-                        {
-                            <Col span={2}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <Dropdown overlay={menu} trigger={['click']} arrow={{
-                                        pointAtCenter: true,
-                                    }}>
-                                        <Button type="link" className="ant-dropdown-link h-16 w-16" onClick={(e) => e.preventDefault()}>
-                                            <img src={male} alt="avatar" />
-                                        </Button>
-                                    </Dropdown>
-                                </div>
-                            </Col>
-                        }
-                    </Row>
-                </Header>
-                <Content className="bg-slate-50">{<Outlet />}</Content>
+            <Header className="bg-transparent my-3 mx-5 p-0">
+                <div className="float-left">
+                    <img className="h-16 w-48 bg-transparent float-left" src={logo} alt="logo" />
+                </div>
+                <div className="float-right">
+                    <Dropdown overlay={menu} trigger={['click']} arrow={{
+                        pointAtCenter: true,
+                    }}>
+                        <Button type="link" className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+                            <img className="h-10 w-10" src={male} alt="avatar" />
+                        </Button>
+                    </Dropdown>
+                </div>
+            </Header>
+            <Layout className="ant-layout">
+                <Sider
+                    trigger={
+                        React.createElement(
+                            collapsed ? RightOutlined : LeftOutlined,
+                            {
+                                className: 'trigger',
+                                onClick: () => setCollapsed(!collapsed),
+                            }
+                        )}
+                    collapsible
+                    collapsed={collapsed}
+                    theme="light"
+                    className="bg-slate-50"
+                >
+                    <Sidenav color={sidenavColor} />
+                </Sider>
+                <Content className="bg-slate-50">
+                    <div className='body'>
+                        <div className="tabled">
+                            {<Outlet />}
+                        </div>
+                    </div>
+                </Content>
             </Layout>
         </Layout >
     );

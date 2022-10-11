@@ -1,7 +1,6 @@
 import React from "react";
 import { Menu } from "antd";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import logo from "../../../assets/logo/logo.png";
 import {
   InfoCircleOutlined,
   HomeOutlined,
@@ -110,15 +109,12 @@ function Sidenav({ color }) {
   ];
 
   return (
-    <>
-      <img className="h-8 w-40 m-4 bg-transparent" src={logo} alt="logo" />
-      <Menu
-        theme="light"
-        mode="inline"
-        items={SideNavItems}
-        inlineIndent={10}
-      />
-    </>
+    <Menu
+      theme="light"
+      mode="inline"
+      items={SideNavItems}
+      inlineIndent={10}
+    />
   );
 }
 

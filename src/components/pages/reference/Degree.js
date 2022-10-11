@@ -46,18 +46,12 @@ const column = [
 ]
 
 function Degree() {
-    const params = {
-    }
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="24" xl={24}>
-                        <UTable title={'Зэрэг'} url={'reference/degree'} params={params} column={column} width='50%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="24" xl={24}>
+                <UTable title={'Зэрэг'} url={'reference/degree'} column={column} width='50%' />
+            </Col>
+        </Row>
     )
 }
 export default Degree;

@@ -180,21 +180,17 @@ function CountryDictionary() {
         page: 1,
     }
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="12" xl={12}>
-                        <UTable title={'Улс'} url={'reference/country'} params={CountryParams} column={CountryColumn} width='50%' />
-                    </Col>
-                    <Col xs="12" xl={12}>
-                        <UTable title={'Аймаг/ Хот'} url={'reference/country'} params={ProviceParams} column={ProviceColumn} width='50%' />
-                    </Col>
-                    <Col xs={12} xl={12}>
-                        <UTable title={'Сум / Дүүрэг'} url={'reference/country'} params={TownParams} column={TownColumn} width='50%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="12" xl={12}>
+                <UTable title={'Улс'} url={'reference/country'} params={CountryParams} column={CountryColumn} width='50%' />
+            </Col>
+            <Col xs="12" xl={12}>
+                <UTable title={'Аймаг/ Хот'} url={'reference/country'} params={ProviceParams} column={ProviceColumn} width='50%' />
+            </Col>
+            <Col xs={12} xl={12}>
+                <UTable title={'Сум / Дүүрэг'} url={'reference/country'} params={TownParams} column={TownColumn} width='50%' />
+            </Col>
+        </Row>
     )
 }
 export default CountryDictionary;

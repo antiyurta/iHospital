@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import UTable from "../../UTable";
 
 function Directory() {
-    const [data, setData] = useState([{ id: 1, label: 'ICD10' }, { id:2, label: 'ICD9' }]);
+    const [data, setData] = useState([{ id: 1, label: 'ICD10' }, { id: 2, label: 'ICD9' }]);
     const column = [
         {
             index: 'name',
@@ -31,15 +31,11 @@ function Directory() {
     ]
 
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="24" xl={24}>
-                        <UTable title={'directories'} url={'reference/directories'} column={column} width='80%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="24" xl={24}>
+                <UTable title={'directories'} url={'reference/directories'} column={column} width='80%' />
+            </Col>
+        </Row>
     )
 }
 export default Directory;

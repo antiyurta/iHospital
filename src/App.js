@@ -69,7 +69,7 @@ function App() {
             <Route path='/examination' element={<PrivateRoute><Examination /></PrivateRoute>} />
           </Route>
           <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path='/history' element={<PrivateRoute><History /></PrivateRoute>} />
+          <Route path='/history' element={  <PrivateRoute><History /></PrivateRoute>} />
         </Route>
       </Routes>
     </div>

@@ -6,12 +6,15 @@ import { EditOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CheckOutlined,
 import axios from 'axios';
 import 'moment/locale/mn';
 import mn from 'antd/es/calendar/locale/mn_MN';
+import { selectCurrentToken } from '../../../features/authReducer';
+import { useSelector } from "react-redux";
 const { Search } = Input;
 const { Option } = Select;
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 function Examination() {
     const scrollRef = useRef();
+    const token = useSelector(selectCurrentToken);
     const [form] = Form.useForm();
     const [typeForm] = Form.useForm();
     const [examinations, setExaminations] = useState([]);
@@ -41,7 +44,13 @@ function Examination() {
         setAddModal(true);
     }
     const view = async (id) => {
-        await Get(`service/examination/${id}`)
+        await axios.get(DEV_URL + "service/examination/" + id,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "x-api-key": API_KEY
+                },
+            })
             .then((response) => {
                 setExamination(response.data.response);
                 setViewModal(true);
@@ -52,8 +61,6 @@ function Examination() {
     const edit = async (row) => {
         setEditMode(true);
         setAddModal(true);
-        const eprice = await Get(`service/eprice/${row.epriceId}`);
-        console.log(eprice);
         form.setFieldsValue(row);
     }
     const deleteModal = (id) => {
@@ -87,7 +94,7 @@ function Examination() {
     const getExamination = async (page) => {
         await axios.get(DEV_URL + 'service/examination', {
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+                "Authorization": `Bearer ${token}`,
                 "x-api-key": API_KEY
             },
             params: {
@@ -116,7 +123,7 @@ function Examination() {
     useEffect(() => {
         ScrollRef(scrollRef);
         getExamination(1);
-        getExaminationType();
+        // getExaminationType();
     }, [])
     return (
         <>
@@ -185,13 +192,13 @@ function Examination() {
                 width="80%"
             >
                 <Descriptions bordered>
-                    <Descriptions.Item label={'Шинэжилгээний Төрөл'}>{examination.etypes?.name}</Descriptions.Item>
+                    <Descriptions.Item label={'Шинэжилгээний Төрөл'}>{examination.types?.name}</Descriptions.Item>
                     <Descriptions.Item label={'Шинэжилгээний Нэр'}>{examination.name}</Descriptions.Item>
                     <Descriptions.Item label={'Даатгал'}>{examination.hasInsurance ? <CheckOutlined style={{ color: 'green' }} /> : <CloseOutlined style={{ color: 'red' }} />}</Descriptions.Item>
                     <Descriptions.Item label={'Идэвхтэй эсэх'}>{examination.isActive ? <CheckOutlined style={{ color: 'green' }} /> : <CloseOutlined style={{ color: 'red' }} />}</Descriptions.Item>
-                    <Descriptions.Item label={'Үнэ'}>{examination.eprices?.price}</Descriptions.Item>
-                    <Descriptions.Item label={'Хэвтэнд ашиглах үнэ'}>{examination.eprices?.inpatientPrice}</Descriptions.Item>
-                    <Descriptions.Item label={'Үнэ ашигласан огнооF'}>{examination.eprices?.begindate}</Descriptions.Item>
+                    <Descriptions.Item label={'Үнэ'}>{examination.prices?.price}</Descriptions.Item>
+                    <Descriptions.Item label={'Хэвтэнд ашиглах үнэ'}>{examination?.prices?.inpatientPrice}</Descriptions.Item>
+                    <Descriptions.Item label={'Үнэ ашигласан огноо'}>{examination?.prices?.createdAt}</Descriptions.Item>
                 </Descriptions>
             </Modal>
             <Modal
@@ -245,7 +252,7 @@ function Examination() {
                                 name="isActive"
                                 valuePropName="checked"
                             >
-                                <Switch checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                                <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -254,7 +261,7 @@ function Examination() {
                                 name="hasInsurance"
                                 valuePropName="checked"
                             >
-                                <Switch checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                                <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                             </Form.Item>
                         </Col>
                         <Col span={12}>

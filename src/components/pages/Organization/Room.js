@@ -46,15 +46,11 @@ const column = [
 
 function Room() {
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="24" xl={24}>
-                        <UTable title={'Өрөө'} url={'organization/room'} column={column} width='30%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="24" xl={24}>
+                <UTable title={'Өрөө'} url={'organization/room'} column={column} width='30%' />
+            </Col>
+        </Row>
     )
 }
 export default Room;

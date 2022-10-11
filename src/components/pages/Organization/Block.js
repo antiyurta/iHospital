@@ -39,15 +39,11 @@ function Block() {
         getFloor();
     }, [])
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="24" xl={24}>
-                        <UTable title={'Блок'} url={'organization/block'} column={column} width='20%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="24" xl={24}>
+                <UTable title={'Блок'} url={'organization/block'} column={column} width='20%' />
+            </Col>
+        </Row>
     )
 }
 export default Block;

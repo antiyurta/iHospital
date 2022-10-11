@@ -177,15 +177,11 @@ function Employee() {
     const params = {
     }
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="24" xl={24}>
-                        <UTable title={'Ажилтан'} url={'organization/employee'} params={params} column={column} width='80%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="24" xl={24}>
+                <UTable title={'Ажилтан'} url={'organization/employee'} params={params} column={column} width='80%' />
+            </Col>
+        </Row>
     )
 }
 export default Employee;

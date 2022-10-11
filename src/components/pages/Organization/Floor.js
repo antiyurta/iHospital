@@ -14,18 +14,12 @@ const column = [
 ]
 
 function Floor() {
-    const params = {
-    }
     return (
-        <div className='body'>
-            <div className="tabled">
-                <Row gutter={[24, 0]}>
-                    <Col xs="24" xl={24}>
-                        <UTable title={'Давхар'} url={'organization/floor'} params={params} column={column} width='20%' />
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Row gutter={[24, 0]}>
+            <Col xs="24" xl={24}>
+                <UTable title={'Давхар'} url={'organization/floor'} column={column} width='20%' />
+            </Col>
+        </Row>
     )
 }
 export default Floor;
