@@ -47,8 +47,22 @@ function UTable(props) {
     const [spinner, setSpinner] = useState(false);
     const [form] = Form.useForm();
     const scrollRef = useRef();
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "x-api-key": API_KEY
+        },
+        params: {
+            page: 1,
+            limit: 5,
+        }
+    };
+
     const onSearch = (value) => {
-        props.params.name = value;
+        props.searchParams.map((item) => {
+            config.params[item.index] = value;
+        })
         onStart(1);
     };
     const showModal = () => {
@@ -92,18 +106,9 @@ function UTable(props) {
     }
     const onStart = async (page) => {
         setSpinner(false);
+        config.params.page = page;
         await axios.get(
-            DEV_URL + props.url,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "x-api-key": API_KEY
-                },
-                params: {
-                    page: page,
-                    limit: 5,
-                }
-            }
+            DEV_URL + props.url, config
         ).then((response) => {
             if (response.status === 200) {
                 setSpinner(true);

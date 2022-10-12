@@ -69,14 +69,14 @@ const Main = () => {
         <Layout>
             <Header className="bg-transparent my-3 mx-5 p-0">
                 <div className="float-left">
-                    <img className="h-16 w-48 bg-transparent float-left" src={logo} alt="logo" />
+                    <img className="h-12 w-48 bg-transparent float-left" src={logo} alt="logo" />
                 </div>
                 <div className="float-right">
                     <Dropdown overlay={menu} trigger={['click']} arrow={{
                         pointAtCenter: true,
                     }}>
                         <Button type="link" className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                            <img className="h-10 w-10" src={male} alt="avatar" />
+                            <img className="h-12 w-12" src={male} alt="avatar" />
                         </Button>
                     </Dropdown>
                 </div>
@@ -94,7 +94,7 @@ const Main = () => {
                     collapsible
                     collapsed={collapsed}
                     theme="light"
-                    className="bg-slate-50"
+                    className="bg-white"
                 >
                     <Sidenav color={sidenavColor} />
                 </Sider>

@@ -38,6 +38,9 @@ import EMR from "./components/pages/EMR/emr";
 import BeforeAmbulatoryList from "./components/pages/BeforeAmbulatory/BeforeAmbulatoryList";
 import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail";
 //emr end
+// inpatient HEWTENT start
+import Inpatient from "./components/pages/Inpatient/inpatient";
+// inpatient HEWTEN end
 
 function App() {
   return (
@@ -45,6 +48,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<Main />}>
+          <Route path="/inpatient" element={<Inpatient />} />
           <Route path="/emr" element={<EMR />} />
           <Route path="/" element={<Home />} />
           <Route
