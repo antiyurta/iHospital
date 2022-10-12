@@ -86,10 +86,8 @@ function Sidenav({ color }) {
     },
     {
       key: 4,
-      icon: <InfoCircleOutlined />,
-      label: (
-        <NavLink to="/doctorAppointmentSchedule">Эмчийн цаг захиалга</NavLink>
-      ),
+      icon: <UserAddOutlined />,
+      label:<NavLink to="/doctorAppointmentSchedule">Эмчийн цаг захиалга</NavLink>,
     },
     {
       key: 5,

@@ -17,7 +17,7 @@ import {
 } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
-import { EditOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { EditOutlined, SearchOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { Get, Post, Patch, Delete, ScrollRef, openNofi } from './comman';
 import TextArea from 'antd/lib/input/TextArea';
 import 'moment/locale/mn';
@@ -39,6 +39,7 @@ function UTable(props) {
     const [data, setData] = useState([]);
     const [meta, setMeta] = useState([]);
     const [view, setView] = useState([]);
+    const [searchValue, setSearchValue] = useState();
     const [id, setId] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isViewModalVisible, setIsViewModalVisible] = useState(false);
@@ -47,7 +48,6 @@ function UTable(props) {
     const [spinner, setSpinner] = useState(false);
     const [form] = Form.useForm();
     const scrollRef = useRef();
-
     const config = {
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -58,28 +58,25 @@ function UTable(props) {
             limit: 5,
         }
     };
-
-    const onSearch = (value) => {
-        props.searchParams.map((item) => {
-            config.params[item.index] = value;
-        })
+    const onSearch = (value, index) => {
+        config.params[index] = value;
         onStart(1);
     };
     const showModal = () => {
         setEditMode(false);
         form.resetFields();
         setIsModalVisible(true);
-    }
+    };
     const viewModal = (row) => {
         setView(row);
         setIsViewModalVisible(true);
-    }
+    };
     const editModal = (row) => {
         setEditMode(true);
         setId(row.id);
         form.setFieldsValue(row);
         setIsModalVisible(true);
-    }
+    };
     const deleteModal = (id) => {
         Modal.error({
             title: 'Устгах',
@@ -103,7 +100,7 @@ function UTable(props) {
                     })
             }
         })
-    }
+    };
     const onStart = async (page) => {
         setSpinner(false);
         config.params.page = page;
@@ -120,7 +117,7 @@ function UTable(props) {
 
             }
         })
-    }
+    };
     const onFinish = async (data) => {
         setIsConfirmLoading(true);
         editMode ?
@@ -180,10 +177,10 @@ function UTable(props) {
                 if (data.id === row) return (data[`${props.column[index].relIndex}`]);
             })
         } else if (props.column[index].input === 'switch') {
-            return row ? <CheckOutlined /> : <CloseOutlined />
+            return row ? <CheckOutlined className='text-green-600' /> : <CloseOutlined className='text-red-600' />
         }
         return (row);
-    }
+    };
     const checkNumber = (event) => {
         var charCode = event.charCode
         if (
@@ -195,44 +192,44 @@ function UTable(props) {
         } else {
             return true;
         }
-    }
+    };
     useEffect(() => {
         onStart(1);
         ScrollRef(scrollRef);
-    }, [])
+    }, []);
     return (
         <>
             <Card
                 bordered={false}
-                className="criclebox tablespace mb-24"
+                className="header-solid max-h-max rounded-md"
                 title={props.title}
-                extra={
-                    <Search placeholder="Хайх" onSearch={onSearch} enterButton="Хайх" />
+                extra={props.isCreate &&
+                    <Button onClick={showModal} className='bg-sky-700 rounded-md text-white'>Нэмэх</Button>
                 }
             >
-                <div className='table-responsive' id='style-8' ref={scrollRef}>
+                <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
                     <Table className='ant-border-space' style={{ width: '100%' }}>
-                        <thead className='ant-table-thead'>
+                        <thead className='ant-table-thead bg-slate-200'>
                             <tr>
-                                <th>№</th>
+                                <th className="font-bold text-sm align-middle" rowSpan={2}>№</th>
                                 {
                                     props.column.map((element, index) => {
-                                        return (element.isView && <th key={index}>{element.label}</th>)
+                                        return (element.isView && <th key={index} className="font-bold text-sm">{element.label}</th>)
                                     })
                                 }
-                                {spinner ?
-                                    <th style={{ width: 10 }}>
-                                        <span className='ant-table-header-column'>
-                                            <div style={{ textAlign: 'center' }}>
-                                                <span className='ant-table-column-title'>
-                                                    <Button type='link' onClick={showModal} title='Нэмэх' ><PlusOutlined style={{ fontSize: '20px', color: 'green', textAlign: 'center' }} /></Button>
-                                                </span>
-                                            </div>
-                                        </span>
-                                    </th> : <th style={{ backgroundColor: 'white' }}></th>}
+                                <th className='w-3 font-bold text-sm align-middle' rowSpan={2}>Үйлдэл</th>
+                            </tr>
+                            <tr>
+                                {
+                                    props.column.map((element, index) => {
+                                        return (element.isView && <td key={index}>
+                                            <Search placeholder={element.label + " Хайх"} onSearch={(e) => onSearch(e, element.index)} enterButton={"Хайх"} />
+                                        </td>)
+                                    })
+                                }
                             </tr>
                         </thead>
-                        <tbody className='ant-table-tbody'>
+                        <tbody className='ant-table-tbody p-0'>
                             {spinner ?
                                 data.map((row, index) => {
                                     return (
@@ -245,9 +242,16 @@ function UTable(props) {
                                                 })
                                             }
                                             <td className='ant-table-row-cell-break-word'>
-                                                <Button type="link" onClick={() => viewModal(row)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
-                                                <Button type="link" onClick={() => editModal(row)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
-                                                <Button type="link" onClick={() => deleteModal(row.id)} title='Устгах' style={{ paddingLeft: 5 }} ><DeleteOutlined style={{ color: 'red' }} /></Button>
+                                                {
+                                                    props.isRead && <Button type="link" onClick={() => viewModal(row)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
+                                                }
+                                                {
+                                                    props.isUpdate && <Button type="link" onClick={() => editModal(row)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
+                                                }
+                                                {
+                                                    props.isDelete && <Button type="link" onClick={() => deleteModal(row.id)} title='Устгах' style={{ paddingLeft: 5 }} ><DeleteOutlined style={{ color: 'red' }} /></Button>
+                                                }
+
                                             </td>
                                         </tr>
                                     )
@@ -263,8 +267,8 @@ function UTable(props) {
                 </div>
                 <div>
                     <Pagination
-                        size="small"
                         className='pagination'
+                        defaultCurrent={'1'}
                         pageSize={5}
                         total={meta.itemCount}
                         onChange={onStart}
@@ -396,7 +400,6 @@ function UTable(props) {
                     </Row>
                 </Form>
             </Modal>
-
         </>
     );
 }

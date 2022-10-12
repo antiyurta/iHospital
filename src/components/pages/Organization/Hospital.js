@@ -96,7 +96,17 @@ function Hospital() {
     return (
         <Row gutter={[24, 0]}>
             <Col xs="24" xl={24}>
-                <UTable title={'Байгууллага'} url={'organization/hospital'} searchParams={searchConfig} column={column} width='80%' />
+                <UTable
+                    title={'Байгууллага'}
+                    url={'organization/hospital'}
+                    searchParams={searchConfig}
+                    column={column}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={false}
+                    isDelete={false}
+                    width='50%'
+                />
             </Col>
         </Row>
     );
