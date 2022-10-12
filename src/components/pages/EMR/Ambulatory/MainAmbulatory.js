@@ -1,6 +1,7 @@
 import React from "react";
 import { Tabs } from "antd";
 import ProgressNotes from "./ProgressNotes";
+import NurseNote from "../NurseNote";
 
 export default function MainAmbulatory() {
   const items = [
@@ -32,7 +33,7 @@ export default function MainAmbulatory() {
     {
       label: "Сувилагчийн тэмдэглэл",
       key: "item-6",
-      children: <ProgressNotes />,
+      children: <NurseNote />,
     },
   ];
   return <Tabs size="small" items={items} />;

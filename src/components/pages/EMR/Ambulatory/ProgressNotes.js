@@ -1,3 +1,4 @@
+//Явцын тэмдэглэл
 import React from "react";
 import { Collapse } from "antd";
 import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";

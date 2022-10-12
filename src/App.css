@@ -1,10 +1,10 @@
-@import "~antd/dist/antd.css";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import "./style/main.css";
 @import "./style/responsive.css";
+@import "~antd/dist/antd.css";
 
 label {
   white-space: normal !important;
@@ -88,4 +88,16 @@ legend.scheduler-border {
 }
 .ant-form-item-control-input {
   min-height: 30px !important;
+}
+.small-radio-button > .ant-radio-button-wrapper{
+  height: 24px !important;
+  padding: 0 7px !important;
+  line-height: 22px !important;
+}
+.ant-menu-title-content{
+  white-space: normal !important;
+  line-height: 14px !important;
+}
+.ant-select-selector{
+  height: 28px !important;
 }

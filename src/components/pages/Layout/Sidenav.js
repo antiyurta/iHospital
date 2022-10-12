@@ -106,15 +106,17 @@ function Sidenav({ color }) {
       icon: <InfoCircleOutlined />,
       label: <Link to="/examination">examination</Link>,
     },
+    {
+      key: 8,
+      icon: <InfoCircleOutlined />,
+      label: (
+        <Link to="/ambulatoryList">Амбулаторийн үзлэгийн өмнөх жагсаалт</Link>
+      ),
+    },
   ];
 
   return (
-    <Menu
-      theme="light"
-      mode="inline"
-      items={SideNavItems}
-      inlineIndent={10}
-    />
+    <Menu theme="light" mode="inline" items={SideNavItems} inlineIndent={10} />
   );
 }
 
