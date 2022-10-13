@@ -11,7 +11,8 @@
   padding-bottom: 1%;
 }
 .ant-input-group-addon {
-  background-color: #0369a1;
+  background-color: none !important;
+  background: none !important;
 }
 .ant-menu {
   background: #ffffff;

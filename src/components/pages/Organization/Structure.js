@@ -139,7 +139,7 @@ function Structure() {
         }
     ]
     return (
-        <Row gutter={[24, 0]}>
+        <Row gutter={[8, 8]}>
             <Col xs="24" xl={24}>
                 <UTable title={'Structure'} url={'organization/structure'} params={department} column={DepartmentColumn} width='80%' />
             </Col>

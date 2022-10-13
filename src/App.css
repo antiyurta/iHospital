@@ -4,6 +4,7 @@
 @tailwind utilities;
 @import "./style/main.css";
 @import "./style/responsive.css";
+@import './style/Hospital.css';
 @import "~antd/dist/antd.css";
 
 label {
@@ -16,10 +17,6 @@ label {
   /* height: 40px !important; */
   border-radius: 6px !important;
   width: 100% !important;
-}
-
-.ant-input-number .ant-input-number-input-wrap {
-  /* height: 40px !important; */
 }
 
 fieldset.scheduler-border {
@@ -80,7 +77,8 @@ legend.scheduler-border {
 .ant-input-number-input {
   height: 28px !important;
 }
-.ant-divider-horizontal.ant-divider-with-text::before, .ant-divider-horizontal.ant-divider-with-text::after {
+.ant-divider-horizontal.ant-divider-with-text::before,
+.ant-divider-horizontal.ant-divider-with-text::after {
   border-top: 2px solid #e5e7eb !important;
 }
 .ant-row .ant-form-item-row {
@@ -89,15 +87,25 @@ legend.scheduler-border {
 .ant-form-item-control-input {
   min-height: 30px !important;
 }
-.small-radio-button > .ant-radio-button-wrapper{
+.small-radio-button > .ant-radio-button-wrapper {
   height: 24px !important;
   padding: 0 7px !important;
   line-height: 22px !important;
 }
-.ant-menu-title-content{
+.ant-menu-title-content {
   white-space: normal !important;
   line-height: 14px !important;
 }
-.ant-select-selector{
+.ant-select-selector {
   height: 28px !important;
+}
+.ant-input {
+  height: 28px;
+  border-radius: 6px;
+}
+.ant-input-search-button{
+  height: 28px;
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+  background-color: #2d8cff;
 }

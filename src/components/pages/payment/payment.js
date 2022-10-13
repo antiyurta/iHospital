@@ -21,7 +21,7 @@ function Payment() {
                         <Card
                             bordered={false}
                             title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн мэдээлэл</h6>}
-                            className="header-solid h-full"
+                            className="header-solid max-h-max rounded-md"
                             loading={cardLoading}
                             bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
                         >
@@ -47,7 +47,7 @@ function Payment() {
                         <Card
                             bordered={false}
                             title={<h6 className="font-semibold m-0">Туслах цэс</h6>}
-                            className="header-solid h-full"
+                            className="header-solid max-h-max rounded-md"
                             loading={cardLoading}
                             bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
                         >
@@ -61,11 +61,11 @@ function Payment() {
                     <Col span={24}>
                         <Card
                             bordered={false}
-                            className="header-solid h-full"
+                            className="header-solid max-h-max rounded-md"
                             loading={cardLoading}
                             bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
                         >
-                            <div className='table-responsive' id='style-8' ref={scrollRef}>
+                            <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
                                 <Table className='ant-border-space' style={{ width: '100%' }}>
                                     <thead className='ant-table-thead'>
                                         <tr>
@@ -76,7 +76,7 @@ function Payment() {
                                             <th>Регистрийн дугаар</th>
                                             <th>Хүйс</th>
                                             <th>Даатгал</th>
-                                            <th style={{ backgroundColor: '#fff' }}>Үзлэг</th>
+                                            <th>Үзлэг</th>
                                         </tr>
                                     </thead>
                                     <tbody className='ant-table-tbody'>
