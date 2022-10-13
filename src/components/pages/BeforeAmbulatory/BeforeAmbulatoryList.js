@@ -9,7 +9,7 @@ export default function BeforeAmbulatoryList() {
 
   return (
     <div>
-      <Row gutter={[16, 16]}>
+      <Row gutter={16}>
         <Col span={6} className="text-center">
           <RangePicker placeholder={["Эхлэх огноо", "Дуусах огноо"]} />
         </Col>
@@ -17,7 +17,7 @@ export default function BeforeAmbulatoryList() {
           <Select
             showSearch
             style={{
-              width: 200,
+              minWidth: 200,
             }}
             size="small"
             placeholder="Кабинет"
