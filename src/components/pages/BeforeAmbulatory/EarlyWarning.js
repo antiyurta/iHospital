@@ -75,7 +75,7 @@ export default function EarlyWarning() {
         console.log("response", response.data.response.data);
         setPatientAssesments(response.data.response.data);
         setPatientAssesmentsResult(response.data.response.data);
-        if (type == "save") {
+        if (type === "save") {
           Modal.warning({
             title: "Анхааруулга",
             content: response.data.response.data.slice(-1)[0].message, //Сүүлд хадгалагдсан тэмдэглэлийн message харуулах

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Tabs, Tag } from "antd";
+import React, { useCallback, useState, useEffect } from "react";
+import { Tabs, Tag, Col, Radio, Row, Input, Button, Form } from "antd";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -9,16 +9,31 @@ import Step6 from "./Step6";
 import Step7 from "./Step7";
 import Step8 from "./Step8";
 import GeneralInspection from "../GeneralInspection";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../../features/authReducer";
+import axios from "axios";
+import { blue } from "@ant-design/colors";
 
 export default function MainPatientHistory() {
   const { CheckableTag } = Tag;
+  const { TextArea } = Input;
+  const [form] = Form.useForm();
   const [selectedTags, setSelectedTags] = useState({
     value: 0,
     label: "Төрөлт, өсөлт бойжилт",
   });
+  const [tabs, setTabs] = useState([]);
+  const [validStep, setValidStep] = useState(false);
+
+  const token = useSelector(selectCurrentToken);
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const DEV_URL = process.env.REACT_APP_DEV_URL;
   const handleChange = (tag, checked) => {
     setSelectedTags(tag);
   };
+  useEffect(() => {
+    getInspectionTabs();
+  }, []);
 
   const tagsData = [
     { value: 0, label: "Төрөлт, өсөлт бойжилт" },
@@ -31,7 +46,7 @@ export default function MainPatientHistory() {
     { value: 7, label: "Удамшлын асуумж" },
   ];
 
-  const Tab1Content = (key) => {
+  const Tab1Content = () => {
     return (
       <div className="items-center">
         {tagsData.map((tag, index) => {
@@ -99,20 +114,153 @@ export default function MainPatientHistory() {
       </div>
     );
   };
-  const Tab2Content = (key) => {
+  const Tab2Content = useCallback(() => {
     return <GeneralInspection />;
+  }, []);
+
+  const DynamicTabContent = useCallback((props) => {
+    console.log("props", props.data);
+    return (
+      <Form
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={saveDynamicTab}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        labelAlign="left"
+        scrollToFirstError
+        form={form}
+      >
+        {props.data?.map((el, index) => {
+          if (el.type === "textarea") {
+            return (
+              <Row align="middle" className="mb-1" key={index}>
+                <Col span={24} className="text-left">
+                  <Form.Item
+                    label=""
+                    name={el.inspectionType}
+                    rules={[{ required: false, message: "" }]}
+                    className="mb-0"
+                    wrapperCol={{
+                      span: 24,
+                    }}
+                    labelCol={{
+                      span: 8,
+                    }}
+                  >
+                    <TextArea
+                      rows={2}
+                      style={{ padding: 5, marginBottom: 5 }}
+                      placeholder={el.label}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            );
+          } else {
+            return (
+              <Row align="middle" className="mb-1">
+                <Col span={24} className="text-left">
+                  <Form.Item
+                    label="Биеийн ерөнхий байдал"
+                    name="bodyCondition"
+                    rules={[{ required: false, message: "" }]}
+                    className="mb-0"
+                    wrapperCol={{
+                      span: 12,
+                    }}
+                    labelCol={{
+                      span: 8,
+                    }}
+                  >
+                    <Radio.Group>
+                      <Radio value="Дунд">Дунд</Radio>
+                      <Radio value="Хүндэвтэр">Хүндэвтэр</Radio>
+                      <Radio value="Хүнд">Хүнд</Radio>
+                      <Radio value="Маш хүнд">Маш хүнд</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </Col>
+              </Row>
+            );
+          }
+        })}
+
+        <Form.Item
+          wrapperCol={{
+            span: 16,
+          }}
+        >
+          <Row className="mt-2">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => validStep && saveDynamicTab()}
+              style={{ backgroundColor: blue.primary }}
+            >
+              Хадгалах
+            </Button>
+          </Row>
+        </Form.Item>
+      </Form>
+    );
+  }, []);
+
+  const saveDynamicTab = (values) => {
+    console.log("saveDynamicTab values: ", values);
   };
-  const items = [
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+    setValidStep(false);
+  };
+  const [items, setItems] = useState([
     {
       label: "Өвчтөний түүх",
-      key: "item-1",
+      key: "item-history",
       children: <Tab1Content />,
     },
     {
       label: "Ерөнхий үзлэг",
-      key: "item-2",
+      key: "item-general-inspection",
       children: <Tab2Content />,
     },
-  ];
+  ]);
+  const getInspectionTabs = () => {
+    //Тухайн эмчид харагдах TAB ууд
+    axios({
+      method: "get",
+      url: `${DEV_URL}emr/inspection-form`,
+      params: {
+        structureId: 1,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "x-api-key": API_KEY,
+      },
+    })
+      .then(async (response) => {
+        console.log("res getInspectionTabs", response.data.response.data);
+        setTabs(response.data.response.data);
+      })
+      .catch(function (error) {
+        console.log("response error", error.response);
+      });
+  };
+
+  useEffect(() => {
+    //Тухайн эмчид харагдах TAB уудыг харуулах
+    tabs.map((el) => {
+      console.log("el", el);
+      setItems((items) => [
+        ...items,
+        {
+          label: el.name,
+          key: `item-${el.id}`,
+          children: <DynamicTabContent data={el.formItems} />,
+        },
+      ]);
+    });
+  }, [tabs]);
   return <Tabs items={items} />;
 }
