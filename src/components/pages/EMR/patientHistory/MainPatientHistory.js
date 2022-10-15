@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Tabs, Tag, Col, Radio, Row, Input, Button, Form } from "antd";
+import { Tabs, Tag, Row, Button, Form, Divider } from "antd";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -13,24 +13,17 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import axios from "axios";
 import { blue } from "@ant-design/colors";
+import DynamicFormInspection from "../../DynamicFormInspection";
 
 export default function MainPatientHistory() {
   const { CheckableTag } = Tag;
-  const { TextArea } = Input;
   const [form] = Form.useForm();
-  const [selectedTags, setSelectedTags] = useState({
-    value: 0,
-    label: "Төрөлт, өсөлт бойжилт",
-  });
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
 
   const token = useSelector(selectCurrentToken);
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
-  const handleChange = (tag, checked) => {
-    setSelectedTags(tag);
-  };
   useEffect(() => {
     getInspectionTabs();
   }, []);
@@ -45,20 +38,27 @@ export default function MainPatientHistory() {
     { value: 6, label: "Тархвар зүйн асуумж" },
     { value: 7, label: "Удамшлын асуумж" },
   ];
+  function Tab1Content() {
+    const [selectedTags, setSelectedTags] = useState({
+      value: 0,
+      label: "Төрөлт, өсөлт бойжилт",
+    });
 
-  const Tab1Content = () => {
+    const handleChange = (tag, checked) => {
+      setSelectedTags(tag);
+    };
     return (
       <div className="items-center">
         {tagsData.map((tag, index) => {
           return (
             <CheckableTag
               key={tag.value}
-              checked={selectedTags.value == tag.value}
+              checked={selectedTags.value === tag.value}
               onChange={(checked) => handleChange(tag, checked)}
               color="red"
               style={{
                 backgroundColor:
-                  selectedTags.value == tag.value ? "#1890ff" : "#d9d9d9",
+                  selectedTags.value === tag.value ? "#1890ff" : "#d9d9d9",
                 marginBottom: 5,
               }}
             >
@@ -66,46 +66,46 @@ export default function MainPatientHistory() {
             </CheckableTag>
           );
         })}
-        {selectedTags.value == tagsData[0].value ? (
+        {selectedTags.value === tagsData[0].value ? (
           <Step1 nextBtn={() => handleChange(tagsData[1])} />
         ) : null}
-        {selectedTags.value == tagsData[1].value ? (
+        {selectedTags.value === tagsData[1].value ? (
           <Step2
             nextBtn={() => handleChange(tagsData[2])}
             backBtn={() => handleChange(tagsData[0])}
           />
         ) : null}
-        {selectedTags.value == tagsData[2].value ? (
+        {selectedTags.value === tagsData[2].value ? (
           <Step3
             nextBtn={() => handleChange(tagsData[3])}
             backBtn={() => handleChange(tagsData[1])}
           />
         ) : null}
-        {selectedTags.value == tagsData[3].value ? (
+        {selectedTags.value === tagsData[3].value ? (
           <Step4
             nextBtn={() => handleChange(tagsData[4])}
             backBtn={() => handleChange(tagsData[2])}
           />
         ) : null}
-        {selectedTags.value == tagsData[4].value ? (
+        {selectedTags.value === tagsData[4].value ? (
           <Step5
             nextBtn={() => handleChange(tagsData[5])}
             backBtn={() => handleChange(tagsData[3])}
           />
         ) : null}
-        {selectedTags.value == tagsData[5].value ? (
+        {selectedTags.value === tagsData[5].value ? (
           <Step6
             nextBtn={() => handleChange(tagsData[6])}
             backBtn={() => handleChange(tagsData[4])}
           />
         ) : null}
-        {selectedTags.value == tagsData[6].value ? (
+        {selectedTags.value === tagsData[6].value ? (
           <Step7
             nextBtn={() => handleChange(tagsData[7])}
             backBtn={() => handleChange(tagsData[5])}
           />
         ) : null}
-        {selectedTags.value == tagsData[7].value ? (
+        {selectedTags.value === tagsData[7].value ? (
           <Step8
             nextBtn={() => console.log("SAVED")}
             backBtn={() => handleChange(tagsData[6])}
@@ -113,13 +113,13 @@ export default function MainPatientHistory() {
         ) : null}
       </div>
     );
-  };
+  }
   const Tab2Content = useCallback(() => {
     return <GeneralInspection />;
   }, []);
 
   const DynamicTabContent = useCallback((props) => {
-    console.log("props", props.data);
+    console.log("props", props);
     return (
       <Form
         name="basic"
@@ -131,60 +131,38 @@ export default function MainPatientHistory() {
         scrollToFirstError
         form={form}
       >
-        {props.data?.map((el, index) => {
-          if (el.type === "textarea") {
-            return (
-              <Row align="middle" className="mb-1" key={index}>
-                <Col span={24} className="text-left">
-                  <Form.Item
-                    label=""
-                    name={el.inspectionType}
-                    rules={[{ required: false, message: "" }]}
-                    className="mb-0"
-                    wrapperCol={{
-                      span: 24,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
-                  >
-                    <TextArea
-                      rows={2}
-                      style={{ padding: 5, marginBottom: 5 }}
-                      placeholder={el.label}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            );
-          } else {
-            return (
-              <Row align="middle" className="mb-1">
-                <Col span={24} className="text-left">
-                  <Form.Item
-                    label="Биеийн ерөнхий байдал"
-                    name="bodyCondition"
-                    rules={[{ required: false, message: "" }]}
-                    className="mb-0"
-                    wrapperCol={{
-                      span: 12,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
-                  >
-                    <Radio.Group>
-                      <Radio value="Дунд">Дунд</Radio>
-                      <Radio value="Хүндэвтэр">Хүндэвтэр</Radio>
-                      <Radio value="Хүнд">Хүнд</Radio>
-                      <Radio value="Маш хүнд">Маш хүнд</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                </Col>
-              </Row>
-            );
-          }
-        })}
+        {"pain" in props.data && props.data.pain.length > 0 ? (
+          <>
+            <Divider orientation="left" className="text-sm my-2">
+              Зовиур
+            </Divider>
+            <DynamicFormInspection data={props.data["pain"]} />
+          </>
+        ) : null}
+        {"inspection" in props.data && props.data.inspection.length > 0 ? (
+          <>
+            <Divider orientation="left" className="text-sm my-2">
+              Үзлэг
+            </Divider>
+            <DynamicFormInspection data={props.data["inspection"]} />
+          </>
+        ) : null}
+        {"question" in props.data && props.data.question.length > 0 ? (
+          <>
+            <Divider orientation="left" className="text-sm my-2">
+              Асуумж
+            </Divider>
+            <DynamicFormInspection data={props.data["question"]} />
+          </>
+        ) : null}
+        {"plan" in props.data && props.data.plan.length > 0 ? (
+          <>
+            <Divider orientation="left" className="text-sm my-2">
+              Төлөвлөгөө
+            </Divider>
+            <DynamicFormInspection data={props.data["plan"]} />
+          </>
+        ) : null}
 
         <Form.Item
           wrapperCol={{
@@ -208,6 +186,29 @@ export default function MainPatientHistory() {
 
   const saveDynamicTab = (values) => {
     console.log("saveDynamicTab values: ", values);
+    axios({
+      method: "post",
+      url: `${DEV_URL}emr/inspectionNote`,
+      data: {
+        bookingId: 99,
+        departmentId: 55,
+        patientId: 43,
+        pain: JSON.stringify(values["pain"]),
+        question: JSON.stringify(values["question"]),
+        inspection: JSON.stringify(values["inspection"]),
+        plan: JSON.stringify(values["plan"]),
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "x-api-key": API_KEY,
+      },
+    })
+      .then(async (response) => {
+        console.log("saveDynamicTab response", response);
+      })
+      .catch(function (error) {
+        console.log("saveDynamicTab response error", error.response);
+      });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -240,27 +241,27 @@ export default function MainPatientHistory() {
       },
     })
       .then(async (response) => {
-        console.log("res getInspectionTabs", response.data.response.data);
+        // console.log("res getInspectionTabs", response.data.response.data);
         setTabs(response.data.response.data);
       })
       .catch(function (error) {
-        console.log("response error", error.response);
+        // console.log("response error", error.response);
       });
   };
 
   useEffect(() => {
     //Тухайн эмчид харагдах TAB уудыг харуулах
-    tabs.map((el) => {
-      console.log("el", el);
+    tabs?.map((el) => {
       setItems((items) => [
         ...items,
         {
           label: el.name,
           key: `item-${el.id}`,
-          children: <DynamicTabContent data={el.formItems} />,
+          children: <DynamicTabContent data={el.formItem} />,
         },
       ]);
     });
   }, [tabs]);
+
   return <Tabs items={items} />;
 }

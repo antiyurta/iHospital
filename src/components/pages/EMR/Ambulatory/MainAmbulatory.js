@@ -11,6 +11,11 @@ export default function MainAmbulatory() {
       children: <ProgressNotes />,
     },
     {
+      label: "Сувилагчийн тэмдэглэл",
+      key: "item-6",
+      children: <NurseNote />,
+    },
+    {
       label: "Оношилгоо",
       key: "item-2",
       children: <ProgressNotes />,
@@ -29,11 +34,6 @@ export default function MainAmbulatory() {
       label: "Эмийн бус эмчилгээ",
       key: "item-5",
       children: <ProgressNotes />,
-    },
-    {
-      label: "Сувилагчийн тэмдэглэл",
-      key: "item-6",
-      children: <NurseNote />,
     },
   ];
   return <Tabs size="small" items={items} />;

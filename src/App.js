@@ -40,6 +40,7 @@ import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAm
 //emr end
 // inpatient HEWTENT start
 import Inpatient from "./components/pages/Inpatient/inpatient";
+import FormBuilder from "./components/pages/FormBuilder/FormBuilder";
 // inpatient HEWTEN end
 
 function App() {
@@ -208,6 +209,14 @@ function App() {
             element={
               <PrivateRoute>
                 <BeforeAmbulatoryDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/formBuilder"
+            element={
+              <PrivateRoute>
+                <FormBuilder />
               </PrivateRoute>
             }
           />

@@ -1,12 +1,71 @@
 //Явцын тэмдэглэл
-import React from "react";
-import { Collapse } from "antd";
+import React, { useEffect, useState } from "react";
+import { Collapse, Divider } from "antd";
 import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../../features/authReducer";
+import axios from "axios";
 
 export default function ProgressNotes(props) {
   const { Panel } = Collapse;
+  const token = useSelector(selectCurrentToken);
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const DEV_URL = process.env.REACT_APP_DEV_URL;
+  const [inspectionNotes, setInspectionNotes] = useState([]);
   const onChange = (key) => {
-    console.log(key);
+    // console.log(key);
+  };
+
+  useEffect(() => {
+    getInspectionNotes();
+  }, []);
+
+  const getInspectionNotes = () => {
+    axios({
+      method: "get",
+      url: `${DEV_URL}emr/inspectionNote`,
+      params: {
+        patientId: 43,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "x-api-key": API_KEY,
+      },
+    })
+      .then(async (response) => {
+        console.log("response getInspectionNotes", response.data.response.data);
+        var result = response.data.response.data.reduce(function (r, a) {
+          r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
+          r[a.createdAt.substring(0, 4)].push(a);
+          return r;
+        }, Object.create(null));
+
+        setInspectionNotes(result);
+      })
+      .catch(function (error) {
+        console.log("response error", error.response);
+      });
+  };
+
+  const RenderNotesDetail = (data) => {
+    return Object.entries(data.data).map(([key, value], index) => {
+      return (
+        <div key={index} className="flex">
+          <p className="font-semibold mr-2">{key}: </p>
+          {Object.values(value).map((elValues, index) => {
+            return typeof elValues === "string" ? (
+              <p key={index}>{elValues}</p>
+            ) : (
+              <div key={index}>
+                {elValues.map((el, index) => {
+                  return <p key={index}>{el}</p>;
+                })}
+              </div>
+            );
+          })}
+        </div>
+      );
+    });
   };
   return (
     <Collapse
@@ -21,99 +80,49 @@ export default function ProgressNotes(props) {
       }}
       ghost
     >
-      <Panel header="2021 Он" key="1">
-        <Collapse accordion>
-          <Panel
-            header={
-              <div className="grid">
-                <span className="font-semibold">
-                  Чих хамар хоолой - Цэнд-Аюуш
-                </span>
-                <span>2021-07-01 08:20</span>
-              </div>
-            }
-            key="1"
-          >
-            <table cellSpacing={2} cellPadding="5">
-              <tbody>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Ерөнхий үзлэг:</td>
-                  <td>Мэдээлэл байхгүй</td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Зовиур:</td>
-                  <td>ерөнхий үзлэг : Зовиургүй</td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Асуумж:</td>
-                  <td>
-                    Арьс : Өвчин анх эхэлсэн Баруун гарын чигчий хуруунд тууралт
-                    гарсан.
-                  </td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Бодит үзлэг:</td>
-                  <td>
-                    Арьс : Үзлэг : Баруун гарын чигчий хуруун дээр 0,3*0,3см
-                    гүвдрүүтэй ургацаг гарсан.
-                  </td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Онош:</td>
-                  <td>
-                    Урьдчилсан:General examination and investigation of persons
-                    without complaint and reported diagnosis - Z00
-                  </td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Төлөвлөгөө:</td>
-                  <td>Үү авахуулах ( Электрокоагуляци )</td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Захиалга:</td>
-                  <td>
-                    <div>Хэвлийн цуцлаг дотор эрхтэний эхо ()</div>
-                    <div>ЦДШ (CBC+DIFF) ()</div>
-                    <div>Биохимийн шинжилгээ ()</div>
-                  </td>
-                </tr>
-                <tr className="border-b-2">
-                  <td className="font-semibold">Нэмэлт:</td>
-                  <td>Мэдээлэл байхгүй</td>
-                </tr>
-              </tbody>
-            </table>
+      {Object.entries(inspectionNotes).map(([key, value], index) => {
+        return (
+          <Panel header={`${key} Он`} key={index}>
+            <Collapse accordion>
+              {value.map((el, index) => {
+                return (
+                  <Panel
+                    header={
+                      <div className="grid">
+                        <span className="font-semibold">
+                          {el.departmentId}Чих хамар хоолой - {el.departmentId}
+                          Цэнд-Аюуш
+                        </span>
+                        <span>
+                          {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                        </span>
+                      </div>
+                    }
+                    key={index}
+                  >
+                    <Divider orientation="left" className="text-sm my-2">
+                      Зовиур
+                    </Divider>
+                    <RenderNotesDetail data={JSON.parse(el["pain"])} />
+                    <Divider orientation="left" className="text-sm my-2">
+                      Үзлэг
+                    </Divider>
+                    <RenderNotesDetail data={JSON.parse(el["inspection"])} />
+                    <Divider orientation="left" className="text-sm my-2">
+                      Асуумж
+                    </Divider>
+                    <RenderNotesDetail data={JSON.parse(el["question"])} />
+                    <Divider orientation="left" className="text-sm my-2">
+                      Төлөвлөгөө
+                    </Divider>
+                    <RenderNotesDetail data={JSON.parse(el["plan"])} />
+                  </Panel>
+                );
+              })}
+            </Collapse>
           </Panel>
-          <Panel
-            header={
-              <div className="grid">
-                <span className="font-semibold">Арьс харшлын - Ундрам</span>
-                <span>2021-08-01 08:20</span>
-              </div>
-            }
-            key="2"
-          >
-            <div></div>
-          </Panel>
-        </Collapse>
-      </Panel>
-      <Panel header="2022 Он" key="2">
-        <Collapse accordion>
-          <Panel
-            header={
-              <div className="grid">
-                <span className="font-semibold">
-                  Эрүүл мэндийг дэмжих төв - Алтантуяа
-                </span>
-                <span>2022-07-01 08:20</span>
-              </div>
-            }
-            key="1"
-          >
-            <div>text</div>
-          </Panel>
-        </Collapse>
-      </Panel>
+        );
+      })}
     </Collapse>
   );
 }

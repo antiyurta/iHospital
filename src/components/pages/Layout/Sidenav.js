@@ -87,7 +87,9 @@ function Sidenav({ color }) {
     {
       key: 4,
       icon: <UserAddOutlined />,
-      label:<NavLink to="/doctorAppointmentSchedule">Эмчийн цаг захиалга</NavLink>,
+      label: (
+        <NavLink to="/doctorAppointmentSchedule">Эмчийн цаг захиалга</NavLink>
+      ),
     },
     {
       key: 5,
@@ -110,6 +112,11 @@ function Sidenav({ color }) {
       label: (
         <Link to="/ambulatoryList">Амбулаторийн үзлэгийн өмнөх жагсаалт</Link>
       ),
+    },
+    {
+      key: 9,
+      icon: <InfoCircleOutlined />,
+      label: <Link to="/formBuilder">Form Builder</Link>,
     },
   ];
 
