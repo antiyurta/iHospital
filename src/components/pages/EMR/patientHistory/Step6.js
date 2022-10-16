@@ -1,27 +1,23 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Эмийн хэрэглээ
 import React from "react";
-import { Row, Input, Button } from "antd";
-import { blue } from "@ant-design/colors";
+import { Row, Input, Form, Col } from "antd";
 
-export default function Step6(props) {
+export default function Step6() {
   const { TextArea } = Input;
 
   return (
     <div>
       <Row align="middle" className="mb-1">
-        <TextArea rows={3} style={{ padding: 2 }} />
-      </Row>
-      <Row className="mt-2">
-        <Button className="mr-4" onClick={() => props.backBtn()}>
-          Буцах
-        </Button>
-        <Button
-          type="primary"
-          style={{ backgroundColor: blue.primary }}
-          onClick={() => props.nextBtn()}
-        >
-          Дараах
-        </Button>
+        <Col span={24}>
+          <Form.Item
+            label=""
+            name="usuallyMedicine"
+            rules={[{ required: false, message: "" }]}
+            className="mb-0"
+          >
+            <TextArea rows={3} style={{ padding: 2 }} />
+          </Form.Item>
+        </Col>
       </Row>
     </div>
   );

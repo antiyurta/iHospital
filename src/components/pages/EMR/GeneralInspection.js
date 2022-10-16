@@ -20,7 +20,7 @@ export default function GeneralInspection(props) {
   }, []);
 
   const saveGeneralInspection = (values) => {
-    // console.log("saveGeneralInspection values: ", values);
+    // console.log("saveGeneral Inspection values: ", values);
     values["patientId"] = 43;
     axios({
       method: "post",

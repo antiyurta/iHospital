@@ -212,7 +212,7 @@ export default function DynamicFormInspection(props) {
                     span: 8,
                   }}
                 >
-                  <Editor
+                  {/* <Editor
                     apiKey="1496a5008b4dxdff26l7a8l3lx338v4e022taav81h0q0wnz"
                     onInit={(evt, editor) => (editorRef.current = editor)}
                     initialValue="<p>This is the initial content of the editor.</p>"
@@ -234,7 +234,7 @@ export default function DynamicFormInspection(props) {
                     }}
                     onChange={(e) => handleEditorChange(e)}
                     disabled
-                  />
+                  /> */}
                 </Form.Item>
               </Col>
             </Row>

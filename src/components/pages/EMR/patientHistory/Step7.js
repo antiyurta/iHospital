@@ -1,58 +1,64 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Тархвар зүйн асуумж
 import React from "react";
-import { Col, Radio, Row, Divider, Input, Typography, Button } from "antd";
-import { blue } from "@ant-design/colors";
+import { Col, Radio, Row, Divider, Input, Form } from "antd";
 
-export default function Step7(props) {
+export default function Step7() {
   const { TextArea } = Input;
-  const { Text } = Typography;
   return (
     <div>
       <Divider orientation="left" className="text-sm my-2">
         Аялал
       </Divider>
       <Row align="middle" className="mb-1">
-        <Col span={16} className="text-left">
-          <Text>Сүүлийн 3-6 сарын дотор гадны улсад зорчсон уу</Text>
-        </Col>
-        <Col span={6}>
-          <Radio.Group>
-            <Radio value={1}>Тийм</Radio>
-            <Radio value={2}>Үгүй</Radio>
-          </Radio.Group>
+        <Col span={24}>
+          <Form.Item
+            label="Сүүлийн 3-6 сарын дотор гадны улсад зорчсон уу"
+            name={["epidemicQuestion", "isTravel"]}
+            rules={[{ required: false, message: "" }]}
+            className="mb-0"
+            labelCol={{ span: 14 }}
+          >
+            <Radio.Group>
+              <Radio value={true}>Тийм</Radio>
+              <Radio value={false}>Үгүй</Radio>
+            </Radio.Group>
+          </Form.Item>
         </Col>
       </Row>
       <Row align="middle" className="mb-1">
-        <Text>Ямар зорилгоор</Text>
-        <TextArea rows={2} style={{ padding: 2 }} />
+        <Col span={24}>
+          <Form.Item
+            label=""
+            name={["epidemicQuestion", "travelDesc"]}
+            rules={[{ required: false, message: "" }]}
+            className="mb-0"
+          >
+            <TextArea
+              rows={2}
+              style={{ padding: 2 }}
+              placeholder="Ямар зорилгоор"
+            />
+          </Form.Item>
+        </Col>
       </Row>
       <Divider orientation="left" className="text-sm my-2">
         Цус цусан бүтээгдэхүүн ба эрхтэн шилжүүлэг
       </Divider>
       <Row align="middle" className="mb-1">
-        <Col span={16} className="text-left">
-          <Text>
-            Сүүлийн 3-6 сарын дотор цус цусан бүтээгдэхүүн сэлбүүлсэн үү
-          </Text>
+        <Col span={24}>
+          <Form.Item
+            label="Сүүлийн 3-6 сарын дотор цус цусан бүтээгдэхүүн сэлбүүлсэн үү"
+            name={["epidemicQuestion", "isUseBlood"]}
+            rules={[{ required: false, message: "" }]}
+            className="mb-0"
+            labelCol={{ span: 14 }}
+          >
+            <Radio.Group>
+              <Radio value={true}>Тийм</Radio>
+              <Radio value={false}>Үгүй</Radio>
+            </Radio.Group>
+          </Form.Item>
         </Col>
-        <Col span={6}>
-          <Radio.Group>
-            <Radio value={1}>Тийм</Radio>
-            <Radio value={2}>Үгүй</Radio>
-          </Radio.Group>
-        </Col>
-      </Row>
-      <Row className="mt-2">
-        <Button className="mr-4" onClick={() => props.backBtn()}>
-          Буцах
-        </Button>
-        <Button
-          type="primary"
-          style={{ backgroundColor: blue.primary }}
-          onClick={() => props.nextBtn()}
-        >
-          Дараах
-        </Button>
       </Row>
     </div>
   );

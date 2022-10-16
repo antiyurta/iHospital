@@ -33,7 +33,7 @@ export default function ProgressNotes(props) {
       },
     })
       .then(async (response) => {
-        console.log("response getInspectionNotes", response.data.response.data);
+        // console.log("response getInspectionNotes", response.data.response.data);
         var result = response.data.response.data.reduce(function (r, a) {
           r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
           r[a.createdAt.substring(0, 4)].push(a);
