@@ -1,47 +1,70 @@
-import { Card, Col, InputNumber, Radio, Row, Table, Typography } from "antd";
+import {
+  Card,
+  Col,
+  InputNumber,
+  Radio,
+  Row,
+  Table,
+  Typography,
+  Collapse,
+} from "antd";
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import male from "../../../assets/images/maleAvatar.svg";
 import { INPUT_HEIGHT } from "../../../constant";
 import Ocs from "../OCS/Ocs";
 import MainAmbulatory from "./Ambulatory/MainAmbulatory";
 import MainPatientHistory from "./PatientHistory/MainPatientHistory";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
+import Birth from "./Problems/Birth";
+import HealthRecord from "./Problems/HealthRecord";
+import LifeStyle from "./Problems/LifeStyle";
+import LifeCondition from "./Problems/LifeCondition";
+import Allergy from "./Problems/Allergy";
+import UsuallyMedicine from "./Problems/UsuallyMedicine";
+import EpidemicQuestion from "./Problems/EpidemicQuestion";
+import GeneticQuestion from "./Problems/GeneticQuestion";
 
 function EMR() {
   const [cardLoading, setCardLoading] = useState(false);
+  const [problems, setProblems] = useState("");
+  const token = useSelector(selectCurrentToken);
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const DEV_URL = process.env.REACT_APP_DEV_URL;
   const [type, setType] = useState("EMR"); // ['OCS', 'EMR']
   const { Text } = Typography;
+  const { Panel } = Collapse;
 
   useEffect(() => {}, []);
 
   const handleTypeChange = ({ target: { value } }) => {
     setType(value);
   };
-  const columns = [
-    {
-      title: "Огноо",
-      dataIndex: "date",
-      key: "date",
-      className: "bg-white",
-    },
-    {
-      title: "Асуудал",
-      dataIndex: "problem",
-      key: "problem",
-      className: "bg-white",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      date: "2022-10-01",
-      problem: "Самарны харшилтай",
-    },
-    {
-      key: "2",
-      date: "2022-09-01",
-      problem: "Тууралт",
-    },
-  ];
+
+  useEffect(() => {
+    getHistory();
+  }, []);
+  const getHistory = () => {
+    axios({
+      method: "get",
+      url: `${DEV_URL}emr/patient-history`,
+      params: {
+        patientId: 43,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "x-api-key": API_KEY,
+      },
+    })
+      .then(async (response) => {
+        console.log("response", response);
+        setProblems(response.data.response.data.slice(-1)[0]);
+      })
+      .catch(function (error) {
+        console.log("response error", error.response);
+      });
+  };
 
   return (
     <Row gutter={[8, 8]}>
@@ -113,17 +136,69 @@ function EMR() {
           <Col span={10}>
             <Card
               bordered={false}
-              title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
-              className="header-solid h-full"
+              title={
+                <div className="flex font-semibold m-0 justify-between">
+                  <h6>Гол асуудлууд</h6>
+                  <p>
+                    {problems.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                  </p>
+                </div>
+              }
+              className="header-solid h-full p-0"
               loading={cardLoading}
+              bodyStyle={{
+                padding: 0,
+                paddingBottom: 16,
+                minHeight: 200,
+                maxHeight: 200,
+                overflowX: "hidden",
+                overflowY: "scroll",
+              }}
             >
-              <Table
-                columns={columns}
-                dataSource={data}
-                pagination={false}
-                sticky={false}
-                size="small"
-              />
+              {problems != "" ? (
+                <Collapse accordion ghost>
+                  {problems.hasOwnProperty("birth") ? (
+                    <Panel header="Төрөлт, өсөлт бойжилт" key="1">
+                      <Birth data={problems["birth"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("healthRecord") ? (
+                    <Panel header="Өвчний түүх" key="2">
+                      <HealthRecord data={problems["healthRecord"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("lifeStyle") ? (
+                    <Panel header="Амьдралын хэв маяг" key="3">
+                      <LifeStyle data={problems["lifeStyle"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("lifeCondition") ? (
+                    <Panel header="Амьдралын нөхцөл" key="14">
+                      <LifeCondition data={problems["lifeCondition"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("allergy") ? (
+                    <Panel header="Харшил" key="5">
+                      <Allergy data={problems["allergy"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("usuallyMedicine") ? (
+                    <Panel header="Эмийн хэрэглээ" key="6">
+                      <UsuallyMedicine data={problems["usuallyMedicine"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("epidemicQuestion") ? (
+                    <Panel header="Тархвар зүйн асуумж" key="7">
+                      <EpidemicQuestion data={problems["epidemicQuestion"]} />
+                    </Panel>
+                  ) : null}
+                  {problems.hasOwnProperty("geneticQuestion") ? (
+                    <Panel header="Удамшлын асуумж" key="8">
+                      <GeneticQuestion data={problems["geneticQuestion"]} />
+                    </Panel>
+                  ) : null}
+                </Collapse>
+              ) : null}
             </Card>
           </Col>
           <Col span={24}>

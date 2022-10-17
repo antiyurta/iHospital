@@ -119,3 +119,6 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.custom-card > .ant-card-head > .ant-card-head-wrapper {
+  display: contents !important;
+}
