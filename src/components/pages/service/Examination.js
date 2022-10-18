@@ -1,5 +1,5 @@
-import { Button, Card, Col, DatePicker, Descriptions, Form, Input, InputNumber, Modal, Pagination, Row, Select, Switch } from "antd";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { Button, Card, Col, DatePicker, Form, Input, InputNumber, Modal, Pagination, Row, Select, Switch } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import Table from 'react-bootstrap/Table';
 import { Get, openNofi, Post, ScrollRef } from "../../comman";
 import { EditOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
@@ -19,12 +19,21 @@ function Examination() {
     const [typeForm] = Form.useForm();
     const [examinations, setExaminations] = useState([]);
     const [examinationType, setExaminationType] = useState([]);
-    const [examination, setExamination] = useState([]);
-    const [editMode, setEditMode] = useState(false);
     const [addModal, setAddModal] = useState(false);
     const [AddTypeModal, setAddTypeModal] = useState(false);
-    const [viewModal, setViewModal] = useState(false);
+    const [editMode, setEditMode] = useState(false);
     const [meta, setMeta] = useState([]);
+    const [id, setId] = useState([]);
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "x-api-key": API_KEY
+        },
+        params: {
+            page: 1,
+            limit: 5,
+        }
+    };
     const checkNumber = (event) => {
         var charCode = event.charCode
         if (
@@ -37,36 +46,50 @@ function Examination() {
             return true;
         }
     }
-    const onSearch = (value) => {
-
-    }
+    const onSearch = (value, index) => {
+        config.params[index] = value;
+        getExamination(1);
+    };
     const showModal = () => {
         setAddModal(true);
-    }
-    const view = async (id) => {
-        await axios.get(DEV_URL + "service/examination/" + id,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "x-api-key": API_KEY
-                },
-            })
-            .then((response) => {
-                setExamination(response.data.response);
-                setViewModal(true);
-            }).catch((error) => {
-                console.log(error);
-            })
+        setEditMode(false);
+        form.resetFields();
     }
     const edit = async (row) => {
         setEditMode(true);
         setAddModal(true);
+        setId(row.id);
         form.setFieldsValue(row);
     }
     const deleteModal = (id) => {
+        Modal.error({
+            title: 'Устгах',
+            okText: 'Устгах',
+            closable: true,
+            content: (
+                <div>
+                    Устгасан дохиолдолд дахин сэргэхгүй болно
+                </div>
+            ),
+            onOk() {
+                config.params.limit = null;
+                config.params.page = null;
+                axios.delete(DEV_URL + "service/examination" + '/' + id, config)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            openNofi('success', 'ADasd', 'adsad');
+                            getExamination(1);
+                        }
+                    })
+                    .catch(() => {
+                        openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
+                    })
+            }
+        })
     }
     const onFinishAddType = async (values) => {
-        await Post('service/etype', values)
+        values.type = 0;
+        await axios.post(DEV_URL + 'service/type', values, config)
             .then((response) => {
                 openNofi('success', 'asdasd', 'sdad');
                 getExaminationType();
@@ -76,14 +99,28 @@ function Examination() {
             })
     }
     const onFinishAddEx = async (values) => {
-        await Post('service/examination', values)
+        // console.log(values);
+        config.params.limit = null;
+        config.params.page = null;
+        values.isActive = values.isActive ? 1 : 0;
+        values.hasInsurance = values.hasInsurance ? 1 : 0;
+        editMode ? await axios.patch(DEV_URL + 'service/examination/' + id, values, config)
             .then((response) => {
                 openNofi('success', "sadad", "sada");
-                getExamination();
+                getExamination(1);
                 setAddModal(false);
             }).catch((error) => {
                 console.log(error);
             })
+            :
+            await axios.post(DEV_URL + 'service/examination', values, config)
+                .then((response) => {
+                    openNofi('success', "sadad", "sada");
+                    getExamination(1);
+                    setAddModal(false);
+                }).catch((error) => {
+                    console.log(error);
+                })
     }
     const onFinishFailedEx = (error) => {
         console.log(error)
@@ -92,16 +129,8 @@ function Examination() {
         console.log(error);
     }
     const getExamination = async (page) => {
-        await axios.get(DEV_URL + 'service/examination', {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "x-api-key": API_KEY
-            },
-            params: {
-                limit: 5,
-                page: page
-            }
-        }).then((response) => {
+        config.params.page = page;
+        await axios.get(DEV_URL + 'service/examination', config).then((response) => {
             setExaminations(response.data.response.data);
             setMeta(response.data.response.meta);
         }).catch((error) => {
@@ -109,50 +138,54 @@ function Examination() {
         })
     }
     const getExaminationType = async () => {
-        await axios.get(DEV_URL + 'service/etype', {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-                "x-api-key": API_KEY
-            },
-        }).then((response) => {
+        config.params.page = null;
+        config.params.limit = null;
+        config.params.type = 0;
+        await axios.get(DEV_URL + 'service/type', config).then((response) => {
             setExaminationType(response.data.response.data);
         }).catch((error) => {
             console.log(error);
         })
     }
+    const changeIsActive = async (type) => {
+        const state = type ? 1 : 0;
+        config.params.isActive = state;
+        getExamination(1);
+    }
     useEffect(() => {
         ScrollRef(scrollRef);
         getExamination(1);
-        // getExaminationType();
+        getExaminationType();
     }, [])
     return (
         <>
             <Card
                 bordered={false}
-                className="criclebox tablespace mb-24"
+                className="header-solid max-h-max rounded-md"
                 title="Шинжилгээ"
                 extra={
-                    <Search placeholder="Хайх" onSearch={onSearch} enterButton="Хайх" />
+                    <>
+                        <Button onClick={showModal} className='bg-sky-700 rounded-md text-white'>Нэмэх</Button>
+                    </>
                 }
             >
-                <div className='table-responsive' id='style-8' ref={scrollRef}>
+                <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
                     <Table className='ant-border-space' style={{ width: '100%' }}>
                         <thead className='ant-table-thead'>
                             <tr>
-                                <th>№</th>
-                                <th>Нэр</th>
-                                {/* <th>Үнэ</th> */}
-                                <th>Даатгал</th>
-                                <th>Төлөв</th>
-                                <th style={{ width: 10 }}>
-                                    <span className='ant-table-header-column'>
-                                        <div style={{ textAlign: 'center' }}>
-                                            <span className='ant-table-column-title'>
-                                                <Button type='link' onClick={showModal} title='Нэмэх' ><PlusOutlined style={{ fontSize: '20px', color: 'green', textAlign: 'center' }} /></Button>
-                                            </span>
-                                        </div>
-                                    </span>
+                                <th className="font-bold text-sm align-middle" rowSpan={2}>№</th>
+                                <th className="font-bold text-sm">Нэр</th>
+                                <th className="font-bold text-sm align-middle" rowSpan={2}>Даатгал</th>
+                                <th className="font-bold text-sm align-middle" rowSpan={2}>
+                                    Төлөв
+                                    <Switch defaultChecked={1} checkedChildren="1" unCheckedChildren="0" className='bg-sky-700 rounded-md text-white' onChange={changeIsActive} />
                                 </th>
+                                <th className="font-bold text-sm align-middle" rowSpan={2}>Үнэ</th>
+                                <th className="font-bold text-sm align-middle" rowSpan={2}>Хэвтэн үнэ</th>
+                                <th className='w-3 font-bold text-sm align-middle' rowSpan={2}>Үйлдэл</th>
+                            </tr>
+                            <tr>
+                                <td><Search placeholder={"Нэр хайх"} allowClear onSearch={(e) => onSearch(e, 'name')} enterButton={"Хайх"} /></td>
                             </tr>
                         </thead>
                         <tbody className='ant-table-tbody'>
@@ -164,8 +197,9 @@ function Examination() {
                                             <td>{row.name}</td>
                                             <td>{row.hasInsurance ? <CheckOutlined style={{ color: 'green' }} /> : <CloseOutlined style={{ color: 'red' }} />}</td>
                                             <td>{row.isActive ? <CheckOutlined style={{ color: 'green' }} /> : <CloseOutlined style={{ color: 'red' }} />}</td>
+                                            <td>{row.prices ? row.prices.price : 0}</td>
+                                            <td>{row.prices ? row.prices.inpatientPrice : 0}</td>
                                             <td className='ant-table-row-cell-break-word'>
-                                                <Button type="link" onClick={() => view(row.id)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
                                                 <Button type="link" onClick={() => edit(row)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
                                                 <Button type="link" onClick={() => deleteModal(row.id)} title='Устгах' style={{ paddingLeft: 5 }} ><DeleteOutlined style={{ color: 'red' }} /></Button>
                                             </td>
@@ -186,23 +220,7 @@ function Examination() {
                 </div>
             </Card>
             <Modal
-                title={'Дэлгэрэнгүй'}
-                open={viewModal}
-                onCancel={() => setViewModal(false)}
-                width="80%"
-            >
-                <Descriptions bordered>
-                    <Descriptions.Item label={'Шинэжилгээний Төрөл'}>{examination.types?.name}</Descriptions.Item>
-                    <Descriptions.Item label={'Шинэжилгээний Нэр'}>{examination.name}</Descriptions.Item>
-                    <Descriptions.Item label={'Даатгал'}>{examination.hasInsurance ? <CheckOutlined style={{ color: 'green' }} /> : <CloseOutlined style={{ color: 'red' }} />}</Descriptions.Item>
-                    <Descriptions.Item label={'Идэвхтэй эсэх'}>{examination.isActive ? <CheckOutlined style={{ color: 'green' }} /> : <CloseOutlined style={{ color: 'red' }} />}</Descriptions.Item>
-                    <Descriptions.Item label={'Үнэ'}>{examination.prices?.price}</Descriptions.Item>
-                    <Descriptions.Item label={'Хэвтэнд ашиглах үнэ'}>{examination?.prices?.inpatientPrice}</Descriptions.Item>
-                    <Descriptions.Item label={'Үнэ ашигласан огноо'}>{examination?.prices?.createdAt}</Descriptions.Item>
-                </Descriptions>
-            </Modal>
-            <Modal
-                title="Шинжилгээ нэмэх"
+                title={editMode ? "Шинжилгээ засах" : "Шинжилгээ нэмэх"}
                 cancelText="Болих"
                 okText="Хадгалах"
                 open={addModal}
@@ -236,7 +254,9 @@ function Examination() {
                             </Form.Item>
                         </Col>
                         <Col span={2}>
-                            <Button type="link" title="Төрөл нэмэх" onClick={() => setAddTypeModal(true)}><PlusOutlined style={{ fontSize: '20px', color: 'green', textAlign: 'center' }} /></Button>
+                            {
+                                !editMode && <Button type="link" title="Төрөл нэмэх" onClick={() => setAddTypeModal(true)}><PlusOutlined style={{ fontSize: '20px', color: 'green', textAlign: 'center' }} /></Button>
+                            }
                         </Col>
                         <Col span={24}>
                             <Form.Item
@@ -267,7 +287,7 @@ function Examination() {
                         <Col span={12}>
                             <Form.Item
                                 label="Үнэ"
-                                name="price"
+                                name={['prices', 'price']}
                             >
                                 <InputNumber onKeyPress={checkNumber} />
                             </Form.Item>
@@ -275,17 +295,9 @@ function Examination() {
                         <Col span={12}>
                             <Form.Item
                                 label="Хэвтэнд ашиглах үнэ"
-                                name="inpatientPrice"
+                                name={['prices', 'inpatientPrice']}
                             >
                                 <InputNumber onKeyPress={checkNumber} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Үнэ ашиглах огноо"
-                                name="begindate"
-                            >
-                                <DatePicker locale={mn} />
                             </Form.Item>
                         </Col>
                     </Row>

@@ -14,7 +14,7 @@ import Room from "./components/pages/Organization/Room";
 import Bed from "./components/pages/Organization/Bed";
 //
 //
-import Payment from "./components/pages/payment/payment";
+import Payment from "./components/pages/payment/Payment";
 //
 //
 import DoctorAppointmentSchedule from "./components/pages/Appointment/DoctorAppointmentSchedule";

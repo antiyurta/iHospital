@@ -103,7 +103,7 @@ function Hospital() {
                     column={column}
                     isCreate={true}
                     isRead={true}
-                    isUpdate={false}
+                    isUpdate={true}
                     isDelete={false}
                     width='50%'
                 />

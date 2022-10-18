@@ -1,16 +1,27 @@
 import { Col, Row } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Get } from "../../comman";
-
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
 import UTable from "../../UTable";
-
+const DEV_URL = process.env.REACT_APP_DEV_URL;
+const API_KEY = process.env.REACT_APP_API_KEY;
 function CountryDictionary() {
-
+    const token = useSelector(selectCurrentToken);
     const [provice, setProvice] = useState([]);
     const [country, setCountry] = useState([]);
-
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "x-api-key": API_KEY
+        },
+        params: {
+            type: null,
+        }
+    };
     const getProvice = async () => {
-        await Get('reference/country', { type: 2 })
+        config.params.type = 2;
+        await axios.get(DEV_URL + 'reference/country', config)
             .then((response) => {
                 setProvice(response.data.response.data);
             })
@@ -19,7 +30,8 @@ function CountryDictionary() {
             })
     };
     const getCountry = async () => {
-        await Get('reference/country', { type: 1 })
+        config.params.type = 1;
+        await axios.get(DEV_URL + 'reference/country', config)
             .then((response) => {
                 setCountry(response.data.response.data);
             })
@@ -167,28 +179,59 @@ function CountryDictionary() {
             col: 24,
         }
     ]
-    const CountryParams = {
-        type: 1,
-        limit: 1,
-        page: 1
-    };
-    const ProviceParams = {
-        type: 2
-    };
-    const TownParams = {
-        type: 3,
-        page: 1,
+    const configCountry = {
+        params: {
+            type: 1,
+        }
+    }
+    const configProvice = {
+        params: {
+            type: 2,
+        }
+    }
+    const configTown = {
+        params: {
+            type: 3,
+        }
     }
     return (
         <Row gutter={[24, 0]}>
             <Col xs="12" xl={12}>
-                <UTable title={'Улс'} url={'reference/country'} params={CountryParams} column={CountryColumn} width='50%' />
+                <UTable
+                    title={'Улс'}
+                    url={'reference/country'}
+                    params={configCountry}
+                    column={CountryColumn}
+                    width='50%'
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                />
             </Col>
             <Col xs="12" xl={12}>
-                <UTable title={'Аймаг/ Хот'} url={'reference/country'} params={ProviceParams} column={ProviceColumn} width='50%' />
+                <UTable
+                    title={'Аймаг/ Хот'}
+                    url={'reference/country'}
+                    params={configProvice}
+                    column={ProviceColumn}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    width='50%' />
             </Col>
             <Col xs={12} xl={12}>
-                <UTable title={'Сум / Дүүрэг'} url={'reference/country'} params={TownParams} column={TownColumn} width='50%' />
+                <UTable
+                    title={'Сум / Дүүрэг'}
+                    url={'reference/country'}
+                    params={configTown}
+                    column={TownColumn}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    width='50%' />
             </Col>
         </Row>
     )

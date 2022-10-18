@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../features/authReducer';
-
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Row } from "antd";
@@ -28,7 +27,6 @@ const pencil = [
 
 function Profile() {
     const token = useSelector(selectCurrentToken);
-
     useEffect(() => {
         console.log(token);
     })
