@@ -122,3 +122,9 @@ input[type=number] {
 .custom-card > .ant-card-head > .ant-card-head-wrapper {
   display: contents !important;
 }
+.ant-collapse-header{
+  padding: 5px !important;
+}
+.ant-collapse-arrow{
+  display: inline-flex !important; /* Collapse -н сумыг голлуулах */
+}

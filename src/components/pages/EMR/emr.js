@@ -140,7 +140,7 @@ function EMR() {
                 <div className="flex font-semibold m-0 justify-between">
                   <h6>Гол асуудлууд</h6>
                   <p>
-                    {problems.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                    {problems?.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
                   </p>
                 </div>
               }
@@ -157,42 +157,42 @@ function EMR() {
             >
               {problems != "" ? (
                 <Collapse accordion ghost>
-                  {problems.hasOwnProperty("birth") ? (
+                  {problems?.hasOwnProperty("birth") ? (
                     <Panel header="Төрөлт, өсөлт бойжилт" key="1">
                       <Birth data={problems["birth"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("healthRecord") ? (
+                  {problems?.hasOwnProperty("healthRecord") ? (
                     <Panel header="Өвчний түүх" key="2">
                       <HealthRecord data={problems["healthRecord"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("lifeStyle") ? (
+                  {problems?.hasOwnProperty("lifeStyle") ? (
                     <Panel header="Амьдралын хэв маяг" key="3">
                       <LifeStyle data={problems["lifeStyle"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("lifeCondition") ? (
+                  {problems?.hasOwnProperty("lifeCondition") ? (
                     <Panel header="Амьдралын нөхцөл" key="14">
                       <LifeCondition data={problems["lifeCondition"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("allergy") ? (
+                  {problems?.hasOwnProperty("allergy") ? (
                     <Panel header="Харшил" key="5">
                       <Allergy data={problems["allergy"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("usuallyMedicine") ? (
+                  {problems?.hasOwnProperty("usuallyMedicine") ? (
                     <Panel header="Эмийн хэрэглээ" key="6">
                       <UsuallyMedicine data={problems["usuallyMedicine"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("epidemicQuestion") ? (
+                  {problems?.hasOwnProperty("epidemicQuestion") ? (
                     <Panel header="Тархвар зүйн асуумж" key="7">
                       <EpidemicQuestion data={problems["epidemicQuestion"]} />
                     </Panel>
                   ) : null}
-                  {problems.hasOwnProperty("geneticQuestion") ? (
+                  {problems?.hasOwnProperty("geneticQuestion") ? (
                     <Panel header="Удамшлын асуумж" key="8">
                       <GeneticQuestion data={problems["geneticQuestion"]} />
                     </Panel>

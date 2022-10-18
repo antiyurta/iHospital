@@ -1,17 +1,22 @@
-import { Col, Row, List, Typography, Card, Button, Modal } from "antd";
+import { Col, Row, List, Typography, Card, Button, Modal, Input } from "antd";
 import Search from "antd/lib/transfer/search";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { blue } from "@ant-design/colors";
 import FormModal from "./FormModal";
+import MainContext from "../../../contexts/MainContext";
+import { SearchOutlined } from "@ant-design/icons";
 
 export default function FormBuilder() {
   const token = useSelector(selectCurrentToken);
+  const context_state = useContext(MainContext);
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
+  const [searchField, setSearchField] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [callForms, setCallForms] = useState(false); //Зүгээр л Хадгалах дарсан эсэхийг мэдэх
   const [modalType, setModalType] = useState("");
   const [modalData, setModalData] = useState("");
   const [forms, setForms] = useState([]);
@@ -23,10 +28,9 @@ export default function FormBuilder() {
     setIsModalOpen(true);
   };
 
-  const onSearch = (value) => console.log(value);
   useEffect(() => {
     getHistory();
-  }, []);
+  }, [callForms]);
   const getHistory = () => {
     axios({
       method: "get",
@@ -45,17 +49,20 @@ export default function FormBuilder() {
       });
   };
 
+  const filteredForm = forms.filter((form) => {
+    return form.name.toLowerCase().includes(searchField.toLowerCase());
+  });
+
   return (
     <>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Row className="items-center">
             <Col span={4}>
-              <Search
+              <Input
                 placeholder="Хайх"
                 allowClear
-                onSearch={onSearch}
-                className="w-48"
+                onChange={(e) => setSearchField(e.target.value)}
               />
             </Col>
             <Col span={2} className="ml-4">
@@ -76,7 +83,7 @@ export default function FormBuilder() {
                   gutter: 8,
                   column: 5,
                 }}
-                dataSource={forms}
+                dataSource={filteredForm}
                 renderItem={(item) => (
                   <List.Item>
                     <Card
@@ -100,6 +107,19 @@ export default function FormBuilder() {
         close={setIsModalOpen}
         type={modalType}
         data={modalData}
+        formValue={{
+          pain: [context_state.painData, "Зовиур"],
+          inspection: [context_state.inspectionData, "Үзлэг"],
+          question: [context_state.questionData, "Асуумж"],
+          plan: [context_state.planData, "Төлөвлөгөө"],
+        }}
+        setFormValue={{
+          pain: context_state.setPainData,
+          inspection: context_state.setInspectionData,
+          question: context_state.setQuestionData,
+          plan: context_state.setPplanData,
+        }}
+        callForm={[callForms, setCallForms]}
       />
     </>
   );
