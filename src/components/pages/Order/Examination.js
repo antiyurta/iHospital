@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
@@ -37,11 +37,7 @@ function Examination({ handleclick }) {
         await axios.get(DEV_URL + "service/examination", config)
             .then((response) => {
                 setExamination(response.data.response.data);
-                console.log(examination);
             })
-    }
-    const addService = (item) => {
-
     }
     useEffect(() => {
         getExamination();
