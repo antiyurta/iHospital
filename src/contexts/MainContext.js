@@ -51,7 +51,7 @@ export const MainStore = (props) => {
       ],
     },
   ]);
-  const [planData, setPplanData] = useState([
+  const [planData, setPlanData] = useState([
     {
       inspectionType: "plan",
       inspectionFormId: null,
@@ -69,6 +69,72 @@ export const MainStore = (props) => {
   ]);
   useEffect(() => {}, []);
 
+  const resetFields = () => {
+    setPainData([
+      {
+        inspectionType: "pain",
+        inspectionFormId: null,
+        type: "",
+        key: "",
+        label: "",
+        order: null,
+        options: [
+          {
+            value: "",
+            label: "",
+          },
+        ],
+      },
+    ]);
+    setInspectionData([
+      {
+        inspectionType: "pain",
+        inspectionFormId: null,
+        type: "",
+        key: "",
+        label: "",
+        order: null,
+        options: [
+          {
+            value: "",
+            label: "",
+          },
+        ],
+      },
+    ]);
+    setQuestionData([
+      {
+        inspectionType: "pain",
+        inspectionFormId: null,
+        type: "",
+        key: "",
+        label: "",
+        order: null,
+        options: [
+          {
+            value: "",
+            label: "",
+          },
+        ],
+      },
+    ]);
+    setPlanData([
+      {
+        inspectionType: "pain",
+        inspectionFormId: null,
+        type: "",
+        key: "",
+        label: "",
+        order: null,
+        options: [
+          {
+            value: "",
+            label: "",
+          },
+        ],
+      },
+    ]);
+  };
   return (
     <MainContext.Provider
       value={{
@@ -79,7 +145,8 @@ export const MainStore = (props) => {
         questionData,
         setQuestionData,
         planData,
-        setPplanData,
+        setPlanData,
+        resetFields,
       }}
     >
       {props.children}
