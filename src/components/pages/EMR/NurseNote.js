@@ -1,99 +1,119 @@
 //Сувилагчийн тэмдэглэл
-import React from "react";
-import { Table } from "antd";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
 
 export default function NurseNote() {
-  const columns = [
-    {
-      title: "Огноо/цаг/",
-      dataIndex: "date",
-      key: "date",
-      className: "bg-white",
-    },
-    {
-      title: "Систол",
-      dataIndex: "systole",
-      key: "systole",
-      className: "bg-white",
-    },
-    {
-      title: "Диастол",
-      dataIndex: "diastole",
-      key: "diastole",
-      className: "bg-white",
-    },
-    {
-      title: "Жин",
-      dataIndex: "weight",
-      key: "weight",
-      className: "bg-white",
-    },
-    {
-      title: "Өндөр",
-      dataIndex: "height",
-      key: "height",
-      className: "bg-white",
-    },
-    {
-      title: "Халуун",
-      dataIndex: "heat",
-      key: "heat",
-      className: "bg-white",
-    },
-    {
-      title: "Амьсгал",
-      dataIndex: "breath",
-      key: "breath",
-      className: "bg-white",
-    },
-    {
-      title: "SpO'2",
-      dataIndex: "spo",
-      key: "spo",
-      className: "bg-white",
-    },
-    {
-      title: "Пульс",
-      dataIndex: "pulse",
-      key: "pulse",
-      className: "bg-white",
-    },
-    {
-      title: "Ухаан санаа",
-      dataIndex: "wisdom",
-      key: "wisdom",
-      className: "bg-white",
-    },
-    {
-      title: "Сувилагч",
-      dataIndex: "nurse",
-      key: "nurse",
-      className: "bg-white",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      date: "2022-10-11 18:02:35",
-      systole: "1",
-      diastole: "1",
-      weight: "1",
-      height: "1",
-      heat: "1",
-      breath: "1",
-      spo: "1",
-      pulse: "1",
-      wisdom: "V,P,U",
-      nurse: "Б.Намуунцэлмэг",
-    },
-  ];
+  const token = useSelector(selectCurrentToken);
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const DEV_URL = process.env.REACT_APP_DEV_URL;
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getAssesment();
+  }, []);
+
+  const getAssesment = (type) => {
+    //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
+    axios({
+      method: "get",
+      url: `${DEV_URL}assesment`,
+      params: {
+        patientId: 47,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "x-api-key": API_KEY,
+      },
+    })
+      .then(async (response) => {
+        console.log("response getAssesment", response.data.response.data);
+        setData(response.data.response.data);
+      })
+      .catch(function (error) {
+        console.log("response error", error.response);
+      });
+  };
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      pagination={false}
-      sticky={false}
-      size="small"
-    />
+    <table className="w-full">
+      <tbody>
+        <tr className="">
+          <th className="font-medium text-xs text-black text-center py-3.5">
+            Огноо/цаг/
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Систол
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Диастол
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Жин
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Өндөр
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Халуун
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Амьсгал
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            SpO'2
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Пульс
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            <div className="whitespace-normal">Ухаан санаа</div>
+          </th>
+          <th className="font-medium text-xs text-black text-center border-x">
+            Сувилагч
+          </th>
+        </tr>
+        {data &&
+          data.map((element, index) => (
+            <tr key={index} className="">
+              <td className="text-center ">
+                <p className="p-1 h-7">
+                  {element.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                </p>
+              </td>
+              <td className="text-center ">
+                <p className="p-1 h-7">{element.highPressureRight}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.lowPressureRight}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.weight}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.height}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.temp}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.respiratoryRate}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.spO2}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.pulse}</p>
+              </td>
+              <td className="text-center">
+                <p className="p-1 h-7">{element.mind}</p>
+              </td>
+              <td className="text-center">
+                <p>Б.Намуунцэлмэг</p>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
   );
 }

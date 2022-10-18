@@ -13,7 +13,7 @@ export default function EarlyWarning() {
   const { Option } = Select;
 
   const [formValues, setFormValues] = useState({
-    patientId: 43,
+    patientId: 48,
     highPressureRight: 0, //Систол
     lowPressureRight: 0, //Диастол
     weight: 0,
@@ -44,7 +44,7 @@ export default function EarlyWarning() {
 
   let resetFormFields = () => {
     setFormValues({
-      patientId: 43,
+      patientId: 48,
       highPressureRight: null, //Систол
       lowPressureRight: null, //Диастол
       weight: null,
@@ -64,7 +64,7 @@ export default function EarlyWarning() {
       method: "get",
       url: `${DEV_URL}assesment`,
       params: {
-        patientId: 43,
+        patientId: 48,
       },
       headers: {
         Authorization: `Bearer ${token}`,
