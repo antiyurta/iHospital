@@ -46,7 +46,7 @@ function Order(props) {
                 {
                     label: "Оношилгоо",
                     key: index,
-                    children: <Xray />
+                    children: <Xray handleclick={handleclick}/>
                 }
             )
         }

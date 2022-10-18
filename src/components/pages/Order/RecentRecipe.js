@@ -1,7 +1,7 @@
 function RecentRecipe() {
     return (
         <div>
-            sadasd
+            Өмнөх жор
         </div>
     )
 }

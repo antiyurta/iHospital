@@ -1,7 +1,7 @@
 function SetOrder() {
     return (
         <div>
-            asdsad
+            Set Order
         </div>
     )
 }
