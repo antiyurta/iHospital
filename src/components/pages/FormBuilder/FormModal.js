@@ -9,26 +9,36 @@ import {
   Select,
   Typography,
 } from "antd";
-import React, { useContext, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { blue, red } from "@ant-design/colors";
 import { INPUT_HEIGHT } from "../../../constant";
 import { DeleteOutlined } from "@ant-design/icons";
-import MainContext from "../../../contexts/MainContext";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import axios from "axios";
 
 export default function FormModal(props) {
-  console.log("prpops", props);
+  // console.log("prpops", props);
   const token = useSelector(selectCurrentToken);
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
-  const [formStructure, setFormStructure] = useState(1);
+  const [formStructure, setFormStructure] = useState();
   const [formName, setFormName] = useState("");
   const [saveError, setSaveError] = useState("");
   const { Option } = Select;
   const { Text } = Typography;
   const { Panel } = Collapse;
+  useEffect(() => {
+    //Form -г засах үед
+    if (props.data !== null) {
+      setFormStructure(props.data.id);
+      setFormName(props.data.name);
+    } else {
+      setFormStructure("");
+      setFormName("");
+    }
+  }, []);
+
   const handleOk = () => {
     saveForm();
   };
@@ -38,19 +48,29 @@ export default function FormModal(props) {
 
   const saveForm = () => {
     axios({
-      method: "post",
-      url: `${DEV_URL}emr/inspection-form`,
+      method: props.type === "add" ? "post" : "patch", //Form -г засах үед
+      url:
+        props.type === "add"
+          ? `${DEV_URL}emr/inspection-form`
+          : `${DEV_URL}emr/inspection-form/${props.data?.id}`, //Form -г засах үед
       headers: {
         Authorization: `Bearer ${token}`,
         "x-api-key": API_KEY,
       },
       data: {
+        ...(props.type === "edit" && { id: props.data?.id }), //Form -г засах үед
         structureId: formStructure,
         name: formName,
-        pains: props.formValue["pain"][0],
-        inspections: props.formValue["inspection"][0],
-        questions: props.formValue["question"][0],
-        plans: props.formValue["plan"][0],
+        formItems: [
+          ...props.formValue["pain"][0],
+          ...props.formValue["inspection"][0],
+          ...props.formValue["question"][0],
+          ...props.formValue["plan"][0],
+        ],
+        // pains: props.formValue["pain"][0],
+        // inspections: props.formValue["inspection"][0],
+        // questions: props.formValue["question"][0],
+        // plans: props.formValue["plan"][0],
       },
     })
       .then(async (response) => {
@@ -188,7 +208,7 @@ export default function FormModal(props) {
   ];
   return (
     <Modal
-      title={props.type === "add" ? "Форм нэмэх" : "Форм засах"}
+      title={props.type === "add" ? "Форм нэмэх" : "Форм засах"} //Form -г засах үед
       open={props.show}
       onOk={handleOk}
       onCancel={handleCancel}
@@ -241,9 +261,9 @@ export default function FormModal(props) {
                 value={formStructure}
                 onChange={setFormStructure}
               >
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="Yiminghe">yiminghe</Option>
+                <Option value={1}>Structure 1</Option>
+                <Option value={2}>Structure 2</Option>
+                <Option value={3}>Structure 3</Option>
               </Select>
             </Col>
           </Row>

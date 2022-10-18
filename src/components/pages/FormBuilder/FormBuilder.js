@@ -1,5 +1,4 @@
-import { Col, Row, List, Typography, Card, Button, Modal, Input } from "antd";
-import Search from "antd/lib/transfer/search";
+import { Col, Row, List, Card, Button, Input } from "antd";
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useSelector } from "react-redux";
@@ -7,7 +6,6 @@ import { selectCurrentToken } from "../../../features/authReducer";
 import { blue } from "@ant-design/colors";
 import FormModal from "./FormModal";
 import MainContext from "../../../contexts/MainContext";
-import { SearchOutlined } from "@ant-design/icons";
 
 export default function FormBuilder() {
   const token = useSelector(selectCurrentToken);
@@ -21,10 +19,19 @@ export default function FormBuilder() {
   const [modalData, setModalData] = useState("");
   const [forms, setForms] = useState([]);
   const showModal = (type, data) => {
+    type === "add" && context_state.resetFields();
     console.log("type", type);
     console.log("data", data);
     setModalType(type);
     setModalData(data);
+    //Form -г засах үед*************************
+    if (data !== null) {
+      context_state.setPainData(data?.formItem["pain"]);
+      context_state.setInspectionData(data?.formItem["inspection"]);
+      context_state.setQuestionData(data?.formItem["question"]);
+      context_state.setPlanData(data?.formItem["plan"]);
+    }
+    //Form -г засах үед*************************
     setIsModalOpen(true);
   };
 
@@ -102,25 +109,27 @@ export default function FormBuilder() {
           </Row>
         </Col>
       </Row>
-      <FormModal
-        show={isModalOpen}
-        close={setIsModalOpen}
-        type={modalType}
-        data={modalData}
-        formValue={{
-          pain: [context_state.painData, "Зовиур"],
-          inspection: [context_state.inspectionData, "Үзлэг"],
-          question: [context_state.questionData, "Асуумж"],
-          plan: [context_state.planData, "Төлөвлөгөө"],
-        }}
-        setFormValue={{
-          pain: context_state.setPainData,
-          inspection: context_state.setInspectionData,
-          question: context_state.setQuestionData,
-          plan: context_state.setPplanData,
-        }}
-        callForm={[callForms, setCallForms]}
-      />
+      {isModalOpen ? (
+        <FormModal
+          show={isModalOpen}
+          close={setIsModalOpen}
+          type={modalType}
+          data={modalData}
+          formValue={{
+            pain: [context_state.painData, "Зовиур"],
+            inspection: [context_state.inspectionData, "Үзлэг"],
+            question: [context_state.questionData, "Асуумж"],
+            plan: [context_state.planData, "Төлөвлөгөө"],
+          }}
+          setFormValue={{
+            pain: context_state.setPainData,
+            inspection: context_state.setInspectionData,
+            question: context_state.setQuestionData,
+            plan: context_state.setPlanData,
+          }}
+          callForm={[callForms, setCallForms]}
+        />
+      ) : null}
     </>
   );
 }

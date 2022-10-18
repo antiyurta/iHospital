@@ -149,7 +149,7 @@ export default function MainPatientHistory() {
       },
     })
       .then(async (response) => {
-        // console.log("res getInspectionTabs", response.data.response.data);
+        console.log("res getInspectionTabs", response.data.response.data);
         setTabs(response.data.response.data);
       })
       .catch(function (error) {
