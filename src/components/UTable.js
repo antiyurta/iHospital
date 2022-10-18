@@ -103,7 +103,14 @@ function UTable(props) {
     };
     const onStart = async (page) => {
         setSpinner(false);
+        if (props.params) {
+            config.params = {
+                ...config.params,
+                ...props.params.params
+            }
+        }
         config.params.page = page;
+        config.params.limit = 5;
         await axios.get(
             DEV_URL + props.url, config
         ).then((response) => {
@@ -123,17 +130,17 @@ function UTable(props) {
         editMode ?
             await axios.patch(
                 DEV_URL + props.url + '/' + id,
+                data,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "x-api-key": API_KEY
                     },
-                },
-                data
+                }
             ).then((response) => {
                 if (response.status === 200) {
                     openNofi('success', 'ADasd', 'adsad');
-                    onStart();
+                    onStart(1);
                     setIsConfirmLoading(false);
                     setIsModalVisible(false);
                 } else {
@@ -156,7 +163,7 @@ function UTable(props) {
             ).then((response) => {
                 if (response.status === 201) {
                     openNofi('success', 'asdas', 'dsada');
-                    onStart();
+                    onStart(1);
                     setIsConfirmLoading(false);
                     setIsModalVisible(false);
                 } else {
@@ -223,7 +230,7 @@ function UTable(props) {
                                 {
                                     props.column.map((element, index) => {
                                         return (element.isView && <td key={index}>
-                                            <Search placeholder={element.label + " Хайх"} onSearch={(e) => onSearch(e, element.index)} enterButton={"Хайх"} />
+                                            <Search placeholder={element.label + " Хайх"} allowClear onSearch={(e) => onSearch(e, element.index)} enterButton={"Хайх"} />
                                         </td>)
                                     })
                                 }

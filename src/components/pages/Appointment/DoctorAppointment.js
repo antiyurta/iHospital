@@ -6,6 +6,7 @@ import 'moment/locale/mn';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import React, { useEffect, useRef, useState } from 'react';
 import male from '../../../assets/images/maleAvatar.svg';
+import PatientInformation from '../PatientInformation';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -54,6 +55,10 @@ function DoctorAppointment() {
         ])
     }
 
+    const dada = (value) => {
+        console.log("========>", value);
+    }
+
     useEffect(() => {
         mountShower();
         ScrollRef(scrollRef);
@@ -61,37 +66,14 @@ function DoctorAppointment() {
     return (
         <Row gutter={[8, 8]}>
             <Col span={8}>
-                <Card
-                    bordered={false}
-                    title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн мэдээлэл</h6>}
-                    className="header-solid h-full"
-                    loading={cardLoading}
-                    bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
-                >
-                    <Row gutter={[16, 16]}>
-                        <Col span={8}>
-                            <img src={male} alt="avatar" />
-                        </Col>
-                        <Col span={16}>
-                            <div style={{ display: 'inline-flex' }}>
-                                <label style={{ alignSelf: 'center' }}>Регистр:</label>
-                                <Search placeholder="Хайх" onSearch={onSearch} enterButton="Хайх" />
-                            </div>
-                            <label style={{ width: '100%', paddingBottom: 5 }}>Овог: <b>Ширчиндэмбэрэл</b></label>
-                            <br />
-                            <label style={{ width: '100%', paddingBottom: 5 }}>Нэр: <b>Амарбат</b></label>
-                            <br />
-                            <label style={{ width: '100%' }}>Хүйс: <b>Эр</b></label>
-                        </Col>
-                    </Row>
-                </Card>
+                <PatientInformation dada={dada} />
             </Col>
             <Col span={8}>
                 <Card
                     bordered={false}
                     title={<h6 className="font-semibold m-0">Үзлэгийн түүх</h6>}
-                    className="header-solid h-full"
-                    bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
+                    className="header-solid max-h-max rounded-md"
+                    bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
                 >
                     <div className='table-responsive' id='style-8' ref={scrollRef}>
                         <Table className='ant-border-space'>
@@ -101,7 +83,7 @@ function DoctorAppointment() {
                                     <th>Кабинет</th>
                                     <th>Эмч</th>
                                     <th>Төлбөр</th>
-                                    <th style={{ backgroundColor: '#fff' }}>Статус</th>
+                                    <th>Статус</th>
                                 </tr>
                             </thead>
                         </Table>
@@ -112,8 +94,8 @@ function DoctorAppointment() {
                 <Card
                     bordered={false}
                     title={<h6 className="font-semibold m-0">Төлбөрийн мэдээлэл</h6>}
-                    className="header-solid h-full"
-                    bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
+                    className="header-solid max-h-max rounded-md"
+                    bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
                 >
                     <div className='table-responsive' id='style-8' ref={scrollRef}>
                         <Table className='ant-border-space'>
@@ -122,7 +104,7 @@ function DoctorAppointment() {
                                     <th>Огноо</th>
                                     <th>Төрөл</th>
                                     <th>Төлбөр</th>
-                                    <th style={{ backgroundColor: '#fff' }}>Ажилтан</th>
+                                    <th>Ажилтан</th>
                                 </tr>
                             </thead>
                         </Table>
@@ -133,7 +115,7 @@ function DoctorAppointment() {
                 <Card
                     bordered={false}
                     title={<h6 className="font-semibold m-0">Цаг захиалга</h6>}
-                    className="header-solid h-full"
+                    className="header-solid max-h-max rounded-md"
                     bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
                     loading={cardLoading}
                     extra={

@@ -1214,7 +1214,7 @@ span.blue {
 }
 
 #style-8::-webkit-scrollbar {
-  width: auto;
+  width: 2px;
   height: 7px;
   background-color: #f5f5f5;
 }

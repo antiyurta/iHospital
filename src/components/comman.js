@@ -8,41 +8,21 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 const config = {
     headers: {
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+        "Authorization": null,
         "x-api-key": API_KEY
     }
 }
 
 const getConfig = {
     headers: {
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+        "Authorization": null,
         "x-api-key": API_KEY
     }
 }
 
-export const ScrollRef = (scrollRef) => {
-    const el = scrollRef.current;
-    if (el) {
-        const wheelListener = (e) => {
-            e.preventDefault();
-            el.scrollTo({
-                left: el.scrollLeft + e.deltaY * 100,
-                behavior: "smooth"
-            });
-        };
-        el.addEventListener("wheel", wheelListener);
-        return () => el.removeEventListener("wheel", wheelListener);
-    }
-}
-
-export const openNofi = (type, message, description) => {
-    notification[type]({
-        message: `${message}`,
-        description: `${description}`
-    })
-}
-
 export function Get(url, params) {
+    const token = useSelector(selectCurrentToken);
+    config.headers.Authorization = `Baerer ${token}`;
     if (params) {
         getConfig.params = params;
         return axios.get(DEV_URL + url, getConfig);
@@ -80,5 +60,27 @@ export function Delete(url) {
             }).catch((error) => {
                 reject(error);
             })
+    })
+}
+
+export const ScrollRef = (scrollRef) => {
+    const el = scrollRef.current;
+    if (el) {
+        const wheelListener = (e) => {
+            e.preventDefault();
+            el.scrollTo({
+                left: el.scrollLeft + e.deltaY * 100,
+                behavior: "smooth"
+            });
+        };
+        el.addEventListener("wheel", wheelListener);
+        return () => el.removeEventListener("wheel", wheelListener);
+    }
+}
+
+export const openNofi = (type, message, description) => {
+    notification[type]({
+        message: `${message}`,
+        description: `${description}`
     })
 }

@@ -94,6 +94,11 @@ const Main = () => {
                     collapsible
                     collapsed={collapsed}
                     theme="light"
+                    style={{
+                        maxWidth: 250,
+                        width: 250,
+                        minWidth: 250,
+                    }}
                     className="bg-white"
                 >
                     <Sidenav color={sidenavColor} />
