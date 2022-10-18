@@ -4,14 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { ScrollRef } from "../../comman";
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-function Examination() {
+function Examination({ handleclick }) {
     const token = useSelector(selectCurrentToken);
-    const scrollRef = useRef();
     const [examinations, setExaminations] = useState([]);
     const [examination, setExamination] = useState([]);
     const config = {
@@ -42,23 +40,25 @@ function Examination() {
                 console.log(examination);
             })
     }
+    const addService = (item) => {
+
+    }
     useEffect(() => {
         getExamination();
-        ScrollRef(scrollRef);
     }, []);
     return (
         <div className="flex flex-row">
-            <div className="basis-1/2">
+            <div className="basis-1/3">
                 {
                     examinations.map((examination, index) => {
                         return (
-                            <Button onClick={() => getTypeById(examination.id)} className="w-full my-1 bg-[#3d9970] text-white rounded-lg" key={index}>{examination.name}</Button>
+                            <Button onClick={() => getTypeById(examination.id)} className="w-full mb-1 bg-[#3d9970] text-white rounded-lg" key={index}>{examination.name}</Button>
                         )
                     })
                 }
             </div>
-            <div className="basis-1/2">
-                <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
+            <div className="basis-2/3">
+                <div className='table-responsive px-4 pb-4' id='style-8' style={{ maxHeight: '500px' }}>
                     <Table className='ant-border-space' style={{ width: '100%' }}>
                         <thead className='ant-table-thead bg-slate-200'>
                             <tr>
@@ -70,9 +70,9 @@ function Examination() {
                             {
                                 examination.map((item, index) => {
                                     return (
-                                        <tr key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                                        <tr onDoubleClick={() => handleclick(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
                                             <td>{item.name}</td>
-                                            <td>{item.prices?.price}</td>
+                                            <td>{item.prices?.price}₮</td>
                                         </tr>
                                     )
                                 })

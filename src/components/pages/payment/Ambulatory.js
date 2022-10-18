@@ -18,10 +18,10 @@ function Ambulatory() {
     }, []);
 
     const categories = [
-        // {
-        //     //omnoh jor
-        //     name: 'RecentRecipe',
-        // },
+        {
+            //omnoh jor
+            name: 'RecentRecipe',
+        },
         {
             //set order
             name: 'SetOrder',

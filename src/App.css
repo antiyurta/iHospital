@@ -105,6 +105,7 @@ legend.scheduler-border {
 .ant-input {
   height: 28px;
   border-radius: 6px;
+  background: transparent;
 }
 .ant-input-search-button {
   height: 28px;

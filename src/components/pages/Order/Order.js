@@ -10,23 +10,34 @@ import Xray from "./Xray";
 import Treatment from "./Treatment";
 import Surgery from './Surgery';
 import Endo from "./Endo";
+import { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
 //
-
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
-
 function Order(props) {
-    const token = useSelector(selectCurrentToken);
+    const [orders, setOrders] = useState([]);
+    const [total, setTotal] = useState(Number);
+
+
+    const handleclick = (value) => {
+        setOrders([...orders, value]);
+        setTotal(total + value.prices?.price);
+    }
+
+    const remove = (index) => {
+        var arr = [...orders];
+        arr.splice(index, 1);
+        setTotal(total - orders[index].prices?.price);
+        setOrders(arr);
+    }
 
     const categories = [];
-
     props.categories.map((category, index) => {
         if (category.name == 'Examination') {
             categories.push(
                 {
                     label: "Шинэжилгээ",
                     key: index,
-                    children: <Examination />
+                    children: <Examination handleclick={handleclick} />
                 }
             )
         }
@@ -95,88 +106,39 @@ function Order(props) {
         }
     })
 
-    const getData = (value) => {
-        console.log(value);
-    }
-
     return (
         <div className="flex flex-row">
-            <div className="basis-1/3">
-                <Tabs tabPosition="left" onChange={getData} items={categories} />
-            </div>
             <div className="basis-2/3">
-                sadasdasd
+                {categories ? <Tabs tabPosition="left" items={categories} /> : null}
             </div>
-            {/* <div className="flex flex-wrap">
-                {
-                    categories.map((category, index) => {
-                        return (
-                            <div key={index} className="w-full md:w-2/12 p-4">
-                                <Button onClick={() => getType(category.render)} className="bg-[#00a4ef] w-full text-white rounded-lg">{category.name}</Button>
-                            </div>
-                        )
-                    })
-                }
-            </div> */}
-            {/* <div className="flex flex-row">
-                <div className="basis-1/3">
-                    {
-                        types.map((type, index) => {
-                            return (
-                                <Button onClick={() => getTypeById(type.id)} className="w-full my-1 bg-[#3d9970] text-white rounded-lg" key={index}>{type.name}</Button>
-                            )
-                        })
-                    }
+            <div className="basis-1/3">
+                <div className='table-responsive px-4 pb-4' id='style-8' style={{ maxHeight: '420px' }}>
+                    <Table className='ant-border-space' style={{ width: '100%' }}>
+                        <thead className='ant-table-thead bg-slate-200'>
+                            <tr>
+                                <th className="font-bold text-sm align-middle">Нэр</th>
+                                <th className="font-bold text-sm align-middle">Үнэ</th>
+                            </tr>
+                        </thead>
+                        <tbody className='ant-table-tbody p-0'>
+                            {
+                                orders?.map((order, index) => {
+                                    return (
+                                        <tr onDoubleClick={() => remove(index)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                                            <td>{order.name}</td>
+                                            <td>{order.prices?.price}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </Table>
                 </div>
-                <div className="basis-1/3">
-                    <div className='table-responsive p-4' id='style-8' ref={scrollRef} style={{ maxHeight: '400px' }}>
-                        <Table className='ant-border-space' style={{ width: '100%' }}>
-                            <thead className='ant-table-thead bg-slate-200'>
-                                <tr>
-                                    <th className="font-bold text-sm align-middle">Нэр</th>
-                                    <th className="font-bold text-sm align-middle">Үнэ</th>
-                                </tr>
-                            </thead>
-                            <tbody className='ant-table-tbody p-0'>
-                                {
-                                    typeById.map((item, index) => {
-                                        return (
-                                            <tr onClick={() => addType(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
-                                                <td>{item.name}</td>
-                                                <td>{item.prices?.price}</td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </Table>
-                    </div>
+                <div>
+                    <p className="float-left font-extrabold">Нийт Үнэ</p>
+                    <p className="float-right font-extrabold">{total}₮</p>
                 </div>
-                <div className="basis-1/3">
-                    <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
-                        <Table className='ant-border-space' style={{ width: '100%' }}>
-                            <thead className='ant-table-thead bg-slate-200'>
-                                <tr>
-                                    <th className="font-bold text-sm align-middle">Нэр</th>
-                                    <th className="font-bold text-sm align-middle">Үнэ</th>
-                                    <th className="font-bold text-sm align-middle"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    orderTypes.map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>{item.name}</td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </Table>
-                    </div>
-                </div>
-            </div> */}
+            </div>
         </div>
     )
 }
