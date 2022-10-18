@@ -43,10 +43,12 @@ function UTable(props) {
     const [id, setId] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+    const [isSubModalVisible, setIsSubModalVisible] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [isConfirmLoading, setIsConfirmLoading] = useState(false);
     const [spinner, setSpinner] = useState(false);
     const [form] = Form.useForm();
+    const [AddSubForm] = Form.useForm();
     const scrollRef = useRef();
     const config = {
         headers: {
@@ -67,6 +69,9 @@ function UTable(props) {
         form.resetFields();
         setIsModalVisible(true);
     };
+    const subAddModal = () => {
+
+    }
     const viewModal = (row) => {
         setView(row);
         setIsViewModalVisible(true);
@@ -88,7 +93,7 @@ function UTable(props) {
                 </div>
             ),
             onOk() {
-                axios.delete(DEV_URL + props.url + '/' + id)
+                axios.delete(DEV_URL + props.url + '/' + id, config)
                     .then((response) => {
                         if (response.status === 200) {
                             openNofi('success', 'ADasd', 'adsad');
@@ -151,17 +156,17 @@ function UTable(props) {
                 openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
             })
             :
-            await axios.patch(
+            await axios.post(
                 DEV_URL + props.url,
+                data,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "x-api-key": API_KEY
                     },
                 },
-                data
             ).then((response) => {
-                if (response.status === 201) {
+                if (response.status === 200) {
                     openNofi('success', 'asdas', 'dsada');
                     onStart(1);
                     setIsConfirmLoading(false);
@@ -221,7 +226,7 @@ function UTable(props) {
                                 <th className="font-bold text-sm align-middle" rowSpan={2}>№</th>
                                 {
                                     props.column.map((element, index) => {
-                                        return (element.isView && <th key={index} className="font-bold text-sm">{element.label}</th>)
+                                        return (element.isView && <th key={index} rowSpan={element.isSearch ? 1 : 2} className="font-bold text-sm align-middle">{element.label}</th>)
                                     })
                                 }
                                 <th className='w-3 font-bold text-sm align-middle' rowSpan={2}>Үйлдэл</th>
@@ -229,7 +234,7 @@ function UTable(props) {
                             <tr>
                                 {
                                     props.column.map((element, index) => {
-                                        return (element.isView && <td key={index}>
+                                        return (element.isView && element.isSearch && <td key={index}>
                                             <Search placeholder={element.label + " Хайх"} allowClear onSearch={(e) => onSearch(e, element.index)} enterButton={"Хайх"} />
                                         </td>)
                                     })
@@ -245,7 +250,11 @@ function UTable(props) {
                                             {
                                                 props.column.map((column, index) => {
                                                     return (
-                                                        column.isView && <td key={index}>{inputChecker(index, row[`${column.index}`])}</td>)
+                                                        column.relation ?
+                                                            <td key={index}>{inputChecker(index, row[`${column.index[0]}`][`${column.index[1]}`])}</td>
+                                                            :
+                                                            (column.isView && <td key={index}>{inputChecker(index, row[`${column.index}`])}</td>)
+                                                    )
                                                 })
                                             }
                                             <td className='ant-table-row-cell-break-word'>
@@ -321,17 +330,28 @@ function UTable(props) {
                 okText="Хадгалах"
             >
                 <Form form={form}
-                    labelCol={{
-                        span: 4,
-                    }}
-                    wrapperCol={{
-                        span: 20,
-                    }}>
+                // labelCol={{
+                //     span: 4,
+                // }}
+                // wrapperCol={{
+                //     span: 20,
+                // }}
+                >
                     <Row gutter={[8, 8]}>
                         {
                             props.column.map((element, index) => {
                                 return (
                                     <Col span={element.col} key={index}>
+                                        {
+                                            element.isAdd && !editMode &&
+                                            <Button
+                                                type="link"
+                                                title="Төрөл нэмэх"
+                                                onClick={() => setIsSubModalVisible(true)}
+                                            >
+                                                <PlusOutlined style={{ fontSize: '20px', color: 'green', textAlign: 'center' }} />
+                                            </Button>
+                                        }
                                         {
                                             element.input === 'select' &&
                                             <Form.Item
@@ -405,6 +425,51 @@ function UTable(props) {
                             })
                         }
                     </Row>
+                </Form>
+            </Modal>
+            <Modal
+                title="Шинжилгээний төрөл нэмэх"
+                open={isSubModalVisible}
+                onOk={() => {
+                    AddSubForm.validateFields()
+                        .then(async (values) => {
+                            let type;
+                            props.column.map((item) => {
+                                if (item.isAdd) {
+                                    type = item.type;
+                                }
+                            });
+                            values.type = type;
+                            await axios.post(DEV_URL + 'service/type', values, config)
+                                .then((response) => {
+                                    openNofi('success', 'asdasd', 'sdad');
+                                    setIsSubModalVisible(false);
+                                }).catch((error) => {
+                                    console.log(error);
+                                })
+                        }).catch((error) => {
+                            console.log(error);
+                        })
+                }}
+                onCancel={() => { setIsSubModalVisible(false) }}
+            >
+                <Form form={AddSubForm}>
+                    {
+                        props.column.map((element, index) => {
+                            return (
+                                <Col span={24} key={index}>
+                                    {element.isAdd && element.subInput === 'input' &&
+                                        <Form.Item
+                                            label={element.label}
+                                            name={element.index}
+                                            rules={element.rules}
+                                        >
+                                            <Input placeholder={element.label} />
+                                        </Form.Item>}
+                                </Col>
+                            )
+                        })
+                    }
                 </Form>
             </Modal>
         </>

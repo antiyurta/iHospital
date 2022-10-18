@@ -8,9 +8,9 @@ import UTable from "../../UTable";
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-function Examination() {
+function Treatment() {
     const token = useSelector(selectCurrentToken);
-    const [examinationTypeData, setExaminationTypeData] = useState([]);
+    const [treatmentTypeData, setTreatmentTypeData] = useState([]);
 
     const config = {
         headers: {
@@ -23,36 +23,36 @@ function Examination() {
         }
     };
 
-    const getExaminationTypeData = async () => {
+    const getTreatmentTypeData = async () => {
         config.params.page = null;
         config.params.limit = null;
-        config.params.type = 0;
+        config.params.type = 2;
         await axios.get(DEV_URL + 'service/type', config).then((response) => {
-            setExaminationTypeData(response.data.response.data);
+            setTreatmentTypeData(response.data.response.data);
         }).catch((error) => {
             console.log(error);
         })
     }
 
     useEffect(() => {
-        getExaminationTypeData();
+        getTreatmentTypeData();
     }, [])
     const column = [
         {
-            index: 'examinationTypeId',
-            label: 'Шинэжилгээний төрөл',
+            index: 'treatmentTypeId',
+            label: 'Эмчилгээний төрөл',
             isView: false,
             input: 'select',
-            inputData: examinationTypeData,
+            inputData: treatmentTypeData,
             relIndex: 'name',
             col: 21
         },
         {
-            label: 'Шинэжилгээний төрөл',
+            label: 'Эмчилгээний төрөл',
             isAdd: true,
             isView: false,
             index: 'name',
-            type: 0,
+            type: 1,
             subInput: 'input',
             col: 3
         },
@@ -103,8 +103,8 @@ function Examination() {
         <Row gutter={[8, 8]}>
             <Col span={24}>
                 <UTable
-                    title={'Шинжилгээ'}
-                    url={'service/examination'}
+                    title={'Эмчилгээ'}
+                    url={'service/treatment'}
                     column={column}
                     isCreate={true}
                     isRead={false}
@@ -115,4 +115,4 @@ function Examination() {
         </Row>
     )
 }
-export default Examination;
+export default Treatment;

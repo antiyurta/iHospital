@@ -1,11 +1,15 @@
 import { Col, Row } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Get } from "../../comman";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
 
 import UTable from "../../UTable";
-
+const DEV_URL = process.env.REACT_APP_DEV_URL;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 function Structure() {
+    const token = useSelector(selectCurrentToken);
     const [hospital, setHospital] = useState([]);
     const [departments, setDepartments] = useState([]);
     const department = {
@@ -14,15 +18,31 @@ function Structure() {
     const position = {
         type: 1,
     }
-    const getHospital = () => {
-        Get('organization/hospital')
+    const getHospital = async () => {
+        await axios.get(DEV_URL + 'organization/hospital', {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "x-api-key": API_KEY
+            },
+            params: {
+                type: 1,
+            }
+        })
             .then((response) => {
                 setHospital(response.data.response.data);
             })
     }
 
-    const getDepartment = () => {
-        Get('organization/structure', department)
+    const getDepartment = async () => {
+        await axios.get(DEV_URL + 'organization/structure', {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "x-api-key": API_KEY
+            },
+            params: {
+                type: 2,
+            }
+        })
             .then((response) => {
                 setDepartments(response.data.response.data);
             })

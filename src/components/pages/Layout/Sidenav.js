@@ -104,7 +104,24 @@ function Sidenav({ color }) {
     {
       key: 7,
       icon: <InfoCircleOutlined />,
-      label: <Link to="/examination">examination</Link>,
+      label: <p>OCS</p>,
+      children: [
+        {
+          key: "7-1",
+          icon: <ShopOutlined />,
+          label: <NavLink to="/examination">examination</NavLink>,
+        },
+        {
+          key: "7-2",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/xray">xray</NavLink>,
+        },
+        {
+          key: "7-3",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/treatment">treatment</NavLink>,
+        }
+      ],
     },
     {
       key: 8,
