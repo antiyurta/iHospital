@@ -32,6 +32,7 @@ import History from "./components/History";
 import PrivateRoute from "./features/PrivateRoute";
 //service start
 import Examination from "./components/pages/service/Examination";
+import Xray from "./components/pages/service/Xray";
 //service end
 //emr start
 import EMR from "./components/pages/EMR/emr";
@@ -41,6 +42,7 @@ import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAm
 // inpatient HEWTENT start
 import Inpatient from "./components/pages/Inpatient/inpatient";
 import FormBuilder from "./components/pages/FormBuilder/FormBuilder";
+import Treatment from "./components/pages/service/Treatment";
 // inpatient HEWTEN end
 
 function App() {
@@ -171,14 +173,9 @@ function App() {
             />
           </Route>
           <Route>
-            <Route
-              path="/examination"
-              element={
-                <PrivateRoute>
-                  <Examination />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/examination" element={<PrivateRoute><Examination /></PrivateRoute>} />
+            <Route path="/xray" element={<PrivateRoute><Xray /></PrivateRoute>} />
+            <Route path="/treatment" element={<PrivateRoute><Treatment /></PrivateRoute>} />
           </Route>
           <Route
             path="/profile"

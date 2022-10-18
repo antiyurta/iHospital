@@ -66,7 +66,7 @@ const column =
             index: 'phone',
             label: 'Утас',
             isView: false,
-            input: 'inputNumber',
+            input: 'input',
             col: 12,
         },
         {
@@ -85,21 +85,12 @@ const column =
         }
     ];
 function Hospital() {
-    const searchConfig = [
-        {
-            index: "name",
-        },
-        {
-            index: 'address'
-        }
-    ]
     return (
         <Row gutter={[24, 0]}>
             <Col xs="24" xl={24}>
                 <UTable
                     title={'Байгууллага'}
                     url={'organization/hospital'}
-                    searchParams={searchConfig}
                     column={column}
                     isCreate={true}
                     isRead={true}
