@@ -77,39 +77,98 @@ export default function NurseNote() {
           data.map((element, index) => (
             <tr key={index} className="">
               <td className="text-center ">
-                <p className="p-1 h-7">
+                <p className="p-1 h-7 text-xs border rounded-md text-black">
                   {element.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
                 </p>
               </td>
               <td className="text-center ">
-                <p className="p-1 h-7">{element.highPressureRight}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{
+                    backgroundColor: element.colorSystolews ?? "#fff",
+                  }}
+                >
+                  {element.highPressureRight}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.lowPressureRight}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{ backgroundColor: "#C0C0C0" }}
+                >
+                  {element.lowPressureRight}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.weight}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{ backgroundColor: "#C0C0C0" }}
+                >
+                  {element.weight}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.height}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{ backgroundColor: "#C0C0C0" }}
+                >
+                  {element.height}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.temp}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{
+                    backgroundColor: element.colorTempews ?? "#fff",
+                  }}
+                >
+                  {element.temp}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.respiratoryRate}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{
+                    backgroundColor: element.colorRespiratoryews ?? "#fff",
+                  }}
+                >
+                  {element.respiratoryRate}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.spO2}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{
+                    backgroundColor: element.colorSpoews ?? "#fff",
+                  }}
+                >
+                  {element.spO2}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.pulse}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{
+                    backgroundColor: element.colorPulsews ?? "#fff",
+                  }}
+                >
+                  {element.pulse}
+                </p>
               </td>
               <td className="text-center">
-                <p className="p-1 h-7">{element.mind}</p>
+                <p
+                  className="p-1 h-7 text-xs border rounded-md text-black"
+                  style={{
+                    backgroundColor: element.colorMindews ?? "#fff",
+                  }}
+                >
+                  {element.mind}
+                </p>
               </td>
               <td className="text-center">
-                <p>Б.Намуунцэлмэг</p>
+                <p className="p-1 h-7 text-xs border rounded-md text-black">
+                  {element.user?.email}
+                </p>
               </td>
             </tr>
           ))}
