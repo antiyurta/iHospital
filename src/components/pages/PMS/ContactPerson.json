@@ -1,4 +1,5 @@
 [
+  { "value": 0, "label": "Бусад" },
   { "value": 1, "label": "Эцэг" },
   { "value": 2, "label": "Эх" },
   { "value": 3, "label": "Өвөө" },
@@ -15,6 +16,5 @@
   { "value": 14, "label": "Хадам эцэг" },
   { "value": 15, "label": "Хадам эх" },
   { "value": 16, "label": "Бэр" },
-  { "value": 17, "label": "Хүргэн" },
-  { "value": 18, "label": "Бусад" }
+  { "value": 17, "label": "Хүргэн" }
 ]

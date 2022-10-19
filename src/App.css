@@ -126,9 +126,9 @@ input::-webkit-inner-spin-button {
   border-radius: 6px !important;
   align-items: center;
 }
-.ant-alert {
+/* .ant-alert {
   height: 32px !important;
-}
+} */
 
 /* Firefox */
 input[type="number"] {

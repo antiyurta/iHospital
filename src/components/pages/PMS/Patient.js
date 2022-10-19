@@ -9,7 +9,7 @@ import serviceScopeStatus from './serviceScopeStatus.json';
 //
 import { Table } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
-import { ScrollRef } from '../../comman';
+import { openNofi, ScrollRef } from '../../comman';
 import axios from 'axios';
 import 'moment/locale/mn';
 import mn from 'antd/es/calendar/locale/mn_MN';
@@ -47,6 +47,7 @@ function Patient() {
     const token = useSelector(selectCurrentToken);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+    const [isConfirmLoading, setIsConfirmLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
     const [spinner, setSpinner] = useState(false);
@@ -54,6 +55,7 @@ function Patient() {
     //
     const [isChild, setIsChild] = useState(true);
     //
+    const [id, setId] = useState([]);
     const [data, setData] = useState([]);
     const [meta, setMeta] = useState([]);
     const [view, setView] = useState([]);
@@ -120,14 +122,26 @@ function Patient() {
     const showModal = () => {
         setIsModalVisible(true);
     };
-    const viewModal = (row) => {
-        console.log(row);
-        setView(row);
+    const viewModal = async (id) => {
+        await axios.get(DEV_URL + 'pms/patient/' + id, config)
+            .then((response) => {
+                setView(response.data.response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         setIsViewModalVisible(true);
     }
-    const editModal = (row) => {
-        console.log(row);
-        form.setFieldsValue(row);
+    const editModal = async (id) => {
+        await axios.get(DEV_URL + 'pms/patient/' + id, config)
+            .then((response) => {
+                form.setFieldsValue(response.data.response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        setId(id);
+        setEditMode(true);
         setIsModalVisible(true);
     }
     const deleteModal = (id) => {
@@ -140,7 +154,54 @@ function Patient() {
         setIsModalVisible(false);
     };
     const onFinish = async (data) => {
-        console.log(data);
+        setIsConfirmLoading(true);
+        editMode ?
+            await axios.patch(
+                DEV_URL + 'pms/patient/' + id,
+                data,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "x-api-key": API_KEY
+                    },
+                }
+            ).then((response) => {
+                if (response.status === 200) {
+                    openNofi('success', 'ADasd', 'adsad');
+                    getData(1);
+                    setIsConfirmLoading(false);
+                    setIsModalVisible(false);
+                } else {
+                    openNofi('error', 'adsads', 'asdas');
+                    setIsConfirmLoading(false);
+                }
+            }).catch(() => {
+                openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
+            })
+            :
+            await axios.post(
+                DEV_URL + "pms/patient",
+                data,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "x-api-key": API_KEY
+                    },
+                },
+            ).then((response) => {
+                if (response.status === 200) {
+                    openNofi('success', 'asdas', 'dsada');
+                    getData(1);
+                    setIsConfirmLoading(false);
+                    setIsModalVisible(false);
+                } else {
+                    openNofi('error', 'adsads', 'asdas');
+                    setIsConfirmLoading(false);
+                }
+            }).catch(() => {
+                setIsConfirmLoading(false);
+                openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
+            })
     };
     const onFinishFailed = (errorInfo) => {
         console.log(errorInfo);
@@ -262,12 +323,13 @@ function Patient() {
                                             <td className='ant-table-row-cell-break-word'>{row.cardNumber}</td>
                                             <td className='ant-table-row-cell-break-word'>{row.lastName}</td>
                                             <td className='ant-table-row-cell-break-word'>{row.firstName}</td>
+                                            <td className='ant-table-row-cell-break-word'>{row.registerNumber}</td>
                                             <td className='ant-table-row-cell-break-word'>{row.phoneNo}</td>
                                             <td className='ant-table-row-cell-break-word'>{row.address}</td>
                                             <td className='ant-table-row-cell-break-word'>{row.createdAt}</td>
                                             <td className='ant-table-row-cell-break-word'>
-                                                <Button type="link" onClick={() => viewModal(row)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
-                                                <Button type="link" onClick={() => editModal(row)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
+                                                <Button type="link" onClick={() => viewModal(row.id)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
+                                                <Button type="link" onClick={() => editModal(row.id)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
                                                 <Button type="link" onClick={() => deleteModal(row.id)} title='Устгах' style={{ paddingLeft: 5 }} ><DeleteOutlined style={{ color: 'red' }} /></Button>
                                             </td>
                                         </tr>
@@ -388,7 +450,7 @@ function Patient() {
                                     <Col span={8}>
                                         <Form.Item
                                             label="Иргэншил:"
-                                            name="citizenId"
+                                            name={['countries', 'id']}
                                             rules={[
                                                 {
                                                     required: true,
@@ -451,16 +513,16 @@ function Patient() {
                                                     required: true,
                                                     message: 'Zaawal'
                                                 },
-                                                {
-                                                    validator: async (_, phoneNumber) => {
-                                                        if (phoneNumber < 10000000 || phoneNumber > 100000000) {
-                                                            return Promise.reject(new Error('Дугаар алдаатай'));
-                                                        }
-                                                    }
-                                                }
+                                                // {
+                                                //     validator: async (_, phoneNumber) => {
+                                                //         if (phoneNumber < 10000000 || phoneNumber > 100000000) {
+                                                //             return Promise.reject(new Error('Дугаар алдаатай'));
+                                                //         }
+                                                //     }
+                                                // }
                                             ]}
                                         >
-                                            <InputNumber onKeyPress={checkNumber} />
+                                            <Input />
                                         </Form.Item>
                                     </Col>
                                     <Col span={8}>
@@ -513,7 +575,7 @@ function Patient() {
                                         <Col span={6}>
                                             <Form.Item
                                                 label="Хэрэв хүүхэд бол:"
-                                                name="childStatus"
+                                                name="type"
                                             >
                                                 <Select disabled={isChild}>
                                                     {
@@ -559,6 +621,7 @@ function Patient() {
                                         <Col span={6}>
                                             <Form.Item
                                                 label="Ажлын газар:"
+                                                name="organization"
                                             >
                                                 <Input />
                                             </Form.Item>
@@ -566,13 +629,7 @@ function Patient() {
                                         <Col span={6}>
                                             <Form.Item
                                                 label="Албан тушаал:"
-                                            >
-                                                <Input />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col span={6}>
-                                            <Form.Item
-                                                label="Байгууллагын нэр:"
+                                                name="jobPosition"
                                             >
                                                 <Input />
                                             </Form.Item>
@@ -589,7 +646,7 @@ function Patient() {
                                                 <Col span={12}>
                                                     <Form.Item
                                                         label="Аймаг/Хот:"
-                                                        name="aimagId"
+                                                        name={['aimags', 'id']}
                                                     >
                                                         <Select onChange={filterTowns}>
                                                             {
@@ -605,7 +662,7 @@ function Patient() {
                                                 <Col span={12}>
                                                     <Form.Item
                                                         label="Сум/Дүүрэг:"
-                                                        name="soumId"
+                                                        name={['soums', 'id']}
                                                     >
                                                         <Select>
                                                             {
@@ -618,16 +675,10 @@ function Patient() {
                                                         </Select>
                                                     </Form.Item>
                                                 </Col>
-                                                <Col span={12}>
+                                                <Col span={24}>
                                                     <Form.Item
-                                                        label="Баг/Хороо:"
-                                                    >
-                                                        <Input />
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={12}>
-                                                    <Form.Item
-                                                        label="Гудамж/Байр:"
+                                                        label="Хаяг:"
+                                                        name="address"
                                                     >
                                                         <Input />
                                                     </Form.Item>
@@ -641,44 +692,19 @@ function Patient() {
                                             <Row gutter={[8, 8]}>
                                                 <Col span={12}>
                                                     <Form.Item
-                                                        label="Аймаг/Хот:"
-                                                        name="city"
-                                                    >
-                                                        <Select
-                                                            allowClear
-                                                        >
-                                                            {
-                                                                provices.map((provice, index) => {
-                                                                    return (
-                                                                        <Option key={index} value={provice.id}>{provice.name}</Option>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={12}>
-                                                    <Form.Item
-                                                        label="Сум/Дүүрэг:"
-                                                        name="insuranceSoumId"
-                                                    >
-                                                        <Select>
-                                                            {
-                                                                towns.map((town, index) => {
-                                                                    return (
-                                                                        <Option key={index} value={town.id}>{town.name}</Option>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={12}>
-                                                    <Form.Item
                                                         label="Даатгалын хэлбэр:"
+                                                        name="isInsuranceType"
                                                         valuePropName="checked"
                                                     >
-                                                        <Switch checkedChildren="ХУВЬ" unCheckedChildren="ТӨР" />
+                                                        <Switch className='bg-sky-700' checkedChildren="ХУВЬ" unCheckedChildren="ТӨР" />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={12}>
+                                                    <Form.Item
+                                                        label="Даатгалын дугаар"
+                                                        name="insuranceNo"
+                                                    >
+                                                        <Input />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
@@ -691,33 +717,44 @@ function Patient() {
                             <fieldset className='scheduler-border'>
                                 <legend className='scheduler-border'>Холбоо барих хүний мэдээлэл</legend>
                                 <Form.List
-                                    name="ContactPerson"
+                                    name="contacts"
                                 >
                                     {
                                         (fields, { add, remove }) => (
                                             <>
                                                 {fields.map(({ key, name, ...restField }) => (
-                                                    <Space
-                                                        key={key}
-                                                        style={{ display: 'flex', marginBottom: 8 }}
-                                                        align="center"
-                                                    >
-                                                        <Form.Item
-                                                            {...restField}
-                                                            label='Хамаарал'
-                                                            name={[name, 'relationshipId']}
-                                                        >
-                                                            <Input />
-                                                        </Form.Item>
-                                                        <Form.Item
-                                                            {...restField}
-                                                            label="Утас"
-                                                            name={[name, 'phoneNo']}
-                                                        >
-                                                            <Input />
-                                                        </Form.Item>
-                                                        <MinusCircleOutlined onClick={() => remove(name)} />
-                                                    </Space>
+                                                    <Row gutter={[8, 8]} key={key}>
+                                                        <Col span={11}>
+                                                            <Form.Item
+                                                                {...restField}
+                                                                label='Хамаарал'
+                                                                name={[name, 'contactPersonStatusType']}
+                                                            >
+                                                                <Select>
+                                                                    {
+                                                                        ContactPerson.map((person, index) => {
+                                                                            return (
+                                                                                <Option key={index} value={person.value} >{person.label}</Option>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </Select>
+                                                            </Form.Item>
+
+                                                        </Col>
+                                                        <Col span={11}>
+                                                            <Form.Item
+                                                                {...restField}
+                                                                label="Утас"
+                                                                name={[name, 'contactPhoneNo']}
+                                                            >
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={2} className="self-center">
+                                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                                        </Col>
+                                                    </Row>
 
                                                 ))}
                                                 <Form.Item>

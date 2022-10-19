@@ -1,53 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Badge, Button, Calendar, Card, Col, Form, Input, Modal, Row, Select, Slider, Switch, TimePicker } from 'antd';
 import moment from 'moment';
 import 'moment/locale/mn';
 import mn from 'antd/es/calendar/locale/mn_MN';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../../../features/authReducer';
+import axios from 'axios';
 
-const TimeFormat = 'HH:mm';
-const Marks = {
-    0: '0%',
-    50: '50%',
-    100: '100%'
-};
-
-const getListData = (value) => {
-    let listData;
-    // console.log(value.format('M'));
-    switch (value.date()) {
-        case 8:
-            listData = [
-                {
-                    type: 'success',
-                    content: 'Дотор 101 Болормаа',
-                },
-            ];
-            break;
-
-        case 10:
-            listData = [
-                {
-                    type: 'success',
-                    content: 'Чих хамар хоолой 203 Чимгээ',
-                },
-            ];
-            break;
-    }
-
-    return listData || [];
-};
-
-const getMonthData = (value) => {
-    if (value.month() === 8) {
-        return 1394;
-    }
-};
+const DEV_URL = process.env.REACT_APP_DEV_URL;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 function DoctorAppointmentSchedule() {
+    const token = useSelector(selectCurrentToken);
+    const [schedules, setSchedules] = useState([]);
     const [today] = useState(moment(new Date()));
     const [isModal, setIsModal] = useState(false);
     const [form] = Form.useForm();
     const { Option } = Select;
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "x-api-key": API_KEY
+        },
+    };
+    const TimeFormat = 'HH:mm';
+    const Marks = {
+        0: '0%',
+        50: '50%',
+        100: '100%'
+    };
+
+    const getListData = (value) => {
+        let listData;
+        schedules.map((schedule) => {
+            const date = new Date(schedule.workDate).getDate();
+            if (value.date() === date) {
+                listData = [
+                    {
+                        title: `Эмч : ${schedule.doctor.firstName} -> ${schedule.room.roomNumber}`,
+                        content: `Цаг ${schedule.startTime} -> ${schedule.endTime}`
+                    },
+                ];
+            }
+        })
+        return listData || [];
+    };
+
+    const getMonthData = (value) => {
+        if (value.month() === 8) {
+            return 1394;
+        }
+    };
 
     const monthCellRender = (value) => {
         const num = getMonthData(value);
@@ -62,13 +65,9 @@ function DoctorAppointmentSchedule() {
     const dateCellRender = (value) => {
         const listData = getListData(value);
         return (
-            <ul className="events">
-                {listData.map((item) => (
-                    <li key={item.content}>
-                        <Badge status={item.type} text={item.content} />
-                    </li>
-                ))}
-            </ul>
+            listData.map((item, index) => (
+                <Alert key={index} message={item.title} description={item.content} />
+            ))
         );
     };
 
@@ -77,9 +76,8 @@ function DoctorAppointmentSchedule() {
     };
 
     const onPanelChange = (newValue) => {
-        console.log(newValue.format('M'));
-        console.log(newValue.format('Y'));
-
+        console.log(new Date(newValue.format('Y'), newValue.format('M'), 1));
+        console.log(new Date(newValue.format('Y'), newValue.format('M'), 0));
     };
 
     const onFinish = (value) => {
@@ -89,6 +87,25 @@ function DoctorAppointmentSchedule() {
     const onFinishFailed = (error) => {
         console.log("error", error);
     };
+
+    const getSchedules = async () => {
+
+        const newDate = new Date();
+        console.log("===>", new Date(newDate.getFullYear(), newDate.getMonth() + 1 , 1));
+        console.log("===>", new Date(newDate.getFullYear(), newDate.getMonth() + 1 , 0));
+
+        await axios.get(DEV_URL + "schedule", config)
+            .then((response) => {
+                setSchedules(response.data.response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    useEffect(() => {
+        getSchedules();
+    }, [])
 
     return (
         <>
