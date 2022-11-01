@@ -7,8 +7,7 @@ import axios from "axios";
 import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
-
-export default function MainPatientHistory({PatientId}) {
+function MainPatientHistory({ PatientId }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
@@ -175,3 +174,4 @@ export default function MainPatientHistory({PatientId}) {
 
   return <Tabs items={items} />;
 }
+export default MainPatientHistory;
