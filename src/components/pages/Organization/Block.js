@@ -54,7 +54,10 @@ function Block() {
         <>
             <Row gutter={[24, 0]}>
                 <Col xs="24" xl={24}>
-                    <UTable title={'Блок'} url={'organization/block'} column={column} width='20%' />
+                    <UTable title={'Блок'} url={'organization/block'} column={column} width='20%' isCreate={true}
+                        isRead={true}
+                        isUpdate={true}
+                        isDelete={true} />
                 </Col>
             </Row>
         </>

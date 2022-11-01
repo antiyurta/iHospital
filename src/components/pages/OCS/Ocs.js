@@ -39,7 +39,7 @@ export default function Ocs() {
 
   return (
     <div className="items-center">
-      <Order categories={categories} />
+      <Order isDoctor={true} categories={categories} />
     </div>
   );
 }

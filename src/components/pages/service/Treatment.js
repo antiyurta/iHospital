@@ -1,37 +1,24 @@
 import { Col, Row } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
+import { Get } from "../../comman";
 import UTable from "../../UTable";
-
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
 
 function Treatment() {
     const token = useSelector(selectCurrentToken);
     const [treatmentTypeData, setTreatmentTypeData] = useState([]);
 
     const config = {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "x-api-key": API_KEY
-        },
+        headers: {},
         params: {
-            page: 1,
-            limit: 5,
+            type: 2,
         }
     };
 
     const getTreatmentTypeData = async () => {
-        config.params.page = null;
-        config.params.limit = null;
-        config.params.type = 2;
-        await axios.get(DEV_URL + 'service/type', config).then((response) => {
-            setTreatmentTypeData(response.data.response.data);
-        }).catch((error) => {
-            console.log(error);
-        })
+        const response = await Get("service/type", token, config);
+        setTreatmentTypeData(response.data);
     }
 
     useEffect(() => {
@@ -52,7 +39,7 @@ function Treatment() {
             isAdd: true,
             isView: false,
             index: 'name',
-            type: 1,
+            type: 2,
             subInput: 'input',
             col: 3
         },
@@ -74,15 +61,14 @@ function Treatment() {
         },
         {
             index: 'isActive',
-            label: 'Даатгал',
+            label: 'Идэвхтэй эсэх',
             isView: true,
             isSearch: false,
             input: 'switch',
             col: 12
         },
         {
-            relation: true,
-            index: ['prices', 'price'],
+            index: 'price',
             label: "Үнэ",
             isView: true,
             isSearch: false,
@@ -90,8 +76,7 @@ function Treatment() {
             col: 12
         },
         {
-            relation: true,
-            index: ['prices', 'inpatientPrice'],
+            index: 'inpatientPrice',
             label: 'Хэвтэн үнэ',
             isView: true,
             isSearch: false,
@@ -107,7 +92,7 @@ function Treatment() {
                     url={'service/treatment'}
                     column={column}
                     isCreate={true}
-                    isRead={false}
+                    isRead={true}
                     isUpdate={true}
                     isDelete={true}
                     width='40%' />

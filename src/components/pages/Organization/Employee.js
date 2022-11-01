@@ -1,47 +1,49 @@
 import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
 import { Get } from "../../comman";
 
 import UTable from "../../UTable";
 
 function Employee() {
-
+    const token = useSelector(selectCurrentToken);
+    const config = {
+        headers: {},
+        params: {}
+    };
     const [degree, setDegree] = useState([]);
     const [positions, setPositions] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [roles, setRoles] = useState([]);
-    const department = {
-        type: 2,
-    }
-    const position = {
-        type: 1,
-    }
-    const getDegree = () => {
-        Get('reference/degree')
-            .then((response) => {
-                setDegree(response.data.response.data);
-            })
+    const getDegree = async () => {
+        const response = await Get('reference/degree', token, config);
+        if (response.data.length != 0) {
+            setDegree(response.data);
+        }
     }
 
-    const getPosition = () => {
-        Get('organization/structure', position)
-            .then((response) => {
-                setPositions(response.data.response.data);
-            })
+    const getPosition = async () => {
+        config.params.type = 1;
+        const response = await Get('organization/structure', token, config);
+        if (response.data.length != 0) {
+            setPositions(response.data);
+        }
     }
 
-    const getDepartment = () => {
-        Get('organization/structure', department)
-            .then((response) => {
-                setDepartments(response.data.response.data);
-            })
+    const getDepartment = async () => {
+        config.params.type = 2;
+        const response = await Get('organization/structure', token, config);
+        if (response.data.length != 0) {
+            setDepartments(response.data);
+        }
     }
 
-    const getRoles = () => {
-        Get('reference/role')
-            .then((response) => {
-                setRoles(response.data.response.data);
-            })
+    const getRoles = async () => {
+        const response = await Get('reference/role', token, config);
+        if (response.data.length != 0) {
+            setRoles(response.data);
+        }
     }
 
     useEffect(() => {
@@ -139,25 +141,12 @@ function Employee() {
         },
         {
             index: 'roleId',
-            label: "ЖҮУЛ",
+            label: "role",
             isView: true,
             input: 'select',
             inputData: roles,
             relIndex: 'name',
             col: 24
-        },
-        {
-            index: 'hospitalId',
-            label: 'Эмнэлэг',
-            isView: false,
-            input: 'select',
-            inputData: [
-                {
-                    id: 1,
-                    label: 'Universal Med'
-                }
-            ],
-            col: 24,
         },
         {
             index: 'dateInEmployment',
@@ -179,7 +168,16 @@ function Employee() {
     return (
         <Row gutter={[24, 0]}>
             <Col xs="24" xl={24}>
-                <UTable title={'Ажилтан'} url={'organization/employee'} params={params} column={column} width='80%' />
+                <UTable
+                    title={'Ажилтан'}
+                    url={'organization/employee'}
+                    column={column}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    width='80%'
+                />
             </Col>
         </Row>
     )

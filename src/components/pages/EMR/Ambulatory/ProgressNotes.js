@@ -5,47 +5,40 @@ import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import axios from "axios";
+import { Get } from "../../../comman";
 
-export default function ProgressNotes(props) {
+export default function ProgressNotes({ PatientId }) {
   const { Panel } = Collapse;
   const token = useSelector(selectCurrentToken);
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
+  const config = {
+    headers: {},
+    params: {}
+  };
   const [inspectionNotes, setInspectionNotes] = useState([]);
   const onChange = (key) => {
     // console.log(key);
   };
 
   useEffect(() => {
-    getInspectionNotes();
-  }, []);
+    if (PatientId) {
+      getInspectionNotes();
+    }
+  }, [PatientId]);
 
-  const getInspectionNotes = () => {
-    axios({
-      method: "get",
-      url: `${DEV_URL}emr/inspectionNote`,
-      params: {
-        patientId: 43,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        // console.log("response getInspectionNotes", response.data.response.data);
-        var result = response.data.response.data.reduce(function (r, a) {
-          //Оноор бүлэглэх
-          r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
-          r[a.createdAt.substring(0, 4)].push(a);
-          return r;
-        }, Object.create(null));
-
-        setInspectionNotes(result);
-      })
-      .catch(function (error) {
-        console.log("response error", error.response);
-      });
+  const getInspectionNotes = async () => {
+    config.params.patientId = PatientId;
+    const response = await Get('emr/inspectionNote', token, config);
+    if (response.data.length != 0) {
+      var result = response.data.reduce(function (r, a) {
+        //Оноор бүлэглэх
+        r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
+        r[a.createdAt.substring(0, 4)].push(a);
+        return r;
+      }, Object.create(null));
+      setInspectionNotes(result);
+    } else {
+      setInspectionNotes([]);
+    }
   };
 
   const RenderNotesDetail = (data) => {

@@ -179,17 +179,17 @@ function CountryDictionary() {
             col: 24,
         }
     ]
-    const configCountry = {
+    const countryParams = {
         params: {
             type: 1,
         }
     }
-    const configProvice = {
+    const ProviceParams = {
         params: {
             type: 2,
         }
     }
-    const configTown = {
+    const TownParams = {
         params: {
             type: 3,
         }
@@ -200,7 +200,7 @@ function CountryDictionary() {
                 <UTable
                     title={'Улс'}
                     url={'reference/country'}
-                    params={configCountry}
+                    params={countryParams}
                     column={CountryColumn}
                     width='50%'
                     isCreate={true}
@@ -213,7 +213,7 @@ function CountryDictionary() {
                 <UTable
                     title={'Аймаг/ Хот'}
                     url={'reference/country'}
-                    params={configProvice}
+                    params={ProviceParams}
                     column={ProviceColumn}
                     isCreate={true}
                     isRead={true}
@@ -225,7 +225,7 @@ function CountryDictionary() {
                 <UTable
                     title={'Сум / Дүүрэг'}
                     url={'reference/country'}
-                    params={configTown}
+                    params={TownParams}
                     column={TownColumn}
                     isCreate={true}
                     isRead={true}

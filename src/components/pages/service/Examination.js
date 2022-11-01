@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
+import { Get } from "../../comman";
 import UTable from "../../UTable";
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -13,25 +14,15 @@ function Examination() {
     const [examinationTypeData, setExaminationTypeData] = useState([]);
 
     const config = {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "x-api-key": API_KEY
-        },
+        headers: {},
         params: {
-            page: 1,
-            limit: 5,
+            type: 0,
         }
     };
 
     const getExaminationTypeData = async () => {
-        config.params.page = null;
-        config.params.limit = null;
-        config.params.type = 0;
-        await axios.get(DEV_URL + 'service/type', config).then((response) => {
-            setExaminationTypeData(response.data.response.data);
-        }).catch((error) => {
-            console.log(error);
-        })
+        const response = await Get("service/type", token, config);
+        setExaminationTypeData(response.data);
     }
 
     useEffect(() => {
@@ -74,15 +65,14 @@ function Examination() {
         },
         {
             index: 'isActive',
-            label: 'Даатгал',
+            label: 'Идэвхтэй эсэх',
             isView: true,
             isSearch: false,
             input: 'switch',
             col: 12
         },
         {
-            relation: true,
-            index: ['prices', 'price'],
+            index: 'price',
             label: "Үнэ",
             isView: true,
             isSearch: false,
@@ -90,8 +80,7 @@ function Examination() {
             col: 12
         },
         {
-            relation: true,
-            index: ['prices', 'inpatientPrice'],
+            index: 'inpatientPrice',
             label: 'Хэвтэн үнэ',
             isView: true,
             isSearch: false,

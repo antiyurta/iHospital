@@ -49,7 +49,15 @@ function Degree() {
     return (
         <Row gutter={[24, 0]}>
             <Col xs="24" xl={24}>
-                <UTable title={'Зэрэг'} url={'reference/degree'} column={column} width='50%' />
+                <UTable
+                    title={'Зэрэг'}
+                    url={'reference/degree'}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    column={column}
+                    width='50%' />
             </Col>
         </Row>
     )

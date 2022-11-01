@@ -44,7 +44,7 @@ export default function GeneralInspection(props) {
       method: "get",
       url: `${DEV_URL}emr/general-inspection`,
       params: {
-        patientId: 43,
+        patientId: 48,
       },
       headers: {
         Authorization: `Bearer ${token}`,

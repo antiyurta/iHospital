@@ -86,8 +86,8 @@ const column =
     ];
 function Hospital() {
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="24" xl={24}>
+        <div className='flex flex-wrap'>
+            <div className='w-full'>
                 <UTable
                     title={'Байгууллага'}
                     url={'organization/hospital'}
@@ -95,11 +95,11 @@ function Hospital() {
                     isCreate={true}
                     isRead={true}
                     isUpdate={true}
-                    isDelete={false}
+                    isDelete={true}
                     width='50%'
                 />
-            </Col>
-        </Row>
+            </div>
+        </div>
     );
 }
 

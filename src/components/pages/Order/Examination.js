@@ -68,7 +68,7 @@ function Examination({ handleclick }) {
                                     return (
                                         <tr onDoubleClick={() => handleclick(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
                                             <td>{item.name}</td>
-                                            <td>{item.prices?.price}₮</td>
+                                            <td>{item.price}₮</td>
                                         </tr>
                                     )
                                 })

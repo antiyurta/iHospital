@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 const MainContext = React.createContext();
 
 export const MainStore = (props) => {
@@ -88,7 +87,7 @@ export const MainStore = (props) => {
     ]);
     setInspectionData([
       {
-        inspectionType: "pain",
+        inspectionType: "inspection",
         inspectionFormId: null,
         type: "",
         key: "",
@@ -104,7 +103,7 @@ export const MainStore = (props) => {
     ]);
     setQuestionData([
       {
-        inspectionType: "pain",
+        inspectionType: "question",
         inspectionFormId: null,
         type: "",
         key: "",
@@ -120,7 +119,7 @@ export const MainStore = (props) => {
     ]);
     setPlanData([
       {
-        inspectionType: "pain",
+        inspectionType: "plan",
         inspectionFormId: null,
         type: "",
         key: "",

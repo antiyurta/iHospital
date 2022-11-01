@@ -17,15 +17,14 @@ import {
 } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
-import { EditOutlined, SearchOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { Get, Post, Patch, Delete, ScrollRef, openNofi } from './comman';
+import { EditOutlined, DeleteOutlined, PlusOutlined, EyeOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { Get, Post, Patch, Delete, ScrollRef } from './comman';
 import TextArea from 'antd/lib/input/TextArea';
-import 'moment/locale/mn';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../features/authReducer';
+import moment from 'moment';
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -51,10 +50,7 @@ function UTable(props) {
     const [AddSubForm] = Form.useForm();
     const scrollRef = useRef();
     const config = {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "x-api-key": API_KEY
-        },
+        headers: {},
         params: {
             page: 1,
             limit: 5,
@@ -69,18 +65,26 @@ function UTable(props) {
         form.resetFields();
         setIsModalVisible(true);
     };
-    const subAddModal = () => {
-
-    }
-    const viewModal = (row) => {
-        setView(row);
-        setIsViewModalVisible(true);
+    const viewModal = async (id) => {
+        const response = await Get(props.url + "/" + id, token, config);
+        if (response.length != 0) {
+            setView(response);
+            setIsViewModalVisible(true);
+        }
     };
-    const editModal = (row) => {
+    const editModal = async (id) => {
         setEditMode(true);
-        setId(row.id);
-        form.setFieldsValue(row);
-        setIsModalVisible(true);
+        setId(id);
+        const response = await Get(props.url + "/" + id, token, config);
+        props.column.map((element) => {
+            if (element.input === 'date') {
+                response[`${element.index}`] = moment(response[`${element.index}`]);
+            }
+        })
+        if (response.length != 0) {
+            form.setFieldsValue(response);
+            setIsModalVisible(true);
+        }
     };
     const deleteModal = (id) => {
         Modal.error({
@@ -92,93 +96,52 @@ function UTable(props) {
                     Устгасан дохиолдолд дахин сэргэхгүй болно
                 </div>
             ),
-            onOk() {
-                axios.delete(DEV_URL + props.url + '/' + id, config)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            openNofi('success', 'ADasd', 'adsad');
-                            onStart();
-                        }
-                    })
-                    .catch(() => {
-                        openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
-                    })
+            async onOk() {
+                await Delete(props.url + '/' + id, token, config);
+                onStart(1);
             }
         })
     };
     const onStart = async (page) => {
         setSpinner(false);
+        config.params.page = page;
         if (props.params) {
-            config.params = {
-                ...config.params,
-                ...props.params.params
+            config.params = { ...config.params, ...props.params.params };
+        }
+        const response = await Get(props.url, token, config);
+        if (response.status === 401) {
+            navigate("/login");
+        } else {
+            if (response.data.length != 0) {
+                setData(response.data);
+                setMeta(response.meta);
+            } else {
+                setData([]);
+                setMeta({});
             }
         }
-        config.params.page = page;
-        config.params.limit = 5;
-        await axios.get(
-            DEV_URL + props.url, config
-        ).then((response) => {
-            if (response.status === 200) {
-                setSpinner(true);
-                setData(response.data.response.data);
-                setMeta(response.data.response.meta);
-            }
-        }).catch((error) => {
-            if (error.response.status === 401) {
-
-            }
-        })
+        setSpinner(true);
     };
     const onFinish = async (data) => {
         setIsConfirmLoading(true);
-        editMode ?
-            await axios.patch(
-                DEV_URL + props.url + '/' + id,
-                data,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "x-api-key": API_KEY
-                    },
-                }
-            ).then((response) => {
-                if (response.status === 200) {
-                    openNofi('success', 'ADasd', 'adsad');
-                    onStart(1);
-                    setIsConfirmLoading(false);
-                    setIsModalVisible(false);
-                } else {
-                    openNofi('error', 'adsads', 'asdas');
-                    setIsConfirmLoading(false);
-                }
-            }).catch(() => {
-                openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
-            })
-            :
-            await axios.post(
-                DEV_URL + props.url,
-                data,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "x-api-key": API_KEY
-                    },
-                },
-            ).then((response) => {
-                if (response.status === 200) {
-                    openNofi('success', 'asdas', 'dsada');
-                    onStart(1);
-                    setIsConfirmLoading(false);
-                    setIsModalVisible(false);
-                } else {
-                    openNofi('error', 'adsads', 'asdas');
-                    setIsConfirmLoading(false);
-                }
-            }).catch(() => {
+        var response = null;
+        if (editMode) {
+            response = await Patch(props.url + '/' + id, token, config, data);
+            if (response === 200) {
+                setIsModalVisible(false);
+                onStart(1);
+                setSpinner(true);
+            }
+        } else {
+            response = await Post(props.url, token, config, data);
+            if (response === 201) {
                 setIsConfirmLoading(false);
-                openNofi('error', 'Сүлжээний алдаа', 'Интернэт холболтоо шалгаад дахин оролдоно уу');
-            })
+                setIsModalVisible(false);
+                onStart(1);
+                setSpinner(true);
+            }
+        }
+        setIsConfirmLoading(false);
     };
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
@@ -259,10 +222,10 @@ function UTable(props) {
                                             }
                                             <td className='ant-table-row-cell-break-word'>
                                                 {
-                                                    props.isRead && <Button type="link" onClick={() => viewModal(row)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
+                                                    props.isRead && <Button type="link" onClick={() => viewModal(row.id)} title='Харах' style={{ paddingRight: 5 }}><EyeOutlined /></Button>
                                                 }
                                                 {
-                                                    props.isUpdate && <Button type="link" onClick={() => editModal(row)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
+                                                    props.isUpdate && <Button type="link" onClick={() => editModal(row.id)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
                                                 }
                                                 {
                                                     props.isDelete && <Button type="link" onClick={() => deleteModal(row.id)} title='Устгах' style={{ paddingLeft: 5 }} ><DeleteOutlined style={{ color: 'red' }} /></Button>
@@ -329,14 +292,7 @@ function UTable(props) {
                 cancelText="Болих"
                 okText="Хадгалах"
             >
-                <Form form={form}
-                // labelCol={{
-                //     span: 4,
-                // }}
-                // wrapperCol={{
-                //     span: 20,
-                // }}
-                >
+                <Form form={form}>
                     <Row gutter={[8, 8]}>
                         {
                             props.column.map((element, index) => {
@@ -360,6 +316,7 @@ function UTable(props) {
                                             >
                                                 <Select
                                                     allowClear
+                                                    placeholder={element.label}
                                                 >
                                                     {
                                                         element.inputData.map((data, index) => {
@@ -398,7 +355,7 @@ function UTable(props) {
                                                 name={element.index}
                                                 rules={element.rules}
                                             >
-                                                <InputNumber onKeyPress={checkNumber} />
+                                                <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
                                             </Form.Item>
                                         }
                                         {
@@ -428,7 +385,7 @@ function UTable(props) {
                 </Form>
             </Modal>
             <Modal
-                title="Шинжилгээний төрөл нэмэх"
+                title={props.title + " төрөл нэмэх"}
                 open={isSubModalVisible}
                 onOk={() => {
                     AddSubForm.validateFields()
@@ -440,13 +397,10 @@ function UTable(props) {
                                 }
                             });
                             values.type = type;
-                            await axios.post(DEV_URL + 'service/type', values, config)
-                                .then((response) => {
-                                    openNofi('success', 'asdasd', 'sdad');
-                                    setIsSubModalVisible(false);
-                                }).catch((error) => {
-                                    console.log(error);
-                                })
+                            const response = await Post('service/type', token, config, values);
+                            if (response.length != 0) {
+                                setIsSubModalVisible(false);
+                            }
                         }).catch((error) => {
                             console.log(error);
                         })

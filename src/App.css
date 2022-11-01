@@ -17,7 +17,6 @@ label {
   height: 28px !important;
   border-radius: 6px !important;
   width: 100% !important;
-  font-weight: 600;
   text-align: center;
 }
 
@@ -126,9 +125,10 @@ input::-webkit-inner-spin-button {
   border-radius: 6px !important;
   align-items: center;
 }
-/* .ant-alert {
-  height: 32px !important;
-} */
+.ant-alert {
+  min-height: 30px;
+  height: auto;
+}
 
 /* Firefox */
 input[type="number"] {
@@ -137,9 +137,34 @@ input[type="number"] {
 .custom-card > .ant-card-head > .ant-card-head-wrapper {
   display: contents !important;
 }
-.ant-collapse-header{
+.ant-collapse-header {
   padding: 5px !important;
 }
-.ant-collapse-arrow{
+.ant-collapse-arrow {
   display: inline-flex !important; /* Collapse -н сумыг голлуулах */
+}
+.ant-table-thead > tr > th {
+  padding: 7px 10px !important;
+  text-align: center;
+}
+.ant-table-tbody > tr > td {
+  padding: 2px 0px !important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.page {
+  width: 21cm;
+  min-height: 29.7cm;
+  padding: 1cm;
+  margin: 1cm auto;
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+@page {
+  size: A4;
+  margin: 0;
 }

@@ -1,40 +1,34 @@
 //Сувилагчийн тэмдэглэл
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
+import { Get } from "../../comman";
 
-export default function NurseNote() {
+export default function NurseNote({ PatientId }) {
   const token = useSelector(selectCurrentToken);
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
+  const config = {
+    headers: {},
+    params: {}
+  };
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getAssesment();
-  }, []);
+    if (PatientId) {
+      console.log(PatientId);
+      getAssesment();
+    }
+  }, [PatientId]);
 
-  const getAssesment = (type) => {
+  const getAssesment = async (type) => {
     //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
-    axios({
-      method: "get",
-      url: `${DEV_URL}assesment`,
-      params: {
-        patientId: 47,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("response getAssesment", response.data.response.data);
-        setData(response.data.response.data);
-      })
-      .catch(function (error) {
-        console.log("response error", error.response);
-      });
-  };
+    config.params.patientId = PatientId;
+    const response = await Get('assesment', token, config);
+    if (response.data.length != 0) {
+      setData(response.data);
+    }else{
+      setData([]);
+    }
+  }
   return (
     <table className="w-full">
       <tbody>

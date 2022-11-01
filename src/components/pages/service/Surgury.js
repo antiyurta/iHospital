@@ -2,44 +2,43 @@ import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get } from "../../comman";
 import UTable from "../../UTable";
+import { Get } from "../../comman";
 
-function Xray() {
+function Surgery() {
     const token = useSelector(selectCurrentToken);
-    const [xrayTypeData, setXrayTypeData] = useState([]);
-
+    const [surgeryTypeData, setSurgeryTypeData] = useState([]);
     const config = {
         headers: {},
         params: {
-            type: 1,
+            type: 3,
         }
     };
-
-    const getXrayTypeData = async () => {
+    const getSurguryTypeData = async () => {
         const response = await Get("service/type", token, config);
-        setXrayTypeData(response.data);
+        setSurgeryTypeData(response.data);
     }
 
     useEffect(() => {
-        getXrayTypeData();
+        getSurguryTypeData();
     }, [])
+
     const column = [
         {
-            index: 'xrayTypeId',
-            label: 'Оншилгооны төрөл',
+            index: 'surgeryTypeId',
+            label: 'Шинэжилгээний төрөл',
             isView: false,
             input: 'select',
-            inputData: xrayTypeData,
+            inputData: surgeryTypeData,
             relIndex: 'name',
             col: 21
         },
         {
-            label: 'Оношилгоо төрөл',
+            label: 'surgery төрөл',
             isAdd: true,
             isView: false,
             index: 'name',
-            type: 1,
+            type: 3,
             subInput: 'input',
             col: 3
         },
@@ -69,7 +68,7 @@ function Xray() {
         },
         {
             index: 'price',
-            label: "Үнэ",
+            label: 'Үнэ',
             isView: true,
             isSearch: false,
             input: 'inputNumber',
@@ -82,22 +81,22 @@ function Xray() {
             isSearch: false,
             input: 'inputNumber',
             col: 12
-        }
+        },
     ]
     return (
-        <Row gutter={[8, 8]}>
+        <Row>
             <Col span={24}>
                 <UTable
-                    title={'Оношилгоо'}
-                    url={'service/xray'}
+                    title={'Surgury'}
+                    url={'service/surgery'}
                     column={column}
                     isCreate={true}
-                    isRead={false}
+                    isRead={true}
                     isUpdate={true}
                     isDelete={true}
-                    width='40%' />
+                    width='100%' />
             </Col>
         </Row>
     )
 }
-export default Xray;
+export default Surgery;

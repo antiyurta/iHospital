@@ -33,6 +33,8 @@ import PrivateRoute from "./features/PrivateRoute";
 //service start
 import Examination from "./components/pages/service/Examination";
 import Xray from "./components/pages/service/Xray";
+import Treatment from "./components/pages/service/Treatment";
+import Surgury from "./components/pages/service/Surgury";
 //service end
 //emr start
 import EMR from "./components/pages/EMR/emr";
@@ -42,7 +44,11 @@ import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAm
 // inpatient HEWTENT start
 import Inpatient from "./components/pages/Inpatient/inpatient";
 import FormBuilder from "./components/pages/FormBuilder/FormBuilder";
-import Treatment from "./components/pages/service/Treatment";
+import DemoEmr from "./components/pages/EMR/demoEmr";
+import Demo from "./components/pages/Demo/demo";
+import Menu from "./components/pages/reference/Menu";
+import Report from "./components/pages/Demo/Report";
+import Editor from "./components/pages/Demo/Editor";
 // inpatient HEWTEN end
 
 function App() {
@@ -51,8 +57,13 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<Main />}>
+          <Route path="/menu" element={<Menu />} />
           <Route path="/inpatient" element={<Inpatient />} />
           <Route path="/emr" element={<EMR />} />
+          <Route path="/emrr" element={<DemoEmr />} />
+          <Route path="/demo" element={<Demo />} />
+          <Route path="/reports" element={<Report />} />
+          <Route path="/reportEditor" element={<Editor />} />
           <Route path="/" element={<Home />} />
           <Route
             path="/hospital"
@@ -176,6 +187,7 @@ function App() {
             <Route path="/examination" element={<PrivateRoute><Examination /></PrivateRoute>} />
             <Route path="/xray" element={<PrivateRoute><Xray /></PrivateRoute>} />
             <Route path="/treatment" element={<PrivateRoute><Treatment /></PrivateRoute>} />
+            <Route path="/surgury" element={<PrivateRoute><Surgury /></PrivateRoute>} />
           </Route>
           <Route
             path="/profile"

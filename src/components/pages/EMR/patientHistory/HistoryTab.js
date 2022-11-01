@@ -27,12 +27,12 @@ export default function HistoryTab() {
 
   const saveHistory = (values) => {
     console.log("save History values Success: ", values);
-    values["patientId"] = 43;
+    values["patientId"] = 8;
     axios({
       method: "post",
       url: `${DEV_URL}emr/patient-history`,
       params: {
-        patientId: 43,
+        patientId: 8,
       },
       data: values,
       headers: {

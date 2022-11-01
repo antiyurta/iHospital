@@ -10,29 +10,17 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 function Structure() {
     const token = useSelector(selectCurrentToken);
-    const [hospital, setHospital] = useState([]);
     const [departments, setDepartments] = useState([]);
     const department = {
-        type: 2,
+        params: {
+            type: 2,
+        }
     }
     const position = {
-        type: 1,
+        params: {
+            type: 1,
+        }
     }
-    const getHospital = async () => {
-        await axios.get(DEV_URL + 'organization/hospital', {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "x-api-key": API_KEY
-            },
-            params: {
-                type: 1,
-            }
-        })
-            .then((response) => {
-                setHospital(response.data.response.data);
-            })
-    }
-
     const getDepartment = async () => {
         await axios.get(DEV_URL + 'organization/structure', {
             headers: {
@@ -49,19 +37,9 @@ function Structure() {
     }
 
     useEffect(() => {
-        getHospital();
         getDepartment();
     }, [])
     const DepartmentColumn = [
-        {
-            index: 'hospitalId',
-            label: 'Байгууллага',
-            isView: true,
-            input: 'select',
-            inputData: hospital,
-            relIndex: 'name',
-            col: 24,
-        },
         {
             index: 'name',
             label: 'Нэр',
@@ -93,7 +71,7 @@ function Structure() {
         {
             index: 'position',
             label: "Байрлал",
-            isView: true,
+            isView: false,
             input: 'inputNumber',
             col: 24,
         },
@@ -104,19 +82,12 @@ function Structure() {
             input: 'select',
             inputData: [
                 {
-                    id: 1,
+                    id: 2,
                     label: "Өөрөө"
                 }
             ],
             relIndex: 'label',
             col: 24
-        },
-        {
-            index: 'inspectionTime',
-            label: "Үзлэгийн цаг",
-            isView: true,
-            input: 'inputNumber',
-            col: 24,
         },
         {
             index: "isOrder",
@@ -151,6 +122,27 @@ function Structure() {
             col: 24,
         },
         {
+            index: 'type',
+            label: 'Төрөл',
+            isView: true,
+            input: 'select',
+            inputData: [
+                {
+                    id: 1,
+                    label: "Албан тушаал"
+                }
+            ],
+            relIndex: 'label',
+            col: 24
+        },
+        {
+            index: 'position',
+            label: "Байрлал",
+            isView: false,
+            input: 'inputNumber',
+            col: 24,
+        },
+        {
             index: 'workingHoursPerMonth',
             label: 'Сард ажиллах цаг',
             isView: true,
@@ -159,14 +151,33 @@ function Structure() {
         }
     ]
     return (
-        <Row gutter={[8, 8]}>
-            <Col xs="24" xl={24}>
-                <UTable title={'Structure'} url={'organization/structure'} params={department} column={DepartmentColumn} width='80%' />
-            </Col>
-            <Col xs="24" xl={24}>
-                <UTable title={'Position'} url={'organization/structure'} params={position} column={positionColumn} width='80%' />
-            </Col>
-        </Row>
+        <div className="flex flex-wrap">
+            <div className="w-full p-1">
+                <UTable
+                    title={'Tасаг'}
+                    url={'organization/structure'}
+                    params={department}
+                    column={DepartmentColumn}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    width='80%'
+                />
+            </div>
+            <div className="w-full p-1">
+                <UTable
+                    title={'Албан тушаал'}
+                    url={'organization/structure'}
+                    params={position}
+                    column={positionColumn}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    width='80%' />
+            </div>
+        </div>
     )
 }
 export default Structure;

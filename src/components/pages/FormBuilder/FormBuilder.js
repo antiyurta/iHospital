@@ -1,17 +1,19 @@
 import { Col, Row, List, Card, Button, Input } from "antd";
-import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { blue } from "@ant-design/colors";
 import FormModal from "./FormModal";
 import MainContext from "../../../contexts/MainContext";
+import { Get } from "../../comman";
 
 export default function FormBuilder() {
   const token = useSelector(selectCurrentToken);
+  const config = {
+    headers: {},
+    params: {}
+  };
   const context_state = useContext(MainContext);
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
   const [searchField, setSearchField] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [callForms, setCallForms] = useState(false); //Зүгээр л Хадгалах дарсан эсэхийг мэдэх
@@ -38,24 +40,10 @@ export default function FormBuilder() {
   useEffect(() => {
     getHistory();
   }, [callForms]);
-  const getHistory = () => {
-    axios({
-      method: "get",
-      url: `${DEV_URL}emr/inspection-form`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("response", response);
-        setForms(response.data.response.data);
-      })
-      .catch(function (error) {
-        console.log("response error", error.response);
-      });
+  const getHistory = async () => {
+    const response = await Get('emr/inspection-form', token, config);
+    setForms(response.data);
   };
-
   const filteredForm = forms.filter((form) => {
     return form.name.toLowerCase().includes(searchField.toLowerCase());
   });

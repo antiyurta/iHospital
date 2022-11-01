@@ -2,18 +2,20 @@ import React, { useCallback, useState, useEffect } from "react";
 import { Tabs, Row, Button, Form, Divider } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../../features/authReducer";
+import { selectCurrentDepId, selectCurrentToken } from "../../../../features/authReducer";
 import axios from "axios";
 import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 
-export default function MainPatientHistory() {
+export default function MainPatientHistory({PatientId}) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
 
   const token = useSelector(selectCurrentToken);
+  const depId = useSelector(selectCurrentDepId);
+  const id = PatientId;
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
   useEffect(() => {
@@ -98,9 +100,9 @@ export default function MainPatientHistory() {
       method: "post",
       url: `${DEV_URL}emr/inspectionNote`,
       data: {
-        bookingId: 99,
-        departmentId: 55,
-        patientId: 43,
+        bookingId: 1,
+        departmentId: depId,
+        patientId: id,
         pain: JSON.stringify(values["pain"]),
         question: JSON.stringify(values["question"]),
         inspection: JSON.stringify(values["inspection"]),
@@ -141,7 +143,7 @@ export default function MainPatientHistory() {
       method: "get",
       url: `${DEV_URL}emr/inspection-form`,
       params: {
-        structureId: 1,
+        structureId: depId,
       },
       headers: {
         Authorization: `Bearer ${token}`,

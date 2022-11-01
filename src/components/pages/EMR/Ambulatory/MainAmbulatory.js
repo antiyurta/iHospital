@@ -3,17 +3,17 @@ import { Tabs } from "antd";
 import ProgressNotes from "./ProgressNotes";
 import NurseNote from "../NurseNote";
 
-export default function MainAmbulatory() {
+export default function MainAmbulatory({ patientId }) {
   const items = [
     {
       label: "Явцын тэмдэглэл",
       key: "item-1",
-      children: <ProgressNotes />,
+      children: <ProgressNotes PatientId={patientId} />,
     },
     {
       label: "Сувилагчийн тэмдэглэл",
       key: "item-6",
-      children: <NurseNote />,
+      children: <NurseNote PatientId={patientId} />,
     },
     {
       label: "Оношилгоо",

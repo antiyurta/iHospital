@@ -1,7 +1,4 @@
 import { Button, Tabs } from "antd";
-import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../features/authReducer";
-// parts
 import RecentRecipe from "./RecentRecipe";
 import SetOrder from "./SetOrder";
 import Medicine from "./Medicine";
@@ -13,27 +10,51 @@ import Endo from "./Endo";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 //
-function Order(props) {
+function Order({ isDoctor, categories, save }) {
     const [orders, setOrders] = useState([]);
     const [total, setTotal] = useState(Number);
 
+    const saveClick = (e) => {
+        save(e);
+    }
 
     const handleclick = (value) => {
-        setOrders([...orders, value]);
-        setTotal(total + value.prices?.price);
+
+        console.log(value);
+
+        const order = {
+            id: value.id,
+            name: value.name,
+            price: value.price,
+            type: value.types.type,
+            isCito: 0,
+            qty: 1,
+            requestDate: new Date(),
+            usageType: 'OUT',
+        }
+
+        if (value.qty) {
+            order.price = value.price * value.qty;
+            order.qty = value.qty;
+            order.dayLength = value.dayLength;
+        }
+
+
+        setOrders([...orders, order]);
+        setTotal(total + order.price);
     }
 
     const remove = (index) => {
         var arr = [...orders];
         arr.splice(index, 1);
-        setTotal(total - orders[index].prices?.price);
+        setTotal(total - orders[index].price);
         setOrders(arr);
     }
 
-    const categories = [];
-    props.categories.map((category, index) => {
+    const Tabss = [];
+    categories.map((category, index) => {
         if (category.name == 'Examination') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Шинэжилгээ",
                     key: index,
@@ -42,25 +63,25 @@ function Order(props) {
             )
         }
         if (category.name == 'Xray') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Оношилгоо",
                     key: index,
-                    children: <Xray handleclick={handleclick}/>
+                    children: <Xray handleclick={handleclick} />
                 }
             )
         }
         if (category.name == 'Treatment') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Эмчилгээ",
                     key: index,
-                    children: <Treatment />
+                    children: <Treatment handleclick={handleclick} />
                 }
             )
         }
         if (category.name == 'Surgery') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Мэс, засал",
                     key: index,
@@ -69,7 +90,7 @@ function Order(props) {
             )
         }
         if (category.name == 'Endo') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Дуран",
                     key: index,
@@ -78,7 +99,7 @@ function Order(props) {
             )
         }
         if (category.name == 'RecentRecipe') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Өмнөх жор",
                     key: index,
@@ -87,7 +108,7 @@ function Order(props) {
             )
         }
         if (category.name == 'SetOrder') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Set Order",
                     key: index,
@@ -96,7 +117,7 @@ function Order(props) {
             )
         }
         if (category.name == 'Medicine') {
-            categories.push(
+            Tabss.push(
                 {
                     label: "Эм",
                     key: index,
@@ -107,11 +128,11 @@ function Order(props) {
     })
 
     return (
-        <div className="flex flex-row">
-            <div className="basis-2/3">
-                {categories ? <Tabs tabPosition="left" items={categories} /> : null}
+        <div className="flex flex-wrap">
+            <div className={isDoctor ? 'w-full' : 'w-full md:w-2/3'}>
+                <Tabs tabPosition="left" items={Tabss} />
             </div>
-            <div className="basis-1/3">
+            <div className={isDoctor ? 'w-full' : 'w-full md:w-1/3'}>
                 <div className='table-responsive px-4 pb-4' id='style-8' style={{ maxHeight: '420px' }}>
                     <Table className='ant-border-space' style={{ width: '100%' }}>
                         <thead className='ant-table-thead bg-slate-200'>
@@ -126,7 +147,7 @@ function Order(props) {
                                     return (
                                         <tr onDoubleClick={() => remove(index)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
                                             <td>{order.name}</td>
-                                            <td>{order.prices?.price}</td>
+                                            <td>{order.price}</td>
                                         </tr>
                                     )
                                 })
@@ -138,6 +159,7 @@ function Order(props) {
                     <p className="float-left font-extrabold">Нийт Үнэ</p>
                     <p className="float-right font-extrabold">{total}₮</p>
                 </div>
+                <Button onClick={() => saveClick(orders)}>Хадгалах</Button>
             </div>
         </div>
     )

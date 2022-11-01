@@ -120,7 +120,12 @@ function Sidenav({ color }) {
           key: "7-3",
           icon: <HomeOutlined />,
           label: <NavLink to="/treatment">treatment</NavLink>,
-        }
+        },
+        {
+          key: "7-4",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/surgury">surgury</NavLink>,
+        },
       ],
     },
     {
@@ -135,6 +140,11 @@ function Sidenav({ color }) {
       icon: <InfoCircleOutlined />,
       label: <Link to="/formBuilder">Form Builder</Link>,
     },
+    {
+      key: 10,
+      icon: <InfoCircleOutlined />,
+      label: <Link to="/reports">Маягтууд</Link>,
+    }
   ];
 
   return (

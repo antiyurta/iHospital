@@ -16,15 +16,21 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import axios from "axios";
+import { Get } from "../../comman";
 
 export default function FormModal(props) {
   // console.log("prpops", props);
   const token = useSelector(selectCurrentToken);
+  const config = {
+    headers: {},
+    params: {}
+  };
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
   const [formStructure, setFormStructure] = useState();
   const [formName, setFormName] = useState("");
   const [saveError, setSaveError] = useState("");
+  const [structures, setStructures] = useState([]);
   const { Option } = Select;
   const { Text } = Typography;
   const { Panel } = Collapse;
@@ -37,7 +43,16 @@ export default function FormModal(props) {
       setFormStructure("");
       setFormName("");
     }
+    getStructures();
   }, []);
+
+  const getStructures = async () => {
+    config.params.type = 2;
+    const response = await Get('organization/structure', token, config);
+    if (response.data.length != 0) {
+      setStructures(response.data);
+    }
+  }
 
   const handleOk = () => {
     saveForm();
@@ -91,15 +106,15 @@ export default function FormModal(props) {
       props.formValue[type][0]?.map((elem, index) => {
         return index === main_index
           ? {
-              ...elem,
-              options: [
-                ...elem.options,
-                {
-                  value: "",
-                  label: "",
-                },
-              ],
-            }
+            ...elem,
+            options: [
+              ...elem.options,
+              {
+                value: "",
+                label: "",
+              },
+            ],
+          }
           : elem;
       })
     );
@@ -113,9 +128,9 @@ export default function FormModal(props) {
       props.formValue[type][0]?.map((elem, index) => {
         return index === main_index
           ? {
-              ...elem,
-              options: arr,
-            }
+            ...elem,
+            options: arr,
+          }
           : elem;
       })
     );
@@ -155,7 +170,7 @@ export default function FormModal(props) {
     props.setFormValue[type]((items) => [
       ...items,
       {
-        inspectionType: "pain",
+        inspectionType: type,
         inspectionFormId: null,
         type: "",
         key: "",
@@ -226,15 +241,15 @@ export default function FormModal(props) {
         </Button>,
         ...(props.data
           ? [
-              <Button
-                key="delete"
-                type="danger"
-                style={{ backgroundColor: red.primary }}
-                onClick={() => deleteForm()}
-              >
-                Устгах
-              </Button>,
-            ]
+            <Button
+              key="delete"
+              type="danger"
+              style={{ backgroundColor: red.primary }}
+              onClick={() => deleteForm()}
+            >
+              Устгах
+            </Button>,
+          ]
           : []),
         <Button
           key="save"
@@ -250,20 +265,23 @@ export default function FormModal(props) {
         <Col span={8}>
           <Row gutter={[8, 8]} className="items-center">
             <Col span={6}>
-              <Text className="mr-2">Structure</Text>
+              <Text className="mr-2">Тасаг</Text>
             </Col>
             <Col span={8}>
               <Select
-                defaultValue="lucy"
                 style={{
                   width: 200,
                 }}
                 value={formStructure}
                 onChange={setFormStructure}
               >
-                <Option value={1}>Structure 1</Option>
-                <Option value={2}>Structure 2</Option>
-                <Option value={3}>Structure 3</Option>
+                {
+                  structures.map((structure, index) => {
+                    return (
+                      <Option key={index} value={structure.id}>{structure.name}</Option>
+                    )
+                  })
+                }
               </Select>
             </Col>
           </Row>

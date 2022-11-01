@@ -4,13 +4,10 @@ import {
   InputNumber,
   Radio,
   Row,
-  Table,
   Typography,
   Collapse,
 } from "antd";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import male from "../../../assets/images/maleAvatar.svg";
 import { INPUT_HEIGHT } from "../../../constant";
 import Ocs from "../OCS/Ocs";
 import MainAmbulatory from "./Ambulatory/MainAmbulatory";
@@ -25,115 +22,72 @@ import Allergy from "./Problems/Allergy";
 import UsuallyMedicine from "./Problems/UsuallyMedicine";
 import EpidemicQuestion from "./Problems/EpidemicQuestion";
 import GeneticQuestion from "./Problems/GeneticQuestion";
-
+import PatientInformation from "../PatientInformation";
+import { Get, openNofi } from "../../comman";
+import { useLocation } from "react-router-dom";
+const config = {
+  headers: {},
+  params: {}
+};
 function EMR() {
+  const IncomePatientId = useLocation().state.patientId;
   const [cardLoading, setCardLoading] = useState(false);
   const [problems, setProblems] = useState("");
   const token = useSelector(selectCurrentToken);
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
   const [type, setType] = useState("EMR"); // ['OCS', 'EMR']
   const { Text } = Typography;
   const { Panel } = Collapse;
 
-  useEffect(() => {}, []);
+  //
+  const [selectedPatient, setSelectedPatient] = useState([]);
+  //
+
 
   const handleTypeChange = ({ target: { value } }) => {
     setType(value);
   };
-
-  useEffect(() => {
-    getHistory();
-  }, []);
-  const getHistory = () => {
-    axios({
-      method: "get",
-      url: `${DEV_URL}emr/patient-history`,
-      params: {
-        patientId: 43,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("response", response);
-        setProblems(response.data.response.data.slice(-1)[0]);
-      })
-      .catch(function (error) {
-        console.log("response error", error.response);
-      });
+  const getHistory = async (PatientId) => {
+    config.params.registerNumber = null;
+    console.log("====>", PatientId);
+    config.params.patientId = PatientId;
+    const response = await Get('emr/patient-history', token, config);
+    if (response.data.length != 0) {
+      setProblems(response.data.slice(-1)[0]);
+    }
   };
 
+  const getByIdPatient = async (id) => {
+    config.params.patientId = null;
+    const response = await Get('pms/patient/' + id, token, config);
+    console.log(response);
+    if (response) {
+      setSelectedPatient(response);
+      getHistory(response.id);
+    }
+  }
+
+  const handleSearch = async (value) => {
+    config.params.registerNumber = value;
+    const response = await Get('pms/patient', token, config);
+    if (response.data.length != 0) {
+      setSelectedPatient(response.data[0]);
+      getHistory(response.data[0].id);
+    } else {
+      openNofi('error', 'Өвчтөн', 'Өвчтөн олдохгүй байна');
+    }
+  }
+  useEffect(() => {
+    getByIdPatient(IncomePatientId);
+  }, []);
+
   return (
-    <Row gutter={[8, 8]}>
-      <Col span={12}>
-        <Row gutter={[8, 8]}>
-          <Col span={14}>
-            <Card
-              bordered={false}
-              title={
-                <h6 className="font-semibold m-0">Үйлчлүүлэгчийн мэдээлэл</h6>
-              }
-              className="header-solid max-h-max"
-              loading={cardLoading}
-              bodyStyle={{
-                paddingTop: 0,
-                paddingBottom: 16,
-              }}
-            >
-              <Row gutter={[16, 16]}>
-                <Col span={8} className="text-center">
-                  <img className="max-h-full" src={male} alt="avatar" />
-                  <Radio.Group
-                    size="small"
-                    value={type}
-                    onChange={handleTypeChange}
-                    optionType="button"
-                    buttonStyle="solid"
-                    className="small-radio-button mt-2"
-                  >
-                    <Radio.Button value="OCS">OCS</Radio.Button>
-                    <Radio.Button value="EMR">EMR</Radio.Button>
-                  </Radio.Group>
-                </Col>
-                <Col span={16}>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">Овог:</span>
-                    <span className="font-bold ml-2">Ширчиндэмбэрэл</span>
-                  </label>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">Нэр:</span>
-                    <span className="font-bold ml-2">Амарбат</span>
-                  </label>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">Хүйс:</span>
-                    <span className="font-bold ml-2">Эр</span>
-                  </label>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">Нас:</span>
-                    <span className="font-bold ml-2">25</span>
-                  </label>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">РД:</span>
-                    <span className="font-bold ml-2">ЙЮ97043019</span>
-                  </label>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">Утас:</span>
-                    <span className="font-bold ml-2">86681325</span>
-                  </label>
-                  <label className="w-full flex mb-1">
-                    <span className="w-1/6">Хаяг:</span>
-                    <span className="font-bold ml-2">
-                      Улаанбаатар, Баянзүрх, 8 Хороо, 68-50
-                    </span>
-                  </label>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={10}>
+    <div className="flex flex-wrap">
+      <div className="w-full md:w-full xl:w-1/2">
+        <div className="flex flex-wrap">
+          <div className="w-full md:w-3/5 p-1">
+            <PatientInformation patient={selectedPatient} handlesearch={handleSearch} handleTypeChange={handleTypeChange} OCS={true} />
+          </div>
+          <div className="w-full md:w-2/5 p-1">
             <Card
               bordered={false}
               title={
@@ -144,7 +98,7 @@ function EMR() {
                   </p>
                 </div>
               }
-              className="header-solid h-full p-0"
+              className="header-solid max-h-max rounded-md"
               loading={cardLoading}
               bodyStyle={{
                 padding: 0,
@@ -200,84 +154,88 @@ function EMR() {
                 </Collapse>
               ) : null}
             </Card>
-          </Col>
-          <Col span={24}>
+          </div>
+          <div className="w-full">
+            <div className="p-1">
+              <Card
+                bordered={false}
+                title={<h6 className="font-semibold m-0">Амбулатори</h6>}
+                className="header-solid max-h-max rounded-md"
+                loading={cardLoading}
+                bodyStyle={{
+                  paddingTop: 0,
+                  paddingBottom: 16,
+                  minHeight: 400,
+                  maxHeight: 600,
+                  overflowX: "hidden",
+                  overflowY: "scroll",
+                }}
+              >
+                <MainAmbulatory patientId={selectedPatient.id} />
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full md:w-full xl:w-1/2">
+        <div className="p-1">
+          {type == "EMR" ? (
             <Card
               bordered={false}
-              title={<h6 className="font-semibold m-0">Амбулатори</h6>}
-              className="header-solid h-full"
+              title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
+              className="header-solid max-h-max rounded-md"
               loading={cardLoading}
               bodyStyle={{
                 paddingTop: 0,
                 paddingBottom: 16,
-                minHeight: 400,
-                maxHeight: 600,
-                overflowX: "hidden",
-                overflowY: "scroll",
               }}
+              extra={
+                <>
+                  <Radio.Group>
+                    <Radio value={1}>Анхан</Radio>
+                    <Radio value={2}>Давтан</Radio>
+                  </Radio.Group>
+                </>
+              }
             >
-              <MainAmbulatory />
+              <MainPatientHistory PatientId={selectedPatient.id} />
             </Card>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={12}>
-        {type == "EMR" ? (
-          <Card
-            bordered={false}
-            title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
-            className="header-solid h-full"
-            loading={cardLoading}
-            bodyStyle={{
-              paddingTop: 0,
-              paddingBottom: 16,
-            }}
-            extra={
-              <>
-                <Radio.Group>
-                  <Radio value={1}>Анхан</Radio>
-                  <Radio value={2}>Давтан</Radio>
-                </Radio.Group>
-              </>
-            }
-          >
-            <MainPatientHistory />
-          </Card>
-        ) : null}
-        {type == "OCS" ? (
-          <Card
-            bordered={false}
-            title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
-            className="header-solid h-full"
-            loading={cardLoading}
-            bodyStyle={{
-              paddingTop: 0,
-              paddingBottom: 16,
-            }}
-            extra={
-              <Row className="items-center">
-                <Col>
-                  <Text className="mr-2">Нийт төлбөр</Text>
-                </Col>
-                <Col>
-                  <InputNumber
-                    min={1}
-                    max={10}
-                    style={{
-                      minHeight: INPUT_HEIGHT,
-                      height: INPUT_HEIGHT,
-                    }}
-                    disabled
-                  />
-                </Col>
-              </Row>
-            }
-          >
-            <Ocs />
-          </Card>
-        ) : null}
-      </Col>
-    </Row>
+          ) : null}
+          {type == "OCS" ? (
+            <Card
+              bordered={false}
+              title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
+              className="header-solid max-h-max rounded-md"
+              loading={cardLoading}
+              bodyStyle={{
+                paddingTop: 0,
+                paddingBottom: 16,
+              }}
+              extra={
+                <Row className="items-center">
+                  <Col>
+                    <Text className="mr-2">Нийт төлбөр</Text>
+                  </Col>
+                  <Col>
+                    <InputNumber
+                      min={1}
+                      max={10}
+                      style={{
+                        minHeight: INPUT_HEIGHT,
+                        height: INPUT_HEIGHT,
+                      }}
+                      disabled
+                    />
+                  </Col>
+                </Row>
+              }
+            >
+              <Ocs />
+            </Card>
+          ) : null}
+        </div>
+      </div>
+    </div>
   );
 }
 

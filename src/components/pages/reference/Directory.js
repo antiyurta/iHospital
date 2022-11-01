@@ -33,7 +33,10 @@ function Directory() {
     return (
         <Row gutter={[24, 0]}>
             <Col xs="24" xl={24}>
-                <UTable title={'directories'} url={'reference/directories'} column={column} width='80%' />
+                <UTable title={'directories'} url={'reference/directories'} column={column} isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true} width='80%' />
             </Col>
         </Row>
     )

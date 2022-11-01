@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../features/authReducer';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, setAppId, setDepId } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Row } from "antd";
+import { Get } from "./comman";
 
 const pencil = [
     <svg
@@ -27,9 +28,27 @@ const pencil = [
 
 function Profile() {
     const token = useSelector(selectCurrentToken);
+    const depId = useSelector(selectCurrentDepId);
+    const appId = useSelector(selectCurrentAppId);
+    const dispatch = useDispatch();
+    const [user, setUser] = useState([]);
+    const config = {
+        headers: {},
+        params: {}
+    }
+    const getProfile = async () => {
+        const response = await Get("authentication", token, config);
+        if (!depId) {
+            dispatch(setDepId(response.employee?.depId));
+        }
+        if (!appId) {
+            dispatch(setAppId(response.employee?.appId));
+        }
+        setUser(response);
+    }
     useEffect(() => {
-        console.log(token);
-    })
+        getProfile();
+    }, [])
     return (
         <div>
             <div
@@ -44,10 +63,9 @@ function Profile() {
                         <Col span={24} md={12} className="col-info">
                             <Avatar.Group>
                                 <Avatar size={74} shape="square" src={profile} />
-
                                 <div className="avatar-info">
-                                    <h4 className="font-semibold m-0">Ширчиндэмбэрэл Амарбат</h4>
-                                    <p>IT / Программист</p>
+                                    <h4 className="font-semibold m-0">{user.employee?.lastName + " " + user.employee?.firstName}</h4>
+                                    <p>{user.role?.name} / {user.role?.description}</p>
                                 </div>
                             </Avatar.Group>
                         </Col>
@@ -71,26 +89,19 @@ function Profile() {
                 extra={<Button type="link">{pencil}</Button>}
                 bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
             >
-                <p className="text-dark">
-                    {" "}
-                    Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer
-                    is no. If two equally difficult paths, choose the one more painful
-                    in the short term (pain avoidance is creating an illusion of
-                    equality).{" "}
-                </p>
-                <hr className="my-25" />
-                <Descriptions title="Oliver Liam">
-                    <Descriptions.Item label="Full Name" span={3}>
-                        Sarah Emily Jacob
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Mobile" span={3}>
-                        (44) 123 1234 123
+                <hr className="my-2" />
+                <Descriptions>
+                    <Descriptions.Item label="Утас" span={3}>
+                        {user.employee?.phone}
                     </Descriptions.Item>
                     <Descriptions.Item label="Email" span={3}>
-                        sarahjacob@mail.com
+                        {user?.email}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Location" span={3}>
-                        USA
+                    <Descriptions.Item label="Гэрийн хаяг" span={3}>
+                        {user?.employee?.homeAddress}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Эмнэлэг" span={3}>
+                        {/* {user} */}
                     </Descriptions.Item>
                 </Descriptions>
             </Card>
