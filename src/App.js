@@ -44,7 +44,6 @@ import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAm
 // inpatient HEWTENT start
 import Inpatient from "./components/pages/Inpatient/inpatient";
 import FormBuilder from "./components/pages/FormBuilder/FormBuilder";
-import DemoEmr from "./components/pages/EMR/demoEmr";
 import Demo from "./components/pages/Demo/demo";
 import Menu from "./components/pages/reference/Menu";
 import Report from "./components/pages/Demo/Report";
@@ -60,7 +59,6 @@ function App() {
           <Route path="/menu" element={<Menu />} />
           <Route path="/inpatient" element={<Inpatient />} />
           <Route path="/emr" element={<EMR />} />
-          <Route path="/emrr" element={<DemoEmr />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/reports" element={<Report />} />
           <Route path="/reportEditor" element={<Editor />} />
