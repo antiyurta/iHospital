@@ -13,13 +13,10 @@ import Block from "./components/pages/Organization/Block";
 import Room from "./components/pages/Organization/Room";
 import Bed from "./components/pages/Organization/Bed";
 //
-//
-import Payment from "./components/pages/payment/Payment";
-//
+import Payment from "./components/pages/Payment/Payment";
 //
 import DoctorAppointmentSchedule from "./components/pages/Appointment/DoctorAppointmentSchedule";
 import DoctorAppointment from "./components/pages/Appointment/DoctorAppointment";
-//
 //
 import Patient from "./components/pages/PMS/Patient";
 import Country from "./components/pages/reference/CountryDictionary";
