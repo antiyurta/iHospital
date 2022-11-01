@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { INPUT_HEIGHT } from "../../../constant";
 import Ocs from "../OCS/Ocs";
 import MainAmbulatory from "./Ambulatory/MainAmbulatory";
-import MainPatientHistory from "./PatientHistory/MainPatientHistory";
+import MainPatientHistory from "./EPatientHistory/MainPatientHistory";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import Birth from "./Problems/Birth";
