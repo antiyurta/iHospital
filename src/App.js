@@ -14,7 +14,7 @@ import Room from "./components/pages/Organization/Room";
 import Bed from "./components/pages/Organization/Bed";
 //
 // import Payment from "./components/pages/Payment/Payment";
-import Payment from './components/pages/Payment/Payments';
+import PaymentCloud from './components/pages/EPayment/Payments';
 //
 import DoctorAppointmentSchedule from "./components/pages/Appointment/DoctorAppointmentSchedule";
 import DoctorAppointment from "./components/pages/Appointment/DoctorAppointment";
@@ -122,7 +122,7 @@ function App() {
               path="/payment"
               element={
                 <PrivateRoute>
-                  <Payment />
+                  <PaymentCloud />
                 </PrivateRoute>
               }
             />
