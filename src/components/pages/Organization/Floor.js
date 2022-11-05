@@ -15,15 +15,15 @@ const column = [
 
 function Floor() {
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="24" xl={24}>
+        <div className="flex flex-wrap">
+            <div className="w-full">
                 <UTable title={'Давхар'} url={'organization/floor'} column={column} width='20%'
                     isCreate={true}
                     isRead={true}
                     isUpdate={true}
                     isDelete={true} />
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 export default Floor;

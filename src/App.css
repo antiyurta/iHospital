@@ -168,3 +168,16 @@ input[type="number"] {
   size: A4;
   margin: 0;
 }
+
+.ant-btn {
+  height: 28px !important;
+  line-height: 1;
+}
+
+.ant-tabs-extra-content {
+  width: 100%;
+}
+
+.ant-picker-calendar-header {
+  /* display: none; */
+}

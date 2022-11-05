@@ -26,7 +26,7 @@ function Surgery() {
     const column = [
         {
             index: 'surgeryTypeId',
-            label: 'Шинэжилгээний төрөл',
+            label: 'Мэс засал төрөл',
             isView: false,
             input: 'select',
             inputData: surgeryTypeData,
@@ -34,7 +34,7 @@ function Surgery() {
             col: 21
         },
         {
-            label: 'surgery төрөл',
+            label: 'Мэс засал төрөл',
             isAdd: true,
             isView: false,
             index: 'name',
@@ -87,7 +87,7 @@ function Surgery() {
         <Row>
             <Col span={24}>
                 <UTable
-                    title={'Surgury'}
+                    title={'Мэс засал'}
                     url={'service/surgery'}
                     column={column}
                     isCreate={true}

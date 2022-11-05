@@ -1,4 +1,3 @@
-import { Col, Row } from "antd";
 import React from "react";
 
 import UTable from "../../UTable";
@@ -47,8 +46,8 @@ const column = [
 
 function Degree() {
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="24" xl={24}>
+        <div className="flex flex-wrap">
+            <div className="w-full">
                 <UTable
                     title={'Зэрэг'}
                     url={'reference/degree'}
@@ -58,8 +57,8 @@ function Degree() {
                     isDelete={true}
                     column={column}
                     width='50%' />
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 export default Degree;

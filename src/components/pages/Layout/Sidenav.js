@@ -28,30 +28,35 @@ function Sidenav({ color }) {
         {
           key: "1-2",
           icon: <UsergroupAddOutlined />,
-          label: <NavLink to="/structure">Тасаг нэгж Албан нэгж</NavLink>,
+          label: <NavLink to="/structure">Тасаг нэгж</NavLink>,
         },
         {
           key: "1-3",
           icon: <UsergroupAddOutlined />,
-          label: <NavLink to="/employee">Ажилтан</NavLink>,
+          label: <NavLink to="/position">Албан тушаал</NavLink>,
         },
         {
           key: "1-4",
           icon: <UsergroupAddOutlined />,
-          label: <NavLink to="/floor">Давхар</NavLink>,
+          label: <NavLink to="/employee">Ажилтан</NavLink>,
         },
         {
           key: "1-5",
           icon: <UsergroupAddOutlined />,
-          label: <NavLink to="/block">Блок</NavLink>,
+          label: <NavLink to="/floor">Давхар</NavLink>,
         },
         {
           key: "1-6",
           icon: <UsergroupAddOutlined />,
-          label: <NavLink to="/room">Өрөө</NavLink>,
+          label: <NavLink to="/block">Блок</NavLink>,
         },
         {
           key: "1-7",
+          icon: <UsergroupAddOutlined />,
+          label: <NavLink to="/room">Өрөө</NavLink>,
+        },
+        {
+          key: "1-8",
           icon: <UsergroupAddOutlined />,
           label: <NavLink to="/bed">Ор</NavLink>,
         },
@@ -72,11 +77,6 @@ function Sidenav({ color }) {
           icon: <HomeOutlined />,
           label: <NavLink to="/degree">degree</NavLink>,
         },
-        {
-          key: "2-3",
-          icon: <HomeOutlined />,
-          label: <NavLink to="/directory">directory</NavLink>,
-        },
       ],
     },
     {
@@ -88,7 +88,7 @@ function Sidenav({ color }) {
       key: 4,
       icon: <UserAddOutlined />,
       label: (
-        <NavLink to="/doctorAppointmentSchedule">Эмчийн цаг захиалга</NavLink>
+        <NavLink to="/dpdemo">Эмчийн цаг захиалга</NavLink>
       ),
     },
     {
@@ -126,6 +126,21 @@ function Sidenav({ color }) {
           icon: <HomeOutlined />,
           label: <NavLink to="/surgury">surgury</NavLink>,
         },
+        {
+          key: "7-5",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/medicine">medicine</NavLink>,
+        },
+        {
+          key: "7-6",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/packages">packages</NavLink>,
+        },
+        {
+          key: "7-7",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/SetOrders">SetOrders</NavLink>,
+        }
       ],
     },
     {
@@ -138,7 +153,7 @@ function Sidenav({ color }) {
     {
       key: 9,
       icon: <InfoCircleOutlined />,
-      label: <Link to="/formBuilder">Form Builder</Link>,
+      label: <Link to="/formBuilder">Асуумж оруулах</Link>,
     },
     {
       key: 10,

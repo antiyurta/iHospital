@@ -20,6 +20,7 @@ function Ambulatory() {
     const [patientId, setPatientId] = useState(0);
     const [paymentRequest, setPaymentRequest] = useState([]);
     const scrollRef = useRef();
+    const [totalAmount, setTotalAmount] = useState(0);
     const config = {
         headers: {},
         params: {}
@@ -40,7 +41,8 @@ function Ambulatory() {
         setPatientId(id);
         config.params.patientId = id;
         const response = await Get('payment/invoice', token, config);
-        setPatient(response.data.response.data);
+        setTotalAmount(response.data.reduce((a, v) => a = a + v.amount, 0));
+        setPatient(response.data);
         setPaymentModal(true);
     }
 
@@ -81,18 +83,6 @@ function Ambulatory() {
 
     const categories = [
         {
-            //omnoh jor
-            name: 'RecentRecipe',
-        },
-        {
-            //set order
-            name: 'SetOrder',
-        },
-        {
-            //em
-            name: 'Medicine',
-        },
-        {
             //shinejilgee
             name: 'Examination',
         },
@@ -111,7 +101,11 @@ function Ambulatory() {
         {
             //duran
             name: 'Endo',
-        }
+        },
+        {
+            //bagts
+            name: 'package',
+        },
     ]
 
     return (
@@ -129,14 +123,14 @@ function Ambulatory() {
                         bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
                     >
                         <div className="flex flex-wrap">
-                            <div className="w-full md:w-1/2 xl:1/3">
-                                <Button type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
+                            <div className="w-full md:w-1/3 xl:1/3">
+                                <Button className="bg-sky-700 w-full" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
                             </div>
-                            <div className="w-full md:w-1/3">
-                                <Button type="primary">Хэвтэн эмчлүүлэх</Button>
+                            <div className="w-full md:w-1/3 xl:1/3">
+                                <Button className="bg-sky-700 w-full" type="primary">Хэвтэн эмчлүүлэх</Button>
                             </div>
-                            <div className="w-full md:w-1/3">
-                                <Button type="primary">Хэвтэн эмчлүүлэх цонх</Button>
+                            <div className="w-full md:w-1/3 xl:1/3">
+                                <Button className="bg-sky-700 w-full" type="primary">Хэвтэн эмчлүүлэх цонх</Button>
                             </div>
                         </div>
                     </Card>
@@ -155,7 +149,6 @@ function Ambulatory() {
                                         <th>Овог</th>
                                         <th>Нэр</th>
                                         <th>Регистрийн дугаар</th>
-                                        <th>Нийт үнэ</th>
                                         <th>Үзлэг</th>
                                     </tr>
                                 </thead>
@@ -168,8 +161,7 @@ function Ambulatory() {
                                                     <td>{patient.firstName}</td>
                                                     <td>{patient.lastName}</td>
                                                     <td>{patient.registerNumber}</td>
-                                                    <td>{patient.totalAmount}</td>
-                                                    <td><Button onClick={() => selectPatient(patient.id)} >ыйбйы</Button></td>
+                                                    <td><Button onClick={() => selectPatient(patient.id)} >Төлбөр авах</Button></td>
                                                 </tr>
                                             )
                                         })
@@ -251,7 +243,18 @@ function Ambulatory() {
                 </div>
             </Modal>
             <Modal
-                title={"sadad"}
+                // title={"Төлбөр авах" + "Нийт төлбөр" + totalAmount}
+                title={
+                    <div className="h-6">
+                        <p className="float-left">
+                            Төлбөр авах
+                        </p>
+                        <p className="float-right font-extrabold">
+                            Нийт төлбөр: {totalAmount}
+                        </p>
+                    </div>
+                }
+                closable={false}
                 open={paymentModal}
                 width={"50%"}
                 onOk={PaymentRequst}
@@ -276,7 +279,7 @@ function Ambulatory() {
                     </Row>
                 </Checkbox.Group>
             </Modal>
-        </div>
+        </div >
     )
 }
 export default Ambulatory;

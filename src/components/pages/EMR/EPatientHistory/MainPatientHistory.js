@@ -2,18 +2,23 @@ import React, { useCallback, useState, useEffect } from "react";
 import { Tabs, Row, Button, Form, Divider } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
-import { selectCurrentDepId, selectCurrentToken } from "../../../../features/authReducer";
+import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
 import axios from "axios";
 import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
+import { openNofi, Post } from "../../../comman";
 function MainPatientHistory({ PatientId }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
-
   const token = useSelector(selectCurrentToken);
   const depId = useSelector(selectCurrentDepId);
+  const userId = useSelector(selectCurrentUserId)
+  const config = {
+    headers: {},
+    params: {}
+  }
   const id = PatientId;
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -93,31 +98,19 @@ function MainPatientHistory({ PatientId }) {
     );
   }, []);
 
-  const saveDynamicTab = (values) => {
-    console.log("saveDynamicTab values: ", values);
-    axios({
-      method: "post",
-      url: `${DEV_URL}emr/inspectionNote`,
-      data: {
-        bookingId: 1,
-        departmentId: depId,
-        patientId: id,
-        pain: JSON.stringify(values["pain"]),
-        question: JSON.stringify(values["question"]),
-        inspection: JSON.stringify(values["inspection"]),
-        plan: JSON.stringify(values["plan"]),
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("saveDynamicTab response", response);
-      })
-      .catch(function (error) {
-        console.log("saveDynamicTab response error", error.response);
-      });
+  const saveDynamicTab = async (values) => {
+
+    const data = {
+      bookingId: 1,
+      departmentId: depId,
+      patientId: id,
+      doctorId: userId,
+      pain: JSON.stringify(values["pain"]),
+      question: JSON.stringify(values["question"]),
+      inspection: JSON.stringify(values["inspection"]),
+      plan: JSON.stringify(values["plan"]),
+    }
+    await Post('emr/inspectionNote', token, config, data);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -136,9 +129,9 @@ function MainPatientHistory({ PatientId }) {
       children: <Tab2Content />,
     },
   ]);
-  const getInspectionTabs = () => {
+  const getInspectionTabs = async () => {
     //Тухайн эмчид харагдах TAB ууд
-    axios({
+    await axios({
       method: "get",
       url: `${DEV_URL}emr/inspection-form`,
       params: {

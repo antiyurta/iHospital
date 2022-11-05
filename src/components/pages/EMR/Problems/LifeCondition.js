@@ -3,7 +3,7 @@ import React from "react";
 export default function LifeCondition(props) {
   return (
     <div>
-      {props.data.hasOwnProperty("homeCondition") ? (
+      {props.data?.hasOwnProperty("homeCondition") ? (
         <>
           {props.data["homeCondition"].hasOwnProperty("locate") ? (
             <div className="flex">
@@ -30,7 +30,7 @@ export default function LifeCondition(props) {
           ) : null}
         </>
       ) : null}
-      {props.data.hasOwnProperty("workCondition") ? (
+      {props.data?.hasOwnProperty("workCondition") ? (
         <>
           {props.data["workCondition"].hasOwnProperty("condition") ? (
             <div className="flex">

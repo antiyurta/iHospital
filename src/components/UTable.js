@@ -100,7 +100,7 @@ function UTable(props) {
                 await Delete(props.url + '/' + id, token, config);
                 onStart(1);
             }
-        })
+        });
     };
     const onStart = async (page) => {
         setSpinner(false);
@@ -313,6 +313,7 @@ function UTable(props) {
                                             <Form.Item
                                                 label={element.label}
                                                 name={element.index}
+                                                rules={element.rules}
                                             >
                                                 <Select
                                                     allowClear
@@ -333,6 +334,7 @@ function UTable(props) {
                                             <Form.Item
                                                 label={element.label}
                                                 name={element.index}
+                                                rules={element.rules}
                                                 valuePropName="checked"
                                             >
                                                 <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
@@ -373,6 +375,7 @@ function UTable(props) {
                                             <Form.Item
                                                 label={element.label}
                                                 name={element.index}
+                                                rules={element.rules}
                                             >
                                                 <DatePicker locale={mn} />
                                             </Form.Item>

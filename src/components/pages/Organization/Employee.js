@@ -166,8 +166,8 @@ function Employee() {
     const params = {
     }
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="24" xl={24}>
+        <div className="flex flex-wrap">
+            <div className="w-full">
                 <UTable
                     title={'Ажилтан'}
                     url={'organization/employee'}
@@ -178,8 +178,8 @@ function Employee() {
                     isDelete={true}
                     width='80%'
                 />
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 export default Employee;

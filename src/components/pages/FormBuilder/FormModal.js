@@ -262,15 +262,15 @@ export default function FormModal(props) {
       ]}
     >
       <Row gutter={[8, 8]}>
-        <Col span={8}>
+        <Col span={12}>
           <Row gutter={[8, 8]} className="items-center">
-            <Col span={6}>
+            <Col span={5}>
               <Text className="mr-2">Тасаг</Text>
             </Col>
-            <Col span={8}>
+            <Col span={16}>
               <Select
                 style={{
-                  width: 200,
+                  width: '100%'
                 }}
                 value={formStructure}
                 onChange={setFormStructure}
@@ -286,7 +286,7 @@ export default function FormModal(props) {
             </Col>
           </Row>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <Row gutter={[8, 8]} className="items-center">
             <Col span={4}>
               <Text className="mr-2">Нэр</Text>

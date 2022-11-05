@@ -18,6 +18,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../features/authReducer";
+import { openNofi } from "./comman";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -51,6 +52,9 @@ function Login() {
                 }
             }).catch((err) => {
                 console.log(err);
+                if (err.response.status == 400) {
+                    openNofi('warning', 'Нэвтрэх', 'Нэвтрэх нэр эсвэл нууц үг буруу');
+                }
             })
     };
 

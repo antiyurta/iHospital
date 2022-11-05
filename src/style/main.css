@@ -1477,11 +1477,6 @@ span.ismobile {
     padding-left: 0px !important;
   }
 
-  .ant-row {
-    margin-left: -12px;
-    margin-right: -12px;
-  }
-
   span.ismobile {
     display: inline-block;
   }

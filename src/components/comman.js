@@ -37,6 +37,8 @@ export async function Post(url, token, config, data) {
                     resolve(201);
                 } else if (response.status === 401) {
                     console.log('NEWTER COMMAN JS');
+                }else{
+                    resolve(201);
                 }
             })
             .catch((error) => {

@@ -32,6 +32,7 @@ function DoctorAppointment() {
     const [selectedDoctor, setSelectedDoctor] = useState();
     //
     const [qwe, setQwe] = useState({});
+    const [date, setDate] = useState('');
     //
 
     const onSearch = async (value) => {
@@ -81,7 +82,7 @@ function DoctorAppointment() {
         const response = await Get('organization/employee', token, config);
         if (response.data.length != 0) {
             setDoctors(response.data);
-        }else{
+        } else {
             setDoctors([]);
         }
     }
@@ -99,6 +100,7 @@ function DoctorAppointment() {
     }
 
     const changeDate = async (value) => {
+        setDate(value);
         if (value) {
             const date = moment(value).format("YYYY-MM-DD");
             config.params.findOneDate = date;
@@ -113,7 +115,10 @@ function DoctorAppointment() {
         data.status = 1;
         config.params = {};
         const response = await Post('appointment', token, config, data);
-        console.log(response);
+        if (response === 201) {
+            setAppointmentModal(false);
+            changeDate(date);
+        }
     }
 
     useEffect(() => {
@@ -179,7 +184,7 @@ function DoctorAppointment() {
                     loading={cardLoading}
                     extra={
                         <Space>
-                            <Button type="danger" onClick={() => orderAppointment(true, {}, {})}>Яаралтай</Button>
+                            <Button className='bg-red-500' type="danger" onClick={() => orderAppointment(true, {}, {})}>Яаралтай</Button>
                             <Alert className='h-6' message={`Өнөөдөр: ${today?.format('YYYY-MM-DD')}`} type='success' />
                             <Select className='w-30' onChange={getDoctor} placeholder="Тасаг сонгох">
                                 {
@@ -237,7 +242,9 @@ function DoctorAppointment() {
                                                                     {
                                                                         slot.isActive ?
                                                                             <td colSpan={9} className="text-center">
-                                                                                <Button onClick={() => orderAppointment(
+                                                                                <Button 
+                                                                                    className='bg-green-500 text-white'
+                                                                                    onClick={() => orderAppointment(
                                                                                     false,
                                                                                     {
                                                                                         roomNumber: schedule.room.roomNumber,
@@ -259,9 +266,36 @@ function DoctorAppointment() {
                                                                                     Цаг захиалах
                                                                                 </Button></td>
                                                                             :
-                                                                            <td colSpan={9} className="text-center">
-                                                                                TSAG ZAHIALSAN
-                                                                            </td>
+                                                                            <>
+                                                                                <td className="text-center">
+                                                                                    {slot.patient?.lastName}
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    {slot.patient?.firstName}
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    {slot.patient?.age}
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    {slot.patient?.registerNumber}
+                                                                                </td>
+                                                                                <td className="text-center">
+
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    {slot.patient?.phoneNo}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {moment(slot.updateAt).format('YYYY-MM-DD HH:mm')}
+                                                                                </td>
+                                                                                <td>
+
+                                                                                </td>
+                                                                                <td>
+
+                                                                                </td>
+                                                                            </>
+
                                                                     }
                                                                 </tr>
                                                             )

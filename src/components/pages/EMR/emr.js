@@ -23,7 +23,7 @@ import UsuallyMedicine from "./Problems/UsuallyMedicine";
 import EpidemicQuestion from "./Problems/EpidemicQuestion";
 import GeneticQuestion from "./Problems/GeneticQuestion";
 import PatientInformation from "../PatientInformation";
-import { Get, openNofi } from "../../comman";
+import { Get, openNofi, Post } from "../../comman";
 import { useLocation } from "react-router-dom";
 const config = {
   headers: {},
@@ -76,6 +76,17 @@ function EMR() {
       openNofi('error', 'Өвчтөн', 'Өвчтөн олдохгүй байна');
     }
   }
+
+  const handleClick = async (value) => {
+    const response = await Post('service-request', token, config, {
+      patientId: selectedPatient.id,
+      services: value,
+    })
+    if (response === 201) {
+      openNofi('success', 'OCS', 'Амжилттай захиалгадлаа');
+    }
+  }
+
   useEffect(() => {
     getByIdPatient(IncomePatientId);
   }, []);
@@ -113,12 +124,12 @@ function EMR() {
                 <Collapse accordion ghost>
                   {problems?.hasOwnProperty("birth") ? (
                     <Panel header="Төрөлт, өсөлт бойжилт" key="1">
-                      <Birth data={problems["birth"]} />
+                      <Birth data={problems?.birth} />
                     </Panel>
                   ) : null}
                   {problems?.hasOwnProperty("healthRecord") ? (
                     <Panel header="Өвчний түүх" key="2">
-                      <HealthRecord data={problems["healthRecord"]} />
+                      <HealthRecord data={problems.healthRecord} />
                     </Panel>
                   ) : null}
                   {problems?.hasOwnProperty("lifeStyle") ? (
@@ -198,7 +209,7 @@ function EMR() {
                 </>
               }
             >
-              <MainPatientHistory PatientId={selectedPatient.id} />
+              <MainPatientHistory PatientId={IncomePatientId} />
             </Card>
           ) : null}
           {type == "OCS" ? (
@@ -230,7 +241,7 @@ function EMR() {
                 </Row>
               }
             >
-              <Ocs />
+              <Ocs handleClick={handleClick} />
             </Card>
           ) : null}
         </div>

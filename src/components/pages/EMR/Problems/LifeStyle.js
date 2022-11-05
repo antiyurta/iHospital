@@ -4,7 +4,7 @@ export default function LifeStyle(props) {
   console.log("props", props.data);
   return (
     <div>
-      {props.data.hasOwnProperty("alcohol") ? (
+      {props.data?.hasOwnProperty("alcohol") ? (
         <>
           {props.data["alcohol"].hasOwnProperty("isUse") ? (
             <div className="flex">
@@ -34,7 +34,7 @@ export default function LifeStyle(props) {
           ) : null}
         </>
       ) : null}
-      {props.data.hasOwnProperty("cigar") ? (
+      {props.data?.hasOwnProperty("cigar") ? (
         <>
           {props.data["cigar"].hasOwnProperty("isUse") ? (
             <div className="flex">
@@ -64,7 +64,7 @@ export default function LifeStyle(props) {
           ) : null}
         </>
       ) : null}
-      {props.data.hasOwnProperty("addicition") ? (
+      {props.data?.hasOwnProperty("addicition") ? (
         <>
           {props.data["addicition"].hasOwnProperty("isUse") ? (
             <div className="flex">
@@ -89,7 +89,7 @@ export default function LifeStyle(props) {
           ) : null}
         </>
       ) : null}
-      {props.data.hasOwnProperty("food") ? (
+      {props.data?.hasOwnProperty("food") ? (
         <>
           {props.data["food"].hasOwnProperty("whatFoodie") ? (
             <div className="flex">
@@ -125,7 +125,7 @@ export default function LifeStyle(props) {
           ) : null}
         </>
       ) : null}
-      {props.data.hasOwnProperty("exercise") ? (
+      {props.data?.hasOwnProperty("exercise") ? (
         <>
           <div className="flex">
             <p className="font-semibold mr-2">

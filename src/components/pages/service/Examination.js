@@ -1,13 +1,9 @@
 import { Col, Row } from "antd";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get } from "../../comman";
 import UTable from "../../UTable";
-
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
 
 function Examination() {
     const token = useSelector(selectCurrentToken);

@@ -213,7 +213,7 @@ function Patient() {
             },
         },
     ).then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
             openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
             getData(1);
             setIsConfirmLoading(false);

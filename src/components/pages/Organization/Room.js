@@ -56,15 +56,15 @@ function Room() {
         }
     ]
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="24" xl={24}>
+        <div className="flex flex-wrap">
+            <div className="w-full">
                 <UTable title={'Өрөө'} url={'organization/room'} column={column}
                     isCreate={true}
                     isRead={true}
                     isUpdate={true}
                     isDelete={true} width='30%' />
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 export default Room;

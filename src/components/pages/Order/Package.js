@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get } from "../../comman";
 
-function SetOrder({ handleclick }) {
+function Package({ handleclick }) {
     const token = useSelector(selectCurrentToken);
     const config = {
         headers: {},
@@ -13,13 +13,13 @@ function SetOrder({ handleclick }) {
     const [packages, setPackages] = useState([]);
 
     const getPackages = async () => {
-        const response = await Get('service/setorder', token, config);
+        const response = await Get('service/package', token, config);
         setPackages(response.data);
     }
 
     const dada = (value) => {
         value.types = {
-            type: 8
+            type: 7
         };
         handleclick(value);
     }
@@ -35,8 +35,10 @@ function SetOrder({ handleclick }) {
                     <Table className='ant-border-space' style={{ width: '100%' }}>
                         <thead className='ant-table-thead bg-slate-200'>
                             <tr>
-                                <th>Код</th>
-                                <th>Тайлбар</th>
+                                <th>Нэр</th>
+                                <th>Үнэ</th>
+                                <th>Насны доод хязгаар</th>
+                                <th>Насны дээд хязгаар</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,8 +46,10 @@ function SetOrder({ handleclick }) {
                                 packages.map((item, index) => {
                                     return (
                                         <tr key={index} onDoubleClick={() => dada(item)}>
-                                            <td>{item.code}</td>
-                                            <td>{item.description}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.price}₮</td>
+                                            <td>{item.minAge}</td>
+                                            <td>{item.maxAge}</td>
                                         </tr>
                                     )
                                 })
@@ -57,4 +61,4 @@ function SetOrder({ handleclick }) {
         </div>
     )
 }
-export default SetOrder;
+export default Package;

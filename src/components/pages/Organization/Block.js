@@ -51,16 +51,14 @@ function Block() {
         getFloor();
     }, [])
     return (
-        <>
-            <Row gutter={[24, 0]}>
-                <Col xs="24" xl={24}>
-                    <UTable title={'Блок'} url={'organization/block'} column={column} width='20%' isCreate={true}
-                        isRead={true}
-                        isUpdate={true}
-                        isDelete={true} />
-                </Col>
-            </Row>
-        </>
+        <div className="flex flex-wrap">
+            <div className="w-full">
+                <UTable title={'Блок'} url={'organization/block'} column={column} width='20%' isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true} />
+            </div>
+        </div>
     )
 }
 export default Block;

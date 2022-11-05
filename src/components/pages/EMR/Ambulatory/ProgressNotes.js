@@ -4,7 +4,6 @@ import { Collapse, Divider } from "antd";
 import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
-import axios from "axios";
 import { Get } from "../../../comman";
 
 export default function ProgressNotes({ PatientId }) {
@@ -84,8 +83,10 @@ export default function ProgressNotes({ PatientId }) {
                     header={
                       <div className="grid">
                         <span className="font-semibold">
-                          {el.departmentId}Чих хамар хоолой - {el.departmentId}
-                          Цэнд-Аюуш
+                          {
+                            el.structures?.name + "->" +
+                            el.employees?.lastName + " " + el.employees?.firstName
+                          }
                         </span>
                         <span>
                           {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}

@@ -32,11 +32,14 @@ const column = [
 
 function Bed() {
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="24" xl={24}>
-                <UTable title={'Ор'} url={'organization/bed'} column={column} width='30%' />
-            </Col>
-        </Row>
+        <div className="flex flex-wrap">
+            <div className="w-full">
+                <UTable title={'Ор'} url={'organization/bed'} column={column} width='30%' isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true} />
+            </div>
+        </div>
     )
 }
 export default Bed;

@@ -1,4 +1,5 @@
-import { Card } from "antd";
+import { Card, DatePicker } from "antd";
+import mnMN from "antd/es/calendar/locale/mn_MN";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
@@ -6,6 +7,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import { Get, ScrollRef } from "../../../comman";
+
+const { RangePicker } = DatePicker;
 
 function Ambulatory() {
     const scrollRef = useRef();
@@ -37,6 +40,16 @@ function Ambulatory() {
         }
 
     }
+
+    const filterAppointment = async (dates) => {
+        if (dates) {
+            config.params.startDate = moment(dates[0]).hour(0).minute(0).format('YYYY-MM-DD HH:mm');
+            config.params.endDate = moment(dates[1]).hour(23).minute(59).format('YYYY-MM-DD HH:mm');
+            const response = await Get('appointment', token, config);
+            setAppointments(response.data);
+        }
+    }
+
     useEffect(() => {
         getAppointment();
         ScrollRef(scrollRef);
@@ -44,7 +57,14 @@ function Ambulatory() {
 
     return (
         <div className="flex flex-wrap">
-            <div className="w-full">
+            <div className="w-full pb-1">
+                <Card bordered={false} className="header-solid max-h-max rounded-md">
+                    <div className="basis-1/3">
+                        <RangePicker onChange={filterAppointment} locale={mnMN} />
+                    </div>
+                </Card>
+            </div>
+            <div className="w-full pt-1">
                 <Card
                     bordered={false}
                     className="header-solid max-h-max rounded-md"

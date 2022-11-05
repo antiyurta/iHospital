@@ -172,6 +172,10 @@ function DoctorAppointmentSchedule() {
         }
     }
 
+    const dateChange = async () => {
+        console.log("=========>");
+    }
+
     useEffect(() => {
         getSchedules();
         getStructures();
@@ -191,14 +195,16 @@ function DoctorAppointmentSchedule() {
                             <Alert className='h-8' message={`Өнөөдөр: ${today?.format('YYYY-MM-DD')}`} type='success' />
                         </Col>
                         <Col span={12}>
-                            <Button type='primary' block onClick={() => showModal()}>Цаг оруулах</Button>
+                            <Button className='bg-sky-700' type='primary' block onClick={() => showModal()}>Цаг оруулах</Button>
                         </Col>
                     </Row>
                     <Calendar
                         dateCellRender={dateCellRender}
                         monthCellRender={monthCellRender}
                         // validRange={[moment('2022-10-01'), moment('2022-10-22')]}
-                        locale={mn} onSelect={onSelect} onPanelChange={onPanelChange} />
+                        locale={mn} onSelect={onSelect} onPanelChange={onPanelChange}
+                        onChange={dateChange}
+                    />
                 </div>
 
             </Card>

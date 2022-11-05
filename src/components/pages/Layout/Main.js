@@ -5,7 +5,7 @@ import { Button, Layout, Dropdown, Row, Col, Menu } from "antd";
 import Sidenav from "./Sidenav";
 import male from '../../../assets/images/maleAvatar.svg';
 import { useNavigate, Outlet, NavLink } from "react-router-dom";
-import { selectCurrentToken, logout } from '../../../features/authReducer';
+import { selectCurrentToken, logout, DelDepId, DelAppId } from '../../../features/authReducer';
 import { useDispatch, useSelector } from "react-redux";
 import {
     PoweroffOutlined,
@@ -30,6 +30,8 @@ const Main = () => {
         if (e.key == 2) {
             logoutt();
             dispatch(logout());
+            dispatch(DelDepId());
+            dispatch(DelAppId());
             navigate('/login');
         }
     };

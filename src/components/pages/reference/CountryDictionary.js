@@ -173,7 +173,7 @@ function CountryDictionary() {
             input: 'select',
             inputData: [{
                 id: 3,
-                label: 'Сум'
+                label: 'Сум/Дүүрэг'
             }],
             relIndex: 'label',
             col: 24,
@@ -195,8 +195,8 @@ function CountryDictionary() {
         }
     }
     return (
-        <Row gutter={[24, 0]}>
-            <Col xs="12" xl={12}>
+        <div className="flex flex-wrap">
+            <div className="lg:w-1/2 md:w-full p-1">
                 <UTable
                     title={'Улс'}
                     url={'reference/country'}
@@ -208,8 +208,8 @@ function CountryDictionary() {
                     isUpdate={true}
                     isDelete={true}
                 />
-            </Col>
-            <Col xs="12" xl={12}>
+            </div>
+            <div className="lg:w-1/2 md:w-full p-1">
                 <UTable
                     title={'Аймаг/ Хот'}
                     url={'reference/country'}
@@ -220,8 +220,8 @@ function CountryDictionary() {
                     isUpdate={true}
                     isDelete={true}
                     width='50%' />
-            </Col>
-            <Col xs={12} xl={12}>
+            </div>
+            <div className="lg:w-1/2 md:w-full p-1">
                 <UTable
                     title={'Сум / Дүүрэг'}
                     url={'reference/country'}
@@ -232,8 +232,9 @@ function CountryDictionary() {
                     isUpdate={true}
                     isDelete={true}
                     width='50%' />
-            </Col>
-        </Row>
+            </div>
+        </div>
+
     )
 }
 export default CountryDictionary;

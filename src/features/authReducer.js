@@ -6,6 +6,7 @@ export const auth = createSlice({
         token: '',
         depId: '',
         appId: '',
+        userId: '',
     },
     reducers: {
         login: (state, action) => {
@@ -25,13 +26,20 @@ export const auth = createSlice({
         },
         DelAppId: (state) => {
             state.appId = null;
+        },
+        setUserId: (state, action) => {
+            state.userId = action.payload;
+        },
+        DelUserId: (state) => {
+            state.userId = null;
         }
     }
 })
 
-export const { login, logout, setDepId, DelDepId, setAppId, DelAppId } = auth.actions;
+export const { login, logout, setDepId, DelDepId, setAppId, DelAppId, setUserId, DelUserId } = auth.actions;
 export default auth.reducer;
 
 export const selectCurrentToken = (state) => state.authReducer.token;
 export const selectCurrentDepId = (state) => state.authReducer.depId;
 export const selectCurrentAppId = (state) => state.authReducer.appId;
+export const selectCurrentUserId = (state) => state.authReducer.userId;

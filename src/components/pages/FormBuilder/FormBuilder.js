@@ -1,7 +1,7 @@
 import { Col, Row, List, Card, Button, Input } from "antd";
 import React, { useEffect, useState, useContext } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../features/authReducer";
+import { selectCurrentToken, setDepId } from "../../../features/authReducer";
 import { blue } from "@ant-design/colors";
 import FormModal from "./FormModal";
 import MainContext from "../../../contexts/MainContext";
@@ -22,8 +22,6 @@ export default function FormBuilder() {
   const [forms, setForms] = useState([]);
   const showModal = (type, data) => {
     type === "add" && context_state.resetFields();
-    console.log("type", type);
-    console.log("data", data);
     setModalType(type);
     setModalData(data);
     //Form -г засах үед*************************
@@ -50,53 +48,48 @@ export default function FormBuilder() {
 
   return (
     <>
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <Row className="items-center">
-            <Col span={4}>
-              <Input
-                placeholder="Хайх"
-                allowClear
-                onChange={(e) => setSearchField(e.target.value)}
-              />
-            </Col>
-            <Col span={2} className="ml-4">
-              <Button
-                type="primary"
-                htmlType="submit"
-                onClick={() => showModal("add", null)}
-                style={{ backgroundColor: blue.primary }}
-              >
-                Нэмэх
-              </Button>
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col span={24}>
-              <List
-                grid={{
-                  gutter: 8,
-                  column: 5,
-                }}
-                dataSource={filteredForm}
-                renderItem={(item) => (
-                  <List.Item>
-                    <Card
-                      hoverable
-                      className="custom-card"
-                      title={item.name}
-                      size="small"
-                      onClick={() => showModal("edit", item)}
-                    >
-                      {item.structureId} - structure ЭНД ХАРАГДАНА
-                    </Card>
-                  </List.Item>
-                )}
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+      <div className="flex flex-wrap">
+        <div className="w-full md:w-1/2">
+          <div className="mx-3">
+            <Input
+              placeholder="Хайх"
+              allowClear
+              onChange={(e) => setSearchField(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="w-full md:w-1/2">
+          <div className="mx-3">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => showModal("add", null)}
+              style={{ backgroundColor: blue.primary }}
+            >
+              Нэмэх
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap mx-3 my-1">
+        {
+          filteredForm.map((form, index) => {
+            return (
+              <div key={index} className="w-full md:w-1/3 p-1">
+                <Card
+                  hoverable
+                  className="custom-card"
+                  title={form.structure.shortName}
+                  size="small"
+                  onClick={() => showModal("edit", form)}
+                >
+                  {form.name}
+                </Card>
+              </div>
+            )
+          })
+        }
+      </div>
       {isModalOpen ? (
         <FormModal
           show={isModalOpen}
