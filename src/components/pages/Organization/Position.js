@@ -9,7 +9,7 @@ function Position() {
     const position = {
         headers: {},
         params: {
-            type: 1,
+            type: 2,
         }
     }
     const [departments, setDepartments] = useState([]);
