@@ -244,7 +244,7 @@ function UTable(props) {
                     <Pagination
                         className='pagination'
                         defaultCurrent={'1'}
-                        pageSize={5}
+                        pageSize={10}
                         total={meta.itemCount}
                         onChange={onStart}
                     />
