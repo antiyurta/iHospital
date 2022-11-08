@@ -13,7 +13,6 @@ import {
     DatePicker,
     InputNumber,
     Pagination,
-    Spin
 } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
@@ -25,9 +24,6 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../features/authReducer';
 import moment from 'moment';
-
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
 
 const { Search } = Input;
 const { Option } = Select;
@@ -53,7 +49,7 @@ function UTable(props) {
         headers: {},
         params: {
             page: 1,
-            limit: 5,
+            limit: 10,
         }
     };
     const onSearch = (value, index) => {
@@ -402,6 +398,7 @@ function UTable(props) {
                             values.type = type;
                             const response = await Post('service/type', token, config, values);
                             if (response.length != 0) {
+                                props.refresh();
                                 setIsSubModalVisible(false);
                             }
                         }).catch((error) => {
