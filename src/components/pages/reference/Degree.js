@@ -17,19 +17,6 @@ const column = [
         col: 24,
     },
     {
-        index: 'salarySupp',
-        label: "Зэрэгийн нэмэгдэл",
-        isView: true,
-        input: 'inputNumber',
-        rules: [
-            {
-                required: true,
-                message: 'Хоосон байж болохгүй'
-            },
-        ],
-        col: 24,
-    },
-    {
         index: 'inspectionPrice',
         label: 'Үзлэгийн үнэ',
         isView: true,
@@ -41,7 +28,34 @@ const column = [
             },
         ],
         col: 24,
-    }
+    },
+    {
+        index: 'inspectionTwicePrice',
+        label: "Үзлэгийн үнэ давтан",
+        isView: true,
+        input: 'inputNumber',
+        rules: [
+            {
+                required: true,
+                message: 'Хоосон байж болохгүй'
+            }
+        ],
+        col: 24,
+    },
+    {
+        index: 'emergencyPrice',
+        label: "Үзлэгийн үнэ яаралтай",
+        isView: true,
+        input: 'inputNumber',
+        rules: [
+            {
+                required: true,
+                message: 'Хоосон байж болохгүй'
+            },
+        ],
+        col: 24,
+    },
+
 ]
 
 function Degree() {
