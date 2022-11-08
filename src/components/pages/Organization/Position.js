@@ -6,15 +6,20 @@ import UTable from "../../UTable";
 
 function Position() {
     const token = useSelector(selectCurrentToken);
+    const config = {
+        headers: {},
+        params: {}
+    }
     const position = {
         headers: {},
         params: {
-            type: 2,
+            type: 1,
         }
     }
     const [departments, setDepartments] = useState([]);
     const getDepartment = async () => {
-        const response = await Get('organization/structure', token, position);
+        config.params.type = 2;
+        const response = await Get('organization/structure', token, config);
         setDepartments(response.data);
     }
 
