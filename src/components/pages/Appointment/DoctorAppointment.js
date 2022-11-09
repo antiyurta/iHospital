@@ -186,7 +186,7 @@ function DoctorAppointment() {
                         <Space>
                             <Button className='bg-red-500' type="danger" onClick={() => orderAppointment(true, {}, {})}>Яаралтай</Button>
                             <Alert className='h-6' message={`Өнөөдөр: ${today?.format('YYYY-MM-DD')}`} type='success' />
-                            <Select className='w-30' onChange={getDoctor} placeholder="Тасаг сонгох">
+                            <Select className='w-52' onChange={getDoctor} placeholder="Тасаг сонгох">
                                 {
                                     structures.map((structure, index) => {
                                         return (
@@ -195,7 +195,7 @@ function DoctorAppointment() {
                                     })
                                 }
                             </Select>
-                            <Select className='w-30' onChange={selectDoctor} placeholder="Эмч сонгох">
+                            <Select className='w-52' onChange={selectDoctor} placeholder="Эмч сонгох">
                                 {
                                     doctors.map((doctor, index) => {
                                         return (
