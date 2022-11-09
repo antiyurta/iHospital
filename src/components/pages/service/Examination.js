@@ -8,6 +8,7 @@ import UTable from "../../UTable";
 function Examination() {
     const token = useSelector(selectCurrentToken);
     const [examinationTypeData, setExaminationTypeData] = useState([]);
+    const [types, setTypes] = useState([]);
 
     const config = {
         headers: {},
@@ -21,8 +22,14 @@ function Examination() {
         setExaminationTypeData(response.data);
     }
 
+    const getServicesType = async () => {
+        const response = await Get('service/type', token, config);
+        setTypes(response.data);
+    }
+
     useEffect(() => {
         getExaminationTypeData();
+        getServicesType();
     }, [])
     const column = [
         {
@@ -85,8 +92,8 @@ function Examination() {
         }
     ]
     return (
-        <Row gutter={[8, 8]}>
-            <Col span={24}>
+        <div className="flex flex-wrap">
+            <div className="w-full">
                 <UTable
                     title={'Шинжилгээ'}
                     url={'service/examination'}
@@ -95,9 +102,10 @@ function Examination() {
                     isRead={false}
                     isUpdate={true}
                     isDelete={true}
+                    refresh={getExaminationTypeData}
                     width='40%' />
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 export default Examination;

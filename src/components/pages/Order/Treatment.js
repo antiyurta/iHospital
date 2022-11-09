@@ -1,3 +1,5 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
+import { configure } from "@testing-library/react";
 import { Button, Input, InputNumber } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -40,6 +42,13 @@ function Treatment({ handleclick }) {
             })
     }
 
+    const configure = (value) => {
+        if (value.qty) {
+            value['calCprice'] = value.price * value.qty;
+        }
+        handleclick(value);
+    }
+
     useEffect(() => {
         getTreatment();
     }, []);
@@ -63,17 +72,19 @@ function Treatment({ handleclick }) {
                                 <th className="font-bold text-sm align-middle">Хэдэн удаа</th>
                                 <th className="font-bold text-sm align-middle">Хэд хоног</th>
                                 <th className="font-bold text-sm align-middle">Үнэ</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody className='ant-table-tbody p-0'>
                             {
                                 treatment.map((item, index) => {
                                     return (
-                                        <tr onDoubleClick={() => handleclick(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                                        <tr key={index} className='ant-table-row ant-table-row-level-0'>
                                             <td>{item.name}</td>
                                             <td><InputNumber defaultValue={1} onChange={(e) => item.qty = e} /></td>
                                             <td><InputNumber defaultValue={1} onChange={(e) => item.dayLength = e} /></td>
                                             <td>{item.price}₮</td>
+                                            <td onDoubleClick={() => configure(item)} className="hover:cursor-pointer"><PlusCircleOutlined style={{ color: "green", verticalAlign: "middle" }} /></td>
                                         </tr>
                                     )
                                 })

@@ -18,10 +18,23 @@ function SetOrder({ handleclick }) {
     }
 
     const dada = (value) => {
-        value.types = {
-            type: 8
-        };
-        handleclick(value);
+        console.log(value);
+        const data = [{}];
+        value.services?.map((service, index) => {
+            console.log("========>", service);
+            handleclick({
+                id: service.serviceId,
+                name: service.serviceName,
+                price: service.servicePrice,
+                types: {
+                    type: service.serviceType,
+                }
+            })
+        })
+        // value.types = {
+        //     type: 8
+        // };
+        // handleclick(value);
     }
 
     useEffect(() => {

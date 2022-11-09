@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get } from "../../comman";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 function Package({ handleclick }) {
     const token = useSelector(selectCurrentToken);
@@ -35,21 +36,23 @@ function Package({ handleclick }) {
                     <Table className='ant-border-space' style={{ width: '100%' }}>
                         <thead className='ant-table-thead bg-slate-200'>
                             <tr>
-                                <th>Нэр</th>
-                                <th>Үнэ</th>
-                                <th>Насны доод хязгаар</th>
-                                <th>Насны дээд хязгаар</th>
+                                <th className="font-bold text-sm align-middle">Нэр</th>
+                                <th className="font-bold text-sm align-middle">Үнэ</th>
+                                <th className="font-bold text-sm align-middle">Насны доод хязгаар</th>
+                                <th className="font-bold text-sm align-middle">Насны дээд хязгаар</th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className='ant-table-tbody p-0'>
                             {
                                 packages.map((item, index) => {
                                     return (
-                                        <tr key={index} onDoubleClick={() => dada(item)}>
+                                        <tr key={index} className='ant-table-row ant-table-row-level-0'>
                                             <td>{item.name}</td>
                                             <td>{item.price}₮</td>
                                             <td>{item.minAge}</td>
                                             <td>{item.maxAge}</td>
+                                            <td onDoubleClick={() => dada(item)} className="hover:cursor-pointer"><PlusCircleOutlined style={{ color: "green", verticalAlign: "middle" }} /></td>
                                         </tr>
                                     )
                                 })
@@ -58,7 +61,7 @@ function Package({ handleclick }) {
                     </Table>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 export default Package;

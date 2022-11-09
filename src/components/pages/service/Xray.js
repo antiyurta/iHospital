@@ -8,6 +8,7 @@ import UTable from "../../UTable";
 function Xray() {
     const token = useSelector(selectCurrentToken);
     const [xrayTypeData, setXrayTypeData] = useState([]);
+    const [devices, setDevices] = useState([]);
 
     const config = {
         headers: {},
@@ -21,7 +22,15 @@ function Xray() {
         setXrayTypeData(response.data);
     }
 
+    const getDevices = async () => {
+        const response = await Get('device', token, config);
+        setDevices(response.data);
+    }
+
+
+
     useEffect(() => {
+        getDevices();
         getXrayTypeData();
     }, [])
     const column = [
@@ -49,6 +58,24 @@ function Xray() {
             isView: true,
             isSearch: true,
             input: 'input',
+            col: 24,
+        },
+        {
+            index: 'deviceId',
+            label: 'Төхөөрөмж сонгох',
+            isView: true,
+            isSearch: false,
+            input: 'select',
+            inputData: devices,
+            relIndex: 'name',
+            col: 24,
+        },
+        {
+            index: 'slotMinute',
+            label: 'Үргэлжлэх хугацаа(МИН)',
+            isView: true,
+            isSearch: false,
+            input: 'inputNumber',
             col: 24,
         },
         {
@@ -95,6 +122,7 @@ function Xray() {
                     isRead={false}
                     isUpdate={true}
                     isDelete={true}
+                    refresh={getXrayTypeData}
                     width='40%' />
             </Col>
         </Row>

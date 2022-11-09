@@ -1,4 +1,4 @@
-import { Button, Tabs } from "antd";
+import { Button, DatePicker, Modal, Tabs } from "antd";
 import RecentRecipe from "./RecentRecipe";
 import SetOrder from "./SetOrder";
 import Medicine from "./Medicine";
@@ -8,22 +8,44 @@ import Treatment from "./Treatment";
 import Surgery from './Surgery';
 import Endo from "./Endo";
 import Package from "./Package";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Table } from "react-bootstrap";
+import { ClockCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { Get, openNofi } from "../../comman";
+import moment from "moment";
 //
 function Order({ isPackage, isDoctor, categories, save }) {
+    const token = useSelector(selectCurrentToken);
+    const config = {
+        headers: {},
+        params: {}
+    }
     const [orders, setOrders] = useState([]);
     const [packages, setPackages] = useState([]);
     const [total, setTotal] = useState(Number);
-
+    //
+    const [isXrayModal, setIsXrayModal] = useState(false);
+    const [xrayDatas, setXrayDatas] = useState([]);
+    const [xrayDeviceId, setXrayDeviceId] = useState('');
+    const [xrayRequestId, setXrayRequestId] = useState('');
+    //
     const saveClick = (e) => {
-        save(e);
+        var status = true;
+        e.map((el) => {
+            if (!el.requestDate) {
+                status = false;
+                openNofi("error", 'Төхөөрөмж', `${el.name} Цаг оруулах`);
+            }
+        })
+        if (status) {
+            console.log("sda");
+            // save(e);
+        }
     }
 
     const handleclick = (value) => {
-
-        console.log(value);
-
         if (isPackage) {
             console.log(isPackage);
             const pack = {
@@ -33,36 +55,33 @@ function Order({ isPackage, isDoctor, categories, save }) {
                 servicePrice: value.price,
             }
             setPackages([...packages, pack]);
-
-            console.log(packages);
-
         } else {
-            const order = {
-                id: value.id,
-                name: value.name ? value.name : value.tName,
-                price: value?.price,
-                isCito: 0,
-                qty: 1,
-                requestDate: new Date(),
-                usageType: 'OUT',
-            }
+
+            const testOrder = {};
+            console.log(value);
+            testOrder.id = value.id;
+            testOrder.name = value.name;
+            testOrder.price = value.price;
             if (value.types?.type === 8) {
-                order.name = value.code;
-                order.type = 8;
-                order.price = 0;
+                testOrder.name = value.code;
+                testOrder.price = 0;
+            } else if (value.types?.type === 2) {
+                testOrder.name = value.name;
+                testOrder.qty = value.qty ? value.qty : 1;
+                if (testOrder.qty != 1) {
+                    testOrder.price = value.calCprice;
+                }
+            }
+            testOrder.isCito = 0;
+            testOrder.type = value.types?.type;
+            if (value.types?.type === 1) {
+                testOrder.deviceId = value.deviceId;
             } else {
-                order.type = value.types?.type;
+                testOrder.requestDate = new Date();
             }
-
-            if (value.qty) {
-                order.price = value.price * value.qty;
-                order.qty = value.qty;
-                order.dayLength = value.dayLength;
-            }
-
-
-            setOrders([...orders, order]);
-            setTotal(total + order.price ? order.price : total + 0);
+            testOrder.usageType = 'OUT';
+            setOrders([...orders, testOrder]);
+            setTotal(total + testOrder.price);
         }
     }
 
@@ -77,6 +96,56 @@ function Order({ isPackage, isDoctor, categories, save }) {
             setTotal(total - orders[index].price);
             setOrders(arr);
         }
+    }
+
+    const newModal = (index, deviceId) => {
+        if (!deviceId) {
+            openNofi('error', 'Төхөөрөмж', 'sadsada');
+        } else {
+            setXrayRequestId(index);
+            setXrayDeviceId(deviceId);
+            setIsXrayModal(true);
+        }
+    }
+
+    const checkType = (order, index) => {
+        if (order.type === 1) {
+            return (
+                <>
+                    <td
+                        className="hover:cursor-pointer"
+                        onDoubleClick={() => newModal(index, order.deviceId)}
+                    >
+                        <ClockCircleOutlined style={{ color: "green", verticalAlign: "middle" }} />
+                    </td>
+                    <td>{order.name}</td>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <td></td>
+                    <td>{order.name}</td>
+                </>
+            )
+        }
+    }
+
+    const filterDeviceDate = async (date) => {
+        if (date) {
+            config.params.deviceId = xrayDeviceId;
+            // config.params.examDate = moment(examDate).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
+            const response = await Get('device-booking/schedule', token, config);
+            setXrayDatas(response.data);
+        }
+    }
+
+    const selectTime = (hour, minute) => {
+        const requestDate = moment().hour(hour).minute(minute);
+        const arr = [...orders];
+        arr[xrayRequestId].requestDate = requestDate;
+        setOrders(arr);
+        setIsXrayModal(false);
     }
 
     const Tabss = [];
@@ -171,7 +240,11 @@ function Order({ isPackage, isDoctor, categories, save }) {
                     tabPosition="left"
                     items={Tabss}
                     tabBarExtraContent={
-                        <Button className="bg-green-500 font-bold my-2 hover:text-white" onClick={() => isPackage ? save(packages) : saveClick(orders)}>Хадгалах</Button>}
+                        <Button
+                            className="bg-green-500 font-bold my-2 hover:text-white"
+                            onClick={() => isPackage ? save(packages) : saveClick(orders)}>
+                            Хадгалах
+                        </Button>}
                 />
             </div>
             <div className={isDoctor ? 'w-full p-1' : 'w-full md:w-1/3 p-1'}>
@@ -179,8 +252,10 @@ function Order({ isPackage, isDoctor, categories, save }) {
                     <Table className='ant-border-space' style={{ width: '100%' }}>
                         <thead className='ant-table-thead bg-slate-200'>
                             <tr>
+                                <th></th>
                                 <th className="font-bold text-sm align-middle">Нэр</th>
                                 <th className="font-bold text-sm align-middle">Үнэ</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody className='ant-table-tbody p-0'>
@@ -189,6 +264,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                     packages?.map((pack, index) => {
                                         return (
                                             <tr key={index} onDoubleClick={() => remove(index)}>
+                                                <td></td>
                                                 <td>{pack.serviceName}</td>
                                                 <td>{pack.servicePrice}</td>
                                             </tr>
@@ -197,9 +273,10 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                     :
                                     orders?.map((order, index) => {
                                         return (
-                                            <tr onDoubleClick={() => remove(index)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
-                                                <td>{order.name}</td>
+                                            <tr key={index} className='ant-table-row ant-table-row-level-0'>
+                                                {checkType(order, index)}
                                                 <td>{order.price}</td>
+                                                <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer"><CloseCircleOutlined style={{ color: "red", verticalAlign: "middle" }} /></td>
                                             </tr>
                                         )
                                     })
@@ -212,6 +289,35 @@ function Order({ isPackage, isDoctor, categories, save }) {
                     <p className="float-right font-extrabold">{total}₮</p>
                 </div>
             </div>
+            <Modal
+                open={isXrayModal}
+                title={"Оношилгооны цаг захиалах" + xrayDeviceId}
+                onCancel={() => setIsXrayModal(false)}
+                width={'60%'}
+            >
+                <div className="flex flex-wrap">
+                    <div className="w-full p-1">
+                        <DatePicker onChange={filterDeviceDate} />
+                    </div>
+                    <div className="w-full p-1">
+                        <div className="grid grid-cols-8 gap-5">
+                            {
+                                xrayDatas.map((item, index) => {
+                                    return (
+                                        <div className="text-center" key={index}>
+                                            <Button onClick={() => selectTime(item.startHour, item.startMinute)} className="bg-green-500 w-full hover:text-white">
+                                                {
+                                                    item.startHour + ":" + item.startMinute
+                                                }
+                                            </Button>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }

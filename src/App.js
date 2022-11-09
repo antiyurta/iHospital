@@ -51,6 +51,7 @@ import Position from "./components/pages/Organization/Position";
 import DoctorAppointmentScheduleDemo from "./components/pages/Appointment/DoctorAppointmentScheduleDemo";
 import SetOrder from "./components/pages/service/SetOrder";
 import DeviceAppointment from "./components/pages/DeviceAppointment/DeviceAppointment";
+import DemoEmployee from "./components/pages/Organization/DemoEmployee";
 // inpatient HEWTEN end
 
 function App() {
@@ -92,6 +93,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Employee />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/demployee"
+            element={
+              <PrivateRoute>
+                <DemoEmployee />
               </PrivateRoute>
             }
           />

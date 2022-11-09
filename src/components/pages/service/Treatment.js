@@ -95,6 +95,7 @@ function Treatment() {
                     isRead={true}
                     isUpdate={true}
                     isDelete={true}
+                    refresh={getTreatmentTypeData}
                     width='40%' />
             </Col>
         </Row>

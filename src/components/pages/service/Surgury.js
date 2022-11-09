@@ -94,7 +94,8 @@ function Surgery() {
                     isRead={true}
                     isUpdate={true}
                     isDelete={true}
-                    width='100%' />
+                    refresh={getSurguryTypeData}
+                    width='40%' />
             </Col>
         </Row>
     )

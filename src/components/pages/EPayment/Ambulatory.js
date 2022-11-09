@@ -59,7 +59,9 @@ function Ambulatory() {
             "invoiceIds": paymentRequest,
             "patientId": patientId,
         });
-        console.log(response);
+        if (response === 201) {
+            setPaymentModal(false);
+        }
     }
 
     const saveOrder = async (value) => {
@@ -71,7 +73,9 @@ function Ambulatory() {
                 patientId: selectedPatient.id,
                 services: value,
             })
-            console.log(response);
+            if (response === 201) {
+                setOrderModal(false);
+            }
         } else {
             openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
         }

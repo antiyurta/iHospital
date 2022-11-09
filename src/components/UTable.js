@@ -13,6 +13,7 @@ import {
     DatePicker,
     InputNumber,
     Pagination,
+    Popconfirm,
 } from "antd";
 import React, { useEffect, useRef, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
@@ -45,6 +46,10 @@ function UTable(props) {
     const [form] = Form.useForm();
     const [AddSubForm] = Form.useForm();
     const scrollRef = useRef();
+    //
+    const [type, setType] = useState();
+    const [typesData, setTypesData] = useState([]);
+    //
     const config = {
         headers: {},
         params: {
@@ -164,6 +169,12 @@ function UTable(props) {
             return true;
         }
     };
+    const getTypesDatas = async (type) => {
+        setType(type);
+        config.params.type = type;
+        const response = await Get('service/type', token, config);
+        setTypesData(response.data);
+    }
     useEffect(() => {
         onStart(1);
         ScrollRef(scrollRef);
@@ -298,7 +309,7 @@ function UTable(props) {
                                             <Button
                                                 type="link"
                                                 title="Төрөл нэмэх"
-                                                onClick={() => setIsSubModalVisible(true)}
+                                                onClick={() => { setIsSubModalVisible(true); getTypesDatas(element.type) }}
                                             >
                                                 <PlusOutlined style={{ fontSize: '20px', color: 'green', textAlign: 'center' }} />
                                             </Button>
@@ -404,7 +415,9 @@ function UTable(props) {
                             console.log(error);
                         })
                 }}
-                onCancel={() => { setIsSubModalVisible(false) }}
+                cancelText="Болих"
+                okText="Хадгалах"
+                onCancel={() => { setIsSubModalVisible(false); props.refresh() }}
             >
                 <Form form={AddSubForm}>
                     {
@@ -424,6 +437,42 @@ function UTable(props) {
                         })
                     }
                 </Form>
+                <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
+                    <Table className='ant-border-space' style={{ width: '100%' }}>
+                        <thead className='ant-table-thead bg-slate-200'>
+                            <tr>
+                                <th className="font-bold text-sm align-middle">Нэр</th>
+                                <th className="font-bold text-sm align-middle">Үйлдэл</th>
+                            </tr>
+                        </thead>
+                        <tbody className='ant-table-tbody p-0'>
+                            {
+                                typesData.map((data, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{data.name}</td>
+                                            <td>
+                                                <Popconfirm
+                                                    title="Устгасан дохиолдолд сэргээх боломжгүй"
+                                                    onConfirm={async () => {
+                                                        const response = await Delete('service/type/' + data.id, token, config);
+                                                        if (response === 200) {
+                                                            getTypesDatas(data.type);
+                                                        }
+                                                    }}
+                                                    okText="Тийм"
+                                                    cancelText="Үгүй"
+                                                >
+                                                    <DeleteOutlined style={{ color: 'red' }} />
+                                                </Popconfirm>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </Table>
+                </div>
             </Modal>
         </>
     );

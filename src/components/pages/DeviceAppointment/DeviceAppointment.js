@@ -69,14 +69,14 @@ function DeviceAppointment() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [deviceList, setDeviceList] = useState([]);
     //
-    const [deviceId, setDeviceId] = useState(0);
+    const [deviceId, setDeviceId] = useState(1);
     const [examDate, setExamDate] = useState('');
     //
     const [form] = Form.useForm();
 
     const getDa = async () => {
-        config.params.deviceId = 2;
-        config.params.examDate = "2022-11-02";
+        config.params.deviceId = deviceId;
+        // config.params.examDate = moment(examDate).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
         const response = await Get('device-booking/schedule', token, config);
         console.log(response);
     }

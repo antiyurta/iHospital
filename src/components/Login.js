@@ -46,12 +46,11 @@ function Login() {
     const onFinish = (values) => {
         axios.post(process.env.REACT_APP_DEV_URL + "authentication/login", values, { headers: { "X-API-KEY": process.env.REACT_APP_API_KEY } })
             .then((response) => {
-                if (response.status === 200) {
+                if (response.status === 201) {
                     dispatch(login(response.data.response.accessToken));
                     navigate('/profile');
                 }
             }).catch((err) => {
-                console.log(err);
                 if (err.response.status == 400) {
                     openNofi('warning', 'Нэвтрэх', 'Нэвтрэх нэр эсвэл нууц үг буруу');
                 }
