@@ -46,7 +46,7 @@ function Login() {
     const onFinish = (values) => {
         axios.post(process.env.REACT_APP_DEV_URL + "authentication/login", values, { headers: { "X-API-KEY": process.env.REACT_APP_API_KEY } })
             .then((response) => {
-                if (response.status === 201) {
+                if (response.status === 200) {
                     dispatch(login(response.data.response.accessToken));
                     navigate('/profile');
                 }
