@@ -13,7 +13,7 @@ import Block from "./components/pages/Organization/Block";
 import Room from "./components/pages/Organization/Room";
 import Bed from "./components/pages/Organization/Bed";
 //
-import PaymentCloud from './components/pages/EPayment/Payments';
+import PaymentCloud from "./components/pages/EPayment/Payments";
 //
 import DoctorAppointmentSchedule from "./components/pages/Appointment/DoctorAppointmentSchedule";
 import DoctorAppointment from "./components/pages/Appointment/DoctorAppointment";
@@ -52,6 +52,7 @@ import DoctorAppointmentScheduleDemo from "./components/pages/Appointment/Doctor
 import SetOrder from "./components/pages/service/SetOrder";
 import DeviceAppointment from "./components/pages/DeviceAppointment/DeviceAppointment";
 import DemoEmployee from "./components/pages/Organization/DemoEmployee";
+import MainBed from "./components/pages/Bed/MainBed";
 // inpatient HEWTEN end
 
 function App() {
@@ -70,8 +71,22 @@ function App() {
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
           <Route path="/" element={<Home />} />
-          <Route path="/hospital" element={<PrivateRoute><Hospital /></PrivateRoute>} />
-          <Route path="/dpdemo" element={<PrivateRoute><DoctorAppointmentScheduleDemo /></PrivateRoute>} />
+          <Route
+            path="/hospital"
+            element={
+              <PrivateRoute>
+                <Hospital />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dpdemo"
+            element={
+              <PrivateRoute>
+                <DoctorAppointmentScheduleDemo />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/structure"
             element={
@@ -128,14 +143,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/Bed"
-            element={
-              <PrivateRoute>
-                <Bed />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/Bed" element={<Bed />} />
           <Route>
             <Route
               path="/payment"
@@ -199,11 +207,46 @@ function App() {
             />
           </Route>
           <Route>
-            <Route path="/examination" element={<PrivateRoute><Examination /></PrivateRoute>} />
-            <Route path="/xray" element={<PrivateRoute><Xray /></PrivateRoute>} />
-            <Route path="/treatment" element={<PrivateRoute><Treatment /></PrivateRoute>} />
-            <Route path="/surgury" element={<PrivateRoute><Surgury /></PrivateRoute>} />
-            <Route path="/medicine" element={<PrivateRoute><Medicine /></PrivateRoute>} />
+            <Route
+              path="/examination"
+              element={
+                <PrivateRoute>
+                  <Examination />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/xray"
+              element={
+                <PrivateRoute>
+                  <Xray />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/treatment"
+              element={
+                <PrivateRoute>
+                  <Treatment />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/surgury"
+              element={
+                <PrivateRoute>
+                  <Surgury />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/medicine"
+              element={
+                <PrivateRoute>
+                  <Medicine />
+                </PrivateRoute>
+              }
+            />
           </Route>
           <Route
             path="/profile"
@@ -245,6 +288,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/bed_management" element={<MainBed />} />
         </Route>
       </Routes>
     </div>
