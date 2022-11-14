@@ -87,9 +87,7 @@ function Sidenav({ color }) {
     {
       key: 4,
       icon: <UserAddOutlined />,
-      label: (
-        <NavLink to="/dpdemo">Эмчийн цаг захиалга</NavLink>
-      ),
+      label: <NavLink to="/dpdemo">Эмчийн цаг захиалга</NavLink>,
     },
     {
       key: 5,
@@ -140,7 +138,7 @@ function Sidenav({ color }) {
           key: "7-7",
           icon: <HomeOutlined />,
           label: <NavLink to="/SetOrders">SetOrders</NavLink>,
-        }
+        },
       ],
     },
     {
@@ -159,7 +157,12 @@ function Sidenav({ color }) {
       key: 10,
       icon: <InfoCircleOutlined />,
       label: <Link to="/reports">Маягтууд</Link>,
-    }
+    },
+    {
+      key: 11,
+      icon: <InfoCircleOutlined />,
+      label: <Link to="/bed_management">Орны менежмент</Link>,
+    },
   ];
 
   return (
