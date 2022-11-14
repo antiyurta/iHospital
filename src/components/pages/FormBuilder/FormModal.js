@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import axios from "axios";
 import { Get } from "../../comman";
-
+const { TextArea } = Input;
 export default function FormModal(props) {
   // console.log("prpops", props);
   const token = useSelector(selectCurrentToken);
@@ -29,19 +29,23 @@ export default function FormModal(props) {
   const DEV_URL = process.env.REACT_APP_DEV_URL;
   const [formStructure, setFormStructure] = useState();
   const [formName, setFormName] = useState("");
+  const [formTitle, setFormTitle] = useState("");
   const [saveError, setSaveError] = useState("");
   const [structures, setStructures] = useState([]);
   const { Option } = Select;
   const { Text } = Typography;
   const { Panel } = Collapse;
+  //
   useEffect(() => {
     //Form -г засах үед
     if (props.data !== null) {
       setFormStructure(props.data.id);
       setFormName(props.data.name);
+      setFormTitle(props.data.title);
     } else {
       setFormStructure("");
       setFormName("");
+      setFormTitle("");
     }
     getStructures();
   }, []);
@@ -76,6 +80,7 @@ export default function FormModal(props) {
         ...(props.type === "edit" && { id: props.data?.id }), //Form -г засах үед
         structureId: formStructure,
         name: formName,
+        title: formTitle,
         formItems: [
           ...props.formValue["pain"][0],
           ...props.formValue["inspection"][0],
@@ -122,7 +127,7 @@ export default function FormModal(props) {
 
   // Хариулт устгах
   const removeOption = (type, main_index, index) => {
-    var arr = [...props.formValue[type][main_index][0].options];
+    var arr = [...props.formValue[type][0][main_index].options];
     arr.splice(index, 1);
     props.setFormValue[type](
       props.formValue[type][0]?.map((elem, index) => {
@@ -223,7 +228,7 @@ export default function FormModal(props) {
   ];
   return (
     <Modal
-      title={props.type === "add" ? "Форм нэмэх" : "Форм засах"} //Form -г засах үед
+      title={props.type === "add" ? "Асуумж нэмэх" : "Асуумж засах"} //Form -г засах үед
       open={props.show}
       onOk={handleOk}
       onCancel={handleCancel}
@@ -264,10 +269,10 @@ export default function FormModal(props) {
       <Row gutter={[8, 8]}>
         <Col span={12}>
           <Row gutter={[8, 8]} className="items-center">
-            <Col span={5}>
-              <Text className="mr-2">Тасаг</Text>
+            <Col span={4}>
+              <Text className="font-bold mr-2">Тасаг</Text>
             </Col>
-            <Col span={16}>
+            <Col span={20}>
               <Select
                 style={{
                   width: '100%'
@@ -289,9 +294,9 @@ export default function FormModal(props) {
         <Col span={12}>
           <Row gutter={[8, 8]} className="items-center">
             <Col span={4}>
-              <Text className="mr-2">Нэр</Text>
+              <Text className="font-bold mr-2">Нэр</Text>
             </Col>
-            <Col span={16}>
+            <Col span={20}>
               <Input
                 size="small"
                 style={{
@@ -302,6 +307,16 @@ export default function FormModal(props) {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
               />
+            </Col>
+          </Row>
+        </Col>
+        <Col span={24}>
+          <Row gutter={[8, 8]} className="items-center">
+            <Col span={4}>
+              <Text className="font-bold mr-2">Асуумж</Text>
+            </Col>
+            <Col span={20}>
+              <TextArea value={formTitle} rows={4} onChange={(e) => setFormTitle(e.target.value)} />
             </Col>
           </Row>
         </Col>
