@@ -35,6 +35,7 @@ export default function FormModal(props) {
   const { Option } = Select;
   const { Text } = Typography;
   const { Panel } = Collapse;
+  //
   useEffect(() => {
     //Form -г засах үед
     if (props.data !== null) {
