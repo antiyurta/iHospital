@@ -181,3 +181,20 @@ input[type="number"] {
 .ant-picker-calendar-header {
   /* display: none; */
 }
+.department-bed-segment > .ant-segmented-group > .ant-segmented-item-selected {
+  background-color: #2d8cff;
+  color: #fff; 
+}
+.department-bed-segment > .ant-segmented-group > .ant-segmented-item {
+  transition: color 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) !important; 
+}
+.anticon {
+  vertical-align: middle !important;
+}
+.ant-segmented.ant-segmented-sm .ant-segmented-item-label {
+  display: flex !important;
+}
+.ant-segmented-sm > .ant-segmented-group >.ant-segmented-item > .ant-segmented-item-label  > .ant-segmented-item-icon{
+  line-height: 18px !important;
+  display: inline !important;
+}

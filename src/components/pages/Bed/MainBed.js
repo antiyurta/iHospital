@@ -9,7 +9,7 @@ import {
 import { Layout, Menu } from "antd";
 import DashboardBed from "./DashboardBed";
 import CalendarBed from "./CalendarBed";
-import PatientBed from "./PatientBed";
+import PatientListBed from "./PatientListBed";
 import InformationBed from "./InformationBed";
 import DepartmentBed from "./DepartmentBed";
 const { Footer, Header, Sider, Content } = Layout;
@@ -37,7 +37,7 @@ const items = [
 const rootSubmenuKeys = ["menu2"];
 const MainBed = () => {
   const [openKeys, setOpenKeys] = useState(["menu1"]);
-  const [selectedMenuKey, setSelectedMenuKey] = useState("");
+  const [selectedMenuKey, setSelectedMenuKey] = useState("menu1");
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -58,6 +58,7 @@ const MainBed = () => {
           onOpenChange={onOpenChange}
           items={items}
           onSelect={onSelect}
+          defaultSelectedKeys={"menu1"}
         />
       </Sider>
       <Layout>
@@ -74,7 +75,7 @@ const MainBed = () => {
           ) : null}
           {selectedMenuKey == "menu3" ? <CalendarBed /> : null}
           {selectedMenuKey == "menu4" ? <InformationBed /> : null}
-          {selectedMenuKey == "menu5" ? <PatientBed /> : null}
+          {selectedMenuKey == "menu5" ? <PatientListBed /> : null}
         </Content>
       </Layout>
     </Layout>

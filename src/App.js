@@ -53,6 +53,7 @@ import SetOrder from "./components/pages/service/SetOrder";
 import DeviceAppointment from "./components/pages/DeviceAppointment/DeviceAppointment";
 import DemoEmployee from "./components/pages/Organization/DemoEmployee";
 import MainBed from "./components/pages/Bed/MainBed";
+import RoomtDtl from "./components/pages/Bed/RoomtDtl";
 // inpatient HEWTEN end
 
 function App() {
@@ -289,6 +290,7 @@ function App() {
             }
           />
           <Route path="/bed_management" element={<MainBed />} />
+          <Route path="/roomDtl" element={<RoomtDtl />} />
         </Route>
       </Routes>
     </div>
