@@ -1,0 +1,26 @@
+[
+  {
+    "key": "medium",
+    "value": true,
+    "label": "Дунд",
+    "type": "checkbox"
+  },
+  {
+    "key": "moreSerious",
+    "value": false,
+    "label": "Хүндэвтэр",
+    "type": "checkbox"
+  },
+  {
+    "key": "heavy",
+    "value": false,
+    "label": "Хүнд",
+    "type": "checkbox"
+  },
+  {
+    "key": "veryHeavy",
+    "value": false,
+    "label": "Маш хүнд",
+    "type": "checkbox"
+  }
+]
