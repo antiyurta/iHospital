@@ -23,15 +23,19 @@ export default function Index(props) {
     const RenderHTML = (data) => {
         return Object.entries(data.data).map(([key, value], index) => {
             return (
-                <div key={index} className="inline-flex">
-                    <p className="font-semibold mr-2">{key}: </p>
+                <div key={index} className="flex">
+                    {
+                        Object.keys(value).map((e, index) => {
+                            return <p key={index} className="font-semibold mr-2">{e}: </p>
+                        })
+                    }
                     {Object.values(value).map((elValues, index) => {
                         return typeof elValues === "string" ? (
-                            <p key={index} className="pr-3">{elValues}</p>
+                            <p key={index}>{elValues}</p>
                         ) : (
                             <div key={index}>
                                 {elValues.map((el, index) => {
-                                    return <p key={index} className="pr-3">{el}</p>;
+                                    return <p key={index}>{el}</p>;
                                 })}
                             </div>
                         );
