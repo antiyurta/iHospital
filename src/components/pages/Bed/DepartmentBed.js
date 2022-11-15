@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Segmented, Col, Row, Card, Input, Tag, Modal } from "antd";
 import { blue } from "@ant-design/colors";
 import { SearchOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import RoomDtl from "./RoomDtl";
 const cardStyle = {
   borderColor: blue.primary,
 };
@@ -32,9 +34,11 @@ const cardRowContainer = {
 };
 const DepartmentBed = (props) => {
   console.log("rpops", props);
-  const [viewType, setViewType] = useState("List"); //['list', 'card']
   const [filter, setFilter] = useState("all"); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
+
+  let navigate = useNavigate();
+  const location = useLocation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -46,125 +50,122 @@ const DepartmentBed = (props) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const navigateRoom = (data) => {
+    navigate(`${location.pathname}/${data}`);
+  };
+
+  const DepartmentBedList = () => {
+    return (
+      <>
+        <Row>
+          <Col span={8}>
+            <Segmented
+              className="department-bed-segment"
+              size="small"
+              options={[
+                {
+                  label: "Бүгд",
+                  value: "all",
+                  icon: null,
+                },
+                {
+                  label: "Сул өрөө",
+                  value: "0",
+                  icon: null,
+                },
+                {
+                  label: "Дүүрсэн өрөө",
+                  value: "1",
+                  icon: null,
+                },
+                {
+                  label: "Засвартай өрөө",
+                  value: "2",
+                  icon: null,
+                },
+              ]}
+              value={filter}
+              onChange={setFilter}
+            />
+          </Col>
+          <Col span={8} offset={8}>
+            <Input
+              size="small"
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Өрөө хайх"
+              prefix={<SearchOutlined />}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]} className="mt-4">
+          <Col className="gutter-row" span={8}>
+            <Card
+              style={cardStyle}
+              className="rounded-xl cursor-pointer"
+              bodyStyle={cardBodyStyle}
+              // onClick={showModal}
+              onClick={() => navigateRoom("1")}
+            >
+              <div style={{ width: "10%" }}>
+                <SnippetsOutlined style={iconStyle} />
+              </div>
+              <div style={{ width: "90%" }}>
+                <div style={cardRowContainer} className="mb-6">
+                  <p>#101 - Энгийн өрөө</p>
+                </div>
+                <div style={cardRowContainer}>
+                  <p style={total}>Орны тоо: 4 / 3</p>
+                  <Tag color="warning" className="rounded-xl">
+                    1 ор засвартай
+                  </Tag>
+                </div>
+              </div>
+            </Card>
+          </Col>
+          <Col className="gutter-row" span={8}>
+            <Card
+              style={cardStyle}
+              className="rounded-xl cursor-pointer"
+              bodyStyle={cardBodyStyle}
+              onClick={() => navigateRoom("2")}
+            >
+              <div style={{ width: "10%" }}>
+                <SnippetsOutlined style={iconStyle} />
+              </div>
+              <div style={{ width: "90%" }}>
+                <div style={cardRowContainer} className="mb-6">
+                  <p>#102 - VIP өрөө</p>
+                </div>
+                <div style={cardRowContainer}>
+                  <p style={total}>Орны тоо: 4 / 4</p>
+                  <Tag color="error" className="rounded-xl">
+                    Дүүрсэн
+                  </Tag>
+                </div>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+        <Modal
+          title="Өвчтөн нэмэх"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+      </>
+    );
+  };
   return (
     <div className="p-6">
-      <Row>
-        {/* <Col span={3}>
-          <Segmented
-            className="department-bed-segment"
-            size="small"
-            options={[
-              {
-                label: "List",
-                value: "List",
-                icon: <BarsOutlined />,
-              },
-              {
-                label: "Grid",
-                value: "Grid",
-                icon: <AppstoreOutlined />,
-              },
-            ]}
-            value={viewType}
-            onChange={setViewType}
-          />
-        </Col> */}
-        <Col span={8}>
-          <Segmented
-            className="department-bed-segment"
-            size="small"
-            options={[
-              {
-                label: "Бүгд",
-                value: "all",
-                icon: null,
-              },
-              {
-                label: "Сул өрөө",
-                value: "0",
-                icon: null,
-              },
-              {
-                label: "Дүүрсэн өрөө",
-                value: "1",
-                icon: null,
-              },
-              {
-                label: "Засвартай өрөө",
-                value: "2",
-                icon: null,
-              },
-            ]}
-            value={filter}
-            onChange={setFilter}
-          />
-        </Col>
-        <Col span={8} offset={8}>
-          <Input
-            size="small"
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Өрөө хайх"
-            prefix={<SearchOutlined />}
-          />
-        </Col>
-      </Row>
-      <Row gutter={[16, 16]} className="mt-4">
-        <Col className="gutter-row" span={8}>
-          <Card
-            style={cardStyle}
-            className="rounded-xl cursor-pointer"
-            bodyStyle={cardBodyStyle}
-            onClick={showModal}
-          >
-            <div style={{ width: "10%" }}>
-              <SnippetsOutlined style={iconStyle} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <div style={cardRowContainer} className="mb-6">
-                <p>#101 - Энгийн өрөө</p>
-              </div>
-              <div style={cardRowContainer}>
-                <p style={total}>Орны тоо: 4 / 3</p>
-                <Tag color="warning" className="rounded-xl">
-                  1 ор засвартай
-                </Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-        <Col className="gutter-row" span={8}>
-          <Card
-            style={cardStyle}
-            className="rounded-xl cursor-pointer"
-            bodyStyle={cardBodyStyle}
-          >
-            <div style={{ width: "10%" }}>
-              <SnippetsOutlined style={iconStyle} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <div style={cardRowContainer} className="mb-6">
-                <p>#102 - VIP өрөө</p>
-              </div>
-              <div style={cardRowContainer}>
-                <p style={total}>Орны тоо: 4 / 4</p>
-                <Tag color="error" className="rounded-xl">
-                  Дүүрсэн
-                </Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-      <Modal
-        title="Өвчтөн нэмэх"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
+      <Routes>
+        <Route path="/" element={<DepartmentBedList />} />
+        <Route path="/:id" element={<RoomDtl />} />
+      </Routes>
     </div>
   );
 };

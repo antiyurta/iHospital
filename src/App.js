@@ -53,14 +53,13 @@ import SetOrder from "./components/pages/service/SetOrder";
 import DeviceAppointment from "./components/pages/DeviceAppointment/DeviceAppointment";
 import DemoEmployee from "./components/pages/Organization/DemoEmployee";
 import MainBed from "./components/pages/Bed/MainBed";
-import RoomtDtl from "./components/pages/Bed/RoomtDtl";
+import RoomtDtl from "./components/pages/Bed/RoomDtl";
 // inpatient HEWTEN end
 
-// lab start 
+// lab start
 import Demo2 from "./components/pages/Demo/demo2";
 import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 // lab end
-
 
 function App() {
   return (
@@ -298,7 +297,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/bed_management" element={<MainBed />} />
+          <Route path="/bed_management/*" element={<MainBed />} />
           <Route path="/roomDtl" element={<RoomtDtl />} />
         </Route>
       </Routes>

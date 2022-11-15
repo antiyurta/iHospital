@@ -12,7 +12,9 @@ import CalendarBed from "./CalendarBed";
 import PatientListBed from "./PatientListBed";
 import InformationBed from "./InformationBed";
 import DepartmentBed from "./DepartmentBed";
-const { Footer, Header, Sider, Content } = Layout;
+import RoomDtl from "./RoomDtl";
+import { Routes, Route, useNavigate } from "react-router-dom";
+const { Sider, Content } = Layout;
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -23,22 +25,25 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("Хянах самбар", "menu1", <FundViewOutlined />),
-  getItem("Тасаг", "menu2", <AppstoreOutlined />, [
+  getItem("Хянах самбар", "", <FundViewOutlined />),
+  getItem("Тасаг", "department", <AppstoreOutlined />, [
     getItem("Нүд", "menu2submenu1"),
     getItem("Чих", "menu2submenu2"),
     getItem("Хамар", "menu2submenu3"),
   ]),
-  getItem("Хуанли", "menu3", <CalendarOutlined />),
-  getItem("Орны мэдээлэл", "menu4", <PicCenterOutlined />),
-  getItem("Өвчтөн", "menu5", <UserOutlined />),
+  getItem("Хуанли", "calendar", <CalendarOutlined />),
+  getItem("Орны мэдээлэл", "rooms", <PicCenterOutlined />),
+  getItem("Өвчтөн", "patient_list", <UserOutlined />),
 ];
 // submenu keys of first level
 const rootSubmenuKeys = ["menu2"];
 const MainBed = () => {
-  const [openKeys, setOpenKeys] = useState(["menu1"]);
-  const [selectedMenuKey, setSelectedMenuKey] = useState("menu1");
+  const [openKeys, setOpenKeys] = useState(["dashboard"]);
+  const [selectedMenuKey, setSelectedMenuKey] = useState("");
+  let navigate = useNavigate();
+
   const onOpenChange = (keys) => {
+    console.log("KEYS", keys);
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
       setOpenKeys(keys);
@@ -46,8 +51,10 @@ const MainBed = () => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
+
   const onSelect = (data) => {
     setSelectedMenuKey(data.key);
+    navigate(`/bed_management/${data.key}`);
   };
   return (
     <Layout>
@@ -58,24 +65,21 @@ const MainBed = () => {
           onOpenChange={onOpenChange}
           items={items}
           onSelect={onSelect}
-          defaultSelectedKeys={"menu1"}
+          defaultSelectedKeys={"dashboard"}
         />
       </Sider>
       <Layout>
         <Content>
-          {selectedMenuKey == "menu1" ? <DashboardBed /> : null}
-          {selectedMenuKey == "menu2submenu1" ? (
-            <DepartmentBed title="menu2submenu1" />
-          ) : null}
-          {selectedMenuKey == "menu2submenu2" ? (
-            <DepartmentBed title="menu2submenu2" />
-          ) : null}
-          {selectedMenuKey == "menu2submenu3" ? (
-            <DepartmentBed title="menu2submenu3" />
-          ) : null}
-          {selectedMenuKey == "menu3" ? <CalendarBed /> : null}
-          {selectedMenuKey == "menu4" ? <InformationBed /> : null}
-          {selectedMenuKey == "menu5" ? <PatientListBed /> : null}
+          <Routes>
+            <Route exact path="/" element={<DashboardBed />} />
+            <Route path="/calendar" element={<CalendarBed />} />
+            <Route path="/rooms" element={<InformationBed />} />
+            <Route path="/patient_list" element={<PatientListBed />} />
+            <Route
+              path="/:id/*"
+              element={<DepartmentBed data={selectedMenuKey} />}
+            />
+          </Routes>
         </Content>
       </Layout>
     </Layout>

@@ -1,7 +1,8 @@
 import React from "react";
-import { Col, Row, Card } from "antd";
-import { UserAddOutlined } from "@ant-design/icons";
+import { Col, Row, Card, Button } from "antd";
+import { ArrowLeftOutlined, UserAddOutlined } from "@ant-design/icons";
 import { blue } from "@ant-design/colors";
+import { useNavigate } from "react-router-dom";
 
 const cardStyle = {
   borderColor: blue.primary,
@@ -28,10 +29,18 @@ const total = {
   fontSize: 20,
   fontWeight: "bold",
 };
-const RoomtDtl = () => {
+const RoomDtl = (props) => {
+  let navigate = useNavigate();
+  console.log("props", props);
   return (
     <div>
-      <Row gutter={[16, 16]}>
+      <Row>
+        <Button className="rounded-md" onClick={() => navigate(-1)}>
+          <ArrowLeftOutlined />
+          Буцах
+        </Button>
+      </Row>
+      <Row gutter={[16, 16]} className="mt-4">
         <Col span={16}>
           <Card
             style={cardStyle}
@@ -66,4 +75,4 @@ const RoomtDtl = () => {
   );
 };
 
-export default RoomtDtl;
+export default RoomDtl;
