@@ -199,3 +199,9 @@ input[type="number"] {
   line-height: 18px !important;
   display: inline !important;
 }
+.bed-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 0 !important;
+}
+.custom-primary-btn {
+  background-color: #2d8cff !important  ;
+}
