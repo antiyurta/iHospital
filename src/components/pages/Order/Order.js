@@ -40,8 +40,8 @@ function Order({ isPackage, isDoctor, categories, save }) {
             }
         })
         if (status) {
-            console.log("sda");
-            // save(e);
+            // console.log(e);
+            save(e);
         }
     }
 

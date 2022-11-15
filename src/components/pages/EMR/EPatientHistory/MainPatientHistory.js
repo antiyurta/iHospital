@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Tabs, Row, Button, Form, Divider } from "antd";
+import { Tabs, Row, Button, Form, Divider, Col } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
@@ -8,6 +8,7 @@ import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 import { openNofi, Post } from "../../../comman";
+import TextArea from "antd/lib/input/TextArea";
 function MainPatientHistory({ PatientId }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
@@ -77,7 +78,35 @@ function MainPatientHistory({ PatientId }) {
             <DynamicFormInspection data={props.data["plan"]} />
           </>
         ) : null}
-
+        {
+          <>
+            <Divider orientation="left" className="text-sm my-2">
+              Онош
+            </Divider>
+            <Row align="middle" className="mb-1">
+              <Col span={24} className="text-left">
+                <Form.Item
+                  label=""
+                  name={["diagnose", "sadsad", "ASdsad"]}
+                  rules={[{ required: false, message: "" }]}
+                  className="mb-0"
+                  wrapperCol={{
+                    span: 24,
+                  }}
+                  labelCol={{
+                    span: 8,
+                  }}
+                >
+                  <TextArea
+                    rows={2}
+                    style={{ padding: 5, marginBottom: 5 }}
+                    placeholder={"asda"}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </>
+        }
         <Form.Item
           wrapperCol={{
             span: 16,
@@ -99,7 +128,7 @@ function MainPatientHistory({ PatientId }) {
   }, []);
 
   const saveDynamicTab = async (values) => {
-
+    console.log(values);
     const data = {
       bookingId: 1,
       departmentId: depId,
@@ -110,6 +139,7 @@ function MainPatientHistory({ PatientId }) {
       inspection: JSON.stringify(values["inspection"]),
       plan: JSON.stringify(values["plan"]),
     }
+    console.log(data);
     await Post('emr/inspectionNote', token, config, data);
   };
 

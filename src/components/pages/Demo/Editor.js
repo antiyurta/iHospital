@@ -4,8 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, Patch, Post } from "../../comman";
 import { Editor } from '@tinymce/tinymce-react';
-import { Button, Descriptions, Input, PageHeader } from "antd";
+import { Button, Descriptions, Input, PageHeader, Select } from "antd";
 
+//
+import data from './demo.json';
+//
+
+const { Option } = Select;
 function Editors() {
     const IncomeReportId = useLocation().state?.reportId;
     const navigate = useNavigate();
@@ -42,7 +47,19 @@ function Editors() {
     const changeName = (value) => {
         setName(value);
     }
-
+    const dada = (e) => {
+        const code = e.current.innerHTML;
+        console.log(code);
+    }
+    const ddi = (e) => {
+        const dad = document.getElementById('dada');
+        const dd = document.editor.
+            console.log(dad);
+    }
+    const click = () => {
+        editorRef.current.insertContent(`<input type="radio" id="html" name="fav_language" value="HTML">
+        <label for="html">HTML</label><br>`);
+    }
     useEffect(() => {
         getReport();
     }, [IncomeReportId])
@@ -62,6 +79,11 @@ function Editors() {
                     <p>Нэр: <Input value={name} onChange={(e) => changeName(e.target.value)} /></p>
                 }
                 <Button className='bg-sky-700' onClick={save}>Хадгалах</Button>
+                <div id="dada">
+                    <Select onChange={ddi}>
+                        <Option value="<input type='text'/>">input</Option>
+                    </Select>
+                </div>
                 <Editor
                     onInit={(evt, editor) => editorRef.current = editor}
                     initialValue={content}
@@ -81,6 +103,7 @@ function Editors() {
                         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:10px }'
                     }}
                 />
+                <Button type="primary" onClick={click}>sdsadsa</Button>
             </div>
         </>
     );

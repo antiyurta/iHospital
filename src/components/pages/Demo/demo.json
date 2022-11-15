@@ -1,9 +1,48 @@
-{
-  "hosipitalID": "173685",
-  "regno": "КИ98042111",
-  "firstname": "Өлзийхутаг",
-  "lastname": "Гантуяа",
-  "year": "1997",
-  "month": "04",
-  "day": "30"
-}
+[
+  {
+      "key": "Зовиур",
+      "type": "textarea",
+      "label": "Зовиур",
+      "order": "1",
+      "options": [
+          {
+              "label": "",
+              "value": ""
+          }
+      ],
+      "inspectionType": "pain",
+      "inspectionFormId": null
+  },
+  {
+      "key": "Өвчний эхлэх явц",
+      "type": "textarea",
+      "label": "Өвчний эхлэх явц",
+      "order": "2",
+      "options": [
+          {
+              "label": "",
+              "value": ""
+          }
+      ],
+      "inspectionType": "pain",
+      "inspectionFormId": null
+  },
+  {
+      "key": "Эрсдэлт хүчин зүйлс",
+      "type": "radio",
+      "label": "Эрсдэлт хүчин зүйлс",
+      "order": "3",
+      "options": [
+          {
+              "label": "Архи",
+              "value": "Архи"
+          },
+          {
+              "label": "Тамхи",
+              "value": "Тамхи"
+          }
+      ],
+      "inspectionType": "question",
+      "inspectionFormId": null
+  }
+]

@@ -106,14 +106,17 @@ function DemoEmployee() {
     }
     const onFinish = async () => {
         form.validateFields().then(async (values) => {
+            console.log(values);
             if (editMode) {
                 const response = await Patch('organization/employee/' + id, token, config, values);
                 if (response === 200) {
+                    getEmployee(1);
                     setIsOpenCreateModal(false);
                 }
             } else {
                 const response = await Post('organization/employee', token, config, values);
                 if (response === 201) {
+                    getEmployee(1);
                     setIsOpenCreateModal(false);
                 }
             }
@@ -277,7 +280,7 @@ function DemoEmployee() {
                         <div className="md:w-1/4 sm:w-1/3 p-1">
                             <Form.Item
                                 label="Утасны дугаар"
-                                name='phone'
+                                name='phoneNo'
                                 rules={[
                                     {
                                         required: true,
@@ -322,7 +325,7 @@ function DemoEmployee() {
                                     }
                                 ]}
                             >
-                                <Select onChange={getDepartment}>
+                                <Select  onChange={getDepartment}>
                                     <Option value={2}>Тасаг</Option>
                                     <Option value={0}>Харьяалал</Option>
                                 </Select>
