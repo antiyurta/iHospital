@@ -163,6 +163,11 @@ function Sidenav({ color }) {
       icon: <InfoCircleOutlined />,
       label: <Link to="/bed_management">Орны менежмент</Link>,
     },
+    {
+      key: 12,
+      icon: <HomeOutlined/>,
+      label: <Link to="/equipments">ЛАБ</Link>
+    }
   ];
 
   return (

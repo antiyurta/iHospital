@@ -32,7 +32,7 @@ export default function DynamicFormInspection(props) {
               <Col span={24} className="text-left">
                 <Form.Item
                   label=""
-                  name={[el.inspectionType, el.label, el.key]}
+                  name={[el.inspectionType, el.key, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
                   wrapperCol={{
@@ -57,7 +57,7 @@ export default function DynamicFormInspection(props) {
               <Col span={24} className="text-left">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.label, el.key]}
+                  name={[el.inspectionType, el.key, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
                   wrapperCol={{
@@ -86,7 +86,7 @@ export default function DynamicFormInspection(props) {
               <Col span={24} className="text-left">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.label, el.key]}
+                  name={[el.inspectionType, el.key, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
                   wrapperCol={{
@@ -99,7 +99,7 @@ export default function DynamicFormInspection(props) {
                   <Radio.Group>
                     {el.options?.map((el, index) => {
                       return (
-                        <Radio value={el.value} key={index}>
+                        <Radio value={el.label} key={index}>
                           {el.label}
                         </Radio>
                       );
@@ -116,7 +116,7 @@ export default function DynamicFormInspection(props) {
               <Col span={24} className="text-left">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.label, el.key]}
+                  name={[el.inspectionType, el.key, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
                   wrapperCol={{
@@ -146,7 +146,7 @@ export default function DynamicFormInspection(props) {
               <Col span={24} className="text-left">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.label, el.key]}
+                  name={[el.inspectionType, el.key, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
                   wrapperCol={{
@@ -180,7 +180,7 @@ export default function DynamicFormInspection(props) {
               <Col span={24} className="text-left">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.label, el.key]}
+                  name={[el.inspectionType, el.key, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
                   wrapperCol={{

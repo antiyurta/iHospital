@@ -56,12 +56,21 @@ import MainBed from "./components/pages/Bed/MainBed";
 import RoomtDtl from "./components/pages/Bed/RoomtDtl";
 // inpatient HEWTEN end
 
+// lab start 
+import Demo2 from "./components/pages/Demo/demo2";
+import EquipmentList from "./components/pages/Laboratory/EquipmentList";
+// lab end
+
+
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<Main />}>
+          {/* lab start */}
+          <Route path="/equipments" element={<EquipmentList />} />
+          {/* lab end */}
           <Route path="/menu" element={<Menu />} />
           <Route path="/inpatient" element={<Inpatient />} />
           <Route path="/emr" element={<EMR />} />

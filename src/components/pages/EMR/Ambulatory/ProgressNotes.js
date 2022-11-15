@@ -1,10 +1,11 @@
 //Явцын тэмдэглэл
 import React, { useEffect, useState } from "react";
-import { Collapse, Divider } from "antd";
-import { FolderOutlined, FolderOpenOutlined } from "@ant-design/icons";
+import { Collapse, Divider, Modal } from "antd";
+import { FolderOutlined, FolderOpenOutlined, PrinterOutlined, FilePdfOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import { Get } from "../../../comman";
+import Index from "../FormPrint";
 
 export default function ProgressNotes({ PatientId }) {
   const { Panel } = Collapse;
@@ -14,9 +15,23 @@ export default function ProgressNotes({ PatientId }) {
     params: {}
   };
   const [inspectionNotes, setInspectionNotes] = useState([]);
+  const [printData, setPrintData] = useState([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const onChange = (key) => {
     // console.log(key);
   };
+  const genExtra = (value) => (
+    <>
+      <PrinterOutlined className="p-1"
+        onClick={(event) => {
+          setPrintData(value);
+          console.log(value);
+          setIsOpenModal(true);
+        }
+        }
+      />
+    </>
+  );
 
   useEffect(() => {
     if (PatientId) {
@@ -41,10 +56,15 @@ export default function ProgressNotes({ PatientId }) {
   };
 
   const RenderNotesDetail = (data) => {
+    console.log(data);
     return Object.entries(data.data).map(([key, value], index) => {
       return (
         <div key={index} className="flex">
-          <p className="font-semibold mr-2">{key}: </p>
+          {
+            Object.keys(value).map((e, index) => {
+              return <p key={index} className="font-semibold mr-2">{e}: </p>
+            })
+          }
           {Object.values(value).map((elValues, index) => {
             return typeof elValues === "string" ? (
               <p key={index}>{elValues}</p>
@@ -60,64 +80,77 @@ export default function ProgressNotes({ PatientId }) {
       );
     });
   };
+
   return (
-    <Collapse
-      onChange={onChange}
-      accordion
-      expandIcon={({ isActive }) => {
-        return isActive ? (
-          <FolderOpenOutlined style={{ fontSize: "24px" }} />
-        ) : (
-          <FolderOutlined style={{ fontSize: "24px" }} />
-        );
-      }}
-      ghost
-    >
-      {Object.entries(inspectionNotes).map(([key, value], index) => {
-        return (
-          <Panel header={`${key} Он`} key={index}>
-            <Collapse accordion>
-              {value.map((el, index) => {
-                return (
-                  <Panel
-                    header={
-                      <div className="grid">
-                        <span className="font-semibold">
-                          {
-                            el.structures?.name + "->" +
-                            el.employees?.lastName + " " + el.employees?.firstName
-                          }
-                        </span>
-                        <span>
-                          {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
-                        </span>
-                      </div>
-                    }
-                    key={index}
-                  >
-                    <Divider orientation="left" className="text-sm my-2">
-                      Зовиур
-                    </Divider>
-                    <RenderNotesDetail data={JSON.parse(el["pain"])} />
-                    <Divider orientation="left" className="text-sm my-2">
-                      Үзлэг
-                    </Divider>
-                    <RenderNotesDetail data={JSON.parse(el["inspection"])} />
-                    <Divider orientation="left" className="text-sm my-2">
-                      Асуумж
-                    </Divider>
-                    <RenderNotesDetail data={JSON.parse(el["question"])} />
-                    <Divider orientation="left" className="text-sm my-2">
-                      Төлөвлөгөө
-                    </Divider>
-                    <RenderNotesDetail data={JSON.parse(el["plan"])} />
-                  </Panel>
-                );
-              })}
-            </Collapse>
-          </Panel>
-        );
-      })}
-    </Collapse>
+    <>
+      <Collapse
+        onChange={onChange}
+        collapsible="header"
+        expandIcon={({ isActive }) => {
+          return isActive ? (
+            <FolderOpenOutlined style={{ fontSize: "24px" }} />
+          ) : (
+            <FolderOutlined style={{ fontSize: "24px" }} />
+          );
+        }}
+        ghost
+      >
+        {Object.entries(inspectionNotes).map(([key, value], index) => {
+          return (
+            <Panel header={`${key} Он`} key={index}>
+              <Collapse collapsible="header">
+                {value.map((el, index) => {
+                  return (
+                    <Panel
+                      header={
+                        <div className="grid">
+                          <span className="font-semibold">
+                            {
+                              el.structures?.name + "->" +
+                              el.employees?.lastName + " " + el.employees?.firstName
+                            }
+                          </span>
+                          <span>
+                            {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                          </span>
+                        </div>
+                      }
+                      key={index}
+                      extra={genExtra(el)}
+                    >
+                      <Divider orientation="left" className="text-sm my-2">
+                        Зовиур
+                      </Divider>
+                      <RenderNotesDetail data={JSON.parse(el["pain"])} />
+                      <Divider orientation="left" className="text-sm my-2">
+                        Үзлэг
+                      </Divider>
+                      <RenderNotesDetail data={JSON.parse(el["inspection"])} />
+                      <Divider orientation="left" className="text-sm my-2">
+                        Асуумж
+                      </Divider>
+                      <RenderNotesDetail data={JSON.parse(el["question"])} />
+                      <Divider orientation="left" className="text-sm my-2">
+                        Төлөвлөгөө
+                      </Divider>
+                      <RenderNotesDetail data={JSON.parse(el["plan"])} />
+                    </Panel>
+                  );
+                })}
+              </Collapse>
+            </Panel>
+          );
+        })}
+      </Collapse>
+      <Modal
+        open={isOpenModal}
+        onCancel={() => setIsOpenModal(false)}
+        footer={null}
+        width={845}
+        title={'CT-1'}
+      >
+        <Index props={printData} />
+      </Modal>
+    </>
   );
 }

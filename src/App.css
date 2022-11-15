@@ -81,7 +81,7 @@ legend.scheduler-border {
 }
 .ant-divider-horizontal.ant-divider-with-text::before,
 .ant-divider-horizontal.ant-divider-with-text::after {
-  border-top: 2px solid #e5e7eb !important;
+  border-top: 2px solid #000000 !important;
 }
 .ant-row .ant-form-item-row {
   align-items: center;
@@ -135,7 +135,8 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 .custom-card > .ant-card-head > .ant-card-head-wrapper {
-  display: contents !important;
+  /* display: contents !important; */
+  display: flex;
 }
 .ant-collapse-header {
   padding: 5px !important;

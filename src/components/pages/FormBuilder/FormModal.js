@@ -39,7 +39,7 @@ export default function FormModal(props) {
   useEffect(() => {
     //Form -г засах үед
     if (props.data !== null) {
-      setFormStructure(props.data.id);
+      setFormStructure(props.data.structureId);
       setFormName(props.data.name);
       setFormTitle(props.data.title);
     } else {
