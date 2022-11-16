@@ -2,6 +2,7 @@ import React from "react";
 import { Col, Row, Card } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import { blue } from "@ant-design/colors";
+import { useNavigate } from "react-router-dom";
 
 const cardStyle = {
   borderColor: blue.primary,
@@ -28,7 +29,9 @@ const total = {
   fontSize: 20,
   fontWeight: "bold",
 };
-function DashboardBed() {
+function DashboardBed(props) {
+  let navigate = useNavigate();
+
   return (
     <div className="p-6">
       <Row gutter={[16, 16]}>
@@ -37,6 +40,10 @@ function DashboardBed() {
             style={cardStyle}
             className="rounded-xl cursor-pointer"
             bodyStyle={cardBodyStyle}
+            onClick={() => {
+              props.setSelectedFn("rooms");
+              navigate(`/bed_management/rooms`);
+            }}
           >
             <div style={{ width: "70%" }}>
               <p>Сул орны тоо</p>

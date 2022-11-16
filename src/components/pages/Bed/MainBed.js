@@ -12,45 +12,28 @@ import CalendarBed from "./CalendarBed";
 import PatientListBed from "./PatientListBed";
 import InformationBed from "./InformationBed";
 import DepartmentBed from "./DepartmentBed";
-import RoomDtl from "./RoomDtl";
 import { Routes, Route, useNavigate } from "react-router-dom";
 const { Sider, Content } = Layout;
-function getItem(label, key, icon, children, type) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
+
 const items = [
-  getItem("Хянах самбар", "", <FundViewOutlined />),
-  getItem("Тасаг", "department", <AppstoreOutlined />, [
-    getItem("Нүд", "menu2submenu1"),
-    getItem("Чих", "menu2submenu2"),
-    getItem("Хамар", "menu2submenu3"),
-  ]),
-  getItem("Хуанли", "calendar", <CalendarOutlined />),
-  getItem("Орны мэдээлэл", "rooms", <PicCenterOutlined />),
-  getItem("Өвчтөн", "patient_list", <UserOutlined />),
+  { label: "Хянах самбар", key: "", icon: <FundViewOutlined /> },
+  {
+    label: "Тасаг",
+    key: "department",
+    icon: <AppstoreOutlined />,
+    children: [
+      { label: "Нүд", key: "menu2submenu1" },
+      { label: "Чих", key: "menu2submenu2" },
+    ],
+  },
+  { label: "Хуанли", key: "calendar", icon: <CalendarOutlined /> },
+  { label: "Орны мэдээлэл", key: "rooms", icon: <PicCenterOutlined /> },
+  { label: "Өвчтөн", key: "patient_list", icon: <UserOutlined /> },
 ];
-// submenu keys of first level
-const rootSubmenuKeys = ["menu2"];
+
 const MainBed = () => {
-  const [openKeys, setOpenKeys] = useState(["dashboard"]);
   const [selectedMenuKey, setSelectedMenuKey] = useState("");
   let navigate = useNavigate();
-
-  const onOpenChange = (keys) => {
-    console.log("KEYS", keys);
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
 
   const onSelect = (data) => {
     setSelectedMenuKey(data.key);
@@ -61,17 +44,20 @@ const MainBed = () => {
       <Sider className="bg-white">
         <Menu
           mode="inline"
-          openKeys={openKeys}
-          onOpenChange={onOpenChange}
           items={items}
           onSelect={onSelect}
-          defaultSelectedKeys={"dashboard"}
+          defaultSelectedKeys={""}
+          selectedKeys={[selectedMenuKey]}
         />
       </Sider>
       <Layout>
         <Content>
           <Routes>
-            <Route exact path="/" element={<DashboardBed />} />
+            <Route
+              exact
+              path="/"
+              element={<DashboardBed setSelectedFn={setSelectedMenuKey} />}
+            />
             <Route path="/calendar" element={<CalendarBed />} />
             <Route path="/rooms" element={<InformationBed />} />
             <Route path="/patient_list" element={<PatientListBed />} />

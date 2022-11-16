@@ -33,15 +33,13 @@ const DepartmentBed = (props) => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const selectBed = (data) => {
     setSelectedBed(data);
   };
+
   return (
     <div className="p-6">
       <Row>
@@ -244,7 +242,7 @@ const DepartmentBed = (props) => {
             >
               <div>
                 <p>AA</p>
-                <div>
+                <div className="text-right">
                   <Button className="mr-2" danger>
                     Гаргах
                   </Button>

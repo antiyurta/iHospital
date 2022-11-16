@@ -16,6 +16,7 @@ import {
   BarsOutlined,
   AppstoreOutlined,
   UserAddOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 
 const cardStyle = {
@@ -62,10 +63,10 @@ function PatientListBed() {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
+  const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleCancel = () => {
+  const assignPatient = () => {
     setIsModalOpen(false);
   };
 
@@ -103,16 +104,7 @@ function PatientListBed() {
             prefix={<SearchOutlined />}
           />
         </Col>
-        <Col span={18} className="text-right">
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={showModal}
-            style={{ backgroundColor: blue.primary }}
-          >
-            Өвчтөн нэмэх
-          </Button>
-        </Col>
+        <Col span={18} className="text-right"></Col>
       </Row>
       <Row gutter={[16, 16]} className="mt-4">
         <Col span={2}>
@@ -179,6 +171,7 @@ function PatientListBed() {
                 style={cardStyle}
                 className="rounded-xl cursor-pointer"
                 bodyStyle={cardBodyStyle}
+                onClick={showModal}
               >
                 <div>
                   <UserAddOutlined style={iconStyle} />
@@ -219,6 +212,7 @@ function PatientListBed() {
                 style={cardStyle}
                 className="rounded-xl cursor-pointer"
                 bodyStyle={cardBodyStyleList}
+                onClick={showModal}
               >
                 <div className="w-3/12 pl-4">Б. Бат - Эрдэнэ</div>
                 <div className="w-2/12 text-xs">РД: АА99999999</div>
@@ -235,14 +229,23 @@ function PatientListBed() {
         )}
       </Row>
       <Modal
-        title="Өвчтөн нэмэх"
+        title="Өвчтөн хуваарилах"
         open={isModalOpen}
-        onOk={handleOk}
         onCancel={handleCancel}
+        footer={false}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <div>
+          <p>Харуулах мэдээлэл...</p>
+          <div className="text-right">
+            <Button
+              type="primary"
+              className="custom-primary-btn"
+              onClick={assignPatient}
+            >
+              Хуваарилах
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
