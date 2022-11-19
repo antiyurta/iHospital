@@ -86,7 +86,7 @@ function PatientListBed() {
 
   const column = [
     {
-      index: "patient.firstName",
+      index: ['patient', 'firstName'],
       label: "Овог, Нэр",
       isView: true,
       input: "input",
