@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Segmented,
   Col,
@@ -20,16 +20,26 @@ import {
 import bed from "../../../assets/bed/bed.png";
 import bed_red from "../../../assets/bed/bed_red.png";
 import bed_yellow from "../../../assets/bed/bed_yellow.png";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { Get, openNofi, Post } from "../../comman";
+import Spinner from "react-bootstrap/Spinner";
 
 const InformationBed = (props) => {
-  console.log("rpops", props);
+  const token = useSelector(selectCurrentToken);
   const [filter, setFilter] = useState("all"); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
   const [selectedBed, setSelectedBed] = useState(""); //Сонгогдсон ор
+  const [rooms, setRooms] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const config = {
+    headers: {},
+    params: {},
+  };
 
   const { Panel } = Collapse;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -39,6 +49,21 @@ const InformationBed = (props) => {
   const selectBed = (data) => {
     setSelectedBed(data);
   };
+
+  const getRooms = async () => {
+    config.params.type = 2;
+    config.params.startDate = null;
+    config.params.endDate = null;
+    const response = await Get("organization/room", token, config);
+    console.log("response InformationBed", response);
+    if (response.data.length != 0) {
+      setRooms(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getRooms();
+  }, []);
 
   return (
     <div className="p-6">
@@ -82,53 +107,45 @@ const InformationBed = (props) => {
           />
         </Col>
       </Row>
-      <Row gutter={[16, 16]} className="mt-4">
-        <Col className="gutter-row" span={8}>
-          <Card
-            style={styles.cardStyle}
-            className="rounded-xl cursor-pointer"
-            bodyStyle={styles.cardBodyStyle}
-            onClick={showModal}
-          >
-            <div style={{ width: "10%" }}>
-              <SnippetsOutlined style={styles.iconStyle} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <div style={styles.cardRowContainer} className="mb-6">
-                <p>#101 - Энгийн өрөө</p>
-              </div>
-              <div style={styles.cardRowContainer}>
-                <p style={styles.total}>Орны тоо: 4 / 3</p>
-                <Tag color="warning" className="rounded-xl">
-                  1 ор засвартай
-                </Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-        <Col className="gutter-row" span={8}>
-          <Card
-            style={styles.cardStyle}
-            className="rounded-xl cursor-pointer"
-            bodyStyle={styles.cardBodyStyle}
-          >
-            <div style={{ width: "10%" }}>
-              <SnippetsOutlined style={styles.iconStyle} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <div style={styles.cardRowContainer} className="mb-6">
-                <p>#102 - VIP өрөө</p>
-              </div>
-              <div style={styles.cardRowContainer}>
-                <p style={styles.total}>Орны тоо: 4 / 4</p>
-                <Tag color="error" className="rounded-xl">
-                  Дүүрсэн
-                </Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-      </Row>
+      {rooms != "" ? (
+        <Row gutter={[16, 16]} className="mt-4">
+          {rooms?.map((el, index) => {
+            return (
+              <Col className="gutter-row" span={8} key={index}>
+                <Card
+                  style={styles.cardStyle}
+                  className="rounded-xl cursor-pointer"
+                  bodyStyle={styles.cardBodyStyle}
+                  onClick={showModal}
+                >
+                  <div style={{ width: "10%" }}>
+                    <SnippetsOutlined style={styles.iconStyle} />
+                  </div>
+                  <div style={{ width: "90%" }}>
+                    <div style={styles.cardRowContainer} className="mb-6">
+                      <p>
+                        {el.roomNumber} -{" "}
+                        {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
+                      </p>
+                    </div>
+                    <div style={styles.cardRowContainer}>
+                      <p style={styles.total}>Орны тоо: 4 / 3</p>
+                      <Tag color="warning" className="rounded-xl">
+                        1 ор засвартай
+                      </Tag>
+                    </div>
+                  </div>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      ) : (
+        <div className="text-center">
+          <Spinner animation="grow" style={{ color: "#1890ff" }} />
+        </div>
+      )}
+
       <Modal
         title={
           <div className="grid">

@@ -9,7 +9,7 @@ import {
   Tag,
   Modal,
 } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { blue } from "@ant-design/colors";
 import {
   SearchOutlined,
@@ -18,46 +18,22 @@ import {
   UserAddOutlined,
   FormOutlined,
 } from "@ant-design/icons";
-
-const cardStyle = {
-  borderColor: blue.primary,
-};
-const containerCardBodyStyle = {
-  flex: 1,
-  display: "flex",
-  flexDirection: "row",
-  padding: 5,
-  alignItems: "center",
-  width: "100%",
-};
-const cardBodyStyle = {
-  flex: 1,
-  display: "flex",
-  flexDirection: "column",
-  padding: 12,
-  alignItems: "center",
-  justifyContent: "center",
-  width: "100%",
-};
-const cardBodyStyleList = {
-  flex: 1,
-  display: "flex",
-  flexDirection: "row",
-  padding: 12,
-  alignItems: "center",
-  width: "100%",
-};
-const iconStyle = {
-  backgroundColor: blue.primary,
-  padding: 15,
-  borderRadius: 12,
-  fontSize: 20,
-  color: "#fff",
-};
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { Get, openNofi, Post } from "../../comman";
+import Spinner from "react-bootstrap/Spinner";
+import UTable from "../../UTable";
 
 function PatientListBed() {
+  const token = useSelector(selectCurrentToken);
   const [viewType, setViewType] = useState("list"); //['list', 'card']
   const [searchValue, setSearchValue] = useState("");
+  const [patientList, setPatientList] = useState("");
+
+  const config = {
+    headers: {},
+    params: {},
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -70,29 +46,68 @@ function PatientListBed() {
     setIsModalOpen(false);
   };
 
+  const getPatientList = async () => {
+    config.params.startDate = null;
+    config.params.endDate = null;
+    const response = await Get("service/inpatient-request", token, config);
+    console.log("response Patient List Bed", response);
+    if (response.data != "") {
+      setPatientList(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getPatientList();
+  }, []);
+
   var DATA = [
     {
       value: "jack",
       label: "Jack",
-    },
-    {
-      value: "lucy",
-      label: "Lucy",
-    },
-    {
-      value: "disabled",
-      disabled: true,
-      label: "Disabled",
-    },
-    {
-      value: "Yiminghe",
-      label: "yiminghe",
     },
   ];
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
+
+  const filterTypeList = [
+    {
+      label: "Хэвтэх захиалгатай",
+      value: 0,
+      icon: <BarsOutlined />,
+    },
+    {
+      label: "Хэвтэх зөвшөөрөлтэй",
+      value: 1,
+      icon: <AppstoreOutlined />,
+    },
+  ];
+
+  const column = [
+    {
+      index: "patient.firstName",
+      label: "Овог, Нэр",
+      isView: true,
+      input: "input",
+      col: 24,
+      relation: true,
+    },
+    {
+      index: "cardNumber",
+      label: "Картын дугаар",
+      isView: true,
+      input: "select",
+      col: 24,
+    },
+    {
+      index: "roomId",
+      label: "Өрөөний дугаар",
+      isView: true,
+      input: "select",
+      col: 24,
+    },
+  ];
   return (
     <div className="p-6">
       <Row gutter={[16, 16]}>
@@ -110,18 +125,7 @@ function PatientListBed() {
         <Col span={2}>
           <Segmented
             className="department-bed-segment"
-            options={[
-              {
-                label: "",
-                value: "list",
-                icon: <BarsOutlined />,
-              },
-              {
-                label: "",
-                value: "grid",
-                icon: <AppstoreOutlined />,
-              },
-            ]}
+            options={filterTypeList}
             value={viewType}
             onChange={setViewType}
           />
@@ -164,69 +168,53 @@ function PatientListBed() {
         </Col>
       </Row>
       <Row gutter={[24, 6]} className="mt-4">
-        {viewType == "grid" ? (
-          <>
-            <Col className="gutter-row" span={6}>
-              <Card
-                style={cardStyle}
-                className="rounded-xl cursor-pointer"
-                bodyStyle={cardBodyStyle}
-                onClick={showModal}
-              >
-                <div>
-                  <UserAddOutlined style={iconStyle} />
-                </div>
-                <div>
-                  <div className="text-center mt-2 font-bold">
-                    Б. Бат - Эрдэнэ
-                  </div>
-                  <div className="text-center text-xs">РД: АА99999999</div>
-                  <div className="text-center mt-2">#123456</div>
-                  <div className="text-center">Эрэгтэй</div>
-                  <div className="text-center mt-4">
-                    <Tag color="success" className="rounded-xl mr-0">
-                      2022/11/11
-                    </Tag>
-                  </div>
-                </div>
-              </Card>
-            </Col>
-          </>
-        ) : (
-          <>
-            <Col className="gutter-row" span={24}>
-              <Card
-                style={cardStyle}
-                className="rounded-xl"
-                bodyStyle={containerCardBodyStyle}
-              >
-                <div className="w-3/12 pl-4 font-bold">Нэр</div>
-                <div className="w-2/12 font-bold">Регистр</div>
-                <div className="w-2/12 font-bold">#ID</div>
-                <div className="w-2/12 font-bold">Хүйс</div>
-                <div className="w-2/12 font-bold">Огноо</div>
-              </Card>
-            </Col>
-            <Col className="gutter-row" span={24}>
-              <Card
-                style={cardStyle}
-                className="rounded-xl cursor-pointer"
-                bodyStyle={cardBodyStyleList}
-                onClick={showModal}
-              >
-                <div className="w-3/12 pl-4">Б. Бат - Эрдэнэ</div>
-                <div className="w-2/12 text-xs">РД: АА99999999</div>
-                <div className="w-2/12">#123456</div>
-                <div className="w-2/12">Эрэгтэй</div>
-                <div className="w-2/12">
-                  <Tag color="success" className="rounded-xl mr-0">
-                    2022/11/11
-                  </Tag>
-                </div>
-              </Card>
-            </Col>
-          </>
-        )}
+        <Col className="gutter-row" span={24}>
+          <Card
+            style={styles.cardStyle}
+            className="rounded-xl"
+            bodyStyle={styles.containerCardBodyStyle}
+          >
+            <div className="w-1/5 pl-4" style={styles.titleStyle}>
+              Овог, Нэр
+            </div>
+            <div className="w-2/12" style={styles.titleStyle}>
+              Картын дугаар
+            </div>
+            <div className="w-2/12" style={styles.titleStyle}>
+              Өрөөний дугаар
+            </div>
+            <div className="w-2/12" style={styles.titleStyle}>
+              Регистр
+            </div>
+            <div className="w-1/12" style={styles.titleStyle}>
+              Хүйс
+            </div>
+            <div className="w-1/12" style={styles.titleStyle}>
+              Нас
+            </div>
+            <div className="w-2/12" style={styles.titleStyle}>
+              Хэвтэх өдөр
+            </div>
+            <div className="w-2/12" style={styles.titleStyle}>
+              Гарах өдөр
+            </div>
+            <div className="w-2/12" style={styles.titleStyle}>
+              Захиалгын төрөл
+            </div>
+          </Card>
+        </Col>
+        <Col className="gutter-row" span={24}>
+          <UTable
+            title={"Өвчтөний мэдээлэл"}
+            url={"service/inpatient-request"}
+            column={column}
+            width="20%"
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+          />
+        </Col>
       </Row>
       <Modal
         title="Өвчтөн хуваарилах"
@@ -252,3 +240,47 @@ function PatientListBed() {
 }
 
 export default PatientListBed;
+
+const styles = {
+  cardStyle: {
+    borderColor: blue.primary,
+    marginBottom: 5,
+  },
+  containerCardBodyStyle: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    padding: 5,
+    alignItems: "center",
+    width: "100%",
+  },
+  cardBodyStyle: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    padding: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  cardBodyStyleList: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    padding: 12,
+    alignItems: "center",
+    width: "100%",
+  },
+  iconStyle: {
+    backgroundColor: blue.primary,
+    padding: 15,
+    borderRadius: 12,
+    fontSize: 20,
+    color: "#fff",
+  },
+  titleStyle: {
+    fontSize: 12,
+    color: "#000",
+    fontWeight: "bold",
+  },
+};

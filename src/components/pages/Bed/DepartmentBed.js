@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Segmented,
   Col,
@@ -17,28 +17,43 @@ import {
   SearchOutlined,
   SnippetsOutlined,
 } from "@ant-design/icons";
-import bed from "../../../assets/bed/bed.png";
-import bed_red from "../../../assets/bed/bed_red.png";
-import bed_yellow from "../../../assets/bed/bed_yellow.png";
+import { Spinner } from "react-bootstrap";
 
 const DepartmentBed = (props) => {
-  console.log("rpops", props);
+  console.log("props DepartmentBed", props);
   const [filter, setFilter] = useState("all"); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
+  const [selectedRoomBeds, setSelectedRoomBeds] = useState(""); //Сонгогдсон өрөөний орнууд
   const [selectedBed, setSelectedBed] = useState(""); //Сонгогдсон ор
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { Panel } = Collapse;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const statusList = [
+    { id: 0, label: "Дүүрсэн" },
+    { id: 1, label: "Цэвэрлэх" },
+    { id: 2, label: "Засвартай" },
+    { id: 3, label: "Сул" },
+  ];
+
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleCancel = () => {
+    setSelectedRoomBeds(""); //Өрөөний мэдээлэл хаахад дата хоослох
     setIsModalOpen(false);
   };
-  const selectBed = (data) => {
-    setSelectedBed(data);
+  const selectRoom = (data) => {
+    setSelectedRoomBeds(data); //Өрөөний мэдээлэл state -д хадгалах
   };
+  const selectBed = (data) => {
+    setSelectedBed(data); //Орны мэдээлэл state -д хадгалах
+  };
+
+  useEffect(() => {
+    console.log("selected RoomBeds", selectedRoomBeds);
+    selectedRoomBeds != "" && showModal(); //Өрөөний мэдээлэл SET хийгдсэний дараа MODAL дуудах
+  }, [selectedRoomBeds]);
 
   return (
     <div className="p-6">
@@ -82,59 +97,93 @@ const DepartmentBed = (props) => {
           />
         </Col>
       </Row>
-      <Row gutter={[16, 16]} className="mt-4">
-        <Col className="gutter-row" span={8}>
-          <Card
-            style={styles.cardStyle}
-            className="rounded-xl cursor-pointer"
-            bodyStyle={styles.cardBodyStyle}
-            onClick={showModal}
-          >
-            <div style={{ width: "10%" }}>
-              <SnippetsOutlined style={styles.iconStyle} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <div style={styles.cardRowContainer} className="mb-6">
-                <p>#101 - Энгийн өрөө</p>
-              </div>
-              <div style={styles.cardRowContainer}>
-                <p style={styles.total}>Орны тоо: 4 / 3</p>
-                <Tag color="warning" className="rounded-xl">
-                  1 ор засвартай
-                </Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-        <Col className="gutter-row" span={8}>
-          <Card
-            style={styles.cardStyle}
-            className="rounded-xl cursor-pointer"
-            bodyStyle={styles.cardBodyStyle}
-          >
-            <div style={{ width: "10%" }}>
-              <SnippetsOutlined style={styles.iconStyle} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <div style={styles.cardRowContainer} className="mb-6">
-                <p>#102 - VIP өрөө</p>
-              </div>
-              <div style={styles.cardRowContainer}>
-                <p style={styles.total}>Орны тоо: 4 / 4</p>
-                <Tag color="error" className="rounded-xl">
-                  Дүүрсэн
-                </Tag>
-              </div>
-            </div>
-          </Card>
-        </Col>
-      </Row>
+      {props.data?.rooms != "" ? (
+        <Row gutter={[16, 16]} className="mt-4">
+          {props.data?.rooms?.map((el, index) => {
+            return (
+              <Col className="gutter-row" span={8} key={index}>
+                <Card
+                  style={styles.cardStyle}
+                  className="rounded-xl cursor-pointer"
+                  bodyStyle={styles.cardBodyStyle}
+                  onClick={() => selectRoom(el)}
+                >
+                  <div style={{ width: "10%" }}>
+                    <SnippetsOutlined style={styles.iconStyle} />
+                  </div>
+                  <div style={{ width: "90%" }}>
+                    <div style={styles.cardRowContainer} className="mb-6">
+                      <p style={styles.total}>
+                        {el.roomNumber} -{" "}
+                        {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
+                      </p>
+                      <p>Орны тоо: {el.beds.length}</p>
+                    </div>
+                    <div style={styles.statusRowContainer}>
+                      <Tag color="success" className="rounded-xl">
+                        Сул:{" "}
+                        <span>
+                          {el.beds?.reduce((sum, val) => {
+                            if (val.status === 1) {
+                              sum += 1;
+                            }
+                            return sum;
+                          }, 0)}
+                        </span>
+                      </Tag>
+                      <Tag color="error" className="rounded-xl">
+                        Засвартай:{" "}
+                        <span>
+                          {el.beds?.reduce((sum, val) => {
+                            if (val.status === 2) {
+                              sum += 1;
+                            }
+                            return sum;
+                          }, 0)}
+                        </span>
+                      </Tag>
+                      <Tag color="warning" className="rounded-xl">
+                        Дүүрсэн:{" "}
+                        <span>
+                          {el.beds?.reduce((sum, val) => {
+                            if (val.status === 0) {
+                              sum += 1;
+                            }
+                            return sum;
+                          }, 0)}
+                        </span>
+                      </Tag>
+                      <Tag color="processing" className="rounded-xl">
+                        Цэвэрлэх:{" "}
+                        <span>
+                          {el.beds?.reduce((sum, val) => {
+                            if (val.status === 1) {
+                              sum += 1;
+                            }
+                            return sum;
+                          }, 0)}
+                        </span>
+                      </Tag>
+                    </div>
+                  </div>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      ) : (
+        <div className="text-center">
+          <Spinner animation="grow" style={{ color: "#1890ff" }} />
+        </div>
+      )}
       <Modal
         title={
           <div className="grid">
             <span>Өрөөний мэдээлэл</span>
             <span className="text-xs">
-              Тасаг: Нүд <LineOutlined /> Өрөө: 101 <LineOutlined /> Орны тоо: 4
+              Тасаг: {props.data?.name} <LineOutlined /> Өрөө:{" "}
+              {selectedRoomBeds?.roomNumber} <LineOutlined /> Орны тоо:{" "}
+              {selectedRoomBeds?.beds?.length}
             </span>
           </div>
         }
@@ -143,56 +192,68 @@ const DepartmentBed = (props) => {
         width={600}
         footer={null}
       >
-        {/* default rgb(188 218 230 / 60%)
-        red rgb(250 82 82 / 60%)
-        yellow rgb(252 196 25 / 60%) */}
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div
-            style={{
-              ...styles.bedContainer,
-              ...{
-                backgroundColor: "rgb(188 218 230 / 60%)",
-              },
-            }}
-            onClick={() => selectBed("001")}
-          >
-            <img src={bed} style={{ zIndex: 1 }} draggable="false" />
-            <span style={styles.bedText}>#001</span>
-          </div>
-          <div
-            style={{
-              ...styles.bedContainer,
-              ...{
-                backgroundColor: "rgb(188 218 230 / 60%)",
-              },
-            }}
-          >
-            <img src={bed} style={{ zIndex: 1 }} draggable="false" />
-            <span style={styles.bedText}>#002</span>
-          </div>
-          <div
-            style={{
-              ...styles.bedContainer,
-              ...{
-                backgroundColor: "rgb(252 196 25 / 60%)",
-              },
-            }}
-          >
-            <img src={bed_yellow} draggable="false" />
-            <span style={styles.bedText}>#003</span>
-          </div>
-          <div
-            style={{
-              ...styles.bedContainer,
-              ...{
-                backgroundColor: "rgb(250 82 82 / 60%)",
-              },
-            }}
-          >
-            <img src={bed_red} draggable="false" />
-            <span style={styles.bedText}>#004</span>
-          </div>
-        </div>
+        <Row
+          gutter={{
+            xs: 8,
+            sm: 16,
+            md: 24,
+            lg: 32,
+          }}
+        >
+          {selectedRoomBeds != "" && selectedRoomBeds.beds != "" ? (
+            <>
+              {selectedRoomBeds.beds.map((el, index) => {
+                return (
+                  <Col
+                    className="gutter-row mb-4 text-center"
+                    span={6}
+                    key={index}
+                  >
+                    <div
+                      style={{
+                        ...styles.bedContainer,
+                        ...{
+                          backgroundColor: "rgb(188 218 230 / 40%)",
+                        },
+                      }}
+                      onClick={() => selectBed(el)}
+                    >
+                      <img
+                        src={
+                          el.status === 0
+                            ? require("../../../assets/bed/hunte.png")
+                            : el.status === 1
+                            ? require("../../../assets/bed/tsewerleh.png")
+                            : el.status === 2
+                            ? require("../../../assets/bed/zaswartai.png")
+                            : el.status === 3
+                            ? require("../../../assets/bed/sul.png")
+                            : require("../../../assets/bed/sul.png")
+                        }
+                        style={{ zIndex: 1 }}
+                        draggable="false"
+                      />
+                    </div>
+                    <span style={styles.bedText}>
+                      {el.bedNumber} -{" "}
+                      {statusList.map((i) => {
+                        return i.id === el.status ? i.label : "";
+                      })}
+                    </span>
+                  </Col>
+                );
+              })}
+            </>
+          ) : selectedRoomBeds.beds?.length === 0 ? (
+            <div className="text-center w-100">
+              <p>Бүртгэлтэй ор байхгүй байна.</p>
+            </div>
+          ) : (
+            <div className="text-center">
+              <Spinner animation="grow" style={{ color: "#1890ff" }} />
+            </div>
+          )}
+        </Row>
         <Divider orientation="left" className="text-sm my-2">
           Өвчтөний мэдээлэл
         </Divider>
@@ -222,13 +283,13 @@ const DepartmentBed = (props) => {
                   style={{
                     ...styles.cardBodyStyleList,
                     ...{
-                      borderColor: "red",
+                      borderColor: "#1890ff",
                     },
                   }}
                   className="rounded-xl cursor-pointer"
                 >
                   <div className="w-3/12 pl-4">Б. Бат - Эрдэнэ</div>
-                  <div className="w-2/12 text-xs">РД: АА99999999</div>
+                  <div className="w-2/12 text-xs">АА99999999</div>
                   <div className="w-2/12">#123456</div>
                   <div className="w-2/12">Эрэгтэй</div>
                   <div className="w-2/12">
@@ -285,6 +346,11 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  statusRowContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
   bedContainer: {
     padding: 5,
     paddingLeft: 10,
@@ -296,7 +362,6 @@ const styles = {
   },
   bedText: {
     fontWeight: "bold",
-    color: "#fff",
   },
   modalHeader: {
     display: "grid",
