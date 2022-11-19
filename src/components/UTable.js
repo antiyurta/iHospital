@@ -73,12 +73,15 @@ function UTable(props) {
     form.resetFields();
     setIsModalVisible(true);
   };
-  const viewModal = async (id) => {
-    const response = await Get(props.url + "/" + id, token, config);
-    if (response.length != 0) {
-      setView(response);
-      setIsViewModalVisible(true);
-    }
+  const viewModal = (row) => {
+    setView(row);
+    setIsViewModalVisible(true);
+    // const response = await Get(props.url + "/" + id, token, config);
+    // if (response.length != 0) {
+    //   setView(response);
+    //   console.log("=======>", response);
+    //   setIsViewModalVisible(true);
+    // }
   };
   const editModal = async (id) => {
     setEditMode(true);
@@ -113,7 +116,6 @@ function UTable(props) {
       config.params = { ...config.params, ...props.params.params };
     }
     const response = await Get(props.url, token, config);
-    console.log("UTBALE response", response);
     if (response.status === 401) {
       navigate("/login");
     } else {
@@ -152,7 +154,6 @@ function UTable(props) {
     console.log("Failed:", errorInfo);
   };
   const inputChecker = (index, row) => {
-    console.log("index", index, "----", "row", row);
     if (props.column[index].input === "select") {
       return props.column[index].inputData?.map((data) => {
         if (data.id === row) return data[`${props.column[index].relIndex}`];
@@ -183,7 +184,7 @@ function UTable(props) {
   useEffect(() => {
     onStart(1);
     ScrollRef(scrollRef);
-  }, []);
+  }, [props.isRefresh]);
   return (
     <>
       <Card
@@ -255,7 +256,6 @@ function UTable(props) {
                         {meta.page * meta.limit - (meta.limit - index - 1)}
                       </td>
                       {props.column.map((column, index) => {
-                        console.log("COLUMN", column);
                         return column.relation ? (
                           <td key={index}>
                             {inputChecker(
@@ -266,7 +266,9 @@ function UTable(props) {
                         ) : (
                           column.isView && (
                             <td key={index}>
-                              {inputChecker(index, row[`${column.index}`])}
+                              {column.staticData
+                                ? column.staticData(row[`${column.index}`])
+                                : inputChecker(index, row[`${column.index}`])}
                             </td>
                           )
                         );
@@ -275,7 +277,7 @@ function UTable(props) {
                         {props.isRead && (
                           <Button
                             type="link"
-                            onClick={() => viewModal(row.id)}
+                            onClick={() => viewModal(row)}
                             title="Харах"
                             style={{ paddingRight: 5 }}
                           >
@@ -339,10 +341,16 @@ function UTable(props) {
         }}
       >
         <Descriptions bordered>
-          {props.column.map((element, index) => {
+          {props.column.map((element, idx) => {
             return (
-              <Descriptions.Item key={index} label={element.label}>
-                {inputChecker(index, view[`${element.index}`])}
+              <Descriptions.Item key={idx} label={element.label}>
+                {inputChecker(idx, view[`${element.index}`])}
+                {element.relation
+                  ? inputChecker(
+                      idx,
+                      view[`${element.index[0]}`]?.[`${element.index[1]}`]
+                    )
+                  : inputChecker(idx, view[`${element.index}`])}
               </Descriptions.Item>
             );
           })}
