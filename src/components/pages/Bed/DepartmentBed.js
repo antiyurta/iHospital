@@ -10,6 +10,7 @@ import {
   Divider,
   Collapse,
   Button,
+  notification,
 } from "antd";
 import { blue } from "@ant-design/colors";
 import {
@@ -18,16 +19,26 @@ import {
   SnippetsOutlined,
 } from "@ant-design/icons";
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { Get, Post } from "../../comman";
+import orderType from "./orderType.json";
 
 const DepartmentBed = (props) => {
-  console.log("props DepartmentBed", props);
+  const token = useSelector(selectCurrentToken);
   const [filter, setFilter] = useState("all"); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
   const [selectedRoomBeds, setSelectedRoomBeds] = useState(""); //Сонгогдсон өрөөний орнууд
   const [selectedBed, setSelectedBed] = useState(""); //Сонгогдсон ор
+  const [orderedPatientList, setOrderedPatientList] = useState(""); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { Panel } = Collapse;
+
+  const config = {
+    headers: {},
+    params: {},
+  };
 
   const statusList = [
     { id: 0, label: "Дүүрсэн" },
@@ -47,13 +58,52 @@ const DepartmentBed = (props) => {
     setSelectedRoomBeds(data); //Өрөөний мэдээлэл state -д хадгалах
   };
   const selectBed = (data) => {
-    setSelectedBed(data); //Орны мэдээлэл state -д хадгалах
+    if (data.id === selectedBed.id) {
+      setSelectedBed(""); //Орны мэдээлэл state -д хадгалах
+    } else {
+      setSelectedBed(data); //Орны мэдээлэл state -д хадгалах
+    }
+  };
+
+  //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт авах
+  const getOrderedPatient = async () => {
+    config.params.process = "0,1"; //Хэвтэх захиалгатай = 0, Хэвтэх зөвшөөрөлтэй өвтөн = 1
+    const response = await Get("service/inpatient-request", token, config);
+    if (response.data.length != 0) {
+      // console.log("response get Ordered Patient ====>", response.data);
+      setOrderedPatientList(response.data);
+    }
   };
 
   useEffect(() => {
-    console.log("selected RoomBeds", selectedRoomBeds);
-    selectedRoomBeds != "" && showModal(); //Өрөөний мэдээлэл SET хийгдсэний дараа MODAL дуудах
+    if (selectedRoomBeds != "") {
+      showModal(); //Өрөөний мэдээлэл SET хийгдсэний дараа MODAL дуудах
+      getOrderedPatient();
+    }
   }, [selectedRoomBeds]);
+
+  //Оронд хуваарилж хэвтүүлэх
+  const setPatientBed = async (patient_id) => {
+    if (selectedBed === "") {
+      notification["warning"]({
+        message: `Өвчтөн хэвтүүлэх ор сонгоно уу.`,
+        description: ``,
+        duration: 2,
+      });
+    } else {
+      console.log("ELSE");
+      // data.patientId = "";
+      // data.bedId = "";
+      // const response = await Post("service/inpatient-request/bed", token, config);
+      // if (response.data.length != 0) {
+      //   console.log("response set PatientBed ====>", response.data);
+      // }
+    }
+  };
+
+  const selectFilter = (data) => {
+    setFilter(data);
+  };
 
   return (
     <div className="p-6">
@@ -65,16 +115,11 @@ const DepartmentBed = (props) => {
             options={[
               {
                 label: "Бүгд",
-                value: "all",
+                value: "",
                 icon: null,
               },
               {
                 label: "Сул өрөө",
-                value: "0",
-                icon: null,
-              },
-              {
-                label: "Дүүрсэн өрөө",
                 value: "1",
                 icon: null,
               },
@@ -83,9 +128,14 @@ const DepartmentBed = (props) => {
                 value: "2",
                 icon: null,
               },
+              {
+                label: "Дүүрсэн өрөө",
+                value: "0",
+                icon: null,
+              },
             ]}
             value={filter}
-            onChange={setFilter}
+            onChange={(e) => selectFilter(e)}
           />
         </Col>
         <Col span={8} offset={8}>
@@ -99,6 +149,7 @@ const DepartmentBed = (props) => {
       </Row>
       {props.data?.rooms != "" ? (
         <Row gutter={[16, 16]} className="mt-4">
+          {/* .filter(obj => obj.tech.includes("React")) */}
           {props.data?.rooms?.map((el, index) => {
             return (
               <Col className="gutter-row" span={8} key={index}>
@@ -153,7 +204,7 @@ const DepartmentBed = (props) => {
                           }, 0)}
                         </span>
                       </Tag>
-                      <Tag color="processing" className="rounded-xl">
+                      {/* <Tag color="processing" className="rounded-xl">
                         Цэвэрлэх:{" "}
                         <span>
                           {el.beds?.reduce((sum, val) => {
@@ -163,7 +214,7 @@ const DepartmentBed = (props) => {
                             return sum;
                           }, 0)}
                         </span>
-                      </Tag>
+                      </Tag> */}
                     </div>
                   </div>
                 </Card>
@@ -213,7 +264,8 @@ const DepartmentBed = (props) => {
                       style={{
                         ...styles.bedContainer,
                         ...{
-                          backgroundColor: "rgb(188 218 230 / 40%)",
+                          borderColor:
+                            selectedBed.id === el.id ? blue.primary : null,
                         },
                       }}
                       onClick={() => selectBed(el)}
@@ -265,55 +317,82 @@ const DepartmentBed = (props) => {
           >
             <div className="w-3/12 pl-4 font-bold">Нэр</div>
             <div className="w-2/12 font-bold">Регистр</div>
-            <div className="w-2/12 font-bold">#ID</div>
-            <div className="w-2/12 font-bold">Хүйс</div>
-            <div className="w-2/12 font-bold">Огноо</div>
+            <div className="w-2/12 font-bold">Картын дугаар</div>
+            <div className="w-1/12 font-bold">Хүйс</div>
+            <div className="w-3/12 font-bold">Захиалга</div>
           </Card>
         </Col>
-        <Col className="gutter-row mt-4" span={24}>
-          <Collapse
-            accordion
-            expandIconPosition="end"
-            ghost
-            className="bed-collapse"
-          >
-            <Panel
-              header={
-                <div
-                  style={{
-                    ...styles.cardBodyStyleList,
-                    ...{
-                      borderColor: "#1890ff",
-                    },
-                  }}
-                  className="rounded-xl cursor-pointer"
+        <Col className="gutter-row mt-2" span={24}>
+          {orderedPatientList &&
+            orderedPatientList.map((el, index) => {
+              return (
+                <Collapse
+                  accordion
+                  expandIconPosition="end"
+                  ghost
+                  className="bed-collapse"
+                  key={index}
                 >
-                  <div className="w-3/12 pl-4">Б. Бат - Эрдэнэ</div>
-                  <div className="w-2/12 text-xs">АА99999999</div>
-                  <div className="w-2/12">#123456</div>
-                  <div className="w-2/12">Эрэгтэй</div>
-                  <div className="w-2/12">
-                    <Tag color="success" className="rounded-xl mr-0">
-                      2022/11/11
-                    </Tag>
-                  </div>
-                </div>
-              }
-              key="1"
-            >
-              <div>
-                <p>AA</p>
-                <div className="text-right">
-                  <Button className="mr-2" danger>
-                    Гаргах
-                  </Button>
-                  <Button type="primary" className="custom-primary-btn">
-                    Шилжүүлэх
-                  </Button>
-                </div>
-              </div>
-            </Panel>
-          </Collapse>
+                  <Panel
+                    header={
+                      <div
+                        style={{
+                          ...styles.cardBodyStyleList,
+                          ...{},
+                        }}
+                        className="rounded-xl cursor-pointer"
+                      >
+                        <div className="w-3/12 pl-4">
+                          {el.patient?.lastName?.substr(0, 1)}.{" "}
+                          {el.patient?.firstName}
+                        </div>
+                        <div className="w-2/12 text-xs">
+                          {el.patient?.registerNumber}
+                        </div>
+                        <div className="w-2/12">{el.patient?.cardNumber}</div>
+                        <div className="w-1/12">
+                          {el.patient?.genderType === "MAN" ? "Эр" : "Эм"}
+                        </div>
+                        <div className="w-3/12">
+                          {orderType.map((item, index) => {
+                            if (item.value === el.process) {
+                              return (
+                                <>
+                                  {/* <img
+                                    src={require(`../../../assets/bed/${item.img}`)}
+                                    width="20"
+                                    className="inline-block"
+                                    key={index}
+                                  /> */}
+                                  <span>{item.label}</span>
+                                </>
+                              );
+                            }
+                          })}
+                        </div>
+                      </div>
+                    }
+                    key="1"
+                  >
+                    <div>
+                      <p>AA</p>
+                      <div className="text-right">
+                        {/* <Button className="mr-2" danger>
+                          Гаргах
+                        </Button> */}
+                        <Button
+                          type="primary"
+                          className="custom-primary-btn"
+                          onClick={() => setPatientBed(el.patient?.id)}
+                        >
+                          Хэвтүүлэх
+                        </Button>
+                      </div>
+                    </div>
+                  </Panel>
+                </Collapse>
+              );
+            })}
         </Col>
       </Modal>
     </div>
@@ -359,6 +438,8 @@ const styles = {
     textAlign: "center",
     cursor: "pointer",
     pointerEvent: "none",
+    borderWidth: 2,
+    backgroundColor: "rgb(188 218 230 / 40%)",
   },
   bedText: {
     fontWeight: "bold",
@@ -378,11 +459,12 @@ const styles = {
     flex: 1,
     display: "flex",
     flexDirection: "row",
-    padding: 12,
+    padding: 5,
     paddingLeft: 0,
     alignItems: "center",
     width: "100%",
     borderWidth: 1,
+    marginTop: 5,
   },
   patientInformationContainer: {},
 };

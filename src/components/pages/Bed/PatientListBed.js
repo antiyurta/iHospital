@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi, Post } from "../../comman";
 import UTable from "../../UTable";
+import orderType from "./orderType.json";
 
 function PatientListBed() {
   const token = useSelector(selectCurrentToken);
@@ -28,44 +29,6 @@ function PatientListBed() {
   const assignPatient = () => {
     setIsModalOpen(false);
   };
-
-  const filterTypeList = [
-    {
-      label: "Хэвтэх захиалгатай",
-      value: 0,
-      img: "filter0.png",
-    },
-    {
-      label: "Хэвтэх зөвшөөрөлтэй",
-      value: 1,
-      img: "filter1.png",
-    },
-    {
-      label: "Хэвтэж байгаа",
-      value: 2,
-      img: "filter2.png",
-    },
-    {
-      label: "Гарах захиалгатай",
-      value: 3,
-      img: "filter3.png",
-    },
-    {
-      label: "Гарах зөвшөөрөлтэй",
-      value: 4,
-      img: "filter4.png",
-    },
-    {
-      label: "Өрөө суллаагүй",
-      value: 5,
-      img: "filter5.png",
-    },
-    {
-      label: "Эмнэлгээс гарсан",
-      value: 6,
-      img: "filter6.png",
-    },
-  ];
 
   const column = [
     {
@@ -146,7 +109,7 @@ function PatientListBed() {
       staticData: (type) => {
         return (
           <img
-            src={require(`../../../assets/bed/${filterTypeList[type].img}`)}
+            src={require(`../../../assets/bed/${orderType[type].img}`)}
             width="20"
             className="inline-block"
           />
@@ -171,7 +134,7 @@ function PatientListBed() {
     <div className="p-6">
       <Row gutter={[16, 16]} className="mt-4">
         <Col span={2} className="contents">
-          {filterTypeList.map((tag) => {
+          {orderType.map((tag) => {
             return (
               <div
                 key={tag.value}
