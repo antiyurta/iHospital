@@ -116,6 +116,7 @@ function UTable(props) {
       config.params = { ...config.params, ...props.params.params };
     }
     const response = await Get(props.url, token, config);
+    console.log("res", response);
     if (response.status === 401) {
       navigate("/login");
     } else {
@@ -191,6 +192,7 @@ function UTable(props) {
         bordered={false}
         className="header-solid max-h-max rounded-md"
         title={props.title}
+        bodyStyle={{ padding: 0 }}
         extra={
           props.isCreate && (
             <Button
@@ -258,10 +260,18 @@ function UTable(props) {
                       {props.column.map((column, index) => {
                         return column.relation ? (
                           <td key={index}>
-                            {inputChecker(
-                              index,
-                              row[`${column.index[0]}`][`${column.index[1]}`]
-                            )}
+                            {column.staticData
+                              ? column.staticData(
+                                  row[`${column.index[0]}`][
+                                    `${column.index[1]}`
+                                  ]
+                                )
+                              : inputChecker(
+                                  index,
+                                  row[`${column.index[0]}`][
+                                    `${column.index[1]}`
+                                  ]
+                                )}
                           </td>
                         ) : (
                           column.isView && (

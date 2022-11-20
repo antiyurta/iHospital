@@ -107,7 +107,12 @@ const MainBed = () => {
             <Route path="/patient_list" element={<PatientListBed />} />
             <Route
               path="/:id/*"
-              element={<DepartmentBed data={selectedStructureData} />}
+              element={
+                <DepartmentBed
+                  data={selectedStructureData}
+                  callFn={(dep_id) => getStructureById(dep_id)}
+                />
+              }
             />
           </Routes>
         </Content>

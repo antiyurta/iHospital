@@ -1,4 +1,4 @@
-import { Col, Row, Button, Tag, Modal } from "antd";
+import { Col, Row, Button, Tag, Modal, Input } from "antd";
 import React, { useState, useEffect } from "react";
 import { blue } from "@ant-design/colors";
 import { useSelector } from "react-redux";
@@ -6,13 +6,16 @@ import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi, Post } from "../../comman";
 import UTable from "../../UTable";
 import orderType from "./orderType.json";
+import { SearchOutlined } from "@ant-design/icons";
 
 function PatientListBed() {
   const token = useSelector(selectCurrentToken);
   const [selectedTags, setSelectedTags] = useState([]);
   const [testParam, setTestParam] = useState(true);
+  const [searchValue, setSearchValue] = useState("");
 
   const { CheckableTag } = Tag;
+  const { Search } = Input;
 
   const config = {
     headers: {},
@@ -33,26 +36,30 @@ function PatientListBed() {
   const column = [
     {
       index: ["patient", "lastName"],
-      label: "Овог",
+      label: "",
       isView: true,
       input: "input",
-      col: 24,
       relation: true,
+      staticData: (data) => {
+        return <>{data?.substr(0, 1)}.</>;
+      },
+      col: 6,
     },
     {
       index: ["patient", "firstName"],
-      label: "Нэр",
+      label: "Овог Нэр",
       isView: true,
       input: "input",
       col: 24,
       relation: true,
     },
     {
-      index: "roomId",
-      label: "Өрөөний дугаар",
+      index: ["rooms", "roomNumber"],
+      label: "Өрөө",
       isView: true,
-      input: "select",
+      input: "input",
       col: 24,
+      relation: true,
     },
     {
       index: ["patient", "cardNumber"],
@@ -65,7 +72,6 @@ function PatientListBed() {
     {
       index: ["patient", "registerNumber"],
       label: "Регистр",
-      isSearch: true,
       isView: true,
       input: "input",
       col: 24,
@@ -93,6 +99,9 @@ function PatientListBed() {
       isView: true,
       input: "date",
       col: 24,
+      staticData: (data) => {
+        return <>{data?.substr(0, 10)}</>;
+      },
     },
     {
       index: "endDate",
@@ -100,6 +109,9 @@ function PatientListBed() {
       isView: true,
       input: "date",
       col: 24,
+      staticData: (data) => {
+        return <>{data?.substr(0, 10)}</>;
+      },
     },
     {
       index: "process",
@@ -130,9 +142,24 @@ function PatientListBed() {
     setTestParam(!testParam);
   }, [selectedTags]);
 
+  useEffect(() => {
+    setTestParam(!testParam);
+  }, [searchValue]);
+
   return (
     <div className="p-6">
-      <Row gutter={[16, 16]} className="mt-4">
+      <Row>
+        <Col span={6}>
+          <Search
+            placeholder=""
+            allowClear
+            enterButton="Хайх"
+            size="large"
+            onSearch={(e) => setSearchValue(e)}
+          />
+        </Col>
+      </Row>
+      <Row className="mt-4">
         <Col span={2} className="contents">
           {orderType.map((tag) => {
             return (
@@ -175,7 +202,12 @@ function PatientListBed() {
           <UTable
             title={"Өвчтөний мэдээлэл"}
             url={"service/inpatient-request"}
-            params={{ params: { process: selectedTags.toString() } }}
+            params={{
+              params: {
+                process: selectedTags.toString(),
+                filter: searchValue,
+              },
+            }}
             column={column}
             width="60%"
             isCreate={false}

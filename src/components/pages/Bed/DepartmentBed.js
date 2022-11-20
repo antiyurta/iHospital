@@ -11,6 +11,7 @@ import {
   Collapse,
   Button,
   notification,
+  Popconfirm,
 } from "antd";
 import { blue } from "@ant-design/colors";
 import {
@@ -21,17 +22,20 @@ import {
 import { Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, Post } from "../../comman";
+import { Get, Patch } from "../../comman";
 import orderType from "./orderType.json";
+import { useLocation } from "react-router-dom";
 
 const DepartmentBed = (props) => {
   const token = useSelector(selectCurrentToken);
-  const [filter, setFilter] = useState("all"); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
+  const [filter, setFilter] = useState(""); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
   const [selectedRoomBeds, setSelectedRoomBeds] = useState(""); //Сонгогдсон өрөөний орнууд
   const [selectedBed, setSelectedBed] = useState(""); //Сонгогдсон ор
   const [orderedPatientList, setOrderedPatientList] = useState(""); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState({});
+  let location = useLocation();
 
   const { Panel } = Collapse;
 
@@ -53,11 +57,17 @@ const DepartmentBed = (props) => {
   const handleCancel = () => {
     setSelectedRoomBeds(""); //Өрөөний мэдээлэл хаахад дата хоослох
     setIsModalOpen(false);
+    setSelectedBed("");
   };
-  const selectRoom = (data) => {
-    setSelectedRoomBeds(data); //Өрөөний мэдээлэл state -д хадгалах
+  const selectRoom = async (room_id) => {
+    const response = await Get(`organization/room/${room_id}`, token, config);
+    if (response) {
+      console.log("response get Ordered Patient ====>", response);
+      setSelectedRoomBeds(response); //Өрөөний мэдээлэл state -д хадгалах
+    }
   };
   const selectBed = (data) => {
+    // console.log("DATA", data);
     if (data.id === selectedBed.id) {
       setSelectedBed(""); //Орны мэдээлэл state -д хадгалах
     } else {
@@ -83,7 +93,7 @@ const DepartmentBed = (props) => {
   }, [selectedRoomBeds]);
 
   //Оронд хуваарилж хэвтүүлэх
-  const setPatientBed = async (patient_id) => {
+  const setPatientBed = async (inpatient_request_id) => {
     if (selectedBed === "") {
       notification["warning"]({
         message: `Өвчтөн хэвтүүлэх ор сонгоно уу.`,
@@ -91,18 +101,35 @@ const DepartmentBed = (props) => {
         duration: 2,
       });
     } else {
-      console.log("ELSE");
-      // data.patientId = "";
-      // data.bedId = "";
-      // const response = await Post("service/inpatient-request/bed", token, config);
-      // if (response.data.length != 0) {
-      //   console.log("response set PatientBed ====>", response.data);
-      // }
+      data.roomId = selectedBed.roomId;
+      data.bedId = selectedBed.id;
+      data.isOut = false;
+      const response = await Patch(
+        `service/inpatient-request/bed/${inpatient_request_id}`,
+        token,
+        config,
+        data
+      );
+      if (response === 200) {
+        getOrderedPatient();
+        props.callFn(location?.pathname?.split("/").pop()); // Тасагийн ID current route -с авах
+        setSelectedRoomBeds(selectedRoomBeds);
+        setSelectedBed("");
+        selectRoom(selectedBed.roomId);
+      }
+      // console.log("response set PatientBed ====>", response);
     }
   };
 
   const selectFilter = (data) => {
     setFilter(data);
+  };
+
+  const confirm = (e) => {
+    console.log("Click on Yes", e);
+  };
+  const cancel = (e) => {
+    console.log("Click on No", e);
   };
 
   return (
@@ -150,61 +177,63 @@ const DepartmentBed = (props) => {
       {props.data?.rooms != "" ? (
         <Row gutter={[16, 16]} className="mt-4">
           {/* .filter(obj => obj.tech.includes("React")) */}
-          {props.data?.rooms?.map((el, index) => {
-            return (
-              <Col className="gutter-row" span={8} key={index}>
-                <Card
-                  style={styles.cardStyle}
-                  className="rounded-xl cursor-pointer"
-                  bodyStyle={styles.cardBodyStyle}
-                  onClick={() => selectRoom(el)}
-                >
-                  <div style={{ width: "10%" }}>
-                    <SnippetsOutlined style={styles.iconStyle} />
-                  </div>
-                  <div style={{ width: "90%" }}>
-                    <div style={styles.cardRowContainer} className="mb-6">
-                      <p style={styles.total}>
-                        {el.roomNumber} -{" "}
-                        {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
-                      </p>
-                      <p>Орны тоо: {el.beds.length}</p>
+          {props.data?.rooms
+            ?.filter((obj) => obj.roomNumber.includes(searchValue)) //Өрөөний дугаараар хайх
+            .map((el, index) => {
+              return (
+                <Col className="gutter-row" span={8} key={index}>
+                  <Card
+                    style={styles.cardStyle}
+                    className="rounded-xl cursor-pointer"
+                    bodyStyle={styles.cardBodyStyle}
+                    onClick={() => selectRoom(el.id)}
+                  >
+                    <div style={{ width: "10%" }}>
+                      <SnippetsOutlined style={styles.iconStyle} />
                     </div>
-                    <div style={styles.statusRowContainer}>
-                      <Tag color="success" className="rounded-xl">
-                        Сул:{" "}
-                        <span>
-                          {el.beds?.reduce((sum, val) => {
-                            if (val.status === 1) {
-                              sum += 1;
-                            }
-                            return sum;
-                          }, 0)}
-                        </span>
-                      </Tag>
-                      <Tag color="error" className="rounded-xl">
-                        Засвартай:{" "}
-                        <span>
-                          {el.beds?.reduce((sum, val) => {
-                            if (val.status === 2) {
-                              sum += 1;
-                            }
-                            return sum;
-                          }, 0)}
-                        </span>
-                      </Tag>
-                      <Tag color="warning" className="rounded-xl">
-                        Дүүрсэн:{" "}
-                        <span>
-                          {el.beds?.reduce((sum, val) => {
-                            if (val.status === 0) {
-                              sum += 1;
-                            }
-                            return sum;
-                          }, 0)}
-                        </span>
-                      </Tag>
-                      {/* <Tag color="processing" className="rounded-xl">
+                    <div style={{ width: "90%" }}>
+                      <div style={styles.cardRowContainer} className="mb-6">
+                        <p style={styles.total}>
+                          {el.roomNumber} -{" "}
+                          {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
+                        </p>
+                        <p>Орны тоо: {el.beds.length}</p>
+                      </div>
+                      <div style={styles.statusRowContainer}>
+                        <Tag color="success" className="rounded-xl">
+                          Сул:{" "}
+                          <span>
+                            {el.beds?.reduce((sum, val) => {
+                              if (val.status === 3) {
+                                sum += 1;
+                              }
+                              return sum;
+                            }, 0)}
+                          </span>
+                        </Tag>
+                        <Tag color="error" className="rounded-xl">
+                          Засвартай:{" "}
+                          <span>
+                            {el.beds?.reduce((sum, val) => {
+                              if (val.status === 2) {
+                                sum += 1;
+                              }
+                              return sum;
+                            }, 0)}
+                          </span>
+                        </Tag>
+                        <Tag color="warning" className="rounded-xl">
+                          Дүүрсэн:{" "}
+                          <span>
+                            {el.beds?.reduce((sum, val) => {
+                              if (val.status === 0) {
+                                sum += 1;
+                              }
+                              return sum;
+                            }, 0)}
+                          </span>
+                        </Tag>
+                        {/* <Tag color="processing" className="rounded-xl">
                         Цэвэрлэх:{" "}
                         <span>
                           {el.beds?.reduce((sum, val) => {
@@ -215,12 +244,12 @@ const DepartmentBed = (props) => {
                           }, 0)}
                         </span>
                       </Tag> */}
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </Col>
-            );
-          })}
+                  </Card>
+                </Col>
+              );
+            })}
         </Row>
       ) : (
         <div className="text-center">
@@ -260,32 +289,41 @@ const DepartmentBed = (props) => {
                     span={6}
                     key={index}
                   >
-                    <div
-                      style={{
-                        ...styles.bedContainer,
-                        ...{
-                          borderColor:
-                            selectedBed.id === el.id ? blue.primary : null,
-                        },
-                      }}
-                      onClick={() => selectBed(el)}
+                    <Popconfirm
+                      title="Are you sure to delete this task?"
+                      onConfirm={confirm}
+                      onCancel={cancel}
+                      okText="Гаргах"
+                      cancelText="Шилжүүлэх"
+                      okType="warning"
                     >
-                      <img
-                        src={
-                          el.status === 0
-                            ? require("../../../assets/bed/hunte.png")
-                            : el.status === 1
-                            ? require("../../../assets/bed/tsewerleh.png")
-                            : el.status === 2
-                            ? require("../../../assets/bed/zaswartai.png")
-                            : el.status === 3
-                            ? require("../../../assets/bed/sul.png")
-                            : require("../../../assets/bed/sul.png")
-                        }
-                        style={{ zIndex: 1 }}
-                        draggable="false"
-                      />
-                    </div>
+                      <div
+                        style={{
+                          ...styles.bedContainer,
+                          ...{
+                            borderColor:
+                              selectedBed.id === el.id ? blue.primary : null,
+                          },
+                        }}
+                        onClick={() => el.status === 3 && selectBed(el)}
+                      >
+                        <img
+                          src={
+                            el.status === 0
+                              ? require("../../../assets/bed/hunte.png")
+                              : el.status === 1
+                              ? require("../../../assets/bed/tsewerleh.png")
+                              : el.status === 2
+                              ? require("../../../assets/bed/zaswartai.png")
+                              : el.status === 3
+                              ? require("../../../assets/bed/sul.png")
+                              : require("../../../assets/bed/sul.png")
+                          }
+                          style={{ zIndex: 1 }}
+                          draggable="false"
+                        />
+                      </div>
+                    </Popconfirm>
                     <span style={styles.bedText}>
                       {el.bedNumber} -{" "}
                       {statusList.map((i) => {
@@ -357,7 +395,7 @@ const DepartmentBed = (props) => {
                           {orderType.map((item, index) => {
                             if (item.value === el.process) {
                               return (
-                                <>
+                                <div key={index}>
                                   {/* <img
                                     src={require(`../../../assets/bed/${item.img}`)}
                                     width="20"
@@ -365,7 +403,7 @@ const DepartmentBed = (props) => {
                                     key={index}
                                   /> */}
                                   <span>{item.label}</span>
-                                </>
+                                </div>
                               );
                             }
                           })}
@@ -383,7 +421,7 @@ const DepartmentBed = (props) => {
                         <Button
                           type="primary"
                           className="custom-primary-btn"
-                          onClick={() => setPatientBed(el.patient?.id)}
+                          onClick={() => setPatientBed(el.id)}
                         >
                           Хэвтүүлэх
                         </Button>
