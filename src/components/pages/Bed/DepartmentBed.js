@@ -35,6 +35,7 @@ const DepartmentBed = (props) => {
   const [orderedPatientList, setOrderedPatientList] = useState(""); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState({});
+  const [patientInfoOfBed, setPatientInfoOfBed] = useState(""); //Оронд хэвтэж буй өвчтөний мэдээлэл
   let location = useLocation();
 
   const { Panel } = Collapse;
@@ -71,7 +72,8 @@ const DepartmentBed = (props) => {
     if (data.id === selectedBed.id) {
       setSelectedBed(""); //Орны мэдээлэл state -д хадгалах
     } else {
-      setSelectedBed(data); //Орны мэдээлэл state -д хадгалах
+      setSelectedBed(data);
+      data.status === 0 && getPatientInformationOfBed(data);
     }
   };
 
@@ -79,14 +81,29 @@ const DepartmentBed = (props) => {
   const getOrderedPatient = async () => {
     config.params.process = "0,1"; //Хэвтэх захиалгатай = 0, Хэвтэх зөвшөөрөлтэй өвтөн = 1
     const response = await Get("service/inpatient-request", token, config);
-    if (response.data.length != 0) {
+    if (response.data.length !== 0) {
       // console.log("response get Ordered Patient ====>", response.data);
       setOrderedPatientList(response.data);
     }
   };
 
+  //Орон дээр хэвтэж буй өвчтөний мэдээлэл
+  const getPatientInformationOfBed = async (bed_data) => {
+    const response = await Get(
+      `service/inpatient-request/bedPatient/${bed_data.id}`,
+      token,
+      config
+    );
+    if (response) {
+      setPatientInfoOfBed(response);
+    } else {
+      setPatientInfoOfBed("");
+    }
+    console.log("response get Ordered Patient ====>", response);
+  };
+
   useEffect(() => {
-    if (selectedRoomBeds != "") {
+    if (selectedRoomBeds !== "") {
       showModal(); //Өрөөний мэдээлэл SET хийгдсэний дараа MODAL дуудах
       getOrderedPatient();
     }
@@ -94,7 +111,7 @@ const DepartmentBed = (props) => {
 
   //Оронд хуваарилж хэвтүүлэх
   const setPatientBed = async (inpatient_request_id) => {
-    if (selectedBed === "") {
+    if (selectedBed === "" || selectedBed.status !== 3) {
       notification["warning"]({
         message: `Өвчтөн хэвтүүлэх ор сонгоно уу.`,
         description: ``,
@@ -104,6 +121,7 @@ const DepartmentBed = (props) => {
       data.roomId = selectedBed.roomId;
       data.bedId = selectedBed.id;
       data.isOut = false;
+      data.process = 0;
       const response = await Patch(
         `service/inpatient-request/bed/${inpatient_request_id}`,
         token,
@@ -117,8 +135,28 @@ const DepartmentBed = (props) => {
         setSelectedBed("");
         selectRoom(selectedBed.roomId);
       }
-      // console.log("response set PatientBed ====>", response);
+      console.log("response set PatientBed ====>", response);
     }
+  };
+  //Өвчтөнг орноос гаргах
+  const outPatientBed = async (inpatient_request_id) => {
+    data.isOut = true;
+    data.process = 2;
+    data.bedId = selectedBed.id;
+    const response = await Patch(
+      `service/inpatient-request/bed/${inpatient_request_id}`,
+      token,
+      config,
+      data
+    );
+    if (response === 200) {
+      getOrderedPatient();
+      props.callFn(location?.pathname?.split("/").pop()); // Тасагийн ID current route -с авах
+      setSelectedRoomBeds(selectedRoomBeds);
+      setSelectedBed("");
+      selectRoom(selectedBed.roomId);
+    }
+    // console.log("response set PatientBed ====>", response);
   };
 
   const selectFilter = (data) => {
@@ -174,7 +212,7 @@ const DepartmentBed = (props) => {
           />
         </Col>
       </Row>
-      {props.data?.rooms != "" ? (
+      {props.data?.rooms !== "" ? (
         <Row gutter={[16, 16]} className="mt-4">
           {/* .filter(obj => obj.tech.includes("React")) */}
           {props.data?.rooms
@@ -280,7 +318,7 @@ const DepartmentBed = (props) => {
             lg: 32,
           }}
         >
-          {selectedRoomBeds != "" && selectedRoomBeds.beds != "" ? (
+          {selectedRoomBeds !== "" && selectedRoomBeds.beds !== "" ? (
             <>
               {selectedRoomBeds.beds.map((el, index) => {
                 return (
@@ -302,10 +340,13 @@ const DepartmentBed = (props) => {
                           ...styles.bedContainer,
                           ...{
                             borderColor:
-                              selectedBed.id === el.id ? blue.primary : null,
+                              selectedBed.status === 3 &&
+                              selectedBed.id === el.id
+                                ? blue.primary
+                                : null,
                           },
                         }}
-                        onClick={() => el.status === 3 && selectBed(el)}
+                        onClick={() => selectBed(el)}
                       >
                         <img
                           src={
@@ -361,15 +402,13 @@ const DepartmentBed = (props) => {
           </Card>
         </Col>
         <Col className="gutter-row mt-2" span={24}>
-          {orderedPatientList &&
-            orderedPatientList.map((el, index) => {
-              return (
+          {selectedBed.status === 0
+            ? patientInfoOfBed && (
                 <Collapse
                   accordion
                   expandIconPosition="end"
                   ghost
                   className="bed-collapse"
-                  key={index}
                 >
                   <Panel
                     header={
@@ -381,27 +420,31 @@ const DepartmentBed = (props) => {
                         className="rounded-xl cursor-pointer"
                       >
                         <div className="w-3/12 pl-4">
-                          {el.patient?.lastName?.substr(0, 1)}.{" "}
-                          {el.patient?.firstName}
+                          {patientInfoOfBed.patient?.lastName?.substr(0, 1)}.{" "}
+                          {patientInfoOfBed.patient?.firstName}
                         </div>
                         <div className="w-2/12 text-xs">
-                          {el.patient?.registerNumber}
+                          {patientInfoOfBed.patient?.registerNumber}
                         </div>
-                        <div className="w-2/12">{el.patient?.cardNumber}</div>
+                        <div className="w-2/12">
+                          {patientInfoOfBed.patient?.cardNumber}
+                        </div>
                         <div className="w-1/12">
-                          {el.patient?.genderType === "MAN" ? "Эр" : "Эм"}
+                          {patientInfoOfBed.patient?.genderType === "MAN"
+                            ? "Эр"
+                            : "Эм"}
                         </div>
                         <div className="w-3/12">
                           {orderType.map((item, index) => {
-                            if (item.value === el.process) {
+                            if (item.value === patientInfoOfBed.process) {
                               return (
                                 <div key={index}>
-                                  {/* <img
+                                  <img
                                     src={require(`../../../assets/bed/${item.img}`)}
                                     width="20"
                                     className="inline-block"
                                     key={index}
-                                  /> */}
+                                  />
                                   <span>{item.label}</span>
                                 </div>
                               );
@@ -413,24 +456,85 @@ const DepartmentBed = (props) => {
                     key="1"
                   >
                     <div>
-                      <p>AA</p>
                       <div className="text-right">
-                        {/* <Button className="mr-2" danger>
-                          Гаргах
-                        </Button> */}
                         <Button
                           type="primary"
                           className="custom-primary-btn"
-                          onClick={() => setPatientBed(el.id)}
+                          onClick={() => outPatientBed(patientInfoOfBed.id)}
                         >
-                          Хэвтүүлэх
+                          Гаргах
                         </Button>
                       </div>
                     </div>
                   </Panel>
                 </Collapse>
-              );
-            })}
+              )
+            : orderedPatientList &&
+              orderedPatientList.map((el, index) => {
+                return (
+                  <Collapse
+                    accordion
+                    expandIconPosition="end"
+                    ghost
+                    className="bed-collapse"
+                    key={index}
+                  >
+                    <Panel
+                      header={
+                        <div
+                          style={{
+                            ...styles.cardBodyStyleList,
+                            ...{},
+                          }}
+                          className="rounded-xl cursor-pointer"
+                        >
+                          <div className="w-3/12 pl-4">
+                            {el.patient?.lastName?.substr(0, 1)}.{" "}
+                            {el.patient?.firstName}
+                          </div>
+                          <div className="w-2/12 text-xs">
+                            {el.patient?.registerNumber}
+                          </div>
+                          <div className="w-2/12">{el.patient?.cardNumber}</div>
+                          <div className="w-1/12">
+                            {el.patient?.genderType === "MAN" ? "Эр" : "Эм"}
+                          </div>
+                          <div className="w-3/12">
+                            {orderType.map((item, index) => {
+                              if (item.value === el.process) {
+                                return (
+                                  <div key={index}>
+                                    <img
+                                      src={require(`../../../assets/bed/${item.img}`)}
+                                      width="20"
+                                      className="inline-block"
+                                      key={index}
+                                    />
+                                    <span>{item.label}</span>
+                                  </div>
+                                );
+                              }
+                            })}
+                          </div>
+                        </div>
+                      }
+                      key="1"
+                    >
+                      <div>
+                        <div className="text-right">
+                          <Button
+                            type="primary"
+                            className="custom-primary-btn"
+                            onClick={() => setPatientBed(el.id)}
+                          >
+                            Хэвтүүлэх
+                          </Button>
+                        </div>
+                      </div>
+                    </Panel>
+                  </Collapse>
+                );
+              })}
         </Col>
       </Modal>
     </div>

@@ -155,11 +155,11 @@ function UTable(props) {
     console.log("Failed:", errorInfo);
   };
   const inputChecker = (index, row) => {
-    if (props.column[index].input === "select") {
-      return props.column[index].inputData?.map((data) => {
-        if (data.id === row) return data[`${props.column[index].relIndex}`];
+    if (props.column[index]?.input === "select") {
+      return props.column[index]?.inputData?.map((data) => {
+        if (data.id === row) return data[`${props.column[index]?.relIndex}`];
       });
-    } else if (props.column[index].input === "switch") {
+    } else if (props.column[index]?.input === "switch") {
       return row ? (
         <CheckOutlined className="text-green-600" />
       ) : (
@@ -248,19 +248,20 @@ function UTable(props) {
             </thead>
             <tbody className="ant-table-tbody p-0">
               {spinner ? (
-                data.map((row, index) => {
+                data.map((row, indexData) => {
                   return (
                     <tr
-                      key={index}
+                      key={indexData}
                       className="ant-table-row ant-table-row-level-0"
                     >
                       <td className="ant-table-row-cell-break-word">
-                        {meta.page * meta.limit - (meta.limit - index - 1)}
+                        {meta.page * meta.limit - (meta.limit - indexData - 1)}
                       </td>
-                      {props.column.map((column, index) => {
-                        return column.relation ? (
+                      {props.column?.map((column, index) => {
+                        return column.relation &&
+                          row[`${column.index[0]}`] !== null ? (
                           <td key={index}>
-                            {column.staticData
+                            {column?.staticData
                               ? column.staticData(
                                   row[`${column.index[0]}`][
                                     `${column.index[1]}`
