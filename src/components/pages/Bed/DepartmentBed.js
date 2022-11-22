@@ -11,14 +11,9 @@ import {
   Collapse,
   Button,
   notification,
-  Popconfirm,
 } from "antd";
 import { blue } from "@ant-design/colors";
-import {
-  LineOutlined,
-  SearchOutlined,
-  SnippetsOutlined,
-} from "@ant-design/icons";
+import { LineOutlined, SearchOutlined } from "@ant-design/icons";
 import { Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
@@ -28,7 +23,6 @@ import { useLocation } from "react-router-dom";
 
 const DepartmentBed = (props) => {
   const token = useSelector(selectCurrentToken);
-  const [filter, setFilter] = useState(""); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
   const [genderSearchValue, setGenderSearchValue] = useState("all");
   const [selectedRoomBeds, setSelectedRoomBeds] = useState(""); //Сонгогдсон өрөөний орнууд
@@ -160,20 +154,9 @@ const DepartmentBed = (props) => {
     // console.log("response set PatientBed ====>", response);
   };
 
-  const selectFilter = (data) => {
-    setFilter(data);
-  };
-
-  const confirm = (e) => {
-    console.log("Click on Yes", e);
-  };
-  const cancel = (e) => {
-    console.log("Click on No", e);
-  };
-
   return (
     <div className="p-6">
-      <Row>
+      <Row className="justify-between">
         <Col span={3}>
           <Segmented
             className="department-bed-segment"
@@ -200,36 +183,6 @@ const DepartmentBed = (props) => {
           />
         </Col>
         <Col span={8}>
-          <Segmented
-            className="department-bed-segment"
-            size="small"
-            options={[
-              {
-                label: "Бүгд",
-                value: "",
-                icon: null,
-              },
-              {
-                label: "Сул өрөө",
-                value: "1",
-                icon: null,
-              },
-              {
-                label: "Засвартай өрөө",
-                value: "2",
-                icon: null,
-              },
-              {
-                label: "Дүүрсэн өрөө",
-                value: "0",
-                icon: null,
-              },
-            ]}
-            value={filter}
-            onChange={(e) => selectFilter(e)}
-          />
-        </Col>
-        <Col span={8}>
           <Input
             size="small"
             value={searchValue}
@@ -241,7 +194,6 @@ const DepartmentBed = (props) => {
       </Row>
       {props.data?.rooms !== "" ? (
         <Row gutter={[16, 16]} className="mt-4">
-          {/* .filter(obj => obj.tech.includes("React")) */}
           {props.data?.rooms
             ?.filter((obj) => obj.roomNumber.includes(searchValue))
             ?.filter((obj) =>
@@ -282,7 +234,7 @@ const DepartmentBed = (props) => {
                           {el.roomNumber} -{" "}
                           {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
                         </p>
-                        <p>Орны тоо: {el.beds.length}</p>
+                        <p style={styles.total}>Орны тоо: {el.beds.length}</p>
                       </div>
                       <div style={styles.statusRowContainer}>
                         <Tag color="success" className="rounded-xl">
@@ -318,17 +270,6 @@ const DepartmentBed = (props) => {
                             }, 0)}
                           </span>
                         </Tag>
-                        {/* <Tag color="processing" className="rounded-xl">
-                        Цэвэрлэх:{" "}
-                        <span>
-                          {el.beds?.reduce((sum, val) => {
-                            if (val.status === 1) {
-                              sum += 1;
-                            }
-                            return sum;
-                          }, 0)}
-                        </span>
-                      </Tag> */}
                       </div>
                     </div>
                   </Card>
@@ -374,44 +315,34 @@ const DepartmentBed = (props) => {
                     span={6}
                     key={index}
                   >
-                    <Popconfirm
-                      title="Are you sure to delete this task?"
-                      onConfirm={confirm}
-                      onCancel={cancel}
-                      okText="Гаргах"
-                      cancelText="Шилжүүлэх"
-                      okType="warning"
+                    <div
+                      style={{
+                        ...styles.bedContainer,
+                        ...{
+                          borderColor:
+                            selectedBed.status === 3 && selectedBed.id === el.id
+                              ? blue.primary
+                              : null,
+                        },
+                      }}
+                      onClick={() => selectBed(el)}
                     >
-                      <div
-                        style={{
-                          ...styles.bedContainer,
-                          ...{
-                            borderColor:
-                              selectedBed.status === 3 &&
-                              selectedBed.id === el.id
-                                ? blue.primary
-                                : null,
-                          },
-                        }}
-                        onClick={() => selectBed(el)}
-                      >
-                        <img
-                          src={
-                            el.status === 0
-                              ? require("../../../assets/bed/hunte.png")
-                              : el.status === 1
-                              ? require("../../../assets/bed/tsewerleh.png")
-                              : el.status === 2
-                              ? require("../../../assets/bed/zaswartai.png")
-                              : el.status === 3
-                              ? require("../../../assets/bed/sul.png")
-                              : require("../../../assets/bed/sul.png")
-                          }
-                          style={{ zIndex: 1 }}
-                          draggable="false"
-                        />
-                      </div>
-                    </Popconfirm>
+                      <img
+                        src={
+                          el.status === 0
+                            ? require("../../../assets/bed/hunte.png")
+                            : el.status === 1
+                            ? require("../../../assets/bed/tsewerleh.png")
+                            : el.status === 2
+                            ? require("../../../assets/bed/zaswartai.png")
+                            : el.status === 3
+                            ? require("../../../assets/bed/sul.png")
+                            : require("../../../assets/bed/sul.png")
+                        }
+                        style={{ zIndex: 1 }}
+                        draggable="false"
+                      />
+                    </div>
                     <span style={styles.bedText}>
                       {el.bedNumber} -{" "}
                       {statusList.map((i) => {

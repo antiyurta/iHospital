@@ -25,6 +25,7 @@ const MainBed = () => {
   let location = useLocation();
   const [structures, setStructures] = useState([]);
   const [selectedStructureData, setSelectedStructureData] = useState("");
+  const [roomInformationStatus, setRoomInformationStatus] = useState("all");
 
   const config = {
     headers: {},
@@ -100,10 +101,23 @@ const MainBed = () => {
             <Route
               exact
               path="/"
-              element={<DashboardBed setSelectedFn={setSelectedMenuKey} />}
+              element={
+                <DashboardBed
+                  setSelectedFn={setSelectedMenuKey}
+                  setStatus={(status_id) => setRoomInformationStatus(status_id)}
+                />
+              }
             />
             <Route path="/calendar" element={<CalendarBed />} />
-            <Route path="/rooms" element={<InformationBed />} />
+            <Route
+              path="/rooms"
+              element={
+                <InformationBed
+                  status={roomInformationStatus}
+                  setStatus={(status_id) => setRoomInformationStatus(status_id)}
+                />
+              }
+            />
             <Route path="/patient_list" element={<PatientListBed />} />
             <Route
               path="/:id/*"

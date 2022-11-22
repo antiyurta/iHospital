@@ -165,7 +165,7 @@ function PatientListBed() {
             return (
               <div
                 key={tag.value}
-                className="border-blue-400 rounded-sm border mr-2"
+                className="border-blue-400 rounded-sm border mr-2 mb-2"
               >
                 <CheckableTag
                   checked={selectedTags.includes(tag.value)}

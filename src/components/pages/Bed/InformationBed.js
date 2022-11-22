@@ -27,11 +27,12 @@ import Spinner from "react-bootstrap/Spinner";
 
 const InformationBed = (props) => {
   const token = useSelector(selectCurrentToken);
-  const [filter, setFilter] = useState("all"); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
   const [selectedBed, setSelectedBed] = useState(""); //Сонгогдсон ор
+  const [selectedRoomBeds, setSelectedRoomBeds] = useState(""); //Сонгогдсон өрөөний орнууд
   const [rooms, setRooms] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [roomWithStatus, setRoomWithStatus] = useState({});
 
   const config = {
     headers: {},
@@ -51,12 +52,37 @@ const InformationBed = (props) => {
   };
 
   const getRooms = async () => {
-    config.params.type = 2;
-    config.params.startDate = null;
-    config.params.endDate = null;
+    var emptyBeds = [];
+    var usedBeds = [];
+    var repairBeds = [];
     const response = await Get("organization/room", token, config);
     console.log("response InformationBed", response);
     if (response.data.length != 0) {
+      response.data.map((el) => {
+        if (el.beds.length > 0) {
+          el.beds.map((bed) => {
+            if (bed.status === 3) {
+              !emptyBeds.includes(bed.roomId) && emptyBeds.push(bed.roomId);
+              setRoomWithStatus((prevState) => ({
+                ...prevState,
+                empty: emptyBeds,
+              }));
+            } else if (bed.status === 2) {
+              !repairBeds.includes(bed.roomId) && repairBeds.push(bed.roomId);
+              setRoomWithStatus((prevState) => ({
+                ...prevState,
+                repair: repairBeds,
+              }));
+            } else if (bed.status === 0) {
+              !usedBeds.includes(bed.roomId) && usedBeds.push(bed.roomId);
+              setRoomWithStatus((prevState) => ({
+                ...prevState,
+                used: usedBeds,
+              }));
+            }
+          });
+        }
+      });
       setRooms(response.data);
     }
   };
@@ -64,6 +90,18 @@ const InformationBed = (props) => {
   useEffect(() => {
     getRooms();
   }, []);
+
+  const selectFilter = (data) => {
+    props.setStatus(data);
+  };
+
+  const selectRoom = async (room_id) => {
+    const response = await Get(`organization/room/${room_id}`, token, config);
+    if (response) {
+      console.log("response get Ordered Patient ====>", response);
+      setSelectedRoomBeds(response); //Өрөөний мэдээлэл state -д хадгалах
+    }
+  };
 
   return (
     <div className="p-6">
@@ -80,12 +118,7 @@ const InformationBed = (props) => {
               },
               {
                 label: "Сул өрөө",
-                value: "0",
-                icon: null,
-              },
-              {
-                label: "Дүүрсэн өрөө",
-                value: "1",
+                value: "3",
                 icon: null,
               },
               {
@@ -93,52 +126,117 @@ const InformationBed = (props) => {
                 value: "2",
                 icon: null,
               },
+              {
+                label: "Дүүрсэн өрөө",
+                value: "0",
+                icon: null,
+              },
             ]}
-            value={filter}
-            onChange={setFilter}
+            value={props.status}
+            onChange={(e) => selectFilter(e)}
           />
         </Col>
         <Col span={8} offset={8}>
           <Input
             size="small"
+            value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Өрөө хайх"
             prefix={<SearchOutlined />}
           />
         </Col>
       </Row>
-      {rooms != "" ? (
+
+      {rooms !== "" ? (
         <Row gutter={[16, 16]} className="mt-4">
-          {rooms?.map((el, index) => {
-            return (
-              <Col className="gutter-row" span={8} key={index}>
-                <Card
-                  style={styles.cardStyle}
-                  className="rounded-xl cursor-pointer"
-                  bodyStyle={styles.cardBodyStyle}
-                  onClick={showModal}
-                >
-                  <div style={{ width: "10%" }}>
-                    <SnippetsOutlined style={styles.iconStyle} />
-                  </div>
-                  <div style={{ width: "90%" }}>
-                    <div style={styles.cardRowContainer} className="mb-6">
-                      <p>
-                        {el.roomNumber} -{" "}
-                        {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
-                      </p>
+          {rooms
+            ?.filter((obj) => obj.roomNumber.includes(searchValue))
+            ?.filter((obj) => {
+              if (props.status === "all") {
+                return obj;
+              } else if (props.status === "3") {
+                return roomWithStatus["empty"].includes(obj.id);
+              } else if (props.status === "2") {
+                return roomWithStatus["repair"].includes(obj.id);
+              } else if (props.status === "0") {
+                return roomWithStatus["used"].includes(obj.id);
+              }
+            })
+            .map((el, index) => {
+              return (
+                <Col className="gutter-row" span={8} key={index}>
+                  <Card
+                    style={styles.cardStyle}
+                    className="rounded-xl cursor-pointer"
+                    bodyStyle={styles.cardBodyStyle}
+                    onClick={() => selectRoom(el.id)}
+                  >
+                    <div style={{ width: "15%" }}>
+                      {el.genderType === "WOMAN" ? (
+                        <img
+                          src={require("../../../assets/bed/female.png")}
+                          style={styles.iconStyle}
+                        />
+                      ) : el.genderType === "MAN" ? (
+                        <img
+                          src={require("../../../assets/bed/male.png")}
+                          style={styles.iconStyle}
+                        />
+                      ) : (
+                        <img
+                          src={require("../../../assets/bed/empty_room.png")}
+                          style={styles.iconStyle}
+                        />
+                      )}
                     </div>
-                    <div style={styles.cardRowContainer}>
-                      <p style={styles.total}>Орны тоо: 4 / 3</p>
-                      <Tag color="warning" className="rounded-xl">
-                        1 ор засвартай
-                      </Tag>
+                    <div style={{ width: "85%" }}>
+                      <div style={styles.cardRowContainer} className="mb-6">
+                        <p style={styles.total}>
+                          {el.roomNumber} -{" "}
+                          {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
+                        </p>
+                        <p style={styles.total}>Орны тоо: {el.beds.length}</p>
+                      </div>
+                      <div style={styles.statusRowContainer}>
+                        <Tag color="success" className="rounded-xl">
+                          Сул:{" "}
+                          <span>
+                            {el.beds?.reduce((sum, val) => {
+                              if (val.status === 3) {
+                                sum += 1;
+                              }
+                              return sum;
+                            }, 0)}
+                          </span>
+                        </Tag>
+                        <Tag color="error" className="rounded-xl">
+                          Засвартай:{" "}
+                          <span>
+                            {el.beds?.reduce((sum, val) => {
+                              if (val.status === 2) {
+                                sum += 1;
+                              }
+                              return sum;
+                            }, 0)}
+                          </span>
+                        </Tag>
+                        <Tag color="warning" className="rounded-xl">
+                          Дүүрсэн:{" "}
+                          <span>
+                            {el.beds?.reduce((sum, val) => {
+                              if (val.status === 0) {
+                                sum += 1;
+                              }
+                              return sum;
+                            }, 0)}
+                          </span>
+                        </Tag>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </Col>
-            );
-          })}
+                  </Card>
+                </Col>
+              );
+            })}
         </Row>
       ) : (
         <div className="text-center">
@@ -160,9 +258,6 @@ const InformationBed = (props) => {
         width={600}
         footer={null}
       >
-        {/* default rgb(188 218 230 / 60%)
-        red rgb(250 82 82 / 60%)
-        yellow rgb(252 196 25 / 60%) */}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div
             style={{
@@ -287,11 +382,10 @@ const styles = {
     width: "100%",
   },
   iconStyle: {
-    backgroundColor: blue.primary,
-    padding: 5,
     borderRadius: 6,
     fontSize: 16,
     color: "#fff",
+    width: "80%",
   },
   total: {
     fontSize: 16,
@@ -302,6 +396,11 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  statusRowContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
   bedContainer: {
     padding: 5,
     paddingLeft: 10,
@@ -310,13 +409,11 @@ const styles = {
     textAlign: "center",
     cursor: "pointer",
     pointerEvent: "none",
+    borderWidth: 2,
+    backgroundColor: "rgb(188 218 230 / 40%)",
   },
   bedText: {
     fontWeight: "bold",
-    color: "#fff",
-  },
-  modalHeader: {
-    display: "grid",
   },
   containerCardBodyStyle: {
     flex: 1,
@@ -330,11 +427,12 @@ const styles = {
     flex: 1,
     display: "flex",
     flexDirection: "row",
-    padding: 12,
+    padding: 5,
     paddingLeft: 0,
     alignItems: "center",
     width: "100%",
     borderWidth: 1,
+    marginTop: 5,
   },
   patientInformationContainer: {},
 };

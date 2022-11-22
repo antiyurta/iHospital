@@ -20,7 +20,6 @@ function DashboardBed(props) {
   };
   const getAllBed = async () => {
     const response = await Get("organization/bed", token, config);
-    console.log("response get All Bed", response);
     response.data &&
       response.data.map((el) => {
         if (el.status === 3) {
@@ -46,6 +45,7 @@ function DashboardBed(props) {
             bodyStyle={styles.cardBodyStyle}
             onClick={() => {
               props.setSelectedFn("rooms");
+              props.setStatus("3"); //Сул өрөө
               navigate(`/bed_management/rooms`);
             }}
           >
@@ -65,6 +65,11 @@ function DashboardBed(props) {
             style={styles.cardStyle}
             className="rounded-xl cursor-pointer"
             bodyStyle={styles.cardBodyStyle}
+            onClick={() => {
+              props.setSelectedFn("rooms");
+              props.setStatus("2"); //Засвартай өрөө
+              navigate(`/bed_management/rooms`);
+            }}
           >
             <div style={{ width: "70%" }}>
               <p>Засвартай өрөө</p>
@@ -82,6 +87,11 @@ function DashboardBed(props) {
             style={styles.cardStyle}
             className="rounded-xl cursor-pointer"
             bodyStyle={styles.cardBodyStyle}
+            onClick={() => {
+              props.setSelectedFn("rooms");
+              props.setStatus("0"); //Дүүрсэн өрөө
+              navigate(`/bed_management/rooms`);
+            }}
           >
             <div style={{ width: "70%" }}>
               <p>Дүүрсэн өрөө</p>
