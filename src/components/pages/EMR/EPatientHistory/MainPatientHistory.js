@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Tabs, Row, Button, Form, Divider, Col } from "antd";
+import { Tabs, Row, Button, Form, Divider, Col, Select } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
@@ -7,9 +7,10 @@ import axios from "axios";
 import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
-import { openNofi, Post } from "../../../comman";
-import TextArea from "antd/lib/input/TextArea";
-function MainPatientHistory({ PatientId }) {
+import { Get, openNofi, Post } from "../../../comman";
+import { Table } from "react-bootstrap";
+const { Option } = Select;
+function MainPatientHistory({ PatientId, Inspection }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
@@ -21,17 +22,32 @@ function MainPatientHistory({ PatientId }) {
     params: {}
   }
   const id = PatientId;
+  const inspection = Inspection;
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
+
+  const demo = [];
+
+  const getDiagnose = async () => {
+    const response = await Get('reference/diagnose', token, config);
+    response?.data.map((element, idx) => {
+      demo.push({
+        label: `${element.nameMn} - ${element.nameEn} - ${element.nameRu}`,
+        value: element.code
+      })
+    })
+  }
+
   useEffect(() => {
     getInspectionTabs();
+    getDiagnose();
   }, []);
 
   const Tab1Content = useCallback(() => {
-    return <HistoryTab />;
+    return <HistoryTab patientId={id} inspection={inspection} />;
   }, []);
   const Tab2Content = useCallback(() => {
-    return <GeneralInspection />;
+    return <GeneralInspection patientId={id} inspection={inspection} />;
   }, []);
 
   const DynamicTabContent = useCallback((props) => {
@@ -85,24 +101,15 @@ function MainPatientHistory({ PatientId }) {
             </Divider>
             <Row align="middle" className="mb-1">
               <Col span={24} className="text-left">
-                <Form.Item
-                  label=""
-                  name={["diagnose", "sadsad", "ASdsad"]}
-                  rules={[{ required: false, message: "" }]}
-                  className="mb-0"
-                  wrapperCol={{
-                    span: 24,
-                  }}
-                  labelCol={{
-                    span: 8,
-                  }}
-                >
-                  <TextArea
-                    rows={2}
-                    style={{ padding: 5, marginBottom: 5 }}
-                    placeholder={"asda"}
-                  />
-                </Form.Item>
+                <div className="table-responsive p-4" id="style-8">
+                  <Table className="ant-border-space" style={{ width: "100%" }}>
+                    <thead className="ant-table-thead bg-slate-200">
+                      <tr>
+                        <th className="font-bold text-sm align-middle">Код</th>
+                      </tr>
+                    </thead>
+                  </Table>
+                </div>
               </Col>
             </Row>
           </>

@@ -24,7 +24,8 @@ function Ambulatory() {
         setAppointments(response.data);
     }
     const getEMR = (id) => {
-        navigate(`/emr`, { state: { patientId: id } });
+        // status heregteii anhan dawtan 
+        navigate(`/emr`, { state: { patientId: id, inspection: true } });
     }
     const getTypeInfo = (type, begin, end) => {
         if (type === 1) {

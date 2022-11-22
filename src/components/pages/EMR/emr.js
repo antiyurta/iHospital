@@ -31,6 +31,7 @@ const config = {
 };
 function EMR() {
   const IncomePatientId = useLocation().state.patientId;
+  const Inspection = useLocation().state.inspection;
   const [cardLoading, setCardLoading] = useState(false);
   const [problems, setProblems] = useState("");
   const token = useSelector(selectCurrentToken);
@@ -202,14 +203,14 @@ function EMR() {
               }}
               extra={
                 <>
-                  <Radio.Group>
-                    <Radio value={1}>Анхан</Radio>
-                    <Radio value={2}>Давтан</Radio>
+                  <Radio.Group value={Inspection}>
+                    <Radio value={false}>Анхан</Radio>
+                    <Radio value={true}>Давтан</Radio>
                   </Radio.Group>
                 </>
               }
             >
-              <MainPatientHistory PatientId={IncomePatientId} />
+              <MainPatientHistory PatientId={IncomePatientId} Inspection={Inspection} />
             </Card>
           ) : null}
           {type == "OCS" ? (

@@ -4,15 +4,7 @@ import React, { useState } from "react";
 import UTable from "../../UTable";
 
 function Directory() {
-    const [data, setData] = useState([{ id: 1, label: 'ICD10' }, { id: 2, label: 'ICD9' }]);
     const column = [
-        {
-            index: 'name',
-            label: 'Нэр',
-            isView: true,
-            input: 'input',
-            col: 8
-        },
         {
             index: 'code',
             label: 'Код',
@@ -21,11 +13,24 @@ function Directory() {
             col: 8
         },
         {
-            index: 'type',
-            label: 'Төрөл',
+            index: 'nameEn',
+            label: 'English',
             isView: true,
-            input: 'select',
-            inputData: data,
+            input: 'input',
+            col: 8
+        },
+        {
+            index: 'nameMn',
+            label: 'nameMn',
+            isView: true,
+            input: 'input',
+            col: 8
+        },
+        {
+            index: 'nameRu',
+            label: 'nameRu',
+            isView: true,
+            input: 'input',
             col: 8
         },
     ]
@@ -33,7 +38,7 @@ function Directory() {
     return (
         <Row gutter={[24, 0]}>
             <Col xs="24" xl={24}>
-                <UTable title={'directories'} url={'reference/directories'} column={column} isCreate={true}
+                <UTable title={'directories'} url={'reference/diagnose'} column={column} isCreate={true}
                     isRead={true}
                     isUpdate={true}
                     isDelete={true} width='80%' />

@@ -64,6 +64,7 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS }) {
                         OCS && <div className="absolute bottom-1 left-10">
                             <Radio.Group
                                 size="small"
+                                value="EMR"
                                 onChange={handleTypeChangePatient}
                                 optionType="button"
                                 buttonStyle="solid"

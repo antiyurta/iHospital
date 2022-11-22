@@ -43,6 +43,10 @@ legend.scheduler-border {
   float: none !important;
 }
 
+.ant-select.ant-select-in-form-item {
+  padding: 0px !important;
+}
+
 .ant-form-item-label label {
   font-size: 12px;
   font-weight: bold;
@@ -87,7 +91,9 @@ legend.scheduler-border {
   align-items: center;
 }
 .ant-form-item-control-input {
-  min-height: 30px !important;
+  min-height: 28px !important;
+  background: white;
+  border-radius: 5px;
 }
 .small-radio-button > .ant-radio-button-wrapper {
   height: 24px !important;
@@ -183,10 +189,10 @@ input[type="number"] {
 }
 .department-bed-segment > .ant-segmented-group > .ant-segmented-item-selected {
   background-color: #2d8cff;
-  color: #fff; 
+  color: #fff;
 }
 .department-bed-segment > .ant-segmented-group > .ant-segmented-item {
-  transition: color 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) !important; 
+  transition: color 0.1s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
 }
 .anticon {
   vertical-align: middle !important;
@@ -194,7 +200,11 @@ input[type="number"] {
 .ant-segmented.ant-segmented-sm .ant-segmented-item-label {
   display: flex !important;
 }
-.ant-segmented-sm > .ant-segmented-group >.ant-segmented-item > .ant-segmented-item-label  > .ant-segmented-item-icon{
+.ant-segmented-sm
+  > .ant-segmented-group
+  > .ant-segmented-item
+  > .ant-segmented-item-label
+  > .ant-segmented-item-icon {
   line-height: 18px !important;
   display: inline !important;
 }

@@ -3319,7 +3319,7 @@ aside.ant-layout-sider.ant-layout-sider-light.sider-primary.ant-layout-sider-pri
   padding-bottom: 16px;
 }
 
-.ant-row.ant-form-item.aligin-center .ant-form-item-control-input-content {
+.ant-row.-item.aligin-center .ant-form-item-control-input-content {
   display: flex;
   align-items: center;
   color: rgba(0, 0, 0, 0.65);

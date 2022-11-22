@@ -151,7 +151,19 @@ function Sidenav({ color }) {
     {
       key: 9,
       icon: <InfoCircleOutlined />,
-      label: <Link to="/formBuilder">Асуумж оруулах</Link>,
+      label: <p>Асуумж оруулах</p>,
+      children: [
+        {
+          key: "9-7",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/formBuilder">SOAP</NavLink>,
+        },
+        {
+          key: "9-8",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/formBuilder">611 mygt</NavLink>,
+        }
+      ]
     },
     {
       key: 10,
@@ -165,7 +177,7 @@ function Sidenav({ color }) {
     },
     {
       key: 12,
-      icon: <HomeOutlined/>,
+      icon: <HomeOutlined />,
       label: <Link to="/equipments">ЛАБ</Link>
     }
   ];
