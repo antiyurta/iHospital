@@ -41,7 +41,6 @@ import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAm
 //emr end
 // inpatient HEWTENT start
 import Inpatient from "./components/pages/Inpatient/inpatient";
-import FormBuilder from "./components/pages/FormBuilder/FormBuilder";
 import Demo from "./components/pages/Demo/demo";
 import Menu from "./components/pages/reference/Menu";
 import Report from "./components/pages/Demo/Report";
@@ -59,6 +58,7 @@ import RoomtDtl from "./components/pages/Bed/RoomDtl";
 // lab start
 import Demo2 from "./components/pages/Demo/demo2";
 import EquipmentList from "./components/pages/Laboratory/EquipmentList";
+import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
 // lab end
 
 function App() {
@@ -293,7 +293,7 @@ function App() {
             path="/formBuilder"
             element={
               <PrivateRoute>
-                <FormBuilder />
+                <SOAPForm />
               </PrivateRoute>
             }
           />

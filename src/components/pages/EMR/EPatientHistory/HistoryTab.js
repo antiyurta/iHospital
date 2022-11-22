@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Collapse, Row, Button, Form } from "antd";
 import { blue } from "@ant-design/colors";
 import Step2 from "./Step2";
@@ -9,54 +9,57 @@ import Step5 from "./Step5";
 import Step6 from "./Step6";
 import Step7 from "./Step7";
 import Step8 from "./Step8";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
+import { Get, Patch, Post } from "../../../comman";
+import moment from "moment";
 
-export default function HistoryTab() {
+export default function HistoryTab({ patientId, inspection }) {
   const { Panel } = Collapse;
   const token = useSelector(selectCurrentToken);
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
-  const [validHistory, setValidHistory] = useState(false);
+  const config = {
+    headers: {},
+    params: {}
+  };
+  const [historyForm] = Form.useForm();
+  const [historyId, setHistoryId] = useState(Number);
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    setValidHistory(false);
+  const saveHistory = () => {
+    historyForm.validateFields().then(async (values) => {
+      values["patientId"] = patientId;
+      if (inspection) {
+        await Patch('emr/patient-history/' + historyId, token, config, values);
+      } else {
+        await Post('emr/patient-history', token, config, values);
+      }
+    });
   };
 
-  const saveHistory = (values) => {
-    console.log("save History values Success: ", values);
-    values["patientId"] = 8;
-    axios({
-      method: "post",
-      url: `${DEV_URL}emr/patient-history`,
-      params: {
-        patientId: 8,
-      },
-      data: values,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("response", response);
-      })
-      .catch(function (error) {
-        console.log("response error", error.response);
-      });
+  const getPatientHistory = async (id) => {
+    config.params.patientId = id;
+    const response = await Get('emr/patient-history', token, config);
+    response.data[0].birth.birthDate = moment(response.data[0].birth.birthDate);
+    setHistoryId(response.data[0].id);
+    historyForm.setFieldsValue(response.data[0]);
+    config.params.patientId = null;
   };
+
+  useEffect(() => {
+    getPatientHistory(patientId);
+  }, [inspection]);
 
   return (
     <Form
-      name="basic"
-      onFinish={saveHistory}
-      initialValues={{ remember: true }}
-      onFinishFailed={onFinishFailed}
+      form={historyForm}
       autoComplete="off"
       labelAlign="left"
       scrollToFirstError
+      labelCol={{
+        span: 8
+      }}
+      wrapperCol={{
+        span: 16,
+      }}
     >
       <Row className="mt-2">
         <Form.Item
@@ -67,7 +70,7 @@ export default function HistoryTab() {
           <Button
             type="primary"
             htmlType="submit"
-            onClick={() => validHistory && saveHistory()}
+            onClick={() => saveHistory()}
             style={{ backgroundColor: blue.primary }}
           >
             EMR Хадгалах

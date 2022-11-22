@@ -6,73 +6,48 @@ import { blue } from "@ant-design/colors";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
+import { Get, openNofi, Patch, Post } from "../../comman";
 
-export default function GeneralInspection(props) {
+export default function GeneralInspection({ patientId, inspection }) {
   const token = useSelector(selectCurrentToken);
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
+  const config = {
+    headers: {},
+    params: {}
+  };
   const { TextArea } = Input;
-  const [validStep2, setValidStep2] = useState(false);
   const [form] = Form.useForm();
+  const [historyId, setHistoryId] = useState(Number);
 
   useEffect(() => {
     getGeneralInspection();
-  }, []);
+  }, [inspection]);
 
-  const saveGeneralInspection = (values) => {
-    // console.log("saveGeneral Inspection values: ", values);
-    values["patientId"] = 43;
-    axios({
-      method: "post",
-      url: `${DEV_URL}emr/general-inspection`,
-      data: values,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("response", response);
-      })
-      .catch(function (error) {
-        console.log("response error", error.response);
-      });
+  const saveGeneralInspection = () => {
+    form.validateFields().then(async (values) => {
+      values["patientId"] = patientId;
+      if (inspection) {
+        await Patch('emr/general-inspection/' + historyId, token, config, values);
+      } else {
+        await Post('emr/general-inspection', token, config, values);
+      }
+    }).catch((error) => {
+      openNofi("error", "611 маягт", "Заавал бөглөгдөх ёстой");
+    });
   };
 
-  const getGeneralInspection = () => {
-    axios({
-      method: "get",
-      url: `${DEV_URL}emr/general-inspection`,
-      params: {
-        patientId: 48,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        // console.log(
-        //   "response getGeneralInspection",
-        //   response.data.response.data
-        // );
-        form.setFieldsValue(response.data.response.data[0]);
-      })
-      .catch(function (error) {
-        // console.log("response error", error.response);
-      });
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    setValidStep2(false);
+  const getGeneralInspection = async () => {
+    config.params.patientId = patientId;
+    const response = await Get('emr/general-inspection', token, config);
+    if (response.data.length > 0) {
+      form.setFieldsValue(response.data[0]);
+      setHistoryId(response.data[0].id);
+    }
+    config.params.patientId = null;
   };
   return (
     <Form
       name="basic"
       initialValues={{ remember: true }}
-      onFinish={saveGeneralInspection}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
       labelAlign="left"
       scrollToFirstError
@@ -83,7 +58,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Биеийн ерөнхий байдал"
             name="bodyCondition"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 12,
@@ -93,10 +68,10 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Дунд">Дунд</Radio>
-              <Radio value="Хүндэвтэр">Хүндэвтэр</Radio>
-              <Radio value="Хүнд">Хүнд</Radio>
-              <Radio value="Маш хүнд">Маш хүнд</Radio>
+              <Radio value={0}>Дунд</Radio>
+              <Radio value={1}>Хүндэвтэр</Radio>
+              <Radio value={2}>Хүнд</Radio>
+              <Radio value={3}>Маш хүнд</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -106,7 +81,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Ухаан санаа"
             name="mind"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 12,
@@ -116,9 +91,9 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Саруул">Саруул</Radio>
-              <Radio value="Бүдгэрсэн">Бүдгэрсэн</Radio>
-              <Radio value="Ухаангүй">Ухаангүй</Radio>
+              <Radio value="REASONABLE">Саруул</Radio>
+              <Radio value="FADED">Бүдгэрсэн</Radio>
+              <Radio value="UNREASONABLE">Ухаангүй</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -128,7 +103,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Арьс салст"
             name="skin"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 12,
@@ -138,8 +113,8 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Хэвийн">Хэвийн</Radio>
-              <Radio value="Хэвийн бус">Хэвийн бус</Radio>
+              <Radio value="NORMAL">Хэвийн</Radio>
+              <Radio value="UNNORMAL">Хэвийн бус</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -152,7 +127,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Амьсгал 1 минутанд"
             name="respiratoryOneMinute"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 6,
@@ -177,7 +152,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Чагналтаар"
             name="respiratoryListen"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -187,10 +162,10 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Уушги цулцангийн">Уушги цулцангийн</Radio>
-              <Radio value="Гуурсан хоолойн">Гуурсан хоолойн</Radio>
-              <Radio value="Хэржигнүүртэй">Хэржигнүүртэй</Radio>
-              <Radio value="Амьсгал сулавтар">Амьсгал сулавтар</Radio>
+              <Radio value="LUNG">Уушги цулцангийн</Radio>
+              <Radio value="TUBE">Гуурсан хоолойн</Radio>
+              <Radio value="IMPORTANT">Хэржигнүүртэй</Radio>
+              <Radio value="SHORT_BREATH">Амьсгал сулавтар</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -203,7 +178,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Судасны цохилт 1 минутанд"
             name="pulseOneMinute"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 6,
@@ -226,7 +201,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Хүчдэл дүүрэлт"
             name="volt"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 6,
@@ -252,7 +227,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Тогшилтоор /Зүрхний хил/"
             name="heartTapping"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -262,8 +237,8 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Хэвийн">Хэвийн</Radio>
-              <Radio value="Томорсон">Томорсон</Radio>
+              <Radio value="NORMAL">Хэвийн</Radio>
+              <Radio value="LARGER">Томорсон</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -273,7 +248,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Чагналтаар /Зүрхний авиа/"
             name="heartSound"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -283,12 +258,12 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Тод">Тод</Radio>
-              <Radio value="Бүдэг">Бүдэг</Radio>
-              <Radio value="Бүдгэвтэр">Бүдгэвтэр</Radio>
-              <Radio value="Хэм жигд">Хэм жигд</Radio>
-              <Radio value="Жигд бус">Жигд бус</Radio>
-              <Radio value="Хэм алдалттай">Хэм алдалттай</Radio>
+              <Radio value="BRIGHT">Тод</Radio>
+              <Radio value="DIM">Бүдэг</Radio>
+              <Radio value="DIMMY">Бүдгэвтэр</Radio>
+              <Radio value="SMOOTH">Хэм жигд</Radio>
+              <Radio value="UNEVEN">Жигд бус</Radio>
+              <Radio value="HEMOLYSIS">Хэм алдалттай</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -298,7 +273,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="АД баруун талд"
             name="heartBPRight"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 6,
@@ -321,7 +296,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Зүүн талд"
             name="heartBPLeft"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 6,
@@ -350,7 +325,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Хэл"
             name="tongue"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -360,10 +335,10 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Ердийн">Ердийн</Radio>
-              <Radio value="Хуурай">Хуурай</Radio>
-              <Radio value="Өнгөргүй">Өнгөргүй</Radio>
-              <Radio value="Өнгөртэй">Өнгөртэй</Radio>
+              <Radio value="NORMAL">Ердийн</Radio>
+              <Radio value="DRY">Хуурай</Radio>
+              <Radio value="NO_COLORFUL">Өнгөргүй</Radio>
+              <Radio value="COLORFUL">Өнгөртэй</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -373,7 +348,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Хэвлийн үзлэг"
             name="abdomen"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -383,14 +358,14 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Өнгөц тэмтрэлтээр">Өнгөц тэмтрэлтээр</Radio>
-              <Radio value="Гүн тэмтрэлтээр">Гүн тэмтрэлтээр</Radio>
-              <Radio value="Эмзэглэлтэй">Эмзэглэлтэй</Radio>
-              <Radio value="Ердийн">Ердийн</Radio>
-              <Radio value="Зөөлөн гялтан цочрол үгүй">
+              <Radio value="PALPATION">Өнгөц тэмтрэлтээр</Radio>
+              <Radio value="DEEP_PALPATION">Гүн тэмтрэлтээр</Radio>
+              <Radio value="HURFUL">Эмзэглэлтэй</Radio>
+              <Radio value="NORMAL">Ердийн</Radio>
+              <Radio value="MILD_PLEURAL">
                 Зөөлөн гялтан цочрол үгүй
               </Radio>
-              <Radio value="Гялтан цочролтын шинж илэрсэн">
+              <Radio value="SYMTOMS_SHOCK">
                 Гялтан цочролтын шинж илэрсэн
               </Radio>
             </Radio.Group>
@@ -405,7 +380,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Сонсох чадвар"
             name="audition"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -415,8 +390,8 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Хэвийн">Хэвийн</Radio>
-              <Radio value="Буурсан">Буурсан</Radio>
+              <Radio value="NORMAL">Хэвийн</Radio>
+              <Radio value="DECREASED">Буурсан</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -426,7 +401,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label="Рефлексүүд"
             name="reflex"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             wrapperCol={{
               span: 18,
@@ -436,8 +411,8 @@ export default function GeneralInspection(props) {
             }}
           >
             <Radio.Group>
-              <Radio value="Хадгалагдана">Хадгалагдана</Radio>
-              <Radio value="Хадгалагдахгүй">Хадгалагдахгүй</Radio>
+              <Radio value="SAVED">Хадгалагдана</Radio>
+              <Radio value="NOT_SAVED">Хадгалагдахгүй</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -447,7 +422,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label=""
             name="other"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             labelCol={{
               span: 8,
@@ -466,7 +441,7 @@ export default function GeneralInspection(props) {
           <Form.Item
             label=""
             name="mentalState"
-            rules={[{ required: false, message: "" }]}
+            rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
             className="mb-0"
             labelCol={{
               span: 8,
@@ -489,7 +464,7 @@ export default function GeneralInspection(props) {
           <Button
             type="primary"
             htmlType="submit"
-            onClick={() => validStep2 && saveGeneralInspection()}
+            onClick={() => saveGeneralInspection()}
             style={{ backgroundColor: blue.primary }}
           >
             Хадгалах
