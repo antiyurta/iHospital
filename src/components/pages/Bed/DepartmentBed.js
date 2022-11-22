@@ -30,6 +30,7 @@ const DepartmentBed = (props) => {
   const token = useSelector(selectCurrentToken);
   const [filter, setFilter] = useState(""); //['Сул өрөө', 'Дүүрсэн өрөө', .....]
   const [searchValue, setSearchValue] = useState("");
+  const [genderSearchValue, setGenderSearchValue] = useState("all");
   const [selectedRoomBeds, setSelectedRoomBeds] = useState(""); //Сонгогдсон өрөөний орнууд
   const [selectedBed, setSelectedBed] = useState(""); //Сонгогдсон ор
   const [orderedPatientList, setOrderedPatientList] = useState(""); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
@@ -173,6 +174,31 @@ const DepartmentBed = (props) => {
   return (
     <div className="p-6">
       <Row>
+        <Col span={3}>
+          <Segmented
+            className="department-bed-segment"
+            size="small"
+            options={[
+              {
+                label: "Бүгд",
+                value: "all",
+                icon: null,
+              },
+              {
+                label: "Эр",
+                value: "MAN",
+                icon: null,
+              },
+              {
+                label: "Эм",
+                value: "WOMAN",
+                icon: null,
+              },
+            ]}
+            value={genderSearchValue}
+            onChange={(e) => setGenderSearchValue(e)}
+          />
+        </Col>
         <Col span={8}>
           <Segmented
             className="department-bed-segment"
@@ -203,9 +229,10 @@ const DepartmentBed = (props) => {
             onChange={(e) => selectFilter(e)}
           />
         </Col>
-        <Col span={8} offset={8}>
+        <Col span={8}>
           <Input
             size="small"
+            value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Өрөө хайх"
             prefix={<SearchOutlined />}
@@ -216,7 +243,12 @@ const DepartmentBed = (props) => {
         <Row gutter={[16, 16]} className="mt-4">
           {/* .filter(obj => obj.tech.includes("React")) */}
           {props.data?.rooms
-            ?.filter((obj) => obj.roomNumber.includes(searchValue)) //Өрөөний дугаараар хайх
+            ?.filter((obj) => obj.roomNumber.includes(searchValue))
+            ?.filter((obj) =>
+              genderSearchValue === "all"
+                ? obj
+                : obj.genderType && obj.genderType === genderSearchValue
+            ) //Өрөөний дугаараар хайх
             .map((el, index) => {
               return (
                 <Col className="gutter-row" span={8} key={index}>
@@ -226,10 +258,25 @@ const DepartmentBed = (props) => {
                     bodyStyle={styles.cardBodyStyle}
                     onClick={() => selectRoom(el.id)}
                   >
-                    <div style={{ width: "10%" }}>
-                      <SnippetsOutlined style={styles.iconStyle} />
+                    <div style={{ width: "15%" }}>
+                      {el.genderType === "WOMAN" ? (
+                        <img
+                          src={require("../../../assets/bed/female.png")}
+                          style={styles.iconStyle}
+                        />
+                      ) : el.genderType === "MAN" ? (
+                        <img
+                          src={require("../../../assets/bed/male.png")}
+                          style={styles.iconStyle}
+                        />
+                      ) : (
+                        <img
+                          src={require("../../../assets/bed/empty_room.png")}
+                          style={styles.iconStyle}
+                        />
+                      )}
                     </div>
-                    <div style={{ width: "90%" }}>
+                    <div style={{ width: "85%" }}>
                       <div style={styles.cardRowContainer} className="mb-6">
                         <p style={styles.total}>
                           {el.roomNumber} -{" "}
@@ -552,11 +599,10 @@ const styles = {
     width: "100%",
   },
   iconStyle: {
-    backgroundColor: blue.primary,
-    padding: 5,
     borderRadius: 6,
     fontSize: 16,
     color: "#fff",
+    width: "80%",
   },
   total: {
     fontSize: 16,
