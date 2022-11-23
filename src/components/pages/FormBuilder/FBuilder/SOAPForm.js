@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Delete, Get, Post } from '../../../comman';
+import { Delete, Get, Patch, Post } from '../../../comman';
 import Index from './index';
 function SOAPForm() {
     const [SOAPForm] = Form.useForm();
@@ -18,6 +18,7 @@ function SOAPForm() {
     }
     const [soapForms, setSoapForms] = useState([]);
     const [editMode, setEditMode] = useState(false);
+    const [id, setId] = useState(Number);
     const [searchField, setSearchField] = useState("");
     const [isSOAPModal, setIsSOAPModal] = useState(false);
     const [structures, setStructures] = useState([]);
@@ -38,6 +39,8 @@ function SOAPForm() {
         newForm['inspection'] = form.formItem.inspection;
         newForm['question'] = form.formItem.question;
         newForm['plan'] = form.formItem.plan;
+        setEditMode(true);
+        setId(form.id);
         setCabinetFilterValue(form.structureId);
         SOAPForm.setFieldsValue(newForm);
         setIsSOAPModal(true);
@@ -68,6 +71,10 @@ function SOAPForm() {
         {
             label: "RADIO",
             value: "radio"
+        },
+        {
+            label: "CHECKBOX",
+            value: 'checkbox'
         }
     ];
     const basisRule = [
@@ -111,7 +118,6 @@ function SOAPForm() {
     ]
     //
     const onFinish = async (values) => {
-        console.log(values);
         const data = [];
         values.pain?.map((pain) => {
             pain['inspectionType'] = 'pain';
@@ -129,30 +135,47 @@ function SOAPForm() {
             plan['inspectionType'] = 'question';
             data.push(plan);
         });
-        const response = await Post(
-            'emr/inspection-form',
-            token,
-            config,
-            {
-                structureId: values.structureId,
-                cabinetId: values.cabinetId,
-                name: values.name,
-                title: values.title,
-                formItems: data
-            });
-        if (response === 201) {
-            setIsSOAPModal(false);
-            getSOAPForms();
+        if (editMode) {
+            const response = await Patch(
+                'emr/inspection-form/' + id,
+                token,
+                config,
+                {
+                    structureId: values.structureId,
+                    cabinetId: values.cabinetId,
+                    name: values.name,
+                    title: values.title,
+                    formItems: data
+                });
+            if (response === 200) {
+                setIsSOAPModal(false);
+                getSOAPForms();
+            }
+        } else {
+            const response = await Post(
+                'emr/inspection-form',
+                token,
+                config,
+                {
+                    structureId: values.structureId,
+                    cabinetId: values.cabinetId,
+                    name: values.name,
+                    title: values.title,
+                    formItems: data
+                });
+            if (response === 201) {
+                setIsSOAPModal(false);
+                getSOAPForms();
+            }
         }
     }
     const HandleChange = (arg, value) => {
         const formData = SOAPForm.getFieldsValue();
         const type = SOAPForm.getFieldValue([arg, value, 'type']);
-        if (type === 'radio') {
-            formData.pain[value].options = [{ value: "", label: "" }];
-
+        if (type === 'radio' || type === 'checkbox') {
+            formData[arg][value].options = [{ value: "", label: "" }];
         } else {
-            formData.pain[value].options = undefined;
+            formData[arg][value].options = undefined;
         }
         SOAPForm.setFieldsValue(formData);
     };

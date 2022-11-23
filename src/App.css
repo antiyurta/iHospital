@@ -48,6 +48,7 @@ legend.scheduler-border {
 }
 
 .ant-form-item-label label {
+  height: 28px;
   font-size: 12px;
   font-weight: bold;
 }
@@ -91,9 +92,12 @@ legend.scheduler-border {
   align-items: center;
 }
 .ant-form-item-control-input {
-  min-height: 32px !important;
+  min-height: 28px !important;
   background: white;
   border-radius: 5px;
+}
+.ant-form-item-control-input-content {
+  min-height: 28px !important;
 }
 .small-radio-button > .ant-radio-button-wrapper {
   height: 24px !important;

@@ -9,6 +9,7 @@ import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 import { Get, openNofi, Post } from "../../../comman";
 import { Table } from "react-bootstrap";
+import { getByTitle } from "@testing-library/react";
 const { Option } = Select;
 function MainPatientHistory({ PatientId, Inspection }) {
   const [form] = Form.useForm();
@@ -36,7 +37,7 @@ function MainPatientHistory({ PatientId, Inspection }) {
         value: element.code
       })
     })
-  }
+  };
 
   useEffect(() => {
     getInspectionTabs();
@@ -60,6 +61,7 @@ function MainPatientHistory({ PatientId, Inspection }) {
         autoComplete="off"
         labelAlign="left"
         scrollToFirstError
+        layout="vertical"
         form={form}
       >
         {"pain" in props.data && props.data.pain.length > 0 ? (
@@ -73,7 +75,7 @@ function MainPatientHistory({ PatientId, Inspection }) {
         {"inspection" in props.data && props.data.inspection.length > 0 ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
-              Үзлэг
+              Бодит үзлэг
             </Divider>
             <DynamicFormInspection data={props.data["inspection"]} />
           </>
@@ -147,7 +149,7 @@ function MainPatientHistory({ PatientId, Inspection }) {
       plan: JSON.stringify(values["plan"]),
     }
     console.log(data);
-    await Post('emr/inspectionNote', token, config, data);
+    // await Post('emr/inspectionNote', token, config, data);
   };
 
   const onFinishFailed = (errorInfo) => {

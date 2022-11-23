@@ -8,17 +8,13 @@ import {
   Checkbox,
   Select,
   DatePicker,
+  Divider,
 } from "antd";
 import { INPUT_HEIGHT } from "../../constant";
-import { Editor } from "@tinymce/tinymce-react";
 
 export default function DynamicFormInspection(props) {
   const { TextArea } = Input;
   const { Option } = Select;
-  const editorRef = useRef(null);
-  const handleEditorChange = (e) => {
-    console.log("Content was updated:", e.target.getContent());
-  };
 
   //antd FORM нь ингэж хадгалж чаддаг юм байна өөө : {[el.inspectionType, el.label]} => [object -н KEY, Param -ууд]
   //Жнь: question: {Асуумж: '22', checkchoose: Array(2), bodyStatus: 'heavy'} => Асуумжын Парамууд
@@ -28,59 +24,45 @@ export default function DynamicFormInspection(props) {
       {props.data?.map((el, index) => {
         if (el.type === "textarea") {
           return (
-            <Row align="middle" className="mb-1" key={index}>
-              <Col span={24} className="text-left">
+            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+              <div className="inline-flex p-1">
                 <Form.Item
-                  label=""
+                  label=" "
                   name={[el.inspectionType, el.key, el.label]}
-                  rules={[{ required: false, message: "" }]}
                   className="mb-0"
-                  wrapperCol={{
-                    span: 24,
-                  }}
-                  labelCol={{
-                    span: 8,
-                  }}
                 >
                   <TextArea
                     rows={2}
-                    style={{ padding: 5, marginBottom: 5 }}
+                    cols={50}
                     placeholder={el.label}
                   />
                 </Form.Item>
-              </Col>
-            </Row>
+              </div>
+            </div>
+          );
+        } else if (el.type === "title") {
+          return (
+            <div>
+              <p className="mt-2 font-semibold">{el.label}</p>
+              <hr class="m-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+            </div>
           );
         } else if (el.type === "input") {
           return (
-            <Row align="middle" className="mb-1" key={index}>
-              <Col span={24} className="text-left">
+            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+              <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.key, el.label]}
+                  name={[el.inspectionType, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
-                  wrapperCol={{
-                    span: 6,
-                  }}
-                  labelCol={{
-                    span: 8,
-                  }}
                 >
-                  <Input
-                    size="small"
-                    style={{
-                      minHeight: INPUT_HEIGHT,
-                      padding: 5,
-                      height: INPUT_HEIGHT,
-                    }}
-                  />
+                  <Input />
                 </Form.Item>
-              </Col>
-            </Row>
+              </div>
+            </div>
           );
         } else if (el.type === "radio") {
-          // console.log("RADIO", el);
           return (
             <div className="rounded-md bg-gray-100 w-max inline-block m-1">
               <div className="inline-flex p-1">
@@ -89,7 +71,7 @@ export default function DynamicFormInspection(props) {
                   name={[el.inspectionType, el.label]}
                   className="mb-0"
                 >
-                  <Radio.Group>
+                  <Radio.Group className="align-middle grid">
                     {el.options?.map((el, index) => {
                       return (
                         <Radio className="pl-1" value={el.label} key={index}>
@@ -103,34 +85,27 @@ export default function DynamicFormInspection(props) {
             </div>
           );
         } else if (el.type === "checkbox") {
-          // console.log("checkbox", el);
           return (
-            <Row align="middle" className="mb-1" key={index}>
-              <Col span={24} className="text-left">
+            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+              <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.key, el.label]}
+                  name={[el.inspectionType, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
-                  wrapperCol={{
-                    span: 16,
-                  }}
-                  labelCol={{
-                    span: 8,
-                  }}
                 >
-                  <Checkbox.Group>
+                  <Checkbox.Group className="align-middle grid">
                     {el.options?.map((el, index) => {
                       return (
-                        <Checkbox value={el.value} key={index}>
+                        <Checkbox className="pl-1 ml-0" value={el.value} key={index}>
                           {el.label}
                         </Checkbox>
                       );
                     })}
                   </Checkbox.Group>
                 </Form.Item>
-              </Col>
-            </Row>
+              </div>
+            </div>
           );
         } else if (el.type === "dropdown") {
           // console.log("dropdown", el);
