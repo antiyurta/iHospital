@@ -1,4 +1,4 @@
-import { Button, Divider } from "antd";
+import { Button, Checkbox, Divider } from "antd";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react"
@@ -20,22 +20,19 @@ export default function Index(props) {
     const handlePrint = useReactToPrint({
         content: () => printRef.current
     });
+
     const RenderHTML = (data) => {
         return Object.entries(data.data).map(([key, value], index) => {
             return (
                 <div key={index} className="inline-flex">
-                    {
-                        Object.keys(value).map((e, index) => {
-                            return <p key={index} className="font-semibold mr-2">{e}: </p>
-                        })
-                    }
+                    <p className="font-semibold mx-2">{key}: </p>
                     {Object.values(value).map((elValues, index) => {
                         return typeof elValues === "string" ? (
-                            <p key={index} className="pr-3">{elValues}</p>
+                            <p key={index}>{elValues}</p>
                         ) : (
                             <div key={index}>
                                 {elValues.map((el, index) => {
-                                    return <p key={index} className="pr-3">{el}</p>;
+                                    return <p key={index}>{el}</p>;
                                 })}
                             </div>
                         );

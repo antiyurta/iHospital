@@ -149,7 +149,7 @@ function MainPatientHistory({ PatientId, Inspection }) {
       plan: JSON.stringify(values["plan"]),
     }
     console.log(data);
-    // await Post('emr/inspectionNote', token, config, data);
+    await Post('emr/inspectionNote', token, config, data);
   };
 
   const onFinishFailed = (errorInfo) => {

@@ -24,11 +24,11 @@ export default function DynamicFormInspection(props) {
       {props.data?.map((el, index) => {
         if (el.type === "textarea") {
           return (
-            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+            <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
               <div className="inline-flex p-1">
                 <Form.Item
                   label=" "
-                  name={[el.inspectionType, el.key, el.label]}
+                  name={[el.inspectionType, el.label]}
                   className="mb-0"
                 >
                   <TextArea
@@ -42,14 +42,14 @@ export default function DynamicFormInspection(props) {
           );
         } else if (el.type === "title") {
           return (
-            <div>
+            <div key={index}>
               <p className="mt-2 font-semibold">{el.label}</p>
-              <hr class="m-2 h-px bg-gray-200 border-0 dark:bg-gray-700" />
+              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
             </div>
           );
         } else if (el.type === "input") {
           return (
-            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+            <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
               <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
@@ -64,7 +64,7 @@ export default function DynamicFormInspection(props) {
           );
         } else if (el.type === "radio") {
           return (
-            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+            <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
               <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
@@ -86,7 +86,7 @@ export default function DynamicFormInspection(props) {
           );
         } else if (el.type === "checkbox") {
           return (
-            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+            <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
               <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
@@ -97,7 +97,7 @@ export default function DynamicFormInspection(props) {
                   <Checkbox.Group className="align-middle grid">
                     {el.options?.map((el, index) => {
                       return (
-                        <Checkbox className="pl-1 ml-0" value={el.value} key={index}>
+                        <Checkbox className="pl-1 ml-0" value={el.label} key={index}>
                           {el.label}
                         </Checkbox>
                       );

@@ -132,7 +132,7 @@ function SOAPForm() {
             data.push(question);
         });
         values.plan?.map((plan) => {
-            plan['inspectionType'] = 'question';
+            plan['inspectionType'] = 'plan';
             data.push(plan);
         });
         if (editMode) {

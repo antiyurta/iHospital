@@ -56,15 +56,10 @@ export default function ProgressNotes({ PatientId }) {
   };
 
   const RenderNotesDetail = (data) => {
-    console.log(data);
     return Object.entries(data.data).map(([key, value], index) => {
       return (
-        <div key={index} className="flex">
-          {
-            Object.keys(value).map((e, index) => {
-              return <p key={index} className="font-semibold mr-2">{e}: </p>
-            })
-          }
+        <div key={index} className="inline-flex">
+          <p className="font-semibold mx-2">{key}: </p>
           {Object.values(value).map((elValues, index) => {
             return typeof elValues === "string" ? (
               <p key={index}>{elValues}</p>
