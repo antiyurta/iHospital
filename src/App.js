@@ -40,7 +40,6 @@ import BeforeAmbulatoryList from "./components/pages/BeforeAmbulatory/BeforeAmbu
 import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail";
 //emr end
 // inpatient HEWTENT start
-import Inpatient from "./components/pages/Inpatient/inpatient";
 import Demo from "./components/pages/Demo/demo";
 import Menu from "./components/pages/reference/Menu";
 import Report from "./components/pages/Demo/Report";
@@ -59,6 +58,8 @@ import RoomtDtl from "./components/pages/Bed/RoomDtl";
 import Demo2 from "./components/pages/Demo/demo2";
 import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
+import MedicineSupport from "./components/pages/service/MedicineSupport";
+import Finance from "./components/pages/Finance/Finance";
 // lab end
 
 function App() {
@@ -70,8 +71,10 @@ function App() {
           {/* lab start */}
           <Route path="/equipments" element={<EquipmentList />} />
           {/* lab end */}
+          {/* finance start */}
+          <Route path="/finance" element={<Finance />} />
+          {/* finance end */}
           <Route path="/menu" element={<Menu />} />
-          <Route path="/inpatient" element={<Inpatient />} />
           <Route path="/emr" element={<EMR />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/reports" element={<Report />} />
@@ -253,6 +256,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Medicine />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/medicineSupport"
+              element={
+                <PrivateRoute>
+                  <MedicineSupport />
                 </PrivateRoute>
               }
             />

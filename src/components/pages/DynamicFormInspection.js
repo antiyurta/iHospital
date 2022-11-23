@@ -82,32 +82,25 @@ export default function DynamicFormInspection(props) {
         } else if (el.type === "radio") {
           // console.log("RADIO", el);
           return (
-            <Row align="middle" className="mb-1" key={index}>
-              <Col span={24} className="text-left">
+            <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+              <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.key, el.label]}
-                  rules={[{ required: false, message: "" }]}
+                  name={[el.inspectionType, el.label]}
                   className="mb-0"
-                  wrapperCol={{
-                    span: 10,
-                  }}
-                  labelCol={{
-                    span: 8,
-                  }}
                 >
                   <Radio.Group>
                     {el.options?.map((el, index) => {
                       return (
-                        <Radio value={el.label} key={index}>
+                        <Radio className="pl-1" value={el.label} key={index}>
                           {el.label}
                         </Radio>
                       );
                     })}
                   </Radio.Group>
                 </Form.Item>
-              </Col>
-            </Row>
+              </div>
+            </div>
           );
         } else if (el.type === "checkbox") {
           // console.log("checkbox", el);

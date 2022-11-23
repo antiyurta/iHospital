@@ -91,7 +91,7 @@ legend.scheduler-border {
   align-items: center;
 }
 .ant-form-item-control-input {
-  min-height: 28px !important;
+  min-height: 32px !important;
   background: white;
   border-radius: 5px;
 }

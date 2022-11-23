@@ -1,5 +1,5 @@
 import { EditOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { Button, Card, Divider, Form, Input, Modal, Pagination, Select, Switch } from "antd";
+import { Button, Card, Divider, Form, Input, InputNumber, Modal, Pagination, Select, Switch } from "antd";
 import { useEffect, useState } from "react";
 import { Spinner, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -25,6 +25,7 @@ function Medicine() {
     const [measurements, setMeasurements] = useState([]);
     const [pregnancyWarning, setPregnancyWarnings] = useState([]);
     const [spinner, setSpinner] = useState(false);
+    const [ageRank, setAgeRank] = useState("");
 
     const editModal = async (id) => {
         setEditMode(true);
@@ -44,7 +45,9 @@ function Medicine() {
             }
         } else {
             const response = await Post('service/medicine', token, config, values);
-            console.log(response);
+            if (response === 201) {
+                setIsOpenMedicineModal(false);
+            }
         }
     }
 
@@ -98,6 +101,15 @@ function Medicine() {
     const [medicineForm] = Form.useForm();
     const [isOpenSecondModal, setIsOpenSecondModal] = useState(false);
 
+    const getTreatment = (value) => {
+        var data = medTreatmentTypes.filter((e) => e.id === value);
+        return data[0]?.name;
+    };
+    const getATC = (value) => {
+        var data = atcCategories.filter(e => e.id === value);
+        return data[0]?.name;
+    };
+
     return (
         <div className="flex flex-wrap">
             <div className="w-full">
@@ -107,7 +119,10 @@ function Medicine() {
                     title={'Medicine'}
                     extra={
                         <>
-                            <Button onClick={() => { setIsOpenMedicineModal(true); setEditMode(false); medicineForm.resetFields(); }}>Нэмэх</Button>
+                            <Button onClick={() => {
+                                setIsOpenMedicineModal(true); setEditMode(false);
+                                // medicineForm.resetFields();
+                            }}>Нэмэх</Button>
                         </>
                     }
                 >
@@ -118,7 +133,7 @@ function Medicine() {
                                     <th className="font-bold text-sm align-middle">№</th>
                                     <th className="font-bold text-sm align-middle">Эмийн код</th>
                                     <th className="font-bold text-sm align-middle">Олон улсын нэршил</th>
-                                    <th className="font-bold text-sm align-middle">Худалдааны нэршил</th>
+                                    <th className="font-bold text-sm align-middle">Эмийн нэр</th>
                                     <th className="font-bold text-sm align-middle">Эмийн хэлбэр</th>
                                     <th className="font-bold text-sm align-middle">Тун</th>
                                     <th className="font-bold text-sm align-middle">ATC ангилал</th>
@@ -135,8 +150,10 @@ function Medicine() {
                                                 <td>{index + 1}</td>
                                                 <td>{medicine.code}</td>
                                                 <td>{medicine.iName}</td>
-                                                <td>{medicine.tName}</td>
-                                                <td>{medicine.medTreatmentId}</td>
+                                                <td>{medicine.name}</td>
+                                                <td>{getTreatment(medicine.medTreatmentId)}</td>
+                                                <td>{ }</td>
+                                                <td>{getATC(medicine.atcCategoryId)}</td>
                                                 <td>
                                                     <Button type="link" onClick={() => editModal(medicine.id)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
                                                 </td>
@@ -169,11 +186,11 @@ function Medicine() {
                     onFinish(values);
                 })}
                 onCancel={() => { setIsOpenMedicineModal(false) }}
-                width={'100%'}
+                width={'80%'}
                 cancelText="Болих"
                 okText="Хадгалах"
             >
-                <Form form={medicineForm}>
+                <Form form={medicineForm} labelAlign={"right"}>
                     <fieldset className='scheduler-border'>
                         <legend className='scheduler-border'>Эмийн ерөнхий мэдээлэл</legend>
                         <div className="flex flex-wrap">
@@ -187,6 +204,8 @@ function Medicine() {
                                             message: "Заавал",
                                         }
                                     ]}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -201,6 +220,8 @@ function Medicine() {
                                             message: "Заавал",
                                         }
                                     ]}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -215,6 +236,8 @@ function Medicine() {
                                             message: "Заавал",
                                         }
                                     ]}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -229,6 +252,8 @@ function Medicine() {
                                             message: "Заавал"
                                         }
                                     ]}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
                                 >
                                     <Select>
                                         {
@@ -251,6 +276,8 @@ function Medicine() {
                                             message: "Заавал"
                                         }
                                     ]}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
                                 >
                                     <Select>
                                         {
@@ -273,6 +300,8 @@ function Medicine() {
                                             message: "Заавал"
                                         }
                                     ]}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
                                 >
                                     <Select>
                                         {
@@ -295,6 +324,8 @@ function Medicine() {
                                             message: "Заавал"
                                         }
                                     ]}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -309,6 +340,8 @@ function Medicine() {
                                             message: "Заавал"
                                         }
                                     ]}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -317,6 +350,14 @@ function Medicine() {
                                 <Form.Item
                                     label="Эмчилгээний төрөл"
                                     name="medicineType"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Заавал",
+                                        }
+                                    ]}
+                                    labelCol={{ span: 9 }}
+                                    wrapperCol={{ span: 15 }}
                                 >
                                     <Select>
                                         <Option value={1}>Энгийн</Option>
@@ -331,6 +372,14 @@ function Medicine() {
                                 <Form.Item
                                     label="Хадгалах нөхцөл"
                                     name="storageType"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Заавал",
+                                        }
+                                    ]}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
                                 >
                                     <Select>
                                         <Option value={1}>Тасалгаанд</Option>
@@ -338,6 +387,19 @@ function Medicine() {
                                         <Option value={3}>Хөргөгчинд</Option>
                                         <Option value={4}>Тугалган цаасанд ороож</Option>
                                     </Select>
+                                </Form.Item>
+                            </div>
+                            <div className="w-full md:w-full lg:w-2/3 px-1">
+                                <Form.Item
+                                    label="Задгайгаар зарлагдах эсэх"
+                                    name="isExpenditure"
+                                    valuePropName="checked"
+                                >
+                                    <Switch
+                                        className="bg-sky-700"
+                                        checkedChildren="Тийм"
+                                        unCheckedChildren="Үгүй"
+                                    />
                                 </Form.Item>
                             </div>
                         </div>
@@ -361,11 +423,59 @@ function Medicine() {
                             </div>
                             <div className="w-full md:w-1/2 lg:w-1/3 px-1">
                                 <Form.Item
+                                    label="Даатгалд хамаарах эсэх"
+                                    name="isInsurance"
+                                    valuePropName="checked"
+                                    labelCol={{ span: 16 }}
+                                    wrapperCol={{ span: 8 }}
+                                >
+                                    <Switch
+                                        className="bg-sky-700"
+                                        checkedChildren="Тийм"
+                                        unCheckedChildren="Үгүй"
+                                    />
+                                </Form.Item>
+                            </div>
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-1">
+                                <Form.Item
+                                    label="Амбулторийн үнэ"
+                                    name="price"
+                                    labelCol={{ span: 10 }}
+                                    wrapperCol={{ span: 14 }}
+                                >
+                                    <InputNumber />
+                                </Form.Item>
+                            </div>
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-1">
+                                <Form.Item
+                                    label="Стационар хөнгөлөлттэй эсэх"
+                                    name="isInDiscount"
+                                    valuePropName="checked"
+                                >
+                                    <Switch
+                                        className="bg-sky-700"
+                                        checkedChildren="Тийм"
+                                        unCheckedChildren="Үгүй"
+                                    />
+                                </Form.Item>
+                            </div>
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-1">
+                                <Form.Item
                                     label="Идэвхтэй эсэх"
                                     name="isActiveMedicine"
                                     valuePropName="checked"
+                                    labelCol={{ span: 16 }}
+                                    wrapperCol={{ span: 8 }}
                                 >
                                     <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                                </Form.Item>
+                            </div>
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-1">
+                                <Form.Item
+                                    label="Хэвтэн эмчлүүлэх үнэ"
+                                    name="inpatientPrice"
+                                >
+                                    <InputNumber />
                                 </Form.Item>
                             </div>
                         </div>
@@ -394,10 +504,18 @@ function Medicine() {
                                     label="Насны ангилал"
                                     name="ageRank"
                                 >
-                                    <Select>
+                                    <Select onChange={(e) => setAgeRank(e)}>
                                         <Option value="HIGH">Их</Option>
                                         <Option value="LOW">Бага</Option>
                                     </Select>
+                                </Form.Item>
+                            </div>
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-1">
+                                <Form.Item
+                                    label="Нас"
+                                    name={ageRank === 'HIGH' ? "maxAge" : "minAge"}
+                                >
+                                    <InputNumber />
                                 </Form.Item>
                             </div>
                             <div className="w-full md:w-1/2 lg:w-1/3 px-1">

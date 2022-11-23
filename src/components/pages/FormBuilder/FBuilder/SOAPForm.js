@@ -54,7 +54,7 @@ function SOAPForm() {
     //
     const typeSelectData = [
         {
-            label: "Title",
+            label: "Гарчиг",
             value: "title"
         },
         {
@@ -73,7 +73,7 @@ function SOAPForm() {
     const basisRule = [
         {
             required: true,
-            message: "Zaawal"
+            message: "Заавал"
         }
     ];
     const options = [
@@ -246,66 +246,70 @@ function SOAPForm() {
                 width="70%"
             >
                 <Form form={SOAPForm}>
-                    <div className='flex flex-wrap'>
-                        <div className='basis-1/2 p-1'>
-                            <Form.Item
-                                label="Тасаг"
-                                name="structureId"
-                                rules={basisRule}
-                            >
-                                <Select
-                                    notFoundContent="Дата байхгүй"
-                                    onChange={(e) => {
-                                        setCabinetFilterValue(e); SOAPForm.setFieldValue('cabinetId', null)
-                                    }}>
-                                    {
-                                        structures.map((structure, index) => {
-                                            return (
-                                                <Option key={index} value={structure.id}>{structure.name}</Option>
-                                            )
-                                        })
-                                    }
-                                </Select>
-                            </Form.Item>
-                        </div>
-                        <div className='basis-1/2 p-1'>
-                            <Form.Item
-                                label="Кабинэт"
-                                name="cabinetId"
-                                rules={basisRule}
-                            >
-                                <Select>
-                                    {
-                                        filteredCabinets.map((cabinet, index) => {
-                                            return (
-                                                <Option key={index} value={cabinet.id}>{cabinet.name}</Option>
-                                            )
-                                        })
-                                    }
-                                </Select>
-                            </Form.Item>
-                        </div>
-                        <div className='basis-1/2 p-1'>
-                            <Form.Item
-                                label="SOAP нэр"
-                                name="name"
-                                rules={basisRule}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </div>
-                        <div className='basis-1/2 p-1'>
-                            <Form.Item
-                                label="SOAP толгой"
-                                name="title"
-                                rules={basisRule}
-                            >
-                                <TextArea />
-                            </Form.Item>
+                    <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
+                        <div className="p-2">
+                            <div className='flex flex-wrap'>
+                                <div className='w-full md:w-1/2 p-1'>
+                                    <Form.Item
+                                        label="Тасаг"
+                                        name="structureId"
+                                        rules={basisRule}
+                                    >
+                                        <Select
+                                            notFoundContent="Дата байхгүй"
+                                            onChange={(e) => {
+                                                setCabinetFilterValue(e); SOAPForm.setFieldValue('cabinetId', null)
+                                            }}>
+                                            {
+                                                structures.map((structure, index) => {
+                                                    return (
+                                                        <Option key={index} value={structure.id}>{structure.name}</Option>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
+                                    </Form.Item>
+                                </div>
+                                <div className='w-full md:w-1/2 p-1'>
+                                    <Form.Item
+                                        label="Кабинэт"
+                                        name="cabinetId"
+                                        rules={basisRule}
+                                    >
+                                        <Select>
+                                            {
+                                                filteredCabinets.map((cabinet, index) => {
+                                                    return (
+                                                        <Option key={index} value={cabinet.id}>{cabinet.name}</Option>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
+                                    </Form.Item>
+                                </div>
+                                <div className='w-full md:w-1/2 p-1'>
+                                    <Form.Item
+                                        label="SOAP нэр"
+                                        name="name"
+                                        rules={basisRule}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                </div>
+                                <div className='w-full md:w-1/2 p-1'>
+                                    <Form.Item
+                                        label="SOAP толгой"
+                                        name="title"
+                                        rules={basisRule}
+                                    >
+                                        <TextArea />
+                                    </Form.Item>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <Divider>Асуумж</Divider>
-                    <Collapse accordion>
+                    <Collapse accordion style={{ borderRadius: '0.375rem' }}>
                         {
                             panels.map((panel, index) => {
                                 return (

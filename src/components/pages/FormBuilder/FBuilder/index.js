@@ -8,41 +8,47 @@ function index({ options, namePanel, handleChange }) {
                 {(fields, { add, remove }) => (
                     <>
                         {fields.map(({ key, name, ...restField }) => (
-                            <div key={key} className="rounded-md bg-gray-100 m-2">
+                            <div key={key} className="rounded-md m-2" style={{ backgroundColor: '#fafafa' }}>
                                 <div className="p-2">
-                                    <div className="flex flex-wrap">
-                                        {
-                                            options.map((option, index) => {
-                                                return (
-                                                    <div key={index} className="w-full md:w-5/12 p-1">
-                                                        {
-                                                            option.type === 'select' &&
-                                                            <Form.Item
-                                                                {...restField}
-                                                                label={option.label}
-                                                                name={[name, option.name]}
-                                                                rules={option.rules}
-                                                            >
-                                                                <Select onChange={() => handleChange(namePanel, name)} options={option.selectData}></Select>
-                                                            </Form.Item>
-                                                        }
-                                                        {
-                                                            option.type === 'textarea' &&
-                                                            <Form.Item
-                                                                {...restField}
-                                                                label={option.label}
-                                                                name={[name, option.name]}
-                                                                rules={option.rules}
-                                                            >
-                                                                <TextArea />
-                                                            </Form.Item>
-                                                        }
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                        <div className="basis-1/12 p-1 text-center">
-                                            <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(name)} />
+                                    <div className="flex">
+                                        <div className="w-11/12">
+                                            <div className="flex">
+                                                {
+                                                    options.map((option, index) => {
+                                                        return (
+                                                            <div key={index} className="w-full md:w-1/2 lg:w-1/2 p-1">
+                                                                {
+                                                                    option.type === 'select' &&
+                                                                    <Form.Item
+                                                                        {...restField}
+                                                                        label={option.label}
+                                                                        name={[name, option.name]}
+                                                                        rules={option.rules}
+                                                                    >
+                                                                        <Select onChange={() => handleChange(namePanel, name)} options={option.selectData}></Select>
+                                                                    </Form.Item>
+                                                                }
+                                                                {
+                                                                    option.type === 'textarea' &&
+                                                                    <Form.Item
+                                                                        {...restField}
+                                                                        label={option.label}
+                                                                        name={[name, option.name]}
+                                                                        rules={option.rules}
+                                                                    >
+                                                                        <TextArea />
+                                                                    </Form.Item>
+                                                                }
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className="w-1/12">
+                                            <div className="p-1 text-center">
+                                                <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(name)} />
+                                            </div>
                                         </div>
                                     </div>
                                     <Form.List name={[name, 'options']}>
@@ -50,15 +56,15 @@ function index({ options, namePanel, handleChange }) {
                                             <>
                                                 <div className="flex flex-wrap">
                                                     {optionFields.map((optionField) => (
-                                                        <div className="rounded-md bg-white m-2" key={optionField.key}>
-                                                            <div className="p-2">
+                                                        <div className="w-full md:w-1/2 lg:w-1/3" key={optionField.key}>
+                                                            <div className="rounded-md bg-white m-1">
                                                                 <Form.Item
                                                                     noStyle
                                                                     shouldUpdate
                                                                 >
                                                                     {() => {
                                                                         return (
-                                                                            <div className="basis-4/12 inline-flex p-1">
+                                                                            <div className="inline-flex p-1">
                                                                                 <div className="p-1">
                                                                                     <Form.Item
                                                                                         {...optionField}
@@ -69,7 +75,7 @@ function index({ options, namePanel, handleChange }) {
                                                                                         <Input />
                                                                                     </Form.Item>
                                                                                 </div>
-                                                                                <div className="p-1 text-center">
+                                                                                <div className="inline-flex p-1 text-center items-center">
                                                                                     <PlusCircleOutlined style={{ color: 'green', fontSize: '18px', paddingRight: '6px' }} onClick={() => add()} />
                                                                                     <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(optionField.name)} />
                                                                                 </div>
