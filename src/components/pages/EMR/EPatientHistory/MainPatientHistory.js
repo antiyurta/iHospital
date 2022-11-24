@@ -9,9 +9,8 @@ import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 import { Get, openNofi, Post } from "../../../comman";
 import { Table } from "react-bootstrap";
-import { getByTitle } from "@testing-library/react";
 const { Option } = Select;
-function MainPatientHistory({ PatientId, Inspection }) {
+function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
@@ -24,6 +23,7 @@ function MainPatientHistory({ PatientId, Inspection }) {
   }
   const id = PatientId;
   const inspection = Inspection;
+  const cabinetId = CabinetId;
   const API_KEY = process.env.REACT_APP_API_KEY;
   const DEV_URL = process.env.REACT_APP_DEV_URL;
 
@@ -170,24 +170,11 @@ function MainPatientHistory({ PatientId, Inspection }) {
   ]);
   const getInspectionTabs = async () => {
     //Тухайн эмчид харагдах TAB ууд
-    await axios({
-      method: "get",
-      url: `${DEV_URL}emr/inspection-form`,
-      params: {
-        structureId: depId,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": API_KEY,
-      },
-    })
-      .then(async (response) => {
-        console.log("res getInspectionTabs", response.data.response.data);
-        setTabs(response.data.response.data);
-      })
-      .catch(function (error) {
-        // console.log("response error", error.response);
-      });
+    config.params.cabinetId = cabinetId;
+    const response = await Get('emr/inspection-form', token, config);
+    if (response.data.length > 0) {
+      setTabs(response.data);
+    }
   };
 
   useEffect(() => {

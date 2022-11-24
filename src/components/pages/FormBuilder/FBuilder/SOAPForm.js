@@ -44,7 +44,7 @@ function SOAPForm() {
         setCabinetFilterValue(form.structureId);
         SOAPForm.setFieldsValue(newForm);
         setIsSOAPModal(true);
-    }
+    };
     const getStructures = async () => {
         const response = await Get('organization/structure', token, { headers: {}, params: { type: 2 } });
         setStructures(response.data);
@@ -235,7 +235,11 @@ function SOAPForm() {
                                 <div key={index} className="w-full md:w-1/3 p-1">
                                     <Card
                                         className="custom-card"
-                                        title={form.structure.name}
+                                        title={
+                                            <>
+                                                <p>{form.structure?.name}</p>
+                                                <p>{form.cabinet?.name}</p>
+                                            </>}
                                         size="small"
                                         extra={
                                             <div className='inline-flex'>

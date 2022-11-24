@@ -32,6 +32,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
     const [xrayRequestId, setXrayRequestId] = useState('');
     //
     const saveClick = (e) => {
+        console.log(e);
         var status = true;
         e.map((el) => {
             if (!el.requestDate) {
@@ -40,7 +41,6 @@ function Order({ isPackage, isDoctor, categories, save }) {
             }
         })
         if (status) {
-            // console.log(e);
             save(e);
         }
     }
@@ -56,9 +56,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
             }
             setPackages([...packages, pack]);
         } else {
-
             const testOrder = {};
-            console.log(value);
             testOrder.id = value.id;
             testOrder.name = value.name;
             testOrder.price = value.price;
@@ -76,6 +74,9 @@ function Order({ isPackage, isDoctor, categories, save }) {
             testOrder.type = value.types?.type;
             if (value.types?.type === 1) {
                 testOrder.deviceId = value.deviceId;
+            } else if (value.types?.type === 0) {
+                testOrder.typeId = value.examinationTypeId;
+                testOrder.requestDate = new Date();
             } else {
                 testOrder.requestDate = new Date();
             }

@@ -213,9 +213,10 @@ function DoctorAppointment() {
                             schedules.map((schedule) => {
                                 return (
                                     <Panel key={schedule.id} header={
-                                        "Өрөө: " + schedule.room.roomNumber + " " +
-                                        "Тасаг: " + schedule.structures.name + " " +
-                                        "Эмч: " + schedule.doctor.firstName
+                                        "Өрөө: " + schedule.room?.roomNumber + " " +
+                                        "Тасаг: " + schedule.structure?.name + " " +
+                                        "Кабинет: " + schedule.cabinet?.name + " " +
+                                        "Эмч: " + schedule.doctor?.firstName
                                     }>
                                         <div className='table-responsive' id='style-8' ref={scrollRef}>
                                             <Table className='ant-border-space' style={{ width: '100%' }}>
@@ -242,27 +243,28 @@ function DoctorAppointment() {
                                                                     {
                                                                         slot.isActive ?
                                                                             <td colSpan={9} className="text-center">
-                                                                                <Button 
+                                                                                <Button
                                                                                     className='bg-green-500 text-white'
                                                                                     onClick={() => orderAppointment(
-                                                                                    false,
-                                                                                    {
-                                                                                        roomNumber: schedule.room.roomNumber,
-                                                                                        structure: schedule.structures.name,
-                                                                                        doctor: schedule.doctor.firstName,
-                                                                                        time: {
-                                                                                            start: slot.startTime,
-                                                                                            end: slot.endTime
+                                                                                        false,
+                                                                                        {
+                                                                                            roomNumber: schedule.room.roomNumber,
+                                                                                            structure: schedule.structures.name,
+                                                                                            doctor: schedule.doctor.firstName,
+                                                                                            time: {
+                                                                                                start: slot.startTime,
+                                                                                                end: slot.endTime
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            slotId: slot.id,
+                                                                                            patientId: selectedPatient.id,
+                                                                                            isPayment: true,
+                                                                                            doctorId: schedule.doctorId,
+                                                                                            cabinetId: schedule.cabinetId,
+                                                                                            hospitalId: 1,
                                                                                         }
-                                                                                    },
-                                                                                    {
-                                                                                        slotId: slot.id,
-                                                                                        patientId: selectedPatient.id,
-                                                                                        isPayment: true,
-                                                                                        doctorId: schedule.doctorId,
-                                                                                        hospitalId: 1,
-                                                                                    }
-                                                                                )}>
+                                                                                    )}>
                                                                                     Цаг захиалах
                                                                                 </Button></td>
                                                                             :
@@ -329,7 +331,7 @@ function DoctorAppointment() {
                     <Descriptions.Item label="Өрөөийн дугаар">{qwe.roomNumber}</Descriptions.Item>
                 </Descriptions>
             </Modal>
-        </div>
+        </div >
     );
 }
 export default DoctorAppointment;
