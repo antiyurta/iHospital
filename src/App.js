@@ -60,6 +60,7 @@ import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
 import MedicineSupport from "./components/pages/service/MedicineSupport";
 import Finance from "./components/pages/Finance/Finance";
+import RequestAnalys from "./components/pages/Laboratory/RequestAnalys";
 // lab end
 
 function App() {
@@ -310,6 +311,7 @@ function App() {
           />
           <Route path="/bed_management/*" element={<MainBed />} />
           <Route path="/roomDtl" element={<RoomtDtl />} />
+          <Route path="/request_analys" element={<RequestAnalys />} />
         </Route>
       </Routes>
     </div>

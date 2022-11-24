@@ -162,8 +162,8 @@ function Sidenav({ color }) {
           key: "9-8",
           icon: <HomeOutlined />,
           label: <NavLink to="/formBuilder">611 mygt</NavLink>,
-        }
-      ]
+        },
+      ],
     },
     {
       key: 10,
@@ -178,8 +178,13 @@ function Sidenav({ color }) {
     {
       key: 12,
       icon: <HomeOutlined />,
-      label: <Link to="/equipments">ЛАБ</Link>
-    }
+      label: <Link to="/equipments">ЛАБ</Link>,
+    },
+    {
+      key: 13,
+      icon: <HomeOutlined />,
+      label: <Link to="/request_analys">Шинжилгээний хүсэлт</Link>,
+    },
   ];
 
   return (

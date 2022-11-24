@@ -126,7 +126,9 @@ legend.scheduler-border {
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+  -webkit-ap.ant-menu.ant-menu-inline-collapsed .ant-menu-item-icon, .ant-menu.ant-menu-inline-collapsed .anticon {
+    display: block !important;
+  }pearance: none;
   margin: 0;
 }
 
@@ -217,4 +219,7 @@ input[type="number"] {
 }
 .custom-primary-btn {
   background-color: #2d8cff !important  ;
+}
+.ant-menu.ant-menu-inline-collapsed .ant-menu-item-icon, .ant-menu.ant-menu-inline-collapsed .anticon {
+  display: block !important;
 }

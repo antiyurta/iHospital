@@ -5,6 +5,7 @@ import {
   CalendarOutlined,
   PicCenterOutlined,
   UserOutlined,
+  ContactsOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import DashboardBed from "./DashboardBed";
@@ -16,6 +17,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi, Post } from "../../comman";
+import BedPlan from "./BedPlan";
 const { Sider, Content } = Layout;
 
 const MainBed = () => {
@@ -82,6 +84,7 @@ const MainBed = () => {
     { label: "Хуанли", key: "calendar", icon: <CalendarOutlined /> },
     { label: "Орны мэдээлэл", key: "rooms", icon: <PicCenterOutlined /> },
     { label: "Өвчтөн", key: "patient_list", icon: <UserOutlined /> },
+    { label: "Төлөвлөгөө", key: "plan", icon: <ContactsOutlined /> },
   ];
 
   return (
@@ -128,6 +131,7 @@ const MainBed = () => {
                 />
               }
             />
+            <Route path="/plan" element={<BedPlan />} />
           </Routes>
         </Content>
       </Layout>
