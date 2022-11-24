@@ -64,6 +64,7 @@ const MainBed = () => {
   };
 
   useEffect(() => {
+    setSelectedMenuKey(location?.pathname?.split("/").pop()); //Хуудас Refresh хийхэд аль хуудсанд байгааг Menu -д зааж өгөх
     structures == "" && getStructures();
   }, []);
 
