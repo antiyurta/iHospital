@@ -31,6 +31,7 @@ const config = {
 };
 function EMR() {
   const IncomePatientId = useLocation().state.patientId;
+  const IncomeCabinetId = useLocation().state.cabinetId;
   const Inspection = useLocation().state.inspection;
   const [cardLoading, setCardLoading] = useState(false);
   const [problems, setProblems] = useState("");
@@ -210,7 +211,7 @@ function EMR() {
                 </>
               }
             >
-              <MainPatientHistory PatientId={IncomePatientId} Inspection={Inspection} />
+              <MainPatientHistory PatientId={IncomePatientId} CabinetId={IncomeCabinetId} Inspection={Inspection} />
             </Card>
           ) : null}
           {type == "OCS" ? (

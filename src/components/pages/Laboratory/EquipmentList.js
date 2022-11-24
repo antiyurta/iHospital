@@ -155,7 +155,7 @@ function EquipmentList() {
                     marginTop: 8,
                 }}
             >
-                Upload
+                Зураг оруулах
             </div>
         </div>
     );
@@ -193,7 +193,7 @@ function EquipmentList() {
                                 <Badge.Ribbon text={equipment.isActive ? "Идэвхтэй" : "Идэвхгүй"} color={equipment.isActive ? "green" : "red"}>
                                     <Card
                                         cover={
-                                            <img style={{ height: '100%' }} src={equipment.photoSrc} alt="" />
+                                            <img style={{ height: 250, width: "auto", margin: "auto" }} src={equipment.photoSrc} alt="" />
                                         }
                                         actions={[
                                             <SettingOutlined key="setting" />,

@@ -65,12 +65,14 @@ function Ambulatory() {
     }
 
     const saveOrder = async (value) => {
+        // console.log(value);
         if (selectedPatient.length === 0) {
             openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
         }
         else if (value.length > 0) {
             const response = await Post('service-request', token, config, {
                 patientId: selectedPatient.id,
+                requestDate: new Date(),
                 services: value,
             })
             if (response === 201) {

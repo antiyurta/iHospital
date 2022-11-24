@@ -161,11 +161,6 @@ function Sidenav({ color }) {
         {
           key: "9-8",
           icon: <HomeOutlined />,
-          label: <NavLink to="/formBuilder">611 mygt</NavLink>,
-        },
-        {
-          key: "9-9",
-          icon: <HomeOutlined />,
           label: <NavLink to="/formBuilder2">611 mygt</NavLink>,
         },
       ],

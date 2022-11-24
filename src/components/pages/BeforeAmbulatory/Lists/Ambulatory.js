@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectCurrentToken } from "../../../../features/authReducer";
+import { selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
 import { Get, ScrollRef } from "../../../comman";
 
 const { RangePicker } = DatePicker;
@@ -13,6 +13,7 @@ const { RangePicker } = DatePicker;
 function Ambulatory() {
     const scrollRef = useRef();
     const token = useSelector(selectCurrentToken);
+    const employeeId = useSelector(selectCurrentUserId);
     const navigate = useNavigate();
     const config = {
         headers: {},
@@ -20,12 +21,14 @@ function Ambulatory() {
     };
     const [appointments, setAppointments] = useState([]);
     const getAppointment = async () => {
+        config.params.doctorId = employeeId;
         const response = await Get('appointment', token, config);
         setAppointments(response.data);
+        config.params.employeeId = null;
     }
-    const getEMR = (id) => {
+    const getEMR = (id, cabinetId) => {
         // status heregteii anhan dawtan 
-        navigate(`/emr`, { state: { patientId: id, inspection: true } });
+        navigate(`/emr`, { state: { patientId: id, cabinetId: cabinetId, inspection: true } });
     }
     const getTypeInfo = (type, begin, end) => {
         if (type === 1) {
@@ -97,7 +100,7 @@ function Ambulatory() {
                                 {
                                     appointments.map((appointment, index) => {
                                         return (
-                                            <tr key={index} onDoubleClick={() => getEMR(appointment?.patientId)} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                                            <tr key={index} onDoubleClick={() => getEMR(appointment?.patientId, appointment?.cabinetId)} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
                                                 <td>{appointment?.slots?.schedule?.workDate}</td>
                                                 {getTypeInfo(appointment?.type, appointment?.slots.startTime, appointment?.slots.endTime)}
                                                 <td>АНХАН</td>
