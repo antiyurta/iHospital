@@ -40,10 +40,7 @@ import BeforeAmbulatoryList from "./components/pages/BeforeAmbulatory/BeforeAmbu
 import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail";
 //emr end
 // inpatient HEWTENT start
-import Demo from "./components/pages/Demo/demo";
 import Menu from "./components/pages/reference/Menu";
-import Report from "./components/pages/Demo/Report";
-import Editor from "./components/pages/Demo/Editor";
 import Packages from "./components/pages/service/Packages";
 import Position from "./components/pages/Organization/Position";
 import DoctorAppointmentScheduleDemo from "./components/pages/Appointment/DoctorAppointmentScheduleDemo";
@@ -53,13 +50,13 @@ import DemoEmployee from "./components/pages/Organization/DemoEmployee";
 import MainBed from "./components/pages/Bed/MainBed";
 import RoomtDtl from "./components/pages/Bed/RoomDtl";
 // inpatient HEWTEN end
-
+import DemoForm2 from './components/pages/FormBuilder/FormBuilder2'
 // lab start
-import Demo2 from "./components/pages/Demo/demo2";
 import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
 import MedicineSupport from "./components/pages/service/MedicineSupport";
 import Finance from "./components/pages/Finance/Finance";
+import PatientForm from "./components/pages/FormBuilder/FBuilder/PatientForm";
 // lab end
 
 function App() {
@@ -73,12 +70,10 @@ function App() {
           {/* lab end */}
           {/* finance start */}
           <Route path="/finance" element={<Finance />} />
+          <Route path="/demoForm2" element={<DemoForm2 />} />
           {/* finance end */}
           <Route path="/menu" element={<Menu />} />
           <Route path="/emr" element={<EMR />} />
-          <Route path="/demo" element={<Demo />} />
-          <Route path="/reports" element={<Report />} />
-          <Route path="/reportEditor" element={<Editor />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
@@ -305,6 +300,14 @@ function App() {
             element={
               <PrivateRoute>
                 <SOAPForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/formBuilder2"
+            element={
+              <PrivateRoute>
+                <PatientForm />
               </PrivateRoute>
             }
           />

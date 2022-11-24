@@ -161,14 +161,9 @@ function Sidenav({ color }) {
         {
           key: "9-8",
           icon: <HomeOutlined />,
-          label: <NavLink to="/formBuilder">611 mygt</NavLink>,
+          label: <NavLink to="/formBuilder2">611 mygt</NavLink>,
         }
       ]
-    },
-    {
-      key: 10,
-      icon: <InfoCircleOutlined />,
-      label: <Link to="/reports">Маягтууд</Link>,
     },
     {
       key: 11,

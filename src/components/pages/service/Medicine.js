@@ -1,17 +1,15 @@
-import { EditOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Divider, Form, Input, InputNumber, Modal, Pagination, Select, Switch } from "antd";
 import { useEffect, useState } from "react";
 import { Spinner, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, Patch, Post } from "../../comman";
-import UTable from "../../UTable";
-import Order from "../Order/Order";
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 function Medicine() {
-
     const token = useSelector(selectCurrentToken);
     const config = {
         headers: {},
@@ -25,7 +23,9 @@ function Medicine() {
     const [measurements, setMeasurements] = useState([]);
     const [pregnancyWarning, setPregnancyWarnings] = useState([]);
     const [spinner, setSpinner] = useState(false);
-    const [ageRank, setAgeRank] = useState("");
+    const [editMode, setEditMode] = useState(false);
+    const [isOpenMedicineModal, setIsOpenMedicineModal] = useState(false);
+    const [medicineForm] = Form.useForm();
 
     const editModal = async (id) => {
         setEditMode(true);
@@ -35,8 +35,7 @@ function Medicine() {
             medicineForm.setFieldsValue(response);
             setIsOpenMedicineModal(true);
         }
-    }
-
+    };
     const onFinish = async (values) => {
         if (editMode) {
             const response = await Patch('service/medicine/' + id, token, config, values);
@@ -49,32 +48,27 @@ function Medicine() {
                 setIsOpenMedicineModal(false);
             }
         }
-    }
-
+    };
     const getAtcCategory = async () => {
         config.params.type = 1;
         const response = await Get('medicine/reference', token, config);
         setAtcCategories(response.data);
-    }
-
+    };
     const getMedTreatmentTypes = async () => {
         config.params.type = 2;
         const response = await Get('medicine/reference', token, config);
         setMedTreatmentTypes(response.data);
-    }
-
+    };
     const getMeasurements = async () => {
         config.params.type = 3;
         const response = await Get('medicine/reference', token, config);
         setMeasurements(response.data);
-    }
-
+    };
     const getPregnancyWarnings = async () => {
         config.params.type = 4;
         const response = await Get('medicine/reference', token, config);
         setPregnancyWarnings(response.data);
-    }
-
+    };
     const getMedicines = async (page) => {
         setSpinner(false);
         config.params.page = page;
@@ -85,22 +79,7 @@ function Medicine() {
             setMeta(response.meta);
             setSpinner(true);
         }
-    }
-
-    useEffect(() => {
-        getAtcCategory();
-        getMedTreatmentTypes();
-        getMeasurements();
-        getPregnancyWarnings();
-        getMedicines(1);
-    }, [])
-
-    //
-    const [editMode, setEditMode] = useState(false);
-    const [isOpenMedicineModal, setIsOpenMedicineModal] = useState(false);
-    const [medicineForm] = Form.useForm();
-    const [isOpenSecondModal, setIsOpenSecondModal] = useState(false);
-
+    };
     const getTreatment = (value) => {
         var data = medTreatmentTypes.filter((e) => e.id === value);
         return data[0]?.name;
@@ -109,7 +88,13 @@ function Medicine() {
         var data = atcCategories.filter(e => e.id === value);
         return data[0]?.name;
     };
-
+    useEffect(() => {
+        getMedicines(1);
+        getAtcCategory();
+        getMedTreatmentTypes();
+        getMeasurements();
+        getPregnancyWarnings();
+    }, []);
     return (
         <div className="flex flex-wrap">
             <div className="w-full">
@@ -501,19 +486,16 @@ function Medicine() {
                             </div>
                             <div className="w-full md:w-1/2 lg:w-1/3 px-1">
                                 <Form.Item
-                                    label="Насны ангилал"
-                                    name="ageRank"
+                                    label="Насны Дээд"
+                                    name="maxAge"
                                 >
-                                    <Select onChange={(e) => setAgeRank(e)}>
-                                        <Option value="HIGH">Их</Option>
-                                        <Option value="LOW">Бага</Option>
-                                    </Select>
+                                    <InputNumber />
                                 </Form.Item>
                             </div>
                             <div className="w-full md:w-1/2 lg:w-1/3 px-1">
                                 <Form.Item
-                                    label="Нас"
-                                    name={ageRank === 'HIGH' ? "maxAge" : "minAge"}
+                                    label="Насны Дooд"
+                                    name="minAge"
                                 >
                                     <InputNumber />
                                 </Form.Item>
@@ -536,51 +518,44 @@ function Medicine() {
                             </div>
                             <div className="w-full px-1">
                                 <label className="font-bold" style={{ fontSize: '12px' }}>Хамт хэрэглэж болохгүй эм</label>
-                                <Form.List name="services">
+                                <Form.List name="durs">
                                     {
-                                        (fields, { remove }) => (
+                                        (fields, { add, remove }) => (
                                             <>
-                                                <div className='table-responsive p-4' id='style-8'>
-                                                    <Table className='ant-border-space' style={{ width: '100%' }}>
-                                                        <thead className='ant-table-thead bg-slate-200'>
-                                                            <tr>
-                                                                <th>Нэр</th>
-                                                                <th>Yнэ</th>
-                                                                <th>Үйлдэл</th>
-                                                                <th>
-                                                                    <Button
-                                                                        onClick={() => setIsOpenSecondModal(true)}
-                                                                    >
-                                                                        нэмэх
-                                                                    </Button>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {fields.map(({ key, name, }) => (
-                                                                <tr key={key}>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'serviceName']}
-                                                                        >
-                                                                            <Input disabled={true} />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'servicePrice']}
-                                                                        >
-                                                                            <Input disabled={true} />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <MinusCircleOutlined onClick={() => remove(name)} />
-                                                                    </td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </Table>
-                                                </div>
+                                                {fields.map(({ key, name, ...restField }) => (
+                                                    <div key={key} className="rounded-md m-2" style={{ backgroundColor: '#fafafa' }}>
+                                                        <div className="p-2">
+                                                            <Form.Item
+                                                                {...restField}
+                                                                label="Эмийн нэр"
+                                                                name={[name, "medicineDurId"]}
+                                                            >
+                                                                <Select>
+                                                                    {
+                                                                        medicines.map((item, index) => {
+                                                                            return (
+                                                                                <Option key={index} value={item.id}>{item.name}</Option>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </Select>
+                                                            </Form.Item>
+                                                            <Form.Item
+                                                                {...restField}
+                                                                label="Анхааруулах мессиж"
+                                                                name={[name, "message"]}
+                                                            >
+                                                                <TextArea />
+                                                            </Form.Item>
+                                                            <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(name)} />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                <Form.Item>
+                                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                                        Add field
+                                                    </Button>
+                                                </Form.Item>
                                             </>
                                         )
                                     }
