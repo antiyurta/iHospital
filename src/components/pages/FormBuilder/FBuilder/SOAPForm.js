@@ -61,6 +61,10 @@ function SOAPForm() {
             value: "title"
         },
         {
+            label: 'DropDown',
+            value: 'dropdown'
+        },
+        {
             label: "INPUT",
             value: "input"
         },
@@ -172,7 +176,7 @@ function SOAPForm() {
     const HandleChange = (arg, value) => {
         const formData = SOAPForm.getFieldsValue();
         const type = SOAPForm.getFieldValue([arg, value, 'type']);
-        if (type === 'radio' || type === 'checkbox') {
+        if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
             formData[arg][value].options = [{ value: "", label: "" }];
         } else {
             formData[arg][value].options = undefined;

@@ -108,25 +108,18 @@ export default function DynamicFormInspection(props) {
             </div>
           );
         } else if (el.type === "dropdown") {
-          // console.log("dropdown", el);
           return (
-            <Row align="middle" className="mb-1" key={index}>
-              <Col span={24} className="text-left">
+            <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
+              <div className="inline-flex p-1">
                 <Form.Item
                   label={el.label}
-                  name={[el.inspectionType, el.key, el.label]}
+                  name={[el.inspectionType, el.label]}
                   rules={[{ required: false, message: "" }]}
                   className="mb-0"
-                  wrapperCol={{
-                    span: 16,
-                  }}
-                  labelCol={{
-                    span: 8,
-                  }}
                 >
                   <Select
                     style={{
-                      width: 120,
+                      width: '100%',
                     }}
                   >
                     {el.options?.map((el, index) => {
@@ -138,8 +131,8 @@ export default function DynamicFormInspection(props) {
                     })}
                   </Select>
                 </Form.Item>
-              </Col>
-            </Row>
+              </div>
+            </div>
           );
         } else if (el.type === "date") {
           // console.log("dropdown", el);

@@ -118,7 +118,7 @@ export default function ProgressNotes({ PatientId }) {
                       </Divider>
                       <RenderNotesDetail data={JSON.parse(el["pain"])} />
                       <Divider orientation="left" className="text-sm my-2">
-                        Үзлэг
+                        Бодит үзлэг
                       </Divider>
                       <RenderNotesDetail data={JSON.parse(el["inspection"])} />
                       <Divider orientation="left" className="text-sm my-2">
