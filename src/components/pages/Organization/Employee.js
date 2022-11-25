@@ -113,6 +113,15 @@ function Employee() {
             col: 12,
         },
         {
+            index: 'depId',
+            label: "Тасаг",
+            isView: false,
+            input: 'select',
+            inputData: departments,
+            relIndex: 'name',
+            col: 12
+        },
+        {
             index: 'appId',
             label: 'Албан Тушаал',
             isView: false,
@@ -127,15 +136,6 @@ function Employee() {
             isView: false,
             input: 'select',
             inputData: degree,
-            relIndex: 'name',
-            col: 12
-        },
-        {
-            index: 'depId',
-            label: "Тасаг",
-            isView: false,
-            input: 'select',
-            inputData: departments,
             relIndex: 'name',
             col: 12
         },

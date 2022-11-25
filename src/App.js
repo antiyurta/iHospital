@@ -58,6 +58,8 @@ import MedicineSupport from "./components/pages/service/MedicineSupport";
 import Finance from "./components/pages/Finance/Finance";
 import RequestAnalys from "./components/pages/Laboratory/RequestAnalys";
 import PatientForm from "./components/pages/FormBuilder/FBuilder/PatientForm";
+import Role from "./components/pages/Organization/Role";
+import Permission from "./components/pages/Organization/Permission";
 // lab end
 
 function App() {
@@ -72,6 +74,8 @@ function App() {
           {/* finance start */}
           <Route path="/finance" element={<Finance />} />
           <Route path="/demoForm2" element={<DemoForm2 />} />
+          <Route path="/role" element={<Role />} />
+          <Route path="/permission" element={<Permission />} />
           {/* finance end */}
           <Route path="/menu" element={<Menu />} />
           <Route path="/emr" element={<EMR />} />

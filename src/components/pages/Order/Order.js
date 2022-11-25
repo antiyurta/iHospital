@@ -56,6 +56,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
             }
             setPackages([...packages, pack]);
         } else {
+            console.log(value);
             const testOrder = {};
             testOrder.id = value.id;
             testOrder.name = value.name;
@@ -99,7 +100,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
         }
     }
 
-    const newModal = (index, deviceId) => {
+    const newModalXray = (index, deviceId) => {
         if (!deviceId) {
             openNofi('error', 'Төхөөрөмж', 'sadsada');
         } else {
@@ -115,13 +116,15 @@ function Order({ isPackage, isDoctor, categories, save }) {
                 <>
                     <td
                         className="hover:cursor-pointer"
-                        onDoubleClick={() => newModal(index, order.deviceId)}
+                        onDoubleClick={() => newModalXray(index, order.deviceId)}
                     >
                         <ClockCircleOutlined style={{ color: "green", verticalAlign: "middle" }} />
                     </td>
                     <td>{order.name}</td>
                 </>
             )
+        } else if (order.type === 2) {
+
         } else {
             return (
                 <>

@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, openNofi, Post } from "../../comman";
+import { Delete, Get, openNofi, Patch, Post } from "../../comman";
 import { Table } from "react-bootstrap";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -20,23 +21,30 @@ function DoctorAppointmentScheduleDemo() {
     const today = new Date();
     const [form] = Form.useForm();
     const token = useSelector(selectCurrentToken);
+    const [editMode, setEditMode] = useState(false);
+    const [id, setId] = useState(Number);
+    const [editWorkDate, setEditWorkDate] = useState([]);
     //
     const [doctors, setDoctors] = useState([]);
     const [structures, setStructures] = useState([]);
+    const [cabinets, setCabinets] = useState([]);
     const [inspectionTimes, setInspectionTimes] = useState([]);
     const [rooms, setRooms] = useState([]);
+    const [cabinetFilterValue, setCabinetFilterValue] = useState(Number);
     //
     const config = {
         headers: {},
         params: {}
     }
     //
-    const getDoctor = async (value) => {
-        config.params.type = null;
-        config.params.depId = value;
+    const getDoctor = async (depId) => {
+        config.params.type = 2;
+        config.params.depId = depId;
         const response = await Get('organization/employee', token, config);
         if (response.data.length != 0) {
             setDoctors(response.data);
+        } else {
+            setDoctors([]);
         }
     }
     const getStructures = async () => {
@@ -47,7 +55,22 @@ function DoctorAppointmentScheduleDemo() {
         if (response.data.length != 0) {
             setStructures(response.data);
         }
+        config.params.type = null;
     }
+
+    const getCabinets = async (e) => {
+        config.params.type = 3;
+        config.params.parantId = e;
+        config.params.startDate = null;
+        config.params.endDate = null;
+        const response = await Get('organization/structure', token, config);
+        if (response.data.length != 0) {
+            setCabinets(response.data);
+        } else {
+            setCabinets([]);
+        }
+    }
+
     const getInspectionTimes = async () => {
         config.params.type = null;
         const response = await Get('settings', token, config);
@@ -74,6 +97,9 @@ function DoctorAppointmentScheduleDemo() {
         return new Date(year, month + 1, 0);
     }
 
+    const firstDayOfMonth = getFirstDayOfMonth(today.getFullYear(), today.getMonth());
+    const lastDayOfMonth = getLastDayOfMonth(today.getFullYear(), today.getMonth());
+
     const getCurrentMonth = async (firstDayOfMonth, lastDayOfMonth) => {
         const year = firstDayOfMonth.getFullYear();
         const month = firstDayOfMonth.getMonth() + 1;
@@ -88,7 +114,7 @@ function DoctorAppointmentScheduleDemo() {
             const data = getData(ddd, response.data);
             Ddays.push({
                 title: ddd,
-                schedule: data[0]
+                schedule: data
             });
         }
         setDays(Ddays);
@@ -112,21 +138,44 @@ function DoctorAppointmentScheduleDemo() {
                 arr.workDate = moment(date).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
                 arr.startTime = moment(value.startTime).format("HH:mm");
                 arr.endTime = moment(value.endTime).format("HH:mm");
-                const response = await Post('schedule', token, config, arr);
-                if (response === 201) {
-                    getCurrentMonth();
+                if (editMode) {
+                    const response = await Patch('schedule/' + id, token, config, arr);
+                    if (response === 200) {
+                        setEditMode(false);
+                        getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                    }
+                } else {
+                    const response = await Post('schedule', token, config, arr);
+                    if (response === 201) {
+                        getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                    }
                 }
             } else {
                 openNofi('error', 'TSAG', 'Tsag oruulah')
             }
-        })
+        });
+    }
+
+    const filteredCabinets = cabinets.filter((cabinet) => cabinet.parentId === cabinetFilterValue);
+
+    const editSchedule = (item) => {
+        getDoctor();
+        setEditWorkDate(item.workDate);
+        setEditMode(true);
+        setId(item.id);
+        var arr = { ...item };
+        const endTime = arr.endTime.split(':');
+        const startTime = arr.startTime.split(":");
+        arr.endTime = moment().set({ hour: endTime[0], minute: endTime[1], second: endTime[2] });
+        arr.startTime = moment().set({ hour: startTime[0], minute: startTime[1], second: startTime[2] });
+        form.setFieldsValue(arr);
     }
 
     useEffect(() => {
-        const firstDayOfMonth = getFirstDayOfMonth(today.getFullYear(), today.getMonth());
-        const lastDayOfMonth = getLastDayOfMonth(today.getFullYear(), today.getMonth());
         getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
         getStructures();
+        getCabinets();
+        getDoctor();
         getInspectionTimes();
         getRooms();
     }, [])
@@ -180,11 +229,39 @@ function DoctorAppointmentScheduleDemo() {
                                         }
                                     ]}
                                 >
-                                    <Select onChange={getDoctor}>
+                                    <Select
+                                        onChange={(e) => {
+                                            form.setFieldValue('cabinetId', null);
+                                            form.setFieldValue('doctorId', null);
+                                            getCabinets(e);
+                                            getDoctor(e);
+                                        }}>
                                         {
                                             structures.map((structure, index) => {
                                                 return (
                                                     <Option key={index} value={structure.id}>{structure.name}</Option>
+                                                )
+                                            })
+                                        }
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={24} className="p-1">
+                                <Form.Item
+                                    label="Кабинет:"
+                                    name="cabinetId"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Заавал"
+                                        }
+                                    ]}
+                                >
+                                    <Select>
+                                        {
+                                            cabinets.map((cabinet, index) => {
+                                                return (
+                                                    <Option key={index} value={cabinet.id}>{cabinet.name}</Option>
                                                 )
                                             })
                                         }
@@ -265,6 +342,13 @@ function DoctorAppointmentScheduleDemo() {
                                     <Slider marks={Marks} />
                                 </Form.Item>
                             </Col>
+                            {
+                                editMode && <Col span={24} className="p-1">
+                                    <Button onClick={() => setSchedule(editWorkDate)}>
+                                        ЗАсах
+                                    </Button>
+                                </Col>
+                            }
                         </Row>
                     </Form>
                 </Card>
@@ -298,17 +382,27 @@ function DoctorAppointmentScheduleDemo() {
                                                                 <th className="font-bold text-sm align-middle">Эмч</th>
                                                                 <th className="font-bold text-sm align-middle">Өрөө</th>
                                                                 <th className="font-bold text-sm align-middle">Бүртгэсэн</th>
+                                                                <th className="font-bold text-sm align-middle">Үйлдэл</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody className="ant-table-tbody p-0">
-                                                            <tr className='ant-table-row ant-table-row-level-0'>
-                                                                <td className='ant-table-row-cell-break-word'>{day.schedule?.startTime}</td>
-                                                                <td className='ant-table-row-cell-break-word'>{day.schedule?.endTime}</td>
-                                                                <td className='ant-table-row-cell-break-word'>{day.schedule?.structures?.name}</td>
-                                                                <td className='ant-table-row-cell-break-word'>{day.schedule?.doctor?.firstName}</td>
-                                                                <td className='ant-table-row-cell-break-word'>{day.schedule?.room?.roomNumber}</td>
-                                                                <td className='ant-table-row-cell-break-word'>{day.schedule?.authorId}</td>
-                                                            </tr>
+                                                            {
+                                                                day.schedule?.map((item, index) => {
+                                                                    return (
+                                                                        <tr key={index} className='ant-table-row ant-table-row-level-0'>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.startTime}</td>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.endTime}</td>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.structures?.name}</td>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.doctor?.firstName}</td>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.room?.roomNumber}</td>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.authorId}</td>
+                                                                            <td>
+                                                                                <EditOutlined style={{ color: 'blue', fontSize: '18px' }} onClick={() => editSchedule(item)} />
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
                                                         </tbody>
                                                     </Table>
                                                 </div>

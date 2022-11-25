@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Spinner, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, Patch, Post } from "../../comman";
+import { Delete, Get, Patch, Post } from "../../comman";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -35,6 +35,18 @@ function Medicine() {
             medicineForm.setFieldsValue(response);
             setIsOpenMedicineModal(true);
         }
+    };
+    const deleteModal = (id) => {
+        Modal.error({
+            title: "Устгах",
+            okText: "Устгах",
+            closable: true,
+            content: <div>Устгасан дохиолдолд дахин сэргэхгүй болно</div>,
+            async onOk() {
+                await Delete("service/medicine/" + id, token, config);
+                getMedicines(1);
+            },
+        });
     };
     const onFinish = async (values) => {
         if (editMode) {
@@ -141,6 +153,7 @@ function Medicine() {
                                                 <td>{getATC(medicine.atcCategoryId)}</td>
                                                 <td>
                                                     <Button type="link" onClick={() => editModal(medicine.id)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
+                                                    <Button type="link" onClick={() => deleteModal(medicine.id)} title="Устгах" style={{ paddingLeft: 5 }}><DeleteOutlined style={{ color: "red" }} /></Button>
                                                 </td>
                                             </tr>
                                         )

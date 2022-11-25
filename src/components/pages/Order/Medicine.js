@@ -1,3 +1,4 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -32,17 +33,19 @@ function Medicine({ handleclick }) {
                         <tr>
                             <th className="font-bold text-sm align-middle">Код</th>
                             <th className="font-bold text-sm align-middle">ОУ/Нэр</th>
-                            <th className="font-bold text-sm align-middle">Х/Нэр</th>
+                            <th className="font-bold text-sm align-middle">Нэр</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody className='ant-table-tbody p-0'>
                         {
                             medicines.map((item, index) => {
                                 return (
-                                    <tr onDoubleClick={() => handleclick(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                                    <tr key={index} className='ant-table-row ant-table-row-level-0'>
                                         <td>{item.code}</td>
                                         <td>{item.iName}</td>
-                                        <td>{item.tName}</td>
+                                        <td>{item.name}</td>
+                                        <td onDoubleClick={() => handleclick(item)} className="hover:cursor-pointer"><PlusCircleOutlined style={{ color: "green", verticalAlign: "middle" }} /></td>
                                     </tr>
                                 )
                             })

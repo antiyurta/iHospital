@@ -60,6 +60,16 @@ function Sidenav({ color }) {
           icon: <UsergroupAddOutlined />,
           label: <NavLink to="/bed">Ор</NavLink>,
         },
+        {
+          key: "1-9",
+          icon: <UserAddOutlined />,
+          label: <NavLink to="/role">Role</NavLink>
+        },
+        {
+          key: "1-10",
+          icon: <UserAddOutlined />,
+          label: <NavLink to="/permission">permission</NavLink>
+        }
       ],
     },
     {
