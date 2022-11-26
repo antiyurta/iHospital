@@ -236,13 +236,13 @@ function RequestAnalys() {
         </Col>
       </Row>
       <div style={{ display: "none" }}>
-        <div ref={componentRef}>
+        <div ref={componentRef} className="mt-4">
           <p>{selectedDtlData.device}</p>
           <p>{selectedReqData.registerNumber}</p>
           <p>
             {selectedReqData.lastName} {selectedReqData.firstName}
           </p>
-          <Barcode value={barCodeValue} />
+          <Barcode value={barCodeValue} height={50} />
         </div>
       </div>
     </Spin>
