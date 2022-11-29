@@ -1,6 +1,11 @@
 import UTable from "../../UTable";
 
 function MedicineSupport() {
+    const medicineTypeParams = {
+        params: {
+            type: 0
+        }
+    }
     const atcParams = {
         params: {
             type: 1
@@ -21,6 +26,30 @@ function MedicineSupport() {
             type: 4,
         }
     };
+    const medicineTypeColumn = [
+        {
+            index: "name",
+            label: "Нэр",
+            input: 'textarea',
+            col: 24,
+            isView: true,
+            isSearch: false,
+        },
+        {
+            index: 'type',
+            label: 'Төрөл',
+            isView: false,
+            input: 'select',
+            inputData: [
+                {
+                    id: 0,
+                    label: "Эмийн хэлбэр"
+                },
+            ],
+            relIndex: 'label',
+            col: 24
+        }
+    ];
     const atcColumn = [
         {
             index: "name",
@@ -125,6 +154,19 @@ function MedicineSupport() {
                     url={'medicine/reference'}
                     params={atcParams}
                     column={atcColumn}
+                    isCreate={true}
+                    isRead={true}
+                    isUpdate={true}
+                    isDelete={true}
+                    width='30%'
+                />
+            </div>
+            <div className="w-full md:w-1/2 p-1">
+                <UTable
+                    title={'Эмийн хэлбэр'}
+                    url={'medicine/reference'}
+                    params={medicineTypeParams}
+                    column={medicineTypeColumn}
                     isCreate={true}
                     isRead={true}
                     isUpdate={true}

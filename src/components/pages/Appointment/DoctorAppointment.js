@@ -92,8 +92,9 @@ function DoctorAppointment() {
     }
 
     const changePanel = async (value) => {
-        config.params.scheduleId = value[0];
-        if (value[0]) {
+        console.log(value);
+        config.params.scheduleId = value;
+        if (value) {
             const response = await Get('slot', token, config);
             setSlots(response.data);
         }
@@ -208,7 +209,7 @@ function DoctorAppointment() {
                         </Space>
                     }
                 >
-                    <Collapse onChange={changePanel}>
+                    <Collapse onChange={changePanel} accordion>
                         {
                             schedules.map((schedule) => {
                                 return (

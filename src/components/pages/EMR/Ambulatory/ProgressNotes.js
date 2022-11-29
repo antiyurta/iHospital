@@ -129,6 +129,10 @@ export default function ProgressNotes({ PatientId }) {
                         Төлөвлөгөө
                       </Divider>
                       <RenderNotesDetail data={JSON.parse(el["plan"])} />
+                      <Divider orientation="left" className="text-sm my-2">
+                        Онош
+                      </Divider>
+                      {/* {JSON.parse(el['diagnose'])} */}
                     </Panel>
                   );
                 })}

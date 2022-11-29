@@ -1,14 +1,12 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Tabs, Row, Button, Form, Divider, Col, Select } from "antd";
+import { Tabs, Row, Button, Form, Divider, Select, Table, Modal } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
-import axios from "axios";
 import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 import { Get, openNofi, Post } from "../../../comman";
-import { Table } from "react-bootstrap";
 const { Option } = Select;
 function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
   const [form] = Form.useForm();
@@ -24,24 +22,9 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
   const id = PatientId;
   const inspection = Inspection;
   const cabinetId = CabinetId;
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const DEV_URL = process.env.REACT_APP_DEV_URL;
-
-  const demo = [];
-
-  const getDiagnose = async () => {
-    const response = await Get('reference/diagnose', token, config);
-    response?.data.map((element, idx) => {
-      demo.push({
-        label: `${element.nameMn} - ${element.nameEn} - ${element.nameRu}`,
-        value: element.code
-      })
-    })
-  };
 
   useEffect(() => {
     getInspectionTabs();
-    getDiagnose();
   }, []);
 
   const Tab1Content = useCallback(() => {
@@ -96,26 +79,14 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
             <DynamicFormInspection data={props.data["plan"]} />
           </>
         ) : null}
-        {
+        {props.data ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
               Онош
             </Divider>
-            <Row align="middle" className="mb-1">
-              <Col span={24} className="text-left">
-                <div className="table-responsive p-4" id="style-8">
-                  <Table className="ant-border-space" style={{ width: "100%" }}>
-                    <thead className="ant-table-thead bg-slate-200">
-                      <tr>
-                        <th className="font-bold text-sm align-middle">Код</th>
-                      </tr>
-                    </thead>
-                  </Table>
-                </div>
-              </Col>
-            </Row>
+            <DynamicFormInspection data={[{ type: 'diagnose', label: 'diagnose', inspectionType: "diagnose" }]} />
           </>
-        }
+        ) : null}
         <Form.Item
           wrapperCol={{
             span: 16,
@@ -147,6 +118,7 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
       question: JSON.stringify(values["question"]),
       inspection: JSON.stringify(values["inspection"]),
       plan: JSON.stringify(values["plan"]),
+      diagnose: JSON.stringify(values['diagnose']),
     }
     console.log(data);
     await Post('emr/inspectionNote', token, config, data);

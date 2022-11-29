@@ -6,7 +6,6 @@ import { Route, Routes } from "react-router-dom";
 import Main from "./components/pages/Layout/Main";
 import Hospital from "./components/pages/Organization/Hospital";
 import Structure from "./components/pages/Organization/Structure";
-import Employee from "./components/pages/Organization/Employee";
 //
 import Floor from "./components/pages/Organization/Floor";
 import Block from "./components/pages/Organization/Block";
@@ -32,7 +31,7 @@ import Examination from "./components/pages/service/Examination";
 import Xray from "./components/pages/service/Xray";
 import Treatment from "./components/pages/service/Treatment";
 import Surgury from "./components/pages/service/Surgury";
-import Medicine from "./components/pages/service/Medicine";
+import Medicine from "./components/pages/service/Medicine/Medicine";
 //service end
 //emr start
 import EMR from "./components/pages/EMR/emr";
@@ -117,14 +116,6 @@ function App() {
           />
           <Route
             path="/employee"
-            element={
-              <PrivateRoute>
-                <Employee />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/demployee"
             element={
               <PrivateRoute>
                 <DemoEmployee />
