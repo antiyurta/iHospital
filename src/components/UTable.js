@@ -263,16 +263,16 @@ function UTable(props) {
                           <td key={index}>
                             {column?.staticData
                               ? column.staticData(
-                                  row[`${column.index[0]}`][
-                                    `${column.index[1]}`
-                                  ]
-                                )
+                                row[`${column.index[0]}`][
+                                `${column.index[1]}`
+                                ]
+                              )
                               : inputChecker(
-                                  index,
-                                  row[`${column.index[0]}`][
-                                    `${column.index[1]}`
-                                  ]
-                                )}
+                                index,
+                                row[`${column.index[0]}`][
+                                `${column.index[1]}`
+                                ]
+                              )}
                           </td>
                         ) : (
                           column.isView && (
@@ -358,9 +358,9 @@ function UTable(props) {
                 {inputChecker(idx, view[`${element.index}`])}
                 {element.relation
                   ? inputChecker(
-                      idx,
-                      view[`${element.index[0]}`]?.[`${element.index[1]}`]
-                    )
+                    idx,
+                    view[`${element.index[0]}`]?.[`${element.index[1]}`]
+                  )
                   : inputChecker(idx, view[`${element.index}`])}
               </Descriptions.Item>
             );
@@ -418,6 +418,23 @@ function UTable(props) {
                       rules={element.rules}
                     >
                       <Select allowClear placeholder={element.label}>
+                        {element.inputData?.map((data, index) => {
+                          return (
+                            <Option key={index} value={data.id}>
+                              {data[`${element.relIndex}`]}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  )}
+                  {element.input === "multipleSelect" && (
+                    <Form.Item
+                      label={element.label}
+                      name={element.index}
+                      rules={element.rules}
+                    >
+                      <Select mode="multiple" allowClear placeholder={element.label}>
                         {element.inputData?.map((data, index) => {
                           return (
                             <Option key={index} value={data.id}>

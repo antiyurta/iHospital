@@ -33,7 +33,7 @@ function Position() {
             isView: true,
             input: 'select',
             inputData: departments,
-            relIndex: 'shortName',
+            relIndex: 'name',
             col: 24,
         },
         {

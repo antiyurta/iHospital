@@ -110,6 +110,7 @@ legend.scheduler-border {
 }
 .ant-select-selector {
   height: 28px !important;
+  place-content: center;
 }
 .ant-input {
   height: 28px;
@@ -126,9 +127,11 @@ legend.scheduler-border {
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-ap.ant-menu.ant-menu-inline-collapsed .ant-menu-item-icon, .ant-menu.ant-menu-inline-collapsed .anticon {
+  -webkit-ap.ant-menu.ant-menu-inline-collapsed .ant-menu-item-icon,
+  .ant-menu.ant-menu-inline-collapsed .anticon {
     display: block !important;
-  }pearance: none;
+  }
+  pearance: none;
   margin: 0;
 }
 
@@ -220,6 +223,7 @@ input[type="number"] {
 .custom-primary-btn {
   background-color: #2d8cff !important  ;
 }
-.ant-menu.ant-menu-inline-collapsed .ant-menu-item-icon, .ant-menu.ant-menu-inline-collapsed .anticon {
+.ant-menu.ant-menu-inline-collapsed .ant-menu-item-icon,
+.ant-menu.ant-menu-inline-collapsed .anticon {
   display: block !important;
 }

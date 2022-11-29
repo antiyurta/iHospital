@@ -93,12 +93,16 @@ function DemoEmployee() {
         config.params.type = null;
     }
     const getDegree = async () => {
+        config.params.page = null;
+        config.params.limit = null;
         const response = await Get('reference/degree', token, config);
         if (response.data.length != 0) {
             setDegrees(response.data);
         }
     }
     const getRoles = async () => {
+        config.params.page = null;
+        config.params.limit = null;
         const response = await Get('reference/role', token, config);
         if (response.data.length != 0) {
             setRoles(response.data);
@@ -325,7 +329,7 @@ function DemoEmployee() {
                                     }
                                 ]}
                             >
-                                <Select  onChange={getDepartment}>
+                                <Select onChange={getDepartment}>
                                     <Option value={2}>Тасаг</Option>
                                     <Option value={0}>Харьяалал</Option>
                                 </Select>
