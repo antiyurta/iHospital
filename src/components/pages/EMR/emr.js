@@ -80,8 +80,17 @@ function EMR() {
   }
 
   const handleClick = async (value) => {
+    var stateIsCito = false;
+    value.map((item) => {
+      if (item.isCito != 0) {
+        stateIsCito = true;
+      }
+    });
     const response = await Post('service-request', token, config, {
       patientId: selectedPatient.id,
+      requestDate: new Date(),
+      isCito: stateIsCito ? 1 : 0,
+      usageType: "OUT",
       services: value,
     })
     if (response === 201) {
