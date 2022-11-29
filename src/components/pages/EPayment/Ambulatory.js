@@ -1,12 +1,14 @@
-import { Card, Col, Row, Space, Button, Modal, Checkbox } from "antd";
+import { Card, Col, Row, Space, Button, Modal, Checkbox, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, openNofi, Post, ScrollRef } from "../../comman";
+import { DefaultPost, Get, openNofi, Post, ScrollRef } from "../../comman";
 import PatientInformation from "../PatientInformation";
 import Order from '../Order/Order';
 import EbarimtPrint from "./EbarimtPrint";
+
+const { Option } = Select;
 
 function Ambulatory() {
     const token = useSelector(selectCurrentToken);
@@ -19,11 +21,15 @@ function Ambulatory() {
     const [patient, setPatient] = useState([]);
     const [selectedPatient, setSelectedPatient] = useState([]);
     const [patientId, setPatientId] = useState(0);
-    const [paymentRequest, setPaymentRequest] = useState([]);
+    const [invoiceRequest, setInvoiceRequest] = useState([]);
+    const [discountPercentRequest, setDiscountPercentRequest] = useState(null);
     const scrollRef = useRef();
     const [totalAmount, setTotalAmount] = useState(0);
+    const [discounts, setDiscounts] = useState([]);
+    const [isDiscount, setIsDiscount] = useState(false);
     //
     const [ebarimtModal, setEbarimtModal] = useState(false);
+    const [ebarimtData, setEbarimtData] = useState({});
     //
 
     const config = {
@@ -56,16 +62,20 @@ function Ambulatory() {
     }
 
     const check = (e) => {
-        setPaymentRequest(e);
+        setInvoiceRequest(e);
     }
 
-    const PaymentRequst = async () => {
-        const response = await Post('payment/payment', token, config, {
-            "invoiceIds": paymentRequest,
+    const PaymentRequest = async () => {
+        const response = await DefaultPost('payment/payment', token, config, {
+            "invoiceIds": invoiceRequest,
             "patientId": patientId,
+            "discountPercentId": discountPercentRequest
         });
-        if (response === 201) {
+        if (response) {
+            console.log(response);
             setPaymentModal(false);
+            setEbarimtData(response);
+            setEbarimtModal(true);
         }
     }
 
@@ -95,9 +105,13 @@ function Ambulatory() {
             openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
         }
     }
-
+    const getDiscounts = async () => {
+        const response = await Get('payment/discount', token, config);
+        setDiscounts(response.data);
+    };
     useEffect(() => {
         ScrollRef(scrollRef);
+        getDiscounts();
     }, []);
 
     const categories = [
@@ -126,110 +140,6 @@ function Ambulatory() {
             name: 'package',
         },
     ];
-
-    const showQrModal = () => {
-        setEbarimtModal(true);
-    };
-
-    const ebarimtData = {
-        "id": 32,
-        "discountPercentId": null,
-        "paidAmount": null,
-        "insuranceAmount": null,
-        "totalAmount": 30123,
-        "isEbarimt": false,
-        "billId": "000000000038000221125000001054288",
-        "macAddress": "0242AC130002",
-        "lottery": "RC DEMO4464",
-        "internalCode": "594308302A5161DB0A92705F8BF338C6B1677591AB586C252A2D9A14",
-        "qrData": "1036085107201742813068723018911994378071759418786399744378450196400318209496400131422887925326556353485048362161416210248411648159210128425925549867120599897473733415388123382250423456213126139973457306586149541604841783141336377452825497126776144729313326106399498060869992314997494069494837472224024569268939994451",
-        "merchantId": "0000038",
-        "patientType": null,
-        "isReturn": false,
-        "createdBy": 4,
-        "updatedBy": null,
-        "patientId": 15,
-        "createdAt": "2022-11-25T07:04:48.453Z",
-        "updatedAt": "2022-11-25T07:04:48.898Z",
-        "deletedAt": null,
-        "patient": {
-            "id": 15,
-            "cardNumber": "324721",
-            "familyName": "Гэлэн",
-            "lastName": "Гантуяа",
-            "firstName": "Өлзийхутаг",
-            "registerNumber": "КИ90042111",
-            "phoneNo": "88506997",
-            "homePhoneNo": "89721559",
-            "jobPosition": "Программист",
-            "organization": "Гүрэн софт",
-            "isChild": false,
-            "email": null,
-            "address": null,
-            "insuranceNo": null,
-            "genderType": "MAN",
-            "isInsuranceType": false,
-            "createdBy": 5,
-            "type": 3,
-            "socialStatusType": 1,
-            "educationType": 2,
-            "serviceScopeStatusType": 1,
-            "imageId": null,
-            "age": 0,
-            "birthDay": "2022-11-22T09:20:32.540Z",
-            "contacts": null,
-            "countryId": null,
-            "aimagId": null,
-            "soumId": null,
-            "createdAt": "2022-11-22T09:20:32.540Z",
-            "updatedAt": "2022-11-22T09:20:32.540Z",
-            "deletedAt": null
-        },
-        "invoices": [
-            {
-                "id": 91,
-                "patientId": 15,
-                "paymentId": 32,
-                "amount": 10000,
-                "type": 0,
-                "typeId": 2,
-                "createdBy": 4,
-                "updatedBy": null,
-                "createdAt": "2022-11-25T07:04:39.172Z",
-                "updatedAt": "2022-11-25T07:04:48.476Z",
-                "deletedAt": null,
-                "name": "TEST1"
-            },
-            {
-                "id": 89,
-                "patientId": 15,
-                "paymentId": 32,
-                "amount": 123,
-                "type": 0,
-                "typeId": 3,
-                "createdBy": 4,
-                "updatedBy": null,
-                "createdAt": "2022-11-25T07:04:38.532Z",
-                "updatedAt": "2022-11-25T07:04:48.479Z",
-                "deletedAt": null,
-                "name": "TEST"
-            },
-            {
-                "id": 90,
-                "patientId": 15,
-                "paymentId": 32,
-                "amount": 20000,
-                "type": 0,
-                "typeId": 1,
-                "createdBy": 4,
-                "updatedBy": null,
-                "createdAt": "2022-11-25T07:04:39.156Z",
-                "updatedAt": "2022-11-25T07:04:48.481Z",
-                "deletedAt": null,
-                "name": "Шээсний шинжилгээ"
-            }
-        ]
-    };
 
     return (
         <div>
@@ -380,30 +290,56 @@ function Ambulatory() {
                 closable={false}
                 open={paymentModal}
                 width={"50%"}
-                onOk={PaymentRequst}
+                onOk={PaymentRequest}
                 onCancel={() => setPaymentModal(false)}
             >
-                <Checkbox.Group
-                    style={{
-                        width: "100%"
-                    }}
-                    onChange={check}
-                >
-                    <Row>
-                        {
-                            patient.map((element, index) => {
-                                return (
-                                    <Col key={index} span={12}>
-                                        <Checkbox value={element.id}>{element.name + "-->" + element.amount + "₮"}</Checkbox>
-                                    </Col>
-                                )
-                            })
-                        }
-                    </Row>
-                </Checkbox.Group>
+                <div className="flex flex-wrap">
+                    <div className="w-full p-1">
+                        <Checkbox onChange={(e) => {
+                            setIsDiscount(e.target.checked);
+                            if (!e.target.checked) {
+                                setDiscountPercentRequest(null);
+                            }
+                        }} >Хөнгөлөлтэй эсэх</Checkbox>
+                    </div>
+                    {isDiscount &&
+                        <div className="w-full p-1">
+                            <label>Хөнгөлөх хувь</label>
+                            <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
+                                {
+                                    discounts.map((discount, index) => {
+                                        return (
+                                            <Option key={index} value={discount.id}>{discount.name}</Option>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </div>
+                    }
+                    <div className="w-full p-1">
+                        <label>Захиалсан</label>
+                        <Checkbox.Group
+                            style={{
+                                width: "100%"
+                            }}
+                            onChange={check}
+                        >
+                            <Row>
+                                {
+                                    patient.map((element, index) => {
+                                        return (
+                                            <Col key={index} span={12}>
+                                                <Checkbox value={element.id}>{element.name + "-->" + element.amount + "₮"}</Checkbox>
+                                            </Col>
+                                        )
+                                    })
+                                }
+                            </Row>
+                        </Checkbox.Group>
+                    </div>
+                </div>
             </Modal>
-            <Button onClick={() => { showQrModal() }}>EBARIMT</Button>
-            <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)}>
+            <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
                 <EbarimtPrint props={ebarimtData} />
             </Modal>
         </div >

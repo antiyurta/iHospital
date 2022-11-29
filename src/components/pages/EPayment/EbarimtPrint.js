@@ -9,18 +9,11 @@ import moment from "moment";
 
 function EbarimtPrint(props) {
     const printRef = useRef();
-    const printHeart = useRef();
     const handlePrint = useReactToPrint({
         content: () => printRef.current
     });
-    const handlePrintHeart = useReactToPrint({
-        content: () => printHeart.current
-    });
     return (
-        <>
-            <div ref={printHeart} style={{ width: '72mm', height: 'auto' }}>
-                <span style={{ fontSize: 50, textAlign: "center" }}>A + S = &#10084;</span>
-            </div>
+        <div className="pt-6">
             <div ref={printRef} style={{ width: '72mm', height: 'auto' }}>
                 <Table bordered style={{ borderColor: 'black', paddingTop: '10' }}>
                     <tbody>
@@ -50,7 +43,7 @@ function EbarimtPrint(props) {
                                 </div>
                                 <p style={{ fontSize: 14, textAlign: "center" }}>ОНОШИЛГОО</p>
                                 {
-                                    props?.props?.invoices.map((invoice, index) => {
+                                    props?.props?.invoices?.map((invoice, index) => {
                                         return (
                                             <div key={index} className="flex flex-wrap">
                                                 <div className="basis-1/2">
@@ -88,9 +81,8 @@ function EbarimtPrint(props) {
                     </tbody>
                 </Table>
             </div>
-            <Button onClick={handlePrint}>Хэвлэх</Button>
-            <Button onClick={handlePrintHeart}>Хэвлэх</Button>
-        </>
+            <Button className="w-full bg-green-500 text-white font-bold" onClick={handlePrint}>Хэвлэх</Button>
+        </div>
     )
 }
 export default EbarimtPrint;

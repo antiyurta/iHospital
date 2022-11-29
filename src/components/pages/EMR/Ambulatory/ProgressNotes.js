@@ -55,6 +55,12 @@ export default function ProgressNotes({ PatientId }) {
     }
   };
 
+  const RenderNotesDiagnose = (data) => {
+    data?.data?.diagnose?.map((diagnose) => {
+      console.log(diagnose);
+    })
+  }
+
   const RenderNotesDetail = (data) => {
     return Object.entries(data.data).map(([key, value], index) => {
       return (
@@ -132,7 +138,7 @@ export default function ProgressNotes({ PatientId }) {
                       <Divider orientation="left" className="text-sm my-2">
                         Онош
                       </Divider>
-                      {/* {JSON.parse(el['diagnose'])} */}
+                      <RenderNotesDiagnose data={JSON.parse(el["diagnose"])} />
                     </Panel>
                   );
                 })}

@@ -37,7 +37,29 @@ export async function Post(url, token, config, data) {
                     resolve(201);
                 } else if (response.status === 401) {
                     console.log('NEWTER COMMAN JS');
-                }else{
+                } else {
+                    resolve(201);
+                }
+            })
+            .catch((error) => {
+                openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
+                resolve(400);
+            })
+    })
+}
+
+export async function DefaultPost(url, token, config, data) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['x-api-key'] = API_KEY;
+    return new Promise((resolve, reject) => {
+        axios.post(DEV_URL + url, data, config)
+            .then((response) => {
+                if (response.status === 201) {
+                    openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
+                    resolve(response.data.response);
+                } else if (response.status === 401) {
+                    console.log('NEWTER COMMAN JS');
+                } else {
                     resolve(201);
                 }
             })
