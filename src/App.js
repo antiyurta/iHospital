@@ -20,7 +20,6 @@ import DoctorAppointment from "./components/pages/Appointment/DoctorAppointment"
 import Patient from "./components/pages/PMS/Patient";
 import Country from "./components/pages/reference/CountryDictionary";
 import Degree from "./components/pages/reference/Degree";
-import Directory from "./components/pages/reference/Directory";
 //
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -59,6 +58,7 @@ import RequestAnalys from "./components/pages/Laboratory/RequestAnalys";
 import PatientForm from "./components/pages/FormBuilder/FBuilder/PatientForm";
 import Role from "./components/pages/Organization/Role";
 import Permission from "./components/pages/Organization/Permission";
+import Discount from "./components/pages/reference/Discount";
 // lab end
 
 function App() {
@@ -75,6 +75,7 @@ function App() {
           <Route path="/demoForm2" element={<DemoForm2 />} />
           <Route path="/role" element={<Role />} />
           <Route path="/permission" element={<Permission />} />
+          <Route path="/discount" element={<Discount />} />
           {/* finance end */}
           <Route path="/menu" element={<Menu />} />
           <Route path="/emr" element={<EMR />} />
@@ -197,14 +198,6 @@ function App() {
               element={
                 <PrivateRoute>
                   <Degree />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/directory"
-              element={
-                <PrivateRoute>
-                  <Directory />
                 </PrivateRoute>
               }
             />
