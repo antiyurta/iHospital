@@ -138,7 +138,7 @@ export default function ProgressNotes({ PatientId }) {
                       <Divider orientation="left" className="text-sm my-2">
                         Онош
                       </Divider>
-                      <RenderNotesDiagnose data={JSON.parse(el["diagnose"])} />
+                      {el["diagnose"] && <RenderNotesDiagnose data={JSON.parse(el["diagnose"])} />}
                     </Panel>
                   );
                 })}
