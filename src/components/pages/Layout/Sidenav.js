@@ -69,7 +69,12 @@ function Sidenav({ color }) {
           key: "1-10",
           icon: <UserAddOutlined />,
           label: <NavLink to="/permission">permission</NavLink>
-        }
+        },
+        {
+          key: "1-11",
+          icon: <UserAddOutlined />,
+          label: <NavLink to="/menu">menu</NavLink>
+        },
       ],
     },
     {
@@ -87,6 +92,11 @@ function Sidenav({ color }) {
           icon: <HomeOutlined />,
           label: <NavLink to="/degree">degree</NavLink>,
         },
+        {
+          key: "2-3",
+          icon: <HomeOutlined />,
+          label: <NavLink to="/discount">discount</NavLink>,
+        }
       ],
     },
     {

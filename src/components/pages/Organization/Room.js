@@ -32,6 +32,13 @@ function Room() {
             col: 24,
         },
         {
+            index: "price",
+            label: "Өрөөны үнэ",
+            isView: true,
+            input: 'inputNumber',
+            col: 24,
+        },
+        {
             index: 'isInpatient',
             label: 'Хэвтэн эсэх',
             isView: true,

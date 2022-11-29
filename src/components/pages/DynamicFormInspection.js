@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import {
   Col,
   Row,
@@ -8,20 +8,88 @@ import {
   Checkbox,
   Select,
   DatePicker,
-  Divider,
+  Button,
+  AutoComplete,
 } from "antd";
-import { INPUT_HEIGHT } from "../../constant";
+import { Table } from "react-bootstrap";
+import { DeleteOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/authReducer";
+import { Get } from "../comman";
 
 export default function DynamicFormInspection(props) {
   const { TextArea } = Input;
   const { Option } = Select;
-
   //antd FORM нь ингэж хадгалж чаддаг юм байна өөө : {[el.inspectionType, el.label]} => [object -н KEY, Param -ууд]
   //Жнь: question: {Асуумж: '22', checkchoose: Array(2), bodyStatus: 'heavy'} => Асуумжын Парамууд
+
+  const DiagnoseType = [
+    {
+      label: "Үндсэн",
+      value: 0,
+    },
+    {
+      label: "Урьдчилсан",
+      value: 1,
+    },
+    {
+      label: "Хүндрэл",
+      value: 2,
+    },
+    {
+      label: "Үйлдийн онош",
+      value: 3,
+    },
+    {
+      label: "Хавсрах онош",
+      value: 4,
+    },
+  ];
+  const DiagnoseData = [
+    {
+      code: "Aa0.1",
+      nameMn: "asdas",
+      nameEn: "sadsa",
+      nameRu: 'SAdsa'
+    },
+    {
+      code: "Aa0.2",
+      nameMn: "asdas",
+      nameEn: "sadsa",
+      nameRu: 'SAdsa'
+    }
+  ];
+  const token = useSelector(selectCurrentToken);
+  const config = {
+    headers: {},
+    params: {}
+  };
+  const [options, setOptions] = useState([]);
+  const [diagnoseData, setDiagnoseData] = useState([]);
+  const handleSearch = (value) => {
+    const data = diagnoseData.filter((data) => {
+      return data.code.toLowerCase().includes(value.toLowerCase());
+    });
+    setOptions(data);
+  };
+  const handleSelect = (value) => {
+    const selectedData = diagnoseData.find(e => e.code === value);
+
+  };
+  const getDiagnoses = async () => {
+    const response = await Get('reference/diagnose', token, config);
+    setDiagnoseData(response.data);
+  };
+  useEffect(() => {
+    getDiagnoses();
+  }, []);
 
   return (
     <>
       {props.data?.map((el, index) => {
+        console.log("======>", props.data);
         if (el.type === "textarea") {
           return (
             <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
@@ -135,7 +203,6 @@ export default function DynamicFormInspection(props) {
             </div>
           );
         } else if (el.type === "date") {
-          // console.log("dropdown", el);
           return (
             <Row align="middle" className="mb-1" key={index}>
               <Col span={24} className="text-left">
@@ -157,7 +224,6 @@ export default function DynamicFormInspection(props) {
             </Row>
           );
         } else if (el.type === "editor") {
-          // console.log("dropdown", el);
           return (
             <Row align="middle" className="mb-1" key={index}>
               <Col span={24} className="text-left">
@@ -200,6 +266,91 @@ export default function DynamicFormInspection(props) {
               </Col>
             </Row>
           );
+        } else if (el.type === 'diagnose') {
+          return (
+            <div key={index} className="rounded-md bg-gray-100 inline-block m-1">
+              <div className="inline-flex p-1">
+                <Form.List name={[el.inspectionType, el.label]}>
+                  {
+                    (fields, { add, remove }) => (
+                      <>
+                        <div className='table-responsive p-4' id='style-8'>
+                          <Table className='ant-border-space '>
+                            <thead className='ant-table-thead bg-slate-200'>
+                              <tr>
+                                <th>Код</th>
+                                <th>Монгол нэр</th>
+                                <th>Англи нэр</th>
+                                <th>Орос нэр</th>
+                                <th>Төрөл</th>
+                                <th>Үйлдэл</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {fields.map(({ key, name, }) => (
+                                <tr key={key}>
+                                  <td>
+                                    <Form.Item
+                                      name={[name, 'code']}
+                                    >
+                                      <AutoComplete style={{ width: 200 }} onSearch={handleSearch} onSelect={handleSelect}>
+                                        {
+                                          options.map((option, key) => {
+                                            return (
+                                              <Option key={key} value={option.code}>{option.code}</Option>
+                                            )
+                                          })
+                                        }
+                                      </AutoComplete>
+                                    </Form.Item>
+                                  </td>
+                                  <td>
+                                    <Form.Item
+                                      name={[name, 'nameMn']}
+                                    >
+                                      <Input disabled={true} />
+                                    </Form.Item>
+                                  </td>
+                                  <td>
+                                    <Form.Item
+                                      name={[name, 'nameEn']}
+                                    >
+                                      <Input disabled={true} />
+                                    </Form.Item>
+                                  </td>
+                                  <td>
+                                    <Form.Item
+                                      name={[name, 'nameRu']}
+                                    >
+                                      <Input disabled={true} />
+                                    </Form.Item>
+                                  </td>
+                                  <td>
+                                    <Form.Item
+                                      name={[name, 'type']}
+                                      style={{ width: 150 }}
+                                    >
+                                      <Select options={DiagnoseType} />
+                                    </Form.Item>
+                                  </td>
+                                  <td>
+                                    <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(name)} />
+                                  </td>
+                                </tr>
+                              ))}
+                              <Form.Item>
+                                <PlusCircleOutlined style={{ color: 'green', fontSize: '18px', paddingRight: '6px' }} onClick={() => add()} />
+                              </Form.Item>
+                            </tbody>
+                          </Table>
+                        </div>
+                      </>
+                    )
+                  }
+                </Form.List>
+              </div>
+            </div>
+          )
         }
       })}
     </>

@@ -6,7 +6,6 @@ import { Route, Routes } from "react-router-dom";
 import Main from "./components/pages/Layout/Main";
 import Hospital from "./components/pages/Organization/Hospital";
 import Structure from "./components/pages/Organization/Structure";
-import Employee from "./components/pages/Organization/Employee";
 //
 import Floor from "./components/pages/Organization/Floor";
 import Block from "./components/pages/Organization/Block";
@@ -21,7 +20,6 @@ import DoctorAppointment from "./components/pages/Appointment/DoctorAppointment"
 import Patient from "./components/pages/PMS/Patient";
 import Country from "./components/pages/reference/CountryDictionary";
 import Degree from "./components/pages/reference/Degree";
-import Directory from "./components/pages/reference/Directory";
 //
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -32,7 +30,7 @@ import Examination from "./components/pages/service/Examination";
 import Xray from "./components/pages/service/Xray";
 import Treatment from "./components/pages/service/Treatment";
 import Surgury from "./components/pages/service/Surgury";
-import Medicine from "./components/pages/service/Medicine";
+import Medicine from "./components/pages/service/Medicine/Medicine";
 //service end
 //emr start
 import EMR from "./components/pages/EMR/emr";
@@ -60,6 +58,7 @@ import RequestAnalys from "./components/pages/Laboratory/RequestAnalys";
 import PatientForm from "./components/pages/FormBuilder/FBuilder/PatientForm";
 import Role from "./components/pages/Organization/Role";
 import Permission from "./components/pages/Organization/Permission";
+import Discount from "./components/pages/reference/Discount";
 // lab end
 
 function App() {
@@ -76,6 +75,7 @@ function App() {
           <Route path="/demoForm2" element={<DemoForm2 />} />
           <Route path="/role" element={<Role />} />
           <Route path="/permission" element={<Permission />} />
+          <Route path="/discount" element={<Discount />} />
           {/* finance end */}
           <Route path="/menu" element={<Menu />} />
           <Route path="/emr" element={<EMR />} />
@@ -117,14 +117,6 @@ function App() {
           />
           <Route
             path="/employee"
-            element={
-              <PrivateRoute>
-                <Employee />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/demployee"
             element={
               <PrivateRoute>
                 <DemoEmployee />
@@ -206,14 +198,6 @@ function App() {
               element={
                 <PrivateRoute>
                   <Degree />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/directory"
-              element={
-                <PrivateRoute>
-                  <Directory />
                 </PrivateRoute>
               }
             />

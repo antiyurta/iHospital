@@ -93,12 +93,16 @@ function DemoEmployee() {
         config.params.type = null;
     }
     const getDegree = async () => {
+        config.params.page = null;
+        config.params.limit = null;
         const response = await Get('reference/degree', token, config);
         if (response.data.length != 0) {
             setDegrees(response.data);
         }
     }
     const getRoles = async () => {
+        config.params.page = null;
+        config.params.limit = null;
         const response = await Get('reference/role', token, config);
         if (response.data.length != 0) {
             setRoles(response.data);
@@ -293,7 +297,7 @@ function DemoEmployee() {
                         </div>
                         <div className="md:w-1/4 sm:w-1/3 p-1">
                             <Form.Item
-                                label="Ажилж байгаа эсэх"
+                                label="Aжиллаж байгаа эсэх"
                                 name='isWorking'
                                 valuePropName="checked"
                             >
@@ -325,7 +329,7 @@ function DemoEmployee() {
                                     }
                                 ]}
                             >
-                                <Select  onChange={getDepartment}>
+                                <Select onChange={getDepartment}>
                                     <Option value={2}>Тасаг</Option>
                                     <Option value={0}>Харьяалал</Option>
                                 </Select>
@@ -435,14 +439,8 @@ function DemoEmployee() {
                         </div>
                         <div className="w-1/2 p-1">
                             <Form.Item
-                                label="Ажилаас гарсан огноо"
+                                label="Ажлаас гарсан огноо"
                                 name='dateOutEmployment'
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Zaawal'
-                                    }
-                                ]}
                             >
                                 <DatePicker locale={mnMN} />
                             </Form.Item>

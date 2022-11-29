@@ -1,11 +1,14 @@
-import { Card, Col, Row, Space, Button, Modal, Checkbox } from "antd";
+import { Card, Col, Row, Space, Button, Modal, Checkbox, Select } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, openNofi, Post, ScrollRef } from "../../comman";
+import { DefaultPost, Get, openNofi, Post, ScrollRef } from "../../comman";
 import PatientInformation from "../PatientInformation";
 import Order from '../Order/Order';
+import EbarimtPrint from "./EbarimtPrint";
+
+const { Option } = Select;
 
 function Ambulatory() {
     const token = useSelector(selectCurrentToken);
@@ -18,9 +21,17 @@ function Ambulatory() {
     const [patient, setPatient] = useState([]);
     const [selectedPatient, setSelectedPatient] = useState([]);
     const [patientId, setPatientId] = useState(0);
-    const [paymentRequest, setPaymentRequest] = useState([]);
+    const [invoiceRequest, setInvoiceRequest] = useState([]);
+    const [discountPercentRequest, setDiscountPercentRequest] = useState(null);
     const scrollRef = useRef();
     const [totalAmount, setTotalAmount] = useState(0);
+    const [discounts, setDiscounts] = useState([]);
+    const [isDiscount, setIsDiscount] = useState(false);
+    //
+    const [ebarimtModal, setEbarimtModal] = useState(false);
+    const [ebarimtData, setEbarimtData] = useState({});
+    //
+
     const config = {
         headers: {},
         params: {}
@@ -51,16 +62,20 @@ function Ambulatory() {
     }
 
     const check = (e) => {
-        setPaymentRequest(e);
+        setInvoiceRequest(e);
     }
 
-    const PaymentRequst = async () => {
-        const response = await Post('payment/payment', token, config, {
-            "invoiceIds": paymentRequest,
+    const PaymentRequest = async () => {
+        const response = await DefaultPost('payment/payment', token, config, {
+            "invoiceIds": invoiceRequest,
             "patientId": patientId,
+            "discountPercentId": discountPercentRequest
         });
-        if (response === 201) {
+        if (response) {
+            console.log(response);
             setPaymentModal(false);
+            setEbarimtData(response);
+            setEbarimtModal(true);
         }
     }
 
@@ -70,9 +85,17 @@ function Ambulatory() {
             openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
         }
         else if (value.length > 0) {
+            var stateIsCito = false;
+            value.map((item) => {
+                if (item.isCito != 0) {
+                    stateIsCito = true;
+                }
+            });
             const response = await Post('service-request', token, config, {
                 patientId: selectedPatient.id,
                 requestDate: new Date(),
+                isCito: stateIsCito ? 1 : 0,
+                usageType: "OUT",
                 services: value,
             })
             if (response === 201) {
@@ -82,9 +105,13 @@ function Ambulatory() {
             openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
         }
     }
-
+    const getDiscounts = async () => {
+        const response = await Get('payment/discount', token, config);
+        setDiscounts(response.data);
+    };
     useEffect(() => {
         ScrollRef(scrollRef);
+        getDiscounts();
     }, []);
 
     const categories = [
@@ -112,7 +139,7 @@ function Ambulatory() {
             //bagts
             name: 'package',
         },
-    ]
+    ];
 
     return (
         <div>
@@ -263,27 +290,57 @@ function Ambulatory() {
                 closable={false}
                 open={paymentModal}
                 width={"50%"}
-                onOk={PaymentRequst}
+                onOk={PaymentRequest}
                 onCancel={() => setPaymentModal(false)}
             >
-                <Checkbox.Group
-                    style={{
-                        width: "100%"
-                    }}
-                    onChange={check}
-                >
-                    <Row>
-                        {
-                            patient.map((element, index) => {
-                                return (
-                                    <Col key={index} span={12}>
-                                        <Checkbox value={element.id}>{element.name + "-->" + element.amount + "₮"}</Checkbox>
-                                    </Col>
-                                )
-                            })
-                        }
-                    </Row>
-                </Checkbox.Group>
+                <div className="flex flex-wrap">
+                    <div className="w-full p-1">
+                        <Checkbox onChange={(e) => {
+                            setIsDiscount(e.target.checked);
+                            if (!e.target.checked) {
+                                setDiscountPercentRequest(null);
+                            }
+                        }} >Хөнгөлөлтэй эсэх</Checkbox>
+                    </div>
+                    {isDiscount &&
+                        <div className="w-full p-1">
+                            <label>Хөнгөлөх хувь</label>
+                            <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
+                                {
+                                    discounts.map((discount, index) => {
+                                        return (
+                                            <Option key={index} value={discount.id}>{discount.name}</Option>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </div>
+                    }
+                    <div className="w-full p-1">
+                        <label>Захиалсан</label>
+                        <Checkbox.Group
+                            style={{
+                                width: "100%"
+                            }}
+                            onChange={check}
+                        >
+                            <Row>
+                                {
+                                    patient.map((element, index) => {
+                                        return (
+                                            <Col key={index} span={12}>
+                                                <Checkbox value={element.id}>{element.name + "-->" + element.amount + "₮"}</Checkbox>
+                                            </Col>
+                                        )
+                                    })
+                                }
+                            </Row>
+                        </Checkbox.Group>
+                    </div>
+                </div>
+            </Modal>
+            <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
+                <EbarimtPrint props={ebarimtData} />
             </Modal>
         </div >
     )

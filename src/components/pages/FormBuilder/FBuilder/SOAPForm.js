@@ -340,7 +340,7 @@ function SOAPForm() {
                         </div>
                     </div>
                     <Divider>Асуумж</Divider>
-                    <Collapse accordion style={{ borderRadius: '0.375rem' }}>
+                    <Collapse style={{ borderRadius: '0.375rem' }}>
                         {
                             panels.map((panel, index) => {
                                 return (
