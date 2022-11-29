@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi, Post } from "../../comman";
-import { Col, Row, Table, Input, Empty, Spin } from "antd";
+import { Col, Row, Table, Input, Empty, Spin, Segmented } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import usageType from "./usageType.json";
 import examinationProcess from "./examinationProcess.json";
@@ -19,7 +19,9 @@ function RequestAnalys() {
   const [searchValue, setSearchValue] = useState("");
   const [barCodeValue, setBarCodeValue] = useState("");
   const [loader, setLoader] = useState(false);
+  const [loaderDtl, setLoaderDtl] = useState(false);
   const [loadingSpin, setLoadingSpin] = useState(false);
+  const [statusFilter, setStatusFilter] = useState(0);
   const componentRef = useRef();
 
   const config = {
@@ -48,12 +50,15 @@ function RequestAnalys() {
                 return item.label;
               }
             }),
+            dtlData: el.examinationRequestDetials,
           },
         ]);
       });
       setLoader(false);
+      setLoaderDtl(false);
     } else {
       setLoader(false);
+      setLoaderDtl(false);
     }
   };
 
@@ -74,6 +79,7 @@ function RequestAnalys() {
             key: index,
             examination: el.examinations?.name,
             barcode: el.barCode,
+            statusId: el.examinationProcess,
             status: examinationProcess.map((item) => {
               if (item.value === el.examinationProcess) {
                 return item.label;
@@ -83,7 +89,7 @@ function RequestAnalys() {
           },
         ]);
       });
-      setLoader(false);
+      setLoaderDtl(false);
     }
   };
 
@@ -92,6 +98,7 @@ function RequestAnalys() {
   }, []);
 
   useEffect(() => {
+    setLoaderDtl(true);
     selectedRowKey !== "" && getRequestDtl();
   }, [selectedRowKey]);
 
@@ -169,10 +176,17 @@ function RequestAnalys() {
     onBeforePrint: () => {
       setLoadingSpin(false);
     },
+    onAfterPrint: () => {
+      setBarCodeValue("");
+    },
   });
   useEffect(() => {
     barCodeValue !== "" && selectedDtlData !== "" && handlePrint();
   }, [barCodeValue]);
+
+  useEffect(() => {
+    statusFilter && console.log("statusFilter", statusFilter);
+  }, [statusFilter]);
 
   return (
     <Spin spinning={loadingSpin}>
@@ -186,6 +200,21 @@ function RequestAnalys() {
             prefix={<SearchOutlined />}
           />
         </Col>
+        <Col span={8}>
+          <Segmented
+            className="department-bed-segment"
+            size="small"
+            options={examinationProcess.map((el, index) => {
+              return {
+                label: el.label,
+                value: el.value,
+                icon: null,
+              };
+            })}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e)}
+          />
+        </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
@@ -193,13 +222,17 @@ function RequestAnalys() {
             locale={locale}
             loading={loader}
             columns={columns}
-            dataSource={patientReqList?.filter(
-              (obj) =>
-                obj.requestId.toString().includes(searchValue) ||
-                obj.lastName.includes(searchValue) ||
-                obj.firstName.includes(searchValue) ||
-                obj.registerNumber.includes(searchValue)
-            )}
+            dataSource={patientReqList
+              ?.filter(
+                (obj) =>
+                  obj.requestId.toString().includes(searchValue) ||
+                  obj.lastName.includes(searchValue) ||
+                  obj.firstName.includes(searchValue) ||
+                  obj.registerNumber.includes(searchValue)
+              )
+              ?.filter((d) =>
+                d.dtlData?.some((c) => c.examinationProcess === statusFilter)
+              )}
             bordered
             rowSelection={{
               type: "radio",
@@ -220,15 +253,18 @@ function RequestAnalys() {
         <Col span={12}>
           <Table
             locale={locale}
+            loading={loaderDtl}
             columns={columnsTabl2}
             dataSource={patientReqDtl}
             bordered
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
-                  setLoadingSpin(true);
-                  setBarCodeValue(record.barcode);
                   setSelectedDtlData(record);
+                  if (record.statusId === 0) {
+                    setLoadingSpin(true);
+                    setBarCodeValue(record.barcode);
+                  }
                 },
               };
             }}
