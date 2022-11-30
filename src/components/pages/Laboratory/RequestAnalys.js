@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi, Post } from "../../comman";
-import { Col, Row, Table, Input, Empty, Spin, Segmented } from "antd";
+import { Col, Row, Table, Input, Empty, Spin, Segmented, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import usageType from "./usageType.json";
 import examinationProcess from "./examinationProcess.json";
@@ -11,14 +11,15 @@ import { useReactToPrint } from "react-to-print";
 
 function RequestAnalys() {
   const token = useSelector(selectCurrentToken);
-  const [patientReqList, setPatientReqList] = useState([]);
-  const [patientReqDtl, setPatientReqDtl] = useState([]);
-  const [selectedReqData, setSelectedReqData] = useState("");
-  const [selectedDtlData, setSelectedDtlData] = useState("");
-  const [selectedRowKey, setSelectedRowKey] = useState("");
+  const [patientReqList, setPatientReqList] = useState([]); //Нийт хүсэлт
+  const [patientReqDtl, setPatientReqDtl] = useState([]); //Сонгосон хүсэлтийн шижилгээнүүд
+  const [selectedReqData, setSelectedReqData] = useState(""); //Сонгосон хүсэлт
+  const [selectedRowKey, setSelectedRowKey] = useState(""); //Сонгосон хүсэлт мөрийн дугаар (AntD -н TABLE -д ашиглах)
+  const [selectedExaminations, setSelectedExaminations] = useState([]); //Сонгогдсон шинжилгээнүүд
+  const [selectedExaminationKeys, setSelectedExaminationKeys] = useState([]); //Сонгогдсон шинжилгээнүүдийн мөрийн дугаар (AntD -н TABLE -д ашиглах)
   const [searchValue, setSearchValue] = useState("");
-  const [barCodeValue, setBarCodeValue] = useState("");
   const [loader, setLoader] = useState(false);
+  const [checkPrintClosed, setCheckPrintClosed] = useState(false); // Хэвлэх цонх хаагдсан эсэхийг мэдэх
   const [loaderDtl, setLoaderDtl] = useState(false);
   const [loadingSpin, setLoadingSpin] = useState(false);
   const [statusFilter, setStatusFilter] = useState(0);
@@ -102,6 +103,12 @@ function RequestAnalys() {
     selectedRowKey !== "" && getRequestDtl();
   }, [selectedRowKey]);
 
+  useEffect(() => {
+    //PRINT цонх хаагдсан эсвэл BARCODE хэвлэгдсэн бол дараагийн BARCODE -г хэвлэх цонх харуулах
+    if (selectedExaminations.length > 0) {
+      handlePrint();
+    }
+  }, [checkPrintClosed]);
   const columns = [
     {
       title: "Дугаар",
@@ -177,16 +184,64 @@ function RequestAnalys() {
       setLoadingSpin(false);
     },
     onAfterPrint: () => {
-      setBarCodeValue("");
+      //PRINT цонх хаагдсан эсвэл BARCODE хэвлэгдсэн бол эхний BARCODE -г UNCHECK болгоод
+      //Дараагийн BARCODE -г хэвлэхэд бэлдэх
+      var arr = [...selectedExaminations];
+      var newArrayKeys = [...selectedExaminationKeys];
+
+      var theRemovedElement = arr.slice(1);
+      setSelectedExaminations(theRemovedElement);
+      setCheckPrintClosed(!checkPrintClosed);
+      Promise.all(
+        patientReqDtl.map((data) => {
+          if (data.barcode === selectedExaminations[0].barcode) {
+            newArrayKeys = newArrayKeys.filter((e) => e !== data.key);
+          }
+          return false;
+        })
+      ).then(() => {
+        setSelectedExaminationKeys(newArrayKeys);
+      });
     },
   });
-  useEffect(() => {
-    barCodeValue !== "" && selectedDtlData !== "" && handlePrint();
-  }, [barCodeValue]);
 
-  useEffect(() => {
-    statusFilter && console.log("statusFilter", statusFilter);
-  }, [statusFilter]);
+  const rowSelectionExamination = {
+    selectedExaminationKeys,
+    onSelect: (record, selected, selectedRows) => {
+      if (!selected) {
+        //Сонгогдсон ижил BARCODE той шинжилгээнүүдийг UNCHECK болгох
+        var newArrayKeys = [...selectedExaminationKeys];
+        var newArray = [...selectedExaminations];
+
+        Promise.all(
+          patientReqDtl.map((data) => {
+            if (data.barcode === record.barcode) {
+              newArrayKeys = newArrayKeys.filter((e) => e !== data.key);
+              newArray = newArray.filter((e) => e.barcode !== data.barcode);
+            }
+            return false;
+          })
+        ).then(() => {
+          setSelectedExaminationKeys(newArrayKeys);
+          setSelectedExaminations(newArray);
+        });
+      } else {
+        //Ижил BARCODE той шинжилгээнүүдийг CHECK хийх
+        patientReqDtl.map((el) => {
+          if (el.barcode === record.barcode) {
+            setSelectedExaminationKeys((selectedExaminationKeys) => [
+              ...selectedExaminationKeys,
+              el.key,
+            ]);
+          }
+        });
+        setSelectedExaminations((selectedExaminations) => [
+          ...selectedExaminations,
+          record,
+        ]);
+      }
+    },
+  };
 
   return (
     <Spin spinning={loadingSpin}>
@@ -257,30 +312,38 @@ function RequestAnalys() {
             columns={columnsTabl2}
             dataSource={patientReqDtl}
             bordered
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  setSelectedDtlData(record);
-                  if (record.statusId === 0) {
-                    setLoadingSpin(true);
-                    setBarCodeValue(record.barcode);
-                  }
-                },
-              };
+            rowSelection={{
+              ...rowSelectionExamination,
+              selectedRowKeys: selectedExaminationKeys,
+              hideSelectAll: true,
+            }}
+            footer={() => {
+              return (
+                <>
+                  {selectedExaminations.length > 0 ? (
+                    <Button className="mr-2" onClick={() => handlePrint()}>
+                      Хэвлэх
+                    </Button>
+                  ) : null}
+                </>
+              );
             }}
           />
         </Col>
       </Row>
-      <div style={{ display: "none" }}>
-        <div ref={componentRef} className="mt-4">
-          <p>{selectedDtlData.device}</p>
-          <p>{selectedReqData.registerNumber}</p>
-          <p>
-            {selectedReqData.lastName} {selectedReqData.firstName}
-          </p>
-          <Barcode value={barCodeValue} height={50} />
+      {selectedExaminations.length > 0 && (
+        //Энд сонгогдсон шинжилгээнүүдийн зөвхөн эхнийхийг хэвлэхээр тохируулж байгаа.
+        <div style={{ display: "none" }}>
+          <div ref={componentRef} className="mt-4">
+            <p>{selectedExaminations[0].device}</p>
+            <p>{selectedReqData.registerNumber}</p>
+            <p>
+              {selectedReqData.lastName} {selectedReqData.firstName}
+            </p>
+            <Barcode value={selectedExaminations[0].barcode} height={50} />
+          </div>
         </div>
-      </div>
+      )}
     </Spin>
   );
 }
