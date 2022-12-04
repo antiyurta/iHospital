@@ -189,6 +189,11 @@ input[type="number"] {
   line-height: 1;
 }
 
+.ant-btn-primary{
+  border-radius: 6px !important;
+  background-color: #2d8cff;
+}
+
 /* .ant-tabs-extra-content {
   width: 100%;
 } */

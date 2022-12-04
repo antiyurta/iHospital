@@ -4,7 +4,7 @@ import male from '../../assets/images/maleAvatar.svg';
 
 const { Search } = Input;
 
-function PatientInformation({ handlesearch, patient, handleTypeChange, OCS }) {
+function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type }) {
     const onSearch = async (value) => {
         handlesearch(value);
     }
@@ -71,8 +71,8 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS }) {
                         OCS && <div className="absolute bottom-1 left-10">
                             <Radio.Group
                                 size="small"
-                                // value="EMR"
                                 onChange={handleTypeChangePatient}
+                                value={type}
                                 optionType="button"
                                 buttonStyle="solid"
                                 className="small-radio-button mt-2"

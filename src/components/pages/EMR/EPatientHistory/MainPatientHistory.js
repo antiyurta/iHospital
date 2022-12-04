@@ -189,7 +189,7 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
   };
   const [items, setItems] = useState([
     {
-      label: "Өвчтөний түүх",
+      label: "Амьдарлийн түүх",
       key: "item-history",
       children: <Tab1Content />,
     },
