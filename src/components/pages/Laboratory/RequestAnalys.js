@@ -1,8 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, openNofi, Post } from "../../comman";
-import { Col, Row, Table, Input, Empty, Spin, Segmented, Button } from "antd";
+import { Get, Patch } from "../../comman";
+import {
+  Col,
+  Row,
+  Table,
+  Input,
+  Empty,
+  Spin,
+  Segmented,
+  Button,
+  Space,
+  Tag,
+} from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import usageType from "./usageType.json";
 import examinationProcess from "./examinationProcess.json";
@@ -23,6 +34,7 @@ function RequestAnalys() {
   const [loaderDtl, setLoaderDtl] = useState(false);
   const [loadingSpin, setLoadingSpin] = useState(false);
   const [statusFilter, setStatusFilter] = useState(0);
+  const [data, setData] = useState({});
   const componentRef = useRef();
 
   const config = {
@@ -33,6 +45,7 @@ function RequestAnalys() {
   const getERequest = async () => {
     setLoader(true);
     setPatientReqList([]);
+    setPatientReqDtl([]);
     const response = await Get(`service/erequest`, token, config);
     if (response.data.length !== 0) {
       console.log("response get ERequest ====>", response);
@@ -66,6 +79,7 @@ function RequestAnalys() {
   const getRequestDtl = async () => {
     setPatientReqDtl([]);
     config.params.examinationRequestId = selectedRowKey[0];
+    config.params.isPayment = true;
     const response = await Get(
       `service/examinationRequestDetial`,
       token,
@@ -87,11 +101,12 @@ function RequestAnalys() {
               }
             }),
             device: el.examinations?.types?.name,
+            request_id: el.id,
           },
         ]);
       });
-      setLoaderDtl(false);
     }
+    setLoaderDtl(false);
   };
 
   useEffect(() => {
@@ -161,13 +176,51 @@ function RequestAnalys() {
     },
     {
       title: "Төлөв",
-      dataIndex: "status",
       key: "status",
+      render: (_, record) => {
+        if (record.statusId === 0) {
+          return <Tag color="magenta">{record.status}</Tag>;
+        } else if (record.statusId === 1) {
+          return <Tag color="purple">{record.status}</Tag>;
+        } else if (record.statusId === 2) {
+          return <Tag color="green">{record.status}</Tag>;
+        } else if (record.statusId === 3) {
+          return <Tag color="volcano">{record.status}</Tag>;
+        } else if (record.statusId === 4) {
+          return <Tag color="cyan">{record.status}</Tag>;
+        }
+      },
     },
     {
       title: "Төхөөрөмж",
       dataIndex: "device",
       key: "device",
+    },
+    {
+      title: "Үйлдэл",
+      key: "action",
+      render: (_, record) => (
+        <Space size="small">
+          <Tag
+            color="processing"
+            onClick={() => {
+              statusChange(record);
+            }}
+            className="cursor-pointer"
+          >
+            Шилжүүлэх
+          </Tag>
+          <Tag
+            color="processing"
+            onClick={() => {
+              returnChange(record);
+            }}
+            className="cursor-pointer"
+          >
+            Буцаах
+          </Tag>
+        </Space>
+      ),
     },
   ];
   const onSelectChange = (newSelectedRowKeys) => {
@@ -241,6 +294,37 @@ function RequestAnalys() {
         ]);
       }
     },
+  };
+
+  //Шинжилгээний төлөв солих
+  const statusChange = async (exData) => {
+    if (exData.statusId >= 0 && exData.statusId < 4) {
+      data.examinationProcess = exData.statusId + 1;
+      const response = await Patch(
+        `service/examinationRequestDetial/${exData.request_id}`,
+        token,
+        config,
+        data
+      );
+      if (response === 200) {
+        getRequestDtl();
+      }
+    }
+  };
+  //Шинжилгээний төлөв Буцаах
+  const returnChange = async (exData) => {
+    if (exData.statusId >= 1 && exData.statusId <= 4) {
+      data.examinationProcess = exData.statusId - 1;
+      const response = await Patch(
+        `service/examinationRequestDetial/${exData.request_id}`,
+        token,
+        config,
+        data
+      );
+      if (response === 200) {
+        getRequestDtl();
+      }
+    }
   };
 
   return (
@@ -319,8 +403,10 @@ function RequestAnalys() {
             }}
             footer={() => {
               return (
+                // Зөвхөн Захиалга өгсөн төлөвт хэвлэх
                 <>
-                  {selectedExaminations.length > 0 ? (
+                  {selectedExaminations.length > 0 &&
+                  selectedExaminations[0].statusId === 0 ? (
                     <Button className="mr-2" onClick={() => handlePrint()}>
                       Хэвлэх
                     </Button>

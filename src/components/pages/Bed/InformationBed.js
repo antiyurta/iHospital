@@ -150,16 +150,16 @@ const InformationBed = (props) => {
       {rooms !== "" ? (
         <Row gutter={[16, 16]} className="mt-4">
           {rooms
-            ?.filter((obj) => obj.roomNumber.includes(searchValue))
+            ?.filter((obj) => obj.roomNumber?.includes(searchValue))
             ?.filter((obj) => {
               if (props.status === "all") {
                 return obj;
               } else if (props.status === "3") {
-                return roomWithStatus["empty"].includes(obj.id);
+                return roomWithStatus["empty"]?.includes(obj.id);
               } else if (props.status === "2") {
-                return roomWithStatus["repair"].includes(obj.id);
+                return roomWithStatus["repair"]?.includes(obj.id);
               } else if (props.status === "0") {
-                return roomWithStatus["used"].includes(obj.id);
+                return roomWithStatus["used"]?.includes(obj.id);
               }
             })
             .map((el, index) => {

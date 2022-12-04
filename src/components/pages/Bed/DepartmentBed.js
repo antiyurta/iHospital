@@ -11,6 +11,7 @@ import {
   Collapse,
   Button,
   notification,
+  Empty,
 } from "antd";
 import { blue } from "@ant-design/colors";
 import { LineOutlined, SearchOutlined } from "@ant-design/icons";
@@ -153,7 +154,6 @@ const DepartmentBed = (props) => {
     }
     // console.log("response set PatientBed ====>", response);
   };
-
   return (
     <div className="p-6">
       <Row className="justify-between">
@@ -192,7 +192,7 @@ const DepartmentBed = (props) => {
           />
         </Col>
       </Row>
-      {props.data?.rooms !== "" ? (
+      {props.data?.rooms?.length > 0 ? (
         <Row gutter={[16, 16]} className="mt-4">
           {props.data?.rooms
             ?.filter((obj) => obj.roomNumber.includes(searchValue))
@@ -278,9 +278,7 @@ const DepartmentBed = (props) => {
             })}
         </Row>
       ) : (
-        <div className="text-center">
-          <Spinner animation="grow" style={{ color: "#1890ff" }} />
-        </div>
+        <Empty description="Өрөөний мэдээлэл оруулаагүй байна." />
       )}
       <Modal
         title={
