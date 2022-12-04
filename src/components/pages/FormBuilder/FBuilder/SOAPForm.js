@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Delete, Get, Patch, Post } from '../../../comman';
 import Index from './index';
+import Index2 from './index2';
 function SOAPForm() {
     const [SOAPForm] = Form.useForm();
     const { Option } = Select;
@@ -120,7 +121,11 @@ function SOAPForm() {
             key: "plan"
         },
     ]
+
     //
+    const onFinishTest = (values) => {
+        console.log(values);
+    };
     const onFinish = async (values) => {
         const data = [];
         values.pain?.map((pain) => {
@@ -173,6 +178,18 @@ function SOAPForm() {
             }
         }
     }
+    const HandleChangeTest = (panelName, optionName, name) => {
+        console.log(panelName, optionName, name);
+        const formData = SOAPForm.getFieldsValue();
+        const type = SOAPForm.getFieldValue([panelName, optionName, 'options', name, 'type']);
+        console.log(type);
+        if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
+            formData[panelName][optionName].options[name] = { type: type, value: "", options: [{ label: "" }] };
+        } else {
+            formData[panelName][optionName].options[name] = { type: type, value: "" };
+        }
+        SOAPForm.setFieldsValue(formData);
+    };
     const HandleChange = (arg, value) => {
         const formData = SOAPForm.getFieldsValue();
         const type = SOAPForm.getFieldValue([arg, value, 'type']);
@@ -345,7 +362,8 @@ function SOAPForm() {
                             panels.map((panel, index) => {
                                 return (
                                     <Panel key={index} header={panel.name}>
-                                        <Index options={options} namePanel={panel.key} handleChange={HandleChange} />
+                                        {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
+                                        <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                                     </Panel>
                                 )
                             })

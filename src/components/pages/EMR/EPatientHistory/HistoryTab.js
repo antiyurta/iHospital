@@ -27,7 +27,8 @@ export default function HistoryTab({ patientId, inspection }) {
   const saveHistory = () => {
     historyForm.validateFields().then(async (values) => {
       values["patientId"] = patientId;
-      if (inspection) {
+      // inspection = 1 bol dawtan
+      if (inspection === 2) {
         await Patch('emr/patient-history/' + historyId, token, config, values);
       } else {
         await Post('emr/patient-history', token, config, values);
@@ -46,6 +47,7 @@ export default function HistoryTab({ patientId, inspection }) {
 
   useEffect(() => {
     getPatientHistory(patientId);
+    console.log("==========>",inspection);
   }, [inspection]);
 
   return (

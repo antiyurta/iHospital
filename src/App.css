@@ -189,9 +189,9 @@ input[type="number"] {
   line-height: 1;
 }
 
-.ant-tabs-extra-content {
+/* .ant-tabs-extra-content {
   width: 100%;
-}
+} */
 
 .ant-picker-calendar-header {
   /* display: none; */

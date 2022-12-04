@@ -92,7 +92,7 @@ function GeneralDrugInformation() {
                 <div className="w-full md:w-1/2 px-1">
                     <Form.Item
                         label="Эмийн хэлбэр"
-                        name="medicineType"
+                        name="medicineTypeId"
                         rules={[
                             {
                                 required: true,
@@ -192,7 +192,7 @@ function GeneralDrugInformation() {
                 <div className="w-full md:w-1/2 px-1">
                     <Form.Item
                         label="Эмчилгээний төрөл"
-                        name="medicineType"
+                        name="medTreatmentId"
                         rules={[
                             {
                                 required: true,

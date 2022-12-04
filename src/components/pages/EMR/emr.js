@@ -4,8 +4,8 @@ import {
   InputNumber,
   Radio,
   Row,
+  Select,
   Typography,
-  Collapse,
 } from "antd";
 import React, { useState, useEffect } from "react";
 import { INPUT_HEIGHT } from "../../../constant";
@@ -13,15 +13,7 @@ import Ocs from "../OCS/Ocs";
 import MainAmbulatory from "./Ambulatory/MainAmbulatory";
 import MainPatientHistory from "./EPatientHistory/MainPatientHistory";
 import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../features/authReducer";
-import Birth from "./Problems/Birth";
-import HealthRecord from "./Problems/HealthRecord";
-import LifeStyle from "./Problems/LifeStyle";
-import LifeCondition from "./Problems/LifeCondition";
-import Allergy from "./Problems/Allergy";
-import UsuallyMedicine from "./Problems/UsuallyMedicine";
-import EpidemicQuestion from "./Problems/EpidemicQuestion";
-import GeneticQuestion from "./Problems/GeneticQuestion";
+import { selectCurrentToken, selectCurrentUserId } from "../../../features/authReducer";
 import PatientInformation from "../PatientInformation";
 import { Get, openNofi, Post } from "../../comman";
 import { useLocation } from "react-router-dom";
@@ -29,16 +21,17 @@ const config = {
   headers: {},
   params: {}
 };
+const { Option } = Select;
 function EMR() {
   const IncomePatientId = useLocation().state.patientId;
   const IncomeCabinetId = useLocation().state.cabinetId;
   const Inspection = useLocation().state.inspection;
+  const AppointmentId = useLocation().state.appointmentId;
   const [cardLoading, setCardLoading] = useState(false);
-  const [problems, setProblems] = useState("");
   const token = useSelector(selectCurrentToken);
+  const employeeId = useSelector(selectCurrentUserId);
   const [type, setType] = useState("EMR"); // ['OCS', 'EMR']
   const { Text } = Typography;
-  const { Panel } = Collapse;
 
   //
   const [selectedPatient, setSelectedPatient] = useState([]);
@@ -48,15 +41,6 @@ function EMR() {
   const handleTypeChange = ({ target: { value } }) => {
     setType(value);
   };
-  const getHistory = async (PatientId) => {
-    config.params.registerNumber = null;
-    console.log("====>", PatientId);
-    config.params.patientId = PatientId;
-    const response = await Get('emr/patient-history', token, config);
-    if (response.data.length != 0) {
-      setProblems(response.data.slice(-1)[0]);
-    }
-  };
 
   const getByIdPatient = async (id) => {
     config.params.patientId = null;
@@ -64,7 +48,6 @@ function EMR() {
     console.log(response);
     if (response) {
       setSelectedPatient(response);
-      getHistory(response.id);
     }
   }
 
@@ -73,7 +56,6 @@ function EMR() {
     const response = await Get('pms/patient', token, config);
     if (response.data.length != 0) {
       setSelectedPatient(response.data[0]);
-      getHistory(response.data[0].id);
     } else {
       openNofi('error', 'Өвчтөн', 'Өвчтөн олдохгүй байна');
     }
@@ -81,6 +63,7 @@ function EMR() {
 
   const handleClick = async (value) => {
     var stateIsCito = false;
+    console.log(value);
     value.map((item) => {
       if (item.isCito != 0) {
         stateIsCito = true;
@@ -88,8 +71,10 @@ function EMR() {
     });
     const response = await Post('service-request', token, config, {
       patientId: selectedPatient.id,
+      appointmentId: AppointmentId,
+      employeeId: employeeId,
       requestDate: new Date(),
-      isCito: stateIsCito ? 1 : 0,
+      isCito: stateIsCito ? true : false,
       usageType: "OUT",
       services: value,
     })
@@ -104,102 +89,60 @@ function EMR() {
 
   return (
     <div className="flex flex-wrap">
-      <div className="w-full md:w-full xl:w-1/2">
+      <div className={type === 'EMR' ? "w-full md:w-full xl:w-1/2" : "w-full md:w-full xl:w-full"}>
         <div className="flex flex-wrap">
-          <div className="w-full md:w-3/5 p-1">
+          <div className={type === "EMR" ? "w-full md:w-3/5 p-1" : "w-full md:w-2/5 p-1"}>
             <PatientInformation patient={selectedPatient} handlesearch={handleSearch} handleTypeChange={handleTypeChange} OCS={true} />
           </div>
-          <div className="w-full md:w-2/5 p-1">
+          <div className={type === "EMR" ? "w-full md:w-2/5 p-1" : "w-full md:w-1/5 p-1"}>
             <Card
               bordered={false}
               title={
                 <div className="flex font-semibold m-0 justify-between">
                   <h6>Гол асуудлууд</h6>
                   <p>
-                    {problems?.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                    {/* {problems?.createdAt?.replace(/T/, " ").replace(/\..+/, "")} */}
                   </p>
                 </div>
               }
-              className="header-solid max-h-max rounded-md"
+              className="header-solid rounded-md"
+              style={{ height: '100%' }}
               loading={cardLoading}
               bodyStyle={{
-                padding: 0,
-                paddingBottom: 16,
-                minHeight: 200,
-                maxHeight: 200,
+                paddingTop: 0,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingBottom: 10,
+                minHeight: 300,
+                maxHeight: 300,
+              }}
+            >
+            </Card>
+          </div>
+          <div className={type === "EMR" ? "w-full p-1" : "w-full md:w-2/5 p-1"}>
+            <Card
+              bordered={false}
+              title={<h6 className="font-semibold m-0">Амбулатори</h6>}
+              className="header-solid rounded-md"
+              loading={cardLoading}
+              style={{ height: '100%' }}
+              bodyStyle={{
+                paddingTop: 0,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingBottom: 10,
+                minHeight: 400,
+                maxHeight: 400,
                 overflowX: "hidden",
                 overflowY: "scroll",
               }}
             >
-              {problems != "" ? (
-                <Collapse accordion ghost>
-                  {problems?.hasOwnProperty("birth") ? (
-                    <Panel header="Төрөлт, өсөлт бойжилт" key="1">
-                      <Birth data={problems?.birth} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("healthRecord") ? (
-                    <Panel header="Өвчний түүх" key="2">
-                      <HealthRecord data={problems.healthRecord} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("lifeStyle") ? (
-                    <Panel header="Амьдралын хэв маяг" key="3">
-                      <LifeStyle data={problems["lifeStyle"]} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("lifeCondition") ? (
-                    <Panel header="Амьдралын нөхцөл" key="14">
-                      <LifeCondition data={problems["lifeCondition"]} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("allergy") ? (
-                    <Panel header="Харшил" key="5">
-                      <Allergy data={problems["allergy"]} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("usuallyMedicine") ? (
-                    <Panel header="Эмийн хэрэглээ" key="6">
-                      <UsuallyMedicine data={problems["usuallyMedicine"]} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("epidemicQuestion") ? (
-                    <Panel header="Тархвар зүйн асуумж" key="7">
-                      <EpidemicQuestion data={problems["epidemicQuestion"]} />
-                    </Panel>
-                  ) : null}
-                  {problems?.hasOwnProperty("geneticQuestion") ? (
-                    <Panel header="Удамшлын асуумж" key="8">
-                      <GeneticQuestion data={problems["geneticQuestion"]} />
-                    </Panel>
-                  ) : null}
-                </Collapse>
-              ) : null}
+              <MainAmbulatory appointmentId={AppointmentId} patientId={selectedPatient.id} />
             </Card>
-          </div>
-          <div className="w-full">
-            <div className="p-1">
-              <Card
-                bordered={false}
-                title={<h6 className="font-semibold m-0">Амбулатори</h6>}
-                className="header-solid max-h-max rounded-md"
-                loading={cardLoading}
-                bodyStyle={{
-                  paddingTop: 0,
-                  paddingBottom: 16,
-                  minHeight: 400,
-                  maxHeight: 600,
-                  overflowX: "hidden",
-                  overflowY: "scroll",
-                }}
-              >
-                <MainAmbulatory patientId={selectedPatient.id} />
-              </Card>
-            </div>
           </div>
         </div>
       </div>
-      <div className="w-full md:w-full xl:w-1/2">
+      <div className={type === 'OCS' ? "w-full" : "w-full md:w-full xl:w-1/2"}>
         <div className="p-1">
           {type == "EMR" ? (
             <Card
@@ -209,18 +152,28 @@ function EMR() {
               loading={cardLoading}
               bodyStyle={{
                 paddingTop: 0,
-                paddingBottom: 16,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingBottom: 10,
+                minHeight: 764,
+                maxHeight: 764,
+                overflowX: "hidden",
+                overflowY: "scroll",
               }}
               extra={
                 <>
-                  <Radio.Group value={Inspection}>
-                    <Radio value={false}>Анхан</Radio>
-                    <Radio value={true}>Давтан</Radio>
-                  </Radio.Group>
+                  <Select value={Inspection} style={{ width: 200}}>
+                    <Option value={1} disabled={true}>Анхан</Option>
+                    <Option value={2} disabled={true}>Давтан</Option>
+                    <Option value={3}>Урьдчилан сэргийлэх</Option>
+                    <Option value={4}>Гэрийн эргэлт</Option>
+                    <Option value={5}>Идэвхтэй хяналт</Option>
+                    <Option value={6}>Дуудлагаар</Option>
+                  </Select>
                 </>
               }
             >
-              <MainPatientHistory PatientId={IncomePatientId} CabinetId={IncomeCabinetId} Inspection={Inspection} />
+              <MainPatientHistory AppointmentId={AppointmentId} PatientId={IncomePatientId} CabinetId={IncomeCabinetId} Inspection={Inspection} />
             </Card>
           ) : null}
           {type == "OCS" ? (

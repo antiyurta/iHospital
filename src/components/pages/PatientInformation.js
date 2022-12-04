@@ -51,7 +51,14 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS }) {
             bordered={false}
             title={<h6 className="font-semibold m-0">Өвчтөний мэдээлэл</h6>}
             className="header-solid max-h-max rounded-md"
-            bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
+            bodyStyle={{
+                paddingTop: 0,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingBottom: 10,
+                minHeight: 300,
+                maxHeight: 300,
+            }}
             extra={
                 <Search placeholder="Регистр хайх" onSearch={onSearch} enterButton="Хайх" />
             }
@@ -64,7 +71,7 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS }) {
                         OCS && <div className="absolute bottom-1 left-10">
                             <Radio.Group
                                 size="small"
-                                value="EMR"
+                                // value="EMR"
                                 onChange={handleTypeChangePatient}
                                 optionType="button"
                                 buttonStyle="solid"
@@ -75,11 +82,6 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS }) {
                             </Radio.Group>
                         </div>
                     }
-                    <div>
-                        {
-
-                        }
-                    </div>
                 </div>
                 <div className="basis-2/3">
                     <div className="container">

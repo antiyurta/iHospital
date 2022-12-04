@@ -65,6 +65,11 @@ function Ambulatory() {
         setInvoiceRequest(e);
     }
 
+    const sendData = async () => {
+        const response = await Get('payment/payment/sendData', token, config);
+        console.log(response);
+    };
+
     const PaymentRequest = async () => {
         const response = await DefaultPost('payment/payment', token, config, {
             "invoiceIds": invoiceRequest,
@@ -116,28 +121,49 @@ function Ambulatory() {
 
     const categories = [
         {
+            //omnoh jor
+            name: "RecentRecipe",
+            label: "Өмнөх жор"
+        },
+        {
+            //set order
+            name: "SetOrder",
+            label: 'СетОрдер'
+        },
+        {
+            //em
+            name: "Medicine",
+            label: 'Эм'
+        },
+        {
             //shinejilgee
-            name: 'Examination',
+            name: "Examination",
+            label: 'Шинэжилгээ'
         },
         {
             //onshilgoo
-            name: 'Xray',
+            name: "Xray",
+            label: "Оношилгоо"
         },
         {
             //emchilgee
-            name: 'Treatment',
+            name: "Treatment",
+            label: 'Эмчилгээ'
         },
         {
             //hagalgaa mes
-            name: 'Surgery',
+            name: "Surgery",
+            label: "Мэс засал"
         },
         {
             //duran
-            name: 'Endo',
+            name: "Endo",
+            label: "Дуран"
         },
         {
             //bagts
-            name: 'package',
+            name: 'Package',
+            label: "Багц"
         },
     ];
 
@@ -153,7 +179,14 @@ function Ambulatory() {
                         title={<h6 className="font-semibold m-0">Туслах цэс</h6>}
                         className="header-solid max-h-max rounded-md"
                         loading={cardLoading}
-                        bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
+                        bodyStyle={{
+                            paddingTop: 0,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            paddingBottom: 10,
+                            minHeight: 300,
+                            maxHeight: 300,
+                        }}
                     >
                         <div className="flex flex-wrap">
                             <div className="w-full md:w-1/3 xl:1/3">
@@ -166,6 +199,7 @@ function Ambulatory() {
                                 <Button className="bg-sky-700 w-full" type="primary">Хэвтэн эмчлүүлэх цонх</Button>
                             </div>
                         </div>
+                        <Button onClick={() => sendData()}>SENDATA</Button>
                     </Card>
                 </div>
                 <div className="w-full p-1">
@@ -229,7 +263,14 @@ function Ambulatory() {
                             bordered={false}
                             title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
                             className="header-solid max-h-max rounded-md"
-                            bodyStyle={{ paddingTop: 0, paddingBottom: 16, maxHeight: 200, minHeight: 200, height: 200 }}
+                            bodyStyle={{
+                                paddingTop: 0,
+                                paddingLeft: 10,
+                                paddingRight: 10,
+                                paddingBottom: 10,
+                                minHeight: 300,
+                                maxHeight: 300,
+                            }}
                         >
                             <div className='table-responsive p-4' id='style-8' style={{ maxHeight: '180px' }}>
                                 <Table className='ant-border-space' style={{ width: '100%' }}>
@@ -276,7 +317,6 @@ function Ambulatory() {
                 </div>
             </Modal>
             <Modal
-                // title={"Төлбөр авах" + "Нийт төлбөр" + totalAmount}
                 title={
                     <div className="h-6">
                         <p className="float-left">

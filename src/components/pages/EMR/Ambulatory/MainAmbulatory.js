@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs } from "antd";
 import ProgressNotes from "./ProgressNotes";
 import NurseNote from "../NurseNote";
+import ProgressCheck from "./ProgressCheck";
 
 export default function MainAmbulatory({ patientId }) {
   const items = [
@@ -9,6 +10,11 @@ export default function MainAmbulatory({ patientId }) {
       label: "Явцын тэмдэглэл",
       key: "item-1",
       children: <ProgressNotes PatientId={patientId} />,
+    },
+    {
+      label: "Явцын үзлэг",
+      key: "item-7",
+      children: <ProgressCheck PatientId={patientId} />
     },
     {
       label: "Сувилагчийн тэмдэглэл",

@@ -250,7 +250,7 @@ function DoctorAppointment() {
                                                                                         false,
                                                                                         {
                                                                                             roomNumber: schedule.room.roomNumber,
-                                                                                            structure: schedule.structures.name,
+                                                                                            structure: schedule.structure.name,
                                                                                             doctor: schedule.doctor.firstName,
                                                                                             time: {
                                                                                                 start: slot.startTime,
@@ -260,7 +260,6 @@ function DoctorAppointment() {
                                                                                         {
                                                                                             slotId: slot.id,
                                                                                             patientId: selectedPatient.id,
-                                                                                            isPayment: true,
                                                                                             doctorId: schedule.doctorId,
                                                                                             cabinetId: schedule.cabinetId,
                                                                                             hospitalId: 1,

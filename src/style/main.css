@@ -1639,7 +1639,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li:active {
 }
 
 .ant-card-body {
-  /* padding: 16px; */
+  padding: 160px;
 }
 
 ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li svg path {
@@ -1735,13 +1735,13 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   margin: 0px;
 }
 
-.ant-table-thead th:first-child {
+/* .ant-table-thead th:first-child {
   border-start-start-radius: 15px;
 }
 
 .ant-table-thead th:last-child {
   border-top-right-radius: 15px;
-}
+} */
 
 .tag-primary {
   border-radius: 6px;
@@ -2538,7 +2538,7 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
 }
 
 .ant-card-head-wrapper {
-  min-height: 72px;
+  min-height: 36px;
 }
 
 .card-credit .ant-card-body {

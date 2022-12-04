@@ -8,13 +8,13 @@ import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 import { Get, openNofi, Post } from "../../../comman";
 const { Option } = Select;
-function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
+function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
   const token = useSelector(selectCurrentToken);
   const depId = useSelector(selectCurrentDepId);
-  const userId = useSelector(selectCurrentUserId)
+  const userId = useSelector(selectCurrentUserId);
   const config = {
     headers: {},
     params: {}
@@ -22,6 +22,7 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
   const id = PatientId;
   const inspection = Inspection;
   const cabinetId = CabinetId;
+  const appointmentId = AppointmentId;
 
   useEffect(() => {
     getInspectionTabs();
@@ -44,6 +45,7 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
         autoComplete="off"
         labelAlign="left"
         scrollToFirstError
+        className="overflow-auto"
         layout="vertical"
         form={form}
       >
@@ -52,15 +54,44 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
             <Divider orientation="left" className="text-sm my-2">
               Зовиур
             </Divider>
-            <DynamicFormInspection data={props.data["pain"]} />
+            {
+              props.data['pain'].map((pain, index) => {
+                return (
+                  <div key={index}>
+                    <div >
+                      <p className="mt-2 font-semibold">{pain.label}</p>
+                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                    </div>
+                    <div>
+                      <DynamicFormInspection data={pain.options} forkey={pain.label} unikey={pain.inspectionType} />
+                    </div>
+                  </div>
+                )
+              })
+            }
           </>
-        ) : null}
+        ) : null
+        }
         {"inspection" in props.data && props.data.inspection.length > 0 ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
               Бодит үзлэг
             </Divider>
-            <DynamicFormInspection data={props.data["inspection"]} />
+            {
+              props.data['inspection'].map((inspection, index) => {
+                return (
+                  <div key={index}>
+                    <div >
+                      <p className="mt-2 font-semibold">{inspection.label}</p>
+                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                    </div>
+                    <div>
+                      <DynamicFormInspection data={inspection.options} forkey={inspection.label} unikey={inspection.inspectionType} />
+                    </div>
+                  </div>
+                )
+              })
+            }
           </>
         ) : null}
         {"question" in props.data && props.data.question.length > 0 ? (
@@ -68,7 +99,21 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
             <Divider orientation="left" className="text-sm my-2">
               Асуумж
             </Divider>
-            <DynamicFormInspection data={props.data["question"]} />
+            {
+              props.data['question'].map((question, index) => {
+                return (
+                  <div key={index}>
+                    <div >
+                      <p className="mt-2 font-semibold">{question.label}</p>
+                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                    </div>
+                    <div>
+                      <DynamicFormInspection data={question.options} forkey={question.label} unikey={question.inspectionType} />
+                    </div>
+                  </div>
+                )
+              })
+            }
           </>
         ) : null}
         {"plan" in props.data && props.data.plan.length > 0 ? (
@@ -76,18 +121,32 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
             <Divider orientation="left" className="text-sm my-2">
               Төлөвлөгөө
             </Divider>
-            <DynamicFormInspection data={props.data["plan"]} />
+            {
+              props.data['plan'].map((plan, index) => {
+                return (
+                  <div key={index}>
+                    <div >
+                      <p className="mt-2 font-semibold">{plan.label}</p>
+                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                    </div>
+                    <div>
+                      <DynamicFormInspection data={plan.options} forkey={plan.label} unikey={plan.inspectionType} />
+                    </div>
+                  </div>
+                )
+              })
+            }
           </>
         ) : null}
-        {props.data ? (
+        {/* {props.data ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
               Онош
             </Divider>
             <DynamicFormInspection data={[{ type: 'diagnose', label: 'diagnose', inspectionType: "diagnose" }]} />
           </>
-        ) : null}
-        <Form.Item
+        ) : null} */}
+        < Form.Item
           wrapperCol={{
             span: 16,
           }}
@@ -102,15 +161,15 @@ function MainPatientHistory({ PatientId, CabinetId, Inspection }) {
               Хадгалах
             </Button>
           </Row>
-        </Form.Item>
-      </Form>
+        </Form.Item >
+      </Form >
     );
   }, []);
 
   const saveDynamicTab = async (values) => {
     console.log(values);
     const data = {
-      bookingId: 1,
+      appointmentId: appointmentId,
       departmentId: depId,
       patientId: id,
       doctorId: userId,
