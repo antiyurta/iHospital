@@ -92,7 +92,7 @@ function EMR() {
       <div className={type === 'EMR' ? "w-full md:w-full xl:w-1/2" : "w-full md:w-full xl:w-full"}>
         <div className="flex flex-wrap">
           <div className={type === "EMR" ? "w-full md:w-3/5 p-1" : "w-full md:w-2/5 p-1"}>
-            <PatientInformation patient={selectedPatient} handlesearch={handleSearch} handleTypeChange={handleTypeChange} OCS={true} />
+            <PatientInformation patient={selectedPatient} handlesearch={handleSearch} handleTypeChange={handleTypeChange} OCS={true} type={type} />
           </div>
           <div className={type === "EMR" ? "w-full md:w-2/5 p-1" : "w-full md:w-1/5 p-1"}>
             <Card
@@ -162,7 +162,7 @@ function EMR() {
               }}
               extra={
                 <>
-                  <Select value={Inspection} style={{ width: 200}}>
+                  <Select value={Inspection} style={{ width: 200 }}>
                     <Option value={1} disabled={true}>Анхан</Option>
                     <Option value={2} disabled={true}>Давтан</Option>
                     <Option value={3}>Урьдчилан сэргийлэх</Option>
