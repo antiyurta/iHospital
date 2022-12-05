@@ -92,14 +92,14 @@ function Ambulatory() {
         else if (value.length > 0) {
             var stateIsCito = false;
             value.map((item) => {
-                if (item.isCito != 0) {
+                if (!item.isCito) {
                     stateIsCito = true;
                 }
             });
             const response = await Post('service-request', token, config, {
                 patientId: selectedPatient.id,
                 requestDate: new Date(),
-                isCito: stateIsCito ? 1 : 0,
+                isCito: stateIsCito ? true : false,
                 usageType: "OUT",
                 services: value,
             })

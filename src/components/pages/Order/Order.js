@@ -52,14 +52,50 @@ function Order({ isPackage, isDoctor, categories, save }) {
 
     const handleclick = async (value) => {
         if (isPackage) {
-            console.log(isPackage);
-            const pack = {
-                serviceType: value.types?.type,
-                serviceId: value.id,
-                serviceName: value.name,
-                servicePrice: value.price,
-            }
-            setPackages([...packages, pack]);
+            console.log(value);
+            var services = [];
+            value.map((item) => {
+                const service = {};
+                service.id = item.id;
+                service.name = item.name;
+                service.price = item.price;
+                service.type = item.types?.type;
+                if (item.type === 8) {
+                    service.name = item.iName;
+                    service.dose = item.dose;
+                    service.price = 0;
+                    service.type = item.type;
+                    service.medicineType = item.medicineReferences?.name;
+                    service.m = false;
+                    service.d = false;
+                    service.e = false;
+                    service.n = false;
+                    service.desc = "";
+                    service.dayLength = 1;
+                    service.total = 0;
+                } else if (item.type === 2) {
+                    service.name = item.name;
+                    service.qty = item.qty ? item.qty : 1;
+                    if (service.qty != 1) {
+                        service.price = item.calCprice;
+                    }
+                }
+                service.isCito = false;
+                if (item.type === 1) {
+                    service.deviceId = item.deviceId;
+                    service.typeId = item.xrayTypeId;
+                } else if (item.type === 0) {
+                    service.typeId = item.examinationTypeId;
+                    service.requestDate = new Date();
+                } else {
+                    service.requestDate = new Date();
+                }
+                service.requestDate = moment(new Date()).format('YYYY-MM-DD');
+                service.usageType = 'OUT';
+                services.push(service);
+            });
+            console.log(services);
+            setPackages([...packages, services]);
         } else {
             console.log(value);
             var services = [];
@@ -341,16 +377,19 @@ function Order({ isPackage, isDoctor, categories, save }) {
                     {
                         categories.map((category, index) => {
                             return (
-                                <Button key={index} onClick={() => newModalCategory(category)}>{category.label}</Button>
+                                <Button style={{ marginRight: 1, marginLeft: 1 }} type="primary" key={index} onClick={() => newModalCategory(category)}>{category.label}</Button>
                             )
                         })
                     }
-                    <Button onClick={() => orderForm.validateFields()
-                        .then((values) => {
-                            save(values.services);
-                            console.log(values);
-                        })}
-                    >Хыбыйб</Button>
+                    <Button
+                        className="float-right"
+                        type='primary'
+                        onClick={() => orderForm.validateFields()
+                            .then((values) => {
+                                save(values.services);
+                                console.log(values);
+                            })}
+                    >OCS Хадгалах</Button>
                 </div>
                 <div className='w-full'>
                     <Form form={orderForm}>
@@ -385,7 +424,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                                             packages?.map((pack, index) => {
                                                                 return (
                                                                     <tr key={index} onDoubleClick={() => remove(index)}>
-                                                                        <td></td>
+                                                                        <td>ddd</td>
                                                                         <td>{pack.serviceName}</td>
                                                                         <td>{pack.servicePrice}</td>
                                                                     </tr>
@@ -400,7 +439,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                                                             valuePropName='checked'
                                                                             className="mb-0 hover:bg-transparent"
                                                                         >
-                                                                            <Checkbox className="bg-transparent align-middle" />
+                                                                            <Checkbox className="bg-transparent align-middle items-center" />
                                                                         </Form.Item>
                                                                     </td>
                                                                     <td>{orderForm.getFieldValue(['services', name, 'name'])}</td>
@@ -429,6 +468,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                                                         >
                                                                             <Checkbox
                                                                                 onChange={(e) => qtyCalculator("m", e.target.checked, name)}
+                                                                                className="items-center"
                                                                                 disabled={
                                                                                     orderForm.getFieldValue(['services', name, 'type']) === 8 ||
                                                                                         orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
@@ -446,6 +486,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                                                         >
                                                                             <Checkbox
                                                                                 onChange={(e) => qtyCalculator("d", e.target.checked, name)}
+                                                                                className="items-center"
                                                                                 disabled={
                                                                                     orderForm.getFieldValue(['services', name, 'type']) === 8 ||
                                                                                         orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
@@ -463,6 +504,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                                                         >
                                                                             <Checkbox
                                                                                 onChange={(e) => qtyCalculator("e", e.target.checked, name)}
+                                                                                className="items-center"
                                                                                 disabled={
                                                                                     orderForm.getFieldValue(['services', name, 'type']) === 8 ||
                                                                                         orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
@@ -480,6 +522,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                                                         >
                                                                             <Checkbox
                                                                                 onChange={(e) => qtyCalculator("n", e.target.checked, name)}
+                                                                                className="items-center"
                                                                                 disabled={
                                                                                     orderForm.getFieldValue(['services', name, 'type']) === 8 ||
                                                                                         orderForm.getFieldValue(['services', name, 'type']) === 2 ? false

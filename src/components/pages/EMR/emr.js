@@ -65,7 +65,7 @@ function EMR() {
     var stateIsCito = false;
     console.log(value);
     value.map((item) => {
-      if (item.isCito != 0) {
+      if (!item.isCito) {
         stateIsCito = true;
       }
     });
