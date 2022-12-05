@@ -126,10 +126,12 @@ function Medicine() {
                     title={'Medicine'}
                     extra={
                         <>
-                            <Button onClick={() => {
-                                setIsOpenMedicineModal(true); setEditMode(false);
-                                // medicineForm.resetFields();
-                            }}>Нэмэх</Button>
+                            <Button
+                                className="btn-add"
+                                onClick={() => {
+                                    setIsOpenMedicineModal(true); setEditMode(false);
+                                    // medicineForm.resetFields();
+                                }}>Нэмэх</Button>
                         </>
                     }
                 >

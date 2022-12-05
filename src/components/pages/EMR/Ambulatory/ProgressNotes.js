@@ -117,57 +117,59 @@ export default function ProgressNotes({ PatientId }) {
                         key={value[index].id}
                       >
                         {
-                          inspectionNotes.map((note, index) => {
-                            return (
-                              <Card
-                                key={index}
-                                title={
-                                  note.structures?.name + "->" +
-                                  note.employees?.lastName + " " + note.employees?.firstName
-                                }
-                                extra={
-                                  <>
-                                    <PrinterOutlined className="p-1"
-                                      onClick={(event) => {
-                                        setPrintData(note);
-                                        console.log(value);
-                                        setIsOpenModalForm(true);
-                                      }
-                                      }
-                                    />
-                                    <MedicineBoxOutlined className="p-1"
-                                      onClick={(event) => {
-                                        setPrintPrescription(value);
-                                        console.log(value);
-                                        setIsOpenModalPrescription(true);
-                                      }}
-                                    />
-                                  </>
-                                }
-                              >
-                                <Divider orientation="left" className="text-sm my-2">
-                                  Зовиур
-                                </Divider>
-                                <RenderNotesDetail data={JSON.parse(note["pain"])} />
-                                <Divider orientation="left" className="text-sm my-2">
-                                  Бодит үзлэг
-                                </Divider>
-                                <RenderNotesDetail data={JSON.parse(note["inspection"])} />
-                                <Divider orientation="left" className="text-sm my-2">
-                                  Асуумж
-                                </Divider>
-                                <RenderNotesDetail data={JSON.parse(note["question"])} />
-                                <Divider orientation="left" className="text-sm my-2">
-                                  Төлөвлөгөө
-                                </Divider>
-                                <RenderNotesDetail data={JSON.parse(note["plan"])} />
-                                <Divider orientation="left" className="text-sm my-2">
-                                  Онош
-                                </Divider>
-                                {note["diagnose"] && <RenderNotesDiagnose data={JSON.parse(note["diagnose"])} />}
-                              </Card>
-                            )
-                          })
+                          inspectionNotes.length > 0 ?
+                            inspectionNotes.map((note, index) => {
+                              return (
+                                <Card
+                                  key={index}
+                                  title={
+                                    note.structures?.name + "->" +
+                                    note.employees?.lastName + " " + note.employees?.firstName
+                                  }
+                                  extra={
+                                    <>
+                                      <PrinterOutlined className="p-1"
+                                        onClick={(event) => {
+                                          setPrintData(note);
+                                          console.log(value);
+                                          setIsOpenModalForm(true);
+                                        }
+                                        }
+                                      />
+                                      <MedicineBoxOutlined className="p-1"
+                                        onClick={(event) => {
+                                          setPrintPrescription(value);
+                                          console.log(value);
+                                          setIsOpenModalPrescription(true);
+                                        }}
+                                      />
+                                    </>
+                                  }
+                                >
+                                  <Divider orientation="left" className="text-sm my-2">
+                                    Зовиур
+                                  </Divider>
+                                  <RenderNotesDetail data={JSON.parse(note["pain"])} />
+                                  <Divider orientation="left" className="text-sm my-2">
+                                    Бодит үзлэг
+                                  </Divider>
+                                  <RenderNotesDetail data={JSON.parse(note["inspection"])} />
+                                  <Divider orientation="left" className="text-sm my-2">
+                                    Асуумж
+                                  </Divider>
+                                  <RenderNotesDetail data={JSON.parse(note["question"])} />
+                                  <Divider orientation="left" className="text-sm my-2">
+                                    Төлөвлөгөө
+                                  </Divider>
+                                  <RenderNotesDetail data={JSON.parse(note["plan"])} />
+                                  <Divider orientation="left" className="text-sm my-2">
+                                    Онош
+                                  </Divider>
+                                  {note["diagnose"] && <RenderNotesDiagnose data={JSON.parse(note["diagnose"])} />}
+                                </Card>
+                              )
+                            }) :
+                            <p>Тэмдэглэл байхгүй</p>
                         }
                       </Panel>
                     );

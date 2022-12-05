@@ -47,7 +47,7 @@ export default function HistoryTab({ patientId, inspection }) {
 
   useEffect(() => {
     getPatientHistory(patientId);
-    console.log("==========>",inspection);
+    console.log("==========>", inspection);
   }, [inspection]);
 
   return (
@@ -63,22 +63,6 @@ export default function HistoryTab({ patientId, inspection }) {
         span: 16,
       }}
     >
-      <Row className="mt-2">
-        <Form.Item
-          wrapperCol={{
-            span: 16,
-          }}
-        >
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={() => saveHistory()}
-            style={{ backgroundColor: blue.primary }}
-          >
-            EMR Хадгалах
-          </Button>
-        </Form.Item>
-      </Row>
       <Collapse accordion defaultActiveKey={["1"]}>
         <Panel header="Төрөлт, өсөлт бойжилт" key="1">
           <Step1 />
@@ -105,6 +89,22 @@ export default function HistoryTab({ patientId, inspection }) {
           <Step8 />
         </Panel>
       </Collapse>
+      <Row className="mt-2">
+        <Form.Item
+          wrapperCol={{
+            span: 16,
+          }}
+        >
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => saveHistory()}
+            style={{ backgroundColor: blue.primary }}
+          >
+            Амьдралын түүх xадгалах
+          </Button>
+        </Form.Item>
+      </Row>
     </Form>
   );
 }

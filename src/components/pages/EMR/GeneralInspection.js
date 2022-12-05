@@ -467,7 +467,7 @@ export default function GeneralInspection({ patientId, inspection }) {
               >
                 <TextArea
                   rows={2}
-                  style={{ padding: 5, marginBottom: 5 }}
+                  style={{ padding: 5}}
                   placeholder="Бусад"
                 />
               </Form.Item>

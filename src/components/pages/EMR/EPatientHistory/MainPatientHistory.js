@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Tabs, Row, Button, Form, Divider, Select, Table, Modal } from "antd";
+import { Tabs, Row, Button, Form, Divider, Select } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
@@ -7,6 +7,9 @@ import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
 import { Get, openNofi, Post } from "../../../comman";
+import Diagnose from "../../service/Diagnose";
+import { Table } from "react-bootstrap";
+import { CloseOutlined } from "@ant-design/icons";
 const { Option } = Select;
 function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection }) {
   const [form] = Form.useForm();
@@ -24,9 +27,24 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
   const cabinetId = CabinetId;
   const appointmentId = AppointmentId;
 
+  const [diagnoses, setDiagnoses] = useState([]);
+
+  const DiagnoseHandleClick = (diagnoses) => {
+    console.log(diagnoses);
+    setDiagnoses(diagnoses);
+  };
+  const remove = (index) => {
+    var arr = [...diagnoses];
+    arr.splice(index, 1);
+    setDiagnoses(arr);
+  };
+
   useEffect(() => {
     getInspectionTabs();
   }, []);
+  useEffect(() => {
+    console.log("diagnoses",diagnoses);
+  }, [diagnoses]);
 
   const Tab1Content = useCallback(() => {
     return <HistoryTab patientId={id} inspection={inspection} />;
@@ -138,14 +156,41 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
             }
           </>
         ) : null}
-        {/* {props.data ? (
+        {props.data ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
               Онош
             </Divider>
-            <DynamicFormInspection data={[{ type: 'diagnose', label: 'diagnose', inspectionType: "diagnose" }]} />
+            <Diagnose handleClick={DiagnoseHandleClick} />
+            <div>
+              <div className='table-responsive px-4 pb-4' id='style-8' style={{ maxHeight: '500px' }}>
+                <Table className='ant-border-space' style={{ width: '100%' }}>
+                  <thead className='ant-table-thead bg-slate-200'>
+                    <tr>
+                      <th>Код</th>
+                      <th>Монгол нэр</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      diagnoses.length > 0 ? diagnoses.map((item, index) => {
+                        return (
+                          <tr key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                            <td>sad</td>
+                            <td className="whitespace-pre-line" style={{ width: 50, maxWidth: 50 }}>{item.code}</td>
+                            <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>{item.nameMn}</td>
+                            <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer"><CloseOutlined style={{ color: "red", verticalAlign: "middle" }} /></td>
+                          </tr>
+                        )
+                      }) : null
+                    }
+                  </tbody>
+                </Table>
+              </div>
+            </div>
           </>
-        ) : null} */}
+        ) : null}
         < Form.Item
           wrapperCol={{
             span: 16,
@@ -189,7 +234,7 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
   };
   const [items, setItems] = useState([
     {
-      label: "Амьдарлийн түүх",
+      label: "Амьдралын түүх",
       key: "item-history",
       children: <Tab1Content />,
     },

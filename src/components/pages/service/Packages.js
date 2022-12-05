@@ -24,22 +24,22 @@ function Packages() {
         {
             //shinejilgee
             name: "Examination",
+            label: 'Шинэжилгээ'
         },
         {
             //onshilgoo
             name: "Xray",
+            label: "Оношилгоо"
         },
         {
             //emchilgee
             name: "Treatment",
-        },
-        {
-            //hagalgaa mes
-            name: "Surgery",
+            label: 'Эмчилгээ'
         },
         {
             //duran
             name: "Endo",
+            label: "Дуран"
         },
     ];
     const checkNumber = (event) => {
@@ -86,6 +86,7 @@ function Packages() {
     }
 
     const AddServices = async (value) => {
+        console.log("=======>");
         setIsOpenSecondModal(false);
         if (editMode) {
             var arr = await form.validateFields();
@@ -300,6 +301,7 @@ function Packages() {
                 </Form>
             </Modal>
             <Modal
+                title="Сонгох"
                 onCancel={() => setIsOpenSecondModal(false)}
                 footer={null}
                 open={isOpenSecondModal}
