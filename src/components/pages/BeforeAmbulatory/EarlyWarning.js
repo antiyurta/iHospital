@@ -11,7 +11,7 @@ export default function EarlyWarning({ PatientId }) {
   const token = useSelector(selectCurrentToken);
   const config = {
     headers: {},
-    params: {}
+    params: {},
   };
   const { Option } = Select;
 
@@ -66,7 +66,7 @@ export default function EarlyWarning({ PatientId }) {
   const getAssesment = async (type) => {
     //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
     config.params.patientId = PatientId;
-    const response = await Get('assesment', token, config);
+    const response = await Get("assesment", token, config);
     if (response.data.length != 0) {
       setPatientAssesments(response.data);
       setPatientAssesmentsResult(response.data);
@@ -80,7 +80,7 @@ export default function EarlyWarning({ PatientId }) {
   };
   const createAssesment = async () => {
     formValues.patientId = PatientId;
-    const response = await Post('assesment', token, config, formValues);
+    const response = await Post("assesment", token, config, formValues);
     console.log(response);
     resetFormFields();
     getAssesment("save");
@@ -89,34 +89,18 @@ export default function EarlyWarning({ PatientId }) {
     <>
       <div className="flex flex-wrap">
         <div className="w-full md:w-full xl:w-1/2">
-          <div className='table-responsive p-4' id='style-8'>
-            <Table className='ant-border-space' style={{ width: '100%' }}>
-              <thead className='ant-table-thead bg-slate-200'>
+          <div className="table-responsive p-4" id="style-8">
+            <Table className="ant-border-space" style={{ width: "100%" }}>
+              <thead className="ant-table-thead bg-slate-200">
                 <tr>
-                  <th className="font-medium text-x">
-                    Систол
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    Диастол
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    Жин
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    Өндөр
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    Халуун
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    Амьсгал
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    SpO'2
-                  </th>
-                  <th className="font-medium text-x border-x">
-                    Пульс
-                  </th>
+                  <th className="font-medium text-x">Систол</th>
+                  <th className="font-medium text-x border-x">Диастол</th>
+                  <th className="font-medium text-x border-x">Жин</th>
+                  <th className="font-medium text-x border-x">Өндөр</th>
+                  <th className="font-medium text-x border-x">Халуун</th>
+                  <th className="font-medium text-x border-x">Амьсгал</th>
+                  <th className="font-medium text-x border-x">SpO'2</th>
+                  <th className="font-medium text-x border-x">Пульс</th>
                   <th className="font-medium text-x">
                     <div className="whitespace-normal">Ухаан санаа</div>
                   </th>
@@ -128,7 +112,6 @@ export default function EarlyWarning({ PatientId }) {
                     <tr key={index}>
                       <td className="text-center px-0">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.highPressureRight || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="highPressureRight"
@@ -137,7 +120,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.lowPressureRight || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="lowPressureRight"
@@ -146,7 +128,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.weight || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="weight"
@@ -155,7 +136,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.height || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="height"
@@ -164,7 +144,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.temp || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="temp"
@@ -173,7 +152,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.respiratoryRate || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="respiratoryRate"
@@ -182,7 +160,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.spO2 || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="spO2"
@@ -191,7 +168,6 @@ export default function EarlyWarning({ PatientId }) {
                       </td>
                       <td className="text-center">
                         <Input
-                          style={{ width: "60%" }}
                           value={element.pulse || ""}
                           className="p-1 h-7 rounded-md text-center"
                           name="pulse"
@@ -218,7 +194,6 @@ export default function EarlyWarning({ PatientId }) {
                 <tr className="">
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.highPressureRight || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -228,7 +203,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.lowPressureRight || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -238,7 +212,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.weight || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -248,7 +221,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.height || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -258,7 +230,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.temp || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -268,7 +239,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.respiratoryRate || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -278,7 +248,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.spO2 || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -288,7 +257,6 @@ export default function EarlyWarning({ PatientId }) {
                   </td>
                   <td className="text-center">
                     <Input
-                      style={{ width: "60%" }}
                       value={formValues.pulse || ""}
                       onChange={(e) => handleChange(e)}
                       className="p-1 h-7 rounded-md text-center"
@@ -318,9 +286,9 @@ export default function EarlyWarning({ PatientId }) {
           </div>
         </div>
         <div className="w-full md:w-full xl:w-1/2">
-          <div className='table-responsive p-4' id='style-8'>
-            <Table className='ant-border-space' style={{ width: '100%' }}>
-              <thead className='ant-table-thead bg-slate-200'>
+          <div className="table-responsive p-4" id="style-8">
+            <Table className="ant-border-space" style={{ width: "100%" }}>
+              <thead className="ant-table-thead bg-slate-200">
                 <tr>
                   <th className="font-medium text-xs text-black text-center">
                     Огноо/цаг/
@@ -357,7 +325,9 @@ export default function EarlyWarning({ PatientId }) {
                     <tr key={index} className="">
                       <td className="text-center ">
                         <p className="border rounded-md p-1 h-7">
-                          {element.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                          {element.createdAt
+                            ?.replace(/T/, " ")
+                            .replace(/\..+/, "")}
                         </p>
                       </td>
                       <td className="text-center ">
@@ -384,7 +354,8 @@ export default function EarlyWarning({ PatientId }) {
                         <p
                           className="border rounded-md p-1 h-7"
                           style={{
-                            backgroundColor: element.colorRespiratoryews ?? "#fff",
+                            backgroundColor:
+                              element.colorRespiratoryews ?? "#fff",
                           }}
                         >
                           {element.respiratoryEWS}
@@ -452,9 +423,7 @@ export default function EarlyWarning({ PatientId }) {
             Хадгалах
           </Button>
         </Col>
-        <Col span={12}>
-
-        </Col>
+        <Col span={12}></Col>
       </Row>
     </>
   );

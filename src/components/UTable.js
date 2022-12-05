@@ -260,23 +260,35 @@ function UTable(props) {
                       {props.column?.map((column, index) => {
                         return column.relation &&
                           row[`${column.index[0]}`] !== null ? (
-                          <td key={index}>
+                          <td
+                            key={index}
+                            style={{
+                              maxWidth: column.width,
+                              whiteSpace: "pre-line",
+                            }}
+                          >
                             {column?.staticData
                               ? column.staticData(
-                                row[`${column.index[0]}`][
-                                `${column.index[1]}`
-                                ]
-                              )
+                                  row[`${column.index[0]}`][
+                                    `${column.index[1]}`
+                                  ]
+                                )
                               : inputChecker(
-                                index,
-                                row[`${column.index[0]}`][
-                                `${column.index[1]}`
-                                ]
-                              )}
+                                  index,
+                                  row[`${column.index[0]}`][
+                                    `${column.index[1]}`
+                                  ]
+                                )}
                           </td>
                         ) : (
                           column.isView && (
-                            <td key={index}>
+                            <td
+                              key={index}
+                              style={{
+                                maxWidth: column.width,
+                                whiteSpace: "pre-line",
+                              }}
+                            >
                               {column.staticData
                                 ? column.staticData(row[`${column.index}`])
                                 : inputChecker(index, row[`${column.index}`])}
@@ -358,9 +370,9 @@ function UTable(props) {
                 {inputChecker(idx, view[`${element.index}`])}
                 {element.relation
                   ? inputChecker(
-                    idx,
-                    view[`${element.index[0]}`]?.[`${element.index[1]}`]
-                  )
+                      idx,
+                      view[`${element.index[0]}`]?.[`${element.index[1]}`]
+                    )
                   : inputChecker(idx, view[`${element.index}`])}
               </Descriptions.Item>
             );
@@ -434,7 +446,11 @@ function UTable(props) {
                       name={element.index}
                       rules={element.rules}
                     >
-                      <Select mode="multiple" allowClear placeholder={element.label}>
+                      <Select
+                        mode="multiple"
+                        allowClear
+                        placeholder={element.label}
+                      >
                         {element.inputData?.map((data, index) => {
                           return (
                             <Option key={index} value={data.id}>

@@ -168,6 +168,7 @@ function RequestAnalys() {
       title: "Шинжилгээ",
       dataIndex: "examination",
       key: "examination",
+      className: "whitespace-pre-line",
     },
     {
       title: "Баркод",

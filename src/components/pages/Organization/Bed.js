@@ -1,36 +1,48 @@
-import { Col, Row } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { Get } from "../../comman";
 
 import UTable from "../../UTable";
 
-const column = [
-  {
-    index: "bedNumber",
-    label: "Ор дугаар",
-    isView: true,
-    input: "input",
-    col: 24,
-  },
-  {
-    index: "roomId",
-    label: "Өрөөны дугаар",
-    isView: true,
-    input: "select",
-    inputData: [
-      {
-        id: 1,
-        label: "1-Өрөө",
-      },
-      {
-        id: 2,
-        label: "2-Өрөө",
-      },
-    ],
-    col: 24,
-  },
-];
-
 function Bed() {
+  const [rooms, setRooms] = useState([]); //Хэвтэн өрөөнүүд
+  const config = {
+    headers: {},
+    params: {},
+  };
+  const token = useSelector(selectCurrentToken);
+  const getRooms = async () => {
+    config.params.isInpatient = true;
+    const response = await Get("organization/room", token, config);
+    if (response.data?.length > 0) {
+      setRooms(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getRooms();
+  }, []);
+
+  const column = [
+    {
+      index: "bedNumber",
+      label: "Ор дугаар",
+      isView: true,
+      input: "input",
+      col: 24,
+    },
+    {
+      index: "roomId",
+      label: "Өрөөны дугаар",
+      isView: true,
+      input: "select",
+      inputData: rooms,
+      relIndex: "roomNumber",
+      col: 24,
+    },
+  ];
+
   return (
     <div className="flex flex-wrap">
       <div className="w-full">
