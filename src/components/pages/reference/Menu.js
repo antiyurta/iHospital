@@ -2,7 +2,7 @@ import { Delete, Get, Patch, Post } from '../../comman';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Button, Card, Checkbox, Form, Input, InputNumber, Modal, Select, Switch } from 'antd';
+import { Button, Card, Form, Input, InputNumber, Modal, Pagination, Select, Switch } from 'antd';
 import { Table } from 'react-bootstrap';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
@@ -49,12 +49,18 @@ function Menu() {
     const onFinish = async (value) => {
         if (editMode) {
             const response = await Patch('reference/menu/' + id, token, config, value);
-        } else {
-            if (!value.isSubMenu) {
+            if (response === 200) {
+                setIsOpenModal(false);
+                getMenus();
             }
+        } else {
             const response = await Post('reference/menu', token, config, value);
-            console.log(response);
+            if (response === 201) {
+                setIsOpenModal(false);
+                getMenus();
+            }
         }
+
     };
     const deleteModal = (id) => {
         Modal.error({
@@ -142,6 +148,14 @@ function Menu() {
                             }
                         </tbody>
                     </Table>
+                </div>
+                <div>
+                    <Pagination
+                        className="pagination"
+                        pageSize={10}
+                        total={meta.itemCount}
+                        onChange={getMenus}
+                    />
                 </div>
             </Card>
             <Modal
