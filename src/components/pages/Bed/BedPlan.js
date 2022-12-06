@@ -244,8 +244,8 @@ function BedPlan() {
             dataSource={patientReqList?.filter(
               (obj) =>
                 (obj.cardNumber && obj.cardNumber.includes(searchValue)) ||
-                obj.name.includes(searchValue) ||
-                obj.registerNumber.includes(searchValue)
+                obj.name?.toLowerCase()?.includes(searchValue) ||
+                obj.registerNumber?.toLowerCase()?.includes(searchValue)
             )}
             bordered
             rowSelection={{
