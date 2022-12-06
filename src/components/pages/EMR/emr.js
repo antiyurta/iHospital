@@ -17,11 +17,14 @@ import { selectCurrentToken, selectCurrentUserId } from "../../../features/authR
 import PatientInformation from "../PatientInformation";
 import { Get, openNofi, Post } from "../../comman";
 import { useLocation } from "react-router-dom";
+import { Table } from "react-bootstrap";
+import moment from "moment";
 const config = {
   headers: {},
   params: {}
 };
 const { Option } = Select;
+const { Text } = Typography;
 function EMR() {
   const IncomePatientId = useLocation().state.patientId;
   const IncomeCabinetId = useLocation().state.cabinetId;
@@ -31,8 +34,8 @@ function EMR() {
   const token = useSelector(selectCurrentToken);
   const employeeId = useSelector(selectCurrentUserId);
   const [type, setType] = useState("EMR"); // ['OCS', 'EMR']
-  const { Text } = Typography;
-
+  const [appointments, setAppointments] = useState([]);
+  const [problems, setProblems] = useState([]);
   //
   const [selectedPatient, setSelectedPatient] = useState([]);
   //
@@ -83,8 +86,46 @@ function EMR() {
     }
   }
 
+
+  //
+  const getInspectionNotes = async (PatientId) => {
+    config.params.patientId = PatientId;
+    const response = await Get('appointment', token, config);
+    if (response.data.length > 0) {
+      var result = response.data.reduce(function (r, a) {
+        //Оноор бүлэглэх
+        r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
+        r[a.createdAt.substring(0, 4)].push(a);
+        console.log("======a>", a);
+        getProblems(a.id);
+        return r;
+      }, Object.create(null));
+      console.log(result);
+      setAppointments(result);
+    } else {
+      setAppointments([]);
+    }
+    config.params.patientId = null;
+  };
+  const getProblems = async (id) => {
+    const response = await Get('appointment/' + id, token, config);
+    if (response.inspectionNotes.length > 0) {
+      var problem = [];
+      response.inspectionNotes.map((note) => {
+        problem.push({
+          doctorId: note.employees.lastName.substring(0, 1) + "." + note.employees.firstName,
+          diagnose: JSON.parse(note.diagnose),
+          inspectionDate: note.createdAt
+        })
+      });
+      setProblems(problem);
+    }
+  };
+  //
+
   useEffect(() => {
     getByIdPatient(IncomePatientId);
+    getInspectionNotes(IncomePatientId);
   }, []);
 
   return (
@@ -97,14 +138,7 @@ function EMR() {
           <div className={type === "EMR" ? "w-full md:w-2/5 p-1" : "w-full md:w-1/5 p-1"}>
             <Card
               bordered={false}
-              title={
-                <div className="flex font-semibold m-0 justify-between">
-                  <h6>Гол асуудлууд</h6>
-                  <p>
-                    {/* {problems?.createdAt?.replace(/T/, " ").replace(/\..+/, "")} */}
-                  </p>
-                </div>
-              }
+              title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
               className="header-solid rounded-md"
               style={{ height: '100%' }}
               loading={cardLoading}
@@ -117,6 +151,42 @@ function EMR() {
                 maxHeight: 300,
               }}
             >
+              <div className="table-responsive p-4 max-h-80" id="style-8">
+                <Table bordered className="ant-border-space">
+                  <thead className="ant-table-thead bg-slate-200">
+                    <tr>
+                      <th>emch</th>
+                      <th>diagnose</th>
+                      <th>date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      problems?.map((problem, idx) => {
+                        return (
+                          <tr key={idx}>
+                            <td>{problem.doctorId}</td>
+                            <td>
+                              <ul className="list-disc list-inside">
+                                {
+                                  problem.diagnose.map((diagnose, index) => {
+                                    return (
+                                      <li key={index}>{diagnose.code + " " + diagnose.nameEn}</li>
+                                    )
+                                  })
+                                }
+                              </ul>
+                            </td>
+                            <td>
+                              {moment(problem.inspectionDate).format('YYYY-MM-DD')}
+                            </td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </Table>
+              </div>
             </Card>
           </div>
           <div className={type === "EMR" ? "w-full p-1" : "w-full md:w-2/5 p-1"}>
@@ -137,7 +207,7 @@ function EMR() {
                 overflowY: "scroll",
               }}
             >
-              <MainAmbulatory appointmentId={AppointmentId} patientId={selectedPatient.id} />
+              <MainAmbulatory appointments={appointments} patientId={selectedPatient.id} />
             </Card>
           </div>
         </div>

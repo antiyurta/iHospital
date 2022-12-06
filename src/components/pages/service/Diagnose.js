@@ -1,5 +1,5 @@
-import { CloseOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, Pagination } from "antd";
+import { CloseOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Pagination, Select } from "antd";
 import { useState } from "react"
 import { useEffect } from "react"
 import { Table } from "react-bootstrap";
@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi } from "../../comman";
 const { Search } = Input;
+const { TextArea } = Input;
+const { Option } = Select;
 function Diagnose({ handleClick }) {
     const token = useSelector(selectCurrentToken);
     const config = {
@@ -60,7 +62,61 @@ function Diagnose({ handleClick }) {
     return (
         <>
             <div>
-                <Button onClick={() => { setIsOpenDiagnoseModal(true) }}>Онош сонгох</Button>
+                <Button className="btn-add" onClick={() => { setIsOpenDiagnoseModal(true) }}>Онош сонгох</Button>
+                <Form.List name="diagnose">
+                    {
+                        (fields, { add, remove }) => (
+                            <>
+                                <div className='table-responsive pb-4' id='style-8' style={{ maxHeight: '420px' }}>
+                                    <Table className='ant-border-space' style={{ width: '100%' }}>
+                                        <thead className='ant-table-thead bg-slate-200'>
+                                            <tr>
+                                                <th className="font-bold text-sm align-middle">Код</th>
+                                                <th className="font-bold text-sm align-middle">Монгол нэр</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                fields?.map(({ key, name, }) => (
+                                                    <tr key={key} className='ant-table-row ant-table-row-level-0'>
+                                                        <td style={{ width: 80, maxWidth: 80 }}>
+                                                            <Form.Item
+                                                                name={[name, 'code']}>
+                                                                <TextArea rows={5} disabled />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td>
+                                                            <Form.Item
+                                                                name={[name, 'nameMn']}>
+                                                                <TextArea rows={5} disabled />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td>
+                                                            <Form.Item
+                                                                name={[name, 'type']}>
+                                                                <Select>
+                                                                    <Option value="Үндсэн">Үндсэн</Option>
+                                                                    <Option value="Урьдчилан">Урьдчилан</Option>
+                                                                    <Option value="Хүндрэл">Хүндрэл</Option>
+                                                                    <Option value="Үйлдлийн онош">Үйлдлийн онош</Option>
+                                                                    <Option value="Хавсрах онош">Хавсрах онош</Option>
+                                                                    <Option value="Уламжлалт">Уламжлалт</Option>
+                                                                    <Option value="Дагалдах">Дагалдах</Option>
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} /></td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </Table>
+                                </div>
+                            </>
+                        )
+                    }
+                </Form.List>
                 <Modal
                     title="Онош"
                     open={isOpenDiagnoseModal}

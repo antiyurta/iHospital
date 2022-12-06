@@ -4,12 +4,12 @@ import ProgressNotes from "./ProgressNotes";
 import NurseNote from "../NurseNote";
 import ProgressCheck from "./ProgressCheck";
 
-export default function MainAmbulatory({ patientId }) {
+export default function MainAmbulatory({ patientId, appointments }) {
   const items = [
     {
       label: "Явцын тэмдэглэл",
       key: "item-1",
-      children: <ProgressNotes PatientId={patientId} />,
+      children: <ProgressNotes Appointments={appointments} />,
     },
     {
       label: "Явцын үзлэг",
@@ -24,22 +24,22 @@ export default function MainAmbulatory({ patientId }) {
     {
       label: "Оношилгоо",
       key: "item-2",
-      children: <ProgressNotes />,
+      // children: <ProgressNotes />,
     },
     {
       label: "Эмийн эмчилгээ",
       key: "item-3",
-      children: <ProgressNotes />,
+      // children: <ProgressNotes />,
     },
     {
       label: "Шинжилгээний хариу",
       key: "item-4",
-      children: <ProgressNotes />,
+      // children: <ProgressNotes />,
     },
     {
       label: "Эмийн бус эмчилгээ",
       key: "item-5",
-      children: <ProgressNotes />,
+      // children: <ProgressNotes />,
     },
   ];
   return <Tabs size="small" items={items} />;

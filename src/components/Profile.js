@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setUserId } from '../features/authReducer';
+import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setMenus, setUserId } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Row } from "antd";
@@ -49,7 +49,7 @@ function Profile() {
             dispatch(setUserId(response.employee?.id));
         }
         setUser(response);
-    }
+    };
     useEffect(() => {
         getProfile();
     }, [])

@@ -1,11 +1,13 @@
-import { Get, Post } from '../../comman';
+import { Delete, Get, Patch, Post } from '../../comman';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Button, Card, Checkbox, Form, Input, InputNumber, Modal, Select, Switch } from 'antd';
 import { Table } from 'react-bootstrap';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 function Menu() {
     const token = useSelector(selectCurrentToken);
@@ -16,6 +18,7 @@ function Menu() {
     const [form] = Form.useForm();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
+    const [id, setId] = useState([]);
     const [isSubMenu, setIsSubMenu] = useState(false);
     //
     const [menus, setMenus] = useState([]);
@@ -45,14 +48,36 @@ function Menu() {
 
     const onFinish = async (value) => {
         if (editMode) {
-
+            const response = await Patch('reference/menu/' + id, token, config, value);
         } else {
             if (!value.isSubMenu) {
             }
             const response = await Post('reference/menu', token, config, value);
             console.log(response);
         }
-    }
+    };
+    const deleteModal = (id) => {
+        Modal.error({
+            title: "Устгах",
+            okText: "Устгах",
+            closable: true,
+            content: <div>Устгасан дохиолдолд дахин сэргэхгүй болно</div>,
+            async onOk() {
+                await Delete("reference/menu/" + id, token, config);
+                getMenus();
+            },
+        });
+    };
+
+    const editModal = async (id) => {
+        setEditMode(true);
+        setId(id);
+        const response = await Get("reference/menu/show/" + id, token, config);
+        if (response.length != 0) {
+            form.setFieldsValue(response);
+            setIsOpenModal(true);
+        }
+    };
 
     useEffect(() => {
         getMenus();
@@ -78,17 +103,39 @@ function Menu() {
                                 <th>isSubMenu</th>
                                 <th>icon</th>
                                 <th>title</th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="ant-table-tbody p-0">
                             {
                                 menus.map((menu, index) => {
                                     return (
-                                        <tr key={index}>
-                                            <td>{menu.title}</td>
-                                            <td>{menu.name}</td>
-                                            <td>{menu.isSubMenu ? "TIIM" : "UGU"}</td>
-                                            <td>{menu.icon}</td>
+                                        <tr key={index} className="ant-table-row ant-table-row-level-0">
+                                            <td className="ant-table-row-cell-break-word">{menu.title}</td>
+                                            <td className="ant-table-row-cell-break-word">{menu.name}</td>
+                                            <td className="ant-table-row-cell-break-word">{menu.isSubMenu ? "TIIM" : "UGU"}</td>
+                                            <td className="ant-table-row-cell-break-word w-6">
+                                                <a dangerouslySetInnerHTML={{ __html: menu.icon }}>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <Button
+                                                    type="link"
+                                                    onClick={() => editModal(menu.id)}
+                                                    title="Засах"
+                                                    style={{ paddingRight: 5, paddingLeft: 5 }}
+                                                >
+                                                    <EditOutlined />
+                                                </Button>
+                                                <Button
+                                                    type="link"
+                                                    onClick={() => deleteModal(menu.id)}
+                                                    title="Устгах"
+                                                    style={{ paddingLeft: 5 }}
+                                                >
+                                                    <DeleteOutlined style={{ color: "red" }} />
+                                                </Button>
+                                            </td>
                                         </tr>
                                     )
                                 })
@@ -162,7 +209,7 @@ function Menu() {
                         label="ICON"
                         name="icon"
                     >
-                        <Input />
+                        <TextArea />
                     </Form.Item>
                 </Form>
             </Modal>

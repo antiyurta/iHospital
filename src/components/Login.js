@@ -12,7 +12,8 @@ import {
 import {
     StepBackwardOutlined
 } from "@ant-design/icons";
-import Logo from '../assets/logo/logo.png';
+// import Logo from '../assets/logo/logo.png';
+import Logo from '../assets/logo/iHospital.png'
 import signinbg from '../assets/logo/demo4.png';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +67,7 @@ function Login() {
             <Layout className="layout-default layout-signin">
                 <Header>
                     <div className="header-col header-brand">
-                        <img src={Logo} alt="logo" />
+                        <img className="h-24" src={Logo} alt="logo" />
                     </div>
                 </Header>
                 <Content className="signin">
@@ -117,7 +118,6 @@ function Login() {
                                 <Form.Item>
                                     <Button
                                         type="primary"
-                                        className="bg-sky-700"
                                         htmlType="submit"
                                         style={{ width: "100%" }}
                                     >
