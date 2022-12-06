@@ -59,6 +59,8 @@ import PatientForm from "./components/pages/FormBuilder/FBuilder/PatientForm";
 import Role from "./components/pages/Organization/Role";
 import Permission from "./components/pages/Organization/Permission";
 import Discount from "./components/pages/reference/Discount";
+import NotFound from "./features/notFound";
+import NotPermission from "./features/notPermission";
 // lab end
 
 function App() {
@@ -67,6 +69,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<Main />}>
+          <Route path="*" element={<NotFound />} />
+          <Route path="/notPermission" element={<NotPermission />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
           {/* lab start */}
           <Route path="/equipments" element={<EquipmentList />} />
           {/* lab end */}
@@ -77,12 +83,12 @@ function App() {
           <Route path="/permission" element={<Permission />} />
           <Route path="/discount" element={<Discount />} />
           {/* finance end */}
+          {/* <PrivateRoute></PrivateRoute> */}
           <Route path="/menu" element={<Menu />} />
           <Route path="/emr" element={<EMR />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
-          <Route path="/" element={<Home />} />
           <Route
             path="/hospital"
             element={
@@ -252,14 +258,6 @@ function App() {
               }
             />
           </Route>
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
           <Route
             path="/history"
             element={

@@ -16,8 +16,12 @@ export async function Get(url, token, config) {
                 }
             })
             .catch((error) => {
+                console.log("========>", error);
                 if (error.response.status === 401) {
+                    console.log("SDAD");
                     resolve({ data: [], meta: {}, status: 401 });
+                } else if (error.response.status === 400) {
+                    console.log("DSAD");
                 } else {
                     openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
                     reject({ data: [], meta: {} });
@@ -104,8 +108,15 @@ export async function Delete(url, token, config) {
                 }
             })
             .catch((error) => {
-                openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
-                resolve(400);
+                if (error.response.status === 400) {
+                    openNofi('error', 'Алдаа', 'Устгах боложгүй');
+                    resolve(400);
+                } else {
+                    console.log(error);
+
+                    resolve(400);
+                }
+
             })
     })
 }

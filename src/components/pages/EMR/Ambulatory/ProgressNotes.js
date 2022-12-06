@@ -8,7 +8,7 @@ import { Get } from "../../../comman";
 import FormIndex from "../FormPrint";
 import Prescription from "../PrescriptionPrint";
 
-export default function ProgressNotes({ PatientId }) {
+export default function ProgressNotes({ Appointments }) {
   const { Panel } = Collapse;
   const token = useSelector(selectCurrentToken);
   const config = {
@@ -17,7 +17,6 @@ export default function ProgressNotes({ PatientId }) {
   };
   const [inspectionNotes, setInspectionNotes] = useState([]);
   const [serviceRequests, setServiceRequests] = useState([]);
-  const [appointments, setAppointments] = useState([]);
   const [printData, setPrintData] = useState([]);
   const [printPrescription, setPrintPrescription] = useState([])
   const [isOpenModalForm, setIsOpenModalForm] = useState(false);
@@ -26,42 +25,24 @@ export default function ProgressNotes({ PatientId }) {
     if (id) {
       const response = await Get('appointment/' + id, token, config);
       if (response.inspectionNotes.length > 0) {
-        console.log(response.inspectionNotes);
         setInspectionNotes(response.inspectionNotes);
-        setServiceRequests(response.setServiceRequests);
+        setServiceRequests(response.serviceRequests);
+        console.log(response.serviceRequests)
       } else {
         setInspectionNotes([]);
+        setServiceRequests([]);
       }
     }
   };
 
-  useEffect(() => {
-    if (PatientId) {
-      getInspectionNotes(PatientId);
-    }
-  }, [PatientId]);
-
-  const getInspectionNotes = async (PatientId) => {
-    config.params.patientId = PatientId;
-    const response = await Get('appointment', token, config);
-    if (response.data.length > 0) {
-      var result = response.data.reduce(function (r, a) {
-        //Оноор бүлэглэх
-        r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
-        r[a.createdAt.substring(0, 4)].push(a);
-        return r;
-      }, Object.create(null));
-      console.log(result);
-      setAppointments(result);
-    } else {
-      setAppointments([]);
-    }
-    config.params.patientId = null;
-  };
-
   const RenderNotesDiagnose = (data) => {
-    data?.data?.diagnose?.map((diagnose) => {
-      console.log(diagnose);
+    return data?.data?.map((diagnose, index) => {
+      return (
+        <div key={index} className="flex">
+          <p className="font-semibold mx-2">{diagnose.type}: </p>
+          <p>{"[" + diagnose.code + "]" + diagnose.nameMn}</p>
+        </div>
+      )
     })
   }
 
@@ -97,9 +78,9 @@ export default function ProgressNotes({ PatientId }) {
             <FolderOutlined style={{ fontSize: "24px" }} />
           );
         }}
-      // ghost
+        ghost
       >
-        {Object.entries(appointments).map(([key, value], index) => {
+        {Object.entries(Appointments).map(([key, value], index) => {
           return (
             <Panel header={`${key} Он`} key={index}>
               <Collapse Collapse collapsible="header" onChange={onChange} accordion >
@@ -121,6 +102,7 @@ export default function ProgressNotes({ PatientId }) {
                             inspectionNotes.map((note, index) => {
                               return (
                                 <Card
+                                  className="m-3"
                                   key={index}
                                   title={
                                     note.structures?.name + "->" +
@@ -128,7 +110,9 @@ export default function ProgressNotes({ PatientId }) {
                                   }
                                   extra={
                                     <>
-                                      <PrinterOutlined className="p-1"
+                                      <PrinterOutlined
+                                        title="Маягт хэвлэх"
+                                        className="p-1"
                                         onClick={(event) => {
                                           setPrintData(note);
                                           console.log(value);
@@ -136,11 +120,13 @@ export default function ProgressNotes({ PatientId }) {
                                         }
                                         }
                                       />
-                                      <MedicineBoxOutlined className="p-1"
+                                      <MedicineBoxOutlined
+                                        title="Эмийн жор хэвлэх"
+                                        className="p-1"
                                         onClick={(event) => {
-                                          setPrintPrescription(value);
-                                          console.log(value);
-                                          setIsOpenModalPrescription(true);
+                                          // setPrintPrescription(serviceRequests);
+                                          console.log(serviceRequests);
+                                          // setIsOpenModalPrescription(true);
                                         }}
                                       />
                                     </>

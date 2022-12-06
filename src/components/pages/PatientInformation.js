@@ -1,5 +1,4 @@
 import { Input, Card, Radio } from "antd";
-import { useParams } from "react-router-dom";
 import male from '../../assets/images/maleAvatar.svg';
 
 const { Search } = Input;

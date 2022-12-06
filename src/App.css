@@ -189,9 +189,14 @@ input[type="number"] {
   line-height: 1;
 }
 
-.ant-btn-primary{
-  border-radius: 6px !important;
+.ant-btn-primary {
   background-color: #2d8cff;
+}
+
+.btn-add {
+  border-radius: 6px !important;
+  color: white;
+  background-color: green;
 }
 
 /* .ant-tabs-extra-content {
@@ -233,7 +238,7 @@ input[type="number"] {
   display: block !important;
 }
 input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

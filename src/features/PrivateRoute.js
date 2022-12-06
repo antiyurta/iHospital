@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ children }) => {
@@ -9,9 +9,20 @@ const PrivateRoute = ({ children }) => {
             return true;
         }
         return false;
-    }
+    };
+    const location = useLocation();
+
+    const isPermission = () => {
+        if (location.state) {
+            return true;
+        }
+        return false;
+    };
+
     const authed = isauth();
-    return authed ? children : <Navigate to="/login" />
+    const permission = isPermission();
+
+    return authed ? (permission ? children : <Navigate to="/notPermission" />) : (<Navigate to="/login" />)
 }
 
 export default PrivateRoute;

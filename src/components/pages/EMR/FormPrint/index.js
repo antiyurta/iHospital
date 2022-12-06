@@ -21,6 +21,17 @@ export default function Index(props) {
         content: () => printRef.current
     });
 
+    const RenderHTMLDiagnose = (data) => {
+        return data?.data?.map((diagnose, index) => {
+            return (
+                <div key={index} className="flex">
+                    <p className="font-semibold mx-2">{diagnose.type}: </p>
+                    <p>{"[" + diagnose.code + "]" + diagnose.nameMn}</p>
+                </div>
+            )
+        })
+    }
+
     const RenderHTML = (data) => {
         return Object.entries(data.data).map(([key, value], index) => {
             return (
@@ -119,6 +130,10 @@ export default function Index(props) {
                                     Төлөвлөгөө
                                 </Divider>
                                 <RenderHTML data={JSON.parse(props.props.plan)} />
+                                <Divider orientation="left" className="text-sm my-2">
+                                    Онош
+                                </Divider>
+                                <RenderHTMLDiagnose data={JSON.parse(props.props.diagnose)} />
                                 <div className="text-right">
                                     <div className="inline-flex">
                                         <p className="font-semibold mr-2">Үзлэг хийсэн эмч:</p>

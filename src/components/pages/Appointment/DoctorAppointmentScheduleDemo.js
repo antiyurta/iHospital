@@ -60,9 +60,10 @@ function DoctorAppointmentScheduleDemo() {
 
     const getCabinets = async (e) => {
         config.params.type = 3;
-        config.params.parantId = e;
+        config.params.parentId = e;
         config.params.startDate = null;
         config.params.endDate = null;
+        console.log("========>");
         const response = await Get('organization/structure', token, config);
         if (response.data.length != 0) {
             setCabinets(response.data);
@@ -81,10 +82,12 @@ function DoctorAppointmentScheduleDemo() {
     const getRooms = async (value) => {
         // config.params.depId = value;
         config.params.type = null;
+        config.params.isInpatient = false;
         const response = await Get('organization/room', token, config);
         if (response.data.length != 0) {
             setRooms(response.data);
         }
+        config.params.isInpatient = null;
     }
     //
     const [days, setDays] = useState([]);
@@ -132,28 +135,40 @@ function DoctorAppointmentScheduleDemo() {
     }
 
     const setSchedule = async (date) => {
-        form.validateFields().then(async (value) => {
-            var arr = { ...value };
-            if (Object.keys(arr).length > 0) {
-                arr.workDate = moment(date).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
-                arr.startTime = moment(value.startTime).format("HH:mm");
-                arr.endTime = moment(value.endTime).format("HH:mm");
-                if (editMode) {
-                    const response = await Patch('schedule/' + id, token, config, arr);
-                    if (response === 200) {
-                        setEditMode(false);
-                        getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+        form.validateFields()
+            .then(async (value) => {
+                var arr = { ...value };
+                if (Object.keys(arr).length > 0) {
+                    arr.workDate = moment(date).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
+                    arr.startTime = moment(value.startTime).format("HH:mm");
+                    arr.endTime = moment(value.endTime).format("HH:mm");
+                    if (new Date(arr.workDate).getDate() < new Date().getDate()) {
+                        openNofi("error", 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
+                        console.log(arr.startTime);
+                    } else if (moment().isAfter(moment(arr.workDate).set({ hour: moment(arr.startTime, 'h:mma').get('hour'), minute: moment(arr.startTime, 'h:mma').get('minute') }))) {
+                        openNofi("error", 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
+                    } else {
+                        if (editMode) {
+                            const response = await Patch('schedule/' + id, token, config, arr);
+                            if (response === 200) {
+                                setEditMode(false);
+                                getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                            }
+                        } else {
+                            const response = await Post('schedule', token, config, arr);
+                            if (response === 201) {
+                                getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                            }
+                        }
                     }
                 } else {
-                    const response = await Post('schedule', token, config, arr);
-                    if (response === 201) {
-                        getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-                    }
+                    openNofi('error', 'TSAG', 'Tsag oruulah');
                 }
-            } else {
-                openNofi('error', 'TSAG', 'Tsag oruulah')
-            }
-        });
+            })
+            .catch((err) => {
+                console.log(err);
+                openNofi('warning', 'Цаг оруулах', 'Цаг оруулах хэсгийг бүрэн бөглөх');
+            })
     }
 
     const filteredCabinets = cabinets.filter((cabinet) => cabinet.parentId === cabinetFilterValue);
@@ -370,7 +385,7 @@ function DoctorAppointmentScheduleDemo() {
                                             <Panel
                                                 key={index}
                                                 header={moment(day.title).format('YYYY-MM-DD')}
-                                                extra={<Button className="bg-sky-700 text-white" onClick={() => setSchedule(day.title)}>Нэмэх</Button>}
+                                                extra={<Button className="btn-add" onClick={() => setSchedule(day.title)}>Нэмэх</Button>}
                                             >
                                                 <div className='table-responsive' id='style-8'>
                                                     <Table className='ant-border-space' style={{ width: '100%' }}>
