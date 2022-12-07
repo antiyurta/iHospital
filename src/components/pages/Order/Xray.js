@@ -60,6 +60,8 @@ function Xray({ isOpen, isClose, handleclick }) {
                     handleclick(selectedXrays);
                     isClose('xray', false);
                 }}
+                okText={"Хадгалах"}
+                cancelText={"Болих"}
             >
                 <div className="flex flex-row">
                     <div className="basis-1/5">

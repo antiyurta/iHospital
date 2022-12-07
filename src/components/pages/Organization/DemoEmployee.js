@@ -84,6 +84,12 @@ function DemoEmployee() {
         }
         config.params.type = null;
     }
+    const getPositions = async () => {
+        config.params.type = 1;
+        const response = await Get('organization/structure', token, config);
+        setPositions(response.data);
+        config.params.type = null;
+    };
     const selectDepartment = async (value) => {
         config.params.parentId = value;
         config.params.type = 1;
@@ -131,6 +137,9 @@ function DemoEmployee() {
         getEmployee(1);
         getDegree();
         getRoles();
+        //
+        getPositions();
+        //
         ScrollRef(scrollRef);
     }, [])
     return (
@@ -145,7 +154,7 @@ function DemoEmployee() {
                             <Button onClick={showModal} className='bg-sky-700 rounded-md text-white'>Нэмэх</Button>
                         }
                     >
-                        <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
+                        <div className='table-responsive' id='style-8' ref={scrollRef}>
                             <Table className='ant-border-space' style={{ width: '100%' }}>
                                 <thead className='ant-table-thead bg-slate-200'>
                                     <tr>
@@ -335,10 +344,10 @@ function DemoEmployee() {
                                 </Select>
                             </Form.Item>
                         </div>
-                        <div className="md:w-1/4 sm:w-1/3 p-1">
+                        <div className="w-full p-1">
                             <Form.Item
                                 label="Aлбан нэгж"
-                                name='depId'
+                                name='depIds'
                                 rules={[
                                     {
                                         required: true,
@@ -346,7 +355,10 @@ function DemoEmployee() {
                                     }
                                 ]}
                             >
-                                <Select onChange={selectDepartment}>
+                                <Select
+                                    mode="multiple"
+                                // onChange={selectDepartment}
+                                >
                                     {
                                         departments.map((department, index) => {
                                             return (

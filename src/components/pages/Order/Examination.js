@@ -56,6 +56,8 @@ function Examination({ isOpen, isClose, handleclick }) {
           handleclick(selectedExaminations);
           isClose("examination", false);
         }}
+        okText={"Хадгалах"}
+        cancelText={"Болих"}
       >
         <div className="flex flex-row">
           <div className="basis-1/5">

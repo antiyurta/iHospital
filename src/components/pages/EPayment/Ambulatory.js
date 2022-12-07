@@ -18,7 +18,10 @@ function Ambulatory() {
     const [isConfirmLoading, setIsConfirmLoading] = useState(false);
     const [patientsList, setPatientsList] = useState([]);
     const [notPatientsList, setNotPatientsList] = useState([]);
-    const [patient, setPatient] = useState([]);
+    //
+    const [payment, setPayment] = useState([]);
+    const [paymentConfirmLoading, setPaymentConfirmLoading] = useState(false);
+    //
     const [selectedPatient, setSelectedPatient] = useState([]);
     const [patientId, setPatientId] = useState(0);
     const [invoiceRequest, setInvoiceRequest] = useState([]);
@@ -48,12 +51,12 @@ function Ambulatory() {
         setNotPatientsList(response.data);
     };
 
-    const selectPatient = async (id) => {
+    const getPayment = async (id) => {
         setPatientId(id);
         config.params.patientId = id;
         const response = await Get('payment/invoice', token, config);
         setTotalAmount(response.data.reduce((a, v) => a = a + v.amount, 0));
-        setPatient(response.data);
+        setPayment(response.data);
         setPaymentModal(true);
     }
 
@@ -65,12 +68,8 @@ function Ambulatory() {
         setInvoiceRequest(e);
     }
 
-    const sendData = async () => {
-        const response = await Get('payment/payment/sendData', token, config);
-        console.log(response);
-    };
-
     const PaymentRequest = async () => {
+        setPaymentConfirmLoading(true);
         const response = await DefaultPost('payment/payment', token, config, {
             "invoiceIds": invoiceRequest,
             "patientId": patientId,
@@ -81,6 +80,7 @@ function Ambulatory() {
             setPaymentModal(false);
             setEbarimtData(response);
             setEbarimtModal(true);
+            setPaymentConfirmLoading(false);
         }
     }
 
@@ -114,27 +114,13 @@ function Ambulatory() {
         const response = await Get('payment/discount', token, config);
         setDiscounts(response.data);
     };
+
     useEffect(() => {
         ScrollRef(scrollRef);
         getDiscounts();
     }, []);
 
     const categories = [
-        {
-            //omnoh jor
-            name: "RecentRecipe",
-            label: "Өмнөх жор"
-        },
-        {
-            //set order
-            name: "SetOrder",
-            label: 'СетОрдер'
-        },
-        {
-            //em
-            name: "Medicine",
-            label: 'Эм'
-        },
         {
             //shinejilgee
             name: "Examination",
@@ -227,7 +213,7 @@ function Ambulatory() {
                                                     <td>{patient.firstName}</td>
                                                     <td>{patient.lastName}</td>
                                                     <td>{patient.registerNumber}</td>
-                                                    <td><Button onClick={() => selectPatient(patient.id)} >Төлбөр авах</Button></td>
+                                                    <td><Button onClick={() => getPayment(patient.id)} >Төлбөр авах</Button></td>
                                                 </tr>
                                             )
                                         })
@@ -309,6 +295,7 @@ function Ambulatory() {
                     >
                         <Order
                             isDoctor={false}
+                            selectedPatient={selectedPatient}
                             categories={categories}
                             save={saveOrder}
                         />
@@ -326,6 +313,7 @@ function Ambulatory() {
                         </p>
                     </div>
                 }
+                confirmLoading={paymentConfirmLoading}
                 closable={false}
                 open={paymentModal}
                 width={"50%"}
@@ -333,6 +321,7 @@ function Ambulatory() {
                 onCancel={() => setPaymentModal(false)}
             >
                 <div className="flex flex-wrap">
+
                     <div className="w-full p-1">
                         <Checkbox onChange={(e) => {
                             setIsDiscount(e.target.checked);
@@ -365,7 +354,7 @@ function Ambulatory() {
                         >
                             <Row>
                                 {
-                                    patient.map((element, index) => {
+                                    payment.map((element, index) => {
                                         return (
                                             <Col key={index} span={12}>
                                                 <Checkbox value={element.id}>{element.name + "-->" + element.amount + "₮"}</Checkbox>

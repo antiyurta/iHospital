@@ -14,7 +14,6 @@ import Bed from "./components/pages/Organization/Bed";
 //
 import PaymentCloud from "./components/pages/EPayment/Payments";
 //
-import DoctorAppointmentSchedule from "./components/pages/Appointment/DoctorAppointmentSchedule";
 import DoctorAppointment from "./components/pages/Appointment/DoctorAppointment";
 //
 import Patient from "./components/pages/PMS/Patient";
@@ -41,7 +40,6 @@ import BeforeAmbulatoryDetail from "./components/pages/BeforeAmbulatory/BeforeAm
 import Menu from "./components/pages/reference/Menu";
 import Packages from "./components/pages/service/Packages";
 import Position from "./components/pages/Organization/Position";
-import DoctorAppointmentScheduleDemo from "./components/pages/Appointment/DoctorAppointmentScheduleDemo";
 import SetOrder from "./components/pages/service/SetOrder";
 import DeviceAppointment from "./components/pages/DeviceAppointment/DeviceAppointment";
 import DemoEmployee from "./components/pages/Organization/DemoEmployee";
@@ -62,6 +60,7 @@ import Discount from "./components/pages/reference/Discount";
 import NotFound from "./features/notFound";
 import NotPermission from "./features/notPermission";
 import Nurse from "./components/pages/BeforeAmbulatory/Lists/Nurse";
+import Schedule from "./components/pages/Appointment/Schedule/Schedule";
 // lab end
 
 function App() {
@@ -74,6 +73,7 @@ function App() {
           <Route path="/notPermission" element={<NotPermission />} />
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/schedule" element={<Schedule />} />
           {/* lab start */}
           <Route path="/equipments" element={<EquipmentList />} />
           {/* lab end */}
@@ -95,14 +95,6 @@ function App() {
             element={
               <PrivateRoute>
                 <Hospital />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/dpdemo"
-            element={
-              <PrivateRoute>
-                <DoctorAppointmentScheduleDemo />
               </PrivateRoute>
             }
           />
@@ -166,14 +158,6 @@ function App() {
             />
           </Route>
           <Route>
-            <Route
-              path="/doctorAppointmentSchedule"
-              element={
-                <PrivateRoute>
-                  <DoctorAppointmentSchedule />
-                </PrivateRoute>
-              }
-            />
             <Route
               path="/doctorAppointment"
               element={

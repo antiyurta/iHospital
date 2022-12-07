@@ -48,6 +48,8 @@ function Package({ isOpen, isClose, handleclick }) {
                     handleclick(selectedPackages);
                     isClose("package", false);
                 }}
+                okText={"Хадгалах"}
+                cancelText={"Болих"}
             >
                 <div className="flex flex-row">
                     <div className="basis-1/2">

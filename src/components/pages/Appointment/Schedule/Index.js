@@ -1,12 +1,12 @@
-import { Form, Select, Button, Switch, Slider, Card, Collapse, DatePicker, Row, Col, TimePicker } from "antd";
+import { Form, Select, Button, Slider, Card, Collapse, DatePicker, Row, Col, TimePicker } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../features/authReducer";
-import { Delete, Get, openNofi, Patch, Post } from "../../comman";
+import { selectCurrentToken } from "../../../../features/authReducer";
+import { Get, openNofi, Patch, Post } from "../../../comman";
 import { Table } from "react-bootstrap";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -17,7 +17,7 @@ const Marks = {
     100: '100%'
 };
 
-function DoctorAppointmentScheduleDemo() {
+function Index({ type }) {
     const today = new Date();
     const [form] = Form.useForm();
     const token = useSelector(selectCurrentToken);
@@ -38,7 +38,7 @@ function DoctorAppointmentScheduleDemo() {
     }
     //
     const getDoctor = async (depId) => {
-        config.params.type = 2;
+        // config.params.type = 2;
         config.params.depId = depId;
         const response = await Get('organization/employee', token, config);
         if (response.data.length != 0) {
@@ -46,60 +46,61 @@ function DoctorAppointmentScheduleDemo() {
         } else {
             setDoctors([]);
         }
-    }
+    };
     const getStructures = async () => {
-        config.params.type = 2;
-        config.params.startDate = null;
-        config.params.endDate = null;
-        const response = await Get('organization/structure', token, config);
+        const conf = {
+            headers: {},
+            params: {
+                type: 2,
+            }
+        };
+        const response = await Get('organization/structure', token, conf);
         if (response.data.length != 0) {
             setStructures(response.data);
         }
-        config.params.type = null;
-    }
-
+    };
     const getCabinets = async (e) => {
-        config.params.type = 3;
-        config.params.parentId = e;
-        config.params.startDate = null;
-        config.params.endDate = null;
-        console.log("========>");
-        const response = await Get('organization/structure', token, config);
+        const conf = {
+            headers: {},
+            params: {
+                type: 3,
+                parentId: e
+            }
+        };
+        const response = await Get('organization/structure', token, conf);
         if (response.data.length != 0) {
             setCabinets(response.data);
         } else {
             setCabinets([]);
         }
-    }
-
+    };
     const getInspectionTimes = async () => {
         config.params.type = null;
         const response = await Get('settings', token, config);
         if (response.data.length != 0) {
             setInspectionTimes(response.data);
         }
-    }
+    };
     const getRooms = async (value) => {
-        // config.params.depId = value;
-        config.params.type = null;
-        config.params.isInpatient = false;
-        const response = await Get('organization/room', token, config);
+        const conf = {
+            headers: {},
+            params: {
+                isInpatient: false,
+            }
+        };
+        const response = await Get('organization/room', token, conf);
         if (response.data.length != 0) {
             setRooms(response.data);
         }
-        config.params.isInpatient = null;
-    }
+    };
     //
     const [days, setDays] = useState([]);
-
     const getFirstDayOfMonth = (year, month) => {
         return new Date(year, month, 1);
-    }
-
+    };
     const getLastDayOfMonth = (year, month) => {
         return new Date(year, month + 1, 0);
-    }
-
+    };
     const firstDayOfMonth = getFirstDayOfMonth(today.getFullYear(), today.getMonth());
     const lastDayOfMonth = getLastDayOfMonth(today.getFullYear(), today.getMonth());
 
@@ -108,9 +109,15 @@ function DoctorAppointmentScheduleDemo() {
         const month = firstDayOfMonth.getMonth() + 1;
         const startDay = firstDayOfMonth.getDate();
         const endDay = lastDayOfMonth.getDate();
-        config.params['startDate'] = moment(firstDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD');
-        config.params['endDate'] = moment(lastDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD');
-        const response = await Get("schedule", token, config);
+        const conf = {
+            headers: {},
+            params: {
+                type: type,
+                startDate: moment(firstDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD'),
+                endDate: moment(lastDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD'),
+            }
+        };
+        const response = await Get("schedule", token, conf);
         const Ddays = [];
         for (let i = startDay; i <= endDay; i++) {
             const ddd = new Date(year + "-" + month + "-" + i);
@@ -121,18 +128,18 @@ function DoctorAppointmentScheduleDemo() {
             });
         }
         setDays(Ddays);
-    }
+    };
 
     const getData = (value, data) => {
         return data.filter(item => item.workDate.includes(moment(value).format('YYYY-MM-DD')));
-    }
+    };
 
     const changeMonth = (value) => {
         const date = new Date(value);
         const firstDayOfMonth = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
         const lastDayOfMonth = getLastDayOfMonth(date.getFullYear(), date.getMonth());
         getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-    }
+    };
 
     const setSchedule = async (date) => {
         form.validateFields()
@@ -142,20 +149,25 @@ function DoctorAppointmentScheduleDemo() {
                     arr.workDate = moment(date).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
                     arr.startTime = moment(value.startTime).format("HH:mm");
                     arr.endTime = moment(value.endTime).format("HH:mm");
+                    arr.type = type;
                     if (new Date(arr.workDate).getDate() < new Date().getDate()) {
                         openNofi("error", 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                         console.log(arr.startTime);
                     } else if (moment().isAfter(moment(arr.workDate).set({ hour: moment(arr.startTime, 'h:mma').get('hour'), minute: moment(arr.startTime, 'h:mma').get('minute') }))) {
                         openNofi("error", 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                     } else {
+                        const conf = {
+                            headers: {},
+                            params: {}
+                        };
                         if (editMode) {
-                            const response = await Patch('schedule/' + id, token, config, arr);
+                            const response = await Patch('schedule/' + id, token, conf, arr);
                             if (response === 200) {
                                 setEditMode(false);
                                 getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
                             }
                         } else {
-                            const response = await Post('schedule', token, config, arr);
+                            const response = await Post('schedule', token, conf, arr);
                             if (response === 201) {
                                 getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
                             }
@@ -169,7 +181,7 @@ function DoctorAppointmentScheduleDemo() {
                 console.log(err);
                 openNofi('warning', 'Цаг оруулах', 'Цаг оруулах хэсгийг бүрэн бөглөх');
             })
-    }
+    };
 
     const filteredCabinets = cabinets.filter((cabinet) => cabinet.parentId === cabinetFilterValue);
 
@@ -184,7 +196,7 @@ function DoctorAppointmentScheduleDemo() {
         arr.endTime = moment().set({ hour: endTime[0], minute: endTime[1], second: endTime[2] });
         arr.startTime = moment().set({ hour: startTime[0], minute: startTime[1], second: startTime[2] });
         form.setFieldsValue(arr);
-    }
+    };
 
     useEffect(() => {
         getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
@@ -193,7 +205,7 @@ function DoctorAppointmentScheduleDemo() {
         getDoctor();
         getInspectionTimes();
         getRooms();
-    }, [])
+    }, [type])
 
     return (
         <div className="flex flex-wrap">
@@ -285,7 +297,7 @@ function DoctorAppointmentScheduleDemo() {
                             </Col>
                             <Col span={24} className="p-1">
                                 <Form.Item
-                                    label="Эмч сонгох:"
+                                    label={type === 1 && "Эмч сонгох:" || type === 2 && "Сувилагч сонгох:"}
                                     name="doctorId"
                                     rules={[
                                         {
@@ -407,7 +419,7 @@ function DoctorAppointmentScheduleDemo() {
                                                                         <tr key={index} className='ant-table-row ant-table-row-level-0'>
                                                                             <td className='ant-table-row-cell-break-word'>{item?.startTime}</td>
                                                                             <td className='ant-table-row-cell-break-word'>{item?.endTime}</td>
-                                                                            <td className='ant-table-row-cell-break-word'>{item?.structures?.name}</td>
+                                                                            <td className='ant-table-row-cell-break-word'>{item?.structure?.name}</td>
                                                                             <td className='ant-table-row-cell-break-word'>{item?.doctor?.firstName}</td>
                                                                             <td className='ant-table-row-cell-break-word'>{item?.room?.roomNumber}</td>
                                                                             <td className='ant-table-row-cell-break-word'>{item?.authorId}</td>
@@ -433,4 +445,4 @@ function DoctorAppointmentScheduleDemo() {
         </div>
     )
 }
-export default DoctorAppointmentScheduleDemo;
+export default Index;

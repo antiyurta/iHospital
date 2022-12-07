@@ -3,6 +3,8 @@ import Ambulatory from "./Ambulatory";
 
 function Payments() {
   const tabs = [{ label: "Амбултори", key: 1, children: <Ambulatory /> }];
-  return <Tabs items={tabs} />;
+  return (
+    <Tabs type="card" items={tabs} />
+  );
 }
 export default Payments;

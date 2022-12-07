@@ -54,6 +54,8 @@ function Medicine({ isOpen, isClose, handleclick }) {
                     handleclick(selectedMedicines);
                     isClose('medicine', false);
                 }}
+                okText={"Хадгалах"}
+                cancelText={"Болих"}
             >
                 <div className="flex flex-wrap">
                     <div className="w-2/3">
@@ -83,9 +85,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
                                 </Table>
                             </div>
                             <Pagination
-                                simple={true}
-                                position={'bottomCenter'}
-                                current={meta.page}
+                                className="pagination"
                                 pageSize={20}
                                 total={meta.itemCount}
                                 onChange={getMedicine}

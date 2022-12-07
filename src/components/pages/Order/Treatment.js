@@ -78,6 +78,8 @@ function Treatment({ isOpen, isClose, handleclick }) {
                     handleclick(selectedTreatments);
                     isClose('treatment', false);
                 }}
+                okText={"Хадгалах"}
+                cancelText={"Болих"}
             >
                 <div className="flex flex-row">
                     <div className="basis-1/5">
