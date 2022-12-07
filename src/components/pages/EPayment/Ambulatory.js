@@ -180,24 +180,24 @@ function Ambulatory() {
                         className="header-solid max-h-max rounded-md"
                         loading={cardLoading}
                         bodyStyle={{
-                            paddingTop: 0,
+                            paddingTop: 10,
                             paddingLeft: 10,
                             paddingRight: 10,
                             paddingBottom: 10,
-                            minHeight: 300,
-                            maxHeight: 300,
+                            minHeight: 150,
+                            maxHeight: 150,
                         }}
                     >
                         <div className="flex flex-wrap">
                             <div className="w-full md:w-1/3 xl:1/3">
                                 <Button className="bg-[#2d8cff] w-full" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
                             </div>
-                            <div className="w-full md:w-1/3 xl:1/3">
+                            {/* <div className="w-full md:w-1/3 xl:1/3">
                                 <Button className="bg-[#2d8cff] w-full" type="primary">Хэвтэн эмчлүүлэх</Button>
                             </div>
                             <div className="w-full md:w-1/3 xl:1/3">
                                 <Button className="bg-[#2d8cff] w-full" type="primary">Хэвтэн эмчлүүлэх цонх</Button>
-                            </div>
+                            </div> */}
                         </div>
                     </Card>
                 </div>
@@ -271,7 +271,7 @@ function Ambulatory() {
                                 maxHeight: 300,
                             }}
                         >
-                            <div className='table-responsive p-4' id='style-8' style={{ maxHeight: '180px' }}>
+                            <div className='table-responsive p-4' id='style-8' style={{ maxHeight: '300px' }}>
                                 <Table className='ant-border-space' style={{ width: '100%' }}>
                                     <thead className='ant-table-thead'>
                                         <tr>

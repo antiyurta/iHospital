@@ -1,4 +1,4 @@
-import { Input, Card, Radio } from "antd";
+import { Input, Card, Radio, Descriptions } from "antd";
 import male from '../../assets/images/maleAvatar.svg';
 
 const { Search } = Input;
@@ -51,20 +51,20 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type
             title={<h6 className="font-semibold m-0">Өвчтөний мэдээлэл</h6>}
             className="header-solid max-h-max rounded-md"
             bodyStyle={{
-                paddingTop: 0,
+                paddingTop: 10,
                 paddingLeft: 10,
                 paddingRight: 10,
                 paddingBottom: 10,
-                minHeight: 300,
-                maxHeight: 300,
+                minHeight: 150,
+                maxHeight: 150,
             }}
             extra={
                 <Search placeholder="Регистр хайх" onSearch={onSearch} enterButton="Хайх" />
             }
         >
             <div className="flex flex-row">
-                <div className="basis-1/3">
-                    <div className="container h-48 min-h-48 bg-contain bg-no-repeat bg-center" style={{ backgroundImage: "url(" + male + ")" }}>
+                <div className="basis-1/4 p-1">
+                    <div className="container h-24 min-h-24 bg-contain bg-no-repeat bg-center" style={{ backgroundImage: "url(" + male + ")" }}>
                     </div>
                     {
                         OCS && <div className="absolute bottom-1 left-10">
@@ -82,38 +82,17 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type
                         </div>
                     }
                 </div>
-                <div className="basis-2/3">
+                <div className="basis-3/4 p-1">
                     <div className="container">
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">Овог:</span>
-                            <span className="font-bold ml-2">{patient?.lastName}</span>
-                        </label>
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">Нэр:</span>
-                            <span className="font-bold ml-2">{patient?.firstName}</span>
-                        </label>
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">Хүйс:</span>
-                            <span className="font-bold ml-2">{getGender(patient?.registerNumber)}</span>
-                        </label>
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">Нас:</span>
-                            <span className="font-bold ml-2">{getAge(patient?.registerNumber)}</span>
-                        </label>
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">РД:</span>
-                            <span className="font-bold ml-2">{patient?.registerNumber}</span>
-                        </label>
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">Утас:</span>
-                            <span className="font-bold ml-2">{patient?.phoneNo}</span>
-                        </label>
-                        <label className="w-full flex mb-1">
-                            <span className="w-1/5">Хаяг:</span>
-                            <span className="font-bold ml-2">
-                                {getAddress(patient?.aimagId, patient?.soumId, patient?.address)}
-                            </span>
-                        </label>
+                        <Descriptions>
+                            <Descriptions.Item label="Овог">{patient?.lastName}</Descriptions.Item>
+                            <Descriptions.Item label="Нэр">{patient?.firstName}</Descriptions.Item>
+                            <Descriptions.Item label="Хүйс">{getGender(patient?.registerNumber)}</Descriptions.Item>
+                            <Descriptions.Item label="Нас">{getAge(patient?.registerNumber)}</Descriptions.Item>
+                            <Descriptions.Item label="РД">{patient?.registerNumber}</Descriptions.Item>
+                            <Descriptions.Item label="Утас">{patient?.phoneNo}</Descriptions.Item>
+                            <Descriptions.Item label="Хаяг">{getAddress(patient?.aimagId, patient?.soumId, patient?.address)}</Descriptions.Item>
+                        </Descriptions>
                     </div>
                 </div>
             </div>
