@@ -108,7 +108,7 @@ function EMR() {
     config.params.patientId = null;
   };
   const getProblems = async (id) => {
-    const response = await Get('appointment/' + id, token, config);
+    const response = await Get('appointment/show/' + id, token, config);
     if (response.inspectionNotes.length > 0) {
       var problem = [];
       response.inspectionNotes.map((note) => {

@@ -17,6 +17,7 @@ import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../
 import { Get, openNofi, Post } from "../../comman";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
+import DoctorInspection from "./DoctorInspection";
 //
 function Order({ isPackage, isDoctor, categories, save }) {
     const token = useSelector(selectCurrentToken);
@@ -28,7 +29,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
         params: {}
     }
     const [orders, setOrders] = useState([]);
-    const [packages, setPackages] = useState([]);
+    // const [packages, setPackages] = useState([]);
     const [total, setTotal] = useState(Number);
     //
     const [isXrayModal, setIsXrayModal] = useState(false);
@@ -52,52 +53,25 @@ function Order({ isPackage, isDoctor, categories, save }) {
 
     const handleclick = async (value) => {
         if (isPackage) {
-            console.log(value);
+            console.log("====>", value);
             var services = [];
             value.map((item) => {
                 const service = {};
-                service.id = item.id;
-                service.name = item.name;
-                service.price = item.price;
-                service.type = item.types?.type;
-                if (item.type === 8) {
-                    service.name = item.iName;
-                    service.dose = item.dose;
-                    service.price = 0;
-                    service.type = item.type;
-                    service.medicineType = item.medicineReferences?.name;
-                    service.m = false;
-                    service.d = false;
-                    service.e = false;
-                    service.n = false;
-                    service.desc = "";
-                    service.dayLength = 1;
-                    service.total = 0;
-                } else if (item.type === 2) {
-                    service.name = item.name;
-                    service.qty = item.qty ? item.qty : 1;
-                    if (service.qty != 1) {
-                        service.price = item.calCprice;
-                    }
-                }
-                service.isCito = false;
-                if (item.type === 1) {
-                    service.deviceId = item.deviceId;
-                    service.typeId = item.xrayTypeId;
-                } else if (item.type === 0) {
-                    service.typeId = item.examinationTypeId;
-                    service.requestDate = new Date();
-                } else {
-                    service.requestDate = new Date();
-                }
-                service.requestDate = moment(new Date()).format('YYYY-MM-DD');
-                service.usageType = 'OUT';
+                service.serviceId = item.id;
+                service.serviceName = item.name;
+                service.serviceType = item.type;
                 services.push(service);
             });
-            console.log(services);
-            setPackages([...packages, services]);
+            var datas = await orderForm.getFieldsValue();
+            var data = [];
+            if (datas.services === undefined) {
+                data = services;
+            } else {
+                data = datas.services.concat(services);
+            }
+            orderForm.setFieldsValue({ services: data });
+            console.log(data);
         } else {
-            console.log(value);
             var services = [];
             value.map((item) => {
                 const service = {};
@@ -124,6 +98,8 @@ function Order({ isPackage, isDoctor, categories, save }) {
                     if (service.qty != 1) {
                         service.price = item.calCprice;
                     }
+                } else if (item.type === 7) {
+                    service.type = item.type;
                 }
                 service.isCito = false;
                 if (item.type === 1) {
@@ -150,62 +126,6 @@ function Order({ isPackage, isDoctor, categories, save }) {
         }
     };
 
-    const handleclickDemo = (value) => {
-        if (isPackage) {
-            console.log(isPackage);
-            const pack = {
-                serviceType: value.types?.type,
-                serviceId: value.id,
-                serviceName: value.name,
-                servicePrice: value.price,
-            }
-            setPackages([...packages, pack]);
-        } else {
-            console.log(value);
-            const testOrder = {};
-            testOrder.id = value.id;
-            testOrder.name = value.name;
-            testOrder.price = value.price;
-            if (value.types?.type === 8) {
-                testOrder.name = value.iName;
-                testOrder.price = 0;
-            } else if (value.types?.type === 2) {
-                testOrder.name = value.name;
-                testOrder.qty = value.qty ? value.qty : 1;
-                if (testOrder.qty != 1) {
-                    testOrder.price = value.calCprice;
-                }
-            }
-            testOrder.isCito = 0;
-            testOrder.type = value.types?.type;
-            if (value.types?.type === 1) {
-                testOrder.deviceId = value.deviceId;
-                testOrder.typeId = value.xrayTypeId;
-            } else if (value.types?.type === 0) {
-                testOrder.typeId = value.examinationTypeId;
-                testOrder.requestDate = new Date();
-            } else {
-                testOrder.requestDate = new Date();
-            }
-            testOrder.usageType = 'OUT';
-            setOrders([...orders, testOrder]);
-            orderForm.setFieldValue('services', orders);
-            setTotal(total + testOrder.price);
-        }
-    }
-
-    const remove = (index) => {
-        if (isPackage) {
-            var arr = [...packages];
-            arr.splice(index, 1);
-            setPackages(arr);
-        } else {
-            var arr = [...orders];
-            arr.splice(index, 1);
-            setTotal(total - orders[index].price);
-            setOrders(arr);
-        }
-    }
 
     const newModalXray = (index, deviceId) => {
         if (!deviceId) {
@@ -264,6 +184,10 @@ function Order({ isPackage, isDoctor, categories, save }) {
     const [showTreatment, setShowTreatment] = useState(false);
     const [showXray, setShowXray] = useState(false);
     const [showInpatient, setShowInpatient] = useState(false);
+    const [showPackage, setShowPackage] = useState(false);
+    //
+    const [showDoctorInspection, setShowDoctorInspection] = useState(false);
+    //
     const [orderForm] = Form.useForm();
     const tt = {
         m: {
@@ -328,6 +252,10 @@ function Order({ isPackage, isDoctor, categories, save }) {
             setShowTreatment(state);
         } else if (name === 'xray') {
             setShowXray(state);
+        } else if (name === 'package') {
+            setShowPackage(state);
+        } else if (name === 'doctorInspection') {
+            setShowDoctorInspection(state);
         }
     };
     const inpatientRequestClick = async (values) => {
@@ -358,10 +286,11 @@ function Order({ isPackage, isDoctor, categories, save }) {
             // setModalBody(<Endo handleclick={handleclick} />);
             // setModalTitle('Дуран сонгох');
         } else if (category.name === 'Package') {
-            // setModalBody(<Package handleclick={handleclick} />);
-            // setModalTitle('Багц сонгох');
+            setShowPackage(true);
         } else if (category.name === 'Inpatient') {
             setShowInpatient(true);
+        } else if (category.name === 'doctorInspection') {
+            setShowDoctorInspection(true);
         }
     };
     //
@@ -371,7 +300,9 @@ function Order({ isPackage, isDoctor, categories, save }) {
             {showXray && <Xray isOpen={showXray} isClose={isClose} handleclick={handleclick} />}
             {showTreatment && <Treatment isOpen={showTreatment} isClose={isClose} handleclick={handleclick} />}
             {showMedicine && <Medicine isOpen={showMedicine} isClose={isClose} handleclick={handleclick} />}
+            {showPackage && <Package isOpen={showPackage} isClose={isClose} handleclick={handleclick} />}
             {showInpatient && <InpatientRequest isOpen={showInpatient} isClose={isClose} handleClick={inpatientRequestClick} />}
+            {showDoctorInspection && <DoctorInspection isOpen={showDoctorInspection} isClose={isClose} handleclick={handleclick} />}
             <div className="flex flex-wrap">
                 <div className="w-full pb-4">
                     {
@@ -389,7 +320,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                 save(values.services);
                                 console.log(values);
                             })}
-                    >OCS Хадгалах</Button>
+                    >{isPackage ? "Багц хадгалах" : "OCS Хадгалах"}</Button>
                 </div>
                 <div className='w-full'>
                     <Form form={orderForm}>
@@ -400,180 +331,189 @@ function Order({ isPackage, isDoctor, categories, save }) {
                                         <div className='table-responsive pb-4' id='style-8' style={{ maxHeight: '420px' }}>
                                             <Table className='ant-border-space' style={{ width: '100%' }}>
                                                 <thead className='ant-table-thead bg-slate-200'>
-                                                    <tr>
-                                                        <th className="font-bold text-sm align-middle">cito</th>
-                                                        <th className="font-bold text-sm align-middle">Нэр</th>
-                                                        <th className="font-bold text-sm align-middle">Хэлбэр</th>
-                                                        <th className="font-bold text-sm align-middle">Тун</th>
-                                                        <th className="font-bold text-sm align-middle">Сорьц</th>
-                                                        <th className="font-bold text-sm align-middle">m</th>
-                                                        <th className="font-bold text-sm align-middle">d</th>
-                                                        <th className="font-bold text-sm align-middle">e</th>
-                                                        <th className="font-bold text-sm align-middle">n</th>
-                                                        <th className="font-bold text-sm align-middle">Заавар (тэмдэглэл)</th>
-                                                        <th className="font-bold text-sm align-middle">Хугацаа(Өдөр)</th>
-                                                        <th className="font-bold text-sm align-middle">Нийт хэмжээ</th>
-                                                        <th className="font-bold text-sm align-middle">Огноо</th>
-                                                        <th className="font-bold text-sm align-middle">Үнэ</th>
-                                                        <th></th>
-                                                    </tr>
+                                                    {
+                                                        isPackage ?
+                                                            <tr>
+                                                                <th>Нэр</th>
+                                                                <th></th>
+                                                            </tr>
+                                                            :
+                                                            <tr>
+                                                                <th className="font-bold text-sm align-middle">cito</th>
+                                                                <th className="font-bold text-sm align-middle">Нэр</th>
+                                                                <th className="font-bold text-sm align-middle">Хэлбэр</th>
+                                                                <th className="font-bold text-sm align-middle">Тун</th>
+                                                                <th className="font-bold text-sm align-middle">Сорьц</th>
+                                                                <th className="font-bold text-sm align-middle">m</th>
+                                                                <th className="font-bold text-sm align-middle">d</th>
+                                                                <th className="font-bold text-sm align-middle">e</th>
+                                                                <th className="font-bold text-sm align-middle">n</th>
+                                                                <th className="font-bold text-sm align-middle">Заавар (тэмдэглэл)</th>
+                                                                <th className="font-bold text-sm align-middle">Хугацаа(Өдөр)</th>
+                                                                <th className="font-bold text-sm align-middle">Нийт хэмжээ</th>
+                                                                <th className="font-bold text-sm align-middle">Огноо</th>
+                                                                <th className="font-bold text-sm align-middle">Үнэ</th>
+                                                                <th></th>
+                                                            </tr>
+                                                    }
                                                 </thead>
                                                 <tbody className='ant-table-tbody p-0'>
                                                     {
-                                                        isPackage ?
-                                                            packages?.map((pack, index) => {
-                                                                return (
-                                                                    <tr key={index} onDoubleClick={() => remove(index)}>
-                                                                        <td>ddd</td>
-                                                                        <td>{pack.serviceName}</td>
-                                                                        <td>{pack.servicePrice}</td>
-                                                                    </tr>
-                                                                )
-                                                            })
-                                                            :
-                                                            fields?.map(({ key, name, }) => (
-                                                                <tr key={key} className='ant-table-row ant-table-row-level-0'>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'isCito']}
-                                                                            valuePropName='checked'
-                                                                            className="mb-0 hover:bg-transparent"
-                                                                        >
-                                                                            <Checkbox className="bg-transparent align-middle items-center" />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>{orderForm.getFieldValue(['services', name, 'name'])}</td>
-                                                                    <td>{orderForm.getFieldValue(['services', name, 'medicineType'])}</td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'dose']}
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <Input disabled={orderForm.getFieldValue(['services', name, 'type']) === 8 ? false : true} />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'specimen']}
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <Input disabled={orderForm.getFieldValue(['services', name, 'type']) === 0 ? false : true} />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'm']}
-                                                                            valuePropName='checked'
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <Checkbox
-                                                                                onChange={(e) => qtyCalculator("m", e.target.checked, name)}
-                                                                                className="items-center"
-                                                                                disabled={
-                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                                                        orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
-                                                                                        :
-                                                                                        true
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'd']}
-                                                                            valuePropName='checked'
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <Checkbox
-                                                                                onChange={(e) => qtyCalculator("d", e.target.checked, name)}
-                                                                                className="items-center"
-                                                                                disabled={
-                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                                                        orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
-                                                                                        :
-                                                                                        true
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'e']}
-                                                                            valuePropName='checked'
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <Checkbox
-                                                                                onChange={(e) => qtyCalculator("e", e.target.checked, name)}
-                                                                                className="items-center"
-                                                                                disabled={
-                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                                                        orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
-                                                                                        :
-                                                                                        true
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'n']}
-                                                                            valuePropName='checked'
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <Checkbox
-                                                                                onChange={(e) => qtyCalculator("n", e.target.checked, name)}
-                                                                                className="items-center"
-                                                                                disabled={
-                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                                                        orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
-                                                                                        :
-                                                                                        true
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td><Form.Item
-                                                                        name={[name, 'desc']}
-                                                                        className="mb-0"
-                                                                    >
-                                                                        <Input disabled={true} />
-                                                                    </Form.Item></td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'dayLength']}
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <InputNumber
-                                                                                onChange={(e) => totalCalculator(e, name)}
-                                                                                disabled={
-                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                                                        orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
-                                                                                        :
-                                                                                        true
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>
-                                                                        <Form.Item
-                                                                            name={[name, 'total']}
-                                                                            className="mb-0"
-                                                                        >
-                                                                            <InputNumber
-                                                                                disabled={
-                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                                                        orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
-                                                                                        :
-                                                                                        true
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    </td>
-                                                                    <td>{orderForm.getFieldValue(['services', name, 'requestDate'])}</td>
-                                                                    <td>{orderForm.getFieldValue(['services', name, 'price'])}</td>
-                                                                    <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} /></td>
-                                                                </tr>
-                                                            ))
+                                                        fields?.map(({ key, name }) => {
+                                                            return (
+                                                                <>
+                                                                    {
+                                                                        isPackage ?
+                                                                            <tr key={key} className='ant-table-row ant-table-row-level-0'>
+                                                                                <td>{orderForm.getFieldValue(['services', name, 'serviceName'])}</td>
+                                                                                <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} /></td>
+                                                                            </tr>
+                                                                            :
+                                                                            <tr key={key} className='ant-table-row ant-table-row-level-0'>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'isCito']}
+                                                                                        valuePropName='checked'
+                                                                                        className="mb-0 hover:bg-transparent"
+                                                                                    >
+                                                                                        <Checkbox className="bg-transparent align-middle items-center" />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>{orderForm.getFieldValue(['services', name, 'name'])}</td>
+                                                                                <td>{orderForm.getFieldValue(['services', name, 'medicineType'])}</td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'dose']}
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <Input disabled={orderForm.getFieldValue(['services', name, 'type']) === 8 ? false : true} />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'specimen']}
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <Input disabled={orderForm.getFieldValue(['services', name, 'type']) === 0 ? false : true} />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'm']}
+                                                                                        valuePropName='checked'
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <Checkbox
+                                                                                            onChange={(e) => qtyCalculator("m", e.target.checked, name)}
+                                                                                            className="items-center"
+                                                                                            disabled={
+                                                                                                orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
+                                                                                                    :
+                                                                                                    true
+                                                                                            }
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'd']}
+                                                                                        valuePropName='checked'
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <Checkbox
+                                                                                            onChange={(e) => qtyCalculator("d", e.target.checked, name)}
+                                                                                            className="items-center"
+                                                                                            disabled={
+                                                                                                orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
+                                                                                                    :
+                                                                                                    true
+                                                                                            }
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'e']}
+                                                                                        valuePropName='checked'
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <Checkbox
+                                                                                            onChange={(e) => qtyCalculator("e", e.target.checked, name)}
+                                                                                            className="items-center"
+                                                                                            disabled={
+                                                                                                orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
+                                                                                                    :
+                                                                                                    true
+                                                                                            }
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'n']}
+                                                                                        valuePropName='checked'
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <Checkbox
+                                                                                            onChange={(e) => qtyCalculator("n", e.target.checked, name)}
+                                                                                            className="items-center"
+                                                                                            disabled={
+                                                                                                orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
+                                                                                                    :
+                                                                                                    true
+                                                                                            }
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td><Form.Item
+                                                                                    name={[name, 'desc']}
+                                                                                    className="mb-0"
+                                                                                >
+                                                                                    <Input disabled={true} />
+                                                                                </Form.Item></td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'dayLength']}
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <InputNumber
+                                                                                            onChange={(e) => totalCalculator(e, name)}
+                                                                                            disabled={
+                                                                                                orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
+                                                                                                    :
+                                                                                                    true
+                                                                                            }
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <Form.Item
+                                                                                        name={[name, 'total']}
+                                                                                        className="mb-0"
+                                                                                    >
+                                                                                        <InputNumber
+                                                                                            disabled={
+                                                                                                orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                                                                    orderForm.getFieldValue(['services', name, 'type']) === 2 ? false
+                                                                                                    :
+                                                                                                    true
+                                                                                            }
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </td>
+                                                                                <td>{orderForm.getFieldValue(['services', name, 'requestDate'])}</td>
+                                                                                <td>{orderForm.getFieldValue(['services', name, 'price'])}</td>
+                                                                                <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} /></td>
+                                                                            </tr>
+                                                                    }
+                                                                </>
+                                                            )
+                                                        })
                                                     }
                                                 </tbody>
                                             </Table>
@@ -589,7 +529,7 @@ function Order({ isPackage, isDoctor, categories, save }) {
                         <p className="float-right font-extrabold">{total}₮</p>
                     </div>
                 </div>
-            </div>
+            </div >
             <div className="flex flex-wrap">
                 <Modal
                     open={isXrayModal}

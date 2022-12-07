@@ -190,16 +190,15 @@ function Ambulatory() {
                     >
                         <div className="flex flex-wrap">
                             <div className="w-full md:w-1/3 xl:1/3">
-                                <Button className="bg-sky-700 w-full" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
+                                <Button className="bg-[#2d8cff] w-full" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
                             </div>
                             <div className="w-full md:w-1/3 xl:1/3">
-                                <Button className="bg-sky-700 w-full" type="primary">Хэвтэн эмчлүүлэх</Button>
+                                <Button className="bg-[#2d8cff] w-full" type="primary">Хэвтэн эмчлүүлэх</Button>
                             </div>
                             <div className="w-full md:w-1/3 xl:1/3">
-                                <Button className="bg-sky-700 w-full" type="primary">Хэвтэн эмчлүүлэх цонх</Button>
+                                <Button className="bg-[#2d8cff] w-full" type="primary">Хэвтэн эмчлүүлэх цонх</Button>
                             </div>
                         </div>
-                        <Button onClick={() => sendData()}>SENDATA</Button>
                     </Card>
                 </div>
                 <div className="w-full p-1">

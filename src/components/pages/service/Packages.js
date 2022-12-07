@@ -24,12 +24,17 @@ function Packages() {
         {
             //shinejilgee
             name: "Examination",
-            label: 'Шинэжилгээ'
+            label: 'Шинжилгээ'
         },
         {
             //onshilgoo
             name: "Xray",
             label: "Оношилгоо"
+        },
+        {
+            //mes zasal
+            name: 'Surgury',
+            label: "Мэс засал"
         },
         {
             //emchilgee
@@ -41,6 +46,11 @@ function Packages() {
             name: "Endo",
             label: "Дуран"
         },
+        {
+            //emchind uzleg
+            name: 'doctorInspection',
+            label: "Эмчийн үзлэг"
+        }
     ];
     const checkNumber = (event) => {
         var charCode = event.charCode
@@ -86,7 +96,7 @@ function Packages() {
     }
 
     const AddServices = async (value) => {
-        console.log("=======>");
+        console.log("=======>", value);
         setIsOpenSecondModal(false);
         if (editMode) {
             var arr = await form.validateFields();
@@ -184,13 +194,20 @@ function Packages() {
                 onCancel={() => setIsOpenModal(false)}
                 onOk={savePack}
                 open={isOpenModal}
-                width={'50%'}
+            // width={'50%'}
             >
                 <Form
                     form={form}
+                    labelAlign={"right"}
+                    labelCol={{
+                        span: 8,
+                    }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
                 >
                     <Row gutter={[8, 8]}>
-                        <Col span={12}>
+                        <Col span={24}>
                             <Form.Item
                                 label='Багц нэр'
                                 name="name"
@@ -204,7 +221,7 @@ function Packages() {
                                 <Input placeholder="Багц нэр" />
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col span={24}>
                             <Form.Item
                                 label='Үнэ'
                                 name="price"
@@ -218,7 +235,7 @@ function Packages() {
                                 <InputNumber placeholder="Үнэ" onKeyPress={checkNumber} />
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col span={24}>
                             <Form.Item
                                 label='Насны доод'
                                 name="minAge"
@@ -232,7 +249,7 @@ function Packages() {
                                 <InputNumber placeholder="Насны доод" onKeyPress={checkNumber} />
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col span={24}>
                             <Form.Item
                                 label='Насны дээд'
                                 name="maxAge"
@@ -256,10 +273,9 @@ function Packages() {
                                                     <thead className='ant-table-thead bg-slate-200'>
                                                         <tr>
                                                             <th>Нэр</th>
-                                                            <th>Yнэ</th>
-                                                            <th>Үйлдэл</th>
                                                             <th>
                                                                 <Button
+                                                                    className="btn-add"
                                                                     onClick={() => setIsOpenSecondModal(true)}
                                                                 >
                                                                     нэмэх
@@ -270,20 +286,7 @@ function Packages() {
                                                     <tbody>
                                                         {fields.map(({ key, name, }) => (
                                                             <tr key={key}>
-                                                                <td>
-                                                                    <Form.Item
-                                                                        name={[name, 'serviceName']}
-                                                                    >
-                                                                        <Input disabled={true} />
-                                                                    </Form.Item>
-                                                                </td>
-                                                                <td>
-                                                                    <Form.Item
-                                                                        name={[name, 'servicePrice']}
-                                                                    >
-                                                                        <Input disabled={true} />
-                                                                    </Form.Item>
-                                                                </td>
+                                                                <td>{form.getFieldValue(['services', name, 'serviceName'])}</td>
                                                                 <td>
                                                                     <MinusCircleOutlined onClick={() => remove(name)} />
                                                                 </td>
