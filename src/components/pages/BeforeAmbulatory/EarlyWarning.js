@@ -7,7 +7,7 @@ import { selectCurrentToken } from "../../../features/authReducer";
 import { Table } from "react-bootstrap";
 import { Get, Post } from "../../comman";
 
-export default function EarlyWarning({ PatientId }) {
+export default function EarlyWarning({ PatientId, listId }) {
   const token = useSelector(selectCurrentToken);
   const config = {
     headers: {},
@@ -80,6 +80,7 @@ export default function EarlyWarning({ PatientId }) {
   };
   const createAssesment = async () => {
     formValues.patientId = PatientId;
+    formValues.appointmentId = listId;
     const response = await Post("assesment", token, config, formValues);
     console.log(response);
     resetFormFields();

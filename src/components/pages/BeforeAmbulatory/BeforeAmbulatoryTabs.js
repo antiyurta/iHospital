@@ -3,12 +3,12 @@ import React from "react";
 import { Tabs } from "antd";
 import EarlyWarning from "./EarlyWarning";
 
-export default function BeforeAmbulatoryTabs({ patientId }) {
+export default function BeforeAmbulatoryTabs({ patientId, listId }) {
   const items = [
     {
       label: "Эрт сэрэмжлүүлэх үнэлгээ",
       key: "item-1",
-      children: <EarlyWarning PatientId={patientId} />,
+      children: <EarlyWarning PatientId={patientId} listId={listId} />,
     },
     {
       label: "Өвчтөний түүх",

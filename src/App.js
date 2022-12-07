@@ -61,6 +61,7 @@ import Permission from "./components/pages/Organization/Permission";
 import Discount from "./components/pages/reference/Discount";
 import NotFound from "./features/notFound";
 import NotPermission from "./features/notPermission";
+import Nurse from "./components/pages/BeforeAmbulatory/Lists/Nurse";
 // lab end
 
 function App() {
@@ -271,6 +272,14 @@ function App() {
             element={
               <PrivateRoute>
                 <BeforeAmbulatoryList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/beforeAmbulatoryExamination"
+            element={
+              <PrivateRoute>
+                <Nurse />
               </PrivateRoute>
             }
           />

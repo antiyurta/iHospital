@@ -1,30 +1,42 @@
 import { Card } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get } from "../../comman";
 import PatientInformation from "../PatientInformation";
 import BeforeAmbulatoryTabs from "./BeforeAmbulatoryTabs";
+import { useLocation } from "react-router-dom";
 
-function BeforeAmbulatoryDetail() {
+function BeforeAmbulatoryDetail(props) {
+  let location = useLocation();
+  console.log("location", location);
   const token = useSelector(selectCurrentToken);
   const config = {
     headers: {},
-    params: {}
+    params: {},
   };
+
   const [selectedPatient, setSelectedPatient] = useState();
-  const onSearch = async (value) => {
-    config.params.registerNumber = value;
-    const response = await Get('pms/patient', token, config);
+  const onSearch = async () => {
+    config.params.registerNumber = location.state?.regNum;
+    const response = await Get("pms/patient", token, config);
     if (response.data.length != 0) {
       setSelectedPatient(response.data[0]);
     }
-  }
+  };
+
+  useEffect(() => {
+    location.state?.regNum && onSearch();
+  }, []);
+
   return (
     <div>
       <div className="flex flex-wrap">
         <div className="w-full md:w-full xl:w-1/2 p-1">
-          <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
+          <PatientInformation
+            patient={selectedPatient}
+            handlesearch={onSearch}
+          />
         </div>
         <div className="w-full md:w-full xl:w-1/2 p-1">
           <Card
@@ -47,7 +59,10 @@ function BeforeAmbulatoryDetail() {
               overflowY: "scroll",
             }}
           >
-            <BeforeAmbulatoryTabs patientId={selectedPatient?.id} />
+            <BeforeAmbulatoryTabs
+              patientId={selectedPatient?.id}
+              listId={location.state?.appointmentId}
+            />
           </Card>
         </div>
       </div>

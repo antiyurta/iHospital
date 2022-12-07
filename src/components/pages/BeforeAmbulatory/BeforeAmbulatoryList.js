@@ -3,7 +3,6 @@ import React from "react";
 import { Tabs } from "antd";
 //
 import Ambulatory from "./Lists/Ambulatory";
-import Nurse from "./Lists/Nurse";
 import PatientList from "./Lists/PatientList";
 //
 export default function BeforeAmbulatoryList() {
@@ -14,13 +13,8 @@ export default function BeforeAmbulatoryList() {
       children: <Ambulatory />,
     },
     {
-      label: "Suwilagch",
-      key: "2",
-      children: <Nurse />,
-    },
-    {
       label: "Хэвтэн",
-      key: "3",
+      key: "2",
       children: <PatientList />,
     },
   ];

@@ -617,7 +617,7 @@ function Patient() {
                         },
                       ]}
                     >
-                      <Select defaultValue={1}>
+                      <Select defaultValue={18}>
                         {/* Монголын ID === 1 */}
                         {citizens.map((citizen, index) => {
                           return (
@@ -798,6 +798,7 @@ function Patient() {
                           <Form.Item label="Аймаг/Хот:" name={"aimagId"}>
                             <Select onChange={filterTowns}>
                               {provices.map((provice, index) => {
+                                console.log("provice", provice);
                                 return (
                                   <Option key={index} value={provice.id}>
                                     {provice.name}
