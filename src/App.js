@@ -260,7 +260,7 @@ function App() {
             }
           />
           <Route
-            path="/beforeAmbulatoryExamination"
+            path="/enrAmbulatoryList"
             element={
               <PrivateRoute>
                 <Nurse />
