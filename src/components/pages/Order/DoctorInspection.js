@@ -1,52 +1,54 @@
+import { CloseOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
+import { useEffect } from "react";
+import { useState } from "react";
 import { Table } from "react-bootstrap";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi } from "../../comman";
-import { CloseOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
 
-function Package({ isOpen, isClose, handleclick }) {
+function DoctorInspection({ isOpen, isClose, handleclick }) {
+
     const token = useSelector(selectCurrentToken);
     const config = {
         headers: {},
         params: {}
-    }
-    const [packages, setPackages] = useState([]);
-    const [selectedPackages, setSelectedPackages] = useState([]);
-
-    const getPackages = async () => {
-        const response = await Get('service/package', token, config);
-        setPackages(response.data);
-    }
-    const add = (packge) => {
-        const state = selectedPackages.includes(packge);
+    };
+    const [inspections, setInspections] = useState([]);
+    const [selectedInspections, setSelectedInspections] = useState([]);
+    const getInspections = async () => {
+        config.params.type = 3;
+        const response = await Get('organization/structure', token, config);
+        setInspections(response.data);
+        config.params.type = null;
+    };
+    const add = (inspection) => {
+        const state = selectedInspections.includes(inspection);
         if (state) {
             openNofi("warning", "EXA", "EXA сонгогдсон байна");
         } else {
-            packge.type = 7;
-            setSelectedPackages([...selectedPackages, packge]);
+            inspection.type = 5;
+            setSelectedInspections([...selectedInspections, inspection]);
         }
     };
     const remove = (index) => {
-        var arr = [...selectedPackages];
+        var arr = [...selectedInspections];
         arr.splice(index, 1);
-        setSelectedPackages(arr);
+        setSelectedInspections(arr);
     };
     useEffect(() => {
-        getPackages();
-    }, [isOpen])
-
+        getInspections();
+    }, [isOpen]);
     return (
         <>
             <Modal
-                title="Шинжилгээ сонгох"
+                title="Үзлэг сонгох"
                 width={"80%"}
                 open={isOpen}
-                onCancel={() => isClose("package", false)}
+                onCancel={() => isClose("doctorInspection", false)}
                 onOk={() => {
-                    handleclick(selectedPackages);
-                    isClose("package", false);
+                    handleclick(selectedInspections);
+                    isClose("doctorInspection", false);
                 }}
             >
                 <div className="flex flex-row">
@@ -63,7 +65,7 @@ function Package({ isOpen, isClose, handleclick }) {
                                     </tr>
                                 </thead>
                                 <tbody className="ant-table-tbody p-0">
-                                    {packages.map((item, index) => {
+                                    {inspections.map((item, index) => {
                                         return (
                                             <tr
                                                 onDoubleClick={() => add(item)}
@@ -92,7 +94,7 @@ function Package({ isOpen, isClose, handleclick }) {
                                     </tr>
                                 </thead>
                                 <tbody className="ant-table-tbody p-0">
-                                    {selectedPackages.map((item, index) => {
+                                    {selectedInspections.map((item, index) => {
                                         return (
                                             <tr
                                                 key={index}
@@ -117,7 +119,6 @@ function Package({ isOpen, isClose, handleclick }) {
                 </div>
             </Modal>
         </>
-
     )
 }
-export default Package;
+export default DoctorInspection;

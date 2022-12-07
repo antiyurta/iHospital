@@ -341,7 +341,6 @@ function DoctorAppointment() {
                                           patientId: selectedPatient.id,
                                           doctorId: schedule.doctorId,
                                           cabinetId: schedule.cabinetId,
-                                          hospitalId: 1,
                                         }
                                       )
                                     }

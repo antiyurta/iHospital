@@ -168,6 +168,8 @@ function Menu() {
                         console.log(error);
                     })}
                 onCancel={() => setIsOpenModal(false)}
+                okText="Хадгалах"
+                cancelText="Болих"
             >
                 <Form form={form}>
                     <Form.Item
@@ -176,7 +178,7 @@ function Menu() {
                         valuePropName="checked"
                         initialValue={isSubMenu}
                     >
-                        <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" onChange={() => setIsSubMenu(!isSubMenu)} />
+                        <Switch className="bg-[#2d8cff]" checkedChildren="Тийм" unCheckedChildren="Үгүй" onChange={() => setIsSubMenu(!isSubMenu)} />
                     </Form.Item>
                     {
                         !isSubMenu &&

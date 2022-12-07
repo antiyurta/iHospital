@@ -23,7 +23,7 @@ export default function ProgressNotes({ Appointments }) {
   const [isOpenModalPrescription, setIsOpenModalPrescription] = useState(false);
   const onChange = async (id) => {
     if (id) {
-      const response = await Get('appointment/' + id, token, config);
+      const response = await Get('appointment/show/' + id, token, config);
       if (response.inspectionNotes.length > 0) {
         setInspectionNotes(response.inspectionNotes);
         setServiceRequests(response.serviceRequests);

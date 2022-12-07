@@ -10,6 +10,10 @@ function PatientInformation({
   OCS,
   type,
 }) {
+  const onSearch = async (value) => {
+    handlesearch(value);
+  };
+
   const handleTypeChangePatient = async (value) => {
     handleTypeChange(value);
   };
@@ -60,6 +64,13 @@ function PatientInformation({
         minHeight: 300,
         maxHeight: 300,
       }}
+      extra={
+        <Search
+          placeholder="Регистр хайх"
+          onSearch={onSearch}
+          enterButton="Хайх"
+        />
+      }
     >
       <div className="flex flex-row">
         <div className="basis-1/3">

@@ -101,7 +101,7 @@ function EMR() {
     config.params.patientId = null;
   };
   const getProblems = async (id) => {
-    const response = await Get("appointment/" + id, token, config);
+    const response = await Get("appointment/show/" + id, token, config);
     if (response.inspectionNotes.length > 0) {
       var problem = [];
       response.inspectionNotes.map((note) => {
@@ -136,74 +136,72 @@ function EMR() {
         <div className="flex flex-wrap">
           <div
             className={
-              type === "EMR" ? "w-full md:w-3/5 p-1" : "w-full md:w-2/5 p-1"
+              type === "EMR" ? "w-full md:w-full p-1" : "w-full md:w-3/5 p-1"
             }
           >
-            <PatientInformation
-              patient={selectedPatient}
-              handlesearch={handleSearch}
-              handleTypeChange={handleTypeChange}
-              OCS={true}
-              type={type}
-            />
-          </div>
-          <div
-            className={
-              type === "EMR" ? "w-full md:w-2/5 p-1" : "w-full md:w-1/5 p-1"
-            }
-          >
-            <Card
-              bordered={false}
-              title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
-              className="header-solid rounded-md"
-              style={{ height: "100%" }}
-              loading={cardLoading}
-              bodyStyle={{
-                paddingTop: 0,
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingBottom: 10,
-                minHeight: 300,
-                maxHeight: 300,
-              }}
-            >
-              <div className="table-responsive p-4 max-h-80" id="style-8">
-                <Table bordered className="ant-border-space">
-                  <thead className="ant-table-thead bg-slate-200">
-                    <tr>
-                      <th>emch</th>
-                      <th>diagnose</th>
-                      <th>date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {problems?.map((problem, idx) => {
-                      return (
-                        <tr key={idx}>
-                          <td>{problem.doctorId}</td>
-                          <td>
-                            <ul className="list-disc list-inside">
-                              {problem.diagnose?.map((diagnose, index) => {
-                                return (
-                                  <li key={index}>
-                                    {diagnose.code + " " + diagnose.nameEn}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </td>
-                          <td>
-                            {moment(problem.inspectionDate).format(
-                              "YYYY-MM-DD"
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </Table>
-              </div>
-            </Card>
+            <div className="pb-1">
+              <PatientInformation
+                patient={selectedPatient}
+                handlesearch={handleSearch}
+                handleTypeChange={handleTypeChange}
+                OCS={true}
+                type={type}
+              />
+            </div>
+            <div className="pt-1">
+              <Card
+                bordered={false}
+                title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
+                className="header-solid rounded-md"
+                style={{ height: "100%" }}
+                loading={cardLoading}
+                bodyStyle={{
+                  paddingTop: 0,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  paddingBottom: 10,
+                  minHeight: 300,
+                  maxHeight: 300,
+                }}
+              >
+                <div className="table-responsive p-4 max-h-80" id="style-8">
+                  <Table bordered className="ant-border-space">
+                    <thead className="ant-table-thead bg-slate-200">
+                      <tr>
+                        <th>emch</th>
+                        <th>diagnose</th>
+                        <th>date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {problems?.map((problem, idx) => {
+                        return (
+                          <tr key={idx}>
+                            <td>{problem.doctorId}</td>
+                            <td>
+                              <ul className="list-disc list-inside">
+                                {problem.diagnose.map((diagnose, index) => {
+                                  return (
+                                    <li key={index}>
+                                      {diagnose.code + " " + diagnose.nameEn}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </td>
+                            <td>
+                              {moment(problem.inspectionDate).format(
+                                "YYYY-MM-DD"
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                </div>
+              </Card>
+            </div>
           </div>
           <div
             className={type === "EMR" ? "w-full p-1" : "w-full md:w-2/5 p-1"}
@@ -219,8 +217,8 @@ function EMR() {
                 paddingLeft: 10,
                 paddingRight: 10,
                 paddingBottom: 10,
-                minHeight: 400,
-                maxHeight: 400,
+                minHeight: 518,
+                maxHeight: 518,
                 overflowX: "hidden",
                 overflowY: "scroll",
               }}
