@@ -1,12 +1,9 @@
 import { Col, Row, Button, Tag, Modal, Input } from "antd";
 import React, { useState, useEffect } from "react";
-import { blue } from "@ant-design/colors";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, openNofi, Post } from "../../comman";
 import UTable from "../../UTable";
 import orderType from "./orderType.json";
-import { SearchOutlined } from "@ant-design/icons";
 
 function PatientListBed() {
   const token = useSelector(selectCurrentToken);

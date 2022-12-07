@@ -365,10 +365,10 @@ function RequestAnalys() {
             dataSource={patientReqList
               ?.filter(
                 (obj) =>
-                  obj.requestId.toString().includes(searchValue) ||
-                  obj.lastName.includes(searchValue) ||
-                  obj.firstName.includes(searchValue) ||
-                  obj.registerNumber.includes(searchValue)
+                  obj.requestId?.toString()?.includes(searchValue) ||
+                  obj.lastName?.toLowerCase()?.includes(searchValue) ||
+                  obj.firstName?.toLowerCase()?.includes(searchValue) ||
+                  obj.registerNumber?.toLowerCase()?.includes(searchValue)
               )
               ?.filter((d) =>
                 d.dtlData?.some((c) => c.examinationProcess === statusFilter)
