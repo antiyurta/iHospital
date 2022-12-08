@@ -40,7 +40,7 @@ function Profile() {
     const getProfile = async () => {
         const response = await Get("authentication", token, config);
         if (!depId) {
-            dispatch(setDepId(response.employee?.depId));
+            dispatch(setDepId(response.employee?.depIds));
         }
         if (!appId) {
             dispatch(setAppId(response.employee?.appId));

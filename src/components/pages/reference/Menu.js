@@ -29,7 +29,9 @@ function Menu() {
         setIsOpenModal(true);
         setEditMode(false);
     }
-    const getMenus = async () => {
+    const getMenus = async (page, pageSize) => {
+        config.params.page = page;
+        config.params.limit = pageSize;
         const response = await Get('reference/menu', token, config);
         if (response.data.length != 0) {
             setMenus(response.data);
@@ -86,7 +88,7 @@ function Menu() {
     };
 
     useEffect(() => {
-        getMenus();
+        getMenus(1,10);
         getIsSubMenu();
     }, [])
 
