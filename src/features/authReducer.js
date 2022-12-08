@@ -4,7 +4,7 @@ export const auth = createSlice({
     name: 'auth',
     initialState: {
         token: '',
-        depId: '',
+        depId: [],
         appId: '',
         userId: '',
     },

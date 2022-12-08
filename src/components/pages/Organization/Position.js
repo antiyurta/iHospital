@@ -18,7 +18,7 @@ function Position() {
     }
     const [departments, setDepartments] = useState([]);
     const getDepartment = async () => {
-        config.params.type = 2;
+        config.params.types = "2,0";
         const response = await Get('organization/structure', token, config);
         setDepartments(response.data);
     }
@@ -29,7 +29,7 @@ function Position() {
     const positionColumn = [
         {
             index: 'parentId',
-            label: 'Тасаг',
+            label: 'Албан нэгж',
             isView: true,
             input: 'select',
             inputData: departments,

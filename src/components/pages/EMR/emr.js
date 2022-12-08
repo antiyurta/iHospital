@@ -303,7 +303,7 @@ function EMR() {
                 </Row>
               }
             >
-              <Ocs handleClick={handleClick} />
+              <Ocs selectedPatient={selectedPatient} handleClick={handleClick} />
             </Card>
           ) : null}
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import Order from "../Order/Order";
 
-export default function Ocs({ handleClick }) {
+export default function Ocs({ selectedPatient, handleClick }) {
   const categories = [
     {
       //omnoh jor
@@ -57,7 +57,7 @@ export default function Ocs({ handleClick }) {
 
   return (
     <div className="items-center">
-      <Order isDoctor={true} categories={categories} save={handleClick} />
+      <Order isDoctor={true} selectedPatient={selectedPatient} categories={categories} save={handleClick} />
     </div>
   );
 }

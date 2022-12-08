@@ -29,7 +29,7 @@ function Bed() {
       index: "bedNumber",
       label: "Ор дугаар",
       isView: true,
-      input: "input",
+      input: "inputNumber",
       col: 24,
     },
     {
