@@ -21,12 +21,12 @@ function Room() {
     setBlocks(response.data);
   };
   const getFloor = async () => {
-    const response = await Get('organization/floor', token, config);
+    const response = await Get("organization/floor", token, config);
     setRoomData(response.data);
   };
   const getStructures = async () => {
     config.params.type = 2;
-    const response = await Get('organization/structure', token, config);
+    const response = await Get("organization/structure", token, config);
     setStructures(response.data);
   };
 
@@ -36,6 +36,11 @@ function Room() {
     getFloor();
   }, []);
 
+  const genderData = [
+    { value: "WOMAN", label: "Эм" },
+    { value: "MAN", label: "Эр" },
+    { value: "TRANS", label: "Эр эм холилдсон" },
+  ];
   const column = [
     {
       index: "structureId",
@@ -54,17 +59,27 @@ function Room() {
       col: 24,
     },
     {
-      index: "price",
-      label: "Өрөөны үнэ",
+      index: "genderType",
+      label: "Хүйс",
       isView: true,
-      input: "inputNumber",
-      col: 24,
+      input: "select",
+      inputData: genderData,
+      relIndex: "label",
+      col: 12,
     },
     {
       index: "isInpatient",
       label: "Хэвтэн эсэх",
       isView: true,
       input: "switch",
+      col: 12,
+      isDepend: true,
+    },
+    {
+      index: "price",
+      label: "Өрөөны үнэ",
+      isView: true,
+      input: "inputNumber",
       col: 24,
     },
     {
@@ -86,14 +101,14 @@ function Room() {
       col: 24,
     },
     {
-      index: 'floorId',
-      label: 'Давхар',
+      index: "floorId",
+      label: "Давхар",
       isView: true,
-      input: 'select',
+      input: "select",
       inputData: roomData,
-      relIndex: 'name',
-      col: 24
-    }
+      relIndex: "name",
+      col: 24,
+    },
   ];
   return (
     <div className="flex flex-wrap">
@@ -107,6 +122,8 @@ function Room() {
           isUpdate={true}
           isDelete={true}
           width="30%"
+          dependCol="isInpatient"
+          dependVal={true}
         />
       </div>
     </div>

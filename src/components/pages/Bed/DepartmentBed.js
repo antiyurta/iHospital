@@ -12,6 +12,7 @@ import {
   Button,
   notification,
   Empty,
+  Select,
 } from "antd";
 import { blue } from "@ant-design/colors";
 import { LineOutlined, SearchOutlined } from "@ant-design/icons";
@@ -32,6 +33,13 @@ const DepartmentBed = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState({});
   const [patientInfoOfBed, setPatientInfoOfBed] = useState(""); //Оронд хэвтэж буй өвчтөний мэдээлэл
+  const [isTransfer, setIsTransfer] = useState(false);
+  const [department, setDepartment] = useState(""); //Тасаг
+  const [rooms, setRooms] = useState([]); //Өрөө
+  const [beds, setBeds] = useState([]); //ор
+  const [selectedDep, setSelectedDep] = useState(""); //Сонгогдсон Тасаг
+  const [selectedRoom, setSelectedRoom] = useState(""); //Сонгогдсон Өрөө
+  const [selectedNewBed, setSelectedNewBed] = useState(""); //Сонгогдсон Ор
   let location = useLocation();
 
   const { Panel } = Collapse;
@@ -48,6 +56,35 @@ const DepartmentBed = (props) => {
     { id: 3, label: "Сул" },
   ];
 
+  const getDepartment = async () => {
+    config.params.type = 2;
+    config.params.startDate = null;
+    config.params.endDate = null;
+    const response = await Get("organization/structure", token, config);
+    // console.log("response", response);
+    if (response.data.length != 0) {
+      response.data.map((el, index) => {
+        setDepartment((department) => [
+          ...department,
+          { label: el.name, value: el.id },
+        ]);
+      });
+    }
+  };
+
+  const getRooms = async () => {
+    config.params.structureId = selectedDep;
+    const response = await Get("organization/room", token, config);
+    // console.log("response InformationBed", response);
+    if (response.data.length != 0) {
+      response.data.map((el, index) => {
+        setRooms((rooms) => [
+          ...rooms,
+          { label: el.roomNumber, value: el.id, beds: el.beds },
+        ]);
+      });
+    }
+  };
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -59,7 +96,7 @@ const DepartmentBed = (props) => {
   const selectRoom = async (room_id) => {
     const response = await Get(`organization/room/${room_id}`, token, config);
     if (response) {
-      console.log("response get Ordered Patient ====>", response);
+      // console.log("response get Ordered Patient ====>", response);
       setSelectedRoomBeds(response); //Өрөөний мэдээлэл state -д хадгалах
     }
   };
@@ -95,16 +132,30 @@ const DepartmentBed = (props) => {
     } else {
       setPatientInfoOfBed("");
     }
-    console.log("response get Ordered Patient ====>", response);
+    // console.log("response get Ordered Patient ====>", response);
   };
 
   useEffect(() => {
+    department === "" && getDepartment();
     if (selectedRoomBeds !== "") {
       showModal(); //Өрөөний мэдээлэл SET хийгдсэний дараа MODAL дуудах
       getOrderedPatient();
     }
   }, [selectedRoomBeds]);
-
+  useEffect(() => {
+    setRooms([]);
+    getRooms();
+  }, [selectedDep]);
+  useEffect(() => {
+    rooms &&
+      rooms?.map((el) => {
+        if (el.value === selectedRoom) {
+          el.beds.map((el, bedIndex) => {
+            setBeds((beds) => [...beds, { label: el.bedNumber, value: el.id }]);
+          });
+        }
+      });
+  }, [selectedRoom]);
   //Оронд хуваарилж хэвтүүлэх
   const setPatientBed = async (inpatient_request_id) => {
     if (selectedBed === "" || selectedBed.status !== 3) {
@@ -131,7 +182,7 @@ const DepartmentBed = (props) => {
         setSelectedBed("");
         selectRoom(selectedBed.roomId);
       }
-      console.log("response set PatientBed ====>", response);
+      // console.log("response set PatientBed ====>", response);
     }
   };
   //Өвчтөнг орноос гаргах
@@ -153,6 +204,37 @@ const DepartmentBed = (props) => {
       selectRoom(selectedBed.roomId);
     }
     // console.log("response set PatientBed ====>", response);
+  };
+  const handleChangeTransfer = (value) => {
+    setRooms([]);
+    setSelectedDep(value);
+  };
+  const handleChangeRoom = (value) => {
+    setBeds([]);
+    setSelectedRoom(value);
+  };
+  const handleChangeBed = (value) => {
+    setSelectedNewBed(value);
+  };
+  useEffect(() => {
+    console.log("patientInfoOfBed", patientInfoOfBed);
+  }, [patientInfoOfBed]);
+
+  const transferPatient = async (inpatient_request_id) => {
+    console.log("inpatient_request_id", inpatient_request_id);
+    //Өвчтөн шилжүүлэх
+    data.departmentId = selectedDep;
+    data.roomId = selectedRoom;
+    data.bedOutId = selectedBed.id;
+    data.bedInId = selectedNewBed;
+    data.process = 2;
+    const response = await Patch(
+      `service/inpatient-request/switch/${inpatient_request_id}`,
+      token,
+      config,
+      data
+    );
+    console.log("response", response);
   };
   return (
     <div className="p-6">
@@ -434,6 +516,12 @@ const DepartmentBed = (props) => {
                     <div>
                       <div className="text-right">
                         <Button
+                          className="mr-3"
+                          onClick={() => setIsTransfer(!isTransfer)}
+                        >
+                          Шилжүүлэх
+                        </Button>
+                        <Button
                           type="primary"
                           className="custom-primary-btn"
                           onClick={() => outPatientBed(patientInfoOfBed.id)}
@@ -441,6 +529,50 @@ const DepartmentBed = (props) => {
                           Гаргах
                         </Button>
                       </div>
+                      {isTransfer ? (
+                        <div className="border-solid border p-4 rounded-xl mt-2">
+                          <div>
+                            <Select
+                              style={{
+                                width: 200,
+                              }}
+                              onChange={handleChangeTransfer}
+                              value={selectedDep || undefined}
+                              options={department}
+                              placeholder="Тасаг"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Select
+                              style={{
+                                width: 200,
+                              }}
+                              onChange={handleChangeRoom}
+                              value={selectedRoom || undefined}
+                              options={rooms}
+                              placeholder="Өрөө"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Select
+                              style={{
+                                width: 200,
+                              }}
+                              onChange={handleChangeBed}
+                              value={selectedNewBed || undefined}
+                              options={beds}
+                              placeholder="Ор"
+                            />
+                          </div>
+                          <Button
+                            type="primary"
+                            className="custom-primary-btn"
+                            onClick={() => transferPatient(patientInfoOfBed.id)}
+                          >
+                            Хадгалах
+                          </Button>
+                        </div>
+                      ) : null}
                     </div>
                   </Panel>
                 </Collapse>
