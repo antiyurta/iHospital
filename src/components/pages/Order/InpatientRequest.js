@@ -1,6 +1,5 @@
 import { Form, InputNumber, Modal, Select } from "antd";
 import { useState } from "react";
-import { openNofi } from "../../comman";
 const { Option } = Select;
 function InpatientRequest({ isOpen, isClose, handleClick }) {
     const [InpatientRequestForm] = Form.useForm();
@@ -72,7 +71,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                         </div>
                         <div className="w-full">
                             <Form.Item
-                                label="Хэвтэх өдөр"
+                                label="Хэвтэх хоног"
                                 name="duration"
                                 rules={[
                                     {

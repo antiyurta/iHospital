@@ -121,7 +121,6 @@ export async function Delete(url, token, config) {
     })
 }
 
-
 export const ScrollRef = (scrollRef) => {
     const el = scrollRef.current;
     if (el) {
@@ -142,4 +141,10 @@ export const openNofi = (type, message, description) => {
         message: `${message}`,
         description: `${description}`
     })
+}
+
+export const numberToCurrency = (amount) => {
+    return (
+        amount.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })
+    )
 }

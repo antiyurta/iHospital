@@ -12,7 +12,7 @@ export default function MainAmbulatory({ patientId, appointments }) {
       children: <ProgressNotes Appointments={appointments} />,
     },
     {
-      label: "Явцын үзлэг",
+      label: "Амьдралын түүх",
       key: "item-7",
       children: <ProgressCheck PatientId={patientId} />
     },
@@ -21,26 +21,26 @@ export default function MainAmbulatory({ patientId, appointments }) {
       key: "item-6",
       children: <NurseNote PatientId={patientId} />,
     },
-    {
-      label: "Оношилгоо",
-      key: "item-2",
-      // children: <ProgressNotes />,
-    },
-    {
-      label: "Эмийн эмчилгээ",
-      key: "item-3",
-      // children: <ProgressNotes />,
-    },
-    {
-      label: "Шинжилгээний хариу",
-      key: "item-4",
-      // children: <ProgressNotes />,
-    },
-    {
-      label: "Эмийн бус эмчилгээ",
-      key: "item-5",
-      // children: <ProgressNotes />,
-    },
+    // {
+    //   label: "Оношилгоо",
+    //   key: "item-2",
+    //   // children: <ProgressNotes />,
+    // },
+    // {
+    //   label: "Эмийн эмчилгээ",
+    //   key: "item-3",
+    //   // children: <ProgressNotes />,
+    // },
+    // {
+    //   label: "Шинжилгээний хариу",
+    //   key: "item-4",
+    //   // children: <ProgressNotes />,
+    // },
+    // {
+    //   label: "Эмийн бус эмчилгээ",
+    //   key: "item-5",
+    //   // children: <ProgressNotes />,
+    // },
   ];
-  return <Tabs size="small" items={items} />;
+  return <Tabs type="card" size="small" items={items} />;
 }

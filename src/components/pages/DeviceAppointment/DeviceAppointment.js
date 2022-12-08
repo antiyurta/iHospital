@@ -8,6 +8,7 @@ import { Get, Post } from "../../comman";
 import UTable from "../../UTable";
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 function DeviceAppointment() {
     const token = useSelector(selectCurrentToken);
@@ -69,16 +70,22 @@ function DeviceAppointment() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [deviceList, setDeviceList] = useState([]);
     //
-    const [deviceId, setDeviceId] = useState(1);
+    const [deviceId, setDeviceId] = useState(Number);
     const [examDate, setExamDate] = useState('');
     //
     const [form] = Form.useForm();
 
-    const getDa = async () => {
-        config.params.deviceId = deviceId;
-        // config.params.examDate = moment(examDate).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
-        const response = await Get('device-booking/schedule', token, config);
-        console.log(response);
+    const getDa = async (e) => {
+        if (e) {
+            const startDate = moment(e[0]).format('YYYY-MM-DD');
+            const endDate = moment(e[1]).format('YYYY-MM-DD');
+            console.log(startDate, endDate);
+            config.params.deviceId = deviceId;
+            config.params.startDate = startDate;
+            config.params.endDate = endDate;
+            const response = await Get('device-booking/schedule', token, config);
+            console.log(response);
+        }
     }
 
     const getDeviceList = async () => {
@@ -89,7 +96,6 @@ function DeviceAppointment() {
     }
 
     useEffect(() => {
-        getDa();
         getDeviceList();
     }, [])
 
@@ -107,6 +113,16 @@ function DeviceAppointment() {
                     isDelete={true} />
             </div>
             <div className="w-full">
+                <Select onChange={(e) => setDeviceId(e)} className="w-full">
+                    {
+                        deviceList.map((device, index) => {
+                            return (
+                                <Option key={index} index value={device.id}>{device.name}</Option>
+                            )
+                        })
+                    }
+                </Select>
+                <RangePicker onChange={getDa} />
                 <Card
                     bordered={false}
                     className="header-solid max-h-max rounded-md"

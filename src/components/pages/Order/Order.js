@@ -1,4 +1,4 @@
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal } from "antd";
+import { Button, Calendar, Checkbox, DatePicker, Empty, Form, Input, InputNumber, Modal } from "antd";
 import RecentRecipe from "./RecentRecipe";
 import SetOrder from "./SetOrder";
 import Medicine from "./Medicine";
@@ -14,17 +14,20 @@ import { Table } from "react-bootstrap";
 import { ClockCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../features/authReducer";
-import { Post } from "../../comman";
+import { Get, openNofi, Post } from "../../comman";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
 import DoctorInspection from "./DoctorInspection";
 import Appointment from "../Appointment/Schedule/Appointment";
+import mnMN from "antd/es/calendar/locale/mn_MN";
 //
+const { RangePicker } = DatePicker;
 function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     const token = useSelector(selectCurrentToken);
     const depId = useSelector(selectCurrentDepId);
     const userId = useSelector(selectCurrentUserId);
     const IncomePatientId = useLocation()?.state?.patientId;
+    const IncomeCabinetId = useLocation()?.state?.cabinetId;
     const config = {
         headers: {},
         params: {}
@@ -33,6 +36,10 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     //
     const [isOpenPackageModal, setIsOpenPackageModal] = useState(false);
     const [packageModalData, setPackageModalData] = useState([]);
+    //
+    const [isOpenXrayModal, setIsOpenXrayModal] = useState(false);
+    const [xrayDeviceId, setXrayDeviceId] = useState(Number);
+    const [xrayDeviceSchedules, setXrayDeviceSchedules] = useState([]);
     //
     const [isOpenTreatmentAppointment, setIsOpenTreatmentAppointment] = useState(false);
     //
@@ -56,6 +63,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
             orderForm.setFieldsValue({ services: data });
         } else {
             var services = [];
+            var subTotal = 0;
             console.log(value);
             value.map((item) => {
                 const service = {};
@@ -77,7 +85,9 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                     service.dayLength = 1;
                     service.total = 0;
                 } else if (item.type === 2) {
-                    service.order = <ClockCircleOutlined />
+                    if (item.isSlot) {
+                        service.order = <ClockCircleOutlined />
+                    }
                     service.name = item.name;
                     service.qty = item.qty ? item.qty : 1;
                     if (service.qty != 1) {
@@ -90,6 +100,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                 }
                 service.isCito = false;
                 if (item.type === 1) {
+                    service.order = <ClockCircleOutlined />
                     service.deviceId = item.deviceId;
                     service.typeId = item.xrayTypeId;
                 } else if (item.type === 0) {
@@ -100,6 +111,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                 }
                 service.requestDate = moment(new Date()).format('YYYY-MM-DD');
                 service.usageType = 'OUT';
+                subTotal += service.price;
                 services.push(service);
             });
             var datas = await orderForm.getFieldsValue();
@@ -110,8 +122,19 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                 data = datas.services.concat(services);
             }
             orderForm.setFieldsValue({ services: data });
+            setTotal(total + subTotal);
+            console.log()
         }
     };
+    const removeOrder = (name) => {
+        console.log(name);
+        const orders = orderForm.getFieldsValue('services');
+        var arr = [...orders.services];
+        arr.splice(name, 1);
+        setTotal(total - orders.services[name].price);
+        orderForm.setFieldValue('services', arr);
+    }
+    //
     const [key, setkey] = useState('');
     const [subKey, setSubKey] = useState('');
     const [serviceKey, setServiceKey] = useState('');
@@ -119,12 +142,28 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
         const service = orderForm.getFieldValue([key, key1]);
         setkey(key);
         setSubKey(key1);
-        console.log(service);
         if (service.type === 7) {
             setPackageModalData(service.services);
             setIsOpenPackageModal(true);
+        } else if (service.type === 1) {
+            setXrayDeviceId(service.deviceId);
+            setXrayDeviceSchedules([]);
+            setIsOpenXrayModal(true);
         } else if (service.type === 2) {
             dd(service);
+        }
+    };
+
+    const getXraySchedule = async (dates) => {
+        if (dates) {
+            const startDate = moment(dates[0]).format('YYYY-MM-DD');
+            const endDate = moment(dates[1]).format('YYYY-MM-DD');
+            console.log(startDate, endDate);
+            config.params.deviceId = xrayDeviceId;
+            config.params.startDate = startDate;
+            config.params.endDate = endDate;
+            const response = await Get('device-booking/schedule', token, config);
+            setXrayDeviceSchedules(response.data);
         }
     };
 
@@ -142,7 +181,13 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
         }
     };
 
-    const handleClick = (slotId) => {
+    const handleClickXray = (scheduleId) => {
+        orderForm.setFieldValue([key, subKey, 'scheduleId'], scheduleId);
+        orderForm.setFieldValue([key, subKey, 'order'], <ClockCircleOutlined style={{ color: 'green' }} />);
+        setIsOpenXrayModal(false);
+    };
+
+    const handleClickTreatment = (slotId) => {
         if (slotId) {
             setIsOpenTreatmentAppointment(false);
             if (serviceKey != null) {
@@ -215,6 +260,10 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
         }
         orderForm.setFieldValue(['services', key, 'total'], counter * value);
     };
+    const xrayDateCalculator = (date, hour, minute) => {
+        const cDate = moment(date).set({ hour: hour, minute: minute }).format('YYYY-MM-DD HH:mm');
+        return cDate;
+    };
     const isClose = (name, state) => {
         if (name === 'inpatient') {
             setShowInpatient(state);
@@ -234,37 +283,41 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     };
     const inpatientRequestClick = async (values) => {
         values.patientId = IncomePatientId;
-        values.departmentId = depId;
+        values.cabinetId = IncomeCabinetId;
         const response = await Post('service/inpatient-request', token, config, values);
         setShowInpatient(false);
     };
     const newModalCategory = (category) => {
-        if (category.name === 'Examination') {
-            setShowExamination(true);
-        } else if (category.name === 'Xray') {
-            setShowXray(true);
-        } else if (category.name === 'Medicine') {
-            setShowMedicine(true);
-        } else if (category.name === 'SetOrder') {
-            // setModalBody(<SetOrder handleclick={handleclick} />);
-            // setModalTitle('СетОрдер сонгох');
-        } else if (category.name === 'RecentRecipe') {
-            // setModalBody(<RecentRecipe handleclick={handleclick} />);
-            // setModalTitle('Өмнөх жор сонгох');
-        } else if (category.name === 'Treatment') {
-            setShowTreatment(true);
-        } else if (category.name === 'Surgery') {
-            // setModalBody(<Surgery handleclick={handleclick} />);
-            // setModalTitle('Мэс, засал сонгох');
-        } else if (category.name === 'Endo') {
-            // setModalBody(<Endo handleclick={handleclick} />);
-            // setModalTitle('Дуран сонгох');
-        } else if (category.name === 'Package') {
-            setShowPackage(true);
-        } else if (category.name === 'Inpatient') {
-            setShowInpatient(true);
-        } else if (category.name === 'doctorInspection') {
-            setShowDoctorInspection(true);
+        if (selectedPatient.id) {
+            if (category.name === 'Examination') {
+                setShowExamination(true);
+            } else if (category.name === 'Xray') {
+                setShowXray(true);
+            } else if (category.name === 'Medicine') {
+                setShowMedicine(true);
+            } else if (category.name === 'SetOrder') {
+                // setModalBody(<SetOrder handleclick={handleclick} />);
+                // setModalTitle('СетОрдер сонгох');
+            } else if (category.name === 'RecentRecipe') {
+                // setModalBody(<RecentRecipe handleclick={handleclick} />);
+                // setModalTitle('Өмнөх жор сонгох');
+            } else if (category.name === 'Treatment') {
+                setShowTreatment(true);
+            } else if (category.name === 'Surgery') {
+                // setModalBody(<Surgery handleclick={handleclick} />);
+                // setModalTitle('Мэс, засал сонгох');
+            } else if (category.name === 'Endo') {
+                // setModalBody(<Endo handleclick={handleclick} />);
+                // setModalTitle('Дуран сонгох');
+            } else if (category.name === 'Package') {
+                setShowPackage(true);
+            } else if (category.name === 'Inpatient') {
+                setShowInpatient(true);
+            } else if (category.name === 'doctorInspection') {
+                setShowDoctorInspection(true);
+            }
+        } else {
+            openNofi("error", "Өвчтөн", "Өвчтөн сонгоно уу");
         }
     };
 
@@ -352,7 +405,12 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                                                             </Form.Item>
                                                                         </td>
                                                                         <td>{orderForm.getFieldValue(['services', name, 'name'])}</td>
-                                                                        <td onClick={() => setTime('services', name)}>{orderForm.getFieldValue(['services', name, 'order'])}</td>
+                                                                        {
+                                                                            orderForm.getFieldValue(['services', name, 'order']) ?
+                                                                                <td className="hover:cursor-pointer" onClick={() => setTime('services', name)}>{orderForm.getFieldValue(['services', name, 'order'])}</td>
+                                                                                :
+                                                                                <td></td>
+                                                                        }
                                                                         <td>{orderForm.getFieldValue(['services', name, 'medicineType'])}</td>
                                                                         <td>
                                                                             <Form.Item
@@ -480,8 +538,8 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                                                             </Form.Item>
                                                                         </td>
                                                                         <td>{orderForm.getFieldValue(['services', name, 'requestDate'])}</td>
-                                                                        <td>{orderForm.getFieldValue(['services', name, 'price'])}</td>
-                                                                        <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} /></td>
+                                                                        <td>{orderForm.getFieldValue(['services', name, 'price']).toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })}</td>
+                                                                        <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => removeOrder(name)} /></td>
                                                                     </>
                                                                 }
                                                             </tr>
@@ -496,7 +554,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                     </Form>
                     <div>
                         <p className="float-left font-extrabold">Нийт Үнэ</p>
-                        <p className="float-right font-extrabold">{total}₮</p>
+                        <p className="float-right font-extrabold">{total.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })}</p>
                     </div>
                 </div>
             </div>
@@ -514,13 +572,42 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                 </ul>
             </Modal>
             <Modal
+                title='Оношилгоо цаг сонгох'
+                open={isOpenXrayModal}
+                onCancel={() => setIsOpenXrayModal(false)}
+                footer={null}
+            >
+                <div className="p-2">
+                    <RangePicker locale={mnMN} onChange={getXraySchedule} />
+                </div>
+                {
+                    xrayDeviceSchedules.length > 0 ?
+                        xrayDeviceSchedules.map((schedule, index) => {
+                            return (
+                                <Button
+                                    key={index}
+                                    type="primary"
+                                    className="m-2"
+                                    onClick={() => handleClickXray(schedule.id)}
+                                >
+                                    {xrayDateCalculator(schedule.examDate, schedule.startHour, schedule.startMinute)}
+                                </Button>
+                            )
+                        })
+                        :
+                        <div className="p-1">
+                            <Empty description={"Цаг оруулаагүй"} />
+                        </div>
+                }
+            </Modal>
+            <Modal
                 title="asdasd"
                 width={"100%"}
                 open={isOpenTreatmentAppointment}
                 onCancel={() => setIsOpenTreatmentAppointment(false)}
                 footer={null}
             >
-                <Appointment selectedPatient={selectedPatient} type={2} handleClick={handleClick} />
+                <Appointment selectedPatient={selectedPatient} type={2} handleClick={handleClickTreatment} />
             </Modal>
         </>
     )

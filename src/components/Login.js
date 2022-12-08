@@ -138,7 +138,7 @@ function Login() {
                     </Row>
                 </Content>
                 <Footer>
-                    <Menu mode="horizontal" className="menu-nav-social" items={MenuNav} />
+                    {/* <Menu mode="horizontal" className="menu-nav-social" items={MenuNav} /> */}
                     <p className="copyright">
                         {" "}
                         Copyright © 2022  by <a href="gurensoft.com">GurenSoft LLC</a>.{" "}

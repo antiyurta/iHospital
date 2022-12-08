@@ -47,7 +47,6 @@ export default function HistoryTab({ patientId, inspection }) {
 
   useEffect(() => {
     getPatientHistory(patientId);
-    console.log("==========>", inspection);
   }, [inspection]);
 
   return (

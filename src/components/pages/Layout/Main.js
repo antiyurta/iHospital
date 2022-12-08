@@ -164,7 +164,7 @@ const Main = () => {
                         width: 250,
                         minWidth: 250,
                     }}
-                    className="bg-white"
+                    className="bg-white scroll"
                 >
                     <Sidenav menus={menus} />
                 </Sider>

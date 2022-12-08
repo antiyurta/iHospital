@@ -1,10 +1,10 @@
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { Alert, Card, DatePicker } from "antd";
+import { MinusOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Alert, Button, Card, DatePicker, Input, Pagination } from "antd";
 import mnMN from "antd/es/calendar/locale/mn_MN";
 import moment from "moment";
 import { list } from "postcss";
 import { useEffect, useRef, useState } from "react";
-import { Table } from "react-bootstrap";
+import { Spinner, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
@@ -22,11 +22,20 @@ function Ambulatory() {
         params: {}
     };
     const [appointments, setAppointments] = useState([]);
-    const getAppointment = async () => {
+    const [meta, setMeta] = useState({});
+    const [spinner, setSpinner] = useState(false);
+    const getAppointment = async (page, pageSize) => {
+        setSpinner(false);
         config.params.doctorId = employeeId;
+        config.params.page = page;
+        config.params.limit = pageSize;
         const response = await Get('appointment', token, config);
         setAppointments(response.data);
+        setMeta(response.meta);
         config.params.employeeId = null;
+        config.params.page = null;
+        config.params.limit = null;
+        setSpinner(true);
     }
     const getEMR = (listId, id, cabinetId, inspectionType, isPayment) => {
         // status heregteii anhan dawtan 
@@ -121,7 +130,7 @@ function Ambulatory() {
     }
 
     useEffect(() => {
-        getAppointment();
+        getAppointment(1, 10);
         ScrollRef(scrollRef);
     }, [])
 
@@ -129,91 +138,103 @@ function Ambulatory() {
         <div className="flex flex-wrap">
             <div className="w-full">
                 <Card bordered={false} className="header-solid max-h-max rounded-md">
-                    <div className="basis-1/3">
-                        <RangePicker onChange={filterAppointment} locale={mnMN} />
-                    </div>
-                </Card>
-            </div>
-            <div className="w-full pt-1 pb-1">
-                <Card
-                    bordered={false}
-                    className="header-solid max-h-max rounded-md"
-                    bodyStyle={{
-                        padding: 5,
-                        paddingLeft: 21,
-                        paddingRight: 21,
-                    }}
-                >
-                    <div className="flex">
-                        <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                            <span className="font-medium mx-1">Яаралтай</span>
+                    <div className="flex flex-wrap">
+                        <div className="basis-1/3">
+                            <RangePicker onChange={filterAppointment} locale={mnMN} />
                         </div>
-                        <div className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                            <span className="font-medium mx-1">Шууд</span>
+                        <div className="w-full py-2">
+                            <div className="flex float-left">
+                                <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                    <span className="font-medium mx-1">Яаралтай</span>
+                                </div>
+                                <div className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                    <span className="font-medium mx-1">Шууд</span>
+                                </div>
+                                <div className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                    <span className="font-medium mx-1">Урьдчилсан захиалга</span>
+                                </div>
+                            </div>
+                            <div className="float-right">
+                                <Button title="Сэргээх" type="primary" onClick={() => getAppointment(1, 10)}>
+                                    <ReloadOutlined spin={!spinner} />
+                                </Button>
+                            </div>
                         </div>
-                        <div className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                            <span className="font-medium mx-1">Урьдчилсан захиалга</span>
-                        </div>
-                    </div>
-                </Card>
-            </div>
-            <div className="w-full">
-                <Card
-                    bordered={false}
-                    className="header-solid max-h-max rounded-md"
-                >
-                    <div className='table-responsive' id='style-8' ref={scrollRef}>
-                        <Table bordered className='ant-border-space' style={{ width: '100%' }}>
-                            <thead className='ant-table-thead bg-slate-200'>
-                                <tr>
-                                    <th>Он сар</th>
-                                    <th>Үзлэгийн цаг</th>
-                                    <th>Үзлэг</th>
-                                    <th>Овог</th>
-                                    <th>Нэр</th>
-                                    <th>Регистр №</th>
-                                    <th>Нас</th>
-                                    <th>Хүйс</th>
-                                    <th>Захиалсан огноо</th>
-                                    <th>Эхэлсэн цаг</th>
-                                    <th>Дууссан цаг</th>
-                                    <th>Төлөв</th>
-                                    <th>Даатгал</th>
-                                    <th>Төлбөр</th>
-                                    <th>Үзлэг</th>
-                                    <th>Тайлбар</th>
-                                </tr>
-                            </thead>
-                            <tbody className='ant-table-tbody p-0'>
-                                {
-                                    appointments.map((appointment, index) => {
-                                        return (
-                                            <tr key={index} onDoubleClick={() => getEMR(appointment?.id, appointment?.patientId, appointment?.cabinetId, appointment?.inspectionType, appointment?.isPayment)} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
-                                                <td>{appointment?.slots?.schedule?.workDate}</td>
-                                                {getTypeInfo(appointment?.type, appointment?.slots.startTime, appointment?.slots.endTime)}
-                                                {getInspectionInfo(appointment?.inspectionType)}
-                                                <td>{appointment?.patient?.lastName}</td>
-                                                <td>{appointment?.patient?.firstName}</td>
-                                                <td>{appointment?.patient?.registerNumber}</td>
-                                                <td>{getAge(appointment?.patient?.registerNumber)}</td>
-                                                {getGenderInfo(appointment?.patient?.genderType)}
-                                                <td>{moment(appointment?.createdAt).format('YYYY-MM-DD')}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                {getPaymentInfo(appointment.isPayment)}
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                                <tr>
+                        <div className="w-full py-2">
+                            <div className='table-responsive' id='style-8' ref={scrollRef}>
+                                <Table bordered className='ant-border-space' style={{ width: '100%' }}>
+                                    <thead className='ant-table-thead bg-slate-200'>
+                                        <tr>
+                                            <th>Он сар</th>
+                                            <th>Үзлэгийн цаг</th>
+                                            <th>Үзлэг</th>
+                                            <th>Овог</th>
+                                            <th>Нэр</th>
+                                            <th>Регистр №</th>
+                                            <th>Нас</th>
+                                            <th>Хүйс</th>
+                                            <th>Захиалсан огноо</th>
+                                            <th>Эхэлсэн цаг</th>
+                                            <th>Дууссан цаг</th>
+                                            <th>Төлөв</th>
+                                            <th>Даатгал</th>
+                                            <th>Төлбөр</th>
+                                            <th>Үзлэг</th>
+                                            <th>Тайлбар</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='ant-table-tbody p-0'>
+                                        {spinner ?
+                                            (
+                                                appointments.map((appointment, index) => {
+                                                    return (
+                                                        <tr key={index} onDoubleClick={() => getEMR(appointment?.id, appointment?.patientId, appointment?.cabinetId, appointment?.inspectionType, appointment?.isPayment)} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
+                                                            <td>{appointment?.slots?.schedule?.workDate}</td>
+                                                            {getTypeInfo(appointment?.type, appointment?.slots.startTime, appointment?.slots.endTime)}
+                                                            {getInspectionInfo(appointment?.inspectionType)}
+                                                            <td>{appointment?.patient?.lastName}</td>
+                                                            <td>{appointment?.patient?.firstName}</td>
+                                                            <td>{appointment?.patient?.registerNumber}</td>
+                                                            <td>{getAge(appointment?.patient?.registerNumber)}</td>
+                                                            {getGenderInfo(appointment?.patient?.genderType)}
+                                                            <td>{moment(appointment?.createdAt).format('YYYY-MM-DD')}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            {getPaymentInfo(appointment.isPayment)}
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            )
+                                            :
+                                            (
+                                                <tr>
+                                                    <td
+                                                        colSpan={16}
+                                                        size="lg"
+                                                        style={{ backgroundColor: "white", textAlign: "center" }}
+                                                    >
+                                                        <Spinner animation="grow" style={{ color: "#1890ff" }} />
+                                                    </td>
+                                                </tr>
+                                            )
 
-                                </tr>
-                            </tbody>
-                        </Table>
+                                        }
+                                    </tbody>
+                                </Table>
+                            </div>
+                            <div>
+                                <Pagination
+                                    className="pagination"
+                                    pageSize={10}
+                                    total={meta.itemCount}
+                                    onChange={getAppointment}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </Card>
             </div>

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { DefaultPost, Get, openNofi, Post, ScrollRef } from "../../comman";
+import { DefaultPost, Get, openNofi, Post, ScrollRef, numberToCurrency } from "../../comman";
 import PatientInformation from "../PatientInformation";
 import Order from '../Order/Order';
 import EbarimtPrint from "./EbarimtPrint";
@@ -28,6 +28,7 @@ function Ambulatory() {
     const [discountPercentRequest, setDiscountPercentRequest] = useState(null);
     const scrollRef = useRef();
     const [totalAmount, setTotalAmount] = useState(0);
+    const [selectedAmount, setSelectedAmount] = useState(0);
     const [discounts, setDiscounts] = useState([]);
     const [isDiscount, setIsDiscount] = useState(false);
     //
@@ -66,6 +67,14 @@ function Ambulatory() {
 
     const check = (e) => {
         setInvoiceRequest(e);
+    }
+
+    const dd = (value, e) => {
+        if (e.target.checked) {
+            setSelectedAmount(selectedAmount + value.amount);
+        } else {
+            setSelectedAmount(selectedAmount - value.amount);
+        }
     }
 
     const PaymentRequest = async () => {
@@ -176,14 +185,8 @@ function Ambulatory() {
                     >
                         <div className="flex flex-wrap">
                             <div className="w-full md:w-1/3 xl:1/3">
-                                <Button className="bg-[#2d8cff] w-full" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
+                                <Button className="bg-[#2d8cff]" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
                             </div>
-                            {/* <div className="w-full md:w-1/3 xl:1/3">
-                                <Button className="bg-[#2d8cff] w-full" type="primary">Хэвтэн эмчлүүлэх</Button>
-                            </div>
-                            <div className="w-full md:w-1/3 xl:1/3">
-                                <Button className="bg-[#2d8cff] w-full" type="primary">Хэвтэн эмчлүүлэх цонх</Button>
-                            </div> */}
                         </div>
                     </Card>
                 </div>
@@ -213,7 +216,7 @@ function Ambulatory() {
                                                     <td>{patient.firstName}</td>
                                                     <td>{patient.lastName}</td>
                                                     <td>{patient.registerNumber}</td>
-                                                    <td><Button onClick={() => getPayment(patient.id)} >Төлбөр авах</Button></td>
+                                                    <td><Button type="primary" onClick={() => getPayment(patient.id)} >Төлбөр авах</Button></td>
                                                 </tr>
                                             )
                                         })
@@ -253,28 +256,28 @@ function Ambulatory() {
                                 paddingLeft: 10,
                                 paddingRight: 10,
                                 paddingBottom: 10,
-                                minHeight: 300,
-                                maxHeight: 300,
+                                minHeight: 150,
+                                maxHeight: 150,
                             }}
                         >
-                            <div className='table-responsive p-4' id='style-8' style={{ maxHeight: '300px' }}>
+                            <div className='table-responsive' id='style-8' style={{ maxHeight: '150px' }}>
                                 <Table className='ant-border-space' style={{ width: '100%' }}>
-                                    <thead className='ant-table-thead'>
+                                    <thead className="ant-table-thead bg-slate-200">
                                         <tr>
-                                            <th>Картын №</th>
-                                            <th>Овог</th>
-                                            <th>Нэр</th>
-                                            <th>Регистрийн дугаар</th>
+                                            <th className="font-bold text-sm align-middle">Картын №</th>
+                                            <th className="font-bold text-sm align-middle">Овог</th>
+                                            <th className="font-bold text-sm align-middle">Нэр</th>
+                                            <th className="font-bold text-sm align-middle">Регистрийн дугаар</th>
                                         </tr>
                                     </thead>
                                     <tbody className='ant-table-tbody'>
                                         {
                                             notPatientsList.map((patient, index) => {
                                                 return (
-                                                    <tr key={index} onDoubleClick={() => selectPatientNot(patient)}>
+                                                    <tr className="hover:cursor-pointer ant-table-row ant-table-row-level-0" key={index} onDoubleClick={() => selectPatientNot(patient)}>
                                                         <td>{patient.cardNumber}</td>
-                                                        <td>{patient.firstName}</td>
                                                         <td>{patient.lastName}</td>
+                                                        <td>{patient.firstName}</td>
                                                         <td>{patient.registerNumber}</td>
                                                     </tr>
                                                 )
@@ -309,7 +312,7 @@ function Ambulatory() {
                             Төлбөр авах
                         </p>
                         <p className="float-right font-extrabold">
-                            Нийт төлбөр: {totalAmount}
+                            Нийт төлбөр: {numberToCurrency(totalAmount)}
                         </p>
                     </div>
                 }
@@ -319,16 +322,22 @@ function Ambulatory() {
                 width={"50%"}
                 onOk={PaymentRequest}
                 onCancel={() => setPaymentModal(false)}
+                okText={"Хадгалах"}
+                cancelText={"Болих"}
             >
                 <div className="flex flex-wrap">
-
                     <div className="w-full p-1">
                         <Checkbox onChange={(e) => {
                             setIsDiscount(e.target.checked);
                             if (!e.target.checked) {
                                 setDiscountPercentRequest(null);
                             }
-                        }} >Хөнгөлөлтэй эсэх</Checkbox>
+                        }}
+                        >
+                            Хөнгөлөлтэй эсэх
+                        </Checkbox>
+                        <p className="float-right font-bold">Сонгосон төлбөр: {numberToCurrency(selectedAmount)}</p>
+
                     </div>
                     {isDiscount &&
                         <div className="w-full p-1">
@@ -345,7 +354,7 @@ function Ambulatory() {
                         </div>
                     }
                     <div className="w-full p-1">
-                        <label>Захиалсан</label>
+                        <label className="font-extrabold">Захиалсан:</label>
                         <Checkbox.Group
                             style={{
                                 width: "100%"
@@ -357,7 +366,7 @@ function Ambulatory() {
                                     payment.map((element, index) => {
                                         return (
                                             <Col key={index} span={12}>
-                                                <Checkbox value={element.id}>{element.name + "-->" + element.amount + "₮"}</Checkbox>
+                                                <Checkbox onChange={(e) => dd(element, e)} value={element.id}>{element.name + "-->" + numberToCurrency(element.amount)}</Checkbox>
                                             </Col>
                                         )
                                     })

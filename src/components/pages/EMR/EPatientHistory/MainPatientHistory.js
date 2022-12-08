@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Tabs, Row, Button, Form, Divider, Select, Table } from "antd";
+import { Tabs, Row, Button, Form, Divider, Select, Table, Modal, Result } from "antd";
 import GeneralInspection from "../GeneralInspection";
 import { useSelector } from "react-redux";
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../../../../features/authReducer";
@@ -11,8 +11,9 @@ import Diagnose from "../../service/Diagnose";
 // import { Table } from "react-bootstrap";
 import { CloseOutlined } from "@ant-design/icons";
 const { Option } = Select;
-function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection }) {
+function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, handleClick }) {
   const [form] = Form.useForm();
+  const [defualtForm] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
   const token = useSelector(selectCurrentToken);
@@ -26,15 +27,11 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
   const inspection = Inspection;
   const cabinetId = CabinetId;
   const appointmentId = AppointmentId;
+  const [confirmModal, setConfirmModal] = useState(false);
 
   const DiagnoseHandleClick = (diagnoses) => {
-    console.log(diagnoses);
     form.setFieldValue('diagnose', diagnoses);
   };
-  useEffect(() => {
-    getInspectionTabs();
-  }, []);
-
   const Tab1Content = useCallback(() => {
     return <HistoryTab patientId={id} inspection={inspection} />;
   }, []);
@@ -165,7 +162,7 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
               onClick={() => validStep && saveDynamicTab()}
               style={{ backgroundColor: blue.primary }}
             >
-              Хадгалах
+              EMR хадгалах
             </Button>
           </Row>
         </Form.Item >
@@ -173,11 +170,49 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
     );
   }, []);
 
+  const StaticTabContent = useCallback(() => {
+    return (
+      <Form
+        name="basic"
+        initialValues={{ remember: true }}
+        // onFinish={saveDynamicTab}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        labelAlign="left"
+        scrollToFirstError
+        className="overflow-auto"
+        layout="vertical"
+        form={defualtForm}
+      >
+
+        <Divider orientation="left" className="text-sm my-2">
+          Онош
+        </Divider>
+        <Diagnose handleClick={DiagnoseHandleClick} />
+        < Form.Item
+          wrapperCol={{
+            span: 16,
+          }}
+        >
+          <Row className="mt-2">
+            <Button
+              type="primary"
+              htmlType="submit"
+              // onClick={() => validStep && saveDynamicTab()}
+              style={{ backgroundColor: blue.primary }}
+            >
+              EMR хадгалах
+            </Button>
+          </Row>
+        </Form.Item >
+      </Form>
+    )
+  }, []);
+
   const saveDynamicTab = async (values) => {
-    console.log(values);
     const data = {
       appointmentId: appointmentId,
-      departmentId: depId,
+      cabinetId: cabinetId,
       patientId: id,
       doctorId: userId,
       pain: JSON.stringify(values["pain"]),
@@ -186,8 +221,10 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
       plan: JSON.stringify(values["plan"]),
       diagnose: JSON.stringify(values['diagnose']),
     }
-    console.log(data);
-    await Post('emr/inspectionNote', token, config, data);
+    const response = await Post('emr/inspectionNote', token, config, data);
+    if (response === 201) {
+      setConfirmModal(true);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -211,24 +248,53 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection })
     config.params.cabinetId = cabinetId;
     const response = await Get('emr/inspection-form', token, config);
     if (response.data.length > 0) {
-      setTabs(response.data);
+      response?.data?.map((el) => {
+        setItems((items) => [
+          ...items,
+          {
+            label: el.name,
+            key: `item-${el.id}`,
+            children: <DynamicTabContent data={el.formItem} />,
+          },
+        ]);
+      });
     }
+    config.params.cabinetId = null;
   };
-
+  const getDefualtTab = () => {
+    setItems([{
+      label: "Асуумж",
+      key: `item-second`,
+      children: <StaticTabContent />,
+    }]);
+  };
   useEffect(() => {
-    //Тухайн эмчид харагдах TAB уудыг харуулах
-    tabs?.map((el) => {
-      setItems((items) => [
-        ...items,
-        {
-          label: el.name,
-          key: `item-${el.id}`,
-          children: <DynamicTabContent data={el.formItem} />,
-        },
-      ]);
-    });
-  }, [tabs]);
-
-  return <Tabs items={items} />;
+    console.log("=========>", inspection);
+    if (inspection === 1) {
+      getInspectionTabs();
+    } else if (inspection === 2) {
+      getDefualtTab();
+    }
+  }, []);
+  return (
+    <>
+      <Tabs type="card" items={items} />
+      <Modal
+        open={confirmModal}
+        onCancel={() => setConfirmModal(false)}
+        footer={null}
+      >
+        <Result
+          status="success"
+          title="Successfully Purchased Cloud Server ECS!"
+          subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+          extra={[
+            <Button type="primary" key="console" onClick={() => handleClick({ target: { value: 'OCS' } })}>Тийм</Button>,
+            <Button onClick={() => setConfirmModal(false)}>Үгүй</Button>,
+          ]}
+        />
+      </Modal>
+    </>
+  );
 }
 export default MainPatientHistory;

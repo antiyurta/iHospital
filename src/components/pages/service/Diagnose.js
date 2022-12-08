@@ -73,7 +73,7 @@ function Diagnose({ handleClick }) {
                                             <tr>
                                                 <th className="font-bold text-sm align-middle">Код</th>
                                                 <th className="font-bold text-sm align-middle">Монгол нэр</th>
-                                                <th></th>
+                                                <th className="font-bold text-sm align-middle">Төрөл</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -83,19 +83,19 @@ function Diagnose({ handleClick }) {
                                                         <td style={{ width: 80, maxWidth: 80 }}>
                                                             <Form.Item
                                                                 name={[name, 'code']}>
-                                                                <TextArea rows={5} disabled />
+                                                                <TextArea disabled />
                                                             </Form.Item>
                                                         </td>
                                                         <td>
                                                             <Form.Item
                                                                 name={[name, 'nameMn']}>
-                                                                <TextArea rows={5} disabled />
+                                                                <TextArea disabled />
                                                             </Form.Item>
                                                         </td>
                                                         <td>
                                                             <Form.Item
                                                                 name={[name, 'type']}>
-                                                                <Select>
+                                                                <Select style={{ width: "100%"}}>
                                                                     <Option value="Үндсэн">Үндсэн</Option>
                                                                     <Option value="Урьдчилан">Урьдчилан</Option>
                                                                     <Option value="Хүндрэл">Хүндрэл</Option>

@@ -10,6 +10,7 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type
 
     const handleTypeChangePatient = async (value) => {
         handleTypeChange(value);
+        console.log(value);
     }
 
     const getGender = (registerNumber) => {
@@ -43,7 +44,7 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type
         }
     }
     const getAddress = (aimag, soum, address) => {
-        console.log(aimag, soum, address)
+        // console.log(aimag, soum, address)
     }
     return (
         <Card

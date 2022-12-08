@@ -60,7 +60,7 @@ function Profile() {
                 style={{ backgroundImage: "url(" + bg + ")" }}
             ></div>
             <Card
-                className="card-profile-head rounded-md"
+                className="card-profile-head rounded-md h-28"
                 bodyStyle={{ display: "none" }}
                 title={
                     <Row justify="space-between" align="middle" gutter={[24, 0]}>

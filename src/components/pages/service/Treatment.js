@@ -52,12 +52,20 @@ function Treatment() {
             col: 24,
         },
         {
+            index: 'isSlot',
+            label: 'Цаг авах эсэх',
+            isView: true,
+            isSearch: false,
+            input: 'switch',
+            col: 8
+        },
+        {
             index: 'hasInsurance',
             label: 'Даатгал',
             isView: true,
             isSearch: false,
             input: 'switch',
-            col: 12
+            col: 8
         },
         {
             index: 'isActive',
@@ -65,7 +73,7 @@ function Treatment() {
             isView: true,
             isSearch: false,
             input: 'switch',
-            col: 12
+            col: 8
         },
         {
             index: 'price',
@@ -96,7 +104,7 @@ function Treatment() {
                     isUpdate={true}
                     isDelete={true}
                     refresh={getTreatmentTypeData}
-                    width='40%' />
+                    width='50%' />
             </Col>
         </Row>
     )

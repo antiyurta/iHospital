@@ -1,4 +1,4 @@
-import { Card, Col, InputNumber, Radio, Row, Select, Typography } from "antd";
+import { Card, Col, Empty, InputNumber, Radio, Row, Select, Typography } from "antd";
 import React, { useState, useEffect } from "react";
 import { INPUT_HEIGHT } from "../../../constant";
 import Ocs from "../OCS/Ocs";
@@ -47,7 +47,6 @@ function EMR() {
       setSelectedPatient(response);
     }
   };
-
   const handleSearch = async (value) => {
     config.params.registerNumber = value;
     const response = await Get("pms/patient", token, config);
@@ -57,7 +56,6 @@ function EMR() {
       openNofi("error", "Өвчтөн", "Өвчтөн олдохгүй байна");
     }
   };
-
   const handleClick = async (value) => {
     var stateIsCito = false;
     console.log(value);
@@ -79,7 +77,6 @@ function EMR() {
       openNofi("success", "OCS", "Амжилттай захиалгадлаа");
     }
   };
-
   //
   const getInspectionNotes = async (PatientId) => {
     config.params.patientId = PatientId;
@@ -89,7 +86,6 @@ function EMR() {
         //Оноор бүлэглэх
         r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
         r[a.createdAt.substring(0, 4)].push(a);
-        console.log("======a>", a);
         getProblems(a.id);
         return r;
       }, Object.create(null));
@@ -160,45 +156,37 @@ function EMR() {
                   paddingLeft: 10,
                   paddingRight: 10,
                   paddingBottom: 10,
-                  minHeight: 300,
-                  maxHeight: 300,
+                  minHeight: 150,
+                  maxHeight: 150,
                 }}
               >
-                <div className="table-responsive p-4 max-h-80" id="style-8">
-                  <Table bordered className="ant-border-space">
-                    <thead className="ant-table-thead bg-slate-200">
-                      <tr>
-                        <th>emch</th>
-                        <th>diagnose</th>
-                        <th>date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {problems?.map((problem, idx) => {
+                <div className="scroll" style={{ maxHeight: 150 }}>
+                  {
+                    problems.length > 0 ?
+                      problems.map((problem, idx) => {
                         return (
-                          <tr key={idx}>
-                            <td>{problem.doctorId}</td>
-                            <td>
-                              <ul className="list-disc list-inside">
-                                {problem?.diagnose?.map((diagnose, index) => {
-                                  return (
-                                    <li key={index}>
-                                      {diagnose.code + " " + diagnose.nameEn}
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            </td>
-                            <td>
+                          <div key={idx} className="inline-flex">
+                            <p>{problem.doctorId}</p>
+                            <ul className="list-disc list-inside" style={{ width: 600, paddingLeft: 10 }}>
+                              {problem?.diagnose?.map((diagnose, index) => {
+                                return (
+                                  <li key={index}>
+                                    {diagnose.code + " " + diagnose.nameEn}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                            <p>
                               {moment(problem.inspectionDate).format(
                                 "YYYY-MM-DD"
                               )}
-                            </td>
-                          </tr>
+                            </p>
+                          </div>
                         );
-                      })}
-                    </tbody>
-                  </Table>
+                      })
+                      :
+                      <Empty description="Байхгүй" />
+                  }
                 </div>
               </Card>
             </div>
@@ -217,8 +205,8 @@ function EMR() {
                 paddingLeft: 10,
                 paddingRight: 10,
                 paddingBottom: 10,
-                minHeight: 518,
-                maxHeight: 518,
+                minHeight: 300,
+                maxHeight: 300,
                 overflowX: "hidden",
                 overflowY: "scroll",
               }}
@@ -237,21 +225,19 @@ function EMR() {
             <Card
               bordered={false}
               title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
-              className="header-solid max-h-max rounded-md"
+              className="header-solid max-h-max rounded-md scroll"
               loading={cardLoading}
               bodyStyle={{
                 paddingTop: 0,
                 paddingLeft: 10,
                 paddingRight: 10,
                 paddingBottom: 10,
-                minHeight: 764,
-                maxHeight: 764,
-                overflowX: "hidden",
-                overflowY: "scroll",
+                minHeight: 724,
+                maxHeight: 724,
               }}
               extra={
                 <>
-                  <Select value={Inspection} style={{ width: 200 }}>
+                  <Select defaultValue={Inspection} style={{ width: 200 }}>
                     <Option value={1} disabled={true}>
                       Анхан
                     </Option>
@@ -271,6 +257,7 @@ function EMR() {
                 PatientId={IncomePatientId}
                 CabinetId={IncomeCabinetId}
                 Inspection={Inspection}
+                handleClick={handleTypeChange}
               />
             </Card>
           ) : null}

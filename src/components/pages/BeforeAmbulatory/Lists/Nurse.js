@@ -271,6 +271,19 @@ function Nurse() {
                 />
               </Col>
             </Row>
+            <div className="w-full py-2">
+              <div className="flex">
+                <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                  <span className="font-medium mx-1">Яаралтай</span>
+                </div>
+                <div className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                  <span className="font-medium mx-1">Шууд</span>
+                </div>
+                <div className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                  <span className="font-medium mx-1">Урьдчилсан захиалга</span>
+                </div>
+              </div>
+            </div>
             <div className="table-responsive mt-3" id="style-8" ref={scrollRef}>
               <Table
                 bordered
