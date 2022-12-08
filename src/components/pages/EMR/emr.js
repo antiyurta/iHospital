@@ -180,7 +180,7 @@ function EMR() {
                             <td>{problem.doctorId}</td>
                             <td>
                               <ul className="list-disc list-inside">
-                                {problem.diagnose.map((diagnose, index) => {
+                                {problem?.diagnose?.map((diagnose, index) => {
                                   return (
                                     <li key={index}>
                                       {diagnose.code + " " + diagnose.nameEn}
