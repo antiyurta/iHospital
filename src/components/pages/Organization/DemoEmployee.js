@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Form, Button, Card, Descriptions, Input, Modal, Switch, Cascader, Select, DatePicker } from "antd";
+import { Form, Button, Card, Descriptions, Input, Modal, Switch, Cascader, Select, DatePicker, Pagination } from "antd";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { Table } from "react-bootstrap";
@@ -168,8 +168,8 @@ function DemoEmployee() {
                                     </tr>
                                     <tr>
                                         <td><Search placeholder={"Хайх"} allowClear onSearch={(e) => onSearch(e, 'lastName')} enterButton={"Хайх"} /></td>
-                                        <td><Search placeholder={"Хайх"} allowClear onSearch={(e) => onSearch(e, 'lastName')} enterButton={"Хайх"} /></td>
-                                        <td><Search placeholder={"Хайх"} allowClear onSearch={(e) => onSearch(e, 'lastName')} enterButton={"Хайх"} /></td>
+                                        <td><Search placeholder={"Хайх"} allowClear onSearch={(e) => onSearch(e, 'firstName')} enterButton={"Хайх"} /></td>
+                                        <td><Search placeholder={"Хайх"} allowClear onSearch={(e) => onSearch(e, 'registerNumber')} enterButton={"Хайх"} /></td>
                                     </tr>
                                 </thead>
                                 <tbody className='ant-table-tbody p-0'>
@@ -199,6 +199,14 @@ function DemoEmployee() {
                                     }
                                 </tbody>
                             </Table>
+                        </div>
+                        <div>
+                            <Pagination
+                                className="pagination"
+                                pageSize={10}
+                                total={meta.itemCount}
+                                onChange={getEmployee}
+                            />
                         </div>
                     </Card>
                 </div>

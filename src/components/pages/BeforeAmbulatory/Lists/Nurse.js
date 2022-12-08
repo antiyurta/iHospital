@@ -34,19 +34,17 @@ function Nurse() {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const getDoctors = async () => {
     const response = await Get("organization/employee", token, config);
-    console.log("Res getDoctors", response);
     setDoctors(response.data);
   };
   const getDeps = async () => {
+    config.params.type = 2;
     const response = await Get("organization/structure", token, config);
-    console.log("Res getDeps", response);
     setDeps(response.data);
   };
   const getAppointment = async () => {
     config.params.doctorId = selectedDoctor;
     config.params.cabinetId = selectedDep;
     const response = await Get("appointment", token, config);
-    console.log("Res", response);
     setAppointments(response.data);
   };
   const getEMR = (listId, id, cabinetId, inspectionType, isPayment, regNum) => {
