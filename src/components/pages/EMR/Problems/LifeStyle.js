@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function LifeStyle(props) {
-  console.log("props", props.data);
   return (
     <div>
       {props.data?.hasOwnProperty("alcohol") ? (

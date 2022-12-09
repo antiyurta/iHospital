@@ -13,7 +13,6 @@ import { CloseOutlined } from "@ant-design/icons";
 const { Option } = Select;
 function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, handleClick }) {
   const [form] = Form.useForm();
-  const [defualtForm] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
   const token = useSelector(selectCurrentToken);
@@ -62,10 +61,12 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
               props.data['pain'].map((pain, index) => {
                 return (
                   <div key={index}>
-                    <div >
-                      <p className="mt-2 font-semibold">{pain.label}</p>
-                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                    </div>
+                    {
+                      inspection === 1 && <div>
+                        <p className="mt-2 font-semibold">{pain.label}</p>
+                        <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                      </div>
+                    }
                     <div>
                       <DynamicFormInspection data={pain.options} forkey={pain.label} unikey={pain.inspectionType} />
                     </div>
@@ -85,10 +86,12 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
               props.data['inspection'].map((inspection, index) => {
                 return (
                   <div key={index}>
-                    <div >
-                      <p className="mt-2 font-semibold">{inspection.label}</p>
-                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                    </div>
+                    {
+                      inspection === 1 && <div>
+                        <p className="mt-2 font-semibold">{inspection.label}</p>
+                        <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                      </div>
+                    }
                     <div>
                       <DynamicFormInspection data={inspection.options} forkey={inspection.label} unikey={inspection.inspectionType} />
                     </div>
@@ -107,10 +110,12 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
               props.data['question'].map((question, index) => {
                 return (
                   <div key={index}>
-                    <div >
-                      <p className="mt-2 font-semibold">{question.label}</p>
-                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                    </div>
+                    {
+                      inspection === 1 && <div>
+                        <p className="mt-2 font-semibold">{question.label}</p>
+                        <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                      </div>
+                    }
                     <div>
                       <DynamicFormInspection data={question.options} forkey={question.label} unikey={question.inspectionType} />
                     </div>
@@ -129,10 +134,12 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
               props.data['plan'].map((plan, index) => {
                 return (
                   <div key={index}>
-                    <div >
-                      <p className="mt-2 font-semibold">{plan.label}</p>
-                      <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                    </div>
+                    {
+                      inspection === 1 && <div>
+                        <p className="mt-2 font-semibold">{plan.label}</p>
+                        <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                      </div>
+                    }
                     <div>
                       <DynamicFormInspection data={plan.options} forkey={plan.label} unikey={plan.inspectionType} />
                     </div>
@@ -168,45 +175,6 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
         </Form.Item >
       </Form >
     );
-  }, []);
-
-  const StaticTabContent = useCallback(() => {
-    return (
-      <Form
-        name="basic"
-        initialValues={{ remember: true }}
-        // onFinish={saveDynamicTab}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-        labelAlign="left"
-        scrollToFirstError
-        className="overflow-auto"
-        layout="vertical"
-        form={defualtForm}
-      >
-
-        <Divider orientation="left" className="text-sm my-2">
-          Онош
-        </Divider>
-        <Diagnose handleClick={DiagnoseHandleClick} />
-        < Form.Item
-          wrapperCol={{
-            span: 16,
-          }}
-        >
-          <Row className="mt-2">
-            <Button
-              type="primary"
-              htmlType="submit"
-              // onClick={() => validStep && saveDynamicTab()}
-              style={{ backgroundColor: blue.primary }}
-            >
-              EMR хадгалах
-            </Button>
-          </Row>
-        </Form.Item >
-      </Form>
-    )
   }, []);
 
   const saveDynamicTab = async (values) => {
@@ -261,11 +229,61 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
     }
     config.params.cabinetId = null;
   };
+  const defualtForm = {
+    pain: [
+      {
+        label: "Зовиур",
+        options: [
+          {
+            type: "textarea",
+            value: "Зовиур"
+          }
+        ],
+        inspectionType: "pain"
+      }
+    ],
+    question: [
+      {
+        label: "Бодит үзлэг",
+        options: [
+          {
+            type: "textarea",
+            value: "Бодит үзлэг"
+          }
+        ],
+        inspectionType: "question"
+      }
+    ],
+    inspection: [
+      {
+        label: "Асуумж",
+        options: [
+          {
+            type: "textarea",
+            value: "Асуумж"
+          }
+        ],
+        inspectionType: "inspection"
+      }
+    ],
+    plan: [
+      {
+        label: "Төлөвлөгөө",
+        options: [
+          {
+            type: "textarea",
+            value: "TEST"
+          }
+        ],
+        inspectionType: "Төлөвлөгөө"
+      }
+    ],
+  };
   const getDefualtTab = () => {
     setItems([{
       label: "Асуумж",
       key: `item-second`,
-      children: <StaticTabContent />,
+      children: <DynamicTabContent data={defualtForm} />,
     }]);
   };
   useEffect(() => {
@@ -286,8 +304,8 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
       >
         <Result
           status="success"
-          title="Successfully Purchased Cloud Server ECS!"
-          subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+          title="EMR амжилттай хадгалагдлаа та ОCS руу шилжих үү"
+          // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
           extra={[
             <Button type="primary" key="console" onClick={() => handleClick({ target: { value: 'OCS' } })}>Тийм</Button>,
             <Button onClick={() => setConfirmModal(false)}>Үгүй</Button>,
