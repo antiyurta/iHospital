@@ -221,7 +221,6 @@ const DepartmentBed = (props) => {
   };
 
   const transferPatient = async (inpatient_request_id) => {
-    console.log("inpatient_request_id", inpatient_request_id);
     //Өвчтөн шилжүүлэх
     data.departmentId = selectedDep;
     data.roomId = selectedRoom;

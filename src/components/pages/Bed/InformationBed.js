@@ -68,7 +68,6 @@ const InformationBed = (props) => {
     setIsModalOpen(false);
   };
   const selectBed = (data) => {
-    // console.log("DATA", data);
     if (data.id === selectedBed.id) {
       setSelectedBed(""); //Орны мэдээлэл state -д хадгалах
     } else {
@@ -114,7 +113,6 @@ const InformationBed = (props) => {
     );
     if (response === 200) {
       getOrderedPatient();
-      // props.callFn(location?.pathname?.split("/").pop()); // Тасагийн ID current route -с авах
       setSelectedRoomBeds(selectedRoomBeds);
       setSelectedBed("");
       selectRoom(selectedBed.roomId);
@@ -225,7 +223,6 @@ const InformationBed = (props) => {
       );
       if (response === 200) {
         getOrderedPatient();
-        // props.callFn(location?.pathname?.split("/").pop()); // Тасагийн ID current route -с авах
         setSelectedRoomBeds(selectedRoomBeds);
         setSelectedBed("");
         selectRoom(selectedBed.roomId);
@@ -236,7 +233,7 @@ const InformationBed = (props) => {
   const selectRoom = async (room_id) => {
     const response = await Get(`organization/room/${room_id}`, token, config);
     if (response) {
-      console.log("response get Ordered Patient ====>", response);
+      // console.log("response get Ordered Patient ====>", response);
       setSelectedRoomBeds(response); //Өрөөний мэдээлэл state -д хадгалах
     }
   };
@@ -267,7 +264,6 @@ const InformationBed = (props) => {
   }, [selectedRoom]);
 
   const transferPatient = async (inpatient_request_id) => {
-    console.log("inpatient_request_id", inpatient_request_id);
     //Өвчтөн шилжүүлэх
     data.departmentId = selectedDep;
     data.roomId = selectedRoom;
@@ -282,7 +278,6 @@ const InformationBed = (props) => {
     );
     if (response === 200) {
       getOrderedPatient();
-      // props.callFn(location?.pathname?.split("/").pop()); // Тасагийн ID current route -с авах
       setSelectedRoomBeds(selectedRoomBeds);
       setSelectedBed("");
       selectRoom(selectedBed.roomId);

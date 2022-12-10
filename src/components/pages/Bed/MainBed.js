@@ -50,7 +50,6 @@ const MainBed = () => {
   };
 
   const getStructureById = async (structure_id) => {
-    console.log("structure_id", structure_id);
     config.params.startDate = null;
     config.params.endDate = null;
     const response = await Get(
@@ -58,7 +57,7 @@ const MainBed = () => {
       token,
       config
     );
-    console.log("response getStructureById", response);
+    // console.log("response getStructureById", response);
     if (response != "") {
       setSelectedStructureData(response);
     }
