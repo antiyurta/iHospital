@@ -50,6 +50,7 @@ const MainBed = () => {
   };
 
   const getStructureById = async (structure_id) => {
+    console.log("structure_id", structure_id);
     config.params.startDate = null;
     config.params.endDate = null;
     const response = await Get(
@@ -119,6 +120,8 @@ const MainBed = () => {
                 <InformationBed
                   status={roomInformationStatus}
                   setStatus={(status_id) => setRoomInformationStatus(status_id)}
+                  data={selectedStructureData}
+                  callFn={(dep_id) => getStructureById(dep_id)}
                 />
               }
             />

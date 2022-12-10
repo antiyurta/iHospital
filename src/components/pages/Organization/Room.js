@@ -49,22 +49,32 @@ function Room() {
       input: "select",
       inputData: structures,
       relIndex: "name",
-      col: 24,
+      col: 12,
     },
     {
       index: "roomNumber",
       label: "Өрөөны дугаар",
       isView: true,
       input: "input",
-      col: 24,
+      col: 12,
+      isDepend: false,
     },
     {
-      index: "genderType",
-      label: "Хүйс",
+      index: "blockId",
+      label: "Блок",
       isView: true,
       input: "select",
-      inputData: genderData,
-      relIndex: "label",
+      inputData: blocks,
+      relIndex: "name",
+      col: 12,
+    },
+    {
+      index: "floorId",
+      label: "Давхар",
+      isView: true,
+      input: "select",
+      inputData: roomData,
+      relIndex: "name",
       col: 12,
     },
     {
@@ -76,11 +86,22 @@ function Room() {
       isDepend: true,
     },
     {
+      index: "genderType",
+      label: "Хүйс",
+      isView: true,
+      input: "select",
+      inputData: genderData,
+      relIndex: "label",
+      col: 12,
+      isDepend: true,
+    },
+    {
       index: "price",
       label: "Өрөөны үнэ",
       isView: true,
       input: "inputNumber",
-      col: 24,
+      col: 12,
+      isDepend: true,
     },
     {
       index: "roomType",
@@ -89,25 +110,8 @@ function Room() {
       input: "select",
       inputData: roomTypes,
       relIndex: "label",
-      col: 24,
-    },
-    {
-      index: "blockId",
-      label: "Блок",
-      isView: true,
-      input: "select",
-      inputData: blocks,
-      relIndex: "name",
-      col: 24,
-    },
-    {
-      index: "floorId",
-      label: "Давхар",
-      isView: true,
-      input: "select",
-      inputData: roomData,
-      relIndex: "name",
-      col: 24,
+      col: 12,
+      isDepend: true,
     },
   ];
   return (
@@ -122,8 +126,8 @@ function Room() {
           isUpdate={true}
           isDelete={true}
           width="30%"
-          dependCol="isInpatient"
-          dependVal={true}
+          dependCol="isInpatient" //Аль талбараас хамаарч hide/show хийгдэх
+          dependVal={true} //Хамааралтай талбарын утга
         />
       </div>
     </div>

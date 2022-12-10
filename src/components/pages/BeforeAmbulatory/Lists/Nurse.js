@@ -273,13 +273,22 @@ function Nurse() {
             </Row>
             <div className="w-full py-2">
               <div className="flex">
-                <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                <div
+                  className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+                >
                   <span className="font-medium mx-1">Яаралтай</span>
                 </div>
-                <div className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                <div
+                  className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+                >
                   <span className="font-medium mx-1">Шууд</span>
                 </div>
-                <div className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                <div
+                  className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+                >
                   <span className="font-medium mx-1">Урьдчилсан захиалга</span>
                 </div>
               </div>
@@ -308,7 +317,7 @@ function Nurse() {
                     <th>Захиалсан огноо</th>
                     <th>Төлбөр</th>
                     <th>ЭСҮ оноо</th>
-                    <th>Үзлэгийн төрөл</th>
+                    {/* <th>Үзлэгийн төрөл</th> */}
                     <th>Үзлэгт орсон эсэх</th>
                   </tr>
                 </thead>
@@ -381,13 +390,13 @@ function Nurse() {
                           >
                             {appointment?.assesments[0]?.totalEWS}
                           </td>
-                          <td>
+                          {/* <td>
                             {examinationType.map((item) => {
                               if (item.value === appointment.type) {
                                 return item.label;
                               }
                             })}
-                          </td>
+                          </td> */}
                           <td>Тийм</td>
                         </tr>
                       );

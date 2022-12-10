@@ -90,6 +90,7 @@ legend.scheduler-border {
 }
 .ant-row .ant-form-item-row {
   align-items: center;
+  justify-content: space-between !important;
 }
 .ant-form-item-control-input {
   min-height: 28px !important;

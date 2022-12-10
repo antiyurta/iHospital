@@ -56,6 +56,8 @@ function UTable(props) {
   //
   const [type, setType] = useState();
   const [typesData, setTypesData] = useState([]);
+
+  const [dependShow, setDependShow] = useState(false); //Хамааралтай hide/show байвал энэ хувсагч харуулах эсэхийг шийднэ
   //
   const config = {
     headers: {},
@@ -186,6 +188,18 @@ function UTable(props) {
     onStart(1);
     ScrollRef(scrollRef);
   }, [props.isRefresh]);
+
+  const handleFormValuesChange = (changedValues) => {
+    // Хамааралтай hide/show тохируулах
+    const fieldName = Object.keys(changedValues)[0];
+    const fieldVal = Object.values(changedValues)[0];
+    if (fieldName === props.dependCol && fieldVal === props.dependVal) {
+      setDependShow(true);
+    } else {
+      setDependShow(false);
+    }
+  };
+
   return (
     <>
       <Card
@@ -400,8 +414,12 @@ function UTable(props) {
         cancelText="Болих"
         okText="Хадгалах"
       >
-        <Form form={form}>
-          <Row gutter={[8, 8]}>
+        <Form
+          form={form}
+          wrapperCol={{ span: 14 }}
+          onValuesChange={handleFormValuesChange}
+        >
+          <Row gutter={[24, 6]}>
             {props.column.map((element, index) => {
               return (
                 <Col span={element.col} key={index}>
@@ -423,97 +441,133 @@ function UTable(props) {
                       />
                     </Button>
                   )}
-                  {element.input === "select" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                    >
-                      <Select allowClear placeholder={element.label}>
-                        {element.inputData?.map((data, index) => {
-                          return (
-                            <Option key={index} value={data.id}>
-                              {data[`${element.relIndex}`]}
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  )}
-                  {element.input === "multipleSelect" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                    >
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        placeholder={element.label}
+                  {element.input === "select" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                        dependencies={[props.dependVal]}
                       >
-                        {element.inputData?.map((data, index) => {
-                          return (
-                            <Option key={index} value={data.id}>
-                              {data[`${element.relIndex}`]}
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  )}
-                  {element.input === "switch" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                      valuePropName="checked"
-                    >
-                      <Switch
-                        className="bg-sky-700"
-                        checkedChildren="Тийм"
-                        unCheckedChildren="Үгүй"
-                      />
-                    </Form.Item>
-                  )}
-                  {element.input === "input" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                    >
-                      <Input placeholder={element.label} />
-                    </Form.Item>
-                  )}
-                  {element.input === "inputNumber" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                    >
-                      <InputNumber
-                        placeholder={element.label}
-                        onKeyPress={checkNumber}
-                      />
-                    </Form.Item>
-                  )}
-                  {element.input === "textarea" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                    >
-                      <TextArea />
-                    </Form.Item>
-                  )}
-                  {element.input === "date" && (
-                    <Form.Item
-                      label={element.label}
-                      name={element.index}
-                      rules={element.rules}
-                    >
-                      <DatePicker locale={mn} />
-                    </Form.Item>
-                  )}
+                        <Select allowClear placeholder={element.label}>
+                          {element.inputData?.map((data, index) => {
+                            return (
+                              <Option key={index} value={data.id}>
+                                {data[`${element.relIndex}`]}
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
+                    ) : null
+                  ) : null}
+                  {element.input === "multipleSelect" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                      >
+                        <Select
+                          mode="multiple"
+                          allowClear
+                          placeholder={element.label}
+                        >
+                          {element.inputData?.map((data, index) => {
+                            return (
+                              <Option key={index} value={data.id}>
+                                {data[`${element.relIndex}`]}
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
+                    ) : null
+                  ) : null}
+                  {element.input === "switch" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                        valuePropName="checked"
+                      >
+                        <Switch
+                          className="bg-sky-700"
+                          checkedChildren="Тийм"
+                          unCheckedChildren="Үгүй"
+                        />
+                      </Form.Item>
+                    ) : null
+                  ) : null}
+                  {element.input === "input" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                      >
+                        <Input placeholder={element.label} />
+                      </Form.Item>
+                    ) : null
+                  ) : null}
+                  {element.input === "inputNumber" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                      >
+                        <InputNumber
+                          placeholder={element.label}
+                          onKeyPress={checkNumber}
+                        />
+                      </Form.Item>
+                    ) : null
+                  ) : null}
+                  {element.input === "textarea" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                      >
+                        <TextArea />
+                      </Form.Item>
+                    ) : null
+                  ) : null}
+                  {element.input === "date" ? (
+                    element.index === props.dependCol ||
+                    (element.isDepend && dependShow) ||
+                    element.isDepend === undefined ||
+                    !element.isDepend ? (
+                      <Form.Item
+                        label={element.label}
+                        name={element.index}
+                        rules={element.rules}
+                      >
+                        <DatePicker locale={mn} />
+                      </Form.Item>
+                    ) : null
+                  ) : null}
                 </Col>
               );
             })}

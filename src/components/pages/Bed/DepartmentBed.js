@@ -144,9 +144,12 @@ const DepartmentBed = (props) => {
   }, [selectedRoomBeds]);
   useEffect(() => {
     setRooms([]);
+    setSelectedRoom("");
+    setSelectedNewBed("");
     getRooms();
   }, [selectedDep]);
   useEffect(() => {
+    setSelectedNewBed("");
     rooms &&
       rooms?.map((el) => {
         if (el.value === selectedRoom) {
@@ -216,9 +219,6 @@ const DepartmentBed = (props) => {
   const handleChangeBed = (value) => {
     setSelectedNewBed(value);
   };
-  useEffect(() => {
-    console.log("patientInfoOfBed", patientInfoOfBed);
-  }, [patientInfoOfBed]);
 
   const transferPatient = async (inpatient_request_id) => {
     console.log("inpatient_request_id", inpatient_request_id);
@@ -234,7 +234,16 @@ const DepartmentBed = (props) => {
       config,
       data
     );
-    console.log("response", response);
+    if (response === 200) {
+      getOrderedPatient();
+      props.callFn(location?.pathname?.split("/").pop()); // Тасагийн ID current route -с авах
+      setSelectedRoomBeds(selectedRoomBeds);
+      setSelectedBed("");
+      selectRoom(selectedBed.roomId);
+      setSelectedDep("");
+      setSelectedRoom("");
+      setSelectedNewBed("");
+    }
   };
   return (
     <div className="p-6">
@@ -531,46 +540,68 @@ const DepartmentBed = (props) => {
                       </div>
                       {isTransfer ? (
                         <div className="border-solid border p-4 rounded-xl mt-2">
-                          <div>
-                            <Select
-                              style={{
-                                width: 200,
-                              }}
-                              onChange={handleChangeTransfer}
-                              value={selectedDep || undefined}
-                              options={department}
-                              placeholder="Тасаг"
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Select
-                              style={{
-                                width: 200,
-                              }}
-                              onChange={handleChangeRoom}
-                              value={selectedRoom || undefined}
-                              options={rooms}
-                              placeholder="Өрөө"
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Select
-                              style={{
-                                width: 200,
-                              }}
-                              onChange={handleChangeBed}
-                              value={selectedNewBed || undefined}
-                              options={beds}
-                              placeholder="Ор"
-                            />
-                          </div>
-                          <Button
-                            type="primary"
-                            className="custom-primary-btn"
-                            onClick={() => transferPatient(patientInfoOfBed.id)}
-                          >
-                            Хадгалах
-                          </Button>
+                          <Row>
+                            <Col span={4}>Тасаг</Col>
+                            <Col span={12}>
+                              <Select
+                                allowClear
+                                style={{
+                                  width: 200,
+                                }}
+                                onChange={handleChangeTransfer}
+                                value={selectedDep || undefined}
+                                options={department}
+                                placeholder="Сонгох"
+                              />
+                            </Col>
+                          </Row>
+                          <Row className="mt-2">
+                            <Col span={4}>Өрөө</Col>
+                            <Col span={12}>
+                              <Select
+                                allowClear
+                                style={{
+                                  width: 200,
+                                }}
+                                onChange={handleChangeRoom}
+                                value={selectedRoom || undefined}
+                                options={rooms}
+                                placeholder="Сонгох"
+                              />
+                            </Col>
+                          </Row>
+                          <Row className="mt-2">
+                            <Col span={4}>Ор</Col>
+                            <Col span={12}>
+                              <Select
+                                allowClear
+                                style={{
+                                  width: 200,
+                                }}
+                                onChange={handleChangeBed}
+                                value={selectedNewBed || undefined}
+                                options={beds}
+                                placeholder="Сонгох"
+                              />
+                            </Col>
+                          </Row>
+                          <Row className="mt-2">
+                            <Col span={4}></Col>
+                            <Col span={12}>
+                              <Button
+                                style={{
+                                  width: 200,
+                                }}
+                                type="primary"
+                                className="custom-primary-btn"
+                                onClick={() =>
+                                  transferPatient(patientInfoOfBed.id)
+                                }
+                              >
+                                Хадгалах
+                              </Button>
+                            </Col>
+                          </Row>
                         </div>
                       ) : null}
                     </div>
