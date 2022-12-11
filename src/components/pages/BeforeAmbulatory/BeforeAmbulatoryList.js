@@ -8,7 +8,7 @@ import PatientList from "./Lists/PatientList";
 export default function BeforeAmbulatoryList() {
   const items = [
     {
-      label: "Амбултори",
+      label: "Амбулатори",
       key: "1",
       children: <Ambulatory />,
     },

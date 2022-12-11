@@ -67,6 +67,7 @@ export default function EarlyWarning({ PatientId, listId }) {
     //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
     config.params.patientId = PatientId;
     const response = await Get("assesment", token, config);
+    console.log("Res", response);
     if (response.data.length != 0) {
       setPatientAssesments(response.data);
       setPatientAssesmentsResult(response.data);

@@ -6,58 +6,63 @@ export default function Ocs({ selectedPatient, handleClick }) {
     {
       //omnoh jor
       name: "RecentRecipe",
-      label: "Өмнөх жор"
+      label: "Өмнөх жор",
     },
     {
       //set order
       name: "SetOrder",
-      label: 'СетОрдер'
+      label: "СетОрдер",
     },
     {
       //em
       name: "Medicine",
-      label: 'Эм'
+      label: "Эм",
     },
     {
       //shinejilgee
       name: "Examination",
-      label: 'Шинэжилгээ'
+      label: "Шинжилгээ",
     },
     {
       //onshilgoo
       name: "Xray",
-      label: "Оношилгоо"
+      label: "Оношилгоо",
     },
     {
       //emchilgee
       name: "Treatment",
-      label: 'Эмчилгээ'
+      label: "Эмчилгээ",
     },
     {
       //hagalgaa mes
       name: "Surgery",
-      label: "Мэс засал"
+      label: "Мэс засал",
     },
     {
       //duran
       name: "Endo",
-      label: "Дуран"
+      label: "Дуран",
     },
     {
       //bagts
-      name: 'Package',
-      label: "Багц"
+      name: "Package",
+      label: "Багц",
     },
     {
       //hewtuuleh
       name: "Inpatient",
-      label: "Хэвтэн эмчлүүлэх"
-    }
+      label: "Хэвтэн эмчлүүлэх",
+    },
   ];
 
   return (
     <div className="items-center">
-      <Order isDoctor={true} selectedPatient={selectedPatient} categories={categories} save={handleClick} />
+      <Order
+        isDoctor={true}
+        selectedPatient={selectedPatient}
+        categories={categories}
+        save={handleClick}
+      />
     </div>
   );
 }

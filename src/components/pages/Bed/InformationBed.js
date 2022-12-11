@@ -376,7 +376,16 @@ const InformationBed = (props) => {
                     <div style={{ width: "85%" }}>
                       <div style={styles.cardRowContainer} className="mb-6">
                         <div>
-                          <p style={styles.total}>{el.structures?.name}</p>
+                          <p
+                            style={{
+                              ...styles.total,
+                              ...{
+                                color: "#2d8cff",
+                              },
+                            }}
+                          >
+                            {el.structures?.name}
+                          </p>
                           <p style={styles.total}>
                             {el.roomNumber} -{" "}
                             {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
@@ -436,8 +445,8 @@ const InformationBed = (props) => {
           <div className="grid">
             <span>Өрөөний мэдээлэл</span>
             <span className="text-xs">
-              Тасаг: {props.data?.name} <LineOutlined /> Өрөө:{" "}
-              {selectedRoomBeds?.roomNumber} <LineOutlined /> Орны тоо:{" "}
+              <b>Тасаг</b>: {props.data?.name} <LineOutlined /> <b>Өрөө:</b>{" "}
+              {selectedRoomBeds?.roomNumber} <LineOutlined /> <b>Орны тоо:</b>{" "}
               {selectedRoomBeds?.beds?.length}
             </span>
           </div>
@@ -512,7 +521,11 @@ const InformationBed = (props) => {
             </div>
           )}
         </Row>
-        <Divider orientation="left" className="text-sm my-2">
+        <Divider
+          orientation="left"
+          className="text-sm my-2"
+          style={{ color: "#2d8cff" }}
+        >
           Өвчтөний мэдээлэл
         </Divider>
         <Col className="gutter-row" span={24}>

@@ -74,17 +74,30 @@ function Nurse() {
     } else if (type === 2) {
       return "sadasd";
     } else if (type === 3) {
-      const beginTime = begin.split(":");
-      const endTime = end.split(":");
+      const beginTime = begin?.split(":");
+      const endTime = end?.split(":");
       return (
         <td className="bg-[#5cb85c] text-white">
-          <div className="inline-flex flex-row items-center">
-            <span>{beginTime[0] + ":" + beginTime[1]}</span>
-            {<ClockCircleOutlined className="mx-2" />}
-            <span>{endTime[0] + ":" + endTime[1]}</span>
-          </div>
+          {beginTime && endTime
+            ? beginTime[0] +
+              ":" +
+              beginTime[1] +
+              "-" +
+              endTime[0] +
+              ":" +
+              endTime[1]
+            : null}
         </td>
       );
+      // return (
+      //   <td className="bg-[#5cb85c] text-white">
+      //     <div className="inline-flex flex-row items-center">
+      //       <span>{beginTime[0] + ":" + beginTime[1]}</span>
+      //       {<ClockCircleOutlined className="mx-2" />}
+      //       <span>{endTime[0] + ":" + endTime[1]}</span>
+      //     </div>
+      //   </td>
+      // );
     } else {
       return <td className="bg-[#5bc0de]">{begin + "->" + end}</td>;
     }
@@ -355,11 +368,14 @@ function Nurse() {
                           className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                         >
                           <td>{index + 1}</td>
-                          <td>{appointment?.slots?.schedule?.workDate}</td>
+                          <td>
+                            {appointment?.slots?.schedule?.workDate ??
+                              appointment?.createdAt?.substr(0, 10)}
+                          </td>
                           {getTypeInfo(
                             appointment?.type,
-                            appointment?.slots.startTime,
-                            appointment?.slots.endTime
+                            appointment?.slots?.startTime,
+                            appointment?.slots?.endTime
                           )}
                           <td>{`${appointment?.employee?.lastName?.substr(
                             0,

@@ -34,7 +34,7 @@ function Examination() {
   const column = [
     {
       index: "examinationTypeId",
-      label: "Шинэжилгээний төрөл",
+      label: "Шинжилгээний төрөл",
       isView: false,
       input: "select",
       inputData: examinationTypeData,
@@ -42,7 +42,7 @@ function Examination() {
       col: 21,
     },
     {
-      label: "Шинэжилгээний төрөл",
+      label: "Шинжилгээний төрөл",
       isAdd: true,
       isView: false,
       index: "name",

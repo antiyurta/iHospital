@@ -375,8 +375,8 @@ const DepartmentBed = (props) => {
           <div className="grid">
             <span>Өрөөний мэдээлэл</span>
             <span className="text-xs">
-              Тасаг: {props.data?.name} <LineOutlined /> Өрөө:{" "}
-              {selectedRoomBeds?.roomNumber} <LineOutlined /> Орны тоо:{" "}
+              <b>Тасаг</b>: {props.data?.name} <LineOutlined /> <b>Өрөө:</b>{" "}
+              {selectedRoomBeds?.roomNumber} <LineOutlined /> <b>Орны тоо:</b>{" "}
               {selectedRoomBeds?.beds?.length}
             </span>
           </div>
@@ -451,7 +451,11 @@ const DepartmentBed = (props) => {
             </div>
           )}
         </Row>
-        <Divider orientation="left" className="text-sm my-2">
+        <Divider
+          orientation="left"
+          className="text-sm my-2"
+          style={{ color: "#2d8cff" }}
+        >
           Өвчтөний мэдээлэл
         </Divider>
         <Col className="gutter-row" span={24}>
