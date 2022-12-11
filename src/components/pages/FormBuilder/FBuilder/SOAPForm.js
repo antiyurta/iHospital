@@ -27,6 +27,7 @@ function SOAPForm() {
     const [cabinetFilterValue, setCabinetFilterValue] = useState(Number);
     //
     const showModal = () => {
+        setEditMode(false);
         SOAPForm.resetFields();
         setIsSOAPModal(true);
     };

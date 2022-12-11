@@ -67,11 +67,11 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route element={<Main />}>
           <Route path="*" element={<NotFound />} />
+          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="/notPermission" element={<NotPermission />} />
-          <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/schedule" element={<Schedule />} />
           {/* lab start */}

@@ -45,8 +45,6 @@ export const {
     DelAppId,
     setUserId,
     DelUserId,
-    setMenus,
-    DelMenus,
 } = auth.actions;
 export default auth.reducer;
 

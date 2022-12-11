@@ -18,8 +18,10 @@ import signinbg from '../assets/logo/demo4.png';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../features/authReducer";
+import { login, logout, DelAppId, DelDepId, DelUserId } from "../features/authReducer";
 import { openNofi } from "./comman";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -44,7 +46,9 @@ const MenuNav = [
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [loginLoading, setLoginLoading] = useState(false);
     const onFinish = (values) => {
+        setLoginLoading(true);
         axios.post(process.env.REACT_APP_DEV_URL + "authentication/login", values, { headers: { "X-API-KEY": process.env.REACT_APP_API_KEY } })
             .then((response) => {
                 if (response.status === 200) {
@@ -52,15 +56,30 @@ function Login() {
                     navigate('/profile');
                 }
             }).catch((err) => {
-                if (err.response.status == 400) {
+                console.log(err);
+                if (err.code === 'ERR_NETWORK') {
+                    openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
+                }
+                else if (err.response.status == 400) {
                     openNofi('warning', 'Нэвтрэх', 'Нэвтрэх нэр эсвэл нууц үг буруу');
                 }
+            }).finally(() => {
+                setLoginLoading(false);
             })
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
     };
+    const clearStorage = () => {
+        dispatch(logout());
+        dispatch(DelAppId());
+        dispatch(DelDepId());
+        dispatch(DelUserId());
+    };
+    useEffect(() => {
+        clearStorage();
+    }, []);
 
     return (
         <>
@@ -117,6 +136,7 @@ function Login() {
 
                                 <Form.Item>
                                     <Button
+                                        loading={loginLoading}
                                         type="primary"
                                         htmlType="submit"
                                         style={{ width: "100%" }}
