@@ -15,7 +15,6 @@ function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type
 
     const getGender = (registerNumber) => {
         if (registerNumber != undefined) {
-            console.log(registerNumber[registerNumber.length - 2]);
             if (registerNumber[registerNumber.length - 2] % 2 === 1) {
                 return 'Эр'
             } else {

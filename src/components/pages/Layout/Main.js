@@ -38,7 +38,7 @@ const Main = () => {
             dispatch(logout());
             dispatch(DelDepId());
             dispatch(DelAppId());
-            navigate('/login');
+            navigate('/');
         }
     };
 

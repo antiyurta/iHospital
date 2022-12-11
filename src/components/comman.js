@@ -1,5 +1,6 @@
 import axios from "axios";
 import { notification } from "antd";
+import { useNavigate } from "react-router-dom";
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -18,12 +19,11 @@ export async function Get(url, token, config) {
             .catch((error) => {
                 console.log("========>", error);
                 if (error.response.status === 401) {
-                    console.log("SDAD");
                     resolve({ data: [], meta: {}, status: 401 });
                 } else if (error.response.status === 400) {
-                    console.log("DSAD");
+                    openNofi('error', 'Муу хүсэлт', '');
                 } else {
-                    openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
+                    openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                     reject({ data: [], meta: {} });
                 }
             })

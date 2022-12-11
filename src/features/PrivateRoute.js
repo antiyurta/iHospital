@@ -22,7 +22,7 @@ const PrivateRoute = ({ children }) => {
     const authed = isauth();
     const permission = isPermission();
 
-    return authed ? (permission ? children : <Navigate to="/notPermission" />) : (<Navigate to="/login" />)
+    return authed ? (permission ? children : <Navigate to="/notPermission" />) : (<Navigate to="/" />)
 }
 
 export default PrivateRoute;
