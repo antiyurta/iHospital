@@ -27,7 +27,7 @@ export default function ProgressNotes({ Appointments }) {
       if (response.inspectionNotes.length > 0) {
         setInspectionNotes(response.inspectionNotes);
         setServiceRequests(response.serviceRequests);
-        console.log(response.serviceRequests)
+        console.log(response)
       } else {
         setInspectionNotes([]);
         setServiceRequests([]);

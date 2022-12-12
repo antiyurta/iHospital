@@ -53,6 +53,11 @@ export default function Ocs({ selectedPatient, handleClick }) {
       name: "Inpatient",
       label: "Хэвтэн эмчлүүлэх",
     },
+    {
+      //dawtan
+      name: "Reinspection",
+      label: 'Давтан цаг захиалах'
+    }
   ];
 
   return (

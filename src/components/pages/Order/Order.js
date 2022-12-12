@@ -20,6 +20,8 @@ import { useLocation } from "react-router-dom";
 import DoctorInspection from "./DoctorInspection";
 import Appointment from "../Appointment/Schedule/Appointment";
 import mnMN from "antd/es/calendar/locale/mn_MN";
+import Reinspection from "./Reinspection";
+import { useEffect } from "react";
 //
 const { RangePicker } = DatePicker;
 function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
@@ -85,9 +87,6 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                     service.dayLength = 1;
                     service.total = 0;
                 } else if (item.type === 2) {
-                    if (item.isSlot) {
-                        service.order = <ClockCircleOutlined />
-                    }
                     service.name = item.name;
                     service.qty = item.qty ? item.qty : 1;
                     if (service.qty != 1) {
@@ -95,12 +94,10 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                     }
                 } else if (item.type === 7) {
                     service.type = item.type;
-                    service.order = <ClockCircleOutlined />
                     service.services = item.services;
                 }
                 service.isCito = false;
                 if (item.type === 1) {
-                    service.order = <ClockCircleOutlined />
                     service.deviceId = item.deviceId;
                     service.typeId = item.xrayTypeId;
                 } else if (item.type === 0) {
@@ -206,6 +203,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     const [showPackage, setShowPackage] = useState(false);
     //
     const [showDoctorInspection, setShowDoctorInspection] = useState(false);
+    const [showReinspection, setShowReinspection] = useState(false);
     //
     const [orderForm] = Form.useForm();
     const tt = {
@@ -279,6 +277,8 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
             setShowPackage(state);
         } else if (name === 'doctorInspection') {
             setShowDoctorInspection(state);
+        } else if (name === 'Reinspection') {
+            setShowReinspection(state);
         }
     };
     const inpatientRequestClick = async (values) => {
@@ -315,12 +315,16 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                 setShowInpatient(true);
             } else if (category.name === 'doctorInspection') {
                 setShowDoctorInspection(true);
+            } else if (category.name === 'Reinspection') {
+                setShowReinspection(true);
             }
         } else {
             openNofi("error", "Өвчтөн", "Өвчтөн сонгоно уу");
         }
     };
-
+    useEffect(() => {
+        orderForm.resetFields();
+    }, [selectedPatient])
     return (
         <>
             {showExamination && <Examination isOpen={showExamination} isClose={isClose} handleclick={handleclick} />}
@@ -330,6 +334,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
             {showPackage && <Package isOpen={showPackage} isClose={isClose} handleclick={handleclick} />}
             {showInpatient && <InpatientRequest isOpen={showInpatient} isClose={isClose} handleClick={inpatientRequestClick} />}
             {showDoctorInspection && <DoctorInspection isOpen={showDoctorInspection} isClose={isClose} handleclick={handleclick} />}
+            {showReinspection && <Reinspection isOpen={showReinspection} isClose={isClose} selectedPatient={selectedPatient} />}
             <div className="flex flex-wrap">
                 <div className="w-full pb-4">
                     {
@@ -345,6 +350,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                         onClick={() => orderForm.validateFields()
                             .then((values) => {
                                 save(values.services);
+                                orderForm.resetFields();
                             })}
                     >{isPackage ? "Багц хадгалах" : "OCS Хадгалах"}</Button>
                 </div>
@@ -367,7 +373,6 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                                             <tr>
                                                                 <th className="font-bold text-sm align-middle">cito</th>
                                                                 <th className="font-bold text-sm align-middle">Нэр</th>
-                                                                <th className="font-bold text-sm align-middle">TIME</th>
                                                                 <th className="font-bold text-sm align-middle">Хэлбэр</th>
                                                                 <th className="font-bold text-sm align-middle">Тун</th>
                                                                 <th className="font-bold text-sm align-middle">Сорьц</th>
@@ -378,7 +383,6 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                                                 <th className="font-bold text-sm align-middle">Заавар (тэмдэглэл)</th>
                                                                 <th className="font-bold text-sm align-middle">Хугацаа(Өдөр)</th>
                                                                 <th className="font-bold text-sm align-middle">Нийт хэмжээ</th>
-                                                                <th className="font-bold text-sm align-middle">Огноо</th>
                                                                 <th className="font-bold text-sm align-middle">Үнэ</th>
                                                                 <th></th>
                                                             </tr>
@@ -405,12 +409,6 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                                                             </Form.Item>
                                                                         </td>
                                                                         <td>{orderForm.getFieldValue(['services', name, 'name'])}</td>
-                                                                        {
-                                                                            orderForm.getFieldValue(['services', name, 'order']) ?
-                                                                                <td className="hover:cursor-pointer" onClick={() => setTime('services', name)}>{orderForm.getFieldValue(['services', name, 'order'])}</td>
-                                                                                :
-                                                                                <td></td>
-                                                                        }
                                                                         <td>{orderForm.getFieldValue(['services', name, 'medicineType'])}</td>
                                                                         <td>
                                                                             <Form.Item
@@ -537,7 +535,6 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                                                                 />
                                                                             </Form.Item>
                                                                         </td>
-                                                                        <td>{orderForm.getFieldValue(['services', name, 'requestDate'])}</td>
                                                                         <td>{orderForm.getFieldValue(['services', name, 'price']).toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })}</td>
                                                                         <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => removeOrder(name)} /></td>
                                                                     </>

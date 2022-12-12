@@ -46,7 +46,7 @@ export async function Post(url, token, config, data) {
                 }
             })
             .catch((error) => {
-                openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
+                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                 resolve(400);
             })
     })
@@ -68,7 +68,7 @@ export async function DefaultPost(url, token, config, data) {
                 }
             })
             .catch((error) => {
-                openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
+                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                 resolve(400);
             })
     })
@@ -88,7 +88,7 @@ export async function Patch(url, token, config, data) {
                 }
             })
             .catch((error) => {
-                openNofi('error', 'Алдаа', 'Та хэсэг хугацааны дараа дахин оролдоно уу');
+                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                 resolve(400);
             })
     })
@@ -112,8 +112,7 @@ export async function Delete(url, token, config) {
                     openNofi('error', 'Алдаа', 'Устгах боложгүй');
                     resolve(400);
                 } else {
-                    console.log(error);
-
+                    openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                     resolve(400);
                 }
 
@@ -145,6 +144,6 @@ export const openNofi = (type, message, description) => {
 
 export const numberToCurrency = (amount) => {
     return (
-        amount.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })
+        amount?.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })
     )
 }

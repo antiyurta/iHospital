@@ -17,7 +17,7 @@ import axios from "axios";
 // import logo from '../../../assets/logo/logo.png'
 import logo from '../../../assets/logo/iHospital.png'
 import { useEffect } from "react";
-import { Get } from "../../comman";
+import { Get, Post } from "../../comman";
 
 const { Header, Content, Sider } = Layout;
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -41,16 +41,8 @@ const Main = () => {
             navigate('/');
         }
     };
-
     const logoutt = () => {
-        axios.post(DEV_URL + 'authentication/logout',
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "x-api-key": API_KEY
-                },
-            }
-        )
+        Post('authentication/logout', token, config);
     }
 
     const menu = (

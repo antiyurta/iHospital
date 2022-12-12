@@ -1,4 +1,4 @@
-import { Card, Col, Empty, InputNumber, Radio, Row, Select, Typography } from "antd";
+import { Card, Col, Empty, InputNumber, Modal, Radio, Row, Select, Typography } from "antd";
 import React, { useState, useEffect } from "react";
 import { INPUT_HEIGHT } from "../../../constant";
 import Ocs from "../OCS/Ocs";
@@ -14,6 +14,7 @@ import { Get, openNofi, Post } from "../../comman";
 import { useLocation } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import moment from "moment";
+import Schedule from "../OCS/Schedule";
 const config = {
   headers: {},
   params: {},
@@ -33,6 +34,9 @@ function EMR() {
   const [problems, setProblems] = useState([]);
   //
   const [selectedPatient, setSelectedPatient] = useState([]);
+  const [scheduleModal, setScheduleModal] = useState(false);
+  const [payments, setPayments] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   //
 
   const handleTypeChange = ({ target: { value } }) => {
@@ -57,24 +61,35 @@ function EMR() {
     }
   };
   const handleClick = async (value) => {
-    var stateIsCito = false;
-    console.log(value);
-    value.map((item) => {
-      if (!item.isCito) {
-        stateIsCito = true;
+    if (value?.length > 0 || value) {
+      var stateIsCito = false;
+      value.map((item) => {
+        if (!item.isCito) {
+          stateIsCito = true;
+        }
+      });
+      const response = await Post("service-request", token, config, {
+        patientId: selectedPatient.id,
+        appointmentId: AppointmentId,
+        employeeId: employeeId,
+        requestDate: new Date(),
+        isCito: stateIsCito ? true : false,
+        usageType: "OUT",
+        services: value,
+      });
+      if (response === 201) {
+        const conf = {
+          headers: {},
+          params: {
+            patientId: selectedPatient.id,
+          }
+        };
+        const response = await Get('payment/invoice', token, conf);
+        setPayments(response.data);
+        setIsOpen(true);
       }
-    });
-    const response = await Post("service-request", token, config, {
-      patientId: selectedPatient.id,
-      appointmentId: AppointmentId,
-      employeeId: employeeId,
-      requestDate: new Date(),
-      isCito: stateIsCito ? true : false,
-      usageType: "OUT",
-      services: value,
-    });
-    if (response === 201) {
-      openNofi("success", "OCS", "Амжилттай захиалгадлаа");
+    } else {
+      openNofi("warning", 'sadsad', 'sadsa');
     }
   };
   //
@@ -121,181 +136,166 @@ function EMR() {
   }, []);
 
   return (
-    <div className="flex flex-wrap">
-      <div
-        className={
-          type === "EMR"
-            ? "w-full md:w-full xl:w-1/2"
-            : "w-full md:w-full xl:w-full"
-        }
-      >
-        <div className="flex flex-wrap">
-          <div
-            className={
-              type === "EMR" ? "w-full md:w-full p-1" : "w-full md:w-3/5 p-1"
-            }
-          >
-            <div className="pb-1">
-              <PatientInformation
-                patient={selectedPatient}
-                handlesearch={handleSearch}
-                handleTypeChange={handleTypeChange}
-                OCS={true}
-                type={type}
-              />
+    <>
+      <div className="flex flex-wrap">
+        <div
+          className={
+            type === "EMR"
+              ? "w-full md:w-full xl:w-1/2"
+              : "w-full md:w-full xl:w-full"
+          }
+        >
+          <div className="flex flex-wrap">
+            <div
+              className={
+                type === "EMR" ? "w-full md:w-full p-1" : "w-full md:w-3/5 p-1"
+              }
+            >
+              <div className="pb-1">
+                <PatientInformation
+                  patient={selectedPatient}
+                  handlesearch={handleSearch}
+                  handleTypeChange={handleTypeChange}
+                  OCS={true}
+                  type={type}
+                />
+              </div>
+              <div className="pt-1">
+                <Card
+                  bordered={false}
+                  title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
+                  className="header-solid rounded-md"
+                  style={{ height: "100%" }}
+                  loading={cardLoading}
+                  bodyStyle={{
+                    paddingTop: 0,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    paddingBottom: 10,
+                    minHeight: 150,
+                    maxHeight: 150,
+                  }}
+                >
+                  <div className="scroll" style={{ maxHeight: 150 }}>
+                    {
+                      problems.length > 0 ?
+                        problems.map((problem, idx) => {
+                          return (
+                            <div key={idx} className="inline-flex">
+                              <p>{problem.doctorId}</p>
+                              <ul className="list-disc list-inside" style={{ width: 600, paddingLeft: 10 }}>
+                                {problem?.diagnose?.map((diagnose, index) => {
+                                  return (
+                                    <li key={index}>
+                                      {diagnose.code + " " + diagnose.nameEn}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                              <p>
+                                {moment(problem.inspectionDate).format(
+                                  "YYYY-MM-DD"
+                                )}
+                              </p>
+                            </div>
+                          );
+                        })
+                        :
+                        <Empty description="Байхгүй" />
+                    }
+                  </div>
+                </Card>
+              </div>
             </div>
-            <div className="pt-1">
+            <div
+              className={type === "EMR" ? "w-full p-1" : "w-full md:w-2/5 p-1"}
+            >
               <Card
                 bordered={false}
-                title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
+                title={<h6 className="font-semibold m-0">Амбулатори</h6>}
                 className="header-solid rounded-md"
+                loading={cardLoading}
                 style={{ height: "100%" }}
+                bodyStyle={{
+                  paddingTop: 0,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  paddingBottom: 10,
+                  minHeight: 300,
+                  maxHeight: 300,
+                  overflowX: "hidden",
+                  overflowY: "scroll",
+                }}
+              >
+                <MainAmbulatory
+                  appointments={appointments}
+                  patientId={selectedPatient.id}
+                />
+              </Card>
+            </div>
+          </div>
+        </div>
+        <div className={type === "OCS" ? "w-full" : "w-full md:w-full xl:w-1/2"}>
+          <div className="p-1">
+            {type == "EMR" ? (
+              <Card
+                bordered={false}
+                title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
+                className="header-solid max-h-max rounded-md scroll"
                 loading={cardLoading}
                 bodyStyle={{
                   paddingTop: 0,
                   paddingLeft: 10,
                   paddingRight: 10,
                   paddingBottom: 10,
-                  minHeight: 150,
-                  maxHeight: 150,
+                  minHeight: 724,
+                  maxHeight: 724,
+                }}
+                extra={
+                  <>
+                    <Select defaultValue={Inspection} style={{ width: 200 }}>
+                      <Option value={1} disabled={true}>
+                        Анхан
+                      </Option>
+                      <Option value={2} disabled={true}>
+                        Давтан
+                      </Option>
+                      <Option value={3}>Урьдчилан сэргийлэх</Option>
+                      <Option value={4}>Гэрийн эргэлт</Option>
+                      <Option value={5}>Идэвхтэй хяналт</Option>
+                      <Option value={6}>Дуудлагаар</Option>
+                    </Select>
+                  </>
+                }
+              >
+                <MainPatientHistory
+                  AppointmentId={AppointmentId}
+                  PatientId={IncomePatientId}
+                  CabinetId={IncomeCabinetId}
+                  Inspection={Inspection}
+                  handleClick={handleTypeChange}
+                />
+              </Card>
+            ) : null}
+            {type == "OCS" ? (
+              <Card
+                bordered={false}
+                title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
+                className="header-solid max-h-max rounded-md"
+                loading={cardLoading}
+                bodyStyle={{
+                  paddingTop: 0,
+                  paddingBottom: 16,
                 }}
               >
-                <div className="scroll" style={{ maxHeight: 150 }}>
-                  {
-                    problems.length > 0 ?
-                      problems.map((problem, idx) => {
-                        return (
-                          <div key={idx} className="inline-flex">
-                            <p>{problem.doctorId}</p>
-                            <ul className="list-disc list-inside" style={{ width: 600, paddingLeft: 10 }}>
-                              {problem?.diagnose?.map((diagnose, index) => {
-                                return (
-                                  <li key={index}>
-                                    {diagnose.code + " " + diagnose.nameEn}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                            <p>
-                              {moment(problem.inspectionDate).format(
-                                "YYYY-MM-DD"
-                              )}
-                            </p>
-                          </div>
-                        );
-                      })
-                      :
-                      <Empty description="Байхгүй" />
-                  }
-                </div>
+                <Ocs selectedPatient={selectedPatient} handleClick={handleClick} />
               </Card>
-            </div>
-          </div>
-          <div
-            className={type === "EMR" ? "w-full p-1" : "w-full md:w-2/5 p-1"}
-          >
-            <Card
-              bordered={false}
-              title={<h6 className="font-semibold m-0">Амбулатори</h6>}
-              className="header-solid rounded-md"
-              loading={cardLoading}
-              style={{ height: "100%" }}
-              bodyStyle={{
-                paddingTop: 0,
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingBottom: 10,
-                minHeight: 300,
-                maxHeight: 300,
-                overflowX: "hidden",
-                overflowY: "scroll",
-              }}
-            >
-              <MainAmbulatory
-                appointments={appointments}
-                patientId={selectedPatient.id}
-              />
-            </Card>
+            ) : null}
           </div>
         </div>
       </div>
-      <div className={type === "OCS" ? "w-full" : "w-full md:w-full xl:w-1/2"}>
-        <div className="p-1">
-          {type == "EMR" ? (
-            <Card
-              bordered={false}
-              title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
-              className="header-solid max-h-max rounded-md scroll"
-              loading={cardLoading}
-              bodyStyle={{
-                paddingTop: 0,
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingBottom: 10,
-                minHeight: 724,
-                maxHeight: 724,
-              }}
-              extra={
-                <>
-                  <Select defaultValue={Inspection} style={{ width: 200 }}>
-                    <Option value={1} disabled={true}>
-                      Анхан
-                    </Option>
-                    <Option value={2} disabled={true}>
-                      Давтан
-                    </Option>
-                    <Option value={3}>Урьдчилан сэргийлэх</Option>
-                    <Option value={4}>Гэрийн эргэлт</Option>
-                    <Option value={5}>Идэвхтэй хяналт</Option>
-                    <Option value={6}>Дуудлагаар</Option>
-                  </Select>
-                </>
-              }
-            >
-              <MainPatientHistory
-                AppointmentId={AppointmentId}
-                PatientId={IncomePatientId}
-                CabinetId={IncomeCabinetId}
-                Inspection={Inspection}
-                handleClick={handleTypeChange}
-              />
-            </Card>
-          ) : null}
-          {type == "OCS" ? (
-            <Card
-              bordered={false}
-              title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
-              className="header-solid max-h-max rounded-md"
-              loading={cardLoading}
-              bodyStyle={{
-                paddingTop: 0,
-                paddingBottom: 16,
-              }}
-              extra={
-                <Row className="items-center">
-                  <Col>
-                    <Text className="mr-2">Нийт төлбөр</Text>
-                  </Col>
-                  <Col>
-                    <InputNumber
-                      min={1}
-                      max={10}
-                      style={{
-                        minHeight: INPUT_HEIGHT,
-                        height: INPUT_HEIGHT,
-                      }}
-                      disabled
-                    />
-                  </Col>
-                </Row>
-              }
-            >
-              <Ocs selectedPatient={selectedPatient} handleClick={handleClick} />
-            </Card>
-          ) : null}
-        </div>
-      </div>
-    </div>
+      <Schedule isOpen={isOpen} isOCS={true} incomeData={payments} selectedPatient={selectedPatient} isClose={() => setIsOpen(false)} />
+    </>
   );
 }
 

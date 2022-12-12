@@ -7,7 +7,8 @@ import { useSelector } from "react-redux";
 import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from "../../../../features/authReducer";
 import { Get } from "../../../comman";
-import logo from '../../../../assets/logo/logo.png'
+// import logo from '../../../../assets/logo/logo.png'
+import logo from '../../../../assets/logo/universal.png'
 import moment from "moment";
 export default function Index(props) {
     const printRef = useRef();
@@ -74,8 +75,9 @@ export default function Index(props) {
                                     </div>
                                     <div className="basis-1/2">
                                         <p className="text-right">
-                                            ЭМСайдын 2013 оны 11 сарын 450 тоот тушаалаар батлав.
-                                            Эрүүл мэндын бүртгэлийн маягт АМ-15
+                                            Эрүүл мэндийн сайдын 2019 оны 12 сарын 30-ны
+                                            өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт
+                                            Эрүүл мэндын бүртгэлийн маягт CT-1
                                         </p>
                                     </div>
                                 </div>

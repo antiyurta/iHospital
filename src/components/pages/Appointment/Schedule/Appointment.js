@@ -13,7 +13,7 @@ import moment from "moment";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
-import { Get, openNofi, Post, ScrollRef } from "../../../comman";
+import { Get, openNofi, Patch, Post, ScrollRef } from "../../../comman";
 import mn from "antd/es/calendar/locale/mn_MN";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -21,7 +21,7 @@ import { Table } from "react-bootstrap";
 import { ClockCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const { Panel } = Collapse;
-function Appointment({ selectedPatient, type, handleClick }) {
+function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
   const [today] = useState(moment(new Date()));
   const token = useSelector(selectCurrentToken);
   const config = {
@@ -120,8 +120,13 @@ function Appointment({ selectedPatient, type, handleClick }) {
   const getdd = async () => {
     console.log("getdd", data);
     if (type === 2) {
-      handleClick(data.slotId);
-      setAppointmentModal(false);
+      data.type = treatmentData.type;
+      const response = await Patch('service-request/' + treatmentData.invoiceId, token, config, data);
+      if (response === 200) {
+        setAppointmentModal(false);
+        handleClick(true, treatmentData.invoiceId);
+        getSlots();
+      }
     } else {
       data.type = 3;
       data.status = 1;

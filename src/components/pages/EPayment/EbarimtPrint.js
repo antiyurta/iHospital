@@ -30,7 +30,7 @@ function EbarimtPrint(props) {
                         <tr>
                             <td>
                                 <p style={{ fontSize: 14, textAlign: "center" }}>ТӨЛБӨРИЙН БАРИМТ</p>
-                                <p style={{ fontSize: 14, fontWeight: "bold" }}>Картын №:{props.props?.patient?.cardNumber}</p>
+                                <p style={{ fontSize: 14, fontWeight: "bold" }}>Картын №:{props?.props?.patient?.cardNumber}</p>
                                 <div className="flex flex-wrap">
                                     <div className="basis-1/2">
                                         <p style={{ fontSize: 14, fontWeight: "bold" }}>Овог:{props?.props?.patient?.lastName}</p>
@@ -39,7 +39,7 @@ function EbarimtPrint(props) {
                                         <p className="float-right" style={{ fontSize: 14, fontWeight: "bold" }}>Нэр:{props?.props?.patient?.firstName}</p>
                                     </div>
                                 </div>
-                                <p style={{ fontSize: 14, textAlign: "center" }}>ОНОШИЛГОО</p>
+                                <p style={{ fontSize: 14, textAlign: "center" }}>Жагсаалт</p>
                                 {
                                     props?.props?.invoices?.map((invoice, index) => {
                                         return (
@@ -54,17 +54,17 @@ function EbarimtPrint(props) {
                                         )
                                     })
                                 }
-                                <p style={{ fontSize: 14, fontWeight: "bold" }} className="text-end">Нийт үнэ: {props.props.totalAmount}</p>
+                                <p style={{ fontSize: 14, fontWeight: "bold" }} className="text-end">Нийт үнэ: {props?.props?.totalAmount}</p>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <p style={{ fontSize: 14, fontWeight: "bold" }}>Cугалааны дугаар: {props.props.lottery}</p>
-                                <p style={{ fontSize: 14, fontWeight: "bold" }}>ДДТД:{props.props.billId}</p>
+                                <p style={{ fontSize: 14, fontWeight: "bold" }}>Cугалааны дугаар: {props?.props?.lottery}</p>
+                                <p style={{ fontSize: 14, fontWeight: "bold" }}>ДДТД:{props?.props?.billId}</p>
                                 <div style={{ height: "auto", margin: "0 auto", maxWidth: 150, width: "100%" }}>
                                     <QRCode
                                         style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                        value={props.props.qrData}
+                                        value={props?.props?.qrData ? props?.props?.qrData : 0}
                                         viewBox={`0 0 256 256`}
                                     />
                                 </div>
@@ -72,8 +72,8 @@ function EbarimtPrint(props) {
                         </tr>
                         <tr>
                             <td>
-                                <p>Захиалсан цаг:{moment(props.props.createdAt).format('YYYY-MM-DD HH:mm:ss')} </p>
-                                <p>Ажилтан: </p>
+                                <p>Захиалсан цаг:{moment(props?.props?.createdAt).format('YYYY-MM-DD HH:mm:ss')} </p>
+                                <p>Ажилтан: {props?.props?.createdEmployeeName} </p>
                             </td>
                         </tr>
                     </tbody>
