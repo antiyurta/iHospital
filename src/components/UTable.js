@@ -68,7 +68,7 @@ function UTable(props) {
   };
   const onSearch = (value, index) => {
     config.params[index] = value;
-    onStart(1);
+    onStart(meta.page, 10);
   };
   const showModal = () => {
     setEditMode(false);
@@ -107,13 +107,14 @@ function UTable(props) {
       content: <div>Устгасан дохиолдолд дахин сэргэхгүй болно</div>,
       async onOk() {
         await Delete(props.url + "/" + id, token, config);
-        onStart(1);
+        onStart(meta.page, 10);
       },
     });
   };
-  const onStart = async (page) => {
+  const onStart = async (page, pageSize) => {
     setSpinner(false);
     config.params.page = page;
+    config.params.limit = pageSize;
     if (props.params) {
       config.params = { ...config.params, ...props.params.params };
     }
@@ -139,7 +140,7 @@ function UTable(props) {
       response = await Patch(props.url + "/" + id, token, config, data);
       if (response === 200) {
         setIsModalVisible(false);
-        onStart(1);
+        onStart(meta.page, 10);
         setSpinner(true);
       }
     } else {
@@ -147,7 +148,7 @@ function UTable(props) {
       if (response === 201) {
         setIsConfirmLoading(false);
         setIsModalVisible(false);
-        onStart(1);
+        onStart(meta.page, 10);
         setSpinner(true);
       }
     }
@@ -185,7 +186,7 @@ function UTable(props) {
     setTypesData(response.data);
   };
   useEffect(() => {
-    onStart(1);
+    onStart(1, 10);
     ScrollRef(scrollRef);
   }, [props.isRefresh]);
 
@@ -283,16 +284,16 @@ function UTable(props) {
                           >
                             {column?.staticData
                               ? column.staticData(
-                                  row[`${column.index[0]}`][
-                                    `${column.index[1]}`
-                                  ]
-                                )
+                                row[`${column.index[0]}`][
+                                `${column.index[1]}`
+                                ]
+                              )
                               : inputChecker(
-                                  index,
-                                  row[`${column.index[0]}`][
-                                    `${column.index[1]}`
-                                  ]
-                                )}
+                                index,
+                                row[`${column.index[0]}`][
+                                `${column.index[1]}`
+                                ]
+                              )}
                           </td>
                         ) : (
                           column.isView && (
@@ -384,9 +385,9 @@ function UTable(props) {
                 {inputChecker(idx, view[`${element.index}`])}
                 {element.relation
                   ? inputChecker(
-                      idx,
-                      view[`${element.index[0]}`]?.[`${element.index[1]}`]
-                    )
+                    idx,
+                    view[`${element.index[0]}`]?.[`${element.index[1]}`]
+                  )
                   : inputChecker(idx, view[`${element.index}`])}
               </Descriptions.Item>
             );
@@ -443,9 +444,9 @@ function UTable(props) {
                   )}
                   {element.input === "select" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
@@ -466,9 +467,9 @@ function UTable(props) {
                   ) : null}
                   {element.input === "multipleSelect" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
@@ -492,9 +493,9 @@ function UTable(props) {
                   ) : null}
                   {element.input === "switch" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
@@ -511,9 +512,9 @@ function UTable(props) {
                   ) : null}
                   {element.input === "input" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
@@ -525,9 +526,9 @@ function UTable(props) {
                   ) : null}
                   {element.input === "inputNumber" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
@@ -542,9 +543,9 @@ function UTable(props) {
                   ) : null}
                   {element.input === "textarea" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
@@ -556,9 +557,9 @@ function UTable(props) {
                   ) : null}
                   {element.input === "date" ? (
                     element.index === props.dependCol ||
-                    (element.isDepend && dependShow) ||
-                    element.isDepend === undefined ||
-                    !element.isDepend ? (
+                      (element.isDepend && dependShow) ||
+                      element.isDepend === undefined ||
+                      !element.isDepend ? (
                       <Form.Item
                         label={element.label}
                         name={element.index}
