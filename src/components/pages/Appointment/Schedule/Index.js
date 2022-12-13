@@ -171,7 +171,6 @@ function Index({ type }) {
                             const response = await Post('schedule', token, conf, arr);
                             if (response === 201) {
                                 getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-                                form.resetFields();
                             }
                         }
                     }
