@@ -203,7 +203,7 @@ function Profile() {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="Нэр"
+                        label="И-мэйл"
                         name={['employee', 'email']}
                         rules={[
                             {
