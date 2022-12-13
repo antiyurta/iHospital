@@ -96,7 +96,7 @@ function Profile() {
                 <hr className="my-2" />
                 <Descriptions>
                     <Descriptions.Item label="Утас" span={3}>
-                        {user.employee?.phone}
+                        {user.employee?.phoneNo}
                     </Descriptions.Item>
                     <Descriptions.Item label="Email" span={3}>
                         {user?.email}

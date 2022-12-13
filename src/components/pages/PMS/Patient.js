@@ -208,56 +208,56 @@ function Patient() {
     }
     editMode
       ? await axios
-          .patch(DEV_URL + "pms/patient/" + id, data, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "x-api-key": API_KEY,
-            },
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              openNofi("success", "Амжилттай", "Амжиллтай хадгалагдсан");
-              getData(1);
-              setIsConfirmLoading(false);
-              setIsModalVisible(false);
-            } else {
-              openNofi("error", "adsads", "asdas");
-              setIsConfirmLoading(false);
-            }
-          })
-          .catch(() => {
-            openNofi(
-              "error",
-              "Сүлжээний алдаа",
-              "Интернэт холболтоо шалгаад дахин оролдоно уу"
-            );
-          })
-      : await axios
-          .post(DEV_URL + "pms/patient", data, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "x-api-key": API_KEY,
-            },
-          })
-          .then((response) => {
-            if (response.status === 201) {
-              openNofi("success", "Амжилттай", "Амжиллтай хадгалагдсан");
-              getData(1);
-              setIsConfirmLoading(false);
-              setIsModalVisible(false);
-            } else {
-              openNofi("error", "adsads", "asdas");
-              setIsConfirmLoading(false);
-            }
-          })
-          .catch(() => {
+        .patch(DEV_URL + "pms/patient/" + id, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "x-api-key": API_KEY,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            openNofi("success", "Амжилттай", "Амжиллтай хадгалагдсан");
+            getData(1);
             setIsConfirmLoading(false);
-            openNofi(
-              "error",
-              "Сүлжээний алдаа",
-              "Интернэт холболтоо шалгаад дахин оролдоно уу"
-            );
-          });
+            setIsModalVisible(false);
+          } else {
+            openNofi("error", "adsads", "asdas");
+            setIsConfirmLoading(false);
+          }
+        })
+        .catch(() => {
+          openNofi(
+            "error",
+            "Сүлжээний алдаа",
+            "Интернэт холболтоо шалгаад дахин оролдоно уу"
+          );
+        })
+      : await axios
+        .post(DEV_URL + "pms/patient", data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "x-api-key": API_KEY,
+          },
+        })
+        .then((response) => {
+          if (response.status === 201) {
+            openNofi("success", "Амжилттай", "Амжиллтай хадгалагдсан");
+            getData(1);
+            setIsConfirmLoading(false);
+            setIsModalVisible(false);
+          } else {
+            openNofi("error", "adsads", "asdas");
+            setIsConfirmLoading(false);
+          }
+        })
+        .catch(() => {
+          setIsConfirmLoading(false);
+          openNofi(
+            "error",
+            "Сүлжээний алдаа",
+            "Интернэт холболтоо шалгаад дахин оролдоно уу"
+          );
+        });
   };
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
@@ -343,8 +343,8 @@ function Patient() {
         title="Өвчтөн"
         extra={
           <Button
+            type="primary"
             onClick={showModal}
-            className="bg-sky-700 rounded-md text-white"
           >
             Нэмэх
           </Button>
@@ -469,14 +469,6 @@ function Patient() {
                           style={{ paddingRight: 5, paddingLeft: 5 }}
                         >
                           <EditOutlined />
-                        </Button>
-                        <Button
-                          type="link"
-                          onClick={() => deleteModal(row.id)}
-                          title="Устгах"
-                          style={{ paddingLeft: 5 }}
-                        >
-                          <DeleteOutlined style={{ color: "red" }} />
                         </Button>
                       </td>
                     </tr>
@@ -617,8 +609,15 @@ function Patient() {
                         },
                       ]}
                     >
-                      <Select defaultValue={18}>
-                        {/* Монголын ID === 1 */}
+                      <Select
+                        defaultValue={43}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                      >
+                        {/* Монголын ID === 43 */}
                         {citizens.map((citizen, index) => {
                           return (
                             <Option key={index} value={citizen.id}>
@@ -659,12 +658,12 @@ function Patient() {
                     <Form.Item
                       label="Төрсөн огноо"
                       name="birthDay"
-                      // rules={[
-                      //     {
-                      //         required: true,
-                      //         message: 'Төрсөн огноо оруулна уу',
-                      //     }
-                      // ]}
+                    // rules={[
+                    //     {
+                    //         required: true,
+                    //         message: 'Төрсөн огноо оруулна уу',
+                    //     }
+                    // ]}
                     >
                       <DatePicker format={"YYYY-MM-DD HH:mm"} locale={mn} />
                     </Form.Item>
@@ -798,7 +797,6 @@ function Patient() {
                           <Form.Item label="Аймаг/Хот:" name={"aimagId"}>
                             <Select onChange={filterTowns}>
                               {provices.map((provice, index) => {
-                                console.log("provice", provice);
                                 return (
                                   <Option key={index} value={provice.id}>
                                     {provice.name}
@@ -941,11 +939,11 @@ function Patient() {
           </Descriptions.Item>
           <Descriptions.Item label="Овог">{view.lastName}</Descriptions.Item>
           <Descriptions.Item label="Нэр">{view.firstName}</Descriptions.Item>
-          <Descriptions.Item label="Иргэншил">{}</Descriptions.Item>
+          <Descriptions.Item label="Иргэншил">{ }</Descriptions.Item>
           <Descriptions.Item label="Регистр дугаар">
             {view.registerNumber}
           </Descriptions.Item>
-          <Descriptions.Item label="Төрсөн огноо">{}</Descriptions.Item>
+          <Descriptions.Item label="Төрсөн огноо">{ }</Descriptions.Item>
           <Descriptions.Item label="Утас">{view.phoneNo}</Descriptions.Item>
           <Descriptions.Item label="Гэрийн утас">
             {view.homePhoneNo}

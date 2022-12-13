@@ -119,7 +119,6 @@ function UTable(props) {
       config.params = { ...config.params, ...props.params.params };
     }
     const response = await Get(props.url, token, config);
-    console.log("res", response);
     if (response.status === 401) {
       navigate("/login");
     } else {
@@ -212,7 +211,7 @@ function UTable(props) {
           props.isCreate && (
             <Button
               onClick={showModal}
-              className="bg-sky-700 rounded-md text-white"
+              type="primary"
             >
               Нэмэх
             </Button>

@@ -50,7 +50,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
         payments?.map((payment) => {
             if (payment.type === 2 && payment.treatmentRequest?.slotId === null) {
                 time.push(payment);
-            } else if (payment.type === 1) {
+            } else if (payment.type === 1 && payment.xrayRequest.scheduleId === null) {
                 time.push(payment);
             } else {
                 noTime.push(payment);
@@ -76,9 +76,10 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             setIsOpenTreatmentAppointment(true);
             setTreatmentData({ invoiceId: element.id, type: element.type });
         } else if (element.type === 1) {
+            console.log(element);
             setXrayDeviceId(element.xray?.deviceId);
             setXrayInvoiceId(element.xrayRequest?.invoiceId);
-            setXrayRequestId(element.xrayRequest?.id)
+            setXrayRequestId(element.xrayRequest?.id);
             setXrayDeviceSchedules([]);
             setIsOpenXrayModal(true);
         }
