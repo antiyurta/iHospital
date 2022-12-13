@@ -1,4 +1,4 @@
-import { Card, Tabs } from "antd";
+import { Card, Pagination, Tabs } from "antd";
 import Table from "react-bootstrap/Table";
 import { Get, openNofi, ScrollRef } from "../../comman";
 import React, { useRef, useState } from "react";
@@ -25,11 +25,24 @@ function DoctorAppointment() {
   const [selectedPatient, setSelectedPatient] = useState([]);
   //
   const [notPatientsList, setNotPatientsList] = useState([]);
+  const [notPatientsMeta, setNotPatientsMeta] = useState({ page: 1, limit: 10 });
+  const [notPatientsValue, setNotPatientsValue] = useState("");
   //
-  const onSearchSchedule = async (value) => {
-    config.params.registerNumber = value;
-    const response = await Get('pms/patient', token, config);
+  const onSearchSchedule = async (page, pageSize, value) => {
+    if (value != undefined) {
+      setNotPatientsValue(value);
+    }
+    const conf = {
+      headers: {},
+      params: {
+        registerNumber: value,
+        page: page,
+        limit: pageSize,
+      }
+    }
+    const response = await Get('pms/patient', token, conf);
     setNotPatientsList(response.data);
+    setNotPatientsMeta(response.meta);
   };
   //
   useEffect(() => {
@@ -57,6 +70,17 @@ function DoctorAppointment() {
               minHeight: 150,
               maxHeight: 150,
             }}
+            extra={
+              <>
+                <Pagination
+                  simple
+                  current={notPatientsMeta.page}
+                  pageSize={notPatientsMeta.limit}
+                  total={notPatientsMeta.itemCount}
+                  onChange={(page, pageSize) => onSearchSchedule(page, pageSize, notPatientsValue)}
+                />
+              </>
+            }
           >
             <div className='table-responsive' id='style-8' style={{ maxHeight: '150px' }}>
               <Table className='ant-border-space' style={{ width: '100%' }}>

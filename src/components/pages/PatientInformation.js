@@ -5,7 +5,7 @@ const { Search } = Input;
 
 function PatientInformation({ handlesearch, patient, handleTypeChange, OCS, type }) {
     const onSearch = async (value) => {
-        handlesearch(value);
+        handlesearch(1, 10, value);
     }
 
     const handleTypeChangePatient = async (value) => {

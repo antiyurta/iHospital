@@ -1,4 +1,4 @@
-import { Card, Button, Modal, Select } from "antd";
+import { Card, Button, Modal, Select, Pagination } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -20,6 +20,8 @@ function Ambulatory() {
   const [isConfirmLoading, setIsConfirmLoading] = useState(false);
   const [patientsList, setPatientsList] = useState([]);
   const [notPatientsList, setNotPatientsList] = useState([]);
+  const [notPatientsMeta, setNotPatientsMeta] = useState({ page: 1, limit: 10 });
+  const [notPatientsValue, setNotPatientsValue] = useState("");
   //
   const [payments, setPayments] = useState([]);
 
@@ -35,9 +37,20 @@ function Ambulatory() {
     const response = await Get('payment/patient', token, config);
     setPatientsList(response);
   };
-  const onSearchPayment = async (value) => {
-    config.params.registerNumber = value;
-    const response = await Get('pms/patient', token, config);
+  const onSearchPayment = async (page, pageSize, value) => {
+    if (value != undefined) {
+      setNotPatientsValue(value);
+    }
+    const conf = {
+      headers: {},
+      params: {
+        registerNumber: value,
+        page: page,
+        limit: pageSize,
+      }
+    }
+    const response = await Get('pms/patient', token, conf);
+    setNotPatientsMeta(response.meta);
     setNotPatientsList(response.data);
   };
   const getPayment = async (id) => {
@@ -219,6 +232,17 @@ function Ambulatory() {
                 minHeight: 150,
                 maxHeight: 150,
               }}
+              extra={
+                <>
+                  <Pagination
+                    simple
+                    current={notPatientsMeta.page}
+                    pageSize={notPatientsMeta.limit}
+                    total={notPatientsMeta.itemCount}
+                    onChange={(page, pageSize) => onSearchPayment(page, pageSize, notPatientsValue)}
+                  />
+                </>
+              }
             >
               <div className='table-responsive' id='style-8' style={{ maxHeight: '150px' }}>
                 <Table className='ant-border-space' style={{ width: '100%' }}>
