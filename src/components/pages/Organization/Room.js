@@ -37,9 +37,9 @@ function Room() {
   }, []);
 
   const genderData = [
-    { value: "WOMAN", label: "Эм" },
-    { value: "MAN", label: "Эр" },
-    { value: "TRANS", label: "Эр эм холилдсон" },
+    { id: "WOMAN", value: "WOMAN", label: "Эм" },
+    { id: "MAN", value: "MAN", label: "Эр" },
+    { id: "TRANS", value: "TRANS", label: "Эр эм холилдсон" },
   ];
   const column = [
     {
