@@ -5,6 +5,7 @@ import {
   Collapse,
   DatePicker,
   Descriptions,
+  Empty,
   Form,
   Modal,
   Select,
@@ -306,112 +307,117 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
         }
       >
         <div className="mt-2">
-          <Collapse onChange={onChangePanel} accordion>
-            {schedules?.map((schedule) => {
-              return (
-                <Panel
-                  key={schedule.id}
-                  header={
-                    <div>
-                      <b>Өрөө:</b> {schedule.room?.roomNumber}
-                      <b className="ml-2">Тасаг:</b> {schedule.structure?.name}
-                      <b className="ml-2">Кабинет:</b> {schedule.cabinet?.name}
-                      <b className="ml-2">Эмч:</b> {schedule.doctor?.firstName}
-                    </div>
-                  }
-                >
-                  <div className="table-responsive" id="style-8" ref={scrollRef}>
-                    <Table className="ant-border-space" style={{ width: "100%" }}>
-                      <thead className="ant-table-thead">
-                        <tr>
-                          <th>Цаг</th>
-                          <th>Овог</th>
-                          <th>Нас </th>
-                          <th>Хүйс</th>
-                          <th>Регистрийн №</th>
-                          <th>Статус</th>
-                          <th>Утас</th>
-                          <th>Захиалсан огноо</th>
-                          <th>Ирсэн цаг</th>
-                          <th>Бүртгэсэн</th>
-                        </tr>
-                      </thead>
-                      <tbody className="ant-table-tbody">
-                        {slots.map((slot, idx) => {
-                          return (
-                            <tr key={idx}>
-                              <td>
-                                <div className="inline-flex flex-row items-center">
-                                  <span>{slot.startTime?.substr(0, 5)}</span>
-                                  <ClockCircleOutlined className="mx-1.5" />
-                                  <span>{slot.endTime?.substr(0, 5)}</span>
-                                </div>
-                              </td>
-                              {slot.isActive ? (
-                                <td colSpan={9} className="text-center">
-                                  <Button
-                                    className="bg-green-500 text-white"
-                                    onClick={() =>
-                                      orderAppointment(
-                                        true,
-                                        {
-                                          roomNumber: schedule.room.roomNumber,
-                                          structure: schedule.structure.name,
-                                          doctor: schedule.doctor,
-                                          time: {
-                                            start: slot.startTime,
-                                            end: slot.endTime,
-                                          },
-                                        },
-                                        {
-                                          slotId: slot.id,
-                                          patientId: selectedPatient.id,
-                                          doctorId: schedule.doctorId,
-                                          cabinetId: schedule.cabinetId,
-                                        }
-                                      )
-                                    }
-                                  >
-                                    Цаг захиалах
-                                  </Button>
-                                </td>
-                              ) : (
-                                <>
-                                  <td className="text-center">
-                                    {slot.patient?.lastName}
-                                  </td>
-                                  <td className="text-center">
-                                    {slot.patient?.firstName}
-                                  </td>
-                                  <td className="text-center">
-                                    {slot.patient?.age}
-                                  </td>
-                                  <td className="text-center">
-                                    {slot.patient?.registerNumber}
-                                  </td>
-                                  <td className="text-center"></td>
-                                  <td className="text-center">
-                                    {slot.patient?.phoneNo}
-                                  </td>
-                                  <td>
-                                    {moment(slot.updatedAt).format(
-                                      "YYYY-MM-DD HH:mm"
-                                    )}
-                                  </td>
-                                  <td></td>
-                                  <td></td>
-                                </>
-                              )}
+          {
+            schedules.length > 0 ?
+              <Collapse onChange={onChangePanel} accordion>
+                {schedules?.map((schedule) => {
+                  return (
+                    <Panel
+                      key={schedule.id}
+                      header={
+                        <div>
+                          <b>Өрөө:</b> {schedule.room?.roomNumber}
+                          <b className="ml-2">Тасаг:</b> {schedule.structure?.name}
+                          <b className="ml-2">Кабинет:</b> {schedule.cabinet?.name}
+                          <b className="ml-2">Эмч:</b> {schedule.doctor?.firstName}
+                        </div>
+                      }
+                    >
+                      <div className="table-responsive" id="style-8" ref={scrollRef}>
+                        <Table className="ant-border-space" style={{ width: "100%" }}>
+                          <thead className="ant-table-thead">
+                            <tr>
+                              <th>Цаг</th>
+                              <th>Овог</th>
+                              <th>Нас </th>
+                              <th>Хүйс</th>
+                              <th>Регистрийн №</th>
+                              <th>Статус</th>
+                              <th>Утас</th>
+                              <th>Захиалсан огноо</th>
+                              <th>Ирсэн цаг</th>
+                              <th>Бүртгэсэн</th>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Panel>
-              );
-            })}
-          </Collapse>
+                          </thead>
+                          <tbody className="ant-table-tbody">
+                            {slots.map((slot, idx) => {
+                              return (
+                                <tr key={idx}>
+                                  <td>
+                                    <div className="inline-flex flex-row items-center">
+                                      <span>{slot.startTime?.substr(0, 5)}</span>
+                                      <ClockCircleOutlined className="mx-1.5" />
+                                      <span>{slot.endTime?.substr(0, 5)}</span>
+                                    </div>
+                                  </td>
+                                  {slot.isActive ? (
+                                    <td colSpan={9} className="text-center">
+                                      <Button
+                                        className="bg-green-500 text-white"
+                                        onClick={() =>
+                                          orderAppointment(
+                                            true,
+                                            {
+                                              roomNumber: schedule.room.roomNumber,
+                                              structure: schedule.structure.name,
+                                              doctor: schedule.doctor,
+                                              time: {
+                                                start: slot.startTime,
+                                                end: slot.endTime,
+                                              },
+                                            },
+                                            {
+                                              slotId: slot.id,
+                                              patientId: selectedPatient.id,
+                                              doctorId: schedule.doctorId,
+                                              cabinetId: schedule.cabinetId,
+                                            }
+                                          )
+                                        }
+                                      >
+                                        Цаг захиалах
+                                      </Button>
+                                    </td>
+                                  ) : (
+                                    <>
+                                      <td className="text-center">
+                                        {slot.patient?.lastName}
+                                      </td>
+                                      <td className="text-center">
+                                        {slot.patient?.firstName}
+                                      </td>
+                                      <td className="text-center">
+                                        {slot.patient?.age}
+                                      </td>
+                                      <td className="text-center">
+                                        {slot.patient?.registerNumber}
+                                      </td>
+                                      <td className="text-center"></td>
+                                      <td className="text-center">
+                                        {slot.patient?.phoneNo}
+                                      </td>
+                                      <td>
+                                        {moment(slot.updatedAt).format(
+                                          "YYYY-MM-DD HH:mm"
+                                        )}
+                                      </td>
+                                      <td></td>
+                                      <td></td>
+                                    </>
+                                  )}
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      </div>
+                    </Panel>
+                  );
+                })}
+              </Collapse>
+              :
+              <Empty description="Цагийн хувиар ороогүй байна" />
+          }
         </div>
       </Card>
     </>
