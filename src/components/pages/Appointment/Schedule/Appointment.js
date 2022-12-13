@@ -118,7 +118,7 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
     }
   };
   const getdd = async () => {
-    console.log("getdd", data);
+    setIsConfirmLoading(true);
     if (type === 2) {
       data.type = treatmentData.type;
       const response = await Patch('service-request/' + treatmentData.invoiceId, token, config, data);
@@ -138,8 +138,10 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
         getSlots();
       }
     }
+    setIsConfirmLoading(false);
   };
   const urgentRequest = async () => {
+    setIsConfirmLoading(true);
     data.type = 1;
     data.status = 1;
     config.params = {};
@@ -147,6 +149,7 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
     if (response === 201) {
       setAppointmentModal(false);
     }
+    setIsConfirmLoading(false);
   };
   const onFinish = () => {
     filterForm.validateFields()
@@ -212,25 +215,30 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
             <Button
               className="bg-red-500"
               type="danger"
-              onClick={() =>
-                orderAppointment(
-                  false,
-                  {
-                    roomNumber: "",
-                    structure: selectedDep[0]?.name,
-                    doctor: selectedDoctor,
-                    time: {
-                      start: moment(today).format("HH:mm"),
-                      end: moment(today).format("HH:mm"),
+              onClick={() => {
+                filterForm.validateFields().then((values) => {
+                  orderAppointment(
+                    false,
+                    {
+                      roomNumber: "",
+                      structure: selectedDep[0]?.name,
+                      doctor: selectedDoctor,
+                      time: {
+                        start: moment(today).format("HH:mm"),
+                        end: moment(today).format("HH:mm"),
+                      },
                     },
-                  },
-                  {
-                    slotId: null,
-                    patientId: selectedPatient.id,
-                    doctorId: selectedDoctor.id,
-                    cabinetId: selectedDep[0]?.id,
-                  }
-                )
+                    {
+                      slotId: null,
+                      patientId: selectedPatient.id,
+                      doctorId: selectedDoctor.id,
+                      cabinetId: selectedDep[0]?.id,
+                    }
+                  )
+                }).catch((err) => {
+                  openNofi('warning', "Алдаа", "Яаралтай үед тасаг эмч сонгох");
+                })
+              }
               }
             >
               Яаралтай
@@ -419,7 +427,7 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
               <Empty description="Цагийн хувиар ороогүй байна" />
           }
         </div>
-      </Card>
+      </Card >
     </>
   );
 }

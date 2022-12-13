@@ -165,11 +165,13 @@ function Index({ type }) {
                             if (response === 200) {
                                 setEditMode(false);
                                 getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                                form.resetFields();
                             }
                         } else {
                             const response = await Post('schedule', token, conf, arr);
                             if (response === 201) {
                                 getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                                form.resetFields();
                             }
                         }
                     }

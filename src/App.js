@@ -62,6 +62,7 @@ import NotPermission from "./features/notPermission";
 import Nurse from "./components/pages/BeforeAmbulatory/Lists/Nurse";
 import Schedule from "./components/pages/Appointment/Schedule/Schedule";
 import DailyIncome from "./components/pages/EPayment/DailyIncome";
+import Settings from "./components/pages/reference/Settings";
 // lab end
 
 function App() {
@@ -92,6 +93,7 @@ function App() {
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
           <Route path="/dailyIncome" element={<PrivateRoute><DailyIncome /></PrivateRoute>} />
+          <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
           <Route
             path="/hospital"
             element={
