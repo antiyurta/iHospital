@@ -158,6 +158,7 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
         config.params.findOneDate = date;
         config.params.structureId = values.structureId;
         config.params.doctorId = values.doctorId;
+        config.params.type = type;
         const response = await Get("schedule", token, config);
         //   console.log("RES ==========>", response);
         setSchedules(response.data);

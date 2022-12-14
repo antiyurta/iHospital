@@ -691,7 +691,7 @@ function Patient() {
                   </Col>
                   <Col span={8}>
                     <Form.Item label="Гэрийн утас" name="homePhoneNo">
-                      <InputNumber onKeyPress={checkNumber} />
+                      <Input />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
