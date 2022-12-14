@@ -95,7 +95,7 @@ function Diagnose({ handleClick }) {
                                                         <td>
                                                             <Form.Item
                                                                 name={[name, 'type']}>
-                                                                <Select style={{ width: "100%"}}>
+                                                                <Select style={{ width: "100%" }}>
                                                                     <Option value="Үндсэн">Үндсэн</Option>
                                                                     <Option value="Урьдчилан">Урьдчилан</Option>
                                                                     <Option value="Хүндрэл">Хүндрэл</Option>
@@ -133,7 +133,7 @@ function Diagnose({ handleClick }) {
                                 <Table className='ant-border-space' style={{ width: '100%' }}>
                                     <thead className='ant-table-thead bg-slate-200'>
                                         <tr>
-                                            <th className="font-bold text-sm align-middle">Код</th>
+                                            <th className="font-bold text-sm align-middle" style={{ minWidth: 230 }}>Код</th>
                                             <th className="font-bold text-sm align-middle">Монгол нэр</th>
                                             <th className="font-bold text-sm align-middle">Англи нэр</th>
                                             <th className="font-bold text-sm align-middle">Орос нэр</th>
