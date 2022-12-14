@@ -1,16 +1,13 @@
-import { ClockCircleFilled, ClockCircleOutlined } from "@ant-design/icons";
-import { Button, Checkbox, DatePicker, Divider, Empty, Modal, Select } from "antd";
-import moment from "moment";
+import { ClockCircleOutlined } from "@ant-design/icons";
+import { Checkbox, Divider, Modal, Select } from "antd";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { DefaultPost, Get, numberToCurrency, openNofi, Patch } from "../../comman";
+import { DefaultPost, Get, numberToCurrency, openNofi } from "../../comman";
 import Appointment from "../Appointment/Schedule/Appointment";
 import EbarimtPrint from "../EPayment/EbarimtPrint";
-import mnMN from "antd/es/calendar/locale/mn_MN";
 const { Option } = Select;
-const { RangePicker } = DatePicker;
 function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
     // isOCS = true bol emch OSC false bol burgel tolbor awah ued
     const token = useSelector(selectCurrentToken);
@@ -20,8 +17,11 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
     };
     const [noTimeRequirePayments, setNoTimeRequirePayments] = useState([]);
     const [timeRequirePayments, setTimeRequirePayments] = useState([]);
-    const [isOpenTreatmentAppointment, setIsOpenTreatmentAppointment] = useState(false);
-    const [treatmentData, setTreatmentData] = useState({});
+    //
+    const [appointmentType, setAppointmentType] = useState(Number);
+    const [invoiceData, setInvoiceData] = useState({})
+    const [isOpenAppointment, setIsOpenAppointment] = useState(false);
+    //
     const [invoiceRequest, setInvoiceRequest] = useState([]);
     const [selectedAmount, setSelectedAmount] = useState(0);
     const [paymentConfirmLoading, setPaymentConfirmLoading] = useState(false);
@@ -32,13 +32,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
     const [discounts, setDiscounts] = useState([]);
     const [ebarimtModal, setEbarimtModal] = useState(false);
     const [ebarimtData, setEbarimtData] = useState({});
-    //
-    const [xrayDeviceId, setXrayDeviceId] = useState(Number);
-    const [xrayInvoiceId, setXrayInvoiceId] = useState(Number);
-    const [xrayRequestId, setXrayRequestId] = useState(Number);
-    const [xrayDeviceSchedules, setXrayDeviceSchedules] = useState([]);
-    const [isOpenXrayModal, setIsOpenXrayModal] = useState(false);
-    //
+
     const getDiscounts = async () => {
         const response = await Get('payment/discount', token, config);
         setDiscounts(response.data);
@@ -50,7 +44,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
         payments?.map((payment) => {
             if (payment.type === 2 && payment.treatmentRequest?.slotId === null) {
                 time.push(payment);
-            } else if (payment.type === 1 && payment.xrayRequest.scheduleId === null) {
+            } else if (payment.type === 1 && payment.xrayRequest?.slotId === null) {
                 time.push(payment);
             } else {
                 noTime.push(payment);
@@ -59,29 +53,15 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
         setNoTimeRequirePayments(noTime);
         setTimeRequirePayments(time);
     };
-    const getXraySchedule = async (dates) => {
-        if (dates) {
-            const startDate = moment(dates[0]).format('YYYY-MM-DD');
-            const endDate = moment(dates[1]).format('YYYY-MM-DD');
-            config.params.deviceId = xrayDeviceId;
-            config.params.startDate = startDate;
-            config.params.endDate = endDate;
-            const response = await Get('device-booking/schedule', token, config);
-            setXrayDeviceSchedules(response.data);
-        }
-    };
     const onClick = (element) => {
-        console.log(element);
         if (element.type === 2) {
-            setIsOpenTreatmentAppointment(true);
-            setTreatmentData({ invoiceId: element.id, type: element.type });
+            setAppointmentType(2)
+            setIsOpenAppointment(true);
+            setInvoiceData({ invoiceId: element.id, type: element.type });
         } else if (element.type === 1) {
-            console.log(element);
-            setXrayDeviceId(element.xray?.deviceId);
-            setXrayInvoiceId(element.xrayRequest?.invoiceId);
-            setXrayRequestId(element.xrayRequest?.id);
-            setXrayDeviceSchedules([]);
-            setIsOpenXrayModal(true);
+            setAppointmentType(3)
+            setIsOpenAppointment(true);
+            setInvoiceData({ invoiceId: element.id, type: element.type });
         }
     };
     const transfer = (id) => {
@@ -91,27 +71,13 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
         arr.splice(arr.findIndex(e => e.id === id), 1);
         setTimeRequirePayments(arr);
     }
-    const treatmentClick = (state, id) => {
+    const callBackClick = (state, id) => {
         if (state) {
-            setIsOpenTreatmentAppointment(false);
+            setIsOpenAppointment(false);
             transfer(id);
         }
     };
-    const handleClickXray = async (id) => {
-        const conf = {
-            headers: {},
-            params: {}
-        };
-        const response = await Patch('service/xrayRequest/' + xrayRequestId, token, conf, { scheduleId: id });
-        if (response === 200) {
-            transfer(xrayInvoiceId);
-            setIsOpenXrayModal(false);
-        } else {
-            openNofi('warning', 'цаг chadagu', 'cadagu')
-        }
-    };
     const check = (e) => {
-        console.log(e);
         setInvoiceRequest(e);
     };
     const dd = (value, e) => {
@@ -140,10 +106,6 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
         }
         setPaymentConfirmLoading(false);
     }
-    const xrayDateCalculator = (date, hour, minute) => {
-        const cDate = moment(date).set({ hour: hour, minute: minute }).format('YYYY-MM-DD HH:mm');
-        return cDate;
-    };
     useEffect(() => {
         getFilterPayments(incomeData);
         getDiscounts();
@@ -258,42 +220,15 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                 </div >
             </Modal>
             <Modal
-                title="Цаг захиалга"
-                width={"100%"}
-                open={isOpenTreatmentAppointment}
-                onCancel={() => setIsOpenTreatmentAppointment(false)}
+                width={"85%"}
+                open={isOpenAppointment}
+                onCancel={() => setIsOpenAppointment(false)}
                 footer={null}
+                bodyStyle={{ backgroundColor: 'rgb(248 250 252)', padding: 10 }}
             >
-                <Appointment selectedPatient={selectedPatient} type={2} treatmentData={treatmentData} handleClick={treatmentClick} />
-            </Modal>
-            <Modal
-                title='Оношилгоо цаг сонгох'
-                open={isOpenXrayModal}
-                onCancel={() => setIsOpenXrayModal(false)}
-                footer={null}
-            >
-                <div className="p-2">
-                    <RangePicker locale={mnMN} onChange={getXraySchedule} />
+                <div className="pt-10">
+                    <Appointment selectedPatient={selectedPatient} type={appointmentType} invoiceData={invoiceData} handleClick={callBackClick} />
                 </div>
-                {
-                    xrayDeviceSchedules.length > 0 ?
-                        xrayDeviceSchedules.map((schedule, index) => {
-                            return (
-                                <Button
-                                    key={index}
-                                    type="primary"
-                                    className="m-2"
-                                    onClick={() => handleClickXray(schedule.id)}
-                                >
-                                    {xrayDateCalculator(schedule.examDate, schedule.startHour, schedule.startMinute)}
-                                </Button>
-                            )
-                        })
-                        :
-                        <div className="p-1">
-                            <Empty description={"Цаг оруулаагүй"} />
-                        </div>
-                }
             </Modal>
             <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
                 <EbarimtPrint props={ebarimtData} />

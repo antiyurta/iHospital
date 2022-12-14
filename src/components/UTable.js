@@ -283,16 +283,16 @@ function UTable(props) {
                           >
                             {column?.staticData
                               ? column.staticData(
-                                  row[`${column.index[0]}`][
-                                    `${column.index[1]}`
-                                  ]
-                                )
+                                row[`${column.index[0]}`][
+                                `${column.index[1]}`
+                                ]
+                              )
                               : inputChecker(
-                                  index,
-                                  row[`${column.index[0]}`][
-                                    `${column.index[1]}`
-                                  ]
-                                )}
+                                index,
+                                row[`${column.index[0]}`][
+                                `${column.index[1]}`
+                                ]
+                              )}
                           </td>
                         ) : (
                           column.isView && (
@@ -363,6 +363,7 @@ function UTable(props) {
           <Pagination
             className="pagination"
             pageSize={10}
+            current={meta.page}
             total={meta.itemCount}
             onChange={onStart}
           />
@@ -384,9 +385,9 @@ function UTable(props) {
                 {inputChecker(idx, view[`${element.index}`])}
                 {element.relation
                   ? inputChecker(
-                      idx,
-                      view[`${element.index[0]}`]?.[`${element.index[1]}`]
-                    )
+                    idx,
+                    view[`${element.index[0]}`]?.[`${element.index[1]}`]
+                  )
                   : inputChecker(idx, view[`${element.index}`])}
               </Descriptions.Item>
             );
@@ -417,7 +418,7 @@ function UTable(props) {
         <Form
           form={form}
           wrapperCol={{ span: 14 }}
-          // onValuesChange={handleFormValuesChange}
+        // onValuesChange={handleFormValuesChange}
         >
           <Row gutter={[24, 6]}>
             {props.column.map((element, index) => {

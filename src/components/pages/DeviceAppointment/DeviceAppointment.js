@@ -1,21 +1,6 @@
-import { Button, Card, DatePicker, Form, Modal, Select } from "antd";
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, Post } from "../../comman";
 import UTable from "../../UTable";
 
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-
 function DeviceAppointment() {
-    const token = useSelector(selectCurrentToken);
-    const config = {
-        headers: {},
-        params: {}
-    }
     const column = [
         {
             index: 'name',
@@ -66,39 +51,6 @@ function DeviceAppointment() {
             col: 24,
         }
     ]
-
-    const [isOpenModal, setIsOpenModal] = useState(false);
-    const [deviceList, setDeviceList] = useState([]);
-    //
-    const [deviceId, setDeviceId] = useState(Number);
-    const [examDate, setExamDate] = useState('');
-    //
-    const [form] = Form.useForm();
-
-    const getDa = async (e) => {
-        if (e) {
-            const startDate = moment(e[0]).format('YYYY-MM-DD');
-            const endDate = moment(e[1]).format('YYYY-MM-DD');
-            console.log(startDate, endDate);
-            config.params.deviceId = deviceId;
-            config.params.startDate = startDate;
-            config.params.endDate = endDate;
-            const response = await Get('device-booking/schedule', token, config);
-            console.log(response);
-        }
-    }
-
-    const getDeviceList = async () => {
-        config.params.deviceId = null;
-        config.params.examDate = null;
-        const response = await Get('device', token, config);
-        setDeviceList(response.data);
-    }
-
-    useEffect(() => {
-        getDeviceList();
-    }, [])
-
     return (
         <div className="flex flex-wrap">
             <div className="w-full">
@@ -111,61 +63,6 @@ function DeviceAppointment() {
                     isRead={true}
                     isUpdate={true}
                     isDelete={true} />
-            </div>
-            <div className="w-full">
-                <Select onChange={(e) => setDeviceId(e)} className="w-full">
-                    {
-                        deviceList.map((device, index) => {
-                            return (
-                                <Option key={index} index value={device.id}>{device.name}</Option>
-                            )
-                        })
-                    }
-                </Select>
-                <RangePicker onChange={getDa} />
-                <Card
-                    bordered={false}
-                    className="header-solid max-h-max rounded-md"
-                    title={'asdas'}
-                    extra={
-                        <Button onClick={() => setIsOpenModal(true)} className='bg-sky-700 rounded-md text-white'>Нэмэх</Button>
-                    }
-                >
-                    <div className='table-responsive p-4' id='style-8'>
-                        <Table className='ant-border-space' style={{ width: '100%' }}>
-                            <thead className='ant-table-thead bg-slate-200'>
-                                <tr>
-                                    <th>sda</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </Table>
-                    </div>
-                </Card>
-                <Modal
-                    open={isOpenModal}
-                    onCancel={() => setIsOpenModal(false)}
-                    onOk={async () => {
-                        const response = await Post('device-booking/schedule', token, config, {
-                            deviceId: deviceId,
-                            examDate: examDate,
-                        })
-                    }
-                    }
-                >
-                    <Select onChange={(e) => { setDeviceId(e) }}>
-                        {
-                            deviceList.map((list, index) => {
-                                return (
-                                    <Option key={index} value={list.id}>{list.name}</Option>
-                                )
-                            })
-                        }
-                    </Select>
-                    <DatePicker onChange={(e) => { setExamDate(moment(e).utcOffset('+0800').format('YYYY-MM-DD')) }} />
-                </Modal>
             </div>
         </div>
     )

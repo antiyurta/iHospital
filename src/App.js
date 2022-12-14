@@ -63,6 +63,9 @@ import Nurse from "./components/pages/BeforeAmbulatory/Lists/Nurse";
 import Schedule from "./components/pages/Appointment/Schedule/Schedule";
 import DailyIncome from "./components/pages/EPayment/DailyIncome";
 import Settings from "./components/pages/reference/Settings";
+import XrayRequest from "./components/pages/Xray/XrayRequest";
+import DeviceSchedule from "./components/pages/Appointment/Device/DeviceSchedule";
+import BeforeXrayRequest from "./components/pages/Xray/BeforeXrayRequest";
 // lab end
 
 function App() {
@@ -75,7 +78,9 @@ function App() {
           <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="/notPermission" element={<NotPermission />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/schedule" element={<PrivateRoute><Schedule /></PrivateRoute>} />
+          {/* <Route path="/deviceSchedule" element={<PrivateRoute><DeviceSchedule /></PrivateRoute>} /> */}
+          <Route path="/deviceSchedule" element={<DeviceSchedule />} />
           {/* lab start */}
           <Route path="/equipments" element={<EquipmentList />} />
           {/* lab end */}
@@ -264,10 +269,26 @@ function App() {
             }
           />
           <Route
+            path="/xrayList"
+            element={
+              <PrivateRoute>
+                <XrayRequest />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/enrAmbulatoryList"
             element={
               <PrivateRoute>
                 <Nurse />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/beforeXrayList"
+            element={
+              <PrivateRoute>
+                <BeforeXrayRequest />
               </PrivateRoute>
             }
           />

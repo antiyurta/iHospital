@@ -94,7 +94,14 @@ function Diagnose({ handleClick }) {
                                                         </td>
                                                         <td>
                                                             <Form.Item
-                                                                name={[name, 'type']}>
+                                                                name={[name, 'type']}
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Заавал'
+                                                                    }
+                                                                ]}
+                                                            >
                                                                 <Select style={{ width: "100%" }}>
                                                                     <Option value="Үндсэн">Үндсэн</Option>
                                                                     <Option value="Урьдчилан">Урьдчилан</Option>

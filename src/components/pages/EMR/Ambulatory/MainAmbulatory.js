@@ -3,6 +3,7 @@ import { Tabs } from "antd";
 import ProgressNotes from "./ProgressNotes";
 import NurseNote from "../NurseNote";
 import ProgressCheck from "./ProgressCheck";
+import Xray from "../Xray";
 
 export default function MainAmbulatory({ patientId, appointments }) {
   const items = [
@@ -21,11 +22,11 @@ export default function MainAmbulatory({ patientId, appointments }) {
       key: "item-6",
       children: <NurseNote PatientId={patientId} />,
     },
-    // {
-    //   label: "Оношилгоо",
-    //   key: "item-2",
-    //   // children: <ProgressNotes />,
-    // },
+    {
+      label: "Оношилгоо",
+      key: "item-2",
+      children: <Xray PatientId={patientId} />,
+    },
     // {
     //   label: "Эмийн эмчилгээ",
     //   key: "item-3",

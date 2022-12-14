@@ -23,7 +23,7 @@ import { Table } from "react-bootstrap";
 import { ClockCircleOutlined, SearchOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const { Panel } = Collapse;
-function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
+function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
   const [today] = useState(moment(new Date()));
   const token = useSelector(selectCurrentToken);
   const config = {
@@ -113,18 +113,24 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
     setSlots([]);
     config.params.scheduleId = selectedSchedule;
     if (selectedSchedule) {
-      const response = await Get("slot", token, config);
-      setSlots(response.data);
+      if (type === 3) {
+        const response = await Get("device/slot", token, config);
+        setSlots(response.data);
+      } else {
+        const response = await Get("slot", token, config);
+        setSlots(response.data);
+      }
+
     }
   };
   const getdd = async () => {
     setIsConfirmLoading(true);
-    if (type === 2) {
-      data.type = treatmentData.type;
-      const response = await Patch('service-request/' + treatmentData.invoiceId, token, config, data);
+    if (type === 2 || type === 3) {
+      data.type = invoiceData.type;
+      const response = await Patch('service-request/' + invoiceData.invoiceId, token, config, data);
       if (response === 200) {
         setAppointmentModal(false);
-        handleClick(true, treatmentData.invoiceId);
+        handleClick(true, invoiceData.invoiceId);
         getSlots();
       }
     } else {
@@ -160,7 +166,6 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
         config.params.doctorId = values.doctorId;
         config.params.type = type;
         const response = await Get("schedule", token, config);
-        //   console.log("RES ==========>", response);
         setSchedules(response.data);
       }).catch((err) => { })
   };
@@ -213,37 +218,40 @@ function Appointment({ selectedPatient, type, treatmentData, handleClick }) {
         loading={cardLoading}
         extra={
           <Space align="start">
-            <Button
-              className="bg-red-500"
-              type="danger"
-              onClick={() => {
-                filterForm.validateFields().then((values) => {
-                  orderAppointment(
-                    false,
-                    {
-                      roomNumber: "",
-                      structure: selectedDep[0]?.name,
-                      doctor: selectedDoctor,
-                      time: {
-                        start: moment(today).format("HH:mm"),
-                        end: moment(today).format("HH:mm"),
+            {
+              type != 2 && type != 3 &&
+              <Button
+                className="bg-red-500"
+                type="danger"
+                onClick={() => {
+                  filterForm.validateFields().then((values) => {
+                    orderAppointment(
+                      false,
+                      {
+                        roomNumber: "",
+                        structure: selectedDep[0]?.name,
+                        doctor: selectedDoctor,
+                        time: {
+                          start: moment(today).format("HH:mm"),
+                          end: moment(today).format("HH:mm"),
+                        },
                       },
-                    },
-                    {
-                      slotId: null,
-                      patientId: selectedPatient.id,
-                      doctorId: selectedDoctor.id,
-                      cabinetId: selectedDep[0]?.id,
-                    }
-                  )
-                }).catch((err) => {
-                  openNofi('warning', "Алдаа", "Яаралтай үед тасаг эмч сонгох");
-                })
-              }
-              }
-            >
-              Яаралтай
-            </Button>
+                      {
+                        slotId: null,
+                        patientId: selectedPatient.id,
+                        doctorId: selectedDoctor.id,
+                        cabinetId: selectedDep[0]?.id,
+                      }
+                    )
+                  }).catch((err) => {
+                    openNofi('warning', "Алдаа", "Яаралтай үед тасаг эмч сонгох");
+                  })
+                }
+                }
+              >
+                Яаралтай
+              </Button>
+            }
             <Alert
               className="h-6"
               message={`Өнөөдөр: ${today?.format("YYYY-MM-DD")}`}

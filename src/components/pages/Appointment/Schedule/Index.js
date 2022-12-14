@@ -30,7 +30,7 @@ function Index({ type }) {
     const [cabinets, setCabinets] = useState([]);
     const [inspectionTimes, setInspectionTimes] = useState([]);
     const [rooms, setRooms] = useState([]);
-    const [cabinetFilterValue, setCabinetFilterValue] = useState(Number);
+    const [deviceList, setDeviceList] = useState([]);
     //
     const config = {
         headers: {},
@@ -92,6 +92,10 @@ function Index({ type }) {
         if (response.data.length != 0) {
             setRooms(response.data);
         }
+    };
+    const getDeviceList = async () => {
+        const response = await Get('device', token, config);
+        setDeviceList(response.data);
     };
     //
     const [days, setDays] = useState([]);
@@ -184,8 +188,6 @@ function Index({ type }) {
             })
     };
 
-    const filteredCabinets = cabinets.filter((cabinet) => cabinet.parentId === cabinetFilterValue);
-
     const editSchedule = (item) => {
         getDoctor();
         setEditWorkDate(item.workDate);
@@ -201,6 +203,7 @@ function Index({ type }) {
 
     useEffect(() => {
         getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+        getDeviceList();
         getStructures();
         getCabinets();
         getDoctor();
@@ -218,6 +221,30 @@ function Index({ type }) {
                 >
                     <Form layout="vertical" form={form} className="p-3">
                         <Row md={[15, 15]}>
+                            {type === 3 &&
+                                <Col span={24} className="p-1">
+                                    <Form.Item
+                                        label="Төхөөрөмж:"
+                                        name="deviceId"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Заавал"
+                                            }
+                                        ]}
+                                    >
+                                        <Select>
+                                            {
+                                                deviceList.map((list, index) => {
+                                                    return (
+                                                        <Option key={index} value={list.id}>{list.name}</Option>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            }
                             <Col span={12} className="p-1">
                                 <Form.Item
                                     label="Эхлэх цаг:"
@@ -298,7 +325,7 @@ function Index({ type }) {
                             </Col>
                             <Col span={24} className="p-1">
                                 <Form.Item
-                                    label={type === 1 && "Эмч сонгох:" || type === 2 && "Сувилагч сонгох:"}
+                                    label={type === 2 ? "Сувилагч сонгох:" : "Эмч сонгох:"}
                                     name="doctorId"
                                     rules={[
                                         {

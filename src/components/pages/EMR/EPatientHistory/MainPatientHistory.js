@@ -6,12 +6,12 @@ import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from "../
 import { blue } from "@ant-design/colors";
 import DynamicFormInspection from "../../DynamicFormInspection";
 import HistoryTab from "./HistoryTab";
-import { Get, openNofi, Post } from "../../../comman";
+import { Get, openNofi, Patch, Post } from "../../../comman";
 import Diagnose from "../../service/Diagnose";
 // import { Table } from "react-bootstrap";
 import { CloseOutlined } from "@ant-design/icons";
 const { Option } = Select;
-function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, handleClick }) {
+function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId, Inspection, handleClick }) {
   const [form] = Form.useForm();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
@@ -22,20 +22,21 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
     headers: {},
     params: {}
   }
-  const id = PatientId;
+  const patientId = PatientId;
   const inspection = Inspection;
   const cabinetId = CabinetId;
   const appointmentId = AppointmentId;
+  const xrayRequestId = XrayRequestId;
   const [confirmModal, setConfirmModal] = useState(false);
 
   const DiagnoseHandleClick = (diagnoses) => {
     form.setFieldValue('diagnose', diagnoses);
   };
   const Tab1Content = useCallback(() => {
-    return <HistoryTab patientId={id} inspection={inspection} />;
+    return <HistoryTab patientId={patientId} inspection={inspection} />;
   }, []);
   const Tab2Content = useCallback(() => {
-    return <GeneralInspection patientId={id} inspection={inspection} />;
+    return <GeneralInspection patientId={patientId} inspection={inspection} />;
   }, []);
 
   const DynamicTabContent = useCallback((props) => {
@@ -149,6 +150,27 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
             }
           </>
         ) : null}
+        {"conclusion" in props.data && props.data.conclusion.length > 0 ? (
+          <>
+            {
+              props.data['conclusion'].map((conclusion, index) => {
+                return (
+                  <div key={index}>
+                    {
+                      inspection === 1 && <div>
+                        <p className="mt-2 font-semibold">{conclusion.label}</p>
+                        <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                      </div>
+                    }
+                    <div>
+                      <DynamicFormInspection data={conclusion.options} forkey={conclusion.label} unikey={conclusion.inspectionType} />
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </>
+        ) : null}
         {props.data ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
@@ -179,19 +201,28 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
 
   const saveDynamicTab = async (values) => {
     const data = {
-      appointmentId: appointmentId,
       cabinetId: cabinetId,
-      patientId: id,
+      patientId: patientId,
       doctorId: userId,
-      pain: JSON.stringify(values["pain"]),
-      question: JSON.stringify(values["question"]),
-      inspection: JSON.stringify(values["inspection"]),
-      plan: JSON.stringify(values["plan"]),
       diagnose: JSON.stringify(values['diagnose']),
+    }
+    if (inspection === 11) {
+      data['xrayRequestId'] = xrayRequestId;
+      data['conclusion'] = JSON.stringify(values['conclusion']);
+    } else {
+      data['appointmentId'] = appointmentId;
+      data['pain'] = JSON.stringify(values["pain"]);
+      data['question'] = JSON.stringify(values["question"]);
+      data['inspection'] = JSON.stringify(values["inspection"]);
+      data['plan'] = JSON.stringify(values["plan"]);
     }
     const response = await Post('emr/inspectionNote', token, config, data);
     if (response === 201) {
-      setConfirmModal(true);
+      if (inspection === 11) {
+        Patch('service/xrayRequest/' + XrayRequestId, token, config, { xrayProcess: 2 })
+      } else {
+        setConfirmModal(true);
+      }
     }
   };
 
@@ -272,10 +303,24 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
         options: [
           {
             type: "textarea",
-            value: "TEST"
+            value: "Төлөвлөгөө"
           }
         ],
         inspectionType: "Төлөвлөгөө"
+      }
+    ],
+  };
+  const xrayDefualtForm = {
+    conclusion: [
+      {
+        label: "Дүгнэлт",
+        options: [
+          {
+            type: "textarea",
+            value: "Дүгнэлт"
+          }
+        ],
+        inspectionType: "conclusion"
       }
     ],
   };
@@ -286,12 +331,20 @@ function MainPatientHistory({ AppointmentId, PatientId, CabinetId, Inspection, h
       children: <DynamicTabContent data={defualtForm} />,
     }]);
   };
+  const getXrayDefualtTab = () => {
+    setItems([{
+      label: "Дүгнэлт",
+      key: `item-xray`,
+      children: <DynamicTabContent data={xrayDefualtForm} />,
+    }]);
+  };
   useEffect(() => {
-    console.log("=========>", inspection);
     if (inspection === 1) {
       getInspectionTabs();
     } else if (inspection === 2) {
       getDefualtTab();
+    } else if (inspection === 11) {
+      getXrayDefualtTab();
     }
   }, []);
   return (

@@ -32,7 +32,7 @@ function Ambulatory() {
     headers: {},
     params: {}
   };
-  const onSearch = async (value) => {
+  const onSearch = async (page, pageSize, value) => {
     config.params.registerNumber = value;
     const response = await Get('payment/patient', token, config);
     setPatientsList(response);

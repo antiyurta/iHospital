@@ -256,7 +256,6 @@ function EquipmentList() {
                 })}
                 width="50%"
             >
-
                 <Form form={form}>
                     <div className="flex flex-wrap">
                         <div className="w-full md:w-1/3">

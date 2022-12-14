@@ -26,6 +26,7 @@ function EMR() {
   const IncomeCabinetId = useLocation().state.cabinetId;
   const Inspection = useLocation().state.inspection;
   const AppointmentId = useLocation().state.appointmentId;
+  const XrayRequestId = useLocation().state.xrayRequestId;
   const [cardLoading, setCardLoading] = useState(false);
   const token = useSelector(selectCurrentToken);
   const employeeId = useSelector(selectCurrentUserId);
@@ -46,7 +47,6 @@ function EMR() {
   const getByIdPatient = async (id) => {
     config.params.patientId = null;
     const response = await Get("pms/patient/" + id, token, config);
-    console.log(response);
     if (response) {
       setSelectedPatient(response);
     }
@@ -156,7 +156,7 @@ function EMR() {
                   patient={selectedPatient}
                   handlesearch={handleSearch}
                   handleTypeChange={handleTypeChange}
-                  OCS={true}
+                  OCS={AppointmentId ? true : false}
                   type={type}
                 />
               </div>
@@ -229,7 +229,7 @@ function EMR() {
               >
                 <MainAmbulatory
                   appointments={appointments}
-                  patientId={selectedPatient.id}
+                  patientId={IncomePatientId}
                 />
               </Card>
             </div>
@@ -253,7 +253,7 @@ function EMR() {
                 }}
                 extra={
                   <>
-                    <Select defaultValue={Inspection} style={{ width: 200 }}>
+                    <Select defaultValue={Inspection} disabled={Inspection === 11 ? true : false} style={{ width: 200 }}>
                       <Option value={1} disabled={true}>
                         Анхан
                       </Option>
@@ -264,12 +264,14 @@ function EMR() {
                       <Option value={4}>Гэрийн эргэлт</Option>
                       <Option value={5}>Идэвхтэй хяналт</Option>
                       <Option value={6}>Дуудлагаар</Option>
+                      <Option value={11} disabled={true}>xray</Option>
                     </Select>
                   </>
                 }
               >
                 <MainPatientHistory
                   AppointmentId={AppointmentId}
+                  XrayRequestId={XrayRequestId}
                   PatientId={IncomePatientId}
                   CabinetId={IncomeCabinetId}
                   Inspection={Inspection}

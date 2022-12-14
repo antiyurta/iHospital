@@ -608,9 +608,10 @@ function Patient() {
                           message: "Заавал",
                         },
                       ]}
+                      initialValue={43}
                     >
                       <Select
-                        defaultValue={43}
+                        // defaultValue={43}
                         showSearch
                         optionFilterProp="children"
                         filterOption={(input, option) =>
