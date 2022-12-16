@@ -1,114 +1,313 @@
-import { EditOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Modal } from "antd";
-import { useRef } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import { Spinner, Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, ScrollRef } from "../../comman";
-
+import UTable from '../../UTable';
 function Finance() {
-    const token = useSelector(selectCurrentToken);
-    const config = {
-        headers: {},
-        params: {}
-    };
-    const scrollRef = useRef();
-    const [spinner, setSpinner] = useState(false);
-    const [finances, setFinances] = useState([]);
-    const [isOpenModalExpense, setIsOpenModalExpense] = useState(false);
-    const [financeForm] = Form.useForm();
-    const [orderExpense, setOrderExpense] = useState([]);
-    const getFinances = async () => {
-        const response = await Get('finance/material', token, config);
-        if (response.data.length > 0) {
-            setFinances(response.data);
-            setSpinner(true);
-        }
-    };
-    const orderExpenseModal = (finance) => {
-        setOrderExpense(finance);
-        setIsOpenModalExpense(true);
-    };
-    useEffect(() => {
-        getFinances();
-        ScrollRef(scrollRef);
-    }, [])
-
+    const column = [
+        {
+            index: "m_id",
+            label: "барааны ДДД",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "b_id",
+            label: "байгууллага ID",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "barcode",
+            label: "барааны баркод",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "m_name",
+            label: "барааны нэр",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "e_name",
+            label: "гадаад нэр захиалгад хэрэглэх",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "mark",
+            label: "марк",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "seri",
+            label: "сери эмийн санд хэрэглэх",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "xn",
+            label: "хэмжих нэгж",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "dotcode",
+            label: "дотоод код",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "shortname",
+            label: "богино нэр ПОС-н талонд хэрэглэх",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "atype_id",
+            label: "барааны төрөл",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "agroup_id",
+            label: "барааны бүлэг",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "m_brand",
+            label: "брэнд",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "m_infos",
+            label: "нэмэлт тайлбар техникийн үзүүлэлт",
+            isView: true,
+            input: "textarea",
+            col: 24,
+        },
+        {
+            index: "salepercent",
+            label: "хөнгөлөлтийн хувь",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "mincount",
+            label: "Нөөцийн доод хэмжээ",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "nodiscount",
+            label: "хөнгөлөлт үзүүлэх боломжгүй (1) эсэх",
+            isView: true,
+            input: "switch",
+            col: 24,
+        },
+        {
+            index: "clientname",
+            label: "нийлүүлэгчийн нэр",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "m_cost",
+            label: "нэгжийн өртөг дундаж",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "price_low",
+            label: "үнэ",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "price_big",
+            label: "бөөний үнэ",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "price_lowV",
+            label: "үнэ валютаар",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "price_bigV",
+            label: "бөөний үнэ валютаар",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "sale_priority",
+            label: "борлуулалтын зэрэг",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "m_mass",
+            label: "барааны жин",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "pcount",
+            label: "бөөний тоо",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "pcount_n",
+            label: "багцын тоо",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "whcode",
+            label: "байршил",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "regdate",
+            label: "бүртгэсэн огноо",
+            isView: true,
+            input: "date",
+            col: 24,
+        },
+        {
+            index: "enddate",
+            label: "дуусах хугацаа",
+            isView: true,
+            input: "date",
+            col: 24,
+        },
+        {
+            index: "ratecode",
+            label: "ашиглахгүй",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "checked",
+            label: "тэмдэглэгээ",
+            isView: true,
+            input: "switch",
+            col: 24,
+        },
+        {
+            index: "d_code",
+            label: "код",
+            isView: true,
+            input: "input",
+            col: 24,
+        },
+        {
+            index: "clid",
+            label: "нийлүүлэгчийн ДДД",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "m_id2",
+            label: "өмнөх бүртгэлийн барааны ДДД",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "saletype",
+            label: "борлуулалтын ангилал",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "ct_per",
+            label: "НХАТ-н хувь",
+            isView: true,
+            input: "inputNumber",
+            col: 24,
+        },
+        {
+            index: "adate",
+            label: "огноо",
+            isView: true,
+            input: "date",
+            col: 24,
+        },
+        {
+            index: "updatePrice",
+            label: "шинэслэсэн огноо",
+            isView: true,
+            input: "date",
+            col: 24,
+        },
+        {
+            index: "t_sent",
+            label: "илгээсэн эсэх",
+            isView: true,
+            input: "switch",
+            col: 24,
+        },
+        {
+            index: "t_get",
+            label: "татсан эсэх",
+            isView: true,
+            input: "switch",
+            col: 24,
+        },
+        // {
+        //     index: "taxtype",
+        //     label: "татварын төрөл",
+        //     isView: true,
+        //     input: "switch",
+        //     col: 24,
+        // },
+    ];
     return (
         <>
-            <Card
-                bordered={false}
-                className="header-solid max-h-max rounded-md"
-                title="Finance"
-            >
-                <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
-                    <Table className='ant-border-space' style={{ width: '100%' }}>
-                        <thead className='ant-table-thead bg-slate-200'>
-                            <tr>
-                                <th>b_id</th>
-                                <th>barcode</th>
-                                <th>dotcode</th>
-                                <th>e_name</th>
-                                <th>m_cost</th>
-                                <th>m_id</th>
-                                <th>m_name</th>
-                                <th>nodiscount</th>
-                                <th>pcount</th>
-                                <th>Үйлдэл</th>
-                            </tr>
-                        </thead>
-                        <tbody className='ant-table-tbody'>
-                            {spinner ?
-                                finances.map((finance, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{finance.b_id}</td>
-                                            <td>{finance.barcode}</td>
-                                            <td>{finance.dotcode}</td>
-                                            <td>{finance.e_name}</td>
-                                            <td>{finance.m_cost}</td>
-                                            <td>{finance.m_id}</td>
-                                            <td>{finance.m_name}</td>
-                                            <td>{finance.nodiscount ? 'TIIM' : 'UGUI'}</td>
-                                            <td>{finance.pcount}</td>
-                                            <td>
-                                                <Button type="link" onClick={() => orderExpenseModal(finance)} title='Засах' style={{ paddingRight: 5, paddingLeft: 5 }}><EditOutlined /></Button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                                :
-                                <tr>
-                                    <td colSpan={10} size='lg' style={{ backgroundColor: 'white', textAlign: 'center' }}>
-                                        <Spinner animation='grow' style={{ color: '#1890ff' }} />
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </Table>
-                </div>
-            </Card>
-            <Modal
-                title={orderExpense.e_name + " Захиалах"}
-                open={isOpenModalExpense}
-                onOk={() => {
-                    financeForm.validateFields().then((values) => {
-                        console.log(values);
-                    })
-                }}
-                onCancel={() => setIsOpenModalExpense(false)}
-            >
-                <Form form={financeForm}>
-                    <Form.Item
-                        label="patientId"
-                        name="patientId"
-                    >
-                        
-                    </Form.Item>
-                </Form>
-            </Modal>
+            <UTable
+                title={"Finance"}
+                url={"finance/material"}
+                column={column}
+                width="30%"
+                isCreate={true}
+                isRead={true}
+                isUpdate={true}
+                isDelete={true}
+            />
         </>
     )
 }

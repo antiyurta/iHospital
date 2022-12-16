@@ -219,7 +219,7 @@ function UTable(props) {
         }
       >
         <div className="table-responsive p-4" id="style-8" ref={scrollRef}>
-          <Table className="ant-border-space" style={{ width: "100%" }}>
+          <Table bordered className="ant-border-space" style={{ width: "100%" }}>
             <thead className="ant-table-thead bg-slate-200">
               <tr>
                 <th className="font-bold text-sm align-middle" rowSpan={2}>
