@@ -5,6 +5,7 @@ import {
     PlusOutlined,
     UploadOutlined,
     DeleteOutlined,
+    ReloadOutlined,
 } from "@ant-design/icons";
 import {
     Button,
@@ -15,16 +16,21 @@ import {
     Upload,
     Select,
     InputNumber,
+    Table,
+    DatePicker,
 } from "antd";
+import moment from "moment";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi, Patch, Post, ScrollRef } from "../../comman";
+import mnMN from "antd/es/calendar/locale/mn_MN";
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
+const { RangePicker } = DatePicker;
 function BeforeXrayRequest() {
+    const today = new Date();
     const token = useSelector(selectCurrentToken);
     const config = {
         headers: {},
@@ -38,12 +44,13 @@ function BeforeXrayRequest() {
     const [form] = Form.useForm();
     const [photoIds, setPhotoIds] = useState([]);
     const [editMode, setEditMode] = useState(false);
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [xRayMaterialList, setXRayMaterialList] = useState([]);
     const [usedMaterials, setUsedMaterials] = useState([{}]);
-
     const [id, setId] = useState(Number);
+    const [start, setStart] = useState("");
+    const [end, setEnd] = useState("");
+    const [spinner, setSpinner] = useState(false);
     const getXrayMaterials = async () => {
         config.params.serviceType = 1;
         const response = await Get("service/service-material", token, config);
@@ -52,20 +59,32 @@ function BeforeXrayRequest() {
             setXRayMaterialList(response.data);
         }
     };
-    const getXrayRequest = async () => {
-        config.params.xrayProcess = "0,1";
-        const response = await Get("service/xrayRequest", token, config);
-        if (response.data.length > 0) {
-            setXrayLists(response.data);
-            setMeta(response.meta);
-        }
-        config.params.xrayProcess = null;
+    const getXrayRequest = async (page, pageSize, start, end) => {
+        setSpinner(true);
+        start = moment(start).set({ hour: 0, minute: 0, second: 0 });
+        end = moment(end).set({ hour: 23, minute: 59, second: 59 });
+        const conf = {
+            headers: {},
+            params: {
+                xrayProcess: "0,1",
+                page: page,
+                limit: pageSize,
+                startDate: moment(start).format("YYYY-MM-DD HH:mm"),
+                endDate: moment(end).format("YYYY-MM-DD HH:mm")
+            }
+        };
+        setStart(start);
+        setEnd(end);
+        const response = await Get("service/xrayRequest", token, conf);
+        setXrayLists(response.data);
+        setMeta(response.meta);
+        setSpinner(false);
     };
     const getGenderInfo = (gender) => {
         if (gender === "MAN") {
-            return <td>Эр</td>;
+            return "Эр";
         } else {
-            return <td>Эмэгтэй</td>;
+            return "Эмэгтэй";
         }
     };
     const getAge = (registerNumber) => {
@@ -128,47 +147,27 @@ function BeforeXrayRequest() {
         );
         if (response === 200) {
             setXrayModal(false);
-            getXrayRequest();
+            getXrayRequest(1, 10, start, end);
         }
     };
     const checkType = (process) => {
         if (process === 0) {
-            return (
-                <td style={{ color: "red" }}>
-                    <MinusOutlined />
-                </td>
-            );
+            return <MinusOutlined style={{ color: 'red' }} />
         } else if (process === 1) {
-            return (
-                <td style={{ color: "blue" }}>
-                    <PlusOutlined />
-                </td>
-            );
+            return <PlusOutlined style={{ color: "blue" }} />
         } else {
-            return (
-                <td style={{ color: "green" }}>
-                    <CheckOutlined />
-                </td>
-            );
+            return <CheckOutlined style={{ color: "green" }} />
         }
     };
     const getPaymentInfo = (isPayment) => {
         if (isPayment) {
-            return (
-                <td>
-                    <PlusOutlined style={{ color: "#00adef", fontSize: "20px" }} />
-                </td>
-            );
+            return <PlusOutlined style={{ color: "green" }} />;
         } else {
-            return (
-                <td>
-                    <MinusOutlined style={{ color: "red", fontSize: "20px" }} />
-                </td>
-            );
+            return <MinusOutlined style={{ color: "red" }} />;
         }
     };
     useEffect(() => {
-        getXrayRequest();
+        getXrayRequest(1, 10, today, today);
         getXrayMaterials();
         ScrollRef(scrollRef);
     }, []);
@@ -220,96 +219,162 @@ function BeforeXrayRequest() {
         rows.splice(idx, 1);
         setUsedMaterials(rows);
     };
+    const xrayRequestColumns = [
+        {
+            title: 'Оношилгооны нэр',
+            dataIndex: ['xrays', 'name'],
+            render: (text) => {
+                return (
+                    <div className="whitespace-pre-wrap">{text}</div>
+                )
+            }
+        },
+        {
+            title: 'Он сар',
+            dataIndex: "updatedAt",
+            render: (text) => {
+                return moment(text).format("YYYY-MM-DD")
+            }
+        },
+        {
+            title: "Орох цаг",
+            render: (_, row) => {
+                return (
+                    <div className="inline-flex flex-row items-center">
+                        <span>
+                            {row.deviceSlots?.startTime?.substr(0, 5)}
+                        </span>
+                        <ClockCircleOutlined className="mx-1.5" />
+                        <span>
+                            {row.deviceSlots?.endTime?.substr(0, 5)}
+                        </span>
+                    </div>
+                )
+            }
+        },
+        {
+            title: "Үзлэг хийгдсэн эсэх",
+            dataIndex: 'xrayProcess',
+            render: (text) => {
+                return checkType(text)
+            }
+        },
+        {
+            title: "Картын №",
+            dataIndex: ["patients", 'cardNumber']
+        },
+        {
+            title: "Овог",
+            dataIndex: ["patients", 'lastName']
+        },
+        {
+            title: "Нэр",
+            dataIndex: ["patients", 'firstName']
+        },
+        {
+            title: "Регистр №",
+            dataIndex: ["patients", 'registerNumber']
+        },
+        {
+            title: "Нас",
+            render: (_, row) => {
+                return getAge(row.patients?.registerNumber);
+            }
+        },
+        {
+            title: "Хүйс",
+            render: (_, row) => {
+                return getGenderInfo(row.patients?.genderType);
+            }
+        },
+        {
+            title: "Илгээсэн",
+            dataIndex: 'createdBy'
+        },
+        {
+            title: "Эмч",
+            dataIndex: ['employees', 'firstName']
+        },
+        {
+            title: "Төлбөр",
+            dataIndex: 'isPayment',
+            render: (text) => {
+                return getPaymentInfo(text)
+            }
+        },
+        {
+            title: "Зураг",
+            render: (_, row) => {
+                return (
+                    row.photos.length > 0 ?
+                        <ul className="list-disc list-inside">
+                            {row.photos?.map((photo, index) => {
+                                return <li key={index}>{photo.filename}</li>;
+                            })}
+                        </ul>
+                        :
+                        <Button type="primary" onClick={() => newModal(row.id, row?.isPayment)}>Зураг оруулах</Button>
+                )
+            }
+        },
+        {
+            title: "Материал",
+            render: () => {
+                return <Button type="primary" onClick={showModal}>Зарлагадах</Button>
+            }
+        }
+    ]
     return (
         <>
-            <Card
-                title="Оношилгооны өмнөх жагсаалт"
-                bordered={false}
-                className="header-solid max-h-max rounded-md"
-            >
-                <div>
-                    <div className="table-responsive" id="style-8" ref={scrollRef}>
-                        <Table
-                            bordered
-                            className="ant-border-space"
-                            style={{ width: "100%" }}
-                        >
-                            <thead className="ant-table-thead bg-slate-200">
-                                <tr>
-                                    <th>Үзлэг хийгдсэн эсэх</th>
-                                    <th>Орох цаг</th>
-                                    <th>Картын №</th>
-                                    <th>Овог</th>
-                                    <th>Нэр</th>
-                                    <th>Регистр №</th>
-                                    <th>Нас</th>
-                                    <th>Хүйс</th>
-                                    <th>Илгээсэн</th>
-                                    <th>Онош</th>
-                                    <th>Эмч</th>
-                                    <th>Төлбөр</th>
-                                    <th>Оношилгооны нэр</th>
-                                    <th>Зураг</th>
-                                    <th>Материал</th>
-                                </tr>
-                            </thead>
-                            <tbody className="ant-table-tbody p-0">
-                                {xrayLists.length > 0 ? (
-                                    xrayLists.map((xray, index) => {
-                                        return (
-                                            <tr
-                                                className="ant-table-row ant-table-row-level-0 hover: cursor-pointer"
-                                                key={index}
-                                                onDoubleClick={() => newModal(xray.id, xray?.isPayment)}
-                                            >
-                                                {checkType(xray.xrayProcess)}
-                                                <td>
-                                                    <div className="inline-flex flex-row items-center">
-                                                        <span>
-                                                            {xray.deviceSlots?.startTime?.substr(0, 5)}
-                                                        </span>
-                                                        <ClockCircleOutlined className="mx-1.5" />
-                                                        <span>
-                                                            {xray.deviceSlots?.endTime?.substr(0, 5)}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>{xray.patients?.cardNumber}</td>
-                                                <td>{xray.patients?.lastName}</td>
-                                                <td>{xray.patients?.firstName}</td>
-                                                <td>{xray.patients?.registerNumber}</td>
-                                                <td>{getAge(xray?.patients?.registerNumber)}</td>
-                                                {getGenderInfo(xray?.patients?.genderType)}
-                                                <td>{xray?.createdBy}</td>
-                                                <td>Байхгүй</td>
-                                                <td>{xray?.schedule?.employees?.firstName}</td>
-                                                {getPaymentInfo(xray?.isPayment)}
-                                                <td>{xray?.xrays?.name}</td>
-                                                <td>
-                                                    <ul className="list-disc list-inside">
-                                                        {xray?.photos?.map((photo, index) => {
-                                                            return <li key={index}>{photo.filename}</li>;
-                                                        })}
-                                                    </ul>
-                                                </td>
-                                                <td>
-                                                    <Button onClick={showModal}>Зарлагадах</Button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
-                                ) : (
-                                    <tr>
-                                        <td colSpan={13}>
-                                            <Empty />
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </Table>
-                    </div>
+            <div className="flex flex-wrap">
+                <div className="w-full">
+                    <Card
+                        title="Оношилгооны өмнөх жагсаалт"
+                        bordered={false}
+                        className="header-solid max-h-max rounded-md"
+                    >
+                        <div className="flex flex-wrap">
+                            <div className="basis-1/3">
+                                <RangePicker onChange={(e) => {
+                                    if (e != null) {
+                                        getXrayRequest(1, 10, e[0], e[1])
+                                    }
+                                }} locale={mnMN} />
+                            </div>
+                            <div className="basis-2/3">
+                                <div className="float-right">
+                                    <Button title="Сэргээх" type="primary" onClick={() => getXrayRequest(1, 10, start, end)}>
+                                        <ReloadOutlined
+                                        />
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="w-full py-2">
+                                <div>
+                                    <Table
+                                        rowKey={"id"}
+                                        locale={{ emptyText: "Мэдээлэл байхгүй" }}
+                                        bordered
+                                        columns={xrayRequestColumns}
+                                        dataSource={xrayLists}
+                                        scroll={{
+                                            x: 1500
+                                        }}
+                                        loading={spinner}
+                                        pagination={{
+                                            simple: true,
+                                            pageSize: 10,
+                                            total: meta.itemCount,
+                                            current: meta.page,
+                                            onChange: (page, pageSize) => getXrayRequest(page, pageSize, start, end)
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
                 </div>
-            </Card>
+            </div>
             <Modal
                 title="Зураг оруулах"
                 open={xrayModal}
@@ -335,7 +400,6 @@ function BeforeXrayRequest() {
                     </Form.Item>
                 </Form>
             </Modal>
-
             <Modal
                 title="Материал зарлагадах"
                 open={isModalOpen}

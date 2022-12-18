@@ -178,6 +178,7 @@ function XrayRequest() {
                                     <Table bordered className='ant-border-space' style={{ width: '100%' }}>
                                         <thead className='ant-table-thead bg-slate-200'>
                                             <tr>
+                                                <th>Оношилгооны нэр</th>
                                                 <th>Үзлэг хийгдсэн эсэх</th>
                                                 <th>Орох цаг</th>
                                                 <th>Картын №</th>
@@ -190,7 +191,6 @@ function XrayRequest() {
                                                 <th>Онош</th>
                                                 <th>Эмч</th>
                                                 <th>Төлбөр</th>
-                                                <th>Оношилгооны нэр</th>
                                             </tr>
                                         </thead>
                                         <tbody className="ant-table-tbody p-0">
@@ -205,6 +205,7 @@ function XrayRequest() {
                                                                         getEMR(xray?.id, xray?.patientId, xray?.schedule?.cabinetId, 11, xray?.xrayProcess)
                                                                     }
                                                                 >
+                                                                    <td>{xray?.xrays?.name}</td>
                                                                     {checkType(xray.xrayProcess)}
                                                                     <td>
                                                                         <div className="inline-flex flex-row items-center">
@@ -223,7 +224,6 @@ function XrayRequest() {
                                                                     <td>Байхгүй</td>
                                                                     <td>{xray?.schedule?.employees?.firstName}</td>
                                                                     {getPaymentInfo(xray?.isPayment)}
-                                                                    <td>{xray?.xrays?.name}</td>
                                                                 </tr>
                                                             )
                                                         })
