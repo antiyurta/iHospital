@@ -256,3 +256,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+.width-200{
+  width: 200px !important;
+}

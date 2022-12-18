@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
-import { Get, Patch } from "../../comman";
+import { Get, Patch, Post } from "../../comman";
 import {
   Col,
   Row,
@@ -13,8 +13,11 @@ import {
   Button,
   Space,
   Tag,
+  Modal,
+  Select,
+  InputNumber,
 } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import usageType from "./usageType.json";
 import examinationProcess from "./examinationProcess.json";
 import Barcode from "react-barcode";
@@ -35,11 +38,25 @@ function RequestAnalys() {
   const [loadingSpin, setLoadingSpin] = useState(false);
   const [statusFilter, setStatusFilter] = useState(0);
   const [data, setData] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [examinationList, setExaminationList] = useState([]);
+  const [usedMaterials, setUsedMaterials] = useState([{}]);
+  const [selectedRowData, setSelectedRowData] = useState("");
   const componentRef = useRef();
+
+  const { Option } = Select;
 
   const config = {
     headers: {},
     params: {},
+  };
+  const showModal = () => {
+    setIsModalOpen(true);
+    setUsedMaterials([{}]);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setUsedMaterials([{}]);
   };
 
   const getERequest = async () => {
@@ -48,7 +65,7 @@ function RequestAnalys() {
     setPatientReqDtl([]);
     const response = await Get(`service/erequest`, token, config);
     if (response.data.length !== 0) {
-      console.log("response get ERequest ====>", response);
+      // console.log("response get ERequest ====>", response);
       response.data.map((el, index) => {
         setPatientReqList((patientReqList) => [
           ...patientReqList,
@@ -76,6 +93,14 @@ function RequestAnalys() {
     }
   };
 
+  const getExamniationMaterial = async () => {
+    config.params.serviceType = 0;
+    const response = await Get("service/service-material", token, config);
+    // console.log("RES getExamniationMaterial==============>", response);
+    if (response.data.length > 0) {
+      setExaminationList(response.data);
+    }
+  };
   const getRequestDtl = async () => {
     setPatientReqDtl([]);
     config.params.examinationRequestId = selectedRowKey[0];
@@ -85,7 +110,7 @@ function RequestAnalys() {
       token,
       config
     );
-    console.log("response get  RequestDtl ====>", response);
+    // console.log("response get  RequestDtl ====>", response);
     if (response.data.length !== 0) {
       response.data.map((el, index) => {
         setPatientReqDtl((patientReqDtl) => [
@@ -115,6 +140,7 @@ function RequestAnalys() {
 
   useEffect(() => {
     setLoaderDtl(true);
+    getExamniationMaterial();
     selectedRowKey !== "" && getRequestDtl();
   }, [selectedRowKey]);
 
@@ -299,6 +325,27 @@ function RequestAnalys() {
 
   //Шинжилгээний төлөв солих
   const statusChange = async (exData) => {
+    setSelectedRowData(exData);
+    if (exData.statusId === 0) {
+      showModal();
+    } else {
+      statusChangeResult(exData);
+    }
+  };
+  const saveUsedMaterials = async () => {
+    const response = await Post(
+      `finance/create-expenses`,
+      token,
+      config,
+      usedMaterials
+    );
+    if (response === 201) {
+      statusChangeResult(selectedRowData);
+      setIsModalOpen(false);
+      setUsedMaterials([{}]);
+    }
+  };
+  const statusChangeResult = async (exData) => {
     if (exData.statusId >= 0 && exData.statusId < 4) {
       data.examinationProcess = exData.statusId + 1;
       const response = await Patch(
@@ -326,6 +373,33 @@ function RequestAnalys() {
         getRequestDtl();
       }
     }
+  };
+  const handleChange = (idx, e, type) => {
+    const rows = [...usedMaterials];
+    if (type === "material") {
+      rows[idx] = {
+        ...rows[idx],
+        ["materialId"]: e,
+      };
+    } else if (type === "quantity") {
+      rows[idx] = {
+        ...rows[idx],
+        ["count"]: e,
+      };
+    }
+    setUsedMaterials(rows);
+  };
+  const handleAddRow = () => {
+    const item = {
+      materialId: "",
+      count: "",
+    };
+    setUsedMaterials((usedMaterials) => [...usedMaterials, item]);
+  };
+  const handleRemoveSpecificRow = (idx) => () => {
+    const rows = [...usedMaterials];
+    rows.splice(idx, 1);
+    setUsedMaterials(rows);
   };
 
   return (
@@ -417,6 +491,96 @@ function RequestAnalys() {
             }}
           />
         </Col>
+        <Modal
+          title="Шилжүүлэх"
+          open={isModalOpen}
+          onOk={saveUsedMaterials}
+          onCancel={handleCancel}
+          okText="Хадгалах"
+          cancelText="Хаах"
+          width={800}
+        >
+          <div className="container">
+            <div className="row clearfix">
+              <div className="col-md-12 column">
+                <table
+                  className="table table-bordered table-hover"
+                  id="tab_logic"
+                >
+                  <thead>
+                    <tr>
+                      <th className="text-center"> # </th>
+                      <th className="text-center"> Материал </th>
+                      <th className="text-center"> Тоо ширхэг </th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usedMaterials.map((item, idx) => (
+                      <tr id="addr0" key={idx}>
+                        <td className="text-center">{idx + 1}</td>
+                        <td className="text-center">
+                          <Select
+                            allowClear
+                            value={usedMaterials[idx].materialId || undefined}
+                            onChange={(e) => {
+                              // setSelectedMaterial(e);
+                              handleChange(idx, e, "material");
+                            }}
+                            showSearch
+                            style={{
+                              minWidth: 200,
+                            }}
+                            size="small"
+                            placeholder="Сонгох"
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                              option.children.includes(input)
+                            }
+                            filterSort={(optionA, optionB) =>
+                              optionA.children
+                                .toLowerCase()
+                                .localeCompare(optionB.children.toLowerCase())
+                            }
+                          >
+                            {examinationList?.map((el, index) => {
+                              return (
+                                <Option value={el.materialId} key={index}>
+                                  {el.materialName}
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </td>
+                        <td className="text-center">
+                          <InputNumber
+                            style={{
+                              width: 200,
+                            }}
+                            value={usedMaterials[idx].count}
+                            onChange={(e) => handleChange(idx, e, "quantity")}
+                            className="width-200"
+                          />
+                        </td>
+                        <td className="text-center">
+                          <button
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={handleRemoveSpecificRow(idx)}
+                          >
+                            <DeleteOutlined />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <button onClick={handleAddRow} className="btn btn-primary">
+                  Нэмэх
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal>
       </Row>
       {selectedExaminations.length > 0 && (
         //Энд сонгогдсон шинжилгээнүүдийн зөвхөн эхнийхийг хэвлэхээр тохируулж байгаа.
