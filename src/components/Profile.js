@@ -27,16 +27,16 @@ function Profile() {
     const getProfile = async () => {
         const response = await Get("authentication", token, config);
         profileForm.setFieldsValue(response);
-        if (!depId) {
+        if (depId === null) {
             dispatch(setDepId(response.employee?.depIds));
         }
-        if (!appId) {
+        if (appId === null) {
             dispatch(setAppId(response.employee?.appId));
         }
-        if (!userId) {
+        if (userId === null) {
             dispatch(setUserId(response.employee?.id));
         }
-        if (!infoUser.firstName && !infoUser.lastName) {
+        if (infoUser.firstName === null && infoUser.lastName === null) {
             dispatch(setUserInfo({ firstName: response.employee?.firstName, lastName: response.employee?.lastName }));
         }
         setUser(response);

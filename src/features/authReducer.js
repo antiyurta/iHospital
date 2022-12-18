@@ -4,13 +4,13 @@ export const auth = createSlice({
     name: 'auth',
     initialState: {
         userInfo: {
-            firstName: "",
-            lastName: ""
+            firstName: null,
+            lastName: null,
         },
-        token: '',
+        token: null,
         depId: [],
-        appId: '',
-        userId: '',
+        appId: null,
+        userId: null,
     },
     reducers: {
         login: (state, action) => {
