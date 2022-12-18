@@ -304,6 +304,14 @@ input::-webkit-inner-spin-button {
     height: auto;
   }
 
+  p {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 100;
+    font-size: small;
+    color: black;
+    white-space: normal;
+  }
+
   table,
   th,
   td {

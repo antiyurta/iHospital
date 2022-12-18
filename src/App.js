@@ -70,6 +70,7 @@ import BeforeXrayRequest from "./components/pages/Xray/BeforeXrayRequest";
 import FinanceMaterialXray from "./components/pages/Finance/FinanceMaterialXray";
 import FinanceMaterialTreatment from "./components/pages/Finance/FinanceMaterialTreatment";
 import FinanceMaterialSurgery from "./components/pages/Finance/FinanceMaterialSurgery";
+import ExoRequest from "./components/pages/Exo/ExoRequest";
 // lab end
 
 function App() {
@@ -324,6 +325,14 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+              path="/exoList"
+              element={
+                <PrivateRoute>
+                  <ExoRequest />
+                </PrivateRoute>
+              }
+            />
           <Route
             path="/enrAmbulatoryList"
             element={
