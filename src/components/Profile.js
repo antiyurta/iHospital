@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setUserId, setUserInfo, selectCurrentUserInfo } from '../features/authReducer';
+import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setUserId, setUserInfo, selectCurrentUserInfo, selectCurrentLastName, selectCurrentFirstName } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from "antd";
@@ -12,7 +12,8 @@ function Profile() {
     const depId = useSelector(selectCurrentDepId);
     const appId = useSelector(selectCurrentAppId);
     const userId = useSelector(selectCurrentUserId);
-    const infoUser = useSelector(selectCurrentUserInfo);
+    const userFirstName = useSelector(selectCurrentFirstName);
+    const userLastName = useSelector(selectCurrentLastName);
     const dispatch = useDispatch();
     const [profileForm] = Form.useForm();
     const [passwordForm] = Form.useForm();
@@ -36,7 +37,7 @@ function Profile() {
         if (userId === null) {
             dispatch(setUserId(response.employee?.id));
         }
-        if (infoUser.firstName === null && infoUser.lastName === null) {
+        if (userLastName === null && userFirstName === null) {
             dispatch(setUserInfo({ firstName: response.employee?.firstName, lastName: response.employee?.lastName }));
         }
         setUser(response);

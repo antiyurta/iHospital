@@ -5,14 +5,15 @@ import mnMN from "antd/es/calendar/locale/mn_MN";
 import { useState } from "react";
 import { Get, numberToCurrency } from "../../../comman";
 import { useSelector } from "react-redux";
-import { selectCurrentToken, selectCurrentUserInfo } from "../../../../features/authReducer";
+import { selectCurrentFirstName, selectCurrentLastName, selectCurrentToken, selectCurrentUserInfo } from "../../../../features/authReducer";
 import { useEffect } from "react";
 import { useReactToPrint } from "react-to-print";
 const { Option } = Select;
 function PrintIndex({ data }) {
     // const today = new Date();
     const [today, setToday] = useState(new Date());
-    const userInfo = useSelector(selectCurrentUserInfo);
+    const userFirstName = useSelector(selectCurrentFirstName);
+    const userLastName = useSelector(selectCurrentLastName);
     const token = useSelector(selectCurrentToken);
     const [employees, setEmployees] = useState([]);
     const [employee, setEmployee] = useState({
@@ -189,7 +190,7 @@ function PrintIndex({ data }) {
                     Тайлан гаргасан: {employee.lastName.substring(0, 1) + "." + employee.firstName} /.............../
                 </p>
                 <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
-                    Хэвлэсэн: {userInfo.lastName.substring(0, 1) + "." + userInfo.firstName} /.............../
+                    Хэвлэсэн: {userFirstName.substring(0, 1) + "." + userFirstName.firstName} /.............../
                 </p>
             </div>
             <Button type="primary" onClick={handlePrint}>Хэвлэх</Button>

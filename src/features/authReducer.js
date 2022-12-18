@@ -3,10 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const auth = createSlice({
     name: 'auth',
     initialState: {
-        userInfo: {
-            firstName: null,
-            lastName: null,
-        },
+        firstName: null,
+        lastName: null,
         token: null,
         depId: [],
         appId: null,
@@ -39,12 +37,13 @@ export const auth = createSlice({
         },
         setUserInfo: (state, action) => {
             console.log(action.payload.firstName);
-            state.userInfo.firstName = action.payload.firstName;
-            state.userInfo.lastName = action.payload.lastName;
+            console.log(action.payload.lastName);
+            state.firstName = action.payload.firstName;
+            state.lastName = action.payload.lastName;
         },
         DelUserInfo: (state) => {
-            state.userInfo['firstName'] = null;
-            state.userInfo['lastName'] = null;
+            state.firstName = null;
+            state.lastName = null;
         }
     }
 })
@@ -67,4 +66,5 @@ export const selectCurrentToken = (state) => state.authReducer.token;
 export const selectCurrentDepId = (state) => state.authReducer.depId;
 export const selectCurrentAppId = (state) => state.authReducer.appId;
 export const selectCurrentUserId = (state) => state.authReducer.userId;
-export const selectCurrentUserInfo = (state) => state.authReducer.userInfo;
+export const selectCurrentFirstName = (state) => state.authReducer.firstName;
+export const selectCurrentLastName = (state) => state.authReducer.lastName;
