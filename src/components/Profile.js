@@ -1,38 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setMenus, setUserId } from '../features/authReducer';
+import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setUserId, setUserInfo, selectCurrentUserInfo } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from "antd";
 import { DefaultPost, Get, openNofi, Patch, Post } from "./comman";
 import { KeyOutlined } from "@ant-design/icons";
 import axios from "axios";
-
-const pencil = [
-    <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        key={0}
-    >
-        <path
-            d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L15.6213 7.20711L12.7929 4.37868L13.5858 3.58579Z"
-            className="fill-gray-7"
-        ></path>
-        <path
-            d="M11.3787 5.79289L3 14.1716V17H5.82842L14.2071 8.62132L11.3787 5.79289Z"
-            className="fill-gray-7"
-        ></path>
-    </svg>,
-];
-
 function Profile() {
     const token = useSelector(selectCurrentToken);
     const depId = useSelector(selectCurrentDepId);
     const appId = useSelector(selectCurrentAppId);
     const userId = useSelector(selectCurrentUserId);
+    const infoUser = useSelector(selectCurrentUserInfo);
     const dispatch = useDispatch();
     const [profileForm] = Form.useForm();
     const [passwordForm] = Form.useForm();
@@ -55,6 +35,9 @@ function Profile() {
         }
         if (!userId) {
             dispatch(setUserId(response.employee?.id));
+        }
+        if (!infoUser.firstName && !infoUser.lastName) {
+            dispatch(setUserInfo({ firstName: response.employee?.firstName, lastName: response.employee?.lastName }));
         }
         setUser(response);
     };
