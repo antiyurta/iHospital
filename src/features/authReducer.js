@@ -43,8 +43,8 @@ export const auth = createSlice({
             state.userInfo.lastName = action.payload.lastName;
         },
         DelUserInfo: (state) => {
-            state.userInfo.firstName = null;
-            state.userInfo.lastName = null;
+            state.userInfo['firstName'] = null;
+            state.userInfo['lastName'] = null;
         }
     }
 })
