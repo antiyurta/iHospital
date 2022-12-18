@@ -58,8 +58,6 @@ export const {
     DelAppId,
     setUserId,
     DelUserId,
-    setUser,
-    DelUser,
     setUserInfo,
     DelUserInfo
 } = auth.actions;
