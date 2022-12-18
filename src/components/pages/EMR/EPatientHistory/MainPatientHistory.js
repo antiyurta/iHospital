@@ -171,6 +171,27 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
             }
           </>
         ) : null}
+        {"advice" in props.data && props.data.advice.length > 0 ? (
+          <>
+            {
+              props.data['advice'].map((advice, index) => {
+                return (
+                  <div key={index}>
+                    {
+                      inspection === 1 && <div>
+                        <p className="mt-2 font-semibold">{advice.label}</p>
+                        <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                      </div>
+                    }
+                    <div>
+                      <DynamicFormInspection data={advice.options} forkey={advice.label} unikey={advice.inspectionType} />
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </>
+        ) : null}
         {props.data ? (
           <>
             <Divider orientation="left" className="text-sm my-2">
@@ -209,6 +230,7 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
     if (inspection === 11) {
       data['xrayRequestId'] = xrayRequestId;
       data['conclusion'] = JSON.stringify(values['conclusion']);
+      data['advice'] = JSON.stringify(values['advice']);
     } else {
       data['appointmentId'] = appointmentId;
       data['pain'] = JSON.stringify(values["pain"]);
@@ -323,6 +345,18 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
         inspectionType: "conclusion"
       }
     ],
+    advice: [
+      {
+        label: 'Зөвлөгөө',
+        options: [
+          {
+            type: 'textarea',
+            value: 'Зөвлөгөө'
+          }
+        ],
+        inspectionType: "advice"
+      }
+    ]
   };
   const getDefualtTab = () => {
     setItems([{

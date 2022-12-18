@@ -57,7 +57,7 @@ export default function Index(props) {
     const getPatientInfo = async (patientId) => {
         const response = await Get('pms/patient/' + patientId, token, config);
         setPatientInfo(response);
-    }
+    };
 
     useEffect(() => {
         getPatientInfo(props.props.patientId);

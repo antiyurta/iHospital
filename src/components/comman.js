@@ -143,7 +143,5 @@ export const openNofi = (type, message, description) => {
 }
 
 export const numberToCurrency = (amount) => {
-    return (
-        amount?.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })
-    )
+    return amount?.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })
 }

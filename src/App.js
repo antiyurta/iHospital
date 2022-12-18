@@ -62,7 +62,7 @@ import NotFound from "./features/notFound";
 import NotPermission from "./features/notPermission";
 import Nurse from "./components/pages/BeforeAmbulatory/Lists/Nurse";
 import Schedule from "./components/pages/Appointment/Schedule/Schedule";
-import DailyIncome from "./components/pages/EPayment/DailyIncome";
+import DailyIncome from "./components/pages/EPayment/DailyIncome/DailyIncome";
 import Settings from "./components/pages/reference/Settings";
 import XrayRequest from "./components/pages/Xray/XrayRequest";
 import DeviceSchedule from "./components/pages/Appointment/Device/DeviceSchedule";

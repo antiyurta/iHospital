@@ -18,7 +18,7 @@ import signinbg from '../assets/logo/demo4.png';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login, logout, DelAppId, DelDepId, DelUserId } from "../features/authReducer";
+import { login, logout, DelAppId, DelDepId, DelUserId, DelUserInfo } from "../features/authReducer";
 import { openNofi } from "./comman";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -76,6 +76,7 @@ function Login() {
         dispatch(DelAppId());
         dispatch(DelDepId());
         dispatch(DelUserId());
+        dispatch(DelUserInfo());
     };
     useEffect(() => {
         clearStorage();

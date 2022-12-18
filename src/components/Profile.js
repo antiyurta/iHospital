@@ -1,38 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setMenus, setUserId } from '../features/authReducer';
+import { selectCurrentAppId, selectCurrentDepId, selectCurrentToken, selectCurrentUserId, setAppId, setDepId, setUserId, setUserInfo, selectCurrentUserInfo, selectCurrentLastName, selectCurrentFirstName } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from "antd";
 import { DefaultPost, Get, openNofi, Patch, Post } from "./comman";
 import { KeyOutlined } from "@ant-design/icons";
 import axios from "axios";
-
-const pencil = [
-    <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        key={0}
-    >
-        <path
-            d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L15.6213 7.20711L12.7929 4.37868L13.5858 3.58579Z"
-            className="fill-gray-7"
-        ></path>
-        <path
-            d="M11.3787 5.79289L3 14.1716V17H5.82842L14.2071 8.62132L11.3787 5.79289Z"
-            className="fill-gray-7"
-        ></path>
-    </svg>,
-];
-
+import PasswordChecklist from "react-password-checklist";
 function Profile() {
     const token = useSelector(selectCurrentToken);
     const depId = useSelector(selectCurrentDepId);
     const appId = useSelector(selectCurrentAppId);
     const userId = useSelector(selectCurrentUserId);
+    const userFirstName = useSelector(selectCurrentFirstName);
+    const userLastName = useSelector(selectCurrentLastName);
     const dispatch = useDispatch();
     const [profileForm] = Form.useForm();
     const [passwordForm] = Form.useForm();
@@ -40,6 +22,8 @@ function Profile() {
     const [profileModal, setProfileModal] = useState(false);
     const [passwordModal, setPasswordModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [passwordValid, setPasswordValid] = useState(false);
+    const [password, setPassword] = useState("");
     const config = {
         headers: {},
         params: {}
@@ -47,14 +31,17 @@ function Profile() {
     const getProfile = async () => {
         const response = await Get("authentication", token, config);
         profileForm.setFieldsValue(response);
-        if (!depId) {
+        if (depId === null) {
             dispatch(setDepId(response.employee?.depIds));
         }
-        if (!appId) {
+        if (appId === null) {
             dispatch(setAppId(response.employee?.appId));
         }
-        if (!userId) {
+        if (userId === null) {
             dispatch(setUserId(response.employee?.id));
+        }
+        if (userLastName === null && userFirstName === null) {
+            dispatch(setUserInfo({ firstName: response.employee?.firstName, lastName: response.employee?.lastName }));
         }
         setUser(response);
     };
@@ -68,31 +55,43 @@ function Profile() {
         }
         setIsLoading(false);
     };
-    const onFinishPassword = async (values) => {
-        setIsLoading(true)
-        values.token = token;
-        await axios.post(process.env.REACT_APP_DEV_URL + "authentication/changePassword", values,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "X-API-KEY": process.env.REACT_APP_API_KEY
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    passwordForm.resetFields();
-                    setPasswordModal(false);
-                    openNofi('success', 'Нууц үг', 'Нууц үг амжилттай солигдлоо')
-                }
-            }).catch((error) => {
-                if (error.response.status === 400) {
-                    openNofi('warning', 'Нууц үг', 'Нууц үг шаардлага хангахгүй')
-                }
-            })
+    const onFinishPassword = async () => {
+        setIsLoading(true);
+        if (passwordValid) {
+            await axios
+                .post(
+                    process.env.REACT_APP_DEV_URL + "authentication/changePassword",
+                    { password: password, token: token },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "X-API-KEY": process.env.REACT_APP_API_KEY,
+                        },
+                    }
+                )
+                .then((response) => {
+                    if (response.status === 200) {
+                        setPasswordModal(false);
+                        setPassword("");
+                        openNofi("success", "Нууц үг", "Нууц үг амжилттай солигдлоо");
+                    }
+                })
+                .catch((error) => {
+                    if (error.response.status === 400) {
+                        openNofi("warning", "Нууц үг", "Нууц үг шаардлага хангахгүй");
+                    }
+                });
+        } else {
+            openNofi("warning", "Нууц үг", "Нууц үг шаардлага хангахгүй");
+        }
         setIsLoading(false);
     };
     useEffect(() => {
         getProfile();
     }, [])
+    const validPasswordHandle = (isValid) => {
+        isValid ? setPasswordValid(true) : setPasswordValid(false);
+    };
     return (
         <div>
             <div
@@ -221,38 +220,31 @@ function Profile() {
                 open={passwordModal}
                 isLoading={isLoading}
                 onCancel={() => setPasswordModal(false)}
-                onOk={() => {
-                    passwordForm.validateFields().then((values) => {
-                        onFinishPassword(values);
-                    }).catch(() => {
-                        openNofi('warning', 'Мэдээлэл дутуу', 'Мэдээлэл дутуу');
-                    })
-                }}
+                onOk={onFinishPassword}
                 okText="Хадгалах"
                 cancelText="Болих"
+                width={400}
             >
-                <Form
-                    form={passwordForm}
-                    labelCol={{
-                        span: 8,
+                <Input.Password
+                    size="small"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder=""
+                    prefix={<KeyOutlined />}
+                />
+
+                <PasswordChecklist
+                    rules={["minLength", "specialChar", "capital"]}
+                    minLength={8}
+                    value={password}
+                    onChange={validPasswordHandle}
+                    messages={{
+                        minLength: "8 болон түүнээс дээш тэмдэг",
+                        specialChar: "1 тусгай тэмдэгт эсвэл 1 тоо (!@#$%^&*_)",
+                        capital: "Багадаа 1 том үсэг",
                     }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
-                >
-                    <Form.Item
-                        label="Шинэ нууц үг"
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Заавал"
-                            }
-                        ]}
-                    >
-                        <Input.Password prefix={<KeyOutlined />} />
-                    </Form.Item>
-                </Form>
+                    style={{ padding: 10 }}
+                />
             </Modal>
         </div>
     );

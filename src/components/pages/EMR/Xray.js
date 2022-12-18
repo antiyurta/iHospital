@@ -1,5 +1,5 @@
-import { FolderOpenOutlined, FolderOutlined, PrinterOutlined, ReloadOutlined } from "@ant-design/icons";
-import { Button, Collapse, Divider, Image, Modal } from "antd";
+import { DownOutlined, FolderOpenOutlined, FolderOutlined, PrinterOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Button, Collapse, Divider, Dropdown, Image, Modal, Select, Space } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import FormXray from "./FormPrint/Xray";
 const { Panel } = Collapse;
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
+const { Option } = Select;
 function Xrays({ PatientId }) {
     const token = useSelector(selectCurrentToken);
     const [xrayHistory, setXrayHistory] = useState([]);
@@ -88,9 +89,6 @@ function Xrays({ PatientId }) {
             <ReloadOutlined spin={spinner} />
         </Button>
     );
-    const getPrint = () => {
-
-    };
     useEffect(() => {
         getPatientXrays(PatientId);
     }, [PatientId])
@@ -124,18 +122,18 @@ function Xrays({ PatientId }) {
                                                 }
                                                 key={value[index].id}
                                                 extra={
-                                                    <PrinterOutlined
-                                                        title="Маягт хэвлэх"
-                                                        className="p-1"
-                                                        onClick={(event) => {
-                                                            const data = {
-                                                                inspectionNotes: value[index].inspectionNotes ? value[index].inspectionNotes : [],
-                                                                photos: value[index].photos ? value[index].photos : []
-                                                            }
-                                                            setPrintData(data);
-                                                            setIsOpenModalForm(true);
-                                                        }}
-                                                    />}
+                                                    <>
+                                                        <PrinterOutlined
+                                                            title="Дүгнэлт хэвлэх"
+                                                            className="p-1"
+                                                            onClick={(event) => {
+                                                                setPrintData(value[index]);
+                                                                console.log(value[index])
+                                                                setIsOpenModalForm(true);
+                                                            }}
+                                                        />
+                                                    </>
+                                                }
                                             >
                                                 <Divider>Зураг</Divider>
                                                 {
@@ -172,10 +170,10 @@ function Xrays({ PatientId }) {
                 open={isOpenModalForm}
                 onCancel={() => setIsOpenModalForm(false)}
                 footer={null}
-                width={845}
+                // width={"auto"}
                 title={'Дүгнэлт хэвлэх'}
             >
-                <FormXray props={printData} />
+                <FormXray printData={printData} />
             </Modal>
         </>
     )
