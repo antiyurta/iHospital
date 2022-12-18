@@ -76,7 +76,7 @@ function Login() {
         dispatch(DelAppId());
         dispatch(DelDepId());
         dispatch(DelUserId());
-        dispatch(DelUserInfo({ firstName: null, lastName: null }))
+        dispatch(DelUserInfo());
     };
     useEffect(() => {
         clearStorage();
