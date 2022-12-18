@@ -187,7 +187,7 @@ function PrintIndex({ data }) {
                 <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>Бэлнээр: {numberToCurrency(totalAmount)}</p>
                 <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>Нийт мөнгөн дүн: {numberToCurrency(totalAmount)}</p>
                 <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
-                    Тайлан гаргасан: {employee.lastName.substring(0, 1) + "." + employee.firstName} /.............../
+                    Тайлан гаргасан: {employee.lastName?.substring(0, 1) + "." + employee.firstName} /.............../
                 </p>
                 <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
                     Хэвлэсэн: {userLastName.substring(0, 1) + "." + userFirstName} /.............../
