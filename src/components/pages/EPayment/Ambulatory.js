@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { DefaultPost, Get, openNofi, Post, ScrollRef } from "../../comman";
 import PatientInformation from "../PatientInformation";
-import Order from '../Order/Order';
+import Order from "../Order/Order";
 import Schedule from "../OCS/Schedule";
 import moment from "moment";
 
@@ -20,7 +20,10 @@ function Ambulatory() {
   const [isConfirmLoading, setIsConfirmLoading] = useState(false);
   const [patientsList, setPatientsList] = useState([]);
   const [notPatientsList, setNotPatientsList] = useState([]);
-  const [notPatientsMeta, setNotPatientsMeta] = useState({ page: 1, limit: 10 });
+  const [notPatientsMeta, setNotPatientsMeta] = useState({
+    page: 1,
+    limit: 10,
+  });
   const [notPatientsValue, setNotPatientsValue] = useState("");
   //
   const [payments, setPayments] = useState([]);
@@ -30,11 +33,11 @@ function Ambulatory() {
   const scrollRef = useRef();
   const config = {
     headers: {},
-    params: {}
+    params: {},
   };
   const onSearch = async (page, pageSize, value) => {
     config.params.registerNumber = value;
-    const response = await Get('payment/patient', token, config);
+    const response = await Get("payment/patient", token, config);
     setPatientsList(response);
   };
   const onSearchPayment = async (page, pageSize, value) => {
@@ -47,9 +50,9 @@ function Ambulatory() {
         registerNumber: value,
         page: page,
         limit: pageSize,
-      }
-    }
-    const response = await Get('pms/patient', token, conf);
+      },
+    };
+    const response = await Get("pms/patient", token, conf);
     setNotPatientsMeta(response.meta);
     setNotPatientsList(response.data);
   };
@@ -59,40 +62,39 @@ function Ambulatory() {
       headers: {},
       params: {
         patientId: id,
-      }
+      },
     };
-    const response = await Get('payment/invoice', token, conf);
+    const response = await Get("payment/invoice", token, conf);
     getPatient(id);
     setPayments(response.data);
   };
   const getPatient = async (id) => {
-    const patient = await Get('pms/patient/' + id, token, config);
+    const patient = await Get("pms/patient/" + id, token, config);
     setSelectedPatient(patient);
   };
   const saveOrder = async (value) => {
     // console.log(value);
-    if (selectedPatient.length === 0) {
-      openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
-    }
-    else if (value.length > 0) {
+    if (selectedPatient && selectedPatient.length === 0) {
+      openNofi("error", "Анхааруулга", "Өвчтөн сонгоогүй байна");
+    } else if (value.length > 0) {
       var stateIsCito = false;
       value.map((item) => {
         if (!item.isCito) {
           stateIsCito = true;
         }
       });
-      const response = await Post('service-request', token, config, {
+      const response = await Post("service-request", token, config, {
         patientId: selectedPatient.id,
         requestDate: new Date(),
         isCito: stateIsCito ? true : false,
         usageType: "OUT",
         services: value,
-      })
+      });
       if (response === 201) {
         setOrderModal(false);
       }
     } else {
-      openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
+      openNofi("error", "Анхааруулга", "Өвчтөн сонгоогүй байна");
     }
   };
 
@@ -104,32 +106,32 @@ function Ambulatory() {
     {
       //shinejilgee
       name: "Examination",
-      label: 'Шинэжилгээ'
+      label: "Шинэжилгээ",
     },
     {
       //onshilgoo
       name: "Xray",
-      label: "Оношилгоо"
+      label: "Оношилгоо",
     },
     {
       //emchilgee
       name: "Treatment",
-      label: 'Эмчилгээ'
+      label: "Эмчилгээ",
     },
     {
       //hagalgaa mes
       name: "Surgery",
-      label: "Мэс засал"
+      label: "Мэс засал",
     },
     {
       //duran
       name: "Endo",
-      label: "Дуран"
+      label: "Дуран",
     },
     {
       //bagts
-      name: 'Package',
-      label: "Багц"
+      name: "Package",
+      label: "Багц",
     },
   ];
 
@@ -137,7 +139,10 @@ function Ambulatory() {
     <div>
       <div className="flex flex-wrap">
         <div className="w-full md:w-full xl:w-1/2 p-1">
-          <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
+          <PatientInformation
+            patient={selectedPatient}
+            handlesearch={onSearch}
+          />
         </div>
         <div className="w-full md:w-full xl:w-1/2 p-1">
           <Card
@@ -156,7 +161,13 @@ function Ambulatory() {
           >
             <div className="flex flex-wrap">
               <div className="w-full md:w-1/3 xl:1/3">
-                <Button className="bg-[#2d8cff]" type="primary" onClick={() => setOrderModal(true)}>Оношилгоо шинжилгээ захиалах</Button>
+                <Button
+                  className="bg-[#2d8cff]"
+                  type="primary"
+                  onClick={() => setOrderModal(true)}
+                >
+                  Оношилгоо шинжилгээ захиалах
+                </Button>
               </div>
             </div>
           </Card>
@@ -167,9 +178,9 @@ function Ambulatory() {
             className="header-solid max-h-max rounded-md"
             loading={cardLoading}
           >
-            <div className='table-responsive p-4' id='style-8' ref={scrollRef}>
-              <Table className='ant-border-space' style={{ width: '100%' }}>
-                <thead className='ant-table-thead'>
+            <div className="table-responsive p-4" id="style-8" ref={scrollRef}>
+              <Table className="ant-border-space" style={{ width: "100%" }}>
+                <thead className="ant-table-thead">
                   <tr>
                     <th>Картын №</th>
                     <th>Овог</th>
@@ -179,21 +190,28 @@ function Ambulatory() {
                     <th>Үзлэг</th>
                   </tr>
                 </thead>
-                <tbody className='ant-table-tbody'>
-                  {
-                    patientsList.map((patient, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{patient.cardNumber}</td>
-                          <td>{patient.lastName}</td>
-                          <td>{patient.firstName}</td>
-                          <td>{patient.registerNumber}</td>
-                          <td>{moment(patient.createdAt).format('YYYY-MM-DD')}</td>
-                          <td><Button type="primary" onClick={() => getPayment(patient.id)} >Төлбөр авах</Button></td>
-                        </tr>
-                      )
-                    })
-                  }
+                <tbody className="ant-table-tbody">
+                  {patientsList.map((patient, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{patient.cardNumber}</td>
+                        <td>{patient.lastName}</td>
+                        <td>{patient.firstName}</td>
+                        <td>{patient.registerNumber}</td>
+                        <td>
+                          {moment(patient.createdAt).format("YYYY-MM-DD")}
+                        </td>
+                        <td>
+                          <Button
+                            type="primary"
+                            onClick={() => getPayment(patient.id)}
+                          >
+                            Төлбөр авах
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </div>
@@ -201,7 +219,7 @@ function Ambulatory() {
         </div>
       </div>
       <Modal
-        title={'Оношилгоо шинжилгээ захиалах'}
+        title={"Оношилгоо шинжилгээ захиалах"}
         open={orderModal}
         maskClosable={true}
         onCancel={() => setOrderModal(false)}
@@ -212,17 +230,22 @@ function Ambulatory() {
         okText="Хадгалах"
         className="bg-slat-50"
         bodyStyle={{
-          backgroundColor: "#f8fafc"
+          backgroundColor: "#f8fafc",
         }}
       >
         <div className="flex flex-wrap">
-          <div className='w-full md:w-1/2 p-1'>
-            <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
+          <div className="w-full md:w-1/2 p-1">
+            <PatientInformation
+              patient={selectedPatient}
+              handlesearch={onSearchPayment}
+            />
           </div>
           <div className="w-full md:w-1/2 p-1">
             <Card
               bordered={false}
-              title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
+              title={
+                <h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>
+              }
               className="header-solid max-h-max rounded-md"
               bodyStyle={{
                 paddingTop: 0,
@@ -239,34 +262,46 @@ function Ambulatory() {
                     current={notPatientsMeta.page}
                     pageSize={notPatientsMeta.limit}
                     total={notPatientsMeta.itemCount}
-                    onChange={(page, pageSize) => onSearchPayment(page, pageSize, notPatientsValue)}
+                    onChange={(page, pageSize) =>
+                      onSearchPayment(page, pageSize, notPatientsValue)
+                    }
                   />
                 </>
               }
             >
-              <div className='table-responsive' id='style-8' style={{ maxHeight: '150px' }}>
-                <Table className='ant-border-space' style={{ width: '100%' }}>
+              <div
+                className="table-responsive"
+                id="style-8"
+                style={{ maxHeight: "150px" }}
+              >
+                <Table className="ant-border-space" style={{ width: "100%" }}>
                   <thead className="ant-table-thead bg-slate-200">
                     <tr>
-                      <th className="font-bold text-sm align-middle">Картын №</th>
+                      <th className="font-bold text-sm align-middle">
+                        Картын №
+                      </th>
                       <th className="font-bold text-sm align-middle">Овог</th>
                       <th className="font-bold text-sm align-middle">Нэр</th>
-                      <th className="font-bold text-sm align-middle">Регистрийн дугаар</th>
+                      <th className="font-bold text-sm align-middle">
+                        Регистрийн дугаар
+                      </th>
                     </tr>
                   </thead>
-                  <tbody className='ant-table-tbody'>
-                    {
-                      notPatientsList.map((patient, index) => {
-                        return (
-                          <tr className="hover:cursor-pointer ant-table-row ant-table-row-level-0" key={index} onDoubleClick={() => setSelectedPatient(patient)}>
-                            <td>{patient.cardNumber}</td>
-                            <td>{patient.lastName}</td>
-                            <td>{patient.firstName}</td>
-                            <td>{patient.registerNumber}</td>
-                          </tr>
-                        )
-                      })
-                    }
+                  <tbody className="ant-table-tbody">
+                    {notPatientsList.map((patient, index) => {
+                      return (
+                        <tr
+                          className="hover:cursor-pointer ant-table-row ant-table-row-level-0"
+                          key={index}
+                          onDoubleClick={() => setSelectedPatient(patient)}
+                        >
+                          <td>{patient.cardNumber}</td>
+                          <td>{patient.lastName}</td>
+                          <td>{patient.firstName}</td>
+                          <td>{patient.registerNumber}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </div>
@@ -276,7 +311,9 @@ function Ambulatory() {
         <div className="p-1">
           <Card
             bordered={false}
-            title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
+            title={
+              <h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>
+            }
             className="header-solid max-h-max rounded-md"
             bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
@@ -289,8 +326,14 @@ function Ambulatory() {
           </Card>
         </div>
       </Modal>
-      <Schedule isOpen={isOpen} isOCS={false} incomeData={payments} selectedPatient={selectedPatient} isClose={() => setIsOpen(false)} />
-    </div >
-  )
+      <Schedule
+        isOpen={isOpen}
+        isOCS={false}
+        incomeData={payments}
+        selectedPatient={selectedPatient}
+        isClose={() => setIsOpen(false)}
+      />
+    </div>
+  );
 }
 export default Ambulatory;
