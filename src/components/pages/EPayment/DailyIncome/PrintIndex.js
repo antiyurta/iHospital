@@ -54,7 +54,7 @@ function PrintIndex({ data }) {
                     <div className="whitespace-pre-wrap">
                         <ul className="list-disc list-inside">
                             {
-                                row.invoices.map((invoice, index) => {
+                                row.invoices?.map((invoice, index) => {
                                     return <li key={index}>{invoice.name}</li>
                                 })
                             }
