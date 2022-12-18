@@ -190,7 +190,7 @@ function PrintIndex({ data }) {
                     Тайлан гаргасан: {employee.lastName.substring(0, 1) + "." + employee.firstName} /.............../
                 </p>
                 <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
-                    Хэвлэсэн: {userFirstName.substring(0, 1) + "." + userLastName} /.............../
+                    Хэвлэсэн: {userLastName.substring(0, 1) + "." + userFirstName} /.............../
                 </p>
             </div>
             <Button type="primary" onClick={handlePrint}>Хэвлэх</Button>
