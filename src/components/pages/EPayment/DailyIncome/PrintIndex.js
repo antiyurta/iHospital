@@ -154,7 +154,7 @@ function PrintIndex({ data }) {
                                 {
                                     employees.map((employee, index) => {
                                         return (
-                                            <Option key={index} value={employee.id}>{employee.lastName.substring(0, 1) + "." + employee.firstName}</Option>
+                                            <Option key={index} value={employee.userId}>{employee.lastName.substring(0, 1) + "." + employee.firstName}</Option>
                                         )
                                     })
                                 }
