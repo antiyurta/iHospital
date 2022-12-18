@@ -136,7 +136,12 @@ function UTable(props) {
     setIsConfirmLoading(true);
     var response = null;
     if (editMode) {
-      response = await Patch(props.url + "/" + id, token, config, data);
+      response = await Patch(
+        props.url + "/" + parseInt(id),
+        token,
+        config,
+        data
+      );
       if (response === 200) {
         setIsModalVisible(false);
         onStart(meta.page, 10);
@@ -219,7 +224,11 @@ function UTable(props) {
         }
       >
         <div className="table-responsive p-4" id="style-8" ref={scrollRef}>
-          <Table bordered className="ant-border-space" style={{ width: "100%" }}>
+          <Table
+            bordered
+            className="ant-border-space"
+            style={{ width: "100%" }}
+          >
             <thead className="ant-table-thead bg-slate-200">
               <tr>
                 <th className="font-bold text-sm align-middle" rowSpan={2}>
@@ -283,16 +292,16 @@ function UTable(props) {
                           >
                             {column?.staticData
                               ? column.staticData(
-                                row[`${column.index[0]}`][
-                                `${column.index[1]}`
-                                ]
-                              )
+                                  row[`${column.index[0]}`][
+                                    `${column.index[1]}`
+                                  ]
+                                )
                               : inputChecker(
-                                index,
-                                row[`${column.index[0]}`][
-                                `${column.index[1]}`
-                                ]
-                              )}
+                                  index,
+                                  row[`${column.index[0]}`][
+                                    `${column.index[1]}`
+                                  ]
+                                )}
                           </td>
                         ) : (
                           column.isView && (
@@ -324,7 +333,11 @@ function UTable(props) {
                         {props.isUpdate && (
                           <Button
                             type="link"
-                            onClick={() => editModal(row.id)}
+                            onClick={() =>
+                              editModal(
+                                props.passParam ? row[props.passParam] : row.id
+                              )
+                            }
                             title="Засах"
                             style={{ paddingRight: 5, paddingLeft: 5 }}
                           >
@@ -334,7 +347,11 @@ function UTable(props) {
                         {props.isDelete && (
                           <Button
                             type="link"
-                            onClick={() => deleteModal(row.id)}
+                            onClick={() =>
+                              deleteModal(
+                                props.passParam ? row[props.passParam] : row.id
+                              )
+                            }
                             title="Устгах"
                             style={{ paddingLeft: 5 }}
                           >
@@ -385,9 +402,9 @@ function UTable(props) {
                 {inputChecker(idx, view[`${element.index}`])}
                 {element.relation
                   ? inputChecker(
-                    idx,
-                    view[`${element.index[0]}`]?.[`${element.index[1]}`]
-                  )
+                      idx,
+                      view[`${element.index[0]}`]?.[`${element.index[1]}`]
+                    )
                   : inputChecker(idx, view[`${element.index}`])}
               </Descriptions.Item>
             );
@@ -418,7 +435,7 @@ function UTable(props) {
         <Form
           form={form}
           wrapperCol={{ span: 14 }}
-        // onValuesChange={handleFormValuesChange}
+          // onValuesChange={handleFormValuesChange}
         >
           <Row gutter={[24, 6]}>
             {props.column.map((element, index) => {

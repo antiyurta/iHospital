@@ -52,6 +52,7 @@ import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
 import MedicineSupport from "./components/pages/service/MedicineSupport";
 import Finance from "./components/pages/Finance/Finance";
+import FinanceMaterialExamination from "./components/pages/Finance/FinanceMaterialExamination";
 import RequestAnalys from "./components/pages/Laboratory/RequestAnalys";
 import PatientForm from "./components/pages/FormBuilder/FBuilder/PatientForm";
 import Role from "./components/pages/Organization/Role";
@@ -66,6 +67,9 @@ import Settings from "./components/pages/reference/Settings";
 import XrayRequest from "./components/pages/Xray/XrayRequest";
 import DeviceSchedule from "./components/pages/Appointment/Device/DeviceSchedule";
 import BeforeXrayRequest from "./components/pages/Xray/BeforeXrayRequest";
+import FinanceMaterialXray from "./components/pages/Finance/FinanceMaterialXray";
+import FinanceMaterialTreatment from "./components/pages/Finance/FinanceMaterialTreatment";
+import FinanceMaterialSurgery from "./components/pages/Finance/FinanceMaterialSurgery";
 // lab end
 
 function App() {
@@ -75,10 +79,24 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route element={<Main />}>
           <Route path="*" element={<NotFound />} />
-          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
           <Route path="/notPermission" element={<NotPermission />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/schedule" element={<PrivateRoute><Schedule /></PrivateRoute>} />
+          <Route
+            path="/schedule"
+            element={
+              <PrivateRoute>
+                <Schedule />
+              </PrivateRoute>
+            }
+          />
           {/* <Route path="/deviceSchedule" element={<PrivateRoute><DeviceSchedule /></PrivateRoute>} /> */}
           <Route path="/deviceSchedule" element={<DeviceSchedule />} />
           {/* lab start */}
@@ -86,6 +104,22 @@ function App() {
           {/* lab end */}
           {/* finance start */}
           <Route path="/finance" element={<Finance />} />
+          <Route
+            path="/financeMaterialExamination"
+            element={<FinanceMaterialExamination />}
+          />
+          <Route
+            path="/financeMaterialXray"
+            element={<FinanceMaterialXray />}
+          />
+          <Route
+            path="/financeMaterialTreatment"
+            element={<FinanceMaterialTreatment />}
+          />
+          <Route
+            path="/financeMaterialSurgery"
+            element={<FinanceMaterialSurgery />}
+          />
           <Route path="/demoForm2" element={<DemoForm2 />} />
           <Route path="/role" element={<Role />} />
           <Route path="/permission" element={<Permission />} />
@@ -97,8 +131,22 @@ function App() {
           <Route path="/packages" element={<Packages />} />
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
-          <Route path="/dailyIncome" element={<PrivateRoute><DailyIncome /></PrivateRoute>} />
-          <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
+          <Route
+            path="/dailyIncome"
+            element={
+              <PrivateRoute>
+                <DailyIncome />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/hospital"
             element={
