@@ -317,7 +317,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     setShowInpatient(false);
   };
   const newModalCategory = (category) => {
-    if (selectedPatient.id) {
+    if (selectedPatient?.id || isPackage) {
       if (category.name === "Examination") {
         setShowExamination(true);
       } else if (category.name === "Xray") {
@@ -601,11 +601,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                           name,
                                           "type",
                                         ]) === 8 ||
-                                        orderForm.getFieldValue([
-                                          "services",
-                                          name,
-                                          "type",
-                                        ]) === 2
+                                          orderForm.getFieldValue([
+                                            "services",
+                                            name,
+                                            "type",
+                                          ]) === 2
                                           ? false
                                           : true
                                       }
@@ -633,11 +633,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                           name,
                                           "type",
                                         ]) === 8 ||
-                                        orderForm.getFieldValue([
-                                          "services",
-                                          name,
-                                          "type",
-                                        ]) === 2
+                                          orderForm.getFieldValue([
+                                            "services",
+                                            name,
+                                            "type",
+                                          ]) === 2
                                           ? false
                                           : true
                                       }
@@ -665,11 +665,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                           name,
                                           "type",
                                         ]) === 8 ||
-                                        orderForm.getFieldValue([
-                                          "services",
-                                          name,
-                                          "type",
-                                        ]) === 2
+                                          orderForm.getFieldValue([
+                                            "services",
+                                            name,
+                                            "type",
+                                          ]) === 2
                                           ? false
                                           : true
                                       }
@@ -697,11 +697,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                           name,
                                           "type",
                                         ]) === 8 ||
-                                        orderForm.getFieldValue([
-                                          "services",
-                                          name,
-                                          "type",
-                                        ]) === 2
+                                          orderForm.getFieldValue([
+                                            "services",
+                                            name,
+                                            "type",
+                                          ]) === 2
                                           ? false
                                           : true
                                       }
@@ -729,11 +729,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                           name,
                                           "type",
                                         ]) === 8 ||
-                                        orderForm.getFieldValue([
-                                          "services",
-                                          name,
-                                          "type",
-                                        ]) === 2
+                                          orderForm.getFieldValue([
+                                            "services",
+                                            name,
+                                            "type",
+                                          ]) === 2
                                           ? false
                                           : true
                                       }
@@ -752,11 +752,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                           name,
                                           "type",
                                         ]) === 8 ||
-                                        orderForm.getFieldValue([
-                                          "services",
-                                          name,
-                                          "type",
-                                        ]) === 2
+                                          orderForm.getFieldValue([
+                                            "services",
+                                            name,
+                                            "type",
+                                          ]) === 2
                                           ? false
                                           : true
                                       }
