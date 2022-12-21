@@ -265,6 +265,7 @@ function EMR() {
                       <Option value={5}>Идэвхтэй хяналт</Option>
                       <Option value={6}>Дуудлагаар</Option>
                       <Option value={11} disabled={true}>xray</Option>
+                      <Option value={12} disabled={true}>exo</Option>
                     </Select>
                   </>
                 }

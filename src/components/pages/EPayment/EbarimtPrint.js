@@ -4,10 +4,23 @@ import { Table } from "react-bootstrap";
 import { useReactToPrint } from "react-to-print";
 import QRCode from 'react-qr-code';
 import moment from "moment";
-import { numberToCurrency } from "../../comman";
+import { numberToCurrency, Patch } from "../../comman";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../../features/authReducer";
 
 function EbarimtPrint(props) {
     const printRef = useRef();
+    const token = useSelector(selectCurrentToken);
+    const handleBack = async (id) => {
+        const conf = {
+            headers: {},
+            params: {},
+        }
+        await Patch('payment/payment/' + id, token, conf, {
+            isReturn: true,
+        });
+    };
     const handlePrint = useReactToPrint({
         content: () => printRef.current
     });
@@ -58,7 +71,13 @@ function EbarimtPrint(props) {
                     <p>Ажилтан: {props?.props?.createdEmployeeName} </p>
                 </div>
             </div>
-            <Button className="w-full bg-green-500 text-white font-bold" onClick={handlePrint}>Хэвлэх</Button>
+            {
+                props?.isBackPayment ?
+                    <Button className="w-full bg-red-600 text-white font-bold" onClick={() => handleBack(props?.props?.id)}>Буцаалт</Button>
+                    :
+                    <Button className="w-full bg-green-500 text-white font-bold" onClick={handlePrint}>Хэвлэх</Button>
+            }
+
         </div>
     )
 }

@@ -152,6 +152,9 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
         ) : null}
         {"conclusion" in props.data && props.data.conclusion.length > 0 ? (
           <>
+            <Divider orientation="left" className="text-sm my-2">
+              Дүгнэлт
+            </Divider>
             {
               props.data['conclusion'].map((conclusion, index) => {
                 return (
@@ -173,6 +176,9 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
         ) : null}
         {"advice" in props.data && props.data.advice.length > 0 ? (
           <>
+            <Divider orientation="left" className="text-sm my-2">
+              Зөвлөгөө
+            </Divider>
             {
               props.data['advice'].map((advice, index) => {
                 return (
@@ -227,7 +233,7 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
       doctorId: userId,
       diagnose: JSON.stringify(values['diagnose']),
     }
-    if (inspection === 11) {
+    if (inspection === 11 || inspection === 12) {
       data['xrayRequestId'] = xrayRequestId;
       data['conclusion'] = JSON.stringify(values['conclusion']);
       data['advice'] = JSON.stringify(values['advice']);
@@ -240,7 +246,7 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
     }
     const response = await Post('emr/inspectionNote', token, config, data);
     if (response === 201) {
-      if (inspection === 11) {
+      if (inspection === 11 || inspection === 12) {
         Patch('service/xrayRequest/' + XrayRequestId, token, config, { xrayProcess: 2 })
       } else {
         setConfirmModal(true);
@@ -264,6 +270,20 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
       children: <Tab2Content />,
     },
   ]);
+  const getExoInspectionTabs = async () => {
+    config.params.cabinetId = cabinetId;
+    const response = await Get('emr/inspection-form', token, config);
+    if (response.data.length > 0) {
+      response?.data?.map((el) => {
+        setItems([{
+          label: "Дүгнэлт",
+          key: `item-exo`,
+          children: <DynamicTabContent data={el.formItem} />,
+        }]);
+      });
+    }
+    config.params.cabinetId = null;
+  };
   const getInspectionTabs = async () => {
     //Тухайн эмчид харагдах TAB ууд
     config.params.cabinetId = cabinetId;
@@ -379,6 +399,8 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
       getDefualtTab();
     } else if (inspection === 11) {
       getXrayDefualtTab();
+    } else if (inspection === 12) {
+      getExoInspectionTabs();
     }
   }, []);
   return (

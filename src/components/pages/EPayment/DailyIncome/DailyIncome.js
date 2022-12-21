@@ -1,4 +1,4 @@
-import { EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined, RollbackOutlined } from "@ant-design/icons";
 import { Button, Card, DatePicker, Empty, Modal, Pagination, Table } from "antd";
 import moment from "moment";
 import { useState } from "react";
@@ -27,6 +27,7 @@ function DailyIncome() {
     const [ebarimtData, setEbarimtData] = useState({});
     const [start, setStart] = useState("");
     const [end, setEnd] = useState("");
+    const [isBackPayment, setIsBackPayment] = useState(false);
     const [totalAmount, setTotalAmount] = useState(Number);
     const getDailyIncome = async (page, pageSize, start, end) => {
         setSpinner(true);
@@ -48,7 +49,8 @@ function DailyIncome() {
         setMeta(response.meta);
         setSpinner(false);
     };
-    const viewModal = async (id) => {
+    const viewModal = async (id, isBack) => {
+        setIsBackPayment(isBack);
         const response = await Get('payment/payment/' + id, token, config);
         setEbarimtData(response);
         setEbarimtModal(true);
@@ -79,16 +81,31 @@ function DailyIncome() {
             dataIndex: "createdEmployeeName",
         },
         {
-            title: "",
+            title: "Харах",
             render: (_, row) => {
                 return (
                     <Button
                         type="link"
-                        onClick={() => viewModal(row.id)}
+                        onClick={() => viewModal(row.id, false)}
                         title="Харах"
                         style={{ paddingRight: 5 }}
                     >
                         <EyeOutlined />
+                    </Button>
+                )
+            }
+        },
+        {
+            title: "Буцаалт",
+            render: (_, row) => {
+                return (
+                    <Button
+                        type="link"
+                        onClick={() => viewModal(row.id, true)}
+                        title="Харах"
+                        style={{ paddingRight: 5, color: "red" }}
+                    >
+                        <RollbackOutlined />
                     </Button>
                 )
             }
@@ -144,7 +161,7 @@ function DailyIncome() {
                 </div>
             </div>
             <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
-                <EbarimtPrint props={ebarimtData} />
+                <EbarimtPrint props={ebarimtData} isBackPayment={isBackPayment} />
             </Modal>
             <Modal
                 title={'Өдрийн орлого'}

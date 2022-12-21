@@ -42,7 +42,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
         var noTime = [];
         var time = [];
         payments?.map((payment) => {
-            if (payment.type === 2 && payment.treatmentRequest?.slotId === null) {
+            if (payment.type === 2 && payment.treatmentRequest?.slotId === null && payment.treatment?.isSlot) {
                 time.push(payment);
             } else if (payment.type === 1 && payment.xrayRequest?.slotId === null) {
                 time.push(payment);
@@ -231,7 +231,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                 </div>
             </Modal>
             <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
-                <EbarimtPrint props={ebarimtData} />
+                <EbarimtPrint props={ebarimtData} isBackPayment={false} />
             </Modal>
         </>
     )

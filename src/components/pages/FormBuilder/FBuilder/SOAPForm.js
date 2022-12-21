@@ -9,6 +9,7 @@ import Index from './index';
 import Index2 from './index2';
 function SOAPForm() {
     const [SOAPForm] = Form.useForm();
+    const [SOAPFormExo] = Form.useForm();
     const { Option } = Select;
     const { Panel } = Collapse;
     const { TextArea } = Input;
@@ -22,25 +23,35 @@ function SOAPForm() {
     const [id, setId] = useState(Number);
     const [searchField, setSearchField] = useState("");
     const [isSOAPModal, setIsSOAPModal] = useState(false);
+    const [type, setType] = useState(Number); // 0 bol EMR 1 bol EXO
     const [structures, setStructures] = useState([]);
     const [cabinets, setCabinets] = useState([]);
     const [cabinetFilterValue, setCabinetFilterValue] = useState(Number);
     //
-    const showModal = () => {
+    const showModal = (type) => {
         setEditMode(false);
+        setType(type);
         SOAPForm.resetFields();
         setIsSOAPModal(true);
     };
     const editModal = (form) => {
         const newForm = [];
+        console.log(form);
         newForm['structureId'] = form.structureId;
         newForm['cabinetId'] = form.cabinetId;
         newForm['name'] = form.name;
         newForm['title'] = form.title;
-        newForm['pain'] = form.formItem.pain;
-        newForm['inspection'] = form.formItem.inspection;
-        newForm['question'] = form.formItem.question;
-        newForm['plan'] = form.formItem.plan;
+        if (form.formItem.conclusion.length > 0 && form.formItem.advice.length > 0) {
+            newForm['conclusion'] = form.formItem.conclusion;
+            newForm['advice'] = form.formItem.advice;
+            setType(1);
+        } else {
+            setType(0);
+            newForm['pain'] = form.formItem.pain;
+            newForm['inspection'] = form.formItem.inspection;
+            newForm['question'] = form.formItem.question;
+            newForm['plan'] = form.formItem.plan;
+        }
         setEditMode(true);
         setId(form.id);
         setCabinetFilterValue(form.structureId);
@@ -121,30 +132,49 @@ function SOAPForm() {
             name: "Төлөвлөгөө",
             key: "plan"
         },
-    ]
+    ];
+    const panelsExo = [
+        {
+            name: "Дүгнэлт",
+            key: 'conclusion'
+        },
+        {
+            name: "Зөвлөгөө",
+            key: "advice"
+        }
+    ];
 
     //
-    const onFinishTest = (values) => {
-        console.log(values);
-    };
     const onFinish = async (values) => {
         const data = [];
-        values.pain?.map((pain) => {
-            pain['inspectionType'] = 'pain';
-            data.push(pain);
-        });
-        values.inspection?.map((inspection) => {
-            inspection['inspectionType'] = 'inspection';
-            data.push(inspection);
-        });
-        values.question?.map((question) => {
-            question['inspectionType'] = 'question';
-            data.push(question);
-        });
-        values.plan?.map((plan) => {
-            plan['inspectionType'] = 'plan';
-            data.push(plan);
-        });
+        if (type === 0) {
+            values.pain?.map((pain) => {
+                pain['inspectionType'] = 'pain';
+                data.push(pain);
+            });
+            values.inspection?.map((inspection) => {
+                inspection['inspectionType'] = 'inspection';
+                data.push(inspection);
+            });
+            values.question?.map((question) => {
+                question['inspectionType'] = 'question';
+                data.push(question);
+            });
+            values.plan?.map((plan) => {
+                plan['inspectionType'] = 'plan';
+                data.push(plan);
+            });
+        } else if (type === 1) {
+            values.conclusion?.map((conclusion) => {
+                conclusion['inspectionType'] = 'conclusion';
+                data.push(conclusion);
+            });
+            values.advice?.map((advice) => {
+                advice['inspectionType'] = 'advice';
+                data.push(advice);
+            })
+        }
+
         if (editMode) {
             const response = await Patch(
                 'emr/inspection-form/' + id,
@@ -239,9 +269,16 @@ function SOAPForm() {
                             <Button
                                 type="primary"
                                 htmlType="submit"
-                                onClick={() => showModal()}
+                                onClick={() => showModal(0)}
                             >
                                 Нэмэх
+                            </Button>
+                            <Button
+                                className='ml-2'
+                                htmlType="submit"
+                                onClick={() => showModal(1)}
+                            >
+                                EXO Нэмэх
                             </Button>
                         </div>
                     </div>
@@ -359,8 +396,18 @@ function SOAPForm() {
                     </div>
                     <Divider>Асуумж</Divider>
                     <Collapse style={{ borderRadius: '0.375rem' }}>
-                        {
+                        {type === 0 &&
                             panels.map((panel, index) => {
+                                return (
+                                    <Panel key={index} header={panel.name}>
+                                        {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
+                                        <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
+                                    </Panel>
+                                )
+                            })
+                        }
+                        {type === 1 &&
+                            panelsExo.map((panel, index) => {
                                 return (
                                     <Panel key={index} header={panel.name}>
                                         {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}

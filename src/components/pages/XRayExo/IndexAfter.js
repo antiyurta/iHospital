@@ -118,11 +118,13 @@ function IndexAfter({ type, params }) {
             return <td style={{ color: "green" }}><CheckOutlined /></td>
         }
     };
-    const getEMR = (listId, id, cabinetId, inspectionType, xrayProcess) => {
+    const getEMR = (listId, id, cabinetId, inspectionType, xrayProcess, deviceType, isPayment) => {
         // status heregteii anhan dawtan 
         // tolbor shalgah
-        if (xrayProcess === 0) {
+        if (xrayProcess === 0 && deviceType === 0) {
             openNofi('warning', 'Зураг', 'Зураг оруулагүй')
+        } else if (isPayment) {
+            openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
         } else {
             console.log(listId, id, cabinetId, inspectionType);
             navigate(`/emr`,
@@ -203,7 +205,15 @@ function IndexAfter({ type, params }) {
                                                                 <tr className="ant-table-row ant-table-row-level-0 hover: cursor-pointer"
                                                                     key={index}
                                                                     onDoubleClick={() =>
-                                                                        getEMR(xray?.id, xray?.patientId, xray?.schedule?.cabinetId, 11, xray?.xrayProcess)
+                                                                        getEMR(
+                                                                            xray?.id,
+                                                                            xray?.patientId,
+                                                                            xray?.cabinetId,
+                                                                            xray?.deviceType === 0 ? 11 : 12,
+                                                                            xray?.xrayProcess,
+                                                                            xray?.deviceType,
+                                                                            xray?.isPayment
+                                                                        )
                                                                     }
                                                                 >
                                                                     <td>{xray?.xrays?.name}</td>
