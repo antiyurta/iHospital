@@ -32,7 +32,7 @@ function XrayImg({ printImage, type }) {
                                     return (
                                         <img key={index} style={{
                                             width: '145mm',
-                                            height: '102mm',
+                                            height: '100mm',
                                             // transform: "rotate(90deg)",
                                             // marginLeft: 100,
                                             // marginTop: -160,
