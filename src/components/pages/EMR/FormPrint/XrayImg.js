@@ -18,7 +18,7 @@ function XrayImg({ printImage, type }) {
                                 printImage?.map((photo, index) => {
                                     return (
                                         <div key={index} className="basis-1/2">
-                                            <img style={{ height: "147mm" }} src={photo.photoSrc} />
+                                            <img style={{ height: "145mm" }} src={photo.photoSrc} />
                                         </div>
                                     )
                                 })
@@ -31,8 +31,8 @@ function XrayImg({ printImage, type }) {
                                     const ii = photo.photoSrc;
                                     return (
                                         <img key={index} style={{
-                                            width: '147mm',
-                                            height: '104mm',
+                                            width: '145mm',
+                                            height: '102mm',
                                             // transform: "rotate(90deg)",
                                             // marginLeft: 100,
                                             // marginTop: -160,

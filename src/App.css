@@ -200,6 +200,16 @@ input[type="number"] {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.page-landscape {
+  width: 29.7cm;
+  min-height: 21cm;
+  padding: 1cm;
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
 @page {
   size: A4;
   margin: 0;
@@ -291,6 +301,7 @@ input::-webkit-inner-spin-button {
 
 .ant-image-preview-img {
   margin: auto;
+  width: 20%;
 }
 
 .ant-image-preview-img-wrapper {
@@ -302,6 +313,10 @@ input::-webkit-inner-spin-button {
   html,
   body {
     height: auto;
+  }
+
+  @page {
+    margin: 0;
   }
 
   p {
