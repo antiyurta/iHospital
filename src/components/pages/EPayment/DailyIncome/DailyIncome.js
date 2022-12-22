@@ -82,6 +82,7 @@ function DailyIncome() {
         },
         {
             title: "Харах",
+            width: 50,
             render: (_, row) => {
                 return (
                     <Button
@@ -142,6 +143,11 @@ function DailyIncome() {
                             <div className="w-full py-2">
                                 <Table
                                     rowKey={"id"}
+                                    rowClassName={(record, index) => {
+                                        if (record.isReturn) {
+                                            return "bg-red-200"
+                                        }
+                                    }}
                                     locale={{ emptyText: "Мэдээлэл байхгүй" }}
                                     bordered={true}
                                     loading={spinner}

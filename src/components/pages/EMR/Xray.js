@@ -1,5 +1,5 @@
 import { DownOutlined, FolderOpenOutlined, FolderOutlined, PrinterOutlined, ReloadOutlined } from "@ant-design/icons";
-import { Button, Collapse, Divider, Dropdown, Image, Modal, Select, Space } from "antd";
+import { Button, Collapse, Divider, Dropdown, Image, Modal, Select, Space, Spin } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get } from "../../comman";
 import FormXray from "./FormPrint/Xray";
+import XrayImg from "./FormPrint/XrayImg";
 const { Panel } = Collapse;
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -20,10 +21,15 @@ function Xrays({ PatientId }) {
     }
     const [spinner, setSpinner] = useState(false);
     const [printData, setPrintData] = useState({});
+    const [printImg, setPrintImg] = useState([]);
+    const [isOpenModalImg, setIsOpenModalImg] = useState(false);
+    const [isSizeType, setIsSizeType] = useState(Number);
+
     const [isOpenModalForm, setIsOpenModalForm] = useState(false);
     const getPatientXrays = async (id) => {
         setSpinner(true);
         config.params.patientId = id;
+        config.params.deviceType = 0;
         const response = await Get('service/xrayRequest', token, config);
         await Promise.all(response.data.map(async (xray) => {
             await Promise.all(xray.photos.map(async (equip) => {
@@ -94,78 +100,93 @@ function Xrays({ PatientId }) {
     }, [PatientId])
     return (
         <>
-            <Collapse
-                collapsible="header"
-                expandIcon={({ isActive }) => {
-                    return isActive ? (
-                        <FolderOpenOutlined style={{ fontSize: "24px" }} />
-                    ) : (
-                        <FolderOutlined style={{ fontSize: "24px" }} />
-                    );
-                }}
-                ghost
-            >
-                {Object.entries(xrayHistory).map(([key, value], index) => {
-                    return (
-                        <Panel header={`${key} Он`} key={index} extra={refresh()}>
-                            <Collapse Collapse collapsible="header" accordion >
-                                {
-                                    value.map((el, index) => {
-                                        return (
-                                            <Panel
-                                                header={
-                                                    <div className="grid">
-                                                        <span>
-                                                            {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
-                                                        </span>
-                                                    </div>
-                                                }
-                                                key={value[index].id}
-                                                extra={
-                                                    <>
-                                                        <PrinterOutlined
-                                                            title="Дүгнэлт хэвлэх"
-                                                            className="p-1"
-                                                            onClick={(event) => {
-                                                                setPrintData(value[index]);
-                                                                console.log(value[index])
-                                                                setIsOpenModalForm(true);
-                                                            }}
-                                                        />
-                                                    </>
-                                                }
-                                            >
-                                                <Divider>Зураг</Divider>
-                                                {
-                                                    el.photos.map((photo, index) => {
-                                                        return (
-                                                            <Image key={index}
-                                                                width={200}
-                                                                src={photo.photoSrc}
+            <Spin spinning={spinner}>
+                <Collapse
+                    collapsible="header"
+                    expandIcon={({ isActive }) => {
+                        return isActive ? (
+                            <FolderOpenOutlined style={{ fontSize: "24px" }} />
+                        ) : (
+                            <FolderOutlined style={{ fontSize: "24px" }} />
+                        );
+                    }}
+                    ghost
+                >
+                    {Object.entries(xrayHistory).map(([key, value], index) => {
+                        return (
+                            <Panel header={`${key} Он`} key={index} extra={refresh()}>
+                                <Collapse Collapse collapsible="header" accordion >
+                                    {
+                                        value.map((el, index) => {
+                                            return (
+                                                <Panel
+                                                    header={
+                                                        <div className="grid">
+                                                            <span>
+                                                                {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
+                                                            </span>
+                                                        </div>
+                                                    }
+                                                    key={value[index].id}
+                                                    extra={
+                                                        <>
+                                                            <PrinterOutlined
+                                                                title="Дүгнэлт хэвлэх"
+                                                                className="p-1"
+                                                                onClick={(event) => {
+                                                                    setPrintData(value[index]);
+                                                                    console.log(value[index])
+                                                                    setIsOpenModalForm(true);
+                                                                }}
                                                             />
-                                                        )
-                                                    })
-                                                }
-                                                <Divider>Дүгнэлт</Divider>
-                                                {
-                                                    el.inspectionNotes?.map((note, index) => {
-                                                        return (
-                                                            <div key={index}>
-                                                                <RenderNotesDetail data={JSON.parse(note.conclusion)} />
-                                                                <RenderNotesDiagnose data={JSON.parse(note.diagnose)} />
-                                                            </div>
-                                                        )
-                                                    })
-                                                }
-                                            </Panel>
-                                        )
-                                    })
-                                }
-                            </Collapse>
-                        </Panel>
-                    )
-                })}
-            </Collapse>
+                                                            <Button type="primary" onClick={() => {
+                                                                setPrintImg(el.photos);
+                                                                setIsSizeType(1);
+                                                                setIsOpenModalImg(true);
+                                                            }}>A5</Button>
+                                                            <Button type="primary" onClick={() => {
+                                                                setPrintImg(el.photos);
+                                                                setIsSizeType(0);
+                                                                setIsOpenModalImg(true);
+                                                            }}>A4</Button>
+                                                        </>
+                                                    }
+                                                >
+                                                    <Divider>Зураг</Divider>
+                                                    {
+                                                        el.photos.map((photo, index) => {
+                                                            return (
+                                                                <Image
+                                                                    className="p-1"
+                                                                    key={index}
+                                                                    width={200}
+                                                                    src={photo.photoSrc}
+                                                                />
+                                                            )
+                                                        })
+                                                    }
+                                                    <Divider>Дүгнэлт</Divider>
+                                                    {
+                                                        el.inspectionNotes?.map((note, index) => {
+                                                            return (
+                                                                <div key={index}>
+                                                                    <RenderNotesDetail data={JSON.parse(note.conclusion)} />
+                                                                    <RenderNotesDetail data={JSON.parse(note.advice)} />
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </Panel>
+                                            )
+                                        })
+                                    }
+                                </Collapse>
+                            </Panel>
+                        )
+                    })}
+                </Collapse>
+            </Spin>
+
             <Modal
                 open={isOpenModalForm}
                 onCancel={() => setIsOpenModalForm(false)}
@@ -174,6 +195,14 @@ function Xrays({ PatientId }) {
                 title={'Дүгнэлт хэвлэх'}
             >
                 <FormXray printData={printData} />
+            </Modal>
+            <Modal
+                open={isOpenModalImg}
+                onCancel={() => setIsOpenModalImg(false)}
+                width="60%"
+                footer={null}
+            >
+                <XrayImg printImage={printImg} type={isSizeType} />
             </Modal>
         </>
     )
