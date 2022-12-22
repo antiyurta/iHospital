@@ -123,7 +123,7 @@ function IndexAfter({ type, params }) {
         // tolbor shalgah
         if (xrayProcess === 0 && deviceType === 0) {
             openNofi('warning', 'Зураг', 'Зураг оруулагүй')
-        } else if (isPayment) {
+        } else if (!isPayment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
         } else {
             console.log(listId, id, cabinetId, inspectionType);
