@@ -18,7 +18,7 @@ function XrayImg({ printImage, type }) {
                                 printImage?.map((photo, index) => {
                                     return (
                                         <div key={index} className="basis-1/2">
-                                            <img style={{ height: "145mm" }} src={photo.photoSrc} />
+                                            <img style={{ height: "142mm" , width: '100%' }} src={photo.photoSrc} />
                                         </div>
                                     )
                                 })
