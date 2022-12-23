@@ -27,7 +27,6 @@ export default function ProgressNotes({ Appointments }) {
       if (response.inspectionNotes.length > 0) {
         setInspectionNotes(response.inspectionNotes);
         setServiceRequests(response.serviceRequests);
-        console.log(response)
       } else {
         setInspectionNotes([]);
         setServiceRequests([]);
@@ -47,24 +46,26 @@ export default function ProgressNotes({ Appointments }) {
   }
 
   const RenderNotesDetail = (data) => {
-    return Object.entries(data.data).map(([key, value], index) => {
-      return (
-        <div key={index} className="inline-flex">
-          <p className="font-semibold mx-2">{key}: </p>
-          {Object.values(value).map((elValues, index) => {
-            return typeof elValues === "string" ? (
-              <p key={index}>{elValues}</p>
-            ) : (
-              <div key={index}>
-                {elValues.map((el, index) => {
-                  return <p key={index}>{el}</p>;
-                })}
-              </div>
-            );
-          })}
-        </div>
-      );
-    });
+    if (data.data) {
+      return Object.entries(data?.data).map(([key, value], index) => {
+        return (
+          <div key={index} className="inline-flex">
+            <p className="font-semibold mx-2">{key}: </p>
+            {Object.values(value).map((elValues, index) => {
+              return typeof elValues === "string" ? (
+                <p key={index}>{elValues}</p>
+              ) : (
+                <div key={index}>
+                  {elValues.map((el, index) => {
+                    return <p key={index}>{el}</p>;
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        );
+      });
+    }
   };
 
   return (
