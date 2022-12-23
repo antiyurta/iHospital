@@ -47,6 +47,7 @@ import MainBed from "./components/pages/Bed/MainBed";
 import RoomtDtl from "./components/pages/Bed/RoomDtl";
 // inpatient HEWTEN end
 import DemoForm2 from "./components/pages/FormBuilder/FormBuilder2";
+import Builder from './components/pages/FormBuilder/FBuilder/PatientForm'
 // lab start
 import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
@@ -71,6 +72,7 @@ import FinanceMaterialXray from "./components/pages/Finance/FinanceMaterialXray"
 import FinanceMaterialTreatment from "./components/pages/Finance/FinanceMaterialTreatment";
 import FinanceMaterialSurgery from "./components/pages/Finance/FinanceMaterialSurgery";
 import ExoRequest from "./components/pages/Exo/ExoRequest";
+import BeforeEkgRequest from "./components/pages/Ekg/BeforeEkgRequest";
 // lab end
 
 function App() {
@@ -122,16 +124,25 @@ function App() {
             element={<FinanceMaterialSurgery />}
           />
           <Route path="/demoForm2" element={<DemoForm2 />} />
+          <Route path="/builder" element={<Builder />} />
           <Route path="/role" element={<Role />} />
           <Route path="/permission" element={<Permission />} />
           <Route path="/discount" element={<Discount />} />
           {/* finance end */}
           {/* <PrivateRoute></PrivateRoute> */}
           <Route path="/menu" element={<Menu />} />
-          <Route path="/emr" element={<EMR />} />
+          <Route path="/emr" element={<PrivateRoute><EMR /></PrivateRoute>} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
+          <Route
+            path="/beforeEkgList"
+            element={
+              <PrivateRoute>
+                <BeforeEkgRequest />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/dailyIncome"
             element={
@@ -326,13 +337,13 @@ function App() {
             }
           />
           <Route
-              path="/exoList"
-              element={
-                <PrivateRoute>
-                  <ExoRequest />
-                </PrivateRoute>
-              }
-            />
+            path="/exoList"
+            element={
+              <PrivateRoute>
+                <ExoRequest />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/enrAmbulatoryList"
             element={

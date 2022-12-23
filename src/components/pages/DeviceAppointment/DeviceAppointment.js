@@ -4,6 +4,7 @@ function DeviceAppointment() {
   const deviceTypeOption = [
     { id: 0, name: "Рентген" },
     { id: 1, name: "Эхо" },
+    { id: 2, name: "ЭКГ" },
   ];
   const column = [
     {
