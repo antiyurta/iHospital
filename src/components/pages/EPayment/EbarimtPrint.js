@@ -48,7 +48,7 @@ function EbarimtPrint(props) {
                                 <div key={index} className="flex flex-wrap">
                                     <div className="basis-1/2">
                                         <p style={{ fontSize: 12, fontWeight: "bold" }}>{invoice.name}</p>
-                                        <p style={{ fontSize: 12, fontWeight: "bold" }}>{invoice.description}</p>
+                                        <p dangerouslySetInnerHTML={{ __html: invoice.description }}></p>
                                     </div>
                                     <div className="basis-1/2 text-center">
                                         <p className="float-right" style={{ fontSize: 13, fontWeight: "bold" }}>{numberToCurrency(invoice.amount)}</p>

@@ -7,18 +7,12 @@ import { selectCurrentToken } from "../../../features/authReducer";
 import { useSelector } from "react-redux";
 import Appointment from "./Schedule/Appointment";
 import { useEffect } from "react";
-//
-import InspectionHistory from './Doctor/InspectionHistory';
-import PaymentHistory from './Doctor/PaymentHistory';
-//
+import Index from "./Doctor/Index";
 const config = {
   headers: {},
   params: {},
 };
-const supportMenu = [
-  { label: 'Үзлэгийн түүх', key: 1, children: <InspectionHistory /> },
-  { label: 'Төлбөрийн мэдээлэл', key: 2, children: <PaymentHistory /> }
-];
+
 function DoctorAppointment() {
   const token = useSelector(selectCurrentToken);
   const scrollRef = useRef();
@@ -111,7 +105,7 @@ function DoctorAppointment() {
           </Card>
         </div>
         <div className="w-full md:w-4/12 p-1">
-          <Tabs type="card" items={supportMenu} />
+          <Index PatientId={selectedPatient.id} />
         </div>
       </div>
       <div className="px-1">
