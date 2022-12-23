@@ -131,6 +131,7 @@ function IndexAfter({ type, params }) {
                 {
                     state:
                     {
+                        usageType: 'OUT',
                         xrayRequestId: listId,
                         patientId: id,
                         cabinetId: cabinetId,

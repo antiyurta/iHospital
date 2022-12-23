@@ -21,7 +21,7 @@ export async function Get(url, token, config) {
                 if (error.response.status === 401) {
                     resolve({ data: [], meta: {}, status: 401 });
                 } else if (error.response.status === 400) {
-                    openNofi('error', 'Муу хүсэлт', '');
+                    openNofi('error', 'Муу хүсэлт', 'Та Админтай холбогдоно уу');
                 } else {
                     openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                     reject({ data: [], meta: {} });

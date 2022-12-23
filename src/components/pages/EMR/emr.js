@@ -15,6 +15,7 @@ import { useLocation } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import moment from "moment";
 import Schedule from "../OCS/Schedule";
+import MainInPatient from "./InPatient/MainInPatient";
 const config = {
   headers: {},
   params: {},
@@ -22,6 +23,7 @@ const config = {
 const { Option } = Select;
 const { Text } = Typography;
 function EMR() {
+  const IncomeUsageType = useLocation().state.usageType;
   const IncomePatientId = useLocation().state.patientId;
   const IncomeCabinetId = useLocation().state.cabinetId;
   const Inspection = useLocation().state.inspection;
@@ -38,6 +40,7 @@ function EMR() {
   const [scheduleModal, setScheduleModal] = useState(false);
   const [payments, setPayments] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isUsageType, setIsUsageType] = useState(IncomeUsageType);
   //
 
   const handleTypeChange = ({ target: { value } }) => {
@@ -104,7 +107,6 @@ function EMR() {
         getProblems(a.id);
         return r;
       }, Object.create(null));
-      console.log(result);
       setAppointments(result);
     } else {
       setAppointments([]);
@@ -129,10 +131,15 @@ function EMR() {
     }
   };
   //
-
+  const usageType = (value) => {
+    console.log(value);
+    setIsUsageType(value);
+  }
+  //
   useEffect(() => {
     getByIdPatient(IncomePatientId);
     getInspectionNotes(IncomePatientId);
+    console.log(IncomeUsageType);
   }, []);
 
   return (
@@ -212,8 +219,14 @@ function EMR() {
             >
               <Card
                 bordered={false}
-                title={<h6 className="font-semibold m-0">Амбулатори</h6>}
-                className="header-solid rounded-md"
+                // title={<h6 className="font-semibold m-0">Амбулатори</h6>}
+                title={
+                  <Radio.Group defaultValue={isUsageType} onChange={(e) => usageType(e.target.value)}>
+                    <Radio value={"OUT"}>Амбулатори</Radio>
+                    <Radio value={"IN"}>Хэвтэн</Radio>
+                  </Radio.Group>
+                }
+                className="header-solid max-h-max rounded-md scroll"
                 loading={cardLoading}
                 style={{ height: "100%" }}
                 bodyStyle={{
@@ -223,14 +236,21 @@ function EMR() {
                   paddingBottom: 10,
                   minHeight: 300,
                   maxHeight: 300,
-                  overflowX: "hidden",
-                  overflowY: "scroll",
+                  // overflowX: "hidden",
+                  // overflowY: "scroll",
                 }}
               >
-                <MainAmbulatory
-                  appointments={appointments}
-                  patientId={IncomePatientId}
-                />
+                {
+                  isUsageType === 'OUT' &&
+                  <MainAmbulatory
+                    appointments={appointments}
+                    patientId={IncomePatientId}
+                  />
+                }
+                {
+                  isUsageType === 'IN' &&
+                  <MainInPatient />
+                }
               </Card>
             </div>
           </div>

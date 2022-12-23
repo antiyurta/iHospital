@@ -4,6 +4,7 @@ import { Tabs } from "antd";
 //
 import Ambulatory from "./Lists/Ambulatory";
 import PatientList from "./Lists/PatientList";
+import PreOrder from "./Lists/PreOrder";
 //
 export default function BeforeAmbulatoryList() {
   const items = [
@@ -13,8 +14,13 @@ export default function BeforeAmbulatoryList() {
       children: <Ambulatory />,
     },
     {
-      label: "Хэвтэн",
+      label: "Урьдчилсан сэргийлэх",
       key: "2",
+      children: <PreOrder />,
+    },
+    {
+      label: "Хэвтэн",
+      key: "3",
       children: <PatientList />,
     },
   ];

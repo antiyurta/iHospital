@@ -1,10 +1,19 @@
 import { DeleteOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Checkbox, Collapse, Form, Input, Modal, Radio, Select, Space } from "antd";
+import { Button, Card, Checkbox, Collapse, Drawer, Form, Input, Modal, Radio, Select, Space } from "antd";
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { Post } from "../../comman";
 
 function FormBuilder2() {
     const [form] = Form.useForm();
+    const token = useSelector(selectCurrentToken);
+    const config = {
+        headers: {},
+        params: {},
+    };
     const [bigData, setBigData] = useState([]);
     const demoRef = useRef();
     const handleDemo = useReactToPrint({
@@ -75,10 +84,32 @@ function FormBuilder2() {
     const result = () => {
         return true;
     }
+    const save = async () => {
+        const response = await Post(
+            'emr/inspection-form',
+            token,
+            config,
+            {
+                structureId: 1,
+                cabinetId: null,
+                usageType: "IN",
+                name: "SAD",
+                title: "DSA",
+                formItems: bigData
+            }
+        );
+        console.log(response);
+    }
+    //
+    const navigate = useNavigate();
+    const toChange = () => {
+        navigate(`/builder`);
+    }
     return (
         <>
             <div>
-                <Button onClick={() => setIsOpenModal(true)}>Нэмэх</Button>
+                <Button onClick={() => toChange()}>Нэмэх</Button>
+                <Button onClick={() => save()}>Хадгалах</Button>
                 <div ref={demoRef} style={{ width: '21cm', height: '29.7cm' }}>
                     <div className="flex flex-wrap text-center">
                         {
@@ -106,6 +137,13 @@ function FormBuilder2() {
                                             data.type === 'title' &&
                                             <div className="text-start pl-2">
                                                 <p className="font-bold">{data.label + ":"}</p>
+                                            </div>
+                                        }
+                                        {
+                                            data.type === 'input' &&
+                                            <div className="text-start pl-2">
+                                                <p className="font-bold">{data.label + ":"}</p>
+                                                <Input />
                                             </div>
                                         }
                                     </div>

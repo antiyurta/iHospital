@@ -1,7 +1,8 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Modal, Popconfirm } from "antd";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import { Delete, Get } from "../../../comman";
@@ -52,81 +53,104 @@ function PatientForm() {
     useEffect(() => {
         getInpatientForms();
     }, []);
+    //
+    const [layout, setLayout] = useState(false);
+    const [builderForm] = Form.useForm();
+    const [bigData, setBigData] = useState([]);
+    const { Option } = Select;
+    //
     return (
-        <div>
-            <div>
-                <div className="flex flex-wrap">
-                    <div className="w-full md:w-1/2">
-                        <div className="mx-3">
-                            <Input
-                                placeholder="Хайх"
-                                allowClear
-                                onChange={(e) => setSearchField(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className="w-full md:w-1/2">
-                        <div className="mx-3">
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                onClick={() => showModal()}
-                            >
-                                Нэмэх
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-wrap mx-3 my-1">
-                    {
-                        filteredForm.map((form, index) => {
-                            return (
-                                <div key={index} className="w-full md:w-1/3 p-1">
-                                    <Card
-                                        className="custom-card"
-                                        title={
-                                            <>
-                                                <p>{form.structure?.name}</p>
-                                                <p>{form.cabinet?.name}</p>
-                                            </>}
-                                        size="small"
-                                        extra={
-                                            <div className='inline-flex'>
-                                                <div className='px-2'>
-                                                    <EditOutlined style={{ color: 'blue', fontSize: '18px' }} onClick={() => editModal(form)} />
-                                                </div>
-                                                <div className='px-2'>
-                                                    <Popconfirm
-                                                        title="Устгасан тохиолдолд сэргээх боломжгүй"
-                                                        onConfirm={() => deleteForm(form.id)}
-                                                        okText="Тийм"
-                                                        cancelText="Үгүй"
+        <div className="flex flex-wrap">
+            <div className="basis-1/5">
+                <Button onClick={() => {
+                    builderForm.validateFields().then((values) => setBigData(values.formItems))
+                }}>Харах</Button>
+                <Card>
+                    <Form form={builderForm} layout="vertical">
+                        <Form.List name={"formItems"}>
+                            {(fields, { add, remove }) => (
+                                <>
+                                    {fields.map(({ key, name, ...restField }) => (
+                                        <>
+                                            <div className="flex flex-wrap">
+                                                <div className="basis-1/2">
+                                                    <Form.Item
+                                                        label="Төрөл"
+                                                        name={[name, 'type']}
                                                     >
-                                                        <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} />
-                                                    </Popconfirm>
+                                                        <Select>
+                                                            <Option value={true}>Толгой</Option>
+                                                            <Option value={false}>Бие</Option>
+                                                        </Select>
+                                                    </Form.Item>
+                                                </div>
+                                                <div className="basis-1/2">
+                                                    <Form.Item
+                                                        label="Нэр"
+                                                        name={[name, 'label']}
+                                                    >
+                                                        <Input />
+                                                    </Form.Item>
+                                                </div>
+                                                <div className="basis-1/2">
+                                                    <Form.Item
+                                                        label="Мөр"
+                                                        name={[name, 'row']}
+                                                    >
+                                                        <InputNumber />
+                                                    </Form.Item>
+                                                </div>
+                                                <div className="basis-1/2">
+                                                    <Form.Item
+                                                        label="Багана"
+                                                        name={[name, 'col']}
+                                                    >
+                                                        <InputNumber />
+                                                    </Form.Item>
                                                 </div>
                                             </div>
-                                        }
-                                    >
-                                        {form.name}
-                                    </Card>
-                                </div>
-                            )
-                        })
-                    }
+                                            <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(name)} />
+                                        </>
+
+                                    ))}
+                                    <Form.Item>
+                                        <Button className="bg-green-400" type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            Талбар нэмэх
+                                        </Button>
+                                    </Form.Item>
+                                </>
+                            )}
+                        </Form.List>
+                    </Form>
+                </Card>
+            </div>
+            <div className="basis-4/5">
+                <Button onClick={() => setLayout(!layout)}>Эргүүлэх</Button>
+                <div className={layout ? "page-landscape" : "page"} style={{ margin: "auto" }}>
+                    <Table bordered className="ant-border-space">
+                        <tbody className="ant-table-tbody p-0">
+                            {
+                                bigData?.map((data, index) => {
+                                    return (
+                                        <tr key={index} className="ant-table-row ant-table-row-level-0">
+                                            {
+                                                data.type ?
+                                                    <th colSpan={data.col} rowSpan={data.row}>
+                                                        {data.label}
+                                                    </th>
+                                                    :
+                                                    <td colSpan={data.col} rowSpan={data.row}>
+                                                        {data.label}
+                                                    </td>
+                                            }
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </Table>
                 </div>
             </div>
-            <Modal
-                open={isInpatientModal}
-                onCancel={() => setIsInpatientModal(false)}
-                onOk={() => inpatientForm.validateFields().then((values) => {
-                    console.log(values);
-                })}
-            >
-                <Form form={inpatientForm}>
-                    
-                </Form>
-            </Modal>
         </div >
     )
 }
