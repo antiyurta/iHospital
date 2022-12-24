@@ -47,7 +47,7 @@ import MainBed from "./components/pages/Bed/MainBed";
 import RoomtDtl from "./components/pages/Bed/RoomDtl";
 // inpatient HEWTEN end
 import DemoForm2 from "./components/pages/FormBuilder/FormBuilder2";
-import Builder from './components/pages/FormBuilder/FBuilder/PatientForm'
+import Builder from "./components/pages/FormBuilder/FBuilder/PatientForm";
 // lab start
 import EquipmentList from "./components/pages/Laboratory/EquipmentList";
 import SOAPForm from "./components/pages/FormBuilder/FBuilder/SOAPForm";
@@ -73,6 +73,7 @@ import FinanceMaterialTreatment from "./components/pages/Finance/FinanceMaterial
 import FinanceMaterialSurgery from "./components/pages/Finance/FinanceMaterialSurgery";
 import ExoRequest from "./components/pages/Exo/ExoRequest";
 import BeforeEkgRequest from "./components/pages/Ekg/BeforeEkgRequest";
+import Dashboard from "./components/pages/Organization/Dashboard";
 // lab end
 
 function App() {
@@ -131,7 +132,14 @@ function App() {
           {/* finance end */}
           {/* <PrivateRoute></PrivateRoute> */}
           <Route path="/menu" element={<Menu />} />
-          <Route path="/emr" element={<PrivateRoute><EMR /></PrivateRoute>} />
+          <Route
+            path="/emr"
+            element={
+              <PrivateRoute>
+                <EMR />
+              </PrivateRoute>
+            }
+          />
           <Route path="/packages" element={<Packages />} />
           <Route path="/SetOrders" element={<SetOrder />} />
           <Route path="/device" element={<DeviceAppointment />} />
@@ -387,6 +395,7 @@ function App() {
           <Route path="/bed_management/*" element={<MainBed />} />
           <Route path="/roomDtl" element={<RoomtDtl />} />
           <Route path="/request_analys" element={<RequestAnalys />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </div>

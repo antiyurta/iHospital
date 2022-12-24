@@ -22,6 +22,8 @@ import usageType from "./usageType.json";
 import examinationProcess from "./examinationProcess.json";
 import Barcode from "react-barcode";
 import { useReactToPrint } from "react-to-print";
+import axios from "axios";
+import universal from "../../../assets/logo/universal.png";
 
 function RequestAnalys() {
   const token = useSelector(selectCurrentToken);
@@ -43,6 +45,9 @@ function RequestAnalys() {
   const [usedMaterials, setUsedMaterials] = useState([{}]);
   const [selectedRowData, setSelectedRowData] = useState("");
   const componentRef = useRef();
+  const componentResultPrint = useRef();
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const [examinationResult, setExaminationResult] = useState([]);
 
   const { Option } = Select;
 
@@ -58,9 +63,18 @@ function RequestAnalys() {
     setIsModalOpen(false);
     setUsedMaterials([{}]);
   };
-
+  const showResultModal = () => {
+    setIsResultModalOpen(true);
+  };
+  const handleResultOk = () => {
+    // setIsResultModalOpen(false);
+  };
+  const handleResultCancel = () => {
+    setIsResultModalOpen(false);
+  };
   const getERequest = async () => {
     setLoader(true);
+    setSelectedReqData([]);
     setPatientReqList([]);
     setPatientReqDtl([]);
     const response = await Get(`service/erequest`, token, config);
@@ -82,6 +96,10 @@ function RequestAnalys() {
               }
             }),
             dtlData: el.examinationRequestDetials,
+            cardNumber: el.patient?.cardNumber,
+            age: el.patient?.age,
+            genderType:
+              el.patient?.genderType === "WOMAN" ? "Эмэгтэй" : "Эрэгтэй",
           },
         ]);
       });
@@ -104,7 +122,7 @@ function RequestAnalys() {
   const getRequestDtl = async () => {
     setPatientReqDtl([]);
     config.params.examinationRequestId = selectedRowKey[0];
-    config.params.isPayment = true;
+    // config.params.isPayment = true;
     const response = await Get(
       `service/examinationRequestDetial`,
       token,
@@ -116,7 +134,7 @@ function RequestAnalys() {
         setPatientReqDtl((patientReqDtl) => [
           ...patientReqDtl,
           {
-            key: index,
+            key: el.id,
             examination: el.examinations?.name,
             barcode: el.barCode,
             statusId: el.examinationProcess,
@@ -136,6 +154,7 @@ function RequestAnalys() {
 
   useEffect(() => {
     getERequest();
+    getExaminationResult();
   }, []);
 
   useEffect(() => {
@@ -284,6 +303,11 @@ function RequestAnalys() {
       });
     },
   });
+  const handleResultPrint = useReactToPrint({
+    content: () => componentResultPrint.current,
+    onBeforePrint: () => {},
+    onAfterPrint: () => {},
+  });
 
   const rowSelectionExamination = {
     selectedExaminationKeys,
@@ -355,6 +379,7 @@ function RequestAnalys() {
         data
       );
       if (response === 200) {
+        getERequest();
         getRequestDtl();
       }
     }
@@ -370,6 +395,7 @@ function RequestAnalys() {
         data
       );
       if (response === 200) {
+        getERequest();
         getRequestDtl();
       }
     }
@@ -400,6 +426,26 @@ function RequestAnalys() {
     const rows = [...usedMaterials];
     rows.splice(idx, 1);
     setUsedMaterials(rows);
+  };
+
+  const getExaminationResult = () => {
+    axios
+      .get("http://192.168.1.232:8001/laboratory")
+      .then((response) => {
+        console.log("res========>", response.data.response.data);
+        if (response.status === 200) {
+          setExaminationResult(response.data.response.data);
+        } else if (response.status === 401) {
+          console.log("NEWTER COMMAN JS");
+        }
+      })
+      .catch((error) => {
+        console.log("========>", error);
+        if (error.response.status === 401) {
+        } else if (error.response.status === 400) {
+        } else {
+        }
+      });
   };
 
   return (
@@ -461,6 +507,32 @@ function RequestAnalys() {
                   onSelectChange([record.key]);
                 },
               };
+            }}
+            footer={() => {
+              return (
+                // Зөвхөн Хариу гарсан төлөвт харуулах
+                <>
+                  {selectedReqData &&
+                  selectedReqData.dtlData?.some(
+                    (c) => c.examinationProcess === 3
+                  ) ? (
+                    <Button className="mr-2" onClick={() => showResultModal()}>
+                      Хариу харах
+                    </Button>
+                  ) : null}
+                  {selectedReqData &&
+                  selectedReqData.dtlData?.some(
+                    (c) => c.examinationProcess === 4
+                  ) ? (
+                    <Button
+                      className="mr-2"
+                      onClick={() => handleResultPrint()}
+                    >
+                      Хэвлэх
+                    </Button>
+                  ) : null}
+                </>
+              );
             }}
           />
         </Col>
@@ -581,6 +653,43 @@ function RequestAnalys() {
             </div>
           </div>
         </Modal>
+        <Modal
+          title="Шинжилгээний хариу"
+          open={isResultModalOpen}
+          onOk={handleResultOk}
+          onCancel={handleResultCancel}
+          width={800}
+          okText="Хэвлэх"
+          cancelText="Хаах"
+        >
+          <p>Төхөөрөмжийн нэр: {examinationResult[1]?.deviceName}</p>
+          <p>
+            Баркод: {examinationResult[1]?.patientIdentification?.patientId}
+          </p>
+          <table className="ant-border-space" style={{ width: "100%" }}>
+            <thead className="ant-table-thead">
+              <tr>
+                <th>Үзүүлэлт</th>
+                <th>Хариу</th>
+                <th>Нэгж</th>
+                <th>Лавлах хэмжээ</th>
+              </tr>
+            </thead>
+            <tbody className="ant-table-tbody">
+              {examinationResult &&
+                examinationResult[27]?.observations?.map((el, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="text-left">{el.observationSubId}</td>
+                      <td>{el.observationValue}</td>
+                      <td>{el.units}</td>
+                      <td>-</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </Modal>
       </Row>
       {selectedExaminations.length > 0 && (
         //Энд сонгогдсон шинжилгээнүүдийн зөвхөн эхнийхийг хэвлэхээр тохируулж байгаа.
@@ -595,6 +704,116 @@ function RequestAnalys() {
           </div>
         </div>
       )}
+      <div style={{ display: "none" }}>
+        <div ref={componentResultPrint} className="p-4">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={require("../../../assets/logo/universal.png")}
+              style={{ width: 200 }}
+            />
+            <span
+              style={{ color: "#2d8cff", fontSize: 28, fontWeight: "bold" }}
+            >
+              Universal Med Эмнэлэг
+            </span>
+          </div>
+          <span
+            style={{
+              width: 250,
+              position: "absolute",
+              top: 0,
+              right: 10,
+              fontSize: 12,
+            }}
+          >
+            ЭМСайдын 2019 оны 12 сарын 30-ны өдрийн A/611 тоот тушаалаар батлав.
+          </span>
+          <div
+            style={{
+              width: "100%",
+              height: 2,
+              backgroundColor: "#2d8cff",
+              marginTop: 5,
+            }}
+          ></div>
+          <div className="p-2">
+            <Row gutter={[8, 8]}>
+              <Col span={6} style={{ fontWeight: "bold" }}>
+                Эцэг/Эхийн нэр:
+              </Col>
+              <Col span={6}>{selectedReqData.firstName}</Col>
+              <Col span={6} style={{ fontWeight: "bold" }}>
+                Дугаар:
+              </Col>
+              <Col span={6}>{selectedReqData.cardNumber}</Col>
+            </Row>
+            <Row gutter={[8, 8]}>
+              <Col span={6} style={{ fontWeight: "bold" }}>
+                Нэр:
+              </Col>
+              <Col span={6}>{selectedReqData.lastName}</Col>
+              <Col span={6} style={{ fontWeight: "bold" }}>
+                Нас:
+              </Col>
+              <Col span={6}>{selectedReqData.age}</Col>
+            </Row>
+            <Row gutter={[8, 8]}>
+              <Col span={6} style={{ fontWeight: "bold" }}>
+                Регистр:
+              </Col>
+              <Col span={6}>{selectedReqData.registerNumber}</Col>
+              <Col span={6} style={{ fontWeight: "bold" }}>
+                Хүйс:
+              </Col>
+              <Col span={6}>{selectedReqData.genderType}</Col>
+            </Row>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              height: 2,
+              backgroundColor: "#2d8cff",
+              marginBottom: 5,
+            }}
+          ></div>
+          <span>Төхөөрөмжийн нэр: {examinationResult[1]?.deviceName}</span>
+          <div>
+            <span>
+              Баркод: {examinationResult[1]?.patientIdentification?.patientId}
+            </span>
+          </div>
+          <table style={{ width: "100%" }}>
+            <thead>
+              <tr>
+                <th className="text-center">Үзүүлэлт</th>
+                <th className="text-center">Хариу</th>
+                <th className="text-center">Нэгж</th>
+                <th className="text-center">Лавлах хэмжээ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {examinationResult &&
+                examinationResult[27]?.observations?.map((el, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="text-left">{el.observationSubId}</td>
+                      <td>{el.observationValue}</td>
+                      <td>{el.units}</td>
+                      <td>-</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </Spin>
   );
 }
