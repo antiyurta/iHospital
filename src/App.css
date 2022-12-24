@@ -308,15 +308,24 @@ input::-webkit-inner-spin-button {
   position: initial;
 }
 
+/* .ant-table-cell-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #1890ff;
+} */
+
+.ant-table-container::-webkit-scrollbar-track {
+  border: 2px solid white;
+  background-color: #f5f5f5;
+}
+
+.ant-table-container::-webkit-scrollbar-thumb {
+  background-color: #2d8cff !important;
+}
+
 @media print {
 
   html,
   body {
     height: auto;
-  }
-
-  @page {
-    margin: 0;
   }
 
   p {

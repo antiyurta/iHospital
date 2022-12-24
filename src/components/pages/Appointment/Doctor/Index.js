@@ -29,7 +29,7 @@ function Index({ PatientId }) {
         >
             {
                 type === 0 &&
-                <InspectionHistory />
+                <InspectionHistory patientId={PatientId} />
             }
             {
                 type === 1 &&
