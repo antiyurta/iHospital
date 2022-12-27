@@ -151,7 +151,7 @@ export default function Dashboard() {
                 className="rounded-xl cursor-pointer"
                 bodyStyle={styles.cardBodyStyle}
                 onClick={() =>
-                  showModal(1, "Эмчилгээ үйлчлүүлэгч тоо, орлого дүн")
+                  showModal(1, "Оношилгоо үйлчлүүлэгч тоо, орлого дүн")
                 }
               >
                 <div style={{ width: "70%" }}>
@@ -171,7 +171,7 @@ export default function Dashboard() {
                 className="rounded-xl cursor-pointer"
                 bodyStyle={styles.cardBodyStyle}
                 onClick={() =>
-                  showModal(0, "Эмчилгээ үйлчлүүлэгч тоо, орлого дүн")
+                  showModal(0, "Шинжилгээ үйлчлүүлэгч тоо, орлого дүн")
                 }
               >
                 <div style={{ width: "70%" }}>
@@ -190,9 +190,7 @@ export default function Dashboard() {
                 style={styles.cardStyle}
                 className="rounded-xl cursor-pointer"
                 bodyStyle={styles.cardBodyStyle}
-                onClick={() =>
-                  showModal(7, "Эмчилгээ үйлчлүүлэгч тоо, орлого дүн")
-                }
+                onClick={() => showModal(7, "Багц үйлчлүүлэгч тоо, орлого дүн")}
               >
                 <div style={{ width: "70%" }}>
                   <p style={{ width: "80%" }}>
