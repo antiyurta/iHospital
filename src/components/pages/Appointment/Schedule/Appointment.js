@@ -116,6 +116,9 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       if (type === 3) {
         const response = await Get("device/slot", token, config);
         setSlots(response.data);
+      } else if (type === 2) {
+        const response = await Get("treatment/slot", token, config);
+        setSlots(response.data);
       } else {
         const response = await Get("slot", token, config);
         setSlots(response.data);

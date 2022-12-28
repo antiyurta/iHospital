@@ -54,7 +54,7 @@ function Xray({ printData, printSize }) {
                         </div>
                     </div>
                     <div className="flex flex-row">
-                        <div className="basis-1/2">
+                        <div className="basis-1/2 ml-6">
                             <div className="flex">
                                 <p className="font-semibold mr-2">Эцэг эхийн нэр:</p>
                                 <p className="pr-3">{patientInfo.lastName}</p>
@@ -72,7 +72,7 @@ function Xray({ printData, printSize }) {
                                 <p className="pr-3">{patientInfo.address}</p>
                             </div>
                         </div>
-                        <div className="basis-1/2">
+                        <div className="basis-1/2 ml-6">
                             <div className="flex">
                                 <p className="font-semibold mr-2">Нэр:</p>
                                 <p className="pr-3">{patientInfo.firstName}</p>

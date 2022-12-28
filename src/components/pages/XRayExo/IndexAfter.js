@@ -182,6 +182,7 @@ function IndexAfter({ type, params }) {
                                     <Table bordered className='ant-border-space' style={{ width: '100%' }}>
                                         <thead className='ant-table-thead bg-slate-200'>
                                             <tr>
+                                                <th>Он Сар</th>
                                                 <th>Оношилгооны нэр</th>
                                                 <th>Үзлэг хийгдсэн эсэх</th>
                                                 <th>Орох цаг</th>
@@ -217,6 +218,7 @@ function IndexAfter({ type, params }) {
                                                                         )
                                                                     }
                                                                 >
+                                                                    <td>{moment(xray?.updatedAt).format("YYYY-MM-DD")}</td>
                                                                     <td>{xray?.xrays?.name}</td>
                                                                     {checkType(xray.xrayProcess)}
                                                                     <td>
@@ -242,7 +244,7 @@ function IndexAfter({ type, params }) {
                                                     )
                                                     :
                                                     <tr>
-                                                        <td colSpan={13}>
+                                                        <td colSpan={14}>
                                                             <Empty />
                                                         </td>
                                                     </tr>
