@@ -1,7 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Tabs, Card, Row, Col, Modal, Table } from "antd";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, Post } from "../../comman";
@@ -15,7 +24,15 @@ export default function Dashboard() {
     headers: {},
     params: {},
   };
-  ChartJS.register(ArcElement, Tooltip, Legend);
+  ChartJS.register(
+    ArcElement,
+    Tooltip,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Legend
+  );
   const dataEx = {
     labels: ["Сул", "Засвартай", "Дүүрсэн"],
     datasets: [
@@ -27,7 +44,6 @@ export default function Dashboard() {
       },
     ],
   };
-
   const RenderAmbulatory = () => {
     const [totalReport, setTotalReport] = useState(null);
     const [selectedInvoiceDtl, setSelectedInvoiceDtl] = useState({});
@@ -36,6 +52,28 @@ export default function Dashboard() {
     const [modalTitle, setModalTitle] = useState(null);
     const [tableData, setTableData] = useState([]);
     const [dataLoading, setDataLoading] = useState(false);
+    const [chart1Label, setChart1Label] = useState([]);
+    const [doctorData, setDoctorData] = useState([]);
+    const [dataLoadingDoctor, setDataLoadingDoctor] = useState(false);
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+      },
+    };
+    const chart1Data = {
+      labels: chart1Label.map((el) => el.name),
+      datasets: [
+        {
+          label: "Орлогын мэдээ",
+          data: chart1Label.map((el) => el.countPatients),
+          backgroundColor: "#7cb5ec",
+        },
+      ],
+    };
 
     const showModal = (type_id, title) => {
       setDataLoading(true);
@@ -96,7 +134,10 @@ export default function Dashboard() {
     };
 
     useEffect(() => {
+      setDataLoadingDoctor(true);
       getInvoice();
+      getInspectionReport();
+      getDoctorReceipt();
     }, []);
 
     useEffect(() => {
@@ -115,108 +156,202 @@ export default function Dashboard() {
         sorter: (a, b) => a.totalAmount - b.totalAmount,
       },
       {
-        title: "Тоо",
+        title: "Үйлчлүүлэгчдийн тоо",
+        dataIndex: "countPatients",
+        sorter: (a, b) => a.countPatients - b.countPatients,
+      },
+    ];
+    const columnsDoctor = [
+      {
+        title: "Нэр",
+        dataIndex: "name",
+      },
+      {
+        title: "Дүн",
+        dataIndex: "totalAmount",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => a.totalAmount - b.totalAmount,
+      },
+      {
+        title: "Үйлчлүүлэгчдийн тоо",
         dataIndex: "countPatients",
         sorter: (a, b) => a.countPatients - b.countPatients,
       },
     ];
 
+    const getInspectionReport = async () => {
+      const response = await Get("report/inspection/receipt", token, config);
+      console.log("get InspectionReport=======>", response);
+      if (response.length != 0) {
+        setChart1Label(response);
+      }
+    };
+    const getDoctorReceipt = async () => {
+      const response = await Get("report/doctor/receipt", token, config);
+      console.log("get DoctorReceipt=======>", response);
+      setDataLoadingDoctor(false);
+      if (response.length != 0) {
+        response.map((el, index) => {
+          setDoctorData((oldData) => [
+            ...oldData,
+            {
+              key: index,
+              name: el.lastName?.substr(0, 1) + ". " + el.firstName,
+              totalAmount:
+                el.totalAmount
+                  ?.toString()
+                  ?.replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, "$1,") +
+                " ₮",
+              countPatients: el.countPatients,
+            },
+          ]);
+        });
+        var total = 0;
+        var totalPatient = 0;
+        for (var i = 0; i < response.length; i++) {
+          total += response[i].totalAmount;
+          totalPatient += parseInt(response[i].countPatients);
+        }
+        setDoctorData((oldData) => [
+          ...oldData,
+          {
+            key: "total",
+            name: <strong>Нийт</strong>,
+            totalAmount: (
+              <strong>
+                {total
+                  ?.toString()
+                  ?.replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, "$1,") +
+                  " ₮"}
+              </strong>
+            ),
+            countPatients: <strong>{totalPatient}</strong>,
+          },
+        ]);
+      }
+    };
     return (
       <div>
         {totalReport !== null ? (
-          <Row gutter={[16, 16]}>
-            <Col className="gutter-row" span={6}>
-              <Card
-                style={styles.cardStyle}
-                className="rounded-xl cursor-pointer"
-                bodyStyle={styles.cardBodyStyle}
-                onClick={() =>
-                  showModal(2, "Эмчилгээ үйлчлүүлэгч тоо, орлого дүн")
-                }
+          <>
+            <Row gutter={[16, 16]}>
+              <Col className="gutter-row" span={6}>
+                <Card
+                  style={styles.cardStyle}
+                  className="rounded-xl cursor-pointer"
+                  bodyStyle={styles.cardBodyStyle}
+                  onClick={() =>
+                    showModal(2, "Эмчилгээ үйлчлүүлэгч тоо, орлого дүн")
+                  }
+                >
+                  <div style={{ width: "70%" }}>
+                    <p style={{ width: "80%" }}>
+                      Эмчилгээ үйлчлүүлэгч тоо, орлого дүн
+                    </p>
+                    <p style={styles.total}>{calcTotal("2")}</p>
+                  </div>
+                  <div>
+                    <BarChartOutlined style={styles.iconStyle} />
+                  </div>
+                </Card>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <Card
+                  style={styles.cardStyle}
+                  className="rounded-xl cursor-pointer"
+                  bodyStyle={styles.cardBodyStyle}
+                  onClick={() =>
+                    showModal(1, "Оношилгоо үйлчлүүлэгч тоо, орлого дүн")
+                  }
+                >
+                  <div style={{ width: "70%" }}>
+                    <p style={{ width: "80%" }}>
+                      Оношилгоо үйлчлүүлэгч тоо, орлого дүн
+                    </p>
+                    <p style={styles.total}>{calcTotal("1")}</p>
+                  </div>
+                  <div>
+                    <BarChartOutlined style={styles.iconStyle} />
+                  </div>
+                </Card>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <Card
+                  style={styles.cardStyle}
+                  className="rounded-xl cursor-pointer"
+                  bodyStyle={styles.cardBodyStyle}
+                  onClick={() =>
+                    showModal(0, "Шинжилгээ үйлчлүүлэгч тоо, орлого дүн")
+                  }
+                >
+                  <div style={{ width: "70%" }}>
+                    <p style={{ width: "80%" }}>
+                      Шинжилгээ үйлчлүүлэгч тоо, орлого дүн
+                    </p>
+                    <p style={styles.total}>{calcTotal("0")}</p>
+                  </div>
+                  <div>
+                    <BarChartOutlined style={styles.iconStyle} />
+                  </div>
+                </Card>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <Card
+                  style={styles.cardStyle}
+                  className="rounded-xl cursor-pointer"
+                  bodyStyle={styles.cardBodyStyle}
+                  onClick={() =>
+                    showModal(7, "Багц үйлчлүүлэгч тоо, орлого дүн")
+                  }
+                >
+                  <div style={{ width: "70%" }}>
+                    <p style={{ width: "80%" }}>
+                      Багц үйлчлүүлэгч тоо, орлого дүн
+                    </p>
+                    <p style={styles.total}>{calcTotal("7")}</p>
+                  </div>
+                  <div>
+                    <BarChartOutlined style={styles.iconStyle} />
+                  </div>
+                </Card>
+              </Col>
+              <Modal
+                title={modalTitle}
+                open={isModalOpen}
+                footer={false}
+                onCancel={handleCancel}
+                width={1000}
               >
-                <div style={{ width: "70%" }}>
-                  <p style={{ width: "80%" }}>
-                    Эмчилгээ үйлчлүүлэгч тоо, орлого дүн
-                  </p>
-                  <p style={styles.total}>{calcTotal("2")}</p>
-                </div>
-                <div>
-                  <BarChartOutlined style={styles.iconStyle} />
-                </div>
-              </Card>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Card
-                style={styles.cardStyle}
-                className="rounded-xl cursor-pointer"
-                bodyStyle={styles.cardBodyStyle}
-                onClick={() =>
-                  showModal(1, "Оношилгоо үйлчлүүлэгч тоо, орлого дүн")
-                }
-              >
-                <div style={{ width: "70%" }}>
-                  <p style={{ width: "80%" }}>
-                    Оношилгоо үйлчлүүлэгч тоо, орлого дүн
-                  </p>
-                  <p style={styles.total}>{calcTotal("1")}</p>
-                </div>
-                <div>
-                  <BarChartOutlined style={styles.iconStyle} />
-                </div>
-              </Card>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Card
-                style={styles.cardStyle}
-                className="rounded-xl cursor-pointer"
-                bodyStyle={styles.cardBodyStyle}
-                onClick={() =>
-                  showModal(0, "Шинжилгээ үйлчлүүлэгч тоо, орлого дүн")
-                }
-              >
-                <div style={{ width: "70%" }}>
-                  <p style={{ width: "80%" }}>
-                    Шинжилгээ үйлчлүүлэгч тоо, орлого дүн
-                  </p>
-                  <p style={styles.total}>{calcTotal("0")}</p>
-                </div>
-                <div>
-                  <BarChartOutlined style={styles.iconStyle} />
-                </div>
-              </Card>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <Card
-                style={styles.cardStyle}
-                className="rounded-xl cursor-pointer"
-                bodyStyle={styles.cardBodyStyle}
-                onClick={() => showModal(7, "Багц үйлчлүүлэгч тоо, орлого дүн")}
-              >
-                <div style={{ width: "70%" }}>
-                  <p style={{ width: "80%" }}>
-                    Багц үйлчлүүлэгч тоо, орлого дүн
-                  </p>
-                  <p style={styles.total}>{calcTotal("7")}</p>
-                </div>
-                <div>
-                  <BarChartOutlined style={styles.iconStyle} />
-                </div>
-              </Card>
-            </Col>
-            <Modal
-              title={modalTitle}
-              open={isModalOpen}
-              footer={false}
-              onCancel={handleCancel}
-              width={1000}
-            >
-              <Table
-                columns={columns}
-                dataSource={tableData}
-                loading={dataLoading}
-              />
-            </Modal>
-          </Row>
+                <Table
+                  columns={columns}
+                  dataSource={tableData}
+                  loading={dataLoading}
+                />
+              </Modal>
+            </Row>
+            <Row gutter={[16, 16]} className="mt-4">
+              <Col className="gutter-row" span={12}>
+                <Card
+                  title="Орлогын мэдээ"
+                  className="rounded-xl cursor-pointer"
+                >
+                  <Bar options={options} data={chart1Data} />
+                </Card>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <Card
+                  title="Хамгийн их үйлчилгээ хийсэн"
+                  className="rounded-xl cursor-pointer"
+                >
+                  <Table
+                    columns={columnsDoctor}
+                    dataSource={doctorData}
+                    loading={dataLoadingDoctor}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </>
         ) : null}
       </div>
     );

@@ -74,6 +74,7 @@ import FinanceMaterialSurgery from "./components/pages/Finance/FinanceMaterialSu
 import ExoRequest from "./components/pages/Exo/ExoRequest";
 import BeforeEkgRequest from "./components/pages/Ekg/BeforeEkgRequest";
 import Dashboard from "./components/pages/Organization/Dashboard";
+import Report from "./components/pages/Report/Report";
 // lab end
 
 function App() {
@@ -396,6 +397,7 @@ function App() {
           <Route path="/roomDtl" element={<RoomtDtl />} />
           <Route path="/request_analys" element={<RequestAnalys />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/report" element={<Report />} />
         </Route>
       </Routes>
     </div>
