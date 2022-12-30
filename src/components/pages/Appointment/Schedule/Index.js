@@ -19,7 +19,7 @@ const Marks = {
 
 function Index({ type }) {
     const today = new Date();
-    const [newScheduleDay, setNewScheduleDay] = useState("");
+    const [newScheduleDay, setNewScheduleDay] = useState(new Date());
     const [form] = Form.useForm();
     const token = useSelector(selectCurrentToken);
     const [editMode, setEditMode] = useState(false);
@@ -106,8 +106,8 @@ function Index({ type }) {
     const getLastDayOfMonth = (year, month) => {
         return new Date(year, month + 1, 0);
     };
-    const firstDayOfMonth = getFirstDayOfMonth(today.getFullYear(), today.getMonth());
-    const lastDayOfMonth = getLastDayOfMonth(today.getFullYear(), today.getMonth());
+    const firstDayOfMonth = getFirstDayOfMonth(new Date(newScheduleDay).getFullYear(), new Date(newScheduleDay).getMonth());
+    const lastDayOfMonth = getLastDayOfMonth(new Date(newScheduleDay).getFullYear(), new Date(newScheduleDay).getMonth());
 
     const getCurrentMonth = async (firstDayOfMonth, lastDayOfMonth) => {
         const year = firstDayOfMonth.getFullYear();
