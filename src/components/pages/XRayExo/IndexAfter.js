@@ -151,7 +151,7 @@ function IndexAfter({ type, params }) {
             return <p className="bg-[#f0ad4e] text-white">Шууд</p>
         } else {
             return (
-                <div className="inline-flex flex-row items-center bg-[#5cb85c] text-white">
+                <div className="bg-[#5cb85c] text-white">
                     <span>
                         {begin}
                     </span>
