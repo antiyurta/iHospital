@@ -34,6 +34,7 @@ function EMR() {
   const employeeId = useSelector(selectCurrentUserId);
   const [type, setType] = useState("EMR"); // ['OCS', 'EMR']
   const [appointments, setAppointments] = useState([]);
+  const [inPatientAppointments, setInPatientAppointments] = useState([]);
   const [problems, setProblems] = useState([]);
   //
   const [selectedPatient, setSelectedPatient] = useState([]);
@@ -97,8 +98,13 @@ function EMR() {
   };
   //
   const getInspectionNotes = async (PatientId) => {
-    config.params.patientId = PatientId;
-    const response = await Get("appointment", token, config);
+    const conf = {
+      headers: {},
+      params: {
+        patientId: PatientId,
+      }
+    }
+    const response = await Get("appointment", token, conf);
     if (response.data.length > 0) {
       var result = response.data.reduce(function (r, a) {
         //Оноор бүлэглэх
@@ -113,6 +119,26 @@ function EMR() {
     }
     config.params.patientId = null;
   };
+  const getInPatientInspectionNotes = async (PatientId) => {
+    const conf = {
+      headers: {},
+      params: {
+        patientId: PatientId,
+      }
+    }
+    const response = await Get('service/inPatient-request', token, conf);
+    if (response.data.length > 0) {
+      var result = response.data.reduce(function (r, a) {
+        //Оноор бүлэглэх
+        r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
+        r[a.createdAt.substring(0, 4)].push(a);
+        return r;
+      }, Object.create(null));
+      setInPatientAppointments(result);
+    } else {
+      setInPatientAppointments([]);
+    }
+  }
   const getProblems = async (id) => {
     const response = await Get("appointment/show/" + id, token, config);
     if (response.inspectionNotes.length > 0) {
@@ -139,6 +165,7 @@ function EMR() {
   useEffect(() => {
     getByIdPatient(IncomePatientId);
     getInspectionNotes(IncomePatientId);
+    getInPatientInspectionNotes(IncomePatientId);
     console.log(IncomeUsageType);
   }, []);
 
@@ -249,7 +276,10 @@ function EMR() {
                 }
                 {
                   isUsageType === 'IN' &&
-                  <MainInPatient />
+                  <MainInPatient
+                    appointments={inPatientAppointments}
+                    patientId={IncomePatientId}
+                  />
                 }
               </Card>
             </div>
@@ -296,6 +326,7 @@ function EMR() {
                   PatientId={IncomePatientId}
                   CabinetId={IncomeCabinetId}
                   Inspection={Inspection}
+                  UsageType={IncomeUsageType}
                   handleClick={handleTypeChange}
                 />
               </Card>

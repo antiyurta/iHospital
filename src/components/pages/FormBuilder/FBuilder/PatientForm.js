@@ -72,43 +72,45 @@ function PatientForm() {
                                 <>
                                     {fields.map(({ key, name, ...restField }) => (
                                         <>
-                                            <div className="flex flex-wrap">
-                                                <div className="basis-1/2">
-                                                    <Form.Item
-                                                        label="Төрөл"
-                                                        name={[name, 'type']}
-                                                    >
-                                                        <Select>
-                                                            <Option value={true}>Толгой</Option>
-                                                            <Option value={false}>Бие</Option>
-                                                        </Select>
-                                                    </Form.Item>
+                                            <Card>
+                                                <div className="flex flex-wrap">
+                                                    <div className="basis-1/2">
+                                                        <Form.Item
+                                                            label="Төрөл"
+                                                            name={[name, 'type']}
+                                                        >
+                                                            <Select>
+                                                                <Option value={true}>Толгой</Option>
+                                                                <Option value={false}>Бие</Option>
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </div>
+                                                    <div className="basis-1/2">
+                                                        <Form.Item
+                                                            label="Нэр"
+                                                            name={[name, 'label']}
+                                                        >
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </div>
+                                                    <div className="basis-1/2">
+                                                        <Form.Item
+                                                            label="Мөр"
+                                                            name={[name, 'col']}
+                                                        >
+                                                            <InputNumber />
+                                                        </Form.Item>
+                                                    </div>
+                                                    <div className="basis-1/2">
+                                                        <Form.Item
+                                                            label="Багана"
+                                                            name={[name, 'row']}
+                                                        >
+                                                            <InputNumber />
+                                                        </Form.Item>
+                                                    </div>
                                                 </div>
-                                                <div className="basis-1/2">
-                                                    <Form.Item
-                                                        label="Нэр"
-                                                        name={[name, 'label']}
-                                                    >
-                                                        <Input />
-                                                    </Form.Item>
-                                                </div>
-                                                <div className="basis-1/2">
-                                                    <Form.Item
-                                                        label="Мөр"
-                                                        name={[name, 'row']}
-                                                    >
-                                                        <InputNumber />
-                                                    </Form.Item>
-                                                </div>
-                                                <div className="basis-1/2">
-                                                    <Form.Item
-                                                        label="Багана"
-                                                        name={[name, 'col']}
-                                                    >
-                                                        <InputNumber />
-                                                    </Form.Item>
-                                                </div>
-                                            </div>
+                                            </Card>
                                             <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} onClick={() => remove(name)} />
                                         </>
 

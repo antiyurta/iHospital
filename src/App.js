@@ -75,6 +75,7 @@ import ExoRequest from "./components/pages/Exo/ExoRequest";
 import BeforeEkgRequest from "./components/pages/Ekg/BeforeEkgRequest";
 import Dashboard from "./components/pages/Organization/Dashboard";
 import Report from "./components/pages/Report/Report";
+import BeforeAmbulatoryListEnr from './components/pages/BeforeAmbulatory/BeforeAmbulatoryListEnr';
 // lab end
 
 function App() {
@@ -357,7 +358,7 @@ function App() {
             path="/enrAmbulatoryList"
             element={
               <PrivateRoute>
-                <Nurse />
+                <BeforeAmbulatoryListEnr />
               </PrivateRoute>
             }
           />

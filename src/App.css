@@ -320,6 +320,9 @@ input::-webkit-inner-spin-button {
 .ant-table-container::-webkit-scrollbar-thumb {
   background-color: #2d8cff !important;
 }
+.ant-table.ant-table-bordered > .ant-table-container> .ant-table-content > table > tbody> tr > td {
+  white-space: pre-wrap !important;
+}
 
 @media print {
 
@@ -346,4 +349,39 @@ input::-webkit-inner-spin-button {
     padding-left: 10px;
     padding-right: 10px;
   }
+
+  .magadlagaa {
+    padding: 1.5cm;
+  }
+
+  .magadlagaa .ant-input {
+    border-style: none;
+  }
+
+  .magadlagaa .ant-picker {
+    border-style: none;
+    text-decoration: underline;
+  }
+
+  .magadlagaa .ant-picker .ant-picker-suffix {
+    display: none;
+  }
+
+  .amara {
+    /* margin-left: 1cm; */
+    /* margin-right: 1cm; */
+  }
+}
+
+.magadlagaa {
+  padding: 1.5cm;
+}
+.magadlagaa .ant-picker{
+  height: 23px !important;
+}
+.magadlagaa .ant-input {
+  height: 23px !important;
+}
+.magadlagaa .ant-picker-input > input{
+  width: 30px !important;
 }

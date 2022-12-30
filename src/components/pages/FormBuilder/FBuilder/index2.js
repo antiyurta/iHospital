@@ -1,6 +1,5 @@
 import { DeleteOutlined, PlusCircleOutlined, PlusOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select } from "antd";
-import index3 from "./index3";
 const { TextArea } = Input;
 const { Option } = Select;
 function index2({ options, namePanel, handleChange }) {

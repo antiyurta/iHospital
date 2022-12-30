@@ -1,12 +1,13 @@
 //Явцын тэмдэглэл
 import React, { useEffect, useState } from "react";
 import { Card, Collapse, Divider, Modal, Tree } from "antd";
-import { FolderOutlined, FolderOpenOutlined, PrinterOutlined, FilePdfOutlined, CarryOutOutlined, FormOutlined, MedicineBoxOutlined } from "@ant-design/icons";
+import { FolderOutlined, FolderOpenOutlined, PrinterOutlined, FilePdfOutlined, CarryOutOutlined, FormOutlined, MedicineBoxOutlined, MediumOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import { Get } from "../../../comman";
 import FormIndex from "../FormPrint";
 import Prescription from "../PrescriptionPrint";
+import Magadlaga from '../MagadlagaPrint';
 
 export default function ProgressNotes({ Appointments }) {
   const { Panel } = Collapse;
@@ -18,12 +19,19 @@ export default function ProgressNotes({ Appointments }) {
   const [inspectionNotes, setInspectionNotes] = useState([]);
   const [serviceRequests, setServiceRequests] = useState([]);
   const [printData, setPrintData] = useState([]);
-  const [printPrescription, setPrintPrescription] = useState([])
+  const [printPrescription, setPrintPrescription] = useState([]);
+  const [printMagadlaga, setPrintMagadlaga] = useState({});
   const [isOpenModalForm, setIsOpenModalForm] = useState(false);
   const [isOpenModalPrescription, setIsOpenModalPrescription] = useState(false);
+  const [isOpenModalMagadlaga, setIsOpenModalMagadlaga] = useState(false);
   const onChange = async (id) => {
     if (id) {
-      const response = await Get('appointment/show/' + id, token, config);
+      const conf = {
+        headers: {},
+        params: {}
+      }
+      console.log("===========>asdskladsahasdklashdkashdasdhksahdklsahd");
+      const response = await Get('appointment/show/' + id, token, conf);
       if (response.inspectionNotes.length > 0) {
         setInspectionNotes(response.inspectionNotes);
         setServiceRequests(response.serviceRequests);
@@ -111,6 +119,16 @@ export default function ProgressNotes({ Appointments }) {
                                   }
                                   extra={
                                     <>
+                                      <MediumOutlined
+                                        title="Магадлага"
+                                        className="p-1"
+                                        onClick={(event) => {
+                                          setPrintMagadlaga(note);
+                                          console.log(note);
+                                          setIsOpenModalMagadlaga(true);
+                                        }
+                                        }
+                                      />
                                       <PrinterOutlined
                                         title="Маягт хэвлэх"
                                         className="p-1"
@@ -184,6 +202,15 @@ export default function ProgressNotes({ Appointments }) {
         title={'CT-1'}
       >
         <Prescription props={printPrescription} />
+      </Modal>
+      <Modal
+        open={isOpenModalMagadlaga}
+        onCancel={() => setIsOpenModalMagadlaga(false)}
+        footer={null}
+        width={860}
+        title={'Эмнэлэгийн магадлагаа'}
+      >
+        <Magadlaga data={printMagadlaga} />
       </Modal>
     </>
   );

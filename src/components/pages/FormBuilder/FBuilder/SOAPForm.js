@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Delete, Get, Patch, Post } from '../../../comman';
-import Index from './index';
 import Index2 from './index2';
-function SOAPForm() {
+import Index3 from './index3';
+import Index from './index';
+function SOAPForm({ docType }) {
     const [SOAPForm] = Form.useForm();
-    const [SOAPFormExo] = Form.useForm();
     const { Option } = Select;
     const { Panel } = Collapse;
     const { TextArea } = Input;
@@ -183,6 +183,7 @@ function SOAPForm() {
                 {
                     structureId: values.structureId,
                     cabinetId: values.cabinetId,
+                    usageType: docType,
                     name: values.name,
                     title: values.title,
                     formItems: data
@@ -200,6 +201,7 @@ function SOAPForm() {
                     structureId: values.structureId,
                     cabinetId: values.cabinetId,
                     name: values.name,
+                    usageType: docType,
                     title: values.title,
                     formItems: data
                 });
@@ -221,17 +223,21 @@ function SOAPForm() {
         }
         SOAPForm.setFieldsValue(formData);
     };
-    const HandleChange = (arg, value) => {
+    const painHandleChange = async (panelName, name) => {
+        console.log(panelName, name);
         const formData = SOAPForm.getFieldsValue();
-        const type = SOAPForm.getFieldValue([arg, value, 'type']);
+        const type = SOAPForm.getFieldValue([panelName, name, 'type']);
+        console.log(type);
         if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
-            formData[arg][value].options = [{ value: "", label: "" }];
+            formData[panelName][name].options = [{ key: "", value: "" }];
+
         } else {
-            formData[arg][value].options = undefined;
+            formData[panelName][name].options = undefined;
         }
         SOAPForm.setFieldsValue(formData);
     };
     const getSOAPForms = async () => {
+        config.params.usageType = docType;
         const response = await Get('emr/inspection-form', token, config);
         setSoapForms(response.data);
     };
@@ -249,7 +255,7 @@ function SOAPForm() {
         getSOAPForms();
         getStructures();
         getCabinets();
-    }, []);
+    }, [docType]);
     //
     return (
         <div>
@@ -273,13 +279,16 @@ function SOAPForm() {
                             >
                                 Нэмэх
                             </Button>
-                            <Button
-                                className='ml-2'
-                                htmlType="submit"
-                                onClick={() => showModal(1)}
-                            >
-                                EXO Нэмэх
-                            </Button>
+                            {
+                                docType === 'OUT' &&
+                                <Button
+                                    className='ml-2'
+                                    htmlType="submit"
+                                    onClick={() => showModal(1)}
+                                >
+                                    EXO Нэмэх
+                                </Button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -396,26 +405,45 @@ function SOAPForm() {
                     </div>
                     <Divider>Асуумж</Divider>
                     <Collapse style={{ borderRadius: '0.375rem' }}>
-                        {type === 0 &&
-                            panels.map((panel, index) => {
-                                return (
-                                    <Panel key={index} header={panel.name}>
-                                        {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
-                                        <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
-                                    </Panel>
-                                )
-                            })
+                        {
+                            docType === 'OUT' ?
+                                <>
+                                    {type === 0 &&
+                                        panels.map((panel, index) => {
+                                            return (
+                                                <Panel key={index} header={panel.name}>
+                                                    {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
+                                                    <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
+                                                </Panel>
+                                            )
+                                        })
+                                    }
+                                    {type === 1 &&
+                                        panelsExo.map((panel, index) => {
+                                            return (
+                                                <Panel key={index} header={panel.name}>
+                                                    {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
+                                                    <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
+                                                </Panel>
+                                            )
+                                        })
+                                    }
+                                </>
+                                :
+                                <>
+                                    {
+                                        panels.map((panel, index) => {
+                                            return (
+                                                <Panel key={index} header={panel.name}>
+                                                    {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
+                                                    <Index options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
+                                                </Panel>
+                                            )
+                                        })
+                                    }
+                                </>
                         }
-                        {type === 1 &&
-                            panelsExo.map((panel, index) => {
-                                return (
-                                    <Panel key={index} header={panel.name}>
-                                        {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
-                                        <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
-                                    </Panel>
-                                )
-                            })
-                        }
+
                     </Collapse>
                 </Form>
             </Modal>

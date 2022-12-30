@@ -19,6 +19,7 @@ const Marks = {
 
 function Index({ type }) {
     const today = new Date();
+    const [newScheduleDay, setNewScheduleDay] = useState("");
     const [form] = Form.useForm();
     const token = useSelector(selectCurrentToken);
     const [editMode, setEditMode] = useState(false);
@@ -140,6 +141,9 @@ function Index({ type }) {
 
     const changeMonth = (value) => {
         const date = new Date(value);
+        const dayd = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
+        console.log(moment(dayd).format("YYYY-MM-DD HH:mm"));
+        setNewScheduleDay(dayd);
         const firstDayOfMonth = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
         const lastDayOfMonth = getLastDayOfMonth(date.getFullYear(), date.getMonth());
         getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
@@ -154,9 +158,8 @@ function Index({ type }) {
                     arr.startTime = moment(value.startTime).format("HH:mm");
                     arr.endTime = moment(value.endTime).format("HH:mm");
                     arr.type = type;
-                    if (new Date(arr.workDate).getDate() < new Date().getDate()) {
+                    if (new Date(arr.workDate).getDate() < new Date(newScheduleDay).getDate()) {
                         openNofi("error", 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
-                        console.log(arr.startTime);
                     } else if (moment().isAfter(moment(arr.workDate).set({ hour: moment(arr.startTime, 'h:mma').get('hour'), minute: moment(arr.startTime, 'h:mma').get('minute') }))) {
                         openNofi("error", 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                     } else {

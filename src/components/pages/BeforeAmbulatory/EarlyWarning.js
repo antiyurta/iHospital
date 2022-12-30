@@ -6,6 +6,11 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Table } from "react-bootstrap";
 import { Get, Post } from "../../comman";
+//
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from "chart.js";
+import { Line } from "react-chartjs-2";
+import moment from "moment";
+//
 
 export default function EarlyWarning({ PatientId, listId }) {
   const token = useSelector(selectCurrentToken);
@@ -14,7 +19,6 @@ export default function EarlyWarning({ PatientId, listId }) {
     params: {},
   };
   const { Option } = Select;
-
   const [formValues, setFormValues] = useState({
     patientId: null,
     highPressureRight: 0, //Систол
@@ -30,13 +34,21 @@ export default function EarlyWarning({ PatientId, listId }) {
   });
   const [patientAssesments, setPatientAssesments] = useState([]); //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД
   const [patientAssesmentsResult, setPatientAssesmentsResult] = useState([]); //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД Ард харагдах нь
-
+  //
+  const [lineAssesmentsResult, setLineAssesmentsResult] = useState([]);
+  const [lineLabels, setLineLabels] = useState([]);
+  const [breathData, setBreathData] = useState([]);
+  const [spo2Data, setSpo2Data] = useState([]);
+  const [pulseData, setPulseData] = useState([]);
+  const [HighPressureRightData, setHighPressureRightData] = useState([]);
+  const [LowPressureRightData, setLowPressureRightData] = useState([]);
+  const [tempData, setTempData] = useState([]);
+  //
   useEffect(() => {
     if (PatientId) {
       getAssesment();
     }
   }, [PatientId]);
-
   let handleChange = (e, p) => {
     if (p === "mind") {
       //Зөвхөн SELECT үед
@@ -46,7 +58,6 @@ export default function EarlyWarning({ PatientId, listId }) {
       setFormValues({ ...formValues, [name]: parseFloat(value) });
     }
   };
-
   let resetFormFields = () => {
     setFormValues({
       patientId: null,
@@ -62,15 +73,53 @@ export default function EarlyWarning({ PatientId, listId }) {
       nurse: null,
     });
   };
-
   const getAssesment = async (type) => {
     //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
     config.params.patientId = PatientId;
     const response = await Get("assesment", token, config);
-    console.log("Res", response);
     if (response.data.length != 0) {
       setPatientAssesments(response.data);
       setPatientAssesmentsResult(response.data);
+      if (response.data.length <= 7) {
+        var demoLineLabels = [];
+        var demoBreathData = [];
+        var demoSpo2Data = [];
+        var demoPulseData = [];
+        response.data.map((data) => {
+          demoLineLabels.push(moment(data.createdAt).format("YYYY-MM-DD HH:mm"));
+          demoBreathData.push(data.respiratoryRate);
+          demoSpo2Data.push(data.spO2);
+          demoPulseData.push(data.pulse);
+        })
+        setLineLabels(demoLineLabels);
+        setBreathData(demoBreathData);
+        setSpo2Data(demoSpo2Data);
+        setPulseData(demoPulseData);
+      } else {
+        var demoLineLabels = [];
+        var demoBreathData = [];
+        var demoSpo2Data = [];
+        var demoPulseData = [];
+        var demoHighPressureRight = [];
+        var demoLowPressureRight = [];
+        var demoTempData = [];
+        for (let index = response.data.length - 7; index < response.data.length; index++) {
+          demoLineLabels.push(moment(response.data[index].createdAt).format("YYYY-MM-DD HH:mm"));
+          demoBreathData.push(response.data[index].respiratoryRate);
+          demoSpo2Data.push(response.data[index].spO2);
+          demoPulseData.push(response.data[index].pulse);
+          demoHighPressureRight.push(response.data[index].highPressureRight);
+          demoLowPressureRight.push(response.data[index].lowPressureRight);
+          demoTempData.push(response.data[index].temp);
+        }
+        setLineLabels(demoLineLabels);
+        setBreathData(demoBreathData);
+        setSpo2Data(demoSpo2Data);
+        setPulseData(demoPulseData);
+        setHighPressureRightData(demoHighPressureRight);
+        setLowPressureRightData(demoLowPressureRight);
+        setTempData(demoTempData);
+      }
     }
     if (type === "save") {
       Modal.warning({
@@ -83,12 +132,113 @@ export default function EarlyWarning({ PatientId, listId }) {
     formValues.patientId = PatientId;
     formValues.appointmentId = listId;
     const response = await Post("assesment", token, config, formValues);
-    console.log(response);
     resetFormFields();
     getAssesment("save");
   };
+  //
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend);
+  const vsOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+      },
+      title: {
+        display: true,
+        position: "top",
+        text: "VS - ын диаграмм"
+      },
+    },
+  };
+  const CDOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+      },
+      title: {
+        display: true,
+        position: "top",
+        text: "Даралтын диаграмм"
+      },
+    },
+  };
+  const LineGraphVS = {
+    labels: lineLabels,
+    datasets: [
+      {
+        label: "Амьсгал",
+        data: breathData,
+        borderColor: ["#2596be"],
+        backgroundColor: "#2596be",
+        borderWidth: 1,
+      },
+      {
+        label: "SPO2",
+        data: spo2Data,
+        borderColor: ["#21130d"],
+        backgroundColor: "#21130d",
+        borderWidth: 1,
+      },
+      {
+        label: "Пульс",
+        data: pulseData,
+        borderColor: ["#ff0000"],
+        backgroundColor: "#ff0000",
+        borderWidth: 2,
+      },
+    ],
+  };
+  const LineGraphCD = {
+    labels: lineLabels,
+    datasets: [
+      {
+        label: "Дээд даралт",
+        data: HighPressureRightData,
+        borderColor: ["#c51ceb"],
+        backgroundColor: "#c51ceb",
+        borderWidth: 1,
+      },
+      {
+        label: "Доод даралт",
+        data: LowPressureRightData,
+        borderColor: ["#2596be"],
+        backgroundColor: "#2596be",
+        borderWidth: 1,
+      },
+      {
+        label: "Халуун",
+        data: tempData,
+        borderColor: ["#000000"],
+        backgroundColor: "#000000",
+        borderWidth: 2,
+      },
+    ],
+  };
+  //
   return (
     <>
+      <div className="flex flex-wrap">
+        <div className="w-full md:w-full xl:w-1/2">
+          <div className="p-4">
+            <Line options={vsOptions} data={LineGraphVS} />
+          </div>
+        </div>
+        <div className="w-full md:w-full xl:w-1/2">
+          <div className="p-4">
+            <Line options={CDOptions} data={LineGraphCD} />
+          </div>
+        </div>
+      </div>
       <div className="flex flex-wrap">
         <div className="w-full md:w-full xl:w-1/2">
           <div className="table-responsive p-4" id="style-8">
@@ -327,9 +477,7 @@ export default function EarlyWarning({ PatientId, listId }) {
                     <tr key={index} className="">
                       <td className="text-center ">
                         <p className="border rounded-md p-1 h-7">
-                          {element.createdAt
-                            ?.replace(/T/, " ")
-                            .replace(/\..+/, "")}
+                          {moment(element.createdAt).format("YYYY-MM-DD HH:mm")}
                         </p>
                       </td>
                       <td className="text-center ">

@@ -37,6 +37,10 @@ function FormBuilder2() {
             value: 'w-full'
         },
         {
+            label: 'basis-1/2',
+            value: 'basis-1/2',
+        },
+        {
             label: 'basis-1/3',
             value: 'basis-1/3',
         },
@@ -108,7 +112,7 @@ function FormBuilder2() {
     return (
         <>
             <div>
-                <Button onClick={() => toChange()}>Нэмэх</Button>
+                <Button onClick={() => setIsOpenModal(true)}>Нэмэх</Button>
                 <Button onClick={() => save()}>Хадгалах</Button>
                 <div ref={demoRef} style={{ width: '21cm', height: '29.7cm' }}>
                     <div className="flex flex-wrap text-center">
@@ -142,8 +146,7 @@ function FormBuilder2() {
                                         {
                                             data.type === 'input' &&
                                             <div className="text-start pl-2">
-                                                <p className="font-bold">{data.label + ":"}</p>
-                                                <Input />
+                                                <p className="font-bold">{data.label + ":"}<Input style={{ width: "auto" }} /></p>
                                             </div>
                                         }
                                     </div>

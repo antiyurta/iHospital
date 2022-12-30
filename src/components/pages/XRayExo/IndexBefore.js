@@ -127,10 +127,10 @@ function IndexBefore({ type }) {
         }
     };
     const handleRemove = (info) => {
-        console.log(info.response.response.id);
+        console.log(info.response.response);
     };
     const newModal = (id, isPayment) => {
-        if (!isPayment) {
+        if (isPayment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
         } else {
             setId(id);
