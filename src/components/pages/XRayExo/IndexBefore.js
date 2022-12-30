@@ -220,6 +220,23 @@ function IndexBefore({ type }) {
         rows.splice(idx, 1);
         setUsedMaterials(rows);
     };
+    const getTypeInfo = (begin, end) => {
+        if (begin === undefined && end === undefined) {
+            return <p className="bg-[#f0ad4e] text-white">Шууд</p>
+        } else {
+            return (
+                <div className="bg-[#5cb85c] text-white">
+                    <span>
+                        {begin}
+                    </span>
+                    <ClockCircleOutlined className="mx-1.5" />
+                    <span>
+                        {end}
+                    </span>
+                </div>
+            )
+        }
+    };
     const xrayRequestColumns = [
         {
             title: 'Оношилгооны нэр',
@@ -240,17 +257,7 @@ function IndexBefore({ type }) {
         {
             title: "Орох цаг",
             render: (_, row) => {
-                return (
-                    <div className="inline-flex flex-row items-center">
-                        <span>
-                            {row.deviceSlots?.startTime?.substr(0, 5)}
-                        </span>
-                        <ClockCircleOutlined className="mx-1.5" />
-                        <span>
-                            {row.deviceSlots?.endTime?.substr(0, 5)}
-                        </span>
-                    </div>
-                )
+                return getTypeInfo(row.deviceSlots?.startTime?.substr(0, 5), row.deviceSlots?.endTime?.substr(0, 5))
             }
         },
         {
@@ -330,7 +337,7 @@ function IndexBefore({ type }) {
             <div className="flex flex-wrap">
                 <div className="w-full">
                     <Card
-                        title="Оношилгооны өмнөх жагсаалт"
+                        title={type === 1 ? "Оношилгооны өмнөх жагсаалт" : "ЭКГ жагсаалт"}
                         bordered={false}
                         className="header-solid max-h-max rounded-md"
                     >
@@ -342,10 +349,25 @@ function IndexBefore({ type }) {
                                     }
                                 }} locale={mnMN} />
                             </div>
-                            <div className="basis-2/3">
+                            <div className="w-full py-2">
+                                <div className="flex float-left">
+                                    {/* <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                        <span className="font-medium mx-1">Яаралтай</span>
+                                    </div> */}
+                                    <div className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                        <span className="font-medium mx-1">Шууд</span>
+                                    </div>
+                                    <div className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                        <span className="font-medium mx-1">Урьдчилсан захиалга</span>
+                                    </div>
+                                    {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                                        <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
+                                    </div> */}
+                                </div>
                                 <div className="float-right">
                                     <Button title="Сэргээх" type="primary" onClick={() => getXrayRequest(1, 10, start, end)}>
                                         <ReloadOutlined
+                                        // spin={!spinner}
                                         />
                                     </Button>
                                 </div>
