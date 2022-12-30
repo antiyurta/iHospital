@@ -85,16 +85,25 @@ export default function EarlyWarning({ PatientId, listId }) {
         var demoBreathData = [];
         var demoSpo2Data = [];
         var demoPulseData = [];
+        var demoHighPressureRight = [];
+        var demoLowPressureRight = [];
+        var demoTempData = [];
         response.data.map((data) => {
           demoLineLabels.push(moment(data.createdAt).format("YYYY-MM-DD HH:mm"));
           demoBreathData.push(data.respiratoryRate);
           demoSpo2Data.push(data.spO2);
           demoPulseData.push(data.pulse);
+          demoHighPressureRight.push(data.highPressureRight);
+          demoLowPressureRight.push(data.lowPressureRight);
+          demoTempData.push(data.temp);
         })
         setLineLabels(demoLineLabels);
         setBreathData(demoBreathData);
         setSpo2Data(demoSpo2Data);
         setPulseData(demoPulseData);
+        setHighPressureRightData(demoHighPressureRight);
+        setLowPressureRightData(demoLowPressureRight);
+        setTempData(demoTempData);
       } else {
         var demoLineLabels = [];
         var demoBreathData = [];
