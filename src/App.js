@@ -76,6 +76,7 @@ import BeforeEkgRequest from "./components/pages/Ekg/BeforeEkgRequest";
 import Dashboard from "./components/pages/Organization/Dashboard";
 import Report from "./components/pages/Report/Report";
 import BeforeAmbulatoryListEnr from './components/pages/BeforeAmbulatory/BeforeAmbulatoryListEnr';
+import FormIndex from "./components/pages/FormBuilder/FBuilder/FormIndex";
 // lab end
 
 function App() {
@@ -382,7 +383,7 @@ function App() {
             path="/formBuilder"
             element={
               <PrivateRoute>
-                <SOAPForm />
+                <FormIndex />
               </PrivateRoute>
             }
           />
