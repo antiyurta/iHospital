@@ -1,5 +1,5 @@
 import { CloseOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Button, DatePicker, Modal } from "antd";
+import { Button, DatePicker, Input, Modal } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ function Xray({ isOpen, isClose, handleclick }) {
     const [xrays, setXrays] = useState([]);
     const [xray, setXray] = useState([]);
     const [selectedXrays, setSelectedXrays] = useState([]);
+    const [searchField, setSearchField] = useState("");
     const getXray = async () => {
         config.params.type = 1;
         const response = await Get('service/type', token, config);
@@ -46,6 +47,9 @@ function Xray({ isOpen, isClose, handleclick }) {
         arr.splice(index, 1);
         setSelectedXrays(arr);
     };
+    const filteredXray = xray.filter((xry) => {
+        return xry.name.toLowerCase().includes(searchField.toLowerCase());
+    });
     useEffect(() => {
         getXray();
     }, [isOpen]);
@@ -79,12 +83,21 @@ function Xray({ isOpen, isClose, handleclick }) {
                                 <thead className='ant-table-thead bg-slate-200'>
                                     <tr>
                                         <th className="font-bold text-sm align-middle">Нэр</th>
-                                        <th className="font-bold text-sm align-middle">Үнэ</th>
+                                        <th rowSpan={2} className="font-bold text-sm align-middle">Үнэ</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <Input
+                                                placeholder="Хайх"
+                                                allowClear
+                                                onChange={(e) => setSearchField(e.target.value)}
+                                            />
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className='ant-table-tbody p-0'>
                                     {
-                                        xray.map((item, index) => {
+                                        filteredXray.map((item, index) => {
                                             return (
                                                 <tr onDoubleClick={() => add(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
                                                     <td>{item.name}</td>

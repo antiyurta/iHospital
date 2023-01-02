@@ -1,5 +1,5 @@
 import { CloseOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Modal } from "antd";
+import { Button, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ function Examination({ isOpen, isClose, handleclick }) {
   const [examinations, setExaminations] = useState([]);
   const [examination, setExamination] = useState([]);
   const [selectedExaminations, setSelectedExaminations] = useState([]);
+  const [searchField, setSearchField] = useState("");
 
   const config = {
     headers: {},
@@ -42,6 +43,9 @@ function Examination({ isOpen, isClose, handleclick }) {
     arr.splice(index, 1);
     setSelectedExaminations(arr);
   };
+  const filteredExamination = examination.filter((exmintion) => {
+    return exmintion.name.toLowerCase().includes(searchField.toLowerCase());
+  });
   useEffect(() => {
     getExamination();
   }, [isOpen]);
@@ -83,11 +87,20 @@ function Examination({ isOpen, isClose, handleclick }) {
                 <thead className="ant-table-thead bg-slate-200">
                   <tr>
                     <th className="font-bold text-sm align-middle">Нэр</th>
-                    <th className="font-bold text-sm align-middle">Үнэ</th>
+                    <th rowSpan={2} className="font-bold text-sm align-middle">Үнэ</th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <Input
+                        placeholder="Хайх"
+                        allowClear
+                        onChange={(e) => setSearchField(e.target.value)}
+                      />
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="ant-table-tbody p-0">
-                  {examination.map((item, index) => {
+                  {filteredExamination.map((item, index) => {
                     return (
                       <tr
                         onDoubleClick={() => add(item)}

@@ -57,18 +57,11 @@ export default function ProgressNotes({ Appointments }) {
     if (data.data) {
       return Object.entries(data?.data).map(([key, value], index) => {
         return (
-          <div key={index} className="inline-flex">
-            <p className="font-semibold mx-2">{key}: </p>
-            {Object.values(value).map((elValues, index) => {
-              return typeof elValues === "string" ? (
-                <p key={index}>{elValues}</p>
-              ) : (
-                <div key={index}>
-                  {elValues.map((el, index) => {
-                    return <p key={index}>{el}</p>;
-                  })}
-                </div>
-              );
+          <div key={index} className="flex flex-wrap">
+            {Object.entries(value).map((elValues, index) => {
+              return (
+                <p className="pr-2">{elValues[0] + ": " + elValues[1]}</p>
+              )
             })}
           </div>
         );

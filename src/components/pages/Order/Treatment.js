@@ -13,6 +13,7 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 function Treatment({ isOpen, isClose, handleclick }) {
     const token = useSelector(selectCurrentToken);
+    const [searchField, setSearchField] = useState("");
     const [treatments, setTreatments] = useState([]);
     const [treatment, setTreatment] = useState([]);
     const [selectedTreatments, setSelectedTreatments] = useState([]);
@@ -64,6 +65,9 @@ function Treatment({ isOpen, isClose, handleclick }) {
         arr.splice(index, 1);
         setSelectedTreatments(arr);
     };
+    const filteredTreatment = treatment.filter((trtment) => {
+        return trtment.name.toLowerCase().includes(searchField.toLowerCase());
+    });
     useEffect(() => {
         getTreatment();
     }, [isOpen]);
@@ -97,12 +101,21 @@ function Treatment({ isOpen, isClose, handleclick }) {
                                 <thead className='ant-table-thead bg-slate-200'>
                                     <tr>
                                         <th className="font-bold text-sm align-middle">Нэр</th>
-                                        <th className="font-bold text-sm align-middle">Үнэ</th>
+                                        <th rowSpan={2} className="font-bold text-sm align-middle">Үнэ</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <Input
+                                                placeholder="Хайх"
+                                                allowClear
+                                                onChange={(e) => setSearchField(e.target.value)}
+                                            />
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className='ant-table-tbody p-0'>
                                     {
-                                        treatment.map((item, index) => {
+                                        filteredTreatment.map((item, index) => {
                                             return (
                                                 <tr onDoubleClick={() => add(item)} key={index} className='ant-table-row ant-table-row-level-0 hover:cursor-pointer'>
                                                     <td>{item.name}</td>

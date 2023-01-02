@@ -98,6 +98,17 @@ function Ambulatory() {
     }
   };
 
+  const checkAPI = async () => {
+    const conf = {
+      headers: {},
+      params: {}
+    };
+    const response = await Get('ebarimt/checkApi', token, conf);
+    if (!response.database.success) {
+      Get('ebarimt/sendData', token, config);
+    }
+  };
+
   useEffect(() => {
     ScrollRef(scrollRef);
   }, []);
@@ -168,6 +179,9 @@ function Ambulatory() {
                 >
                   Оношилгоо шинжилгээ захиалах
                 </Button>
+              </div>
+              <div>
+                <Button onClick={() => checkAPI()}>CheckAPI</Button>
               </div>
             </div>
           </Card>

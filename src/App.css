@@ -320,7 +320,8 @@ input::-webkit-inner-spin-button {
 .ant-table-container::-webkit-scrollbar-thumb {
   background-color: #2d8cff !important;
 }
-.ant-table.ant-table-bordered > .ant-table-container> .ant-table-content > table > tbody> tr > td {
+
+.ant-table.ant-table-bordered>.ant-table-container>.ant-table-content>table>tbody>tr>td {
   white-space: pre-wrap !important;
 }
 
@@ -337,12 +338,6 @@ input::-webkit-inner-spin-button {
     font-size: small;
     color: black;
     white-space: normal;
-  }
-
-  table,
-  th,
-  td {
-    border: 0.09rem solid black;
   }
 
   .printBody {
@@ -376,12 +371,15 @@ input::-webkit-inner-spin-button {
 .magadlagaa {
   padding: 1.5cm;
 }
-.magadlagaa .ant-picker{
+
+.magadlagaa .ant-picker {
   height: 23px !important;
 }
+
 .magadlagaa .ant-input {
   height: 23px !important;
 }
-.magadlagaa .ant-picker-input > input{
+
+.magadlagaa .ant-picker-input>input {
   width: 30px !important;
 }
