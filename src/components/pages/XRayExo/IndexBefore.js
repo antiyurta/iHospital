@@ -161,7 +161,7 @@ function IndexBefore({ type }) {
         }
     };
     const getPaymentInfo = (isPayment) => {
-        if (isPayment) {
+        if (!isPayment) {
             return <PlusOutlined style={{ color: "green" }} />;
         } else {
             return <MinusOutlined style={{ color: "red" }} />;
