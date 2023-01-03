@@ -8,10 +8,12 @@ import { numberToCurrency, Patch } from "../../comman";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
+import { useState } from "react";
 
 function EbarimtPrint(props) {
     const printRef = useRef();
     const token = useSelector(selectCurrentToken);
+    const [total, setTotal] = useState(Number);
     const handleBack = async (id) => {
         const conf = {
             headers: {},
@@ -24,6 +26,16 @@ function EbarimtPrint(props) {
     const handlePrint = useReactToPrint({
         content: () => printRef.current
     });
+    const calculator = () => {
+        var total = 0;
+        props?.props?.invoices?.map((invoice) => {
+            total += invoice.amount;
+        });
+        setTotal(total);
+    }
+    useEffect(() => {
+        calculator();
+    }, [props])
     return (
         <div className="pt-6">
             <div ref={printRef} style={{ width: '80mm' }}>
@@ -57,7 +69,8 @@ function EbarimtPrint(props) {
                             )
                         })
                     }
-                    <p style={{ fontSize: 14, fontWeight: "bold" }} className="text-end">Нийт үнэ: {numberToCurrency(props?.props?.totalAmount)}</p>
+                    <p style={{ fontSize: 14, fontWeight: "bold" }} className="text-end">Нийт үнэ: {numberToCurrency(total)}</p>
+                    <p style={{ fontSize: 14, fontWeight: "bold" }} className="text-end">Төлөх үнэ: {numberToCurrency(props?.props?.totalAmount)}</p>
                     <p style={{ fontSize: 14, fontWeight: "bold" }}>Cугалааны дугаар: {props?.props?.lottery}</p>
                     <p style={{ fontSize: 14, fontWeight: "bold" }}>ДДТД:{props?.props?.billId}</p>
                     <div style={{ height: "auto", margin: "0 auto", maxWidth: 150, width: "100%" }}>

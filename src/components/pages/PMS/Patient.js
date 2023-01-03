@@ -17,6 +17,7 @@ import {
   Descriptions,
   Pagination,
   DatePicker,
+  Table,
 } from "antd";
 import {
   LoadingOutlined,
@@ -26,6 +27,7 @@ import {
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 // import json
 import ContactPerson from "./ContactPerson.json";
@@ -33,8 +35,6 @@ import SocialStatus from "./socialStatus.json";
 import ChildStatus from "./childStatus.json";
 import serviceScopeStatus from "./serviceScopeStatus.json";
 //
-import { Table } from "react-bootstrap";
-import Spinner from "react-bootstrap/Spinner";
 import { Delete, Get, openNofi, Patch, ScrollRef } from "../../comman";
 import axios from "axios";
 import "moment/locale/mn";
@@ -137,16 +137,22 @@ function Patient() {
       </div>
     </div>
   );
-  const getData = async (page) => {
-    config.params.page = page;
-    await axios
-      .get(DEV_URL + "pms/patient", config)
-      .then((response) => {
-        setSpinner(true);
-        setData(response.data.response.data);
-        setMeta(response.data.response.meta);
-      })
-      .catch(() => console.log("sada"));
+  const getData = async (page, pageSize, value, index) => {
+    setSpinner(true);
+    const conf = {
+      headers: {},
+      params: {
+        page: page,
+        limit: pageSize,
+      }
+    };
+    if (value, index) {
+      conf.params[index] = value;
+    }
+    const response = await Get('pms/patient', token, conf);
+    setData(response.data);
+    setMeta(response.meta);
+    setSpinner(false);
   };
   const showModal = () => {
     setIsModalVisible(true);
@@ -288,6 +294,16 @@ function Patient() {
         console.log("dasd");
       });
   };
+  const getTowns = async () => {
+    const conf = {
+      headers: {},
+      params: {
+        type: 3
+      }
+    };
+    const response = await Get('reference/country', token, conf);
+    setTowns(response.data);
+  }
   const filterTowns = async (value) => {
     config.params.type = 3;
     config.params.parentId = value;
@@ -329,10 +345,156 @@ function Patient() {
       }
     }
   };
+  const ddcitizen = (id) => {
+    const citizen = citizens.filter(citizen => citizen.id === id);
+    if (citizen.length > 0) {
+      return citizen[0].name;
+    } else {
+      return "Байхгүй"
+    }
+  };
+  const ddprovices = (id) => {
+    const provice = provices.filter(provice => provice.id === id);
+    if (provice.length > 0) {
+      return provice[0].name;
+    } else {
+      return "Байхгүй"
+    }
+  };
+  const ddtowns = (id) => {
+    const town = towns.filter(town => town.id === id);
+    if (town.length > 0) {
+      return town[0].name;
+    } else {
+      return "Байхгүй"
+    }
+  };
+  //
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ }) => (
+      <div style={{ padding: 8 }}>
+        <Search
+          placeholder={`Картын № хайх`}
+          allowClear
+          onSearch={(e) => getData(1, 20, e, dataIndex)}
+          enterButton={"Хайх"}
+        />
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{ color: '#2d8cff' }}
+      />
+    ),
+  })
+  const colums = [
+    {
+      title: "№",
+      render: (_, record, index) => {
+        return meta.page * meta.limit - (meta.limit - index - 1)
+      }
+    },
+    {
+      title: "Картын №",
+      dataIndex: "cardNumber",
+      ...getColumnSearchProps('cardNumber')
+    },
+    {
+      title: "Овог",
+      dataIndex: "lastName",
+      ...getColumnSearchProps('lastName')
+    },
+    {
+      title: "Нэр",
+      dataIndex: "firstName",
+      ...getColumnSearchProps('firstName')
+    },
+    {
+      title: "Регистр №",
+      dataIndex: "registerNumber",
+      ...getColumnSearchProps('registerNumber')
+    },
+    {
+      title: "Утас",
+      dataIndex: "phoneNo",
+      ...getColumnSearchProps('phoneNo')
+    },
+    {
+      title: "Гэрийн хаяг",
+      colSpan: 4,
+      dataIndex: "countryId",
+      render: (text) => {
+        if (text != null) {
+          return ddcitizen(text);
+        }
+      }
+    },
+    {
+      colSpan: 0,
+      dataIndex: "aimagId",
+      render: (text) => {
+        if (text != null) {
+          return ddprovices(text);
+        } else {
+          return "Байхгүй"
+        }
+      }
+    },
+    {
+      colSpan: 0,
+      dataIndex: "soumId",
+      render: (text) => {
+        if (text != null) {
+          return ddtowns(text);
+        } else {
+          return "Байхгүй"
+        }
+      }
+    },
+    {
+      colSpan: 0,
+      dataIndex: "address"
+    },
+    {
+      title: "Карт нээлгэсэн огноо",
+      dataIndex: "createdAt",
+      render: (text) => {
+        return moment(text).format("YYYY-MM-DD")
+      }
+    },
+    {
+      title: "Үйлдэл",
+      dataIndex: "id",
+      render: (text) => {
+        return (
+          <Space>
+            <Button
+              type="link"
+              onClick={() => viewModal(text)}
+              title="Харах"
+              style={{ paddingRight: 5 }}
+            >
+              <EyeOutlined />
+            </Button>
+            <Button
+              type="link"
+              onClick={() => editModal(text)}
+              title="Засах"
+              style={{ paddingRight: 5, paddingLeft: 5 }}
+            >
+              <EditOutlined />
+            </Button>
+          </Space>
+        )
+      }
+    }
+  ];
+  //
   useEffect(() => {
-    getData(1);
+    getData(1, 20);
     getCitizens();
     getProvices();
+    getTowns();
     ScrollRef(scrollRef);
   }, []);
   return (
@@ -350,153 +512,23 @@ function Patient() {
           </Button>
         }
       >
-        <div className="table-responsive p-4" id="style-8" ref={scrollRef}>
-          <Table className="ant-border-space" style={{ width: "100%" }}>
-            <thead className="ant-table-thead bg-slate-200">
-              <tr>
-                <th className="font-bold text-sm align-middle" rowSpan={2}>
-                  №
-                </th>
-                <th className="font-bold text-sm">Картын №</th>
-                <th className="font-bold text-sm">Овог</th>
-                <th className="font-bold text-sm">Нэр</th>
-                <th className="font-bold text-sm">Регистр №</th>
-                <th className="font-bold text-sm">Утас</th>
-                <th className="font-bold text-sm">Гэрийн хаяг</th>
-                <th className="font-bold text-sm align-middle" rowSpan={2}>
-                  Карт нээлгэсэн огноо
-                </th>
-                <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
-                  Үйлдэл
-                </th>
-              </tr>
-              <tr>
-                <td>
-                  <Search
-                    placeholder={"Картын № хайх"}
-                    allowClear
-                    onSearch={(e) => onSearch(e, "cardNumber")}
-                    enterButton={"Хайх"}
-                  />
-                </td>
-                <td>
-                  <Search
-                    placeholder={"Овог хайх"}
-                    allowClear
-                    onSearch={(e) => onSearch(e, "lastName")}
-                    enterButton={"Хайх"}
-                  />
-                </td>
-                <td>
-                  <Search
-                    placeholder={"Нэр хайх"}
-                    allowClear
-                    onSearch={(e) => onSearch(e, "firstName")}
-                    enterButton={"Хайх"}
-                  />
-                </td>
-                <td>
-                  <Search
-                    placeholder={"Регистр Хайх"}
-                    allowClear
-                    onSearch={(e) => onSearch(e, "registerNumber")}
-                    enterButton={"Хайх"}
-                  />
-                </td>
-                <td>
-                  <Search
-                    placeholder={"Утас хайх"}
-                    allowClear
-                    onSearch={(e) => onSearch(e, "phoneNumber")}
-                    enterButton={"Хайх"}
-                  />
-                </td>
-                <td>
-                  <Search
-                    placeholder={"Гэрийн хаяг хайх"}
-                    allowClear
-                    onSearch={(e) => onSearch(e, "address")}
-                    enterButton={"Хайх"}
-                  />
-                </td>
-              </tr>
-            </thead>
-            <tbody className="ant-table-tbody">
-              {spinner ? (
-                data.map((row, index) => {
-                  return (
-                    <tr
-                      key={index}
-                      className="ant-table-row ant-table-row-level-0"
-                    >
-                      <td className="ant-table-row-cell-break-word">
-                        {index + 1}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        {row.cardNumber}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        {row.lastName}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        {row.firstName}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        {row.registerNumber}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        {row.phoneNo}
-                      </td>
-                      <td className="ant-table-row-cell-break-word whitespace-normal">
-                        {row.address}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        {moment(row.createdAt).format("YYYY/MM/DD")}
-                      </td>
-                      <td className="ant-table-row-cell-break-word">
-                        <Button
-                          type="link"
-                          onClick={() => viewModal(row.id)}
-                          title="Харах"
-                          style={{ paddingRight: 5 }}
-                        >
-                          <EyeOutlined />
-                        </Button>
-                        <Button
-                          type="link"
-                          onClick={() => editModal(row.id)}
-                          title="Засах"
-                          style={{ paddingRight: 5, paddingLeft: 5 }}
-                        >
-                          <EditOutlined />
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td
-                    colSpan={10}
-                    size="lg"
-                    style={{ backgroundColor: "white", textAlign: "center" }}
-                  >
-                    <Spinner animation="grow" style={{ color: "#1890ff" }} />
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </div>
-        <div>
-          <Pagination
-            className="pagination"
-            defaultCurrent={"1"}
-            pageSize={5}
-            total={meta.itemCount}
-            onChange={getData}
-          />
-        </div>
+        <Table
+          rowKey={"id"}
+          bordered
+          columns={colums}
+          dataSource={data}
+          scroll={{
+            x: 1500
+          }}
+          loading={spinner}
+          pagination={{
+            simple: true,
+            pageSize: 20,
+            total: meta.itemCount,
+            current: meta.page,
+            onChange: (page, pageSize) => getData(page, pageSize)
+          }}
+        />
       </Card>
       <Modal
         title="Өвчтөн бүртгэх"

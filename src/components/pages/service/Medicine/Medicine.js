@@ -209,7 +209,7 @@ function Medicine() {
                         span: 16,
                     }}
                 >
-                    <Tabs items={medicineItems} />
+                    <Tabs type="card" items={medicineItems} />
                 </Form>
             </Modal>
         </div >

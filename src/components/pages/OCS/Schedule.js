@@ -202,7 +202,12 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                                                                 className="pl-1 ml-0 w-full"
                                                                 onChange={(e) => dd(element, e)} value={element.id}
                                                             >
-                                                                <p>{element.name}</p>
+                                                                {
+                                                                    element.treatmentRequest?.qty ?
+                                                                        <p>{element.name + " " + element.treatmentRequest?.qty+"ш"}</p>
+                                                                        :
+                                                                        <p>{element.name}</p>
+                                                                }
                                                             </Checkbox>
                                                         </div>
                                                         <div className="basis-1/2">
