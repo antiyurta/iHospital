@@ -11,12 +11,9 @@ import { Get, openNofi, Patch, Post } from "../../../comman";
 import Diagnose from "../../service/Diagnose";
 // import { Table } from "react-bootstrap";
 import { CloseOutlined } from "@ant-design/icons";
-import { data } from "autoprefixer";
-import { useReactToPrint } from "react-to-print";
 const { Option } = Select;
 function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId, Inspection, UsageType, handleClick }) {
   const [form] = Form.useForm();
-  const formRef = useRef();
   const [tabs, setTabs] = useState([]);
   const [validStep, setValidStep] = useState(false);
   const token = useSelector(selectCurrentToken);
@@ -42,9 +39,6 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
   const Tab2Content = useCallback(() => {
     return <GeneralInspection patientId={patientId} inspection={inspection} />;
   }, []);
-  const handlePrint = useReactToPrint({
-    content: () => formRef.current
-  });
   const DynamicTabContent = useCallback((props) => {
     return (
       < Form
@@ -60,197 +54,164 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
         layout={UsageType === 'OUT' ? "vertical" : ""}
         form={form}
       >
-        {
-          UsageType === 'OUT' ?
+
+        <>
+          {"pain" in props.data && props.data.pain.length > 0 ? (
             <>
-              {"pain" in props.data && props.data.pain.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Зовиур
-                  </Divider>
-                  {
-                    props.data['pain'].map((pain, index) => {
-                      return (
-                        <div key={index}>
-                          {
-                            inspection === 1 && <div>
-                              <p className="mt-2 font-semibold">{pain.label}</p>
-                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                            </div>
-                          }
-                          <div>
-                            <DynamicFormInspection data={pain.options} forkey={pain.label} unikey={pain.inspectionType} />
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </>
-              ) : null
+              {UsageType === "OUT" &&
+                <Divider orientation="left" className="text-sm my-2">
+                  Зовиур
+                </Divider>
               }
-              {"inspection" in props.data && props.data.inspection.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Бодит үзлэг
-                  </Divider>
-                  {
-                    props.data['inspection'].map((inspection, index) => {
-                      return (
-                        <div key={index}>
-                          {
-                            inspection === 1 && <div>
-                              <p className="mt-2 font-semibold">{inspection.label}</p>
-                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                            </div>
-                          }
-                          <div>
-                            <DynamicFormInspection data={inspection.options} forkey={inspection.label} unikey={inspection.inspectionType} />
-                          </div>
+              {
+                props.data['pain'].map((pain, index) => {
+                  return (
+                    <div key={index}>
+                      {
+                        inspection === 1 && <div>
+                          <p className="mt-2 font-semibold">{pain.label}</p>
+                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                         </div>
-                      )
-                    })
-                  }
-                </>
-              ) : null}
-              {"question" in props.data && props.data.question.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Асуумж
-                  </Divider>
-                  {
-                    props.data['question'].map((question, index) => {
-                      return (
-                        <div key={index}>
-                          {
-                            inspection === 1 && <div>
-                              <p className="mt-2 font-semibold">{question.label}</p>
-                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                            </div>
-                          }
-                          <div>
-                            <DynamicFormInspection data={question.options} forkey={question.label} unikey={question.inspectionType} />
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </>
-              ) : null}
-              {"plan" in props.data && props.data.plan.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Төлөвлөгөө
-                  </Divider>
-                  {
-                    props.data['plan'].map((plan, index) => {
-                      return (
-                        <div key={index}>
-                          {
-                            inspection === 1 && <div>
-                              <p className="mt-2 font-semibold">{plan.label}</p>
-                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                            </div>
-                          }
-                          <div>
-                            <DynamicFormInspection data={plan.options} forkey={plan.label} unikey={plan.inspectionType} />
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </>
-              ) : null}
-              {"conclusion" in props.data && props.data.conclusion.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Дүгнэлт
-                  </Divider>
-                  {
-                    props.data['conclusion'].map((conclusion, index) => {
-                      return (
-                        <div key={index}>
-                          {
-                            inspection === 1 && <div>
-                              <p className="mt-2 font-semibold">{conclusion.label}</p>
-                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                            </div>
-                          }
-                          <div>
-                            <DynamicFormInspection data={conclusion.options} forkey={conclusion.label} unikey={conclusion.inspectionType} />
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </>
-              ) : null}
-              {"advice" in props.data && props.data.advice.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Зөвлөгөө
-                  </Divider>
-                  {
-                    props.data['advice'].map((advice, index) => {
-                      return (
-                        <div key={index}>
-                          {
-                            inspection === 1 && <div>
-                              <p className="mt-2 font-semibold">{advice.label}</p>
-                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                            </div>
-                          }
-                          <div>
-                            <DynamicFormInspection data={advice.options} forkey={advice.label} unikey={advice.inspectionType} />
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </>
-              ) : null}
-              {props.data && Inspection != 11 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Онош
-                  </Divider>
-                  <Diagnose handleClick={DiagnoseHandleClick} />
-                </>
-              ) : null}
+                      }
+                      <div>
+                        <DynamicFormInspection data={pain.options} forkey={pain.label} unikey={pain.inspectionType} />
+                      </div>
+                    </div>
+                  )
+                })
+              }
             </>
-            :
-            <div ref={formRef} className="amara">
-              <p className="text-center font-bold">{props.formName}</p>
-              {"pain" in props.data && props.data.pain.length > 0 ? (
-                <>
-                  <div className="flex flex-wrap text-center">
-                    {
-                      props.data['pain'].map((pain, index) => {
-                        return (
-                          <DynamicFormInPatient key={index} data={pain} forkey={index} unikey={pain.inspectionType} />
-                        )
-                      })
-                    }
-                  </div>
-                </>
-              ) : null}
-              {/* {"inspection" in props.data && props.data.inspection.length > 0 ? (
-                <>
-                  <Divider orientation="left" className="text-sm my-2">
-                    Бодит үзлэг
-                  </Divider>
-                  <div className="flex flex-wrap text-center">
-                    {
-                      props.data['inspection'].map((inspection, index) => {
-                        return (
-                          inspection.type != "title" && <DynamicFormInPatient key={index} data={inspection} forkey={index} unikey={inspection.inspectionType} />
-                        )
-                      })
-                    }
-                  </div>
-                </>
-              ) : null} */}
-            </div>
-        }
+          ) : null}
+          {"inspection" in props.data && props.data.inspection.length > 0 ? (
+            <>
+              <Divider orientation="left" className="text-sm my-2">
+                Бодит үзлэг
+              </Divider>
+              {
+                props.data['inspection'].map((inspection, index) => {
+                  return (
+                    <div key={index}>
+                      {
+                        inspection === 1 && <div>
+                          <p className="mt-2 font-semibold">{inspection.label}</p>
+                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                        </div>
+                      }
+                      <div>
+                        <DynamicFormInspection data={inspection.options} forkey={inspection.label} unikey={inspection.inspectionType} />
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </>
+          ) : null}
+          {"question" in props.data && props.data.question.length > 0 ? (
+            <>
+              <Divider orientation="left" className="text-sm my-2">
+                Асуумж
+              </Divider>
+              {
+                props.data['question'].map((question, index) => {
+                  return (
+                    <div key={index}>
+                      {
+                        inspection === 1 && <div>
+                          <p className="mt-2 font-semibold">{question.label}</p>
+                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                        </div>
+                      }
+                      <div>
+                        <DynamicFormInspection data={question.options} forkey={question.label} unikey={question.inspectionType} />
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </>
+          ) : null}
+          {"plan" in props.data && props.data.plan.length > 0 ? (
+            <>
+              <Divider orientation="left" className="text-sm my-2">
+                Төлөвлөгөө
+              </Divider>
+              {
+                props.data['plan'].map((plan, index) => {
+                  return (
+                    <div key={index}>
+                      {
+                        inspection === 1 && <div>
+                          <p className="mt-2 font-semibold">{plan.label}</p>
+                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                        </div>
+                      }
+                      <div>
+                        <DynamicFormInspection data={plan.options} forkey={plan.label} unikey={plan.inspectionType} />
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </>
+          ) : null}
+          {"conclusion" in props.data && props.data.conclusion.length > 0 ? (
+            <>
+              <Divider orientation="left" className="text-sm my-2">
+                Дүгнэлт
+              </Divider>
+              {
+                props.data['conclusion'].map((conclusion, index) => {
+                  return (
+                    <div key={index}>
+                      {
+                        inspection === 1 && <div>
+                          <p className="mt-2 font-semibold">{conclusion.label}</p>
+                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                        </div>
+                      }
+                      <div>
+                        <DynamicFormInspection data={conclusion.options} forkey={conclusion.label} unikey={conclusion.inspectionType} />
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </>
+          ) : null}
+          {"advice" in props.data && props.data.advice.length > 0 ? (
+            <>
+              <Divider orientation="left" className="text-sm my-2">
+                Зөвлөгөө
+              </Divider>
+              {
+                props.data['advice'].map((advice, index) => {
+                  return (
+                    <div key={index}>
+                      {
+                        inspection === 1 && <div>
+                          <p className="mt-2 font-semibold">{advice.label}</p>
+                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                        </div>
+                      }
+                      <div>
+                        <DynamicFormInspection data={advice.options} forkey={advice.label} unikey={advice.inspectionType} />
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </>
+          ) : null}
+          {props.data && Inspection != 11 && UsageType === 'OUT' ? (
+            <>
+              <Divider orientation="left" className="text-sm my-2">
+                Онош
+              </Divider>
+              <Diagnose handleClick={DiagnoseHandleClick} />
+            </>
+          ) : null}
+        </>
+
         < Form.Item
           wrapperCol={{
             span: 16,
@@ -267,7 +228,6 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
             </Button>
           </Row>
         </Form.Item >
-        <Button onClick={() => handlePrint()}>Хэвлэх</Button>
       </Form >
     );
   }, []);

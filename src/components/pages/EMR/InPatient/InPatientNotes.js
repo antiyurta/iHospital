@@ -1,10 +1,11 @@
 import { FolderOpenOutlined, FolderOutlined } from "@ant-design/icons";
-import { Button, Card, Collapse } from "antd";
+import { Button, Card, Collapse, Modal } from "antd";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import { Get } from "../../../comman";
+import Index from "./document/Index";
 const { Panel } = Collapse;
 function InPatientNotes({ Appointments }) {
     const token = useSelector(selectCurrentToken);
@@ -13,6 +14,8 @@ function InPatientNotes({ Appointments }) {
         params: {}
     }
     const [inspectionNotes, setInspectionNotes] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [datas, setDatas] = useState({});
     const onChangee = async (id) => {
         if (id) {
             const conf = {
@@ -22,31 +25,26 @@ function InPatientNotes({ Appointments }) {
             const response = await Get('service/inPatient-request/show/' + id, token, conf);
             if (response.inspectionNotes.length > 0) {
                 setInspectionNotes(response.inspectionNotes);
-                getForm(response.inspectionNotes.formId);
             } else {
                 setInspectionNotes([]);
             }
         }
     }
-    const getForm = async () => {
-        console.log(inspectionNotes);
-        inspectionNotes.map((note, index) => {
-            return (
-                <Card
-                    key={index}
-                    className="m-3"
-                >
-                </Card>
-            )
-
-        })
-        // const conf = {
-        //     headers: {},
-        //     params: {}
-        // }
-        // const response = await Get('emr/inspection-form/8', token, conf);
-        // console.log(response);
-    }
+    const RenderNotesDetail = (data) => {
+        if (data.data) {
+            return Object.entries(data?.data).map(([key, value], index) => {
+                return (
+                    <div key={index} className="flex flex-wrap">
+                        {Object.entries(value).map((elValues, index) => {
+                            return (
+                                <p className="pr-2">{elValues[0] + ": " + elValues[1]}</p>
+                            )
+                        })}
+                    </div>
+                );
+            });
+        }
+    };
     return (
         <>
             <Collapse
@@ -80,7 +78,26 @@ function InPatientNotes({ Appointments }) {
                                             >
                                                 {
                                                     inspectionNotes.length > 0 ?
-                                                        getForm(inspectionNotes)
+                                                        inspectionNotes.map((note, index) => {
+                                                            return (
+                                                                <Card
+                                                                    extra={
+                                                                        <>
+                                                                            <Button
+                                                                                onClick={() => {
+                                                                                    setIsOpen(true);
+                                                                                    setDatas(note);
+                                                                                }}
+                                                                            >
+                                                                                {note.inpatientRequestId}
+                                                                            </Button>
+                                                                        </>
+                                                                    }
+                                                                >
+                                                                    <RenderNotesDetail data={JSON.parse(note["pain"])} />
+                                                                </Card>
+                                                            )
+                                                        })
                                                         :
                                                         <p>Тэмдэглэл байхгүй</p>
                                                 }
@@ -93,6 +110,15 @@ function InPatientNotes({ Appointments }) {
                     );
                 })}
             </Collapse>
+            <Modal
+                title="sada"
+                open={isOpen}
+                onCancel={() => setIsOpen(false)}
+                width={"23cm"}
+                footer={null}
+            >
+                <Index data={datas} />
+            </Modal>
         </>
     )
 }
