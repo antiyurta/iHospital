@@ -71,7 +71,7 @@ function InPatientNotes({ Appointments }) {
                                                         <span>
                                                             {el.createdAt?.replace(/T/, " ").replace(/\..+/, "")}
                                                         </span>
-                                                        <p className="pl-2 font-extrabold">{el.structure.name}</p>
+                                                        <p className="pl-2 font-extrabold">{el.structure?.name}</p>
                                                     </div>
                                                 }
                                                 key={value[index].id}

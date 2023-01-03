@@ -51,7 +51,8 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
         labelAlign="left"
         scrollToFirstError
         className="overflow-auto"
-        layout={UsageType === 'OUT' ? "vertical" : ""}
+        layout={UsageType === 'OUT' ? "" : "vertical"}
+        // layout="vertical"
         form={form}
       >
 
