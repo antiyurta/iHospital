@@ -81,17 +81,18 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     } else {
       var services = [];
       var subTotal = 0;
-      console.log(value);
       value.map((item) => {
         const service = {};
         service.id = item.id;
         service.name = item.name;
         service.price = item.price;
+        service.oPrice = item.price;
         service.type = item.types?.type;
         if (item.type === 8) {
           service.name = item.iName;
           service.dose = item.dose;
           service.price = 0;
+          service.oPrice = 0;
           service.type = item.type;
           service.medicineType = item.medicineReferences?.name;
           service.m = false;
@@ -106,6 +107,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
           service.qty = item.qty ? item.qty : 1;
           if (service.qty != 1) {
             service.price = item.calCprice;
+            service.oPrice = item.price;
           }
         } else if (item.type === 7) {
           service.type = item.type;
@@ -136,7 +138,6 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
       }
       orderForm.setFieldsValue({ services: data });
       setTotal(total + subTotal);
-      console.log();
     }
   };
   const removeOrder = (name) => {
@@ -266,6 +267,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
     const d = orderForm.getFieldValue(["services", key, "d"]);
     const e = orderForm.getFieldValue(["services", key, "e"]);
     const n = orderForm.getFieldValue(["services", key, "n"]);
+    const oPrice = orderForm.getFieldValue(["services", key, "oPrice"]);
     if (m) {
       counter++;
     }
@@ -279,6 +281,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
       counter++;
     }
     orderForm.setFieldValue(["services", key, "total"], counter * value);
+    orderForm.setFieldValue(["services", key, "price"], (counter * value * oPrice));
   };
   const xrayDateCalculator = (date, hour, minute) => {
     const cDate = moment(date)
@@ -286,6 +289,11 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
       .format("YYYY-MM-DD HH:mm");
     return cDate;
   };
+  const calc = (e, key) => {
+    const oPrice = orderForm.getFieldValue(["services", key, "oPrice"]);
+    orderForm.setFieldValue(["services", key, "qty"], e);
+    orderForm.setFieldValue(["services", key, "price"], e * oPrice);
+  }
   const isClose = (name, state) => {
     if (name === "inpatient") {
       setShowInpatient(state);
@@ -353,6 +361,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
   };
   useEffect(() => {
     orderForm.resetFields();
+    setTotal(0);
   }, [selectedPatient]);
   return (
     <>
@@ -746,6 +755,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                     className="mb-0"
                                   >
                                     <InputNumber
+                                      onChange={(e) => calc(e, name)}
                                       disabled={
                                         orderForm.getFieldValue([
                                           "services",
@@ -764,12 +774,18 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
                                   </Form.Item>
                                 </td>
                                 <td>
-                                  {orderForm
-                                    .getFieldValue(["services", name, "price"])
-                                    .toLocaleString("mn-MN", {
-                                      style: "currency",
-                                      currency: "MNT",
-                                    })}
+                                  <Form.Item shouldUpdate className="mb-0">
+                                    {() => {
+                                      return (
+                                        orderForm
+                                          .getFieldValue(["services", name, "price"])
+                                          .toLocaleString("mn-MN", {
+                                            style: "currency",
+                                            currency: "MNT",
+                                          })
+                                      )
+                                    }}
+                                  </Form.Item>
                                 </td>
                                 <td>
                                   <MinusCircleOutlined
