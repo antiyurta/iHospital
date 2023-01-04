@@ -1,4 +1,4 @@
-import { EyeOutlined, RollbackOutlined } from "@ant-design/icons";
+import { EyeOutlined, RollbackOutlined , DownloadOutlined } from "@ant-design/icons";
 import { Button, Card, DatePicker, Empty, Modal, Pagination, Table } from "antd";
 import moment from "moment";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
-import { Get, numberToCurrency, ScrollRef } from "../../../comman";
+import { Get, numberToCurrency, Patch, ScrollRef } from "../../../comman";
 import EbarimtPrint from "../EbarimtPrint";
 import mnMN from "antd/es/calendar/locale/mn_MN";
 import PrintIndex from "./PrintIndex";
@@ -55,6 +55,12 @@ function DailyIncome() {
         setEbarimtData(response);
         setEbarimtModal(true);
     };
+    const reload = async (id) => {
+        const response = await Patch('payment/payment/' + id, token, config, {
+            id: id
+        });
+        console.log(response);
+    };
     const incomeColumns = [
         {
             title: 'Овог',
@@ -92,6 +98,22 @@ function DailyIncome() {
                         style={{ paddingRight: 5 }}
                     >
                         <EyeOutlined />
+                    </Button>
+                )
+            }
+        },
+        {
+            title: "ДАХИН ТАТАХ",
+            width: 50,
+            render: (_, row) => {
+                return (
+                    <Button
+                        type="link"
+                        onClick={() => reload(row.id)}
+                        title="ТАТАХ"
+                        style={{ paddingRight: 5 }}
+                    >
+                        <DownloadOutlined />
                     </Button>
                 )
             }
