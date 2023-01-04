@@ -130,7 +130,7 @@ function IndexBefore({ type }) {
         console.log(info.response.response);
     };
     const newModal = (id, isPayment) => {
-        if (isPayment) {
+        if (!isPayment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
         } else {
             setId(id);
@@ -161,7 +161,7 @@ function IndexBefore({ type }) {
         }
     };
     const getPaymentInfo = (isPayment) => {
-        if (!isPayment) {
+        if (isPayment) {
             return <PlusOutlined style={{ color: "green" }} />;
         } else {
             return <MinusOutlined style={{ color: "red" }} />;
@@ -337,7 +337,7 @@ function IndexBefore({ type }) {
             <div className="flex flex-wrap">
                 <div className="w-full">
                     <Card
-                        title={type === 1 ? "Оношилгооны өмнөх жагсаалт" : "ЭКГ жагсаалт"}
+                        title={type === 0 ? "Оношилгооны өмнөх жагсаалт" : "ЭКГ жагсаалт"}
                         bordered={false}
                         className="header-solid max-h-max rounded-md"
                     >
