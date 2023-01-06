@@ -17,7 +17,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                 title="Хэвтүүлэх хүсэлт"
                 open={isOpen}
                 onCancel={() => { isClose('inpatient',false) }}
-                okText="Захилах"
+                okText="Захиалах"
                 cancelText="Болих"
                 onOk={() => {
                     InpatientRequestForm.validateFields()
@@ -55,7 +55,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                         <div className="w-full">
                             <Form.Item
                                 label="Хэвтэнгийн төлөв"
-                                name="InType"
+                                name="type"
                                 rules={[
                                     {
                                         required: true,
@@ -64,8 +64,8 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                                 ]}
                             >
                                 <Select onChange={(e) => checkDuration(e)}>
-                                    <Option value="emergency">Яаралтай</Option>
-                                    <Option value="plan">Төлөвлөгөөт</Option>
+                                    <Option value="EMERGENCY">Яаралтай</Option>
+                                    <Option value="PLAN">Төлөвлөгөөт</Option>
                                 </Select>
                             </Form.Item>
                         </div>

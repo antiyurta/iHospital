@@ -193,11 +193,35 @@ input[type="number"] {
 .page {
   width: 21cm;
   min-height: 29.7cm;
-  padding: 1cm;
+  padding-top: 0.8cm;
+  padding-bottom: 0.8cm;
+  padding-right: 1cm;
+  padding-left: 1cm;
+  /* padding: 1cm; */
   border: 1px #d3d3d3 solid;
   border-radius: 5px;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.page .ant-form label {
+  font-size: 13px !important;
+}
+
+.page .ant-form-item-row {
+  min-height: 22px !important;
+}
+
+.page .ant-form-item-control {
+  min-height: 22px !important;
+}
+
+.page .ant-form-item-control-input {
+  min-height: 22px !important;
+}
+
+.page .ant-form-item-control-input-content {
+  min-height: 22px !important;
 }
 
 .page-landscape {
@@ -329,11 +353,12 @@ input::-webkit-inner-spin-button {
 
   html,
   body {
-    height: auto;
+    /* height: auto; */
   }
 
   p {
-    font-family: 'Times New Roman', Times, serif;
+    /* font-family: 'Times New Roman', Times, serif; */
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 100;
     font-size: small;
     color: black;
@@ -382,4 +407,44 @@ input::-webkit-inner-spin-button {
 
 .magadlagaa .ant-picker-input>input {
   width: 30px !important;
+}
+
+.ddd {
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+.amaraBorder {
+  border: 0.05rem solid black;
+}
+
+.amaraBorder p {
+  font-size: 13px !important;
+  height: 20px !important;
+}
+
+.amaraDeer {
+  border-top: 1px solid black;
+}
+
+.amaraDoor {
+  border-bottom: 1px solid black;
+}
+
+.amaraZuun {
+  border-left: 1px solid black;
+}
+
+.amaraBaruun {
+  border-right: 1px solid black;
+}
+
+table .formTable tr>th {
+  height: 21px !important;
+  font-size: 12px;
+  border: 1px solid black;
+}
+
+table .formTable tr>td {
+  border: 1px solid black;
 }

@@ -6,6 +6,7 @@ import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, openNofi } from "../../comman";
+import DiagnoseTypes from './DiagnoseTypes.json';
 const { Search } = Input;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -94,7 +95,7 @@ function Diagnose({ handleClick }) {
                                                         </td>
                                                         <td>
                                                             <Form.Item
-                                                                name={[name, 'type']}
+                                                                name={[name, 'diagnoseType']}
                                                                 rules={[
                                                                     {
                                                                         required: true,
@@ -102,15 +103,7 @@ function Diagnose({ handleClick }) {
                                                                     }
                                                                 ]}
                                                             >
-                                                                <Select style={{ width: "100%" }}>
-                                                                    <Option value="Үндсэн">Үндсэн</Option>
-                                                                    <Option value="Урьдчилан">Урьдчилан</Option>
-                                                                    <Option value="Хүндрэл">Хүндрэл</Option>
-                                                                    <Option value="Үйлдлийн онош">Үйлдлийн онош</Option>
-                                                                    <Option value="Хавсрах онош">Хавсрах онош</Option>
-                                                                    <Option value="Уламжлалт">Уламжлалт</Option>
-                                                                    <Option value="Дагалдах">Дагалдах</Option>
-                                                                </Select>
+                                                                <Select style={{ width: "100%" }} options={DiagnoseTypes} />
                                                             </Form.Item>
                                                         </td>
                                                         <td><MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} /></td>
