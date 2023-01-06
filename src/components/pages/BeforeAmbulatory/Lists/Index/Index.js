@@ -518,7 +518,8 @@ function Index({ type, isDoctor }) {
                                                 getEMR(
                                                     row.id,
                                                     row.patientId,
-                                                    row.cabinetId,
+                                                    type === 2 ? row.departmentId : row.cabinetId,
+                                                    // row.cabinetId,
                                                     row.inspectionType,
                                                     row.isPayment
                                                 )
