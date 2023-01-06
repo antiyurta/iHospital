@@ -478,7 +478,7 @@ const InformationBed = (props) => {
                         ...styles.bedContainer,
                         ...{
                           borderColor:
-                            selectedBed.status === 3 && selectedBed.id === el.id
+                            selectedBed && selectedBed.id === el.id
                               ? blue.primary
                               : null,
                         },
