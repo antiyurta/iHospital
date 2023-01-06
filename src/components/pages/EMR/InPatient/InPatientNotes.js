@@ -87,6 +87,7 @@ function InPatientNotes({ Appointments }) {
                                                                                 onClick={() => {
                                                                                     setIsOpen(true);
                                                                                     setDatas(note);
+                                                                                    console.log(note);
                                                                                 }}
                                                                             >
                                                                                 {note.inpatientRequestId}
@@ -117,7 +118,7 @@ function InPatientNotes({ Appointments }) {
                 width={"23cm"}
                 footer={null}
             >
-                <Index data={datas} />
+                <Index id={datas.formId} data={datas} />
             </Modal>
         </>
     )

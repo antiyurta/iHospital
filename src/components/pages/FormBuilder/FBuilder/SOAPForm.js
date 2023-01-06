@@ -41,6 +41,7 @@ function SOAPForm({ docType }) {
         newForm['cabinetId'] = form.cabinetId;
         newForm['name'] = form.name;
         newForm['title'] = form.title;
+        newForm['formId'] = form.formId;
         if (form.formItem.conclusion.length > 0 && form.formItem.advice.length > 0) {
             newForm['conclusion'] = form.formItem.conclusion;
             newForm['advice'] = form.formItem.advice;
@@ -147,6 +148,7 @@ function SOAPForm({ docType }) {
     //
     const onFinish = async (values) => {
         const data = [];
+        console.log(values);
         if (type === 0) {
             values.pain?.map((pain) => {
                 pain['inspectionType'] = 'pain';
@@ -183,6 +185,7 @@ function SOAPForm({ docType }) {
                 {
                     structureId: values.structureId,
                     cabinetId: values.cabinetId,
+                    formId: values.formId,
                     usageType: docType,
                     name: values.name,
                     title: values.title,
@@ -200,6 +203,7 @@ function SOAPForm({ docType }) {
                 {
                     structureId: values.structureId,
                     cabinetId: values.cabinetId,
+                    formId: values.formId,
                     name: values.name,
                     usageType: docType,
                     title: values.title,
@@ -436,6 +440,18 @@ function SOAPForm({ docType }) {
                                                     <Input />
                                                 </Form.Item>
                                             </div>
+                                            <div className='w-full md:w-1/2 p-1'>
+                                                <Form.Item
+                                                    label="sdad"
+                                                    name="formId"
+                                                    rules={basisRule}
+                                                >
+                                                    <Select>
+                                                        <Option value={1}>asdasd</Option>
+                                                        <Option value={2}>asdasd</Option>
+                                                    </Select>
+                                                </Form.Item>
+                                            </div>
                                         </>
                                 }
 
@@ -450,7 +466,7 @@ function SOAPForm({ docType }) {
                                     {type === 0 &&
                                         panels.map((panel, index) => {
                                             return (
-                                                <Panel key={index} header={panel.name}>
+                                                <Panel key={index} header={panel.name} forceRender={true}>
                                                     {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
                                                     <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                                                 </Panel>
@@ -460,7 +476,7 @@ function SOAPForm({ docType }) {
                                     {type === 1 &&
                                         panelsExo.map((panel, index) => {
                                             return (
-                                                <Panel key={index} header={panel.name}>
+                                                <Panel key={index} header={panel.name} forceRender={true}>
                                                     {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
                                                     <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                                                 </Panel>
@@ -473,7 +489,7 @@ function SOAPForm({ docType }) {
                                     {
                                         panels.map((panel, index) => {
                                             return (
-                                                <Panel key={index} header={panel.name}>
+                                                <Panel key={index} header={panel.name} forceRender={true}>
                                                     {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
                                                     <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                                                 </Panel>
