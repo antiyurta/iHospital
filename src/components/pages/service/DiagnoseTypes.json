@@ -1,18 +1,18 @@
 [
     {
-        "value": 1,
+        "value": 0,
         "label": "Үндсэн"
     },
     {
-        "value": 2,
+        "value": 1,
         "label": "Урьдчилсан"
     },
     {
-        "value": 3,
+        "value": 2,
         "label": "Хавсрах онош"
     },
     {
-        "value": 4,
+        "value": 3,
         "label": "Дагалдах"
     }
 ]
