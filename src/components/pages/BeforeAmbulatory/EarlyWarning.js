@@ -7,7 +7,17 @@ import { selectCurrentToken } from "../../../features/authReducer";
 import { Table } from "react-bootstrap";
 import { Get, Post } from "../../comman";
 //
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+} from "chart.js";
 import { Line } from "react-chartjs-2";
 import moment from "moment";
 //
@@ -89,14 +99,16 @@ export default function EarlyWarning({ PatientId, listId }) {
         var demoLowPressureRight = [];
         var demoTempData = [];
         response.data.map((data) => {
-          demoLineLabels.push(moment(data.createdAt).format("YYYY-MM-DD HH:mm"));
+          demoLineLabels.push(
+            moment(data.createdAt).format("YYYY-MM-DD HH:mm")
+          );
           demoBreathData.push(data.respiratoryRate);
           demoSpo2Data.push(data.spO2);
           demoPulseData.push(data.pulse);
           demoHighPressureRight.push(data.highPressureRight);
           demoLowPressureRight.push(data.lowPressureRight);
           demoTempData.push(data.temp);
-        })
+        });
         setLineLabels(demoLineLabels);
         setBreathData(demoBreathData);
         setSpo2Data(demoSpo2Data);
@@ -112,8 +124,14 @@ export default function EarlyWarning({ PatientId, listId }) {
         var demoHighPressureRight = [];
         var demoLowPressureRight = [];
         var demoTempData = [];
-        for (let index = response.data.length - 7; index < response.data.length; index++) {
-          demoLineLabels.push(moment(response.data[index].createdAt).format("YYYY-MM-DD HH:mm"));
+        for (
+          let index = response.data.length - 7;
+          index < response.data.length;
+          index++
+        ) {
+          demoLineLabels.push(
+            moment(response.data[index].createdAt).format("YYYY-MM-DD HH:mm")
+          );
           demoBreathData.push(response.data[index].respiratoryRate);
           demoSpo2Data.push(response.data[index].spO2);
           demoPulseData.push(response.data[index].pulse);
@@ -152,18 +170,19 @@ export default function EarlyWarning({ PatientId, listId }) {
     LineElement,
     Title,
     Tooltip,
-    Legend);
+    Legend
+  );
   const vsOptions = {
     responsive: true,
     plugins: {
       legend: {
         display: true,
-        position: 'bottom',
+        position: "bottom",
       },
       title: {
         display: true,
         position: "top",
-        text: "VS - ын диаграмм"
+        text: "VS - ын диаграмм",
       },
     },
   };
@@ -172,12 +191,12 @@ export default function EarlyWarning({ PatientId, listId }) {
     plugins: {
       legend: {
         display: true,
-        position: 'bottom',
+        position: "bottom",
       },
       title: {
         display: true,
         position: "top",
-        text: "Даралтын диаграмм"
+        text: "Даралтын диаграмм",
       },
     },
   };
@@ -561,7 +580,9 @@ export default function EarlyWarning({ PatientId, listId }) {
                         </p>
                       </td>
                       <td className="text-center">
-                        <p>Б.Намуунцэлмэг</p>
+                        <p>{`${element.createdLastName?.substr(0, 1)}. ${
+                          element.createdFirstName
+                        }`}</p>
                       </td>
                     </tr>
                   ))}

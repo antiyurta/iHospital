@@ -91,6 +91,14 @@ function PatientListBed() {
       relation: true,
     },
     {
+      index: ["structure", "name"],
+      label: "Хэвтэх тасаг",
+      isView: true,
+      input: "input",
+      col: 24,
+      relation: true,
+    },
+    {
       index: "startDate",
       label: "Хэвтэх өдөр",
       isView: true,

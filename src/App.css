@@ -172,6 +172,7 @@ input[type="number"] {
 
 .ant-collapse-header {
   padding: 5px !important;
+  align-items: center !important;
 }
 
 .ant-collapse-arrow {

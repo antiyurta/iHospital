@@ -138,6 +138,7 @@ const InformationBed = (props) => {
     var emptyBeds = [];
     var usedBeds = [];
     var repairBeds = [];
+    config.params.isInpatient = true;
     const response = await Get("organization/room", token, config);
     console.log("response InformationBed", response);
     if (response.data.length != 0) {
