@@ -83,6 +83,7 @@ const InformationBed = (props) => {
       token,
       config
     );
+    // console.log("xxxxxxxxxxxxxx ====>", response);
     if (response) {
       setPatientInfoOfBed(response);
     } else {
@@ -140,7 +141,7 @@ const InformationBed = (props) => {
     var repairBeds = [];
     config.params.isInpatient = true;
     const response = await Get("organization/room", token, config);
-    console.log("response InformationBed", response);
+    // console.log("response InformationBed", response);
     if (response.data.length != 0) {
       response.data.map((el) => {
         if (el.beds.length > 0) {
@@ -454,7 +455,7 @@ const InformationBed = (props) => {
         }
         open={isModalOpen}
         onCancel={handleCancel}
-        width={600}
+        width={800}
         footer={null}
       >
         <Row
@@ -498,7 +499,7 @@ const InformationBed = (props) => {
                             ? require("../../../assets/bed/sul.png")
                             : require("../../../assets/bed/sul.png")
                         }
-                        style={{ zIndex: 1 }}
+                        style={{ zIndex: 1, display: "inline" }}
                         draggable="false"
                       />
                     </div>
@@ -539,6 +540,7 @@ const InformationBed = (props) => {
             <div className="w-2/12 font-bold">Регистр</div>
             <div className="w-2/12 font-bold">Картын дугаар</div>
             <div className="w-1/12 font-bold">Хүйс</div>
+            <div className="w-3/12 font-bold">Хэвтэх тасаг</div>
             <div className="w-3/12 font-bold">Захиалга</div>
           </Card>
         </Col>
@@ -575,6 +577,7 @@ const InformationBed = (props) => {
                             ? "Эр"
                             : "Эм"}
                         </div>
+                        <div className="w-3/12">-</div>
                         <div className="w-3/12">
                           {orderType.map((item, index) => {
                             if (item.value === patientInfoOfBed.process) {
@@ -712,6 +715,7 @@ const InformationBed = (props) => {
                           <div className="w-1/12">
                             {el.patient?.genderType === "MAN" ? "Эр" : "Эм"}
                           </div>
+                          <div className="w-3/12">{el.structure?.name}</div>
                           <div className="w-3/12">
                             {orderType.map((item, index) => {
                               if (item.value === el.process) {
