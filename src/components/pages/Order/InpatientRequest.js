@@ -158,8 +158,8 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                 ]}
               >
                 <Select onChange={(e) => checkDuration(e)}>
-                  <Option value="emergency">Яаралтай</Option>
-                  <Option value="plan">Төлөвлөгөөт</Option>
+                  <Option value="EMERGENCY">Яаралтай</Option>
+                  <Option value="PLAN">Төлөвлөгөөт</Option>
                 </Select>
               </Form.Item>
             </div>

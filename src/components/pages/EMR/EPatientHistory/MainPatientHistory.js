@@ -268,8 +268,20 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
       patientId: patientId,
       doctorId: userId,
       usageType: UsageType,
-      diagnose: JSON.stringify(values['diagnose']),
-    }
+    };
+    var diagnoseData = [];
+    values.diagnose?.map((diagnose) => {
+      diagnoseData.push(
+        {
+          patientId: patientId,
+          usageType: UsageType,
+          diagnoseId: diagnose.id,
+          diagnoseType: diagnose.diagnoseType,
+          inpatientRequestId: UsageType === 'IN' ? appointmentId : null,
+          appointmentId: UsageType === 'OUT' ? appointmentId : null,
+        }
+      )
+    });
     if (inspection === 11 || inspection === 12) {
       data['xrayRequestId'] = xrayRequestId;
       data['conclusion'] = JSON.stringify(values['conclusion']);
@@ -286,6 +298,7 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
     } else if (UsageType === 'OUT') {
       data['appointmentId'] = appointmentId;
     }
+    data['diagnoses'] = diagnoseData;
     console.log(data);
     const response = await Post('emr/inspectionNote', token, config, data);
     if (response === 201) {

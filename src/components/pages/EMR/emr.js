@@ -23,6 +23,7 @@ const config = {
 const { Option } = Select;
 const { Text } = Typography;
 function EMR() {
+  console.log(useLocation())
   const IncomeUsageType = useLocation().state.usageType;
   const IncomePatientId = useLocation().state.patientId;
   const IncomeCabinetId = useLocation().state.cabinetId;
@@ -72,15 +73,19 @@ function EMR() {
           stateIsCito = true;
         }
       });
-      const response = await Post("service-request", token, config, {
-        patientId: selectedPatient.id,
-        appointmentId: AppointmentId,
-        employeeId: employeeId,
-        requestDate: new Date(),
-        isCito: stateIsCito ? true : false,
-        usageType: "OUT",
-        services: value,
-      });
+      const data = {};
+      if (IncomeUsageType === 'IN') {
+        data['inPatientRequestId'] = AppointmentId;
+      } else {
+        data['appointmentId'] = AppointmentId;
+      }
+      data['patientId'] = selectedPatient.id;
+      data['employeeId'] = employeeId;
+      data['requestDate'] = new Date();
+      data['isCito'] = stateIsCito ? true : false;
+      data['usageType'] = IncomeUsageType;
+      data['services'] = value;
+      const response = await Post("service-request", token, config, data);
       if (response === 201) {
         const conf = {
           headers: {},
@@ -342,7 +347,7 @@ function EMR() {
                   paddingBottom: 16,
                 }}
               >
-                <Ocs selectedPatient={selectedPatient} handleClick={handleClick} />
+                <Ocs selectedPatient={selectedPatient} UsageType={IncomeUsageType} handleClick={handleClick} />
               </Card>
             ) : null}
           </div>

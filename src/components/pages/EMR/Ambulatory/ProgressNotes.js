@@ -144,29 +144,11 @@ export default function ProgressNotes({ Appointments }) {
                                     </>
                                   }
                                 >
-                                  <Divider orientation="left" className="text-sm my-2">
-                                    Зовиур
-                                  </Divider>
-                                  <RenderNotesDetail data={JSON.parse(note["pain"])} />
-                                  <Divider orientation="left" className="text-sm my-2">
-                                    Бодит үзлэг
-                                  </Divider>
-                                  <RenderNotesDetail data={JSON.parse(note["inspection"])} />
-                                  <Divider orientation="left" className="text-sm my-2">
-                                    Асуумж
-                                  </Divider>
-                                  <RenderNotesDetail data={JSON.parse(note["question"])} />
-                                  <Divider orientation="left" className="text-sm my-2">
-                                    Төлөвлөгөө
-                                  </Divider>
-                                  <RenderNotesDetail data={JSON.parse(note["plan"])} />
-                                  <Divider orientation="left" className="text-sm my-2">
-                                    Онош
-                                  </Divider>
-                                  {note["diagnose"] && <RenderNotesDiagnose data={JSON.parse(note["diagnose"])} />}
+                                  <FormIndex props={printData} />
                                 </Card>
                               )
-                            }) :
+                            })
+                            :
                             <p>Тэмдэглэл байхгүй</p>
                         }
                       </Panel>

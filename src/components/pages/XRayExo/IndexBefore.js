@@ -129,9 +129,16 @@ function IndexBefore({ type }) {
     const handleRemove = (info) => {
         console.log(info.response.response);
     };
-    const newModal = (id, isPayment) => {
-        if (!isPayment) {
-            openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
+    const newModal = (id, isPayment, usageType) => {
+        if (usageType === "OUT") {
+            if (!isPayment) {
+                openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
+            } else {
+                setId(id);
+                setEditMode(true);
+                setPhotoIds([]);
+                setXrayModal(true);
+            }
         } else {
             setId(id);
             setEditMode(true);
@@ -237,7 +244,21 @@ function IndexBefore({ type }) {
             )
         }
     };
+    const getUsageTypeInfo = (type) => {
+        if (type === "IN") {
+            return <p className="bg-[#5bc0de] text-white">Хэвтэн</p>
+        } else {
+            return <p className="bg-[#5cb85c] text-white">Амбулатори</p>
+        }
+    };
     const xrayRequestColumns = [
+        {
+            title: "Төрөл",
+            dataIndex: "usageType",
+            render: (text) => {
+                return getUsageTypeInfo(text)
+            }
+        },
         {
             title: 'Оношилгооны нэр',
             dataIndex: ['xrays', 'name'],
@@ -321,7 +342,7 @@ function IndexBefore({ type }) {
                             })}
                         </ul>
                         :
-                        <Button type="primary" onClick={() => newModal(row.id, row?.isPayment)}>Зураг оруулах</Button>
+                        <Button type="primary" onClick={() => newModal(row.id, row?.isPayment, row?.usageType)}>Зураг оруулах</Button>
                 )
             }
         },

@@ -38,7 +38,7 @@ import Reinspection from "./Reinspection";
 import { useEffect } from "react";
 //
 const { RangePicker } = DatePicker;
-function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
+function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, save }) {
   const token = useSelector(selectCurrentToken);
   const depId = useSelector(selectCurrentDepId);
   const userId = useSelector(selectCurrentUserId);
@@ -125,7 +125,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
           service.requestDate = new Date();
         }
         service.requestDate = moment(new Date()).format("YYYY-MM-DD");
-        service.usageType = "OUT";
+        service.usageType = usageType;
         subTotal += service.price;
         services.push(service);
       });
@@ -316,6 +316,7 @@ function Order({ isPackage, selectedPatient, isDoctor, categories, save }) {
   const inpatientRequestClick = async (values) => {
     values.patientId = IncomePatientId;
     values.cabinetId = IncomeCabinetId;
+    console.log(values);
     const response = await Post(
       "service/inpatient-request",
       token,

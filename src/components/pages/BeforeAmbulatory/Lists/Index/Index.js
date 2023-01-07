@@ -65,24 +65,27 @@ function Index({ type, isDoctor }) {
         config.params.limit = null;
         setSpinner(false);
     }
-    const getEMR = (listId, id, cabinetId, inspectionType, isPayment) => {
+    const getEMR = (listId, id, cabinetId, inspectionType, isPayment, process) => {
         // status heregteii anhan dawtan 
         // tolbor shalgah
-        console.log("===========>", inspectionType);
-        if (isPayment === false) {
-            openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй')
+        if (process != 2 && process != undefined) {
+            openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна')
         } else {
-            navigate(`/emr`,
-                {
-                    state:
+            if (isPayment === false) {
+                openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй')
+            } else {
+                navigate(`/emr`,
                     {
-                        usageType: type === 0 && "OUT" || type === 2 && "IN",
-                        appointmentId: listId,
-                        patientId: id,
-                        cabinetId: cabinetId,
-                        inspection: inspectionType === undefined ? 1 : inspectionType
-                    }
-                });
+                        state:
+                        {
+                            usageType: type === 0 && "OUT" || type === 2 && "IN",
+                            appointmentId: listId,
+                            patientId: id,
+                            cabinetId: cabinetId,
+                            inspection: inspectionType === undefined ? 1 : inspectionType
+                        }
+                    });
+            }
         }
     };
     const getENR = (listId, id, cabinetId, inspectionType, isPayment, regNum) => {
@@ -131,6 +134,13 @@ function Index({ type, isDoctor }) {
             return (<p><MinusOutlined style={{ color: "red", fontSize: "20px" }} /></p>)
         }
     };
+    const getInPatientType = (type) => {
+        if (type === "EMERGENCY") {
+            return (<p className="bg-red-500 text-white">Яаралтай</p>)
+        } else {
+            return (<p className="bg-green-500 text-white">Төлөвлөгөөт</p>)
+        }
+    }
     const getGenderInfo = (gender) => {
         if (gender === 'MAN') {
             return "Эр"
@@ -273,6 +283,13 @@ function Index({ type, isDoctor }) {
             }
         },
         {
+            title: "Төрөл",
+            dataIndex: 'type',
+            render: (text) => {
+                return getInPatientType(text);
+            }
+        },
+        {
             title: "Дугаар",
             dataIndex: ["patient", "cardNumber"],
             key: "requestId",
@@ -321,6 +338,14 @@ function Index({ type, isDoctor }) {
             render: (_, record, index) => (
                 <span key={index}>{record.endDate?.substr(0, 10)}</span>
             ),
+        },
+        {
+            title: "Гарсан өдөр",
+            key: "outDate",
+            render: (_, record, index) => {
+                // return moment(text).format('YYYY-MM-DD')
+                return <span key={index}>{record.outDate?.substr(0, 10)}</span>
+            }
         },
         {
             title: "Захиалгын төрөл",
@@ -464,42 +489,44 @@ function Index({ type, isDoctor }) {
                                             </div>
                                         </div>
                                     :
-                                    <div className="flex float-left">
-                                        {orderType.map((tag) => {
-                                            return (
-                                                <div
-                                                    key={tag.value}
-                                                    className="border-blue-400 rounded-sm border mr-2 mb-2"
-                                                >
-                                                    <CheckableTag
-                                                        checked={selectedTags.includes(tag.value)}
-                                                        onChange={(checked) => {
-                                                            handleChangeTag(tag.value, checked);
-                                                        }}
-                                                        style={{
-                                                            display: "flex",
-                                                            fontSize: 14,
-                                                            width: "100%",
-                                                        }}
+                                    <>
+                                        <div className="flex float-left">
+                                            {orderType.map((tag) => {
+                                                return (
+                                                    <div
+                                                        key={tag.value}
+                                                        className="border-blue-400 rounded-sm border mr-2 mb-2"
                                                     >
-                                                        <div
-                                                            className="mr-2"
+                                                        <CheckableTag
+                                                            checked={selectedTags.includes(tag.value)}
+                                                            onChange={(checked) => {
+                                                                handleChangeTag(tag.value, checked);
+                                                            }}
                                                             style={{
                                                                 display: "flex",
-                                                                alignItems: "center",
+                                                                fontSize: 14,
+                                                                width: "100%",
                                                             }}
                                                         >
-                                                            <img
-                                                                src={require(`../../../../../assets/bed/${tag.img}`)}
-                                                                width="20"
-                                                            />
-                                                        </div>
-                                                        {tag.label}
-                                                    </CheckableTag>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                                                            <div
+                                                                className="mr-2"
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src={require(`../../../../../assets/bed/${tag.img}`)}
+                                                                    width="20"
+                                                                />
+                                                            </div>
+                                                            {tag.label}
+                                                        </CheckableTag>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </>
                             }
                             <div className="float-right">
                                 <Button title="Сэргээх" type="primary" onClick={() => getAppointment(1, 20, start, end)}>
@@ -520,8 +547,10 @@ function Index({ type, isDoctor }) {
                                                     row.patientId,
                                                     type === 2 ? row.departmentId : row.cabinetId,
                                                     // row.cabinetId,
-                                                    row.inspectionType,
-                                                    row.isPayment
+                                                    // row.inspectionType,
+                                                    type === 2 ? row.process : row.inspectionType,
+                                                    row.isPayment,
+                                                    row.process
                                                 )
                                                 :
                                                 getENR(
