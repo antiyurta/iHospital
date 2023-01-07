@@ -119,6 +119,16 @@ function PatientListBed() {
       },
     },
     {
+      index: "outDate",
+      label: "Гарсан өдөр",
+      isView: true,
+      input: "date",
+      col: 24,
+      staticData: (data) => {
+        return <>{data?.substr(0, 10)}</>;
+      },
+    },
+    {
       index: "process",
       label: "Захиалгын төрөл",
       isView: true,

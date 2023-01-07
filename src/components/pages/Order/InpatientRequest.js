@@ -20,7 +20,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
   };
 
   const checkDuration = (e) => {
-    if (e === "plan") {
+    if (e === "PLAN") {
       setIsDuration(false);
     } else {
       setIsDuration(true);
@@ -89,7 +89,6 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
               >
                 <Select
                   allowClear
-                  className="w-52"
                   onChange={getDoctor}
                   placeholder="Тасаг сонгох"
                 >
@@ -114,7 +113,6 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
               >
                 <Select
                   allowClear
-                  className="w-52"
                   onChange={selectDoctor}
                   placeholder="Эмч сонгох"
                 >

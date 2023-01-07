@@ -37,7 +37,7 @@ const InformationBed = (props) => {
   const [roomWithStatus, setRoomWithStatus] = useState({});
   const [department, setDepartment] = useState(""); //Тасаг
   const [genderSearchValue, setGenderSearchValue] = useState("all");
-  const [orderedPatientList, setOrderedPatientList] = useState(""); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
+  const [orderedPatientList, setOrderedPatientList] = useState([]); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
   const [data, setData] = useState({});
   const [patientInfoOfBed, setPatientInfoOfBed] = useState(""); //Оронд хэвтэж буй өвчтөний мэдээлэл
   const [isTransfer, setIsTransfer] = useState(false);
@@ -93,10 +93,11 @@ const InformationBed = (props) => {
   };
   //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт авах
   const getOrderedPatient = async () => {
+    setOrderedPatientList([]);
     config.params.process = "0,1"; //Хэвтэх захиалгатай = 0, Хэвтэх зөвшөөрөлтэй өвтөн = 1
     const response = await Get("service/inpatient-request", token, config);
     if (response.data.length !== 0) {
-      // console.log("response get Ordered Patient ====>", response.data);
+      console.log("response get Ordered Patient ====>", response.data);
       setOrderedPatientList(response.data);
     }
   };
@@ -141,7 +142,7 @@ const InformationBed = (props) => {
     var repairBeds = [];
     config.params.isInpatient = true;
     const response = await Get("organization/room", token, config);
-    // console.log("response InformationBed", response);
+    console.log("response InformationBed", response);
     if (response.data.length != 0) {
       response.data.map((el) => {
         if (el.beds.length > 0) {
