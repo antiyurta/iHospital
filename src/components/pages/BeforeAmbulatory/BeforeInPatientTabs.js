@@ -4,6 +4,7 @@ import BodyConditionSheet from "./BeforeInPatientTabs/BodyConditionSheet";
 import NursingNote from "./BeforeInPatientTabs/NursingNote";
 import PainAssessment from "./BeforeInPatientTabs/PainAssessment";
 import VitalSign from "./BeforeInPatientTabs/VitalSign";
+import BST from "./BeforeInPatientTabs/BST";
 
 function BeforeInPatientTabs({ patientId, listId }) {
   const [pageId, setPageId] = useState(Number);
@@ -42,6 +43,14 @@ function BeforeInPatientTabs({ patientId, listId }) {
         >
           Өвдөлтийн үнэлгээ
         </Button>
+        <Button
+          onClick={() => {
+            setPageId(5);
+          }}
+          className="mr-2"
+        >
+          BST
+        </Button>
       </div>
       <div className="w-full p-1">
         {pageId === 1 && <BodyConditionSheet PatientId={patientId} />}
@@ -50,6 +59,7 @@ function BeforeInPatientTabs({ patientId, listId }) {
         {pageId === 4 && (
           <PainAssessment PatientId={patientId} ListId={listId} />
         )}
+        {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
       </div>
     </div>
   );
