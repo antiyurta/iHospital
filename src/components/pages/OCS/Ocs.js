@@ -1,7 +1,7 @@
 import React from "react";
 import Order from "../Order/Order";
 
-export default function Ocs({ selectedPatient, UsageType, handleClick }) {
+export default function Ocs({ selectedPatient, ListId, UsageType, handleClick }) {
   const categories = [
     {
       //omnoh jor

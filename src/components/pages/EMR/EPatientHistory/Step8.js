@@ -1,7 +1,7 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Удамшлын асуумж
 import React from "react";
-import { Col, Row, Divider, Input, Form } from "antd";
-import { INPUT_HEIGHT } from "../../../../constant";
+import { Col, Row, Divider, Form, Radio } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 
 export default function Step8() {
   return (
@@ -23,21 +23,17 @@ export default function Step8() {
               span: 14,
             }}
           >
-            <Input
-              size="small"
-              style={{
-                minHeight: INPUT_HEIGHT,
-                padding: 5,
-                height: INPUT_HEIGHT,
-              }}
-            />
+            <Radio.Group>
+              <Radio value={true}>Тийм</Radio>
+              <Radio value={false}>Үгүй</Radio>
+            </Radio.Group>
           </Form.Item>
         </Col>
       </Row>
       <Row align="middle" className="mb-1">
         <Col span={24} className="text-left">
           <Form.Item
-            label="Гэр бүл, хамаатан саданд удамшлын өвчтэй хүн байгаа эсэх"
+            label="Удамшлын өвчинүүд"
             name={["geneticQuestion", "geneticPainDesc"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"
@@ -48,14 +44,7 @@ export default function Step8() {
               span: 14,
             }}
           >
-            <Input
-              size="small"
-              style={{
-                minHeight: INPUT_HEIGHT,
-                padding: 5,
-                height: INPUT_HEIGHT,
-              }}
-            />
+            <TextArea />
           </Form.Item>
         </Col>
       </Row>

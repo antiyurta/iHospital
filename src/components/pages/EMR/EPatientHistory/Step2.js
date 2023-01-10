@@ -1,6 +1,6 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Өвчний түүх
 import React from "react";
-import { Col, Row, Input, Form } from "antd";
+import { Col, Row, Input, Form, Radio } from "antd";
 import { INPUT_HEIGHT } from "../../../../constant";
 
 export default function Step2() {
@@ -10,7 +10,7 @@ export default function Step2() {
         <Col span={24}>
           <Form.Item
             label="Халдварт өвчин"
-            name={["healthRecord", "infection"]}
+            name={["healthRecord", "contagious"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"
             wrapperCol={{
@@ -20,14 +20,15 @@ export default function Step2() {
               span: 6,
             }}
           >
-            <Input
-              size="small"
-              style={{
-                minHeight: INPUT_HEIGHT,
-                padding: 5,
-                height: INPUT_HEIGHT,
-              }}
-            />
+            <Radio.Group>
+              <Radio value={"measles"}>Улаан бурхан</Radio>
+              <Radio value={"varicella"}>Салхин цэцэг</Radio>
+              <Radio value={"avirus"}>Вирус хепатит A</Radio>
+              <Radio value={"bvirus"}>Вирус хепатит B</Radio>
+              <Radio value={"cvirus"}>Вирус хепатит C</Radio>
+              <Radio value={"tuberculosis"}>Сүрьеэ</Radio>
+              <Radio value={"other"}>Бусад</Radio>
+            </Radio.Group>
           </Form.Item>
         </Col>
       </Row>

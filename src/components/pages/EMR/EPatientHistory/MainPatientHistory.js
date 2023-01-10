@@ -54,7 +54,6 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
         layout={UsageType === 'OUT' ? "" : "vertical"}
         form={form}
       >
-
         <>
           {
             UsageType === "OUT" ?
@@ -464,6 +463,7 @@ function MainPatientHistory({ AppointmentId, XrayRequestId, PatientId, CabinetId
     } else if (inspection === 12) {
       getExoInspectionTabs();
     }
+    console.log("==>", inspection)
   }, [UsageType]);
   return (
     <>

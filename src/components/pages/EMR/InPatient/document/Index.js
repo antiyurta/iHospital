@@ -3,6 +3,7 @@ import Endocrinology from './Endocrinology/Index';
 import Rebuild from './Rebuild';
 function Index({ id, data }) {
     /// id nas depId ym ennes hamarch hewleh maygt oor2 bn
+    console.log(id);
     return (
         <>
             {/* {data.inpatientRequestId === 31 && <Rebuild data={data} />} */}

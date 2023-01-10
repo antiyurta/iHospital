@@ -1,4 +1,4 @@
-import { Card, Col, Empty, InputNumber, Modal, Radio, Row, Select, Typography } from "antd";
+import { Button, Card, Col, Empty, InputNumber, Modal, Radio, Row, Select, Typography } from "antd";
 import React, { useState, useEffect } from "react";
 import { INPUT_HEIGHT } from "../../../constant";
 import Ocs from "../OCS/Ocs";
@@ -16,6 +16,7 @@ import { Table } from "react-bootstrap";
 import moment from "moment";
 import Schedule from "../OCS/Schedule";
 import MainInPatient from "./InPatient/MainInPatient";
+import EmrSupports from "../EmrSupports";
 const config = {
   headers: {},
   params: {},
@@ -23,7 +24,6 @@ const config = {
 const { Option } = Select;
 const { Text } = Typography;
 function EMR() {
-  console.log(useLocation())
   const IncomeUsageType = useLocation().state.usageType;
   const IncomePatientId = useLocation().state.patientId;
   const IncomeCabinetId = useLocation().state.cabinetId;
@@ -75,7 +75,7 @@ function EMR() {
       });
       const data = {};
       if (IncomeUsageType === 'IN') {
-        data['inPatientRequestId'] = AppointmentId;
+        data['inpatientRequestId'] = AppointmentId;
       } else {
         data['appointmentId'] = AppointmentId;
       }
@@ -146,24 +146,21 @@ function EMR() {
   }
   const getProblems = async (id) => {
     const response = await Get("appointment/show/" + id, token, config);
-    if (response.inspectionNotes.length > 0) {
+    if (response.patientDiagnosis) {
       var problem = [];
-      response.inspectionNotes.map((note) => {
-        problem.push({
-          doctorId:
-            note.employees.lastName.substring(0, 1) +
-            "." +
-            note.employees.firstName,
-          diagnose: JSON.parse(note.diagnose),
-          inspectionDate: note.createdAt,
-        });
+      problem.push({
+        doctorId:
+          response.employee?.lastName.substring(0, 1) +
+          "." +
+          response.employee?.firstName,
+        diagnose: response.patientDiagnosis,
+        inspectionDate: response.createdAt,
       });
-      setProblems(problem);
+      setProblems([problems, ...problem]);
     }
   };
   //
   const usageType = (value) => {
-    console.log(value);
     setIsUsageType(value);
   }
   //
@@ -171,12 +168,16 @@ function EMR() {
     getByIdPatient(IncomePatientId);
     getInspectionNotes(IncomePatientId);
     getInPatientInspectionNotes(IncomePatientId);
-    console.log(IncomeUsageType);
   }, []);
-
   return (
     <>
       <div className="flex flex-wrap">
+        <div className="w-full p-1">
+          <EmrSupports
+            appointmentId={AppointmentId}
+            usageType={IncomeUsageType}
+          />
+        </div>
         <div
           className={
             type === "EMR"
@@ -226,7 +227,7 @@ function EMR() {
                                 {problem?.diagnose?.map((diagnose, index) => {
                                   return (
                                     <li key={index}>
-                                      {diagnose.code + " " + diagnose.nameEn}
+                                      {diagnose.diagnose.code + " " + diagnose.diagnose.nameEn}
                                     </li>
                                   );
                                 })}

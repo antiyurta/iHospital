@@ -1,33 +1,34 @@
-import { Button, Checkbox, Divider } from "antd";
-import { useState } from "react";
-import { useEffect } from "react";
+import { Card, Divider } from "antd";
 import { useRef } from "react"
-import { Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { PrinterOutlined, MedicineBoxOutlined, MediumOutlined } from "@ant-design/icons";
 import { useReactToPrint } from 'react-to-print';
-import { selectCurrentToken } from "../../../../features/authReducer";
-import { Get } from "../../../comman";
-// import logo from '../../../../assets/logo/logo.png'
 import logo from '../../../../assets/logo/universal.png'
 import moment from "moment";
-export default function Index(props) {
+import DiagnoseTypes from '../../service/DiagnoseTypes.json';
+export default function Index({ patientInfo, inspectionNote, diagnoses, services, employee }) {
     const printRef = useRef();
-    const token = useSelector(selectCurrentToken);
-    const config = {
-        headers: {},
-        params: {}
-    }
-    const [patientInfo, setPatientInfo] = useState([]);
     const handlePrint = useReactToPrint({
         content: () => printRef.current
     });
-
-    const RenderHTMLDiagnose = (data) => {
-        return data?.data?.map((diagnose, index) => {
+    const diagnoseTypeInfo = (diagnoseTypeId) => {
+        const filteredData = DiagnoseTypes.filter((e) => e.value === diagnoseTypeId);
+        return filteredData[0]?.label;
+    };
+    const RenderHTMLDiagnose = (diagnoses) => {
+        return diagnoses?.map((diagnose, index) => {
             return (
                 <div key={index} className="flex">
-                    <p className="font-semibold mx-2">{diagnose.type}: </p>
-                    <p>{"[" + diagnose.code + "]" + diagnose.nameMn}</p>
+                    <p className="font-semibold mx-2">{diagnoseTypeInfo(diagnose.diagnoseType)}: </p>
+                    <p>{"[" + diagnose.diagnose?.code + "]" + diagnose.diagnose?.nameMn}</p>
+                </div>
+            )
+        })
+    };
+    const RenderHTMLServices = (services) => {
+        return services?.map((service, index) => {
+            return (
+                <div key={index}>
+                    <p>{service.name}</p>
                 </div>
             )
         })
@@ -39,7 +40,7 @@ export default function Index(props) {
                     <div key={index} className="flex flex-wrap">
                         {Object.entries(value).map((elValues, index) => {
                             return (
-                                <p className="pr-2">{elValues[0] + ": " + elValues[1]}</p>
+                                <p className="pr-2" key={index}>{elValues[0] + ": " + elValues[1]}</p>
                             )
                         })}
                     </div>
@@ -47,17 +48,32 @@ export default function Index(props) {
             });
         }
     };
-
-    const getPatientInfo = async (patientId) => {
-        const response = await Get('pms/patient/' + patientId, token, config);
-        setPatientInfo(response);
-    };
-
-    useEffect(() => {
-        getPatientInfo(props.props.patientId);
-    }, [props])
     return (
-        <>
+        <Card
+            className="m-3"
+            extra={
+                <>
+                    <MediumOutlined
+                        title="Магадлага"
+                        className="p-1"
+                        onClick={(event) => { }
+                        }
+                    />
+                    <PrinterOutlined
+                        title="Маягт хэвлэх"
+                        className="p-1"
+                        onClick={(event) => { handlePrint() }
+                        }
+                    />
+                    <MedicineBoxOutlined
+                        title="Эмийн жор хэвлэх"
+                        className="p-1"
+                        onClick={(event) => { }
+                        }
+                    />
+                </>
+            }
+        >
             <div ref={printRef} className="magadlagaa">
                 <div className="flex flex-row">
                     <div className="basis-1/2">
@@ -69,7 +85,7 @@ export default function Index(props) {
                         <p className="text-center font-bold">Эрүүл мэндын бүртгэлийн маягт CT-1</p>
                     </div>
                 </div>
-                <p className="text-center py-8" style={{ fontSize: '25px', fontWeight: 'bold' }}>{props.props.structures.name}</p>
+                <p className="text-center py-8" style={{ fontSize: '25px', fontWeight: 'bold' }}>{inspectionNote?.structures?.name}</p>
                 <div className="flex flex-row">
                     <div className="basis-1/2">
                         <div className="flex">
@@ -107,33 +123,37 @@ export default function Index(props) {
                 <Divider orientation="left" className="text-sm my-2">
                     Зовиурь
                 </Divider>
-                <RenderHTML data={JSON.parse(props.props.pain)} />
+                {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.pain)} />}
                 <Divider orientation="left" className="text-sm my-2">
                     Бодит үзлэг
                 </Divider>
-                <RenderHTML data={JSON.parse(props.props.inspection)} />
+                {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.inspection)} />}
                 <Divider orientation="left" className="text-sm my-2">
                     Асуумж
                 </Divider>
-                <RenderHTML data={JSON.parse(props.props.question)} />
+                {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.question)} />}
                 <Divider orientation="left" className="text-sm my-2">
                     Төлөвлөгөө
                 </Divider>
-                <RenderHTML data={JSON.parse(props.props.plan)} />
+                {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.plan)} />}
                 <Divider orientation="left" className="text-sm my-2">
                     Онош
                 </Divider>
-                <RenderHTMLDiagnose data={JSON.parse(props.props.diagnose)} />
+                {diagnoses && RenderHTMLDiagnose(diagnoses)}
+                <Divider orientation="left" className="text-sm my-2">
+                    Захиалга
+                </Divider>
+                {services && RenderHTMLServices(services)}
                 <div className="text-right">
                     <div className="inline-flex">
                         <p className="font-semibold mr-2">Үзлэг хийсэн эмч:</p>
-                        <p>{props.props.employees.lastName.substring(0, 1) + ". " + props.props.employees.firstName}</p>
+                        <p>{employee?.lastName?.substring(0, 1) + ". " + employee?.firstName}</p>
                     </div>
                 </div>
                 <div className="text-right">
                     <div className="inline-flex">
                         <p className="font-semibold mr-2">Үзлэг хийсэн огноо:</p>
-                        <p>{moment(props.props.createdAt).format("YYYY-MM-DD")}</p>
+                        <p>{moment(inspectionNote?.createdAt).format("YYYY-MM-DD")}</p>
                     </div>
                 </div>
                 <div className="text-right">
@@ -143,7 +163,6 @@ export default function Index(props) {
                     </div>
                 </div>
             </div>
-            <Button onClick={handlePrint}>Хэвлэх</Button>
-        </>
+        </Card>
     )
 }

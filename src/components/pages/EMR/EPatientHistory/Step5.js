@@ -31,7 +31,7 @@ export default function Step5() {
       <Row align="middle" className="mb-1">
         <Col span={24}>
           <Form.Item
-            label=""
+            label="Хоол хүнс"
             name={["allergy", "food"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"
@@ -44,7 +44,7 @@ export default function Step5() {
       <Row align="middle" className="mb-1">
         <Col span={24}>
           <Form.Item
-            label=""
+            label="Эмийн бодис"
             name={["allergy", "medicine"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"
@@ -57,7 +57,7 @@ export default function Step5() {
       <Row align="middle" className="mb-1">
         <Col span={24}>
           <Form.Item
-            label=""
+            label="Бусад"
             name={["allergy", "other"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"

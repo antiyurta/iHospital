@@ -1,9 +1,7 @@
 import {
   Button,
-  Calendar,
   Checkbox,
   DatePicker,
-  Empty,
   Form,
   Input,
   InputNumber,
@@ -21,45 +19,29 @@ import Package from "./Package";
 import InpatientRequest from "./InpatientRequest";
 import { useState } from "react";
 import { Table } from "react-bootstrap";
-import { ClockCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import {
-  selectCurrentDepId,
-  selectCurrentToken,
-  selectCurrentUserId,
-} from "../../../features/authReducer";
-import { Get, openNofi, Post } from "../../comman";
+import { selectCurrentToken } from "../../../features/authReducer";
+import { DefaultPost, Get, openNofi, Post } from "../../comman";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
 import DoctorInspection from "./DoctorInspection";
-import Appointment from "../Appointment/Schedule/Appointment";
-import mnMN from "antd/es/calendar/locale/mn_MN";
 import Reinspection from "./Reinspection";
 import { useEffect } from "react";
 //
-const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, save }) {
   const token = useSelector(selectCurrentToken);
-  const depId = useSelector(selectCurrentDepId);
-  const userId = useSelector(selectCurrentUserId);
   const IncomePatientId = useLocation()?.state?.patientId;
   const IncomeCabinetId = useLocation()?.state?.cabinetId;
+  const IncomeAppointmentId = useLocation()?.state?.appointmentId;
+  console.log("========>", IncomeAppointmentId);
   const config = {
     headers: {},
     params: {},
   };
   const [total, setTotal] = useState(Number);
-  //
-  const [isOpenPackageModal, setIsOpenPackageModal] = useState(false);
-  const [packageModalData, setPackageModalData] = useState([]);
-  //
-  const [isOpenXrayModal, setIsOpenXrayModal] = useState(false);
-  const [xrayDeviceId, setXrayDeviceId] = useState(Number);
-  const [xrayDeviceSchedules, setXrayDeviceSchedules] = useState([]);
-  //
-  const [isOpenTreatmentAppointment, setIsOpenTreatmentAppointment] =
-    useState(false);
-  //
+
   const handleclick = async (value) => {
     if (isPackage) {
       var services = [];
@@ -95,12 +77,12 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
           service.oPrice = 0;
           service.type = item.type;
           service.medicineType = item.medicineReferences?.name;
-          service.m = false;
-          service.d = false;
-          service.e = false;
-          service.n = false;
+          service.isMorning = false;
+          service.isAfternoon = false;
+          service.isEvening = false;
+          service.isNight = false;
           service.desc = "";
-          service.dayLength = 1;
+          service.dayCount = 1;
           service.total = 0;
         } else if (item.type === 2) {
           service.name = item.name;
@@ -148,75 +130,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
     setTotal(total - orders.services[name].price);
     orderForm.setFieldValue("services", arr);
   };
-  //
-  const [key, setkey] = useState("");
-  const [subKey, setSubKey] = useState("");
-  const [serviceKey, setServiceKey] = useState("");
-  const setTime = (key, key1) => {
-    const service = orderForm.getFieldValue([key, key1]);
-    setkey(key);
-    setSubKey(key1);
-    if (service.type === 7) {
-      setPackageModalData(service.services);
-      setIsOpenPackageModal(true);
-    } else if (service.type === 1) {
-      setXrayDeviceId(service.deviceId);
-      setXrayDeviceSchedules([]);
-      setIsOpenXrayModal(true);
-    } else if (service.type === 2) {
-      dd(service);
-    }
-  };
-
-  const getXraySchedule = async (dates) => {
-    if (dates) {
-      const startDate = moment(dates[0]).format("YYYY-MM-DD");
-      const endDate = moment(dates[1]).format("YYYY-MM-DD");
-      console.log(startDate, endDate);
-      config.params.deviceId = xrayDeviceId;
-      config.params.startDate = startDate;
-      config.params.endDate = endDate;
-      const response = await Get("device-booking/schedule", token, config);
-      setXrayDeviceSchedules(response.data);
-    }
-  };
-
-  const dd = (service) => {
-    if (service.type === 2) {
-      setServiceKey(null);
-      setIsOpenTreatmentAppointment(true);
-    }
-  };
-
-  const setTimeCheck = (service, index) => {
-    if (service.serviceType === 2) {
-      setServiceKey(index);
-      setIsOpenTreatmentAppointment(true);
-    }
-  };
-
-  const handleClickXray = (scheduleId) => {
-    orderForm.setFieldValue([key, subKey, "scheduleId"], scheduleId);
-    orderForm.setFieldValue(
-      [key, subKey, "order"],
-      <ClockCircleOutlined style={{ color: "green" }} />
-    );
-    setIsOpenXrayModal(false);
-  };
-
-  const handleClickTreatment = (slotId) => {
-    if (slotId) {
-      setIsOpenTreatmentAppointment(false);
-      if (serviceKey != null) {
-        orderForm.setFieldValue(
-          [key, subKey, "services", serviceKey, "slotId"],
-          slotId
-        );
-      } else {
-        orderForm.setFieldValue([key, subKey, "slotId"], slotId);
-      }
-    }
-  };
 
   const [showMedicine, setShowMedicine] = useState(false);
   const [showExamination, setShowExamination] = useState(false);
@@ -227,6 +140,9 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
   //
   const [showDoctorInspection, setShowDoctorInspection] = useState(false);
   const [showReinspection, setShowReinspection] = useState(false);
+  const [showAnamnez, setShowAnamnez] = useState(false);
+  const [formAnamnez] = Form.useForm();
+  const [inPatientId, setInPatientId] = useState(Number);
   //
   const [orderForm] = Form.useForm();
   const tt = {
@@ -248,7 +164,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
     },
   };
   const qtyCalculator = (type, e, key) => {
-    const dayLength = orderForm.getFieldValue(["services", key, "dayLength"]);
+    const dayCount = orderForm.getFieldValue(["services", key, "dayCount"]);
     tt[type].state = e;
     var message = "";
     var counter = 0;
@@ -258,15 +174,15 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
         counter++;
       }
     });
-    orderForm.setFieldValue(["services", key, "total"], counter * dayLength);
+    orderForm.setFieldValue(["services", key, "total"], counter * dayCount);
     orderForm.setFieldValue(["services", key, "desc"], message);
   };
   const totalCalculator = (value, key) => {
     var counter = 0;
-    const m = orderForm.getFieldValue(["services", key, "m"]);
-    const d = orderForm.getFieldValue(["services", key, "d"]);
-    const e = orderForm.getFieldValue(["services", key, "e"]);
-    const n = orderForm.getFieldValue(["services", key, "n"]);
+    const m = orderForm.getFieldValue(["services", key, "isMorning"]);
+    const d = orderForm.getFieldValue(["services", key, "isAfternoon"]);
+    const e = orderForm.getFieldValue(["services", key, "isEvening"]);
+    const n = orderForm.getFieldValue(["services", key, "isNight"]);
     const oPrice = orderForm.getFieldValue(["services", key, "oPrice"]);
     if (m) {
       counter++;
@@ -282,12 +198,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
     }
     orderForm.setFieldValue(["services", key, "total"], counter * value);
     orderForm.setFieldValue(["services", key, "price"], (counter * value * oPrice));
-  };
-  const xrayDateCalculator = (date, hour, minute) => {
-    const cDate = moment(date)
-      .set({ hour: hour, minute: minute })
-      .format("YYYY-MM-DD HH:mm");
-    return cDate;
   };
   const calc = (e, key) => {
     const oPrice = orderForm.getFieldValue(["services", key, "oPrice"]);
@@ -313,17 +223,35 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
       setShowReinspection(state);
     }
   };
+  const onFinishAnamnez = async (values) => {
+    const data = {
+      appointmentId: IncomeAppointmentId,
+      patientId: IncomePatientId,
+      inpatientRequestId: inPatientId,
+      inPatientPain: values.inPatientPain,
+      lifeStory: values.lifeStory,
+      painStory: values.painStory
+    }
+    const response = await Post(
+      "emr/anemis",
+      token,
+      config,
+      data
+    );
+    if (response === 201) {
+      setShowAnamnez(false);
+    }
+  };
   const inpatientRequestClick = async (values) => {
     values.patientId = IncomePatientId;
     values.cabinetId = IncomeCabinetId;
-    console.log(values);
-    const response = await Post(
-      "service/inpatient-request",
-      token,
-      config,
-      values
-    );
-    setShowInpatient(false);
+    const response = await DefaultPost('service/inpatient-request', token, config, values);
+    if (response) {
+      console.log(response);
+      setInPatientId(response.id);
+      setShowInpatient(false);
+      setShowAnamnez(true);
+    }
   };
   const newModalCategory = (category) => {
     if (selectedPatient?.id || isPackage) {
@@ -503,6 +431,12 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                             <th className="font-bold text-sm align-middle">
                               Нийт хэмжээ
                             </th>
+                            {
+                              usageType === "IN" &&
+                              <th className="font-bold text-sm align-middle">
+                                Хэрэгжүүлэх өдөр
+                              </th>
+                            }
                             <th className="font-bold text-sm align-middle">
                               Үнэ
                             </th>
@@ -592,7 +526,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                                 </td>
                                 <td>
                                   <Form.Item
-                                    name={[name, "m"]}
+                                    name={[name, "isMorning"]}
                                     valuePropName="checked"
                                     className="mb-0"
                                   >
@@ -624,7 +558,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                                 </td>
                                 <td>
                                   <Form.Item
-                                    name={[name, "d"]}
+                                    name={[name, "isAfternoon"]}
                                     valuePropName="checked"
                                     className="mb-0"
                                   >
@@ -656,7 +590,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                                 </td>
                                 <td>
                                   <Form.Item
-                                    name={[name, "e"]}
+                                    name={[name, "isEvening"]}
                                     valuePropName="checked"
                                     className="mb-0"
                                   >
@@ -688,7 +622,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                                 </td>
                                 <td>
                                   <Form.Item
-                                    name={[name, "n"]}
+                                    name={[name, "isNight"]}
                                     valuePropName="checked"
                                     className="mb-0"
                                   >
@@ -728,7 +662,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                                 </td>
                                 <td>
                                   <Form.Item
-                                    name={[name, "dayLength"]}
+                                    name={[name, "dayCount"]}
                                     className="mb-0"
                                   >
                                     <InputNumber
@@ -775,6 +709,14 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                                   </Form.Item>
                                 </td>
                                 <td>
+                                  <Form.Item
+                                    name={[name, "startAt"]}
+                                    className="mb-0"
+                                  >
+                                    <DatePicker />
+                                  </Form.Item>
+                                </td>
+                                <td>
                                   <Form.Item shouldUpdate className="mb-0">
                                     {() => {
                                       return (
@@ -817,64 +759,56 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
         </div>
       </div>
       <Modal
-        open={isOpenPackageModal}
-        title="QWER"
-        onCancel={() => setIsOpenPackageModal(false)}
-      >
-        <ul>
-          {packageModalData.map((item, index) => {
-            return (
-              <li onClick={() => setTimeCheck(item, index)} key={index}>
-                {item.serviceName}
-              </li>
-            );
-          })}
-        </ul>
-      </Modal>
-      <Modal
-        title="Оношилгоо цаг сонгох"
-        open={isOpenXrayModal}
-        onCancel={() => setIsOpenXrayModal(false)}
+        title={"Эмчлүүлэгчийн анамнез"}
+        open={showAnamnez}
         footer={null}
       >
-        <div className="p-2">
-          <RangePicker locale={mnMN} onChange={getXraySchedule} />
-        </div>
-        {xrayDeviceSchedules.length > 0 ? (
-          xrayDeviceSchedules.map((schedule, index) => {
-            return (
-              <Button
-                key={index}
-                type="primary"
-                className="m-2"
-                onClick={() => handleClickXray(schedule.id)}
+        <Form layout="vertical" form={formAnamnez}>
+          <div className="rounded-md bg-gray-100 w-full inline-block my-1">
+            <div className="p-1">
+              <Form.Item
+                label={"Хэвтэх үеийн зовиур"}
+                name={'inPatientPain'}
+                rules={[{ required: true, message: "Заавал" }]}
               >
-                {xrayDateCalculator(
-                  schedule.examDate,
-                  schedule.startHour,
-                  schedule.startMinute
-                )}
-              </Button>
-            );
-          })
-        ) : (
-          <div className="p-1">
-            <Empty description={"Цаг оруулаагүй"} />
+                <TextArea />
+              </Form.Item>
+            </div>
           </div>
-        )}
-      </Modal>
-      <Modal
-        title="asdasd"
-        width={"100%"}
-        open={isOpenTreatmentAppointment}
-        onCancel={() => setIsOpenTreatmentAppointment(false)}
-        footer={null}
-      >
-        <Appointment
-          selectedPatient={selectedPatient}
-          type={2}
-          handleClick={handleClickTreatment}
-        />
+          <div className="rounded-md bg-gray-100 w-full inline-block my-1">
+            <div className="p-1">
+              <Form.Item
+                label={"Өвчний түүх"}
+                name={'painStory'}
+                rules={[{ required: true, message: "Заавал" }]}
+              >
+                <TextArea />
+              </Form.Item>
+            </div>
+          </div>
+          <div className="rounded-md bg-gray-100 w-full inline-block my-1">
+            <div className="p-1">
+              <Form.Item
+                label={"Амьдралын түүх"}
+                name={'lifeStory'}
+                rules={[{ required: true, message: "Заавал" }]}
+              >
+                <TextArea />
+              </Form.Item>
+            </div>
+          </div>
+        </Form>
+        <Button
+          type="primary"
+          className="w-full p-1 mb-0"
+          onClick={() => {
+            formAnamnez.validateFields()
+              .then((values) => {
+                onFinishAnamnez(values);
+              })
+          }}>
+          Хадгалах
+        </Button>
       </Modal>
     </>
   );

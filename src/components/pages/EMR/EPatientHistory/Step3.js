@@ -116,8 +116,8 @@ export default function Step3() {
         </Col>
         <Col span={12}>
           <Form.Item
-            label="Хэзээнээс"
-            name={["lifeStyle", "cigar", "fromWhen"]}
+            label="Хэдэн наснаас эхэлж татсан"
+            name={["lifeStyle", "cigar", "fromAge"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"
             wrapperCol={{
@@ -139,29 +139,8 @@ export default function Step3() {
       <Row align="middle" className="mb-1">
         <Col span={12}>
           <Form.Item
-            label="Ямар тамхи"
-            name={["lifeStyle", "cigar", "whatCigar"]}
-            rules={[{ required: false, message: "" }]}
-            className="mb-0"
-            wrapperCol={{
-              offset: 2,
-              span: 12,
-            }}
-          >
-            <Input
-              size="small"
-              style={{
-                minHeight: INPUT_HEIGHT,
-                padding: 5,
-                height: INPUT_HEIGHT,
-              }}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            label="Өдөрт татдаг хэмжээ"
-            name={["lifeStyle", "cigar", "size"]}
+            label="Хэдэн жил татаж байгаа"
+            name={["lifeStyle", "cigar", "usedYear"]}
             rules={[{ required: false, message: "" }]}
             className="mb-0"
             wrapperCol={{
@@ -242,8 +221,9 @@ export default function Step3() {
             }}
           >
             <Radio.Group>
-              <Radio value="0">Махан</Radio>
+              <Radio value="0">Ердийн</Radio>
               <Radio value="1">Цагаан</Radio>
+              <Radio value="2">Бусад</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>

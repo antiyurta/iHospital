@@ -781,11 +781,13 @@ function Patient() {
                     <Col md={8} lg={6}>
                       <Form.Item label="Боловсрол:" name="educationType">
                         <Select>
-                          <Option value={0}>Бага</Option>
-                          <Option value={1}>Дунд</Option>
-                          <Option value={2}>Дээд</Option>
-                          <Option value={3}>Боловсролгүй</Option>
-                          <Option value={4}>Мэргэжлийн техникийн</Option>
+                          <Option value={0}>Боловсролгүй</Option>
+                          <Option value={1}>Бага</Option>
+                          <Option value={2}>Мэргэжлийн болон техникийн</Option>
+                          <Option value={3}>Дипломын</Option>
+                          <Option value={4}>Бакалавр</Option>
+                          <Option value={5}>Магистр</Option>
+                          <Option value={6}>Доктор</Option>
                         </Select>
                       </Form.Item>
                     </Col>

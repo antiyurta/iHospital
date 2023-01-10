@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { MinusOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import {
   Button,
   Input,
@@ -13,6 +14,8 @@ import {
   Spin,
   DatePicker,
   Select,
+  Table,
+  Form,
 } from "antd";
 import mnMN from "antd/es/calendar/locale/mn_MN";
 import { useSelector } from "react-redux";
@@ -29,6 +32,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import moment from "moment";
 const { RangePicker } = DatePicker;
 
 ChartJS.register(
@@ -40,115 +44,247 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-function BST() {
+const { Option } = Select;
+function BST({ PatientId, ListId }) {
+  const today = new Date();
+  const [form] = Form.useForm();
   const token = useSelector(selectCurrentToken);
+  const [isOpenBSTModal, setIsOpenBSTModal] = useState(false);
   const [unitList, setUnitList] = useState([]);
-
-  const filterAppointment = async (value, dateString) => {};
+  const [lineBSTData, setLineBSTData] = useState([]);
+  const [lineLabels, setLineLabels] = useState([]);
+  const [meta, setMeta] = useState({});
+  const [spinner, setSpinner] = useState(false);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const checkNumber = (event) => {
+    var charCode = event.charCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+      event.preventDefault();
+    } else {
+      return true;
+    }
+  };
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        display: true,
+        position: "bottom",
       },
       title: {
         display: true,
-        text: "BTS -ын диаграмм",
+        position: "top",
+        text: "VS - ын диаграмм",
       },
     },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "Хэмжих нэгж(ммоль/л)"
+        }
+      },
+    }
   };
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
+  const cookInfo = (text) => {
+    if (text === 1) {
+      return "Өлөн үед"
+    } else if (text === 2) {
+      return "Хоолны өмнө"
+    } else if (text === 3) {
+      return "Хоолны дараа"
+    } else {
+      return "Ачаалалтай үед"
+    }
+  }
+  const columns = [
+    {
+      title: "Огноо",
+      dataIndex: "createdAt",
+      render: (text) => {
+        return moment(text).format('YYYY-MM-DD')
+      }
+    },
+    {
+      title: "Хэмжсэн цаг",
+      dataIndex: "createdAt",
+      render: (text) => {
+        return moment(text).format('HH:mm')
+      }
+    },
+    {
+      title: 'Сахарын хэмжээ',
+      dataIndex: "sugarAmount",
+    },
+    {
+      title: 'Нэгж',
+      dataIndex: "measurement"
+    },
+    {
+      title: 'Хэзээ / хоолны',
+      dataIndex: "whereCook",
+      render: (text) => {
+        return cookInfo(text);
+      }
+    },
+    {
+      title: "Сувилагч",
+      render: (_, row) => {
+        return row.createdLastName.substring(0, 1) + "." + row.createdFirstName;
+      }
+    }
   ];
+  const getBSTDatas = async (page, pageSize, start, end) => {
+    setSpinner(true);
+    start = moment(start).set({ hour: 0, minute: 0, second: 0 });
+    end = moment(end).set({ hour: 23, minute: 59, second: 59 });
+    const conf = {
+      headers: {},
+      params: {
+        page: page,
+        limit: pageSize,
+        patientId: PatientId,
+        startDate: moment(start).format("YYYY-MM-DD HH:mm"),
+        endDate: moment(end).format("YYYY-MM-DD HH:mm")
+      }
+    }
+    setStart(start);
+    setEnd(end);
+    const response = await Get('inpatient/bst', token, conf);
+    if (response.data.length <= 7) {
+      var demoLineLabels = [];
+      var demoBSTDatas = [];
+      response.data.map((data) => {
+        demoLineLabels.push(moment(data.createdAt).format("YYYY-MM-DD HH:mm"));
+        demoBSTDatas.push(data.sugarAmount);
+      });
+      setLineLabels(demoLineLabels);
+      setLineBSTData(demoBSTDatas);
+    } else {
 
+    }
+    setUnitList(response.data);
+    setMeta(response.meta);
+    setSpinner(false);
+  };
+  const onFinish = async (values) => {
+    const conf = {
+      headers: {},
+      params: {}
+    };
+    values['patientId'] = PatientId;
+    const response = await Post('inpatient/bst', token, conf, values);
+    if (response === 201) {
+      getBSTDatas(1, 10, start, end);
+      setIsOpenBSTModal(false);
+    }
+  }
   const data = {
-    labels,
+    labels: lineLabels.reverse(),
     datasets: [
       {
-        label: "Dataset 2",
-        data: [1, 2, 3, 4, 4, 54, 664, 64, 5, 45, 45, 4],
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        label: "BST",
+        data: lineBSTData.reverse(),
+        borderColor: ["#c51ceb"],
+        backgroundColor: "#c51ceb",
+        borderWidth: 1,
       },
     ],
   };
-
-  const getUnitList = async () => {
-    setUnitList([]);
-    // conf.params.patientId = PatientId;
-    // const response = await Get("inpatient/pain-assesment", token, conf);
-    // console.log("Res", response);
-    // if (response.data.length != 0) {
-    // setUnitList(response.data);
-    // }
-  };
+  useEffect(() => {
+    getBSTDatas(1, 10, today, today);
+  }, []);
   return (
     <>
       <div className="flex flex-wrap">
         <div className="w-full p-1">
           <div className="float-left">
-            <RangePicker onChange={filterAppointment} locale={mnMN} />
+            <RangePicker locale={mnMN} />
           </div>
         </div>
         <div className="w-full p-1">
-          <Row className="mt-2">
-            <Col span={12}>
+          <div className="flex flex-wrap">
+            <div className="md:w-1/2 sm:w-full p-1">
               <Line options={options} data={data} />
-            </Col>
-            <Col span={12}>
-              <table
-                style={{
-                  borderWidth: "1px",
-                  borderColor: "#aaaaaa",
-                  borderStyle: "solid",
-                  width: "100%",
+            </div>
+            <div className="md:w-1/2 sm:w-full p-1">
+              <div className="flex flex-wrap">
+                <div className="w-full p-1">
+                  <div className="float-left">
+                    <Button type="primary" onClick={() => { setIsOpenBSTModal(true); form.resetFields(); }}>Нэмэх</Button>
+                  </div>
+                  <div className="float-right">
+                    <Button title="Сэргээх" type="primary" onClick={() => getBSTDatas(1, 10, start, end)}>
+                      <ReloadOutlined spin={spinner} />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <Table
+                bordered
+                rowKey={"id"}
+                className="whitespace-pre-wrap"
+                locale={{ emptyText: "Мэдээлэл байхгүй" }}
+                loading={spinner}
+                columns={columns}
+                dataSource={unitList}
+                pagination={{
+                  simple: true,
+                  pageSize: 20,
+                  total: meta.itemCount,
+                  current: meta.page,
+                  onChange: (page, pageSize) => getBSTDatas(page, pageSize, start, end)
                 }}
-                className="border-collapse border border-slate-300"
-              >
-                <tbody>
-                  <tr>
-                    <td className="border border-slate-300 p-1">Огноо</td>
-                    <td className="border border-slate-300 p-1">Хэмжсэн цаг</td>
-                    <td className="border border-slate-300 p-1">
-                      Сахарын хэмжээ
-                    </td>
-                    <td className="border border-slate-300 p-1">Нэгж</td>
-                    <td className="border border-slate-300 p-1">
-                      Хэзээ / хоолны
-                    </td>
-                    <td className="border border-slate-300 p-1">Суваг</td>
-                  </tr>
-                  <tr>
-                    <td className="border border-slate-300 p-1">DATA</td>
-                    <td className="border border-slate-300 p-1">DATA</td>
-                    <td className="border border-slate-300 p-1">DATA</td>
-                    <td className="border border-slate-300 p-1">
-                      {/* <Select
-                                allowClear
-                                style={{
-                                  width: 200,
-                                }}
-                                onChange={handleChangeTransfer}
-                                value={selectedDep || undefined}
-                                options={department}
-                                placeholder="Сонгох"
-                              /> */}
-                    </td>
-                    <td className="border border-slate-300 p-1">DATA</td>
-                    <td className="border border-slate-300 p-1">DATA</td>
-                  </tr>
-                </tbody>
-              </table>
-            </Col>
-          </Row>
+              />
+            </div>
+          </div>
         </div>
+        <Modal
+          open={isOpenBSTModal}
+          title="BST бичих"
+          onCancel={() => setIsOpenBSTModal(false)}
+          onOk={() => {
+            form.validateFields().then((values) => {
+              onFinish(values)
+            })
+          }}
+          cancelText="Болих"
+          okText="Хадгалах"
+          width={"11cm"}
+        >
+          <Form
+            form={form}
+            layout="vertical"
+          >
+            <Form.Item
+              label="Сахарын хэмжээ"
+              name="sugarAmount"
+              rules={[{ required: true, message: "Заавал" }]}
+            >
+              <InputNumber onKeyPress={checkNumber} />
+            </Form.Item>
+            <Form.Item
+              label="Нэгж"
+              name="measurement"
+              rules={[{ required: true, message: "Заавал" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Хэзээ/хоолны"
+              name="whereCook"
+              rules={[{ required: true, message: "Заавал" }]}
+            >
+              <Select>
+                <Option value={0}>Өлөн үед</Option>
+                <Option value={1}>Хоолны өмнө</Option>
+                <Option value={2}>Хоолны дараа</Option>
+                <Option value={3}>Ачаалалтай үед</Option>
+              </Select>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </>
   );

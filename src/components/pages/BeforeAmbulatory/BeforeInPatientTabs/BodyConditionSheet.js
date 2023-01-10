@@ -27,7 +27,7 @@ function BodyConditionSheet({ PatientId }) {
                     headers: {},
                     params: {}
                 };
-                // const response = await Post('inpatient/physical-assesment', token, conf, data);
+                const response = await Post('inpatient/physical-assesment', token, conf, data);
             })
             .catch((error) => {
                 var string = "";

@@ -254,6 +254,12 @@ function Index({ type, isDoctor }) {
         },
         {
             title: "Дууссан цаг",
+            dataIndex: 'endDate',
+            render: (text) => {
+                if (text) {
+                    return moment(text).format("YYYY-MM-DD HH:mm")
+                }
+            }
         },
         {
             title: "Төлөв",
@@ -548,7 +554,7 @@ function Index({ type, isDoctor }) {
                                                     type === 2 ? row.departmentId : row.cabinetId,
                                                     // row.cabinetId,
                                                     // row.inspectionType,
-                                                    type === 2 ? row.process : row.inspectionType,
+                                                    type === 2 ? 1 : row.inspectionType,
                                                     row.isPayment,
                                                     row.process
                                                 )

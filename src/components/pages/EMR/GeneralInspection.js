@@ -49,12 +49,13 @@ export default function GeneralInspection({ patientId, inspection }) {
       autoComplete="off"
       labelAlign="left"
       scrollToFirstError
+      layout="vertical"
       form={form}
     >
       <Collapse accordion defaultActiveKey={["1"]}>
-        <Panel header="Ерөнхий" key="1">
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+        <Panel header="Ерөнхий" key="1" forceRender={true}>
+          <div className="flex flex-wrap">
+            <div className="md:w-1/3 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -62,12 +63,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="bodyCondition"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 12,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value={0} className="pl-1 ml-0">Дунд</Radio>
@@ -77,12 +72,9 @@ export default function GeneralInspection({ patientId, inspection }) {
                     </Radio.Group>
                   </Form.Item>
                 </div>
-
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/3 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -90,12 +82,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="mind"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 12,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="REASONABLE" className="pl-1 ml-0">Саруул</Radio>
@@ -105,10 +91,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/3 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -116,12 +100,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="skin"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 12,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="NORMAL" className="pl-1 ml-0">Хэвийн</Radio>
@@ -130,12 +108,12 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Panel>
-        <Panel header="Амьсгалын эрхтэн тогтолцоо" key="2">
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+        <Panel header="Амьсгалын эрхтэн тогтолцоо" key="2" forceRender={true}>
+          <div className="flex flex-wrap">
+            <div className="md:w-1/2 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -143,12 +121,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="respiratoryOneMinute"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 6,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Input
                       size="small"
@@ -156,10 +128,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/2 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -167,12 +137,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="respiratoryListen"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="LUNG" className="pl-1 ml-0">Уушги цулцангийн</Radio>
@@ -183,12 +147,12 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Panel>
-        <Panel header="Цусны эргэлтийн тогтолцоо" key="3">
-          <Row align="middle" className="mb-1">
-            <Col span={12} className="text-left pr-1">
+        <Panel header="Цусны эргэлтийн тогтолцоо" key="3" forceRender={true}>
+          <div className="flex flex-wrap">
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -196,12 +160,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="pulseOneMinute"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 6,
-                    }}
-                    labelCol={{
-                      span: 16,
-                    }}
                   >
                     <Input
                       size="small"
@@ -209,8 +167,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-            <Col span={12} className="text-left pl-1">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -218,13 +176,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="volt"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 6,
-                    }}
-                    labelCol={{
-                      span: 10,
-                    }}
-                    labelAlign="right"
                   >
                     <Input
                       size="small"
@@ -232,10 +183,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -243,12 +192,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="heartTapping"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="NORMAL" className="pl-1 ml-0">Хэвийн</Radio>
@@ -257,10 +200,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -268,12 +209,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="heartSound"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="BRIGHT" className="pl-1 ml-0">Тод</Radio>
@@ -286,10 +221,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={12} className="text-left pr-1">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -297,12 +230,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="heartBPRight"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 6,
-                    }}
-                    labelCol={{
-                      span: 16,
-                    }}
                   >
                     <Input
                       size="small"
@@ -310,8 +237,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-            <Col span={12} className="text-left pl-1">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -319,13 +246,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="heartBPLeft"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 6,
-                    }}
-                    labelCol={{
-                      span: 10,
-                    }}
-                    labelAlign="right"
                   >
                     <Input
                       size="small"
@@ -333,10 +253,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -344,12 +262,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="tongue"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="NORMAL" className="pl-1 ml-0">Ердийн</Radio>
@@ -360,10 +272,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/3 sm:w-1/2 p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -371,12 +281,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="abdomen"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="PALPATION" className="pl-1 ml-0">Өнгөц тэмтрэлтээр</Radio>
@@ -386,19 +290,19 @@ export default function GeneralInspection({ patientId, inspection }) {
                       <Radio value="MILD_PLEURAL" className="pl-1 ml-0">
                         Зөөлөн гялтан цочрол үгүй
                       </Radio>
-                      <Radio value="SYMTOMS_SHOCK">
+                      <Radio value="SYMTOMS_SHOCK" className="pl-1 ml-0">
                         Гялтан цочролтын шинж илэрсэн
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Panel>
-        <Panel header="Мэдрэлийн тогтолцоо" key="4">
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+        <Panel header="Мэдрэлийн тогтолцоо" key="4" forceRender={true}>
+          <div className="flex flex-wrap">
+            <div className="md:w-1/2 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -406,12 +310,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="audition"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="NORMAL" className="pl-1 ml-0">Хэвийн</Radio>
@@ -420,10 +318,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/2 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
@@ -431,12 +327,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                     name="reflex"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    wrapperCol={{
-                      span: 18,
-                    }}
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <Radio.Group className="align-middle">
                       <Radio value="SAVED" className="pl-1 ml-0">Хадгалагдана</Radio>
@@ -445,20 +335,15 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/2 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
-                    label=""
+                    label="Бусад"
                     name="other"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <TextArea
                       rows={2}
@@ -468,20 +353,15 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
-          <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
+            </div>
+            <div className="md:w-1/2 sm:w-full p-1">
               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                 <div className="p-1">
                   <Form.Item
-                    label=""
+                    label="Cэтгэцийн байдал"
                     name="mentalState"
                     rules={[{ required: true, message: "Заавал бөглөнө 611 маяг" }]}
                     className="mb-0"
-                    labelCol={{
-                      span: 8,
-                    }}
                   >
                     <TextArea
                       rows={2}
@@ -491,8 +371,8 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </Form.Item>
                 </div>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Panel>
       </Collapse>
       <Form.Item

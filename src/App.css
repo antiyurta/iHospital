@@ -449,3 +449,7 @@ table .formTable tr>th {
 table .formTable tr>td {
   border: 1px solid black;
 }
+
+.ant-table td {
+  white-space: nowrap !important;
+}
