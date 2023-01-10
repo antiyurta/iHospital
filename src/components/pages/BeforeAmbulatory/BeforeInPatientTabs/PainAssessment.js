@@ -116,7 +116,7 @@ function PainAssessment({ PatientId, ListId }) {
     setSpinner(true);
     conf.params.patientId = PatientId;
     const response = await Get("inpatient/pain-assesment", token, conf);
-    // console.log("Res", response);
+    console.log("Res", response);
     if (response.data.length != 0) {
       setPainDataList(response.data);
     }
@@ -146,7 +146,7 @@ function PainAssessment({ PatientId, ListId }) {
       <div className="flex flex-wrap">
         <div className="w-full p-1">
           <div className="float-left">
-            <Button type="primary" onClick={() => setIsOpenNoteModal(true)}>
+            <Button onClick={() => setIsOpenNoteModal(true)}>
               Хуудас бөглөх
             </Button>
           </div>
@@ -185,7 +185,7 @@ function PainAssessment({ PatientId, ListId }) {
                             <div style={{ marginRight: 10 }}>
                               <b>Тасаг: </b>
                               <span>
-                                {el?.inpatientRequests?.rooms?.structureId}
+                                {el?.inpatientRequests?.structure?.name}
                               </span>
                             </div>
                             <div>
@@ -780,7 +780,7 @@ function PainAssessment({ PatientId, ListId }) {
             </Col>
             <Col span={6}>
               <b>Тасаг: </b>
-              {selectedPainData[0]?.inpatientRequests?.rooms?.structureId}
+              {selectedPainData[0]?.inpatientRequests?.structure?.name}
             </Col>
             <Col span={6}>
               <b>Өрөө: </b>

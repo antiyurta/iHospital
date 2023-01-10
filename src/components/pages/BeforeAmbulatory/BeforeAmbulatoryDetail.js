@@ -34,8 +34,8 @@ function BeforeAmbulatoryDetail() {
       headers: {},
       params: {
         patientId: location.state?.patientId,
-      }
-    }
+      },
+    };
     const response = await Get("appointment", token, conf);
     if (response.data.length > 0) {
       response.data.reduce(function (r, a) {
@@ -50,10 +50,10 @@ function BeforeAmbulatoryDetail() {
   const getProblems = async (id) => {
     const conf = {
       headers: {},
-      params: {}
-    }
+      params: {},
+    };
     const response = await Get("appointment/show/" + id, token, conf);
-    if (response.inspectionNotes.length > 0) {
+    if (response.inspectionNotes?.length > 0) {
       var problem = [];
       response.inspectionNotes.map((note) => {
         problem.push({
@@ -107,32 +107,32 @@ function BeforeAmbulatoryDetail() {
             }}
           >
             <div className="scroll" style={{ maxHeight: 150 }}>
-              {
-                problems.length > 0 ?
-                  problems.map((problem, idx) => {
-                    return (
-                      <div key={idx} className="inline-flex">
-                        <p>{problem.doctorId}</p>
-                        <ul className="list-disc list-inside" style={{ width: 600, paddingLeft: 10 }}>
-                          {problem?.diagnose?.map((diagnose, index) => {
-                            return (
-                              <li key={index}>
-                                {diagnose.code + " " + diagnose.nameEn}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                        <p>
-                          {moment(problem.inspectionDate).format(
-                            "YYYY-MM-DD"
-                          )}
-                        </p>
-                      </div>
-                    );
-                  })
-                  :
-                  <Empty description="Байхгүй" />
-              }
+              {problems.length > 0 ? (
+                problems.map((problem, idx) => {
+                  return (
+                    <div key={idx} className="inline-flex">
+                      <p>{problem.doctorId}</p>
+                      <ul
+                        className="list-disc list-inside"
+                        style={{ width: 600, paddingLeft: 10 }}
+                      >
+                        {problem?.diagnose?.map((diagnose, index) => {
+                          return (
+                            <li key={index}>
+                              {diagnose.code + " " + diagnose.nameEn}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                      <p>
+                        {moment(problem.inspectionDate).format("YYYY-MM-DD")}
+                      </p>
+                    </div>
+                  );
+                })
+              ) : (
+                <Empty description="Байхгүй" />
+              )}
             </div>
           </Card>
         </div>
@@ -150,18 +150,18 @@ function BeforeAmbulatoryDetail() {
               overflowY: "scroll",
             }}
           >
-            {
-              location?.state?.type === 0 ?
-                <BeforeAmbulatoryTabs
-                  patientId={selectedPatient?.id}
-                  listId={location.state?.appointmentId}
-                />
-                :
-                <BeforeInPatientTabs
-                  patientId={selectedPatient?.id}
-                  listId={location.state?.appointmentId}
-                />
-            }
+            {location?.state?.type === 0 ? (
+              <BeforeAmbulatoryTabs
+                patientId={selectedPatient?.id}
+                listId={location.state?.appointmentId}
+              />
+            ) : (
+              <BeforeInPatientTabs
+                patientId={selectedPatient?.id}
+                listId={location.state?.appointmentId}
+                patientData={selectedPatient}
+              />
+            )}
           </Card>
         </div>
       </div>
