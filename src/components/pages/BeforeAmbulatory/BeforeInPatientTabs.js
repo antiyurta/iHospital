@@ -7,6 +7,7 @@ import VitalSign from "./BeforeInPatientTabs/VitalSign";
 import BST from "./BeforeInPatientTabs/BST";
 import Cardex from "./BeforeInPatientTabs/Cardex";
 import MedicineRequests from "./BeforeInPatientTabs/MedicineRequests";
+import Epicriz from "./Lists/Epicriz";
 
 function BeforeInPatientTabs({ patientId, listId, patientData }) {
   const [pageId, setPageId] = useState(Number);
@@ -76,6 +77,15 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
         >
           Тэмдэглэл
         </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            setPageId(8);
+          }}
+          className="mr-2"
+        >
+          Гарах үеийн эпикриз
+        </Button>
       </div>
       <div className="w-full p-1">
         {pageId === 1 && <Cardex PatientId={patientId} ListId={listId} />}
@@ -90,6 +100,13 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
         {pageId === 6 && <BodyConditionSheet PatientId={patientId} />}
         {pageId === 7 && (
           <NursingNote
+            PatientId={patientId}
+            ListId={listId}
+            PatientData={patientData}
+          />
+        )}
+        {pageId === 8 && (
+          <Epicriz
             PatientId={patientId}
             ListId={listId}
             PatientData={patientData}
