@@ -10,16 +10,30 @@
   padding-top: 1%;
   padding-bottom: 1%;
 }
+
 .ant-input-group-addon {
   background-color: none !important;
   background: none !important;
 }
+
 .ant-menu {
   background: #ffffff;
 }
+
 .ant-card .ant-card-head {
   padding: 0 !important;
   padding-left: 10px !important;
   padding-right: 10px !important;
   height: 60px !important;
+}
+
+.button-active {
+  border-color: rgb(128, 131, 128);
+  background-color: rgb(128, 131, 128);
+}
+
+.add-button {
+  color: white;
+  border-color: green;
+  background-color: green;
 }

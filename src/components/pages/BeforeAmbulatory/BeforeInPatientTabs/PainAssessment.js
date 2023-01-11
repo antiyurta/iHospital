@@ -146,7 +146,7 @@ function PainAssessment({ PatientId, ListId }) {
       <div className="flex flex-wrap">
         <div className="w-full p-1">
           <div className="float-left">
-            <Button type="primary" onClick={() => setIsOpenNoteModal(true)}>
+            <Button type="add" onClick={() => setIsOpenNoteModal(true)}>
               Хуудас бөглөх
             </Button>
           </div>

@@ -1,3 +1,4 @@
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, Collapse, Divider, Form, notification, Radio, Select, Space } from "antd";
 import moment from "moment";
 import { useEffect } from "react";
@@ -15,7 +16,7 @@ function BodyConditionSheet({ PatientId }) {
         bodyForm.validateFields()
             .then(async (values) => {
                 const data = {
-                    patientId: 1,
+                    patientId: PatientId,
                     daily: values.daily,
                     respiratory: values.respiratory,
                     indigestion: values.indigestion,
@@ -82,11 +83,111 @@ function BodyConditionSheet({ PatientId }) {
     }, []);
     return (
         <div className="flex flex-wrap">
+            <div className="w-full">
+                <Collapse defaultActiveKey={['1']}>
+                    <Panel header="Хуудасыг хөтлөх заавар:" key="1">
+                        <div className="flex flex-wrap px-6 py-2">
+                            <div className="w-2/12 amaraDeer amaraZuun text-center">
+                                <p>Тэмдэглэгээ</p>
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun">
+                            </div>
+                            <div className="w-9/12 amaraDeer amaraZuun amaraBaruun text-center">
+                                <p>Хөтлөх заавар</p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun ">
+                                <p>"Y" хэсэгт дараах гурван тэмдэглэгээнээс хамаарахыг тавина</p>
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun text-center">
+                                <CheckOutlined />
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun">
+                                <p>Тийм</p>
+                            </div>
+                            <div className="w-8/12 amaraDeer amaraZuun amaraBaruun">
+                                <p>
+                                    Тийм* гэж үнэлсэн асуудал сувилгааны төлөвлөгөөнд оруулав. Ангилал бүрээс нэг асуудалтай бол тэрхүү
+                                    асуудал бүрээр эмчлүүлэгчийн зовиурыг багасгах сувилгааны ажлын төлөвлөлтийг CT-3 хуудсанд тэмдэглэж
+                                    хэрэгжүүлж дүгнэнэ.
+                                </p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun">
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun text-center">
+                                <CloseOutlined />
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun">
+                                <p>Үгүй</p>
+                            </div>
+                            <div className="w-8/12 amaraDeer amaraZuun amaraBaruun">
+                                <p>
+                                    Үгүй* бол сувилгааны төлөвлөгөөнд орох асуудал биш гэж үзэх тул сувилгааны төлөвлөгөөнд энэ чиглэлээр
+                                    хийх ажил төлөвлөгдөхгүй гэж ойлгоно.
+                                </p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun">
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun text-center">
+                                <CloseOutlined />
+                            </div>
+                            <div className="w-1/12 amaraDeer amaraZuun">
+                                <p>Хамаарахгүй</p>
+                            </div>
+                            <div className="w-8/12 amaraDeer amaraZuun amaraBaruun">
+                                <p>
+                                    Тухайн үнэлгээний асуулт эмчлүүлэгчид хамаарахгүй бол тэр бүлгийг бүхэлд нь (/) ташуу зураас татан
+                                    хамаатуулахгүй орхиж болно.
+                                </p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun text-center">
+                                <p>"#"</p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun">
+                                Асуудлын дугаар
+                            </div>
+                            <div className="w-8/12 amaraDeer amaraZuun amaraBaruun">
+                                <p>
+                                    Тухайн бүлэг асуудлыг үнэлж, түүний ард буй сувилгааны асуудлаас тохирох нэг асуудлыг сонгон авч "Сувилгааны
+                                    асуудал" ангилалын арын тохирох хүснэгтэнд тэмдэглэнэ. Жишээ нь: Ханиалгалт, цэртэй гэж үнэлсэн бол "Амьсгалын
+                                    замын цэвэршилт алдагдсан" гэсэн асуудлыг сонгон "#3" тэмдгийг тохирох нүдэнд тавина.
+                                </p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun">
+                                <p>Эмчлүүлэгчийн ариун цэврийн хэсгийг дараах</p>
+                            </div>
+                            <div className="w-3/12 amaraDeer amaraZuun">
+                                <p>СУ</p>
+                                <p>Ө</p>
+                                <p>СА</p>
+                            </div>
+                            <div className="w-7/12 amaraDeer amaraZuun amaraBaruun">
+                                <p>Сувилагч хийсэн</p>
+                                <p>Эмчлүүлэгч өөрөө хийсэн</p>
+                                <p>Сахиур хийсэн</p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun text-center">
+                                <p>_*_</p>
+                            </div>
+                            <div className="w-10/12 amaraDeer amaraZuun amaraBaruun">
+                                <p>Өвдөлттэй бол өвдөлт үнэлэх хуудсыг сонгомолоор авч тухайн эмчлүүлэгчид хэрэглэнэ.</p>
+                                <p>Арьсны байдал өөрчлөлттэй гэж үнэлвэл цооролтын удирдамжийг /нэрийг магадлах/ баримтлан сувилах төлөвлөгөөг боловсруулна.</p>
+                                <p>Шингэний балансыг үнэлэх хуудсыг сонгомолоор авч тухайн эмчлүүлэгчид хэрэглэнэ.</p>
+                            </div>
+                            <div className="w-2/12 amaraDeer amaraZuun amaraDoor">
+                                <p>Саарал хүснэгт</p>
+                            </div>
+                            <div className="w-10/12 amaraDeer amaraZuun amaraBaruun amaraDoor">
+                                <p>Хэвийн үзүүлэлтийг тодруулав.</p>
+                            </div>
+                        </div>
+                    </Panel>
+                </Collapse>
+            </div>
             <div className="md:w-1/2 lg:w-1/2 p-1">
                 <Table bordered className="ant-border-space">
                     <thead className="ant-table-thead bg-slate-200">
                         <tr>
-                            <th className="font-bold text-sm align-middle">Огноо цаг</th>
+                            <th className="font-bold text-sm text-start">Огноо цаг</th>
                             {
                                 sheets?.map((sheet, index) => {
                                     return (
@@ -98,7 +199,7 @@ function BodyConditionSheet({ PatientId }) {
                     </thead>
                     <tbody className="ant-table-thead bg-slate-200 ant-table-tbody p-0">
                         <tr>
-                            <th className="font-bold text-sm align-middle">Амьсгалалт</th>
+                            <th className="font-bold text-sm text-start">Амьсгалалт</th>
                             {
                                 sheets?.map((sheet, index) => {
                                     return (
@@ -108,11 +209,402 @@ function BodyConditionSheet({ PatientId }) {
                             }
                         </tr>
                         <tr>
-                            <th className="font-bold text-sm align-middle">Чимээ</th>
+                            <th className="font-bold text-sm text-start">Чимээ</th>
                             {
                                 sheets?.map((sheet, index) => {
                                     return (
                                         <td key={index}>{sheet.respiratory?.noise}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">Ханиалгалт</th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.respiratory?.cough}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">Хаван</th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.respiratory?.edema}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хялгасан судасны</p>
+                                <p>дахин</p>
+                                <p>дүүрэлт</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.respiratory?.capillary}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Зүрхний хэм</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.respiratory?.heartPoint}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хооллолт</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.indigestion?.eat}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хоолны дэглэм</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.indigestion?.sitiology}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хоолны дуршил</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.indigestion?.appetite}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хэвлий</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.indigestion?.stomach}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Өтгөн</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.indigestion?.grease}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Шээс/Шээсний гарц</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.pee?.peeOut}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Шээс/Зовиур</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.pee?.peePain}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Шээс/Өнгө,Үнэр</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.pee?.peeColor}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Шээс</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.pee?.peeStatus}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Арьсны байдал</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.skin?.skinStatus}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Арьсны эрүүл ахуй</p>
+                                <p>/Бүх биеийн угаалга/</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.skin?.bodyWash}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Арьсны эрүүл ахуй</p>
+                                <p>/Хэсэгчилсэн угаалга/</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.skin?.partWash}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Арьсны эрүүл ахуй</p>
+                                <p>/Ор цэвэрлэх/</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.skin?.bedWash}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Мэс заслын шарх</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.skin?.surgery}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Уян зүү тавьсан хэсэг</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.skin?.targetNeedle}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ухаан санааны байдал</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.mind?.mindStatus}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Орчиндоо</p>
+                                <p>(Бусадтай)</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.mind?.roomTemp}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Өвдөлт</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.mind?.pain}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Үе мөчний</p>
+                                <p>хөдөлгөөн</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.mind?.bodyShake}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Уян зүү</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.needle}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Гуурсны арчилгаа</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.tubeCare}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Бургүй хийсэн</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.burgui}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хэсэгчилсэн</p>
+                                <p>асаргаа</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.partCare}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>ЭМБ</p>
+                                <p>Зөвлөгөө өгөх</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.advice}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Нөхөн сэргээх</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.reHealt}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Байрлал</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.position}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Цагаан хэрэглэл</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.cwb}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Үс угаасан</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.hair}</td>
                                     )
                                 })
                             }
