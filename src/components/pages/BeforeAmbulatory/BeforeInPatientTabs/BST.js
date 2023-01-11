@@ -212,7 +212,7 @@ function BST({ PatientId, ListId }) {
               <div className="flex flex-wrap">
                 <div className="w-full p-1">
                   <div className="float-left">
-                    <Button type="primary" onClick={() => { setIsOpenBSTModal(true); form.resetFields(); }}>Нэмэх</Button>
+                    <Button className="add-button" onClick={() => { setIsOpenBSTModal(true); form.resetFields(); }}>Нэмэх</Button>
                   </div>
                   <div className="float-right">
                     <Button title="Сэргээх" type="primary" onClick={() => getBSTDatas(1, 10, start, end)}>

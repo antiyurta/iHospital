@@ -1,6 +1,6 @@
-import { Button, Card, Col, Empty, InputNumber, Modal, Radio, Row, Select, Typography } from "antd";
+import { Button, Card, Col, Empty, InputNumber, List, Modal, Radio, Row, Select, Typography } from "antd";
 import React, { useState, useEffect } from "react";
-import { INPUT_HEIGHT } from "../../../constant";
+import male from '../../../assets/images/maleAvatar.svg';
 import Ocs from "../OCS/Ocs";
 import MainAmbulatory from "./Ambulatory/MainAmbulatory";
 import MainPatientHistory from "./EPatientHistory/MainPatientHistory";
@@ -146,7 +146,8 @@ function EMR() {
   }
   const getProblems = async (id) => {
     const response = await Get("appointment/show/" + id, token, config);
-    if (response.patientDiagnosis) {
+    var problem = [];
+    if (response.patientDiagnosis.length > 0) {
       var problem = [];
       problem.push({
         doctorId:
@@ -156,8 +157,8 @@ function EMR() {
         diagnose: response.patientDiagnosis,
         inspectionDate: response.createdAt,
       });
-      setProblems([problems, ...problem]);
     }
+    setProblems(problem);
   };
   //
   const usageType = (value) => {
@@ -217,32 +218,38 @@ function EMR() {
                   }}
                 >
                   <div className="scroll" style={{ maxHeight: 150 }}>
-                    {
-                      problems.length > 0 ?
-                        problems.map((problem, idx) => {
-                          return (
-                            <div key={idx} className="inline-flex">
-                              <p>{problem.doctorId}</p>
-                              <ul className="list-disc list-inside" style={{ width: 600, paddingLeft: 10 }}>
-                                {problem?.diagnose?.map((diagnose, index) => {
-                                  return (
-                                    <li key={index}>
-                                      {diagnose.diagnose.code + " " + diagnose.diagnose.nameEn}
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                              <p>
-                                {moment(problem.inspectionDate).format(
-                                  "YYYY-MM-DD"
-                                )}
-                              </p>
-                            </div>
-                          );
-                        })
-                        :
-                        <Empty description="Байхгүй" />
-                    }
+                    <List
+                      itemLayout="horizontal"
+                      dataSource={problems}
+                      renderItem={(item) => (
+                        <List.Item>
+                          <List.Item.Meta
+                            avatar={<img style={{ width: 20 }} src={male} />}
+                            title={
+                              <div className="flow-root">
+                                <div className="float-left">
+                                  <p>{item.doctorId}</p>
+                                </div>
+                                <div className="float-right">
+                                  <p>{moment(item.inspectionDate).format(
+                                    "YYYY-MM-DD"
+                                  )}</p>
+                                </div>
+                              </div>
+                            }
+                            description={
+                              item?.diagnose?.map((diagnose, index) => {
+                                return (
+                                  <p key={index} className="text-black">
+                                    {diagnose.diagnose.code + " " + diagnose.diagnose.nameMn}
+                                  </p>
+                                );
+                              })
+                            }
+                          />
+                        </List.Item>
+                      )}
+                    />
                   </div>
                 </Card>
               </div>

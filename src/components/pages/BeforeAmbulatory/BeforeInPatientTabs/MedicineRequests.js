@@ -1,12 +1,11 @@
-import { Button, DatePicker, Table } from "antd";
-import { PauseCircleOutlined, CloseCircleOutlined, WarningOutlined, CheckCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Dropdown, Menu, Popconfirm, Table } from "antd";
+import { PauseCircleOutlined, CloseCircleOutlined, WarningOutlined, CheckCircleOutlined, ReloadOutlined, EditOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
-import { Get } from "../../../comman";
+import { Get, Patch } from "../../../comman";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../../../features/authReducer";
 import moment from "moment";
 import mnMN from "antd/es/calendar/locale/mn_MN";
-
 function MedicineRequests({ PatientId, ListId }) {
     const today = new Date();
     const token = useSelector(selectCurrentToken);
@@ -15,6 +14,70 @@ function MedicineRequests({ PatientId, ListId }) {
     const [spinner, setSpinner] = useState(false);
     const [start, setStart] = useState("");
     const [end, setEnd] = useState("");
+    const [requestId, setRequestId] = useState(Number);
+    const [requestState, setRequestState] = useState("");
+    const handleMenuClick = async (key) => {
+        const conf = {
+            headers: {},
+            params: {}
+        };
+        var data = {};
+        if (Number(key) === 1) {
+            data[requestState] = 'implemented';
+        } else if (Number(key) === 2) {
+            data[requestState] = 'cancelled';
+        } else if (Number(key) === 3) {
+            data[requestState] = 'stopped';
+        } else {
+            data[requestState] = 'refused';
+        }
+        const response = await Patch('medicine-plan/' + requestId, token, conf, data);
+        if (response === 200) {
+            getMedicineRequests(1, 15, start, end);
+        }
+    }
+    const items = (
+        <Menu
+            onClick={(e) => handleMenuClick(e.key)}
+            items={[
+                {
+                    key: 1,
+                    label: (
+                        <p className="bg-[#5cb85c] text-white p-1"><CheckCircleOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Хэрэгжүүлсэн</p>
+                    )
+                },
+                {
+                    key: 2,
+                    label: (
+                        <p className="bg-[#f0ad4e] text-white p-1"><WarningOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Цуцалсан</p>
+                    )
+                },
+                {
+                    key: 3,
+                    label: (
+                        <p className="bg-[#dd4b39] text-white p-1"><CloseCircleOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Зогсоосон</p>
+                    )
+                },
+                {
+                    key: 4,
+                    label: (
+                        <p className="bg-[#5bc0de] text-white p-1"><PauseCircleOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Татгалзсан</p>
+                    )
+                },
+            ]}
+        />
+    );
+    const getRequestInfo = (text) => {
+        if (text === 'implemented') {
+            return (<CheckCircleOutlined style={{ color: "green" }} />)
+        } else if (text === 'cancelled') {
+            return (<WarningOutlined style={{ color: "#f0ad4e" }} />)
+        } else if (text === 'cancelled') {
+            return (<CloseCircleOutlined style={{ color: "#dd4b39" }} />)
+        } else if (text === 'refused') {
+            return (<PauseCircleOutlined style={{ color: "#5bc0de" }} />)
+        }
+    };
     const columns = [
         {
             title: "№",
@@ -44,21 +107,78 @@ function MedicineRequests({ PatientId, ListId }) {
         {
             title: "Өглөө",
             dataIndex: "isMorning",
-            render: (text) => {
-
+            render: (text, row) => {
+                return (
+                    row.medicineRequest?.isMorning && text === null ?
+                        <>
+                            <Dropdown overlay={items} trigger={['click']} arrow={{
+                                pointAtCenter: true,
+                            }}>
+                                <EditOutlined onClick={(e) => {
+                                    e.preventDefault();
+                                    setRequestId(row.id);
+                                    setRequestState('isMorning');
+                                }} />
+                            </Dropdown>
+                        </>
+                        :
+                        getRequestInfo(text)
+                )
             }
         },
         {
             title: "Өдөр",
-            dataIndex: "isAfternoon"
+            dataIndex: "isAfternoon",
+            render: (text, row) => {
+                return (
+                    row.medicineRequest?.isAfternoon && text === null ?
+                        <>
+                            <Dropdown overlay={items} trigger={['click']} arrow={{
+                                pointAtCenter: true,
+                            }}>
+                                <EditOutlined onClick={(e) => { e.preventDefault(); setRequestId(row.id); setRequestState('isAfternoon'); }} />
+                            </Dropdown>
+                        </>
+                        :
+                        getRequestInfo(text)
+                )
+            }
         },
         {
             title: "Орой",
-            dataIndex: "isEvening"
+            dataIndex: "isEvening",
+            render: (text, row) => {
+                return (
+                    row.medicineRequest?.isEvening && text === null ?
+                        <>
+                            <Dropdown overlay={items} trigger={['click']} arrow={{
+                                pointAtCenter: true,
+                            }}>
+                                <EditOutlined onClick={(e) => { e.preventDefault(); setRequestId(row.id); setRequestState('isEvening'); }} />
+                            </Dropdown>
+                        </>
+                        :
+                        getRequestInfo(text)
+                )
+            }
         },
         {
             title: "Шөнө",
-            dataIndex: "isNight"
+            dataIndex: "isNight",
+            render: (text, row) => {
+                return (
+                    row.medicineRequest?.isNight && text === null ?
+                        <>
+                            <Dropdown overlay={items} trigger={['click']} arrow={{
+                                pointAtCenter: true,
+                            }}>
+                                <EditOutlined onClick={(e) => { e.preventDefault(); setRequestId(row.id); setRequestState('isNight'); }} />
+                            </Dropdown>
+                        </>
+                        :
+                        getRequestInfo(text)
+                )
+            }
         },
     ];
     const getMedicineRequests = async (page, pageSize, start, end) => {
@@ -96,20 +216,20 @@ function MedicineRequests({ PatientId, ListId }) {
             </div>
             <div className="w-full p-1">
                 <div className="flex float-left">
-                    <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                        <span className="font-medium mx-1">Төлөв сонгох</span>
+                    <div className="p-1 mr-1 text-sm text-white bg-[#818787] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                        <span className="font-medium mx-1"><EditOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Төлөв сонгох</span>
                     </div>
                     <div className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                        <span className="font-medium mx-1"><CheckCircleOutlined />Хэрэгжүүлсэн</span>
+                        <span className="font-medium mx-1"><CheckCircleOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Хэрэгжүүлсэн</span>
                     </div>
                     <div className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                        <span className="font-medium mx-1"><WarningOutlined />Цуцалсан</span>
+                        <span className="font-medium mx-1"><WarningOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Цуцалсан</span>
                     </div>
                     <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                        <span className="font-medium mx-1"><CloseCircleOutlined style={{ fontSize: 17 }} />Зогсоон</span>
+                        <span className="font-medium mx-1"><CloseCircleOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Зогсоосон</span>
                     </div>
                     <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                        <span className="font-medium mx-1"><PauseCircleOutlined style={{ fontSize: 16 }} />Татгалзсан</span>
+                        <span className="font-medium mx-2"><PauseCircleOutlined style={{ marginTop: "-2px", marginRight: 4 }} />Татгалзсан</span>
                     </div>
                 </div>
                 <div className="float-right">
