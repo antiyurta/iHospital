@@ -146,7 +146,8 @@ function EMR() {
   }
   const getProblems = async (id) => {
     const response = await Get("appointment/show/" + id, token, config);
-    if (response.patientDiagnosis) {
+    var problem = [];
+    if (response.patientDiagnosis.length > 0) {
       var problem = [];
       problem.push({
         doctorId:
@@ -156,8 +157,8 @@ function EMR() {
         diagnose: response.patientDiagnosis,
         inspectionDate: response.createdAt,
       });
-      setProblems([problems, ...problem]);
     }
+    setProblems(problem);
   };
   //
   const usageType = (value) => {
@@ -239,7 +240,7 @@ function EMR() {
                             description={
                               item?.diagnose?.map((diagnose, index) => {
                                 return (
-                                  <p key={index}>
+                                  <p key={index} className="text-black">
                                     {diagnose.diagnose.code + " " + diagnose.diagnose.nameMn}
                                   </p>
                                 );
