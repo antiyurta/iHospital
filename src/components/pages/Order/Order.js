@@ -35,7 +35,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
   const IncomePatientId = useLocation()?.state?.patientId;
   const IncomeCabinetId = useLocation()?.state?.cabinetId;
   const IncomeAppointmentId = useLocation()?.state?.appointmentId;
-  console.log("========>", IncomeAppointmentId);
   const config = {
     headers: {},
     params: {},

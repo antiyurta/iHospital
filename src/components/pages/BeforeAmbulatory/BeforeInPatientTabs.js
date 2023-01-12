@@ -8,111 +8,12 @@ import BST from "./BeforeInPatientTabs/BST";
 import Cardex from "./BeforeInPatientTabs/Cardex";
 import MedicineRequests from "./BeforeInPatientTabs/MedicineRequests";
 import Epicriz from "./Lists/Epicriz";
+import InputOutput from "./BeforeInPatientTabs/InputOutput";
 
 function BeforeInPatientTabs({ patientId, listId, patientData }) {
   const [pageId, setPageId] = useState(Number);
   return (
     <div className="flex flex-wrap">
-      <div className="w-full p-1">
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(1);
-          }}
-          className="mr-2"
-        >
-          Cardex
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(2);
-          }}
-          className="mr-2"
-        >
-          Захиалга
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(3);
-          }}
-          className="mr-2"
-        >
-          VS
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(4);
-          }}
-          className="mr-2"
-        >
-          BST
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(5);
-          }}
-          className="mr-2"
-        >
-          Өвдөлтийн үнэлгээ
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(6);
-          }}
-          className="mr-2"
-        >
-          Биеийн байдлыг үнэлэх хуудас
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(7);
-          }}
-          className="mr-2"
-        >
-          Тэмдэглэл
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            setPageId(8);
-          }}
-          className="mr-2"
-        >
-          Гарах үеийн эпикриз
-        </Button>
-      </div>
-      <div className="w-full p-1">
-        {pageId === 1 && <Cardex PatientId={patientId} ListId={listId} />}
-        {pageId === 2 && (
-          <MedicineRequests PatientId={patientId} ListId={listId} />
-        )}
-        {pageId === 3 && <VitalSign PatientId={patientId} ListId={listId} />}
-        {pageId === 4 && <BST PatientId={patientId} ListId={listId} />}
-        {pageId === 5 && (
-          <PainAssessment PatientId={patientId} ListId={listId} />
-        )}
-        {pageId === 6 && <BodyConditionSheet PatientId={patientId} />}
-        {pageId === 7 && (
-          <NursingNote
-            PatientId={patientId}
-            ListId={listId}
-            PatientData={patientData}
-          />
-        )}
-        {pageId === 8 && (
-          <Epicriz
-            PatientId={patientId}
-            ListId={listId}
-            PatientData={patientData}
-          />
-        )}
-      </div>
       <div className="w-full pb-1">
         <Card
           bordered={false}
@@ -155,7 +56,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
             }}
             className={pageId === 4 ? "button-active m-1" : "m-1"}
           >
-            BST
+            I/O
           </Button>
           <Button
             type="primary"
@@ -164,7 +65,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
             }}
             className={pageId === 5 ? "button-active m-1" : "m-1"}
           >
-            Өвдөлтийн үнэлгээ
+            BST
           </Button>
           <Button
             type="primary"
@@ -173,25 +74,34 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
             }}
             className={pageId === 6 ? "button-active m-1" : "m-1"}
           >
+            Өвдөлтийн үнэлгээ
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              setPageId(7);
+            }}
+            className={pageId === 7 ? "button-active m-1" : "m-1"}
+          >
             Биеийн байдлыг үнэлэх хуудас
           </Button>
           <Button
             type="primary"
             onClick={() => {
-              setPageId(7);
+              setPageId(8);
             }}
-            className={pageId === 7 ? "button-active m-1" : "m-1"}
+            className={pageId === 8 ? "button-active m-1" : "m-1"}
           >
             Тэмдэглэл
           </Button>
           <Button
             type="primary"
             onClick={() => {
-              setPageId(7);
+              setPageId(9);
             }}
-            className={pageId === 7 ? "button-active m-1" : "m-1"}
+            className={pageId === 9 ? "button-active m-1" : "m-1"}
           >
-            Тэмдэглэл
+            Гарах үеийн эпикриз
           </Button>
           <Button
             type="primary"
@@ -271,12 +181,14 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
             <MedicineRequests PatientId={patientId} ListId={listId} />
           )}
           {pageId === 3 && <VitalSign PatientId={patientId} ListId={listId} />}
-          {pageId === 4 && <BST PatientId={patientId} ListId={listId} />}
-          {pageId === 5 && (
+          {pageId === 4 && <InputOutput PatientId={patientId} ListId={listId} />}
+          {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
+          {pageId === 6 && (
             <PainAssessment PatientId={patientId} ListId={listId} />
           )}
-          {pageId === 6 && <BodyConditionSheet PatientId={patientId} />}
-          {pageId === 7 && <NursingNote PatientId={patientId} />}
+          {pageId === 7 && <BodyConditionSheet PatientId={patientId} />}
+          {pageId === 8 && <NursingNote PatientId={patientId} />}
+          {pageId === 9 && <Epicriz PatientId={patientId} ListId={listId} PatientData={patientData} />}
         </Card>
       </div>
     </div>

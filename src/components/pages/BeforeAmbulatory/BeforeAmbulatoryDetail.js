@@ -137,32 +137,18 @@ function BeforeAmbulatoryDetail() {
           </Card>
         </div>
         <div className="w-full p-1">
-          <Card
-            bordered={false}
-            title=""
-            className="header-solid h-full"
-            bodyStyle={{
-              paddingTop: 0,
-              paddingBottom: 16,
-              minHeight: 400,
-              maxHeight: 600,
-              overflowX: "hidden",
-              overflowY: "scroll",
-            }}
-          >
-            {location?.state?.type === 0 ? (
-              <BeforeAmbulatoryTabs
-                patientId={selectedPatient?.id}
-                listId={location.state?.appointmentId}
-              />
-            ) : (
-              <BeforeInPatientTabs
-                patientId={selectedPatient?.id}
-                listId={location.state?.appointmentId}
-                patientData={selectedPatient}
-              />
-            )}
-          </Card>
+          {location?.state?.type === 0 ? (
+            <BeforeAmbulatoryTabs
+              patientId={selectedPatient?.id}
+              listId={location.state?.appointmentId}
+            />
+          ) : (
+            <BeforeInPatientTabs
+              patientId={selectedPatient?.id}
+              listId={location.state?.appointmentId}
+              patientData={selectedPatient}
+            />
+          )}
         </div>
       </div>
     </div>

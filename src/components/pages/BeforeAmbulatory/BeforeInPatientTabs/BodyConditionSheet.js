@@ -604,7 +604,96 @@ function BodyConditionSheet({ PatientId }) {
                             {
                                 sheets?.map((sheet, index) => {
                                     return (
+                                        <td key={index}>{sheet.daily?.whead}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Үс самнасан</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
                                         <td key={index}>{sheet.daily?.hair}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Сахал хуссан</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.beard}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Хувцас сольсон</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.clothes}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Хөл гарын хумс</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.nails}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Ариун цэвэр</p>
+                                <p>Амны хөндий шүд</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.tooth}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Хооллосон</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.food}</td>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th className="font-bold text-sm text-start">
+                                <p>Аюулгүй байдал</p>
+                            </th>
+                            {
+                                sheets?.map((sheet, index) => {
+                                    return (
+                                        <td key={index}>{sheet.daily?.security}</td>
                                     )
                                 })
                             }
