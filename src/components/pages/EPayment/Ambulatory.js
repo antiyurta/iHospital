@@ -334,6 +334,7 @@ function Ambulatory() {
             <Order
               isDoctor={false}
               selectedPatient={selectedPatient}
+              usageType="OUT"
               categories={categories}
               save={saveOrder}
             />
