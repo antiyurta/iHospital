@@ -9,8 +9,9 @@ import Cardex from "./BeforeInPatientTabs/Cardex";
 import MedicineRequests from "./BeforeInPatientTabs/MedicineRequests";
 import Epicriz from "./Lists/Epicriz";
 import InputOutput from "./BeforeInPatientTabs/InputOutput";
+import VasculerTube from "./BeforeInPatientTabs/VasculerTube";
 
-function BeforeInPatientTabs({ patientId, listId, patientData }) {
+function BeforeInPatientTabs({ patientId, listId, patientData, departmentName }) {
   const [pageId, setPageId] = useState(Number);
   return (
     <div className="flex flex-wrap">
@@ -106,11 +107,11 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
           <Button
             type="primary"
             onClick={() => {
-              setPageId(7);
+              setPageId(10);
             }}
             className={pageId === 7 ? "button-active m-1" : "m-1"}
           >
-            Тэмдэглэл
+            Судасны гуурстай холбоотой тандалт
           </Button>
           <Button
             type="primary"
@@ -181,14 +182,15 @@ function BeforeInPatientTabs({ patientId, listId, patientData }) {
             <MedicineRequests PatientId={patientId} ListId={listId} />
           )}
           {pageId === 3 && <VitalSign PatientId={patientId} ListId={listId} />}
-          {pageId === 4 && <InputOutput PatientId={patientId} ListId={listId} />}
+          {pageId === 4 && <InputOutput PatientId={patientId} ListId={listId} PatientData={patientData} />}
           {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
           {pageId === 6 && (
             <PainAssessment PatientId={patientId} ListId={listId} />
           )}
-          {pageId === 7 && <BodyConditionSheet PatientId={patientId} />}
+          {pageId === 7 && <BodyConditionSheet PatientId={patientId} ListId={listId} PatientData={patientData} />}
           {pageId === 8 && <NursingNote PatientId={patientId} />}
           {pageId === 9 && <Epicriz PatientId={patientId} ListId={listId} PatientData={patientData} />}
+          {pageId === 10 && <VasculerTube PatientData={patientData} />}
         </Card>
       </div>
     </div>

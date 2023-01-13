@@ -147,6 +147,7 @@ function BeforeAmbulatoryDetail() {
               patientId={selectedPatient?.id}
               listId={location.state?.appointmentId}
               patientData={selectedPatient}
+              departmentName={location.state?.departmentName}
             />
           )}
         </div>

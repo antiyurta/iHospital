@@ -191,20 +191,6 @@ input[type="number"] {
   vertical-align: middle;
 }
 
-.page {
-  width: 21cm;
-  min-height: 29.7cm;
-  padding-top: 0.8cm;
-  padding-bottom: 0.8cm;
-  padding-right: 1cm;
-  padding-left: 1cm;
-  /* padding: 1cm; */
-  border: 1px #d3d3d3 solid;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
 .page .ant-form label {
   font-size: 13px !important;
 }
@@ -233,11 +219,6 @@ input[type="number"] {
   border-radius: 5px;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-@page {
-  size: A4;
-  margin: 0;
 }
 
 .ant-btn {
@@ -351,12 +332,6 @@ input::-webkit-inner-spin-button {
 }
 
 @media print {
-
-  html,
-  body {
-    /* height: auto; */
-  }
-
   p {
     /* font-family: 'Times New Roman', Times, serif; */
     font-family: Arial, Helvetica, sans-serif;
@@ -452,4 +427,80 @@ table .formTable tr>td {
 
 .ant-table td {
   white-space: nowrap !important;
+}
+
+.IO thead>tr>th {
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+
+table {
+  border-color: black !important;
+  color: black;
+}
+
+.bcp thead>tr>th {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 7px !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  color: black;
+}
+
+.bcp thead>tr>td {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 7px !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+
+.bcp thead>tr>td>p {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 7px !important;
+  vertical-align: middle !important;
+  text-align: start !important;
+}
+
+.bcp thead>tr>td>.ff>p {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 7px !important;
+  vertical-align: middle !important;
+  text-align: start !important;
+}
+
+.bcp2 thead>tr>th {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  color: black;
+}
+
+.bcp2 thead>tr>td {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+
+.bcp2 thead>tr>td>p {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  vertical-align: middle !important;
+  text-align: start !important;
+}
+
+.bcp2 thead>tr>td>.ff>p {
+  padding: 0px !important;
+  font-weight: 400 !important;
+  font-size: 6px !important;
+  vertical-align: middle !important;
+  text-align: start !important;
 }

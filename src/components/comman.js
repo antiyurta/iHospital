@@ -145,3 +145,22 @@ export const openNofi = (type, message, description) => {
 export const numberToCurrency = (amount) => {
     return amount?.toLocaleString('mn-MN', { style: 'currency', currency: 'MNT' })
 }
+
+export const getAge = (registerNumber) => {
+    if (registerNumber != undefined) {
+        const date = new Date();
+        let year = parseInt(registerNumber.substring(2, 4));
+        let month = parseInt(registerNumber.substring(4, 6));
+        if (month > 20 && month < 33) {
+            year += 2000;
+            month -= 20;
+        } else {
+            year += 1900;
+        }
+        const currentYear = date.getFullYear();
+        const age = currentYear - year;
+        return age;
+    } else {
+        return null;
+    }
+}

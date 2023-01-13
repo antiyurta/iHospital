@@ -88,7 +88,7 @@ function Index({ type, isDoctor }) {
             }
         }
     };
-    const getENR = (listId, id, cabinetId, inspectionType, isPayment, regNum) => {
+    const getENR = (listId, id, departmentId, inspectionType, isPayment, regNum, roomNumber, departmentName) => {
         // status heregteii anhan dawtan
         // tolbor shalgah
         if (isPayment === false) {
@@ -98,10 +98,12 @@ function Index({ type, isDoctor }) {
                 state: {
                     appointmentId: listId,
                     patientId: id,
-                    cabinetId,
+                    dapartmentId: departmentId,
                     inspection: inspectionType,
                     regNum,
                     type: type,
+                    roomNumber: roomNumber,
+                    departmentName: departmentName
                 },
             });
         }
@@ -562,10 +564,12 @@ function Index({ type, isDoctor }) {
                                                 getENR(
                                                     row.id,
                                                     row.patientId,
-                                                    row.cabinetId,
+                                                    row.inDepartmentId,
                                                     row.inspectionType,
                                                     row.isPayment,
                                                     row.patient?.registerNumber,
+                                                    row.rooms?.roomNumber,
+                                                    row.structure.name,
                                                 )
                                         }
                                     }

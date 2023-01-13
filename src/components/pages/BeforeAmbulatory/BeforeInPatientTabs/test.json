@@ -1,0 +1,130 @@
+{
+    "data": [
+        {
+            "date": "2023-01-07",
+            "inputs": [
+                {
+                    "how": "Амаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Гуурсаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Судсаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Бусад",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                }
+            ],
+            "outputs": [
+                {
+                    "how": "Шээсээр",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Өтгөнөөр",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Гуурсаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Бусад /Бөөлжүүлэх/",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                }
+            ]
+        },
+        {
+            "date": "2023-01-08",
+            "inputs": [
+                {
+                    "how": "Амаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Гуурсаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Судсаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Бусад",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                }
+            ],
+            "outputs": [
+                {
+                    "how": "Шээсээр",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Өтгөнөөр",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Гуурсаар",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                },
+                {
+                    "how": "Бусад /Бөөлжүүлэх/",
+                    "morning": 1,
+                    "afternoon": 2,
+                    "evening": 3,
+                    "total": 6
+                }
+            ]
+        }
+    ]
+}
