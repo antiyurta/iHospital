@@ -10,8 +10,16 @@ import MedicineRequests from "./BeforeInPatientTabs/MedicineRequests";
 import Epicriz from "./Lists/Epicriz";
 import InputOutput from "./BeforeInPatientTabs/InputOutput";
 import VasculerTube from "./BeforeInPatientTabs/VasculerTube";
+import Acting from "./BeforeInPatientTabs/Acting";
+import NursingLog from "./BeforeInPatientTabs/NursingLog";
 
-function BeforeInPatientTabs({ patientId, listId, patientData, departmentName }) {
+function BeforeInPatientTabs({
+  patientId,
+  listId,
+  patientData,
+  departmentName,
+  departmentId,
+}) {
   const [pageId, setPageId] = useState(Number);
   return (
     <div className="flex flex-wrap">
@@ -116,20 +124,20 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName })
           <Button
             type="primary"
             onClick={() => {
-              setPageId(7);
+              setPageId(11);
             }}
-            className={pageId === 7 ? "button-active m-1" : "m-1"}
+            className={pageId === 11 ? "button-active m-1" : "m-1"}
           >
-            Тэмдэглэл
+            Acting
           </Button>
           <Button
             type="primary"
             onClick={() => {
-              setPageId(7);
+              setPageId(12);
             }}
-            className={pageId === 7 ? "button-active m-1" : "m-1"}
+            className={pageId === 12 ? "button-active m-1" : "m-1"}
           >
-            Тэмдэглэл
+            Nursing Log
           </Button>
           <Button
             type="primary"
@@ -182,15 +190,49 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName })
             <MedicineRequests PatientId={patientId} ListId={listId} />
           )}
           {pageId === 3 && <VitalSign PatientId={patientId} ListId={listId} />}
-          {pageId === 4 && <InputOutput PatientId={patientId} ListId={listId} PatientData={patientData} />}
+          {pageId === 4 && (
+            <InputOutput
+              PatientId={patientId}
+              ListId={listId}
+              PatientData={patientData}
+            />
+          )}
           {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
           {pageId === 6 && (
             <PainAssessment PatientId={patientId} ListId={listId} />
           )}
-          {pageId === 7 && <BodyConditionSheet PatientId={patientId} ListId={listId} PatientData={patientData} />}
+          {pageId === 7 && (
+            <BodyConditionSheet
+              PatientId={patientId}
+              ListId={listId}
+              PatientData={patientData}
+            />
+          )}
           {pageId === 8 && <NursingNote PatientId={patientId} />}
-          {pageId === 9 && <Epicriz PatientId={patientId} ListId={listId} PatientData={patientData} />}
-          {pageId === 10 && <VasculerTube PatientData={patientData} />}
+          {pageId === 9 && (
+            <Epicriz
+              PatientId={patientId}
+              ListId={listId}
+              PatientData={patientData}
+            />
+          )}
+          {pageId === 10 && (
+            <VasculerTube PatientData={patientData} ListId={listId} />
+          )}
+          {pageId === 11 && (
+            <Acting
+              PatientData={patientData}
+              ListId={listId}
+              DepartmentId={departmentId}
+            />
+          )}
+          {pageId === 12 && (
+            <NursingLog
+              PatientData={patientData}
+              ListId={listId}
+              DepartmentId={departmentId}
+            />
+          )}
         </Card>
       </div>
     </div>
