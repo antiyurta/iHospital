@@ -434,9 +434,18 @@ table .formTable tr>td {
   text-align: center !important;
 }
 
-table {
-  border-color: black !important;
-  color: black;
+.bcp thead>tr {
+  border-color: #000 !important;
+}
+.bcp tbody>tr {
+  border-color: #000 !important;
+}
+
+.bcp2 thead>tr {
+  border-color: #000 !important;
+}
+.bcp2 tbody>tr {
+  border-color: #000 !important;
 }
 
 .bcp thead>tr>th {
@@ -445,7 +454,7 @@ table {
   font-size: 7px !important;
   vertical-align: middle !important;
   text-align: center !important;
-  color: black;
+  color: black !important;
 }
 
 .bcp thead>tr>td {
