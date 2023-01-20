@@ -1,8 +1,4 @@
 function RecentRecipe() {
-    return (
-        <div>
-            Өмнөх жор
-        </div>
-    )
+   return <div>Өмнөх жор</div>;
 }
 export default RecentRecipe;

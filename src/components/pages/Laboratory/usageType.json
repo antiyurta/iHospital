@@ -1,22 +1,22 @@
 [
-    {
-        "label": "Амбулатори",
-        "value": "OUT"
-    },
-    {
-        "label": "Хэвтэн",
-        "value": "IN"
-    },
-    {
-        "label": "Өдрийн эмчилгээ",
-        "value": "DAY_TREATMENT"
-    },
-    {
-        "label": "Уламжлалт",
-        "value": "TRADITIONAL"
-    },
-    {
-        "label": "Бүгд",
-        "value": "ALL"
-    }
+   {
+      "label": "Амбулатори",
+      "value": "OUT"
+   },
+   {
+      "label": "Хэвтэн",
+      "value": "IN"
+   },
+   {
+      "label": "Өдрийн эмчилгээ",
+      "value": "DAY_TREATMENT"
+   },
+   {
+      "label": "Уламжлалт",
+      "value": "TRADITIONAL"
+   },
+   {
+      "label": "Бүгд",
+      "value": "ALL"
+   }
 ]

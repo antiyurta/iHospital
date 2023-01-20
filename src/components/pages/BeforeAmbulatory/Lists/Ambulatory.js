@@ -1,6 +1,6 @@
-import Index from "./Index/Index";
+import Index from './Index/Index';
 
 function Ambulatory() {
-  return <Index type={0} isDoctor={true} />
+   return <Index type={0} isDoctor={true} />;
 }
 export default Ambulatory;

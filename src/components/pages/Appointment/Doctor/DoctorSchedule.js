@@ -1,8 +1,6 @@
-import Index from "../Schedule/Index";
+import Index from '../Schedule/Index';
 
 function DoctorSchedule() {
-    return (
-        <Index type={1} />
-    )
+   return <Index type={1} />;
 }
 export default DoctorSchedule;

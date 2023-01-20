@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function CalendarBed() {
-  return <div>CalendarBed</div>;
+   return <div>CalendarBed</div>;
 }
 
 export default CalendarBed;
