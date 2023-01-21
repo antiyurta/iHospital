@@ -1,10 +1,10 @@
-import Index from "../Schedule/Index";
+import Index from '../Schedule/Index';
 
 function TreatmentSchedule() {
-    return (
-        <>
-            <Index type={2} />
-        </>
-    )
+   return (
+      <>
+         <Index type={2} />
+      </>
+   );
 }
 export default TreatmentSchedule;

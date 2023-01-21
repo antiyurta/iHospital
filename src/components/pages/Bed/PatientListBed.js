@@ -95,107 +95,37 @@ function PatientListBed() {
       staticData: (data) => {
         return <>{data?.substr(0, 1)}.</>;
       },
-      col: 6,
-    },
-    {
-      index: ["patient", "firstName"],
-      label: "Овог Нэр",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: ["rooms", "roomNumber"],
-      label: "Өрөө",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: ["patient", "cardNumber"],
-      label: "Картын дугаар",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: ["patient", "registerNumber"],
-      label: "Регистр",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: ["patient", "genderType"],
-      label: "Хүйс",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: ["patient", "age"],
-      label: "Нас",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: ["structure", "name"],
-      label: "Хэвтэх тасаг",
-      isView: true,
-      input: "input",
-      col: 24,
-      relation: true,
-    },
-    {
-      index: "startDate",
-      label: "Хэвтэх өдөр",
-      isView: true,
-      input: "date",
-      col: 24,
-      staticData: (data) => {
-        return <>{data?.substr(0, 10)}</>;
+      {
+         index: ['patient', 'firstName'],
+         label: 'Овог Нэр',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
       },
-    },
-    {
-      index: "endDate",
-      label: "Гарах өдөр",
-      isView: true,
-      input: "date",
-      col: 24,
-      staticData: (data) => {
-        return <>{data?.substr(0, 10)}</>;
+      {
+         index: ['rooms', 'roomNumber'],
+         label: 'Өрөө',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
       },
-    },
-    {
-      index: "outDate",
-      label: "Гарсан өдөр",
-      isView: true,
-      input: "date",
-      col: 24,
-      staticData: (data) => {
-        return <>{data?.substr(0, 10)}</>;
+      {
+         index: ['patient', 'cardNumber'],
+         label: 'Картын дугаар',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
       },
-    },
-    {
-      index: "process",
-      label: "Захиалгын төрөл",
-      isView: true,
-      input: "input",
-      staticData: (type) => {
-        return (
-          <img
-            src={require(`../../../assets/bed/${orderType[type].img}`)}
-            width="20"
-            className="inline-block"
-          />
-        );
+      {
+         index: ['patient', 'registerNumber'],
+         label: 'Регистр',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
       },
       col: 24,
     },
@@ -377,36 +307,11 @@ function PatientListBed() {
         <Col span={2} className="contents">
           {orderType.map((tag) => {
             return (
-              <div
-                key={tag.value}
-                className="border-blue-400 rounded-sm border mr-2 mb-2"
-              >
-                <CheckableTag
-                  checked={selectedTags.includes(tag.value)}
-                  onChange={(checked) => {
-                    handleChangeTag(tag.value, checked);
-                  }}
-                  style={{
-                    display: "flex",
-                    fontSize: 14,
-                    width: "100%",
-                  }}
-                >
-                  <div
-                    className="mr-2"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={require(`../../../assets/bed/${tag.img}`)}
-                      width="20"
-                    />
-                  </div>
-                  {tag.label}
-                </CheckableTag>
-              </div>
+               <img
+                  src={require(`../../../assets/bed/${orderType[type].img}`)}
+                  width="20"
+                  className="inline-block"
+               />
             );
           })}
         </Col>

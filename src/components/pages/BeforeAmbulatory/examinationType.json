@@ -1,32 +1,32 @@
 [
-    {
-        "code" : "first",
-        "label": "Анхан",
-        "value": 1
-    },
-    {
-        "code" : "second",
-        "label": "Давтан",
-        "value": 2
-    },
-    {
-        "code" : "prevent",
-        "label": "Урьдчилан сэргийлэх",
-        "value": 3
-    },
-    {
-        "code" : "home",
-        "label": "Гэрийн эргэлт",
-        "value": 4
-    },
-    {
-        "code" : "activeControl",
-        "label": "Идэвхтэй хяналт",
-        "value": 5
-    },
-    {
-        "code" : "callBy",
-        "label": "Дуудлагаар",
-        "value": 6
-    }
+   {
+      "code": "first",
+      "label": "Анхан",
+      "value": 1
+   },
+   {
+      "code": "second",
+      "label": "Давтан",
+      "value": 2
+   },
+   {
+      "code": "prevent",
+      "label": "Урьдчилан сэргийлэх",
+      "value": 3
+   },
+   {
+      "code": "home",
+      "label": "Гэрийн эргэлт",
+      "value": 4
+   },
+   {
+      "code": "activeControl",
+      "label": "Идэвхтэй хяналт",
+      "value": 5
+   },
+   {
+      "code": "callBy",
+      "label": "Дуудлагаар",
+      "value": 6
+   }
 ]

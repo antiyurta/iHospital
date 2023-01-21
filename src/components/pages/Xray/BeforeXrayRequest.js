@@ -1,6 +1,6 @@
-import IndexBefore from "../XRayExo/IndexBefore";
+import IndexBefore from '../XRayExo/IndexBefore';
 
 function BeforeXrayRequest() {
-    return <IndexBefore type={0} />
+   return <IndexBefore type={0} />;
 }
 export default BeforeXrayRequest;

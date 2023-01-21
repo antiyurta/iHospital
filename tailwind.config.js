@@ -1,15 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  important: true,
-  content: [
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        montserrat: ['Montserrat', 'sans-serif']
+   important: true,
+   content: ['./src/**/*.{js,ts,jsx,tsx}'],
+   theme: {
+      extend: {
+         fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif']
+         }
       }
-    },
-  },
-  plugins: [],
-}
+   },
+   plugins: [require('tailwindcss/nesting')]
+};
