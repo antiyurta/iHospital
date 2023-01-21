@@ -92,10 +92,10 @@ function PatientListBed() {
          isView: true,
          input: 'input',
          relation: true,
-         col: 6,
          staticData: (data) => {
             return <>{data?.substr(0, 1)}.</>;
-         }
+         },
+         col: 6
       },
       {
          index: ['patient', 'firstName'],
@@ -128,6 +128,76 @@ function PatientListBed() {
          input: 'input',
          col: 24,
          relation: true
+      },
+      {
+         index: ['patient', 'genderType'],
+         label: 'Хүйс',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
+      },
+      {
+         index: ['patient', 'age'],
+         label: 'Нас',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
+      },
+      {
+         index: ['structure', 'name'],
+         label: 'Хэвтэх тасаг',
+         isView: true,
+         input: 'input',
+         col: 24,
+         relation: true
+      },
+      {
+         index: 'startDate',
+         label: 'Хэвтэх өдөр',
+         isView: true,
+         input: 'date',
+         col: 24,
+         staticData: (data) => {
+            return <>{data?.substr(0, 10)}</>;
+         }
+      },
+      {
+         index: 'endDate',
+         label: 'Гарах өдөр',
+         isView: true,
+         input: 'date',
+         col: 24,
+         staticData: (data) => {
+            return <>{data?.substr(0, 10)}</>;
+         }
+      },
+      {
+         index: 'outDate',
+         label: 'Гарсан өдөр',
+         isView: true,
+         input: 'date',
+         col: 24,
+         staticData: (data) => {
+            return <>{data?.substr(0, 10)}</>;
+         }
+      },
+      {
+         index: 'process',
+         label: 'Захиалгын төрөл',
+         isView: true,
+         input: 'input',
+         staticData: (type) => {
+            return (
+               <img
+                  src={require(`../../../assets/bed/${orderType[type].img}`)}
+                  width="20"
+                  className="inline-block"
+               />
+            );
+         },
+         col: 24
       },
       {
          index: 'id',
@@ -307,11 +377,36 @@ function PatientListBed() {
             <Col span={2} className="contents">
                {orderType.map((tag) => {
                   return (
-                     <img
-                        src={require(`../../../assets/bed/${orderType[type].img}`)}
-                        width="20"
-                        className="inline-block"
-                     />
+                     <div
+                        key={tag.value}
+                        className="border-blue-400 rounded-sm border mr-2 mb-2"
+                     >
+                        <CheckableTag
+                           checked={selectedTags.includes(tag.value)}
+                           onChange={(checked) => {
+                              handleChangeTag(tag.value, checked);
+                           }}
+                           style={{
+                              display: 'flex',
+                              fontSize: 14,
+                              width: '100%'
+                           }}
+                        >
+                           <div
+                              className="mr-2"
+                              style={{
+                                 display: 'flex',
+                                 alignItems: 'center'
+                              }}
+                           >
+                              <img
+                                 src={require(`../../../assets/bed/${tag.img}`)}
+                                 width="20"
+                              />
+                           </div>
+                           {tag.label}
+                        </CheckableTag>
+                     </div>
                   );
                })}
             </Col>

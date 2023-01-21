@@ -135,31 +135,6 @@ const DepartmentBed = (props) => {
       // console.log("response get Ordered Patient ====>", response);
    };
 
-   //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт авах
-   const getOrderedPatient = async () => {
-      config.params.process = '0,1'; //Хэвтэх захиалгатай = 0, Хэвтэх зөвшөөрөлтэй өвтөн = 1
-      const response = await Get('service/inpatient-request', token, config);
-      if (response.data.length !== 0) {
-         // console.log("response get Ordered Patient ====>", response.data);
-         setOrderedPatientList(response.data);
-      }
-   };
-
-   //Орон дээр хэвтэж буй өвчтөний мэдээлэл
-   const getPatientInformationOfBed = async (bed_data) => {
-      const response = await Get(
-         `service/inpatient-request/bedPatient/${bed_data.id}`,
-         token,
-         config
-      );
-      if (response) {
-         setPatientInfoOfBed(response);
-      } else {
-         setPatientInfoOfBed('');
-      }
-      // console.log("response get Ordered Patient ====>", response);
-   };
-
    useEffect(() => {
       department === '' && getDepartment();
       if (selectedRoomBeds !== '') {
