@@ -154,7 +154,13 @@ const DepartmentBed = (props) => {
       rooms?.map((el) => {
         if (el.value === selectedRoom) {
           el.beds.map((el, bedIndex) => {
-            setBeds((beds) => [...beds, { label: el.bedNumber, value: el.id }]);
+            if (el.status === 3) {
+              //Зөвхөн сул ор харуулах
+              setBeds((beds) => [
+                ...beds,
+                { label: el.bedNumber, value: el.id },
+              ]);
+            }
           });
         }
       });
@@ -217,6 +223,7 @@ const DepartmentBed = (props) => {
     setSelectedRoom(value);
   };
   const handleChangeBed = (value) => {
+    console.log("VAL", value);
     setSelectedNewBed(value);
   };
 

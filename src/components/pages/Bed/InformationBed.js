@@ -25,6 +25,7 @@ import { selectCurrentToken } from "../../../features/authReducer";
 import { Get, Patch } from "../../comman";
 import Spinner from "react-bootstrap/Spinner";
 import orderType from "./orderType.json";
+import roomType from "./roomType.json";
 import { useLocation } from "react-router-dom";
 
 const InformationBed = (props) => {
@@ -391,7 +392,11 @@ const InformationBed = (props) => {
                           </p>
                           <p style={styles.total}>
                             {el.roomNumber} -{" "}
-                            {el.isVip ? "VIP өрөө" : "Энгийн өрөө"}
+                            {roomType.map((item, index) => {
+                              if (item.value === el.roomType) {
+                                return <span key={index}>{item.label}</span>;
+                              }
+                            })}
                           </p>
                         </div>
                         <p style={styles.total}>Орны тоо: {el.beds.length}</p>
