@@ -1,23 +1,21 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Modal, Pagination } from 'antd';
+import { Modal, Table } from 'antd';
 import { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get, openNofi } from '../../comman';
+import { DefualtGet, openNofi } from '../../comman';
 
 function Medicine({ isOpen, isClose, handleclick }) {
    const token = useSelector(selectCurrentToken);
+   const [loading, setLoading] = useState(false);
    const [medicines, setMedicines] = useState([]);
    const [selectedMedicines, setSelectedMedicines] = useState([]);
-   const [meta, setMeta] = useState({});
    const config = {
       headers: {},
       params: {}
    };
-   const getMedicine = async (page, limit) => {
-      // config.params.page = page;
-      // config.params.limit = limit;
+   const getMedicine = async () => {
+      setLoading(true);
       config.params.depId = 15;
       config.params.typeId = 2;
       const response = await DefualtGet(
@@ -28,6 +26,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
       if (response) {
          setMedicines(response);
       }
+      setLoading(false);
    };
    const add = (medicine) => {
       const state = selectedMedicines.includes(medicine);
@@ -43,8 +42,50 @@ function Medicine({ isOpen, isClose, handleclick }) {
       arr.splice(index, 1);
       setSelectedMedicines(arr);
    };
+   const columns = [
+      {
+         title: 'Код',
+         dataIndex: 'barcode'
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'm_name'
+      },
+      {
+         title: 'Тоо ширхэг',
+         dataIndex: 'countC2'
+      }
+   ];
+   const selectedColumns = [
+      {
+         title: 'Код',
+         dataIndex: 'barcode'
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'm_name'
+      },
+      {
+         title: 'Үйлдэл',
+         render: (_, row, rowIndex) => {
+            return (
+               <p
+                  onClick={() => remove(rowIndex)}
+                  className="hover:cursor-pointer"
+               >
+                  <CloseOutlined
+                     style={{
+                        color: 'red',
+                        verticalAlign: 'middle'
+                     }}
+                  />
+               </p>
+            );
+         }
+      }
+   ];
    useEffect(() => {
-      getMedicine(1, 20);
+      getMedicine();
    }, [isOpen]);
 
    return (
@@ -64,91 +105,38 @@ function Medicine({ isOpen, isClose, handleclick }) {
             <div className="flex flex-wrap">
                <div className="w-2/3">
                   <div className="p-2">
-                     <div
-                        className="table-responsive"
-                        id="style-8"
-                        style={{ maxHeight: '500px' }}
-                     >
-                        <Table
-                           className="ant-border-space"
-                           style={{ width: '100%' }}
-                        >
-                           <thead className="ant-table-thead bg-slate-200">
-                              <tr>
-                                 <th className="font-bold text-sm align-middle">
-                                    Код
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Нэр
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Тоо ширхэг
-                                 </th>
-                              </tr>
-                           </thead>
-                           <tbody className="ant-table-tbody p-0">
-                              {medicines.map((item, index) => {
-                                 return (
-                                    <tr
-                                       onDoubleClick={() => add(item)}
-                                       key={index}
-                                       className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
-                                    >
-                                       <td>{item.barcode}</td>
-                                       <td>{item.m_name}</td>
-                                       <td>{item.countC2}</td>
-                                    </tr>
-                                 );
-                              })}
-                           </tbody>
-                        </Table>
-                     </div>
+                     <Table
+                        rowKey={'id'}
+                        bordered
+                        loading={loading}
+                        rowClassName="hover: cursor-pointer"
+                        scroll={{
+                           y: 200
+                        }}
+                        onRow={(row, rowIndex) => {
+                           return {
+                              onDoubleClick: () => {
+                                 add(row);
+                              }
+                           };
+                        }}
+                        locale={{ emptyText: 'Мэдээлэл байхгүй' }}
+                        columns={columns}
+                        dataSource={medicines}
+                        pagination={false}
+                     />
                   </div>
                </div>
                <div className="w-1/3">
                   <div className="p-2">
-                     <div
-                        className="table-responsive"
-                        id="style-8"
-                        style={{ maxHeight: '500px' }}
-                     >
-                        <Table
-                           className="ant-border-space"
-                           style={{ width: '100%' }}
-                        >
-                           <thead className="ant-table-thead bg-slate-200">
-                              <tr>
-                                 <th className="font-bold text-sm align-middle">
-                                    Нэр
-                                 </th>
-                                 <th></th>
-                              </tr>
-                           </thead>
-                           <tbody className="ant-table-tbody p-0">
-                              {selectedMedicines.map((item, index) => {
-                                 return (
-                                    <tr
-                                       key={index}
-                                       className="ant-table-row ant-table-row-level-0"
-                                    >
-                                       <td>{item.m_name}</td>
-                                       <td
-                                          onDoubleClick={() => remove(index)}
-                                          className="hover:cursor-pointer"
-                                       >
-                                          <CloseOutlined
-                                             style={{
-                                                color: 'red',
-                                                verticalAlign: 'middle'
-                                             }}
-                                          />
-                                       </td>
-                                    </tr>
-                                 );
-                              })}
-                           </tbody>
-                        </Table>
-                     </div>
+                     <Table
+                        rowKey={'id'}
+                        bordered
+                        locale={{ emptyText: 'Мэдээлэл байхгүй' }}
+                        columns={selectedColumns}
+                        dataSource={selectedMedicines}
+                        pagination={false}
+                     />
                   </div>
                </div>
             </div>

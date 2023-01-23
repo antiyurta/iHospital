@@ -12,6 +12,7 @@ import Dermatologist from './Dermatologist/Index'; // арьсны эмч
 import Hematologist from './Hematologist/Index'; // цусны эмч
 import Ophthalmologist from './Ophthalmologist/Index'; // нүдний эмч
 import Gastroenterologist from './Gastroenterologist/Index'; // хоол боловсруулах эрхтний
+import Neurologist from './Neurologist/Index'; // Мэдрэлийн эмчийн үзлэг
 
 function Index({ id, data }) {
    /// id nas depId ym ennes hamarch hewleh maygt oor2 bn
@@ -21,7 +22,7 @@ function Index({ id, data }) {
          {/* {data.inpatientRequestId === 31 && <Rebuild data={data} />} */}
          {/* {id === 31 && <Rebuild data={data} />} */}
          {/* {id === 2 && <Endocrinology data={data} />} */}
-         <Gastroenterologist data={data} />
+         <Neurologist data={data} />
       </>
    );
 }

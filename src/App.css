@@ -601,38 +601,6 @@ table .formTable tr > td {
    font-size: 11px !important;
 }
 
-.document .ant-form-item-row {
-   min-height: 22px !important;
-}
-
-.document2 .ant-form-item-row {
-   min-height: 20px !important;
-}
-
-.document .ant-form-item-control {
-   min-height: 22px !important;
-}
-
-.document2 .ant-form-item-control {
-   min-height: 20px !important;
-}
-
-.document .ant-form-item-control-input {
-   min-height: 22px !important;
-}
-
-.document2 .ant-form-item-control-input {
-   min-height: 20px !important;
-}
-
-.document .ant-form-item-control-input-content {
-   min-height: 22px !important;
-}
-
-.document2 .ant-form-item-control-input-content {
-   min-height: 20px !important;
-}
-
 .document thead > tr,
 .document2 thead > tr {
    border-color: #000 !important;

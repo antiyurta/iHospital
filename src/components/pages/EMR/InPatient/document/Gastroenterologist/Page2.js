@@ -181,105 +181,452 @@ function Page2() {
                   <tr>
                      <td>
                         <p className="font-bold">Улаан хоолойн</p>
-                        <p className="inline-flex items-center">
-                           Салстын өнгө:
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Салстын өнгө:</p>
                            <Form.Item
                               name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
                               className="mb-0"
                            >
-                              <Input />
+                              <Input style={{ height: 22 }} />
                            </Form.Item>
-                        </p>
-                        <p className="inline-flex items-center">
-                           Хаван:
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хаван:</p>
                            <Form.Item
                               name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
                               className="mb-0"
                            >
-                              <Input />
+                              <Input style={{ height: 22 }} />
                            </Form.Item>
-                        </p>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Z шугам:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
-                                 Хөдөлгөөн ____
-                              </Checkbox>
-                              <Checkbox value={'Томорсон (зүүн, баруун)'}>
-                                 Шалбархай - хэмжээ
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Тоо
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хөдөлгөөн:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Шалбархай-хэмжээ:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>тогтолцоо:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
-                                 Байрлал ____
-                              </Checkbox>
-                              <Checkbox value={'Томорсон (зүүн, баруун)'}>
-                                 Хэлбэр ____
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Өнгөр
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Байрлал:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хэлбэр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Өнгөр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
                      </td>
                   </tr>
                   <tr>
                      <td>
                         <p className="font-bold">Ходоод</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
-                                 Амсар - салстын өнгө
-                              </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
-                                 Хаван
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Хөдөлгөөн
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Өнгөр
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Өнгөр
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Өнгөр
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Өнгөр
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Амсар-салстын өнгө:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хаван:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хөдөлгөөн:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Шалбархай-хэмжээ:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хэлбэр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Өнгөр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Тоо:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Байрлал:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Их бие-салстын өнгө:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хаван:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хөдөлгөөн:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Шалбархай-хэмжээ:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хэлбэр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Өнгөр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Тоо:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Байрлал:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Антрум-салтын өнгө:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хаван:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хөдөлгөөн:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Шалбархай-хэмжээ:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хэлбэр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Өнгөр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Тоо:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Байрлал:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <p className="font-bold">Дээд гэдэс:</p>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Салстын өнгө:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хаван:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хөдөлгөөн:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Шалбархай-хэмжээ:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Хэлбэр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Өнгөр:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Тоо:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                     </td>
+                     <td>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Байрлал:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Фатер хөхлөг:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-1">
+                           <p>Цөс ялгаралт:</p>
+                           <Form.Item
+                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                              className="mb-0"
+                           >
+                              <Input style={{ height: 22 }} />
+                           </Form.Item>
+                        </div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colSpan={3}>
+                        <p className="font-bold">Hp тодорхойлох:</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colSpan={3}>
+                        <p className="font-bold">Рн-метрийн шинжилгээ:</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colSpan={3}>
+                        <p className="font-bold">Лабораторийн шинжилгээ:</p>
+                        <p>:</p>
+                        <p className="font-bold">
+                           Цитологи/гистологийн шинжилгээ:
+                        </p>
+                        <p>:</p>
+                        <p className="font-bold">Бусад шинжилгээ:</p>
+                        <p>:</p>
+                        <p>:</p>
+                        <p className="font-bold">Эмнэлзүйн шинжилгээ:</p>
+                        <p>:</p>
+                        <p>:</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colSpan={3}>
+                        <p>Эмчилгээ/зөвлөгөө:</p>
+                        <p>:</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td colSpan={3}>
+                        <p>Зөвлөгөө өгсөн эмч:</p>
                      </td>
                   </tr>
                </thead>
