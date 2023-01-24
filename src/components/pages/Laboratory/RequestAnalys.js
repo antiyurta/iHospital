@@ -554,6 +554,7 @@ function RequestAnalys() {
                   columns={columnsTabl2}
                   dataSource={patientReqDtl}
                   bordered
+                  pagination={{ simple: true, pageSize: 20 }}
                   rowSelection={{
                      ...rowSelectionExamination,
                      selectedRowKeys: selectedExaminationKeys,
