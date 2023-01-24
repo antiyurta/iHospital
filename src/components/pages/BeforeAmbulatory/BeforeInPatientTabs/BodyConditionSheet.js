@@ -1,4 +1,8 @@
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+   CheckOutlined,
+   CloseOutlined,
+   PrinterOutlined
+} from '@ant-design/icons';
 import {
    Button,
    Card,
@@ -33,66 +37,75 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
    const [sheets, setSheets] = useState([]);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const token = useSelector(selectCurrentToken);
-   const onFinish = async () => {
-      bodyForm
-         .validateFields()
-         .then(async (values) => {
-            const data = {
-               patientId: PatientId,
-               daily: values.daily,
-               respiratory: values.respiratory,
-               indigestion: values.indigestion,
-               pee: values.pee,
-               skin: values.skin,
-               mind: values.mind
-            };
-            const conf = {
-               headers: {},
-               params: {}
-            };
-            const response = await Post(
-               'inpatient/physical-assesment',
-               token,
-               conf,
-               data
-            );
-         })
-         .catch((error) => {
-            var string = '';
-            var daily = false;
-            var respiratory = false;
-            var indigestion = false;
-            var pee = false;
-            var skin = false;
-            var mind = false;
-            error.errorFields.map((err) => {
-               if (err.name[0] === 'daily' && !daily) {
-                  daily = true;
-                  string = 'Өдөр тутмын сувилгаа дутуу';
-                  openNofi('warning', 'Бөглөх', string);
-               } else if (err.name[0] === 'respiratory' && !respiratory) {
-                  respiratory = true;
-                  string = 'Амьсгал/Зүрх судас дутуу';
-                  openNofi('warning', 'Бөглөх', string);
-               } else if (err.name[0] === 'indigestion' && !indigestion) {
-                  indigestion = true;
-                  string = 'Хоол боловсруулалт дутуу';
-                  openNofi('warning', 'Бөглөх', string);
-               } else if (err.name[0] === 'pee' && !pee) {
-                  pee = true;
-                  string = 'Шээс ялгаруулалт дутуу';
-                  openNofi('warning', 'Бөглөх', string);
-               } else if (err.name[0] === 'skin' && !skin) {
-                  skin = true;
-                  string = 'Арьс дутуу';
-                  openNofi('warning', 'Бөглөх', string);
-               } else if (err.name[0] === 'mind' && !mind) {
-                  mind = true;
-                  string = 'Мэдрэл, сэтгэхүйн байдал дутуу';
-                  openNofi('warning', 'Бөглөх', string);
-               }
-            });
-         });
+   const onFailed = async (errorInfo) => {
+      var string = '';
+      var daily = false;
+      var respiratory = false;
+      var indigestion = false;
+      var pee = false;
+      var skin = false;
+      var mind = false;
+      var nursing = false;
+      errorInfo?.errorFields?.map((err) => {
+         if (err.name[0] === 'daily' && !daily) {
+            daily = true;
+            string = 'Өдөр тутмын сувилгаа дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         } else if (err.name[0] === 'respiratory' && !respiratory) {
+            respiratory = true;
+            string = 'Амьсгал/Зүрх судас дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         } else if (err.name[0] === 'indigestion' && !indigestion) {
+            indigestion = true;
+            string = 'Хоол боловсруулалт дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         } else if (err.name[0] === 'pee' && !pee) {
+            pee = true;
+            string = 'Шээс ялгаруулалт дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         } else if (err.name[0] === 'skin' && !skin) {
+            skin = true;
+            string = 'Арьс дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         } else if (err.name[0] === 'mind' && !mind) {
+            mind = true;
+            string = 'Мэдрэл, сэтгэхүйн байдал дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         } else if (err.name[0] === 'nursing' && !nursing) {
+            nursing = true;
+            string = 'Сувилгааны асуудал дутуу';
+            openNofi('warning', 'Бөглөх', string);
+         }
+      });
+   };
+   const onFinish = async (values) => {
+      console.log(values);
+      const data = {
+         patientId: PatientId,
+         daily: values.daily,
+         respiratory: values.respiratory,
+         indigestion: values.indigestion,
+         pee: values.pee,
+         skin: values.skin,
+         mind: values.mind,
+         nursing: values.nursing
+      };
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Post(
+         'inpatient/physical-assesment',
+         token,
+         conf,
+         data
+      );
+      console.log(response);
+      if (response === 201) {
+         setIsOpenModal(false);
+         bodyForm.resetFields();
+         getPhysicalAssesment();
+      }
    };
    const getPhysicalAssesment = async () => {
       const conf = {
@@ -112,415 +125,46 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
    }, []);
    return (
       <>
-         <Button onClick={handlePrint}>Хэвлэх</Button>
-         <Button onClick={() => setIsOpenModal(true)}>Нэмэх</Button>
+         <div className="flow-root">
+            <div className="float-left">
+               <Button type="primary" onClick={() => setIsOpenModal(true)}>
+                  Хуудас бөглөх
+               </Button>
+               <Button
+                  className="ml-2"
+                  icon={<PrinterOutlined />}
+                  onClick={handlePrint}
+               >
+                  Хэвлэх
+               </Button>
+            </div>
+            <div className="float-right"></div>
+         </div>
          <div className="flex flex-wrap">
             <div className="w-full">
                <div className="flex flex-wrap">
                   <div ref={printRef} className="contents">
-                     <Page1 patientData={PatientData} className="w-1/2" />
-                     <Page2 patientData={PatientData} className="w-1/2" />
+                     <Page1
+                        patientData={PatientData}
+                        form={sheets}
+                        className="w-1/2"
+                     />
+                     <Page2 form={sheets} className="w-1/2" />
                   </div>
                </div>
             </div>
             <Modal
+               title="Нэмэх"
                open={isOpenModal}
                onCancel={() => setIsOpenModal(false)}
-            ></Modal>
-            <div className="md:w-1/2 lg:w-1/2 p-1">
-               <Table bordered className="ant-border-space">
-                  <thead className="ant-table-thead bg-slate-200">
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           Огноо цаг
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <th key={index}>
-                                 {moment(sheet.createdAt).format(
-                                    'YYYY-MM-DD HH:mm'
-                                 )}
-                              </th>
-                           );
-                        })}
-                     </tr>
-                  </thead>
-                  <tbody className="ant-table-thead bg-slate-200 ant-table-tbody p-0">
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           Амьсгалалт
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>
-                                 {sheet.respiratory?.breathing}
-                              </td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">Чимээ</th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.respiratory?.noise}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           Ханиалгалт
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.respiratory?.cough}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">Хаван</th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.respiratory?.edema}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хялгасан судасны</p>
-                           <p>дахин</p>
-                           <p>дүүрэлт</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>
-                                 {sheet.respiratory?.capillary}
-                              </td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Зүрхний хэм</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>
-                                 {sheet.respiratory?.heartPoint}
-                              </td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хооллолт</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.indigestion?.eat}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хоолны дэглэм</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>
-                                 {sheet.indigestion?.sitiology}
-                              </td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хоолны дуршил</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.indigestion?.appetite}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хэвлий</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.indigestion?.stomach}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Өтгөн</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.indigestion?.grease}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Шээс/Шээсний гарц</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.pee?.peeOut}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Шээс/Зовиур</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.pee?.peePain}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Шээс/Өнгө,Үнэр</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.pee?.peeColor}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Шээс</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.pee?.peeStatus}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Арьсны байдал</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.skin?.skinStatus}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Арьсны эрүүл ахуй</p>
-                           <p>/Бүх биеийн угаалга/</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.skin?.bodyWash}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Арьсны эрүүл ахуй</p>
-                           <p>/Хэсэгчилсэн угаалга/</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.skin?.partWash}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Арьсны эрүүл ахуй</p>
-                           <p>/Ор цэвэрлэх/</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.skin?.bedWash}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Мэс заслын шарх</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.skin?.surgery}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Уян зүү тавьсан хэсэг</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return (
-                              <td key={index}>{sheet.skin?.targetNeedle}</td>
-                           );
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ухаан санааны байдал</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.mind?.mindStatus}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Орчиндоо</p>
-                           <p>(Бусадтай)</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.mind?.roomTemp}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Өвдөлт</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.mind?.pain}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Үе мөчний</p>
-                           <p>хөдөлгөөн</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.mind?.bodyShake}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Уян зүү</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.needle}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Гуурсны арчилгаа</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.tubeCare}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Бургүй хийсэн</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.burgui}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хэсэгчилсэн</p>
-                           <p>асаргаа</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.partCare}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>ЭМБ</p>
-                           <p>Зөвлөгөө өгөх</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.advice}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Нөхөн сэргээх</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.reHealt}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Байрлал</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.position}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Цагаан хэрэглэл</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.cwb}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Үс угаасан</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.whead}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Үс самнасан</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.hair}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Сахал хуссан</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.beard}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Хувцас сольсон</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.clothes}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Хөл гарын хумс</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.nails}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Ариун цэвэр</p>
-                           <p>Амны хөндий шүд</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.tooth}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Хооллосон</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.food}</td>;
-                        })}
-                     </tr>
-                     <tr>
-                        <th className="font-bold text-sm text-start">
-                           <p>Аюулгүй байдал</p>
-                        </th>
-                        {sheets?.map((sheet, index) => {
-                           return <td key={index}>{sheet.daily?.security}</td>;
-                        })}
-                     </tr>
-                  </tbody>
-               </Table>
-            </div>
-            <div className="md:w-1/2 lg:w-1/2 p-1">
-               <Form form={bodyForm} layout="vertical">
+               footer={null}
+            >
+               <Form
+                  onFinishFailed={onFailed}
+                  onFinish={onFinish}
+                  form={bodyForm}
+                  layout="vertical"
+               >
                   <Collapse accordion defaultActiveKey={['1']}>
                      <Panel header="Амьсгал/Зүрх судас" key="1">
                         <div className="flex flex-wrap">
@@ -1212,13 +856,11 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                     <Radio.Group>
                                        <Space direction="vertical">
                                           <Radio value={'Харьцаатай'}>
-                                             Хэвийн
+                                             Харьцаатай
                                           </Radio>
-                                          <Radio value={'Сул'}>
-                                             Сэтгэл хөөрлийн байдалтай
-                                          </Radio>
+                                          <Radio value={'Сул'}>Сул</Radio>
                                           <Radio value={'Харьцаагүй'}>
-                                             Сэтгэл түгшсэн байдалтай
+                                             Харьцаагүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1339,12 +981,12 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                     <Radio.Group>
                                        <Space direction="vertical">
                                           <Radio
-                                             value={'Цэвэрлэх бургүй/ тосгон'}
+                                             value={'Цэвэрлэх бургуй/ тосгон'}
                                           >
-                                             Цэвэрлэх бургүй/ тосгон
+                                             Цэвэрлэх бургуй/ тосгон
                                           </Radio>
-                                          <Radio value={'Эмчилгээний бургүй'}>
-                                             Эмчилгээний бургүй
+                                          <Radio value={'Эмчилгээний бургуй'}>
+                                             Эмчилгээний бургуй
                                           </Radio>
                                           <Radio value={'Хий гаргах гуурс'}>
                                              Хий гаргах гуурс
@@ -1490,8 +1132,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1516,8 +1158,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1542,8 +1184,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1568,8 +1210,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1594,8 +1236,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1620,8 +1262,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1646,8 +1288,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1672,8 +1314,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                  >
                                     <Radio.Group>
                                        <Space direction="vertical">
-                                          <Radio value={'СУ(сувьлагч)'}>
-                                             СУ(сувьлагч)
+                                          <Radio value={'СУ(сувилагч)'}>
+                                             СУ(сувилагч)
                                           </Radio>
                                           <Radio value={'Ө(эмчлүүлэгч өөрөө)'}>
                                              Ө(эмчлүүлэгч өөрөө)
@@ -1722,10 +1364,158 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                            </div>
                         </div>
                      </Panel>
+                     <Panel
+                        header="Сувилгааны асуудал"
+                        key="7"
+                        forceRender={true}
+                     >
+                        <div className="flex flex-wrap">
+                           <div className="basis-1/2 p-1">
+                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <Form.Item
+                                    label="Амьсгал/зүрх судас"
+                                    className="p-1"
+                                    name={['nursing', 'breathing']}
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                 >
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          <Radio value={'Тийм'}>Тийм</Radio>
+                                          <Radio value={'Үгүй'}>Үгүй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
+                                       </Space>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="basis-1/2 p-1">
+                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <Form.Item
+                                    label="Хоол боловсруулах"
+                                    className="p-1"
+                                    name={['nursing', 'food']}
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                 >
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          <Radio value={'Тийм'}>Тийм</Radio>
+                                          <Radio value={'Үгүй'}>Үгүй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
+                                       </Space>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="basis-1/2 p-1">
+                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <Form.Item
+                                    label="Шээс ялгаруулалт"
+                                    className="p-1"
+                                    name={['nursing', 'peeOut']}
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                 >
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          <Radio value={'Тийм'}>Тийм</Radio>
+                                          <Radio value={'Үгүй'}>Үгүй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
+                                       </Space>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="basis-1/2 p-1">
+                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <Form.Item
+                                    label="Арьс"
+                                    className="p-1"
+                                    name={['nursing', 'skin']}
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                 >
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          <Radio value={'Тийм'}>Тийм</Radio>
+                                          <Radio value={'Үгүй'}>Үгүй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
+                                       </Space>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="basis-1/2 p-1">
+                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <Form.Item
+                                    label="Мэдрэл, сэтгэхүйн байдал"
+                                    className="p-1"
+                                    name={['nursing', 'mind']}
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                 >
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          <Radio value={'Тийм'}>Тийм</Radio>
+                                          <Radio value={'Үгүй'}>Үгүй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
+                                       </Space>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="basis-1/2 p-1">
+                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <Form.Item
+                                    label="Өдөр тутмын сувилгаа"
+                                    className="p-1"
+                                    name={['nursing', 'daily']}
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                 >
+                                    <Radio.Group>
+                                       <Space direction="vertical">
+                                          <Radio value={'Тийм'}>Тийм</Radio>
+                                          <Radio value={'Үгүй'}>Үгүй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
+                                       </Space>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                        </div>
+                     </Panel>
                   </Collapse>
+                  <Form.Item className="py-2">
+                     <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="w-full"
+                     >
+                        Хадгалах
+                     </Button>
+                  </Form.Item>
                </Form>
-               <Button onClick={() => onFinish()}>Хадгалах</Button>
-            </div>
+            </Modal>
          </div>
       </>
    );

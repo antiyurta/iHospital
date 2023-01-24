@@ -1,6 +1,6 @@
 // import Endocrinology from './Endocrinology';
 import Endocrinology from './Endocrinology/Index'; // // ДОТООД ШҮҮРЭЛ СУДЛАЛЫН ЭМЧИЙН ҮЗЛЭГ
-import Rebuild from './Rebuild'; // СЭРГЭЭН ЗАСАХЫН ЭМЧИЙН ҮЗЛЭГ
+import Rebuildd from './Rebuild'; // СЭРГЭЭН ЗАСАХЫН ЭМЧИЙН ҮЗЛЭГ
 import InternalMedicine from './InternalMedicine/Index'; // ДОТРЫН ЭМЧИЙН ҮЗЛЭГ
 import Otolaryngologist from './Otolaryngologist/Index'; // ЧИХ ХАМАР ХООЛОЙН ЭМЧИЙН ҮЗЛЭГ
 import Traditional from './Traditional/Index'; // Уламжлалт
@@ -13,6 +13,7 @@ import Hematologist from './Hematologist/Index'; // цусны эмч
 import Ophthalmologist from './Ophthalmologist/Index'; // нүдний эмч
 import Gastroenterologist from './Gastroenterologist/Index'; // хоол боловсруулах эрхтний
 import Neurologist from './Neurologist/Index'; // Мэдрэлийн эмчийн үзлэг
+import Rebuild from './Rebuild/Index';
 
 function Index({ id, data }) {
    /// id nas depId ym ennes hamarch hewleh maygt oor2 bn
@@ -22,7 +23,7 @@ function Index({ id, data }) {
          {/* {data.inpatientRequestId === 31 && <Rebuild data={data} />} */}
          {/* {id === 31 && <Rebuild data={data} />} */}
          {/* {id === 2 && <Endocrinology data={data} />} */}
-         <Neurologist data={data} />
+         <Rebuild data={data} />
       </>
    );
 }

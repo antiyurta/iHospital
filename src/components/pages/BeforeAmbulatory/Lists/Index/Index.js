@@ -649,7 +649,7 @@ function Index({ type, isDoctor }) {
                                          row.isPayment,
                                          row.patient?.registerNumber,
                                          row.rooms?.roomNumber,
-                                         row.structure.name
+                                         row.structure?.name
                                       );
                               }
                            };

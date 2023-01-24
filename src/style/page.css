@@ -26,10 +26,14 @@ body {
    /* outline: 2cm #FFEAEA solid; */
 }
 
-@page {
+/* @page {
+   .document,
+   .docuement2{
+
+   }
    size: A4;
    margin: 0;
-}
+} */
 
 @media print {
    .page {

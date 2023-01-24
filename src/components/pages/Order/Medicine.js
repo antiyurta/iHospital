@@ -16,8 +16,8 @@ function Medicine({ isOpen, isClose, handleclick }) {
    };
    const getMedicine = async () => {
       setLoading(true);
-      config.params.depId = 15;
-      config.params.typeId = 2;
+      config.params.depId = 4078;
+      config.params.typeId = 13;
       const response = await DefualtGet(
          'finance/type-materials',
          token,

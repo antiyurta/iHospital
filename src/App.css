@@ -441,9 +441,24 @@ table .formTable tr > td {
 .IO thead > tr > th {
    vertical-align: middle !important;
    text-align: center !important;
+   font-size: 12px !important;
+}
+.IO thead > tr > td {
+   vertical-align: middle !important;
+   text-align: center !important;
+   font-size: 12px !important;
+}
+.IO tbody > tr > th {
+   vertical-align: middle !important;
+   text-align: center !important;
+   font-size: 12px !important;
 }
 
-.bcp thead > tr {
+.IO thead > tr {
+   border-color: #000 !important;
+}
+
+.IO tbody > tr {
    border-color: #000 !important;
 }
 
@@ -490,6 +505,13 @@ table .formTable tr > td {
    font-size: 7px !important;
    vertical-align: middle !important;
    text-align: start !important;
+}
+
+.bcp thead > tr {
+   border-color: #000 !important;
+}
+.bcp tbody > tr {
+   border-color: #000 !important;
 }
 
 .bcp2 thead > tr > th {

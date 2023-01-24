@@ -117,7 +117,7 @@ function BeforeInPatientTabs({
                   onClick={() => {
                      setPageId(10);
                   }}
-                  className={pageId === 7 ? 'button-active m-1' : 'm-1'}
+                  className={pageId === 10 ? 'button-active m-1' : 'm-1'}
                >
                   Судасны гуурстай холбоотой тандалт
                </Button>
@@ -138,42 +138,6 @@ function BeforeInPatientTabs({
                   className={pageId === 12 ? 'button-active m-1' : 'm-1'}
                >
                   Nursing Log
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(7);
-                  }}
-                  className={pageId === 7 ? 'button-active m-1' : 'm-1'}
-               >
-                  Тэмдэглэл
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(7);
-                  }}
-                  className={pageId === 7 ? 'button-active m-1' : 'm-1'}
-               >
-                  Тэмдэглэл
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(7);
-                  }}
-                  className={pageId === 7 ? 'button-active m-1' : 'm-1'}
-               >
-                  Тэмдэглэл
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(7);
-                  }}
-                  className={pageId === 7 ? 'button-active m-1' : 'm-1'}
-               >
-                  Тэмдэглэл
                </Button>
             </Card>
          </div>
