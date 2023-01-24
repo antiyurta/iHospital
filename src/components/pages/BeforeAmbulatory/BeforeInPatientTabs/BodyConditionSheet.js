@@ -30,12 +30,11 @@ import Page1 from './BodyConditionSheet/Page1';
 import Page2 from './BodyConditionSheet/Page2';
 const { Panel } = Collapse;
 function BodyConditionSheet({ PatientId, ListId, PatientData }) {
-   let location = useLocation();
-   console.log('location', location);
    const [bodyForm] = Form.useForm();
    const printRef = useRef();
    const [sheets, setSheets] = useState([]);
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [printLoading, setPrintLoading] = useState(false);
    const token = useSelector(selectCurrentToken);
    const onFailed = async (errorInfo) => {
       var string = '';
@@ -82,6 +81,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
       console.log(values);
       const data = {
          patientId: PatientId,
+         inpatientRequestId: ListId,
          daily: values.daily,
          respiratory: values.respiratory,
          indigestion: values.indigestion,
@@ -118,6 +118,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
       setSheets(response.data);
    };
    const handlePrint = useReactToPrint({
+      onBeforeGetContent: () => setPrintLoading(true),
+      onBeforePrint: () => setPrintLoading(false),
       content: () => printRef.current
    });
    useEffect(() => {
@@ -134,6 +136,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                   className="ml-2"
                   icon={<PrinterOutlined />}
                   onClick={handlePrint}
+                  loading={printLoading}
                >
                   Хэвлэх
                </Button>

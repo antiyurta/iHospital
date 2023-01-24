@@ -73,7 +73,7 @@ function NursingLog() {
          dataIndex: 'username'
       },
       {
-         title: 'Өдрийн төлвүүд',
+         title: 'Өдрийн төлөвүүд',
          dataIndex: 'statusIo',
          render: (_, record, index) => {
             return StatusIo?.map((obj) => {
