@@ -169,10 +169,12 @@ export default function EarlyWarning({
          config.params.inpatientRequestId = ListId;
       }
       const response = await Get('assesment', token, config);
-      if (response.data.length != 0) {
+      if (response.data.length > 0) {
          setPatientAssesments(response.data);
          setPatientAssesmentsResult(response.data);
-         calcDrawers(response.data);
+         if (UsageType === 'IN') {
+            calcDrawers(response.data);
+         }
          if (response.data.length <= 7) {
             var demoLineLabels = [];
             var demoBreathData = [];
@@ -260,7 +262,9 @@ export default function EarlyWarning({
       );
       resetFormFields();
       getAssesment('save');
-      get();
+      if (UsageType === 'IN') {
+         get();
+      }
    };
    const handlePrint = useReactToPrint({
       onBeforeGetContent: () => setPrintLoading(true),
@@ -362,6 +366,8 @@ export default function EarlyWarning({
    useEffect(() => {
       if (PatientId) {
          getAssesment();
+      }
+      if (UsageType === 'IN') {
          get();
       }
    }, [PatientId]);

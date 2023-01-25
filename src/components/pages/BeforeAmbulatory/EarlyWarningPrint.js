@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 
 function EarlyWarningPrint({ Data }) {
    const data = Data;
-   console.log(data);
    const [line, setLine] = useState([]);
    const createLine = () => {
       var linee = [];
