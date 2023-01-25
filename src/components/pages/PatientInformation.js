@@ -96,7 +96,9 @@ function PatientInformation({
             </div>
             <div className="basis-3/4 p-1">
                <div className="container">
-                  <Descriptions>
+                  <Descriptions
+                     column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
+                  >
                      <Descriptions.Item label="Овог">
                         {patient?.lastName}
                      </Descriptions.Item>

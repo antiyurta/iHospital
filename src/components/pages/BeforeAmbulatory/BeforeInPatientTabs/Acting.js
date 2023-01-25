@@ -77,7 +77,7 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                   {text.map((item, index) => {
                      return (
                         <li key={index}>
-                           {item.material.m_name + '/' + item.tcount}
+                           {item.material?.m_name + '/' + item.tcount}
                         </li>
                      );
                   })}

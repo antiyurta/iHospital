@@ -16,7 +16,7 @@ import { Spinner, Table } from 'react-bootstrap';
 import { useReactToPrint } from 'react-to-print';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Post } from '../../../comman';
+import { Get, getAge, Post } from '../../../comman';
 
 function VasculerTube({ PatientData, ListId }) {
    const token = useSelector(selectCurrentToken);
@@ -435,532 +435,547 @@ function VasculerTube({ PatientData, ListId }) {
                >
                   Нэмэх
                </Button>
-
                <div ref={printRef}>
-                  <page size="A4" layout="landscape">
-                     <div className="flow-root">
-                        <div className="float-right">
-                           <p style={{ fontSize: 10 }}>
-                              Эрүүл мэндийн сайдын 2019 оны 11 сарын 29-ны
-                           </p>
-                           <p style={{ fontSize: 10 }}>
-                              өдрийн А539 дугаар тушаалын 3-р хавсралт
-                           </p>
+                  <div className="page-landscape">
+                     <div className="subpage-landscape">
+                        <div className="flow-root">
+                           <div className="float-right">
+                              <p style={{ fontSize: 10 }}>
+                                 Эрүүл мэндийн сайдын 2019 оны 11 сарын 29-ны
+                              </p>
+                              <p style={{ fontSize: 10 }}>
+                                 өдрийн А539 дугаар тушаалын 3-р хавсралт
+                              </p>
+                           </div>
+                        </div>
+                        <p
+                           className="font-bold text-center"
+                           style={{ fontSize: 12 }}
+                        >
+                           Судасны гуурстай холбоотой тандалт
+                        </p>
+                        <div className="flex flex-wrap py-1 text-center">
+                           <div className="basis-1/5">
+                              <p style={{ fontSize: 10 }}>
+                                 Эмнэлэг: UNIVERSAL MED
+                              </p>
+                           </div>
+                           <div className="basis-1/5">
+                              <p style={{ fontSize: 10 }}>Тасаг: ДОТОР</p>
+                           </div>
+                           <div className="basis-2/5">
+                              <p style={{ fontSize: 10 }}>
+                                 Үйлчлүүлэгчийн овог нэр:{' '}
+                                 {PatientData?.lastName.substring(0, 1) +
+                                    '.' +
+                                    PatientData?.firstName}
+                              </p>
+                           </div>
+                           <div className="basis-1/5">
+                              <p style={{ fontSize: 10 }}>
+                                 Нас: {getAge(PatientData?.registerNumber)}{' '}
+                                 Хүйс:
+                                 {PatientData?.genderType === 'MAN'
+                                    ? 'Эр'
+                                    : 'Эм'}
+                              </p>
+                           </div>
+                           <div className="basis-1/5">
+                              <p style={{ fontSize: 10 }}>
+                                 Регистрийн дугаар:{' '}
+                                 {PatientData?.registerNumber}
+                              </p>
+                           </div>
+                           <div className="basis-1/5">
+                              <p style={{ fontSize: 10 }}>Үндсэн онош: I38</p>
+                           </div>
+                           <div className="basis-2/5">
+                              <p style={{ fontSize: 10 }}>
+                                 Эмнэлэг хэвтсэн огноо: 2022-01-01
+                              </p>
+                           </div>
+                           <div className="basis-1/5">
+                              <p style={{ fontSize: 10 }}>
+                                 Судасны гуурс төрөл: Уян зүү
+                              </p>
+                           </div>
+                        </div>
+                        <Table bordered className="bcp2">
+                           <thead>
+                              <tr>
+                                 <th
+                                    rowSpan={3}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Сар өдөр
+                                 </th>
+                                 <th
+                                    rowSpan={3}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Цаг
+                                 </th>
+                                 <th
+                                    rowSpan={3}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Хэд дахь уян зүү
+                                 </th>
+                                 <th rowSpan={3}>Гуурс тависан талбай</th>
+                                 <th
+                                    rowSpan={3}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Гуурс сольсон шалтгаан
+                                 </th>
+                                 <th colSpan={11}>
+                                    Судасны гуурсны халдварын шинж тэмдэгээр
+                                    тандах хуудас
+                                 </th>
+                                 <th colSpan={4}>Авсан арга хэмжээ</th>
+                                 <td
+                                    rowSpan={3}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlignLast: 'center',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    <p>гарын үсэг</p>
+                                    <p>Уян зүү тавьсан сувилагчийн</p>
+                                 </td>
+                                 <td
+                                    rowSpan={3}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlignLast: 'center',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    <p>гарын үсэг</p>
+                                    <p>Тандалт хийсэн ажилтны</p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <th colSpan={6}>Ерөнхий шинж</th>
+                                 <th colSpan={5}>Хэсэг гэзрын шинж</th>
+                                 <td
+                                    rowSpan={2}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlignLast: 'center',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    <p>эсэх, илэрсэн үүсгэгч</p>
+                                    <p>ЦАЧ шинжилгээ авсан</p>
+                                 </td>
+                                 <td
+                                    rowSpan={2}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlignLast: 'center',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    <p>үүсгэгч</p>
+                                    <p>авсан эсэх, илэрсэн</p>
+                                    <p>судлалын шинжилгээ</p>
+                                    <p>Гуурсны үзүүрээс нян</p>
+                                 </td>
+                                 <td
+                                    rowSpan={2}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlignLast: 'center',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    <p>эсэх, илэрсэн үүсгэгч</p>
+                                    <p>шинжилгээ авсан</p>
+                                    <p>идээнээс нян судлалын</p>
+                                    <p>Үрэвслийн шингэн</p>
+                                 </td>
+                                 <th
+                                    rowSpan={2}
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlignLast: 'center',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Авсан арга хэмжээ
+                                 </th>
+                              </tr>
+                              <tr>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Халуурна /38С дээш/
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    АД ситол буурсан
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Пульс түргэснэ
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    {'Шээсний гарц багасана <20мл/цаг'}
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Арьс зэвхий саарал
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Хоолонд дургүй
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Хатгасан хэсэгт улаан
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Хатгасан хэсэгт эмзэг өвчтэй
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Хатгасан хэсэгт халуун үрэвссэн
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Тэмтэрэхэд судас гүвдрүүтсэн
+                                 </th>
+                                 <th
+                                    className="rotate-180"
+                                    style={{
+                                       writingMode: 'vertical-lr',
+                                       textAlign: 'right',
+                                       verticalAlign: 'middle'
+                                    }}
+                                 >
+                                    Хатгасан хэсэгт буглаатай идээтэй
+                                 </th>
+                              </tr>
+                           </thead>
+                           <thead>
+                              {vascularList?.map((data, index) => {
+                                 return (
+                                    <tr key={index}>
+                                       <th>
+                                          {moment(data.createdAt).format(
+                                             'MM/DD'
+                                          )}
+                                       </th>
+                                       <th>
+                                          {moment(data.createdAt).format(
+                                             'HH:mm'
+                                          )}
+                                       </th>
+                                       <th>{index + 1}</th>
+                                       <th>
+                                          {tubeChangeReasonOptions?.map(
+                                             (obj) => {
+                                                if (
+                                                   obj.value ===
+                                                   data.replacingTube
+                                                ) {
+                                                   return obj.content;
+                                                }
+                                             }
+                                          )}
+                                       </th>
+                                       <th>
+                                          {tubeAreaOptions?.map((obj) => {
+                                             if (obj.value === data.arm) {
+                                                return (
+                                                   <>
+                                                      {obj.label}
+                                                      <br />
+                                                   </>
+                                                );
+                                             }
+                                          })}
+                                          {data.arm === 0 || data.arm === 1
+                                             ? tubeChild?.map((obj) => {
+                                                  if (obj.value === data.arm) {
+                                                     return obj.label;
+                                                  }
+                                               })
+                                             : null}
+                                          {data.arm === 2 || data.arm === 3
+                                             ? tubeChildFoot?.map((obj) => {
+                                                  if (obj.value === data.arm) {
+                                                     return obj.label;
+                                                  }
+                                               })
+                                             : null}
+                                       </th>
+                                       <th>
+                                          {data.isFever ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isSystole ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isPulse ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isUrine ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isSkin ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isFood ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isRed ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isSick ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isInflamed ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isBumpy ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.isPuss ? (
+                                             <PlusOutlined />
+                                          ) : (
+                                             <MinusOutlined />
+                                          )}
+                                       </th>
+                                       <th>
+                                          {data.tsach ? (
+                                             <>
+                                                <PlusOutlined />
+                                                <br />
+                                             </>
+                                          ) : (
+                                             <>
+                                                <MinusOutlined />
+                                                <br />
+                                             </>
+                                          )}
+                                          <span
+                                             style={{
+                                                width: 100,
+                                                textAlign: 'center',
+                                                display: 'inline-block'
+                                             }}
+                                          >
+                                             {data.detected1
+                                                ? data.detected1
+                                                : 'Илрээгүй'}
+                                          </span>
+                                       </th>
+                                       <th>
+                                          {data.fromTheTip ? (
+                                             <>
+                                                <PlusOutlined />
+                                                <br />
+                                             </>
+                                          ) : (
+                                             <>
+                                                <MinusOutlined />
+                                                <br />
+                                             </>
+                                          )}
+                                          <span
+                                             style={{
+                                                width: 100,
+                                                textAlign: 'center',
+                                                display: 'inline-block'
+                                             }}
+                                          >
+                                             {data.detected2
+                                                ? data.detected2
+                                                : 'Илрээгүй'}
+                                          </span>
+                                       </th>
+                                       <th>
+                                          {data.inflammation ? (
+                                             <>
+                                                <PlusOutlined />
+                                                <br />
+                                             </>
+                                          ) : (
+                                             <>
+                                                <MinusOutlined />
+                                                <br />
+                                             </>
+                                          )}
+                                          <span
+                                             style={{
+                                                width: 100,
+                                                textAlign: 'center',
+                                                display: 'inline-block'
+                                             }}
+                                          >
+                                             {data.detected3
+                                                ? data.detected3
+                                                : 'Илрээгүй'}
+                                          </span>
+                                       </th>
+                                       <th>{data.measuresTaken}</th>
+                                       <th></th>
+                                       <th></th>
+                                    </tr>
+                                 );
+                              })}
+                           </thead>
+                        </Table>
+                        <div style={{ display: 'grid' }}>
+                           <span>Тандалтын хуудасыг хөтлөх заавар:</span>
+                           <span>
+                              1. Хэвтсэн өдрөөс гарах өдөр хүртэл өдөрт 2 ээлж
+                              хөтлөнө.
+                           </span>
+                           <span>
+                              2. Шинж тэмдэг илэрсэн /+/, илрээгүй /-/, гуурс
+                              тавьсан бол /Т/, сольсон /С/, авсан /А/, өвдөлттэй
+                              /Ө/, гарсан /Г/, бөгөлсөн /Б/ гэж үсгээр товчилж
+                              бичнэ.
+                           </span>
+                           <span>
+                              3. Шинжилгээ авсан бол /+/, аваагүй /-/, эмгэг
+                              төрөгч илэрсэн бол нэрийг нь, илрээгүй бол
+                              илрээгүй гэж бичнэ.
+                           </span>
                         </div>
                      </div>
-                     <p
-                        className="font-bold text-center"
-                        style={{ fontSize: 12 }}
-                     >
-                        Судасны гуурстай холбоотой тандалт
-                     </p>
-                     <div className="flex flex-wrap py-1 text-center">
-                        <div className="basis-1/5">
-                           <p style={{ fontSize: 10 }}>
-                              Эмнэлэг: UNIVERSAL MED
-                           </p>
-                        </div>
-                        <div className="basis-1/5">
-                           <p style={{ fontSize: 10 }}>Тасаг: ДОТОР</p>
-                        </div>
-                        <div className="basis-2/5">
-                           <p style={{ fontSize: 10 }}>
-                              Үйлчлүүлэгчийн овог нэр:{' '}
-                              {PatientData?.lastName.substring(0, 1) +
-                                 '.' +
-                                 PatientData?.firstName}
-                           </p>
-                        </div>
-                        <div className="basis-1/5">
-                           <p style={{ fontSize: 10 }}>Нас: 33 Хүйс: Эр</p>
-                        </div>
-                        <div className="basis-1/5">
-                           <p style={{ fontSize: 10 }}>
-                              Регистрийн дугаар: {PatientData?.registerNumber}
-                           </p>
-                        </div>
-                        <div className="basis-1/5">
-                           <p style={{ fontSize: 10 }}>Үндсэн онош: I38</p>
-                        </div>
-                        <div className="basis-2/5">
-                           <p style={{ fontSize: 10 }}>
-                              Эмнэлэг хэвтсэн огноо: 2022-01-01
-                           </p>
-                        </div>
-                        <div className="basis-1/5">
-                           <p style={{ fontSize: 10 }}>
-                              Судасны гуурс төрөл: Уян зүү
-                           </p>
-                        </div>
-                     </div>
-                     <Table bordered className="bcp2">
-                        <thead>
-                           <tr>
-                              <th
-                                 rowSpan={3}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Сар өдөр
-                              </th>
-                              <th
-                                 rowSpan={3}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Цаг
-                              </th>
-                              <th
-                                 rowSpan={3}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Хэд дахь уян зүү
-                              </th>
-                              <th rowSpan={3}>Гуурс тависан талбай</th>
-                              <th
-                                 rowSpan={3}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Гуурс сольсон шалтгаан
-                              </th>
-                              <th colSpan={11}>
-                                 Судасны гуурсны халдварын шинж тэмдэгээр тандах
-                                 хуудас
-                              </th>
-                              <th colSpan={4}>Авсан арга хэмжээ</th>
-                              <td
-                                 rowSpan={3}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlignLast: 'center',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 <p>гарын үсэг</p>
-                                 <p>Уян зүү тавьсан сувилагчийн</p>
-                              </td>
-                              <td
-                                 rowSpan={3}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlignLast: 'center',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 <p>гарын үсэг</p>
-                                 <p>Тандалт хийсэн ажилтны</p>
-                              </td>
-                           </tr>
-                           <tr>
-                              <th colSpan={6}>Ерөнхий шинж</th>
-                              <th colSpan={5}>Хэсэг гэзрын шинж</th>
-                              <td
-                                 rowSpan={2}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlignLast: 'center',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 <p>эсэх, илэрсэн үүсгэгч</p>
-                                 <p>ЦАЧ шинжилгээ авсан</p>
-                              </td>
-                              <td
-                                 rowSpan={2}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlignLast: 'center',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 <p>үүсгэгч</p>
-                                 <p>авсан эсэх, илэрсэн</p>
-                                 <p>судлалын шинжилгээ</p>
-                                 <p>Гуурсны үзүүрээс нян</p>
-                              </td>
-                              <td
-                                 rowSpan={2}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlignLast: 'center',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 <p>эсэх, илэрсэн үүсгэгч</p>
-                                 <p>шинжилгээ авсан</p>
-                                 <p>идээнээс нян судлалын</p>
-                                 <p>Үрэвслийн шингэн</p>
-                              </td>
-                              <th
-                                 rowSpan={2}
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlignLast: 'center',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Авсан арга хэмжээ
-                              </th>
-                           </tr>
-                           <tr>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Халуурна /38С дээш/
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 АД ситол буурсан
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Пульс түргэснэ
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 {'Шээсний гарц багасана <20мл/цаг'}
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Арьс зэвхий саарал
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Хоолонд дургүй
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Хатгасан хэсэгт улаан
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Хатгасан хэсэгт эмзэг өвчтэй
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Хатгасан хэсэгт халуун үрэвссэн
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Тэмтэрэхэд судас гүвдрүүтсэн
-                              </th>
-                              <th
-                                 className="rotate-180"
-                                 style={{
-                                    writingMode: 'vertical-lr',
-                                    textAlign: 'right',
-                                    verticalAlign: 'middle'
-                                 }}
-                              >
-                                 Хатгасан хэсэгт буглаатай идээтэй
-                              </th>
-                           </tr>
-                        </thead>
-                        <thead>
-                           {vascularList?.map((data, index) => {
-                              return (
-                                 <tr key={index}>
-                                    <th>
-                                       {moment(data.createdAt).format('MM/DD')}
-                                    </th>
-                                    <th>
-                                       {moment(data.createdAt).format('HH:mm')}
-                                    </th>
-                                    <th>{index + 1}</th>
-                                    <th>
-                                       {tubeChangeReasonOptions?.map((obj) => {
-                                          if (
-                                             obj.value === data.replacingTube
-                                          ) {
-                                             return obj.content;
-                                          }
-                                       })}
-                                    </th>
-                                    <th>
-                                       {tubeAreaOptions?.map((obj) => {
-                                          if (obj.value === data.arm) {
-                                             return (
-                                                <>
-                                                   {obj.label}
-                                                   <br />
-                                                </>
-                                             );
-                                          }
-                                       })}
-                                       {data.arm === 0 || data.arm === 1
-                                          ? tubeChild?.map((obj) => {
-                                               if (obj.value === data.arm) {
-                                                  return obj.label;
-                                               }
-                                            })
-                                          : null}
-                                       {data.arm === 2 || data.arm === 3
-                                          ? tubeChildFoot?.map((obj) => {
-                                               if (obj.value === data.arm) {
-                                                  return obj.label;
-                                               }
-                                            })
-                                          : null}
-                                    </th>
-                                    <th>
-                                       {data.isFever ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isSystole ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isPulse ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isUrine ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isSkin ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isFood ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isRed ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isSick ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isInflamed ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isBumpy ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.isPuss ? (
-                                          <PlusOutlined />
-                                       ) : (
-                                          <MinusOutlined />
-                                       )}
-                                    </th>
-                                    <th>
-                                       {data.tsach ? (
-                                          <>
-                                             <PlusOutlined />
-                                             <br />
-                                          </>
-                                       ) : (
-                                          <>
-                                             <MinusOutlined />
-                                             <br />
-                                          </>
-                                       )}
-                                       <span
-                                          style={{
-                                             width: 100,
-                                             textAlign: 'center',
-                                             display: 'inline-block'
-                                          }}
-                                       >
-                                          {data.detected1
-                                             ? data.detected1
-                                             : 'Илрээгүй'}
-                                       </span>
-                                    </th>
-                                    <th>
-                                       {data.fromTheTip ? (
-                                          <>
-                                             <PlusOutlined />
-                                             <br />
-                                          </>
-                                       ) : (
-                                          <>
-                                             <MinusOutlined />
-                                             <br />
-                                          </>
-                                       )}
-                                       <span
-                                          style={{
-                                             width: 100,
-                                             textAlign: 'center',
-                                             display: 'inline-block'
-                                          }}
-                                       >
-                                          {data.detected2
-                                             ? data.detected2
-                                             : 'Илрээгүй'}
-                                       </span>
-                                    </th>
-                                    <th>
-                                       {data.inflammation ? (
-                                          <>
-                                             <PlusOutlined />
-                                             <br />
-                                          </>
-                                       ) : (
-                                          <>
-                                             <MinusOutlined />
-                                             <br />
-                                          </>
-                                       )}
-                                       <span
-                                          style={{
-                                             width: 100,
-                                             textAlign: 'center',
-                                             display: 'inline-block'
-                                          }}
-                                       >
-                                          {data.detected3
-                                             ? data.detected3
-                                             : 'Илрээгүй'}
-                                       </span>
-                                    </th>
-                                    <th>{data.measuresTaken}</th>
-                                    <th></th>
-                                    <th></th>
-                                 </tr>
-                              );
-                           })}
-                        </thead>
-                     </Table>
-                     <div style={{ display: 'grid' }}>
-                        <span>Тандалтын хуудасыг хөтлөх заавар:</span>
-                        <span>
-                           1. Хэвтсэн өдрөөс гарах өдөр хүртэл өдөрт 2 ээлж
-                           хөтлөнө.
-                        </span>
-                        <span>
-                           2. Шинж тэмдэг илэрсэн /+/, илрээгүй /-/, гуурс
-                           тавьсан бол /Т/, сольсон /С/, авсан /А/, өвдөлттэй
-                           /Ө/, гарсан /Г/, бөгөлсөн /Б/ гэж үсгээр товчилж
-                           бичнэ.
-                        </span>
-                        <span>
-                           3. Шинжилгээ авсан бол /+/, аваагүй /-/, эмгэг төрөгч
-                           илэрсэн бол нэрийг нь, илрээгүй бол илрээгүй гэж
-                           бичнэ.
-                        </span>
-                     </div>
-                  </page>
+                  </div>
                </div>
             </>
          )}

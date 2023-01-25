@@ -210,16 +210,6 @@ input[type='number'] {
    min-height: 22px !important;
 }
 
-.page-landscape {
-   width: 29.7cm;
-   min-height: 21cm;
-   padding: 1cm;
-   border: 1px #d3d3d3 solid;
-   border-radius: 5px;
-   background: white;
-   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
 .ant-btn {
    height: 28px !important;
    line-height: 1;
@@ -640,5 +630,23 @@ table .formTable tr > td {
 
 .document tbody > tr,
 .document2 tbody > tr {
+   border-color: #000 !important;
+}
+
+.vsdocument thead > tr > td {
+   /* margin-left: 8px !important; */
+   padding: 0px !important;
+   font-size: 0.185cm !important;
+   font-family: Arial, Helvetica, sans-serif;
+   vertical-align: top !important;
+}
+.vsdocument thead > tr > th {
+   /* margin-left: 8px !important; */
+   padding: 0px !important;
+   font-size: 9px !important;
+   font-family: Arial, Helvetica, sans-serif;
+   vertical-align: bottom !important;
+}
+.vsdocument thead > tr {
    border-color: #000 !important;
 }

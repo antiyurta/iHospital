@@ -156,7 +156,11 @@ function BeforeInPatientTabs({
                   <MedicineRequests PatientId={patientId} ListId={listId} />
                )}
                {pageId === 3 && (
-                  <VitalSign PatientId={patientId} ListId={listId} />
+                  <VitalSign
+                     PatientId={patientId}
+                     ListId={listId}
+                     PatientData={patientData}
+                  />
                )}
                {pageId === 4 && (
                   <InputOutput

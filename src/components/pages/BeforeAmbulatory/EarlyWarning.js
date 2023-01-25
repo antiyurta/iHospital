@@ -1,11 +1,11 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт -> Эрт сэрэмжлүүлэх үнэлгээ
-import React, { useState, useEffect } from 'react';
-import { Button, Col, Input, Row, Select, Modal } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, Col, Input, Row, Select, Modal, List } from 'antd';
 import { blue } from '@ant-design/colors';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Table } from 'react-bootstrap';
-import { Get, Post } from '../../comman';
+import { DefaultPost, Get, getAge, Post } from '../../comman';
 //
 import {
    Chart as ChartJS,
@@ -20,15 +20,28 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
+import { PrinterOutlined } from '@ant-design/icons';
+import { useReactToPrint } from 'react-to-print';
+import { useLocation } from 'react-router-dom';
+import EarlyWarningPrint from './EarlyWarningPrint';
 //
 
-export default function EarlyWarning({ PatientId, listId }) {
+export default function EarlyWarning({
+   PatientId,
+   UsageType,
+   ListId,
+   patientData
+}) {
    const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
       params: {}
    };
+   let location = useLocation();
    const { Option } = Select;
+   const vsPrintRef = useRef();
+   const dPrintRef = useRef();
+   const vsCanvas = useRef();
    const [formValues, setFormValues] = useState({
       patientId: null,
       highPressureRight: 0, //Систол
@@ -44,8 +57,6 @@ export default function EarlyWarning({ PatientId, listId }) {
    });
    const [patientAssesments, setPatientAssesments] = useState([]); //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД
    const [patientAssesmentsResult, setPatientAssesmentsResult] = useState([]); //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД Ард харагдах нь
-   //
-   const [lineAssesmentsResult, setLineAssesmentsResult] = useState([]);
    const [lineLabels, setLineLabels] = useState([]);
    const [breathData, setBreathData] = useState([]);
    const [spo2Data, setSpo2Data] = useState([]);
@@ -53,12 +64,79 @@ export default function EarlyWarning({ PatientId, listId }) {
    const [HighPressureRightData, setHighPressureRightData] = useState([]);
    const [LowPressureRightData, setLowPressureRightData] = useState([]);
    const [tempData, setTempData] = useState([]);
+   const [printLoading, setPrintLoading] = useState(false);
+   const [reportAssesments, setReportAssesments] = useState([]);
    //
-   useEffect(() => {
-      if (PatientId) {
-         getAssesment();
-      }
-   }, [PatientId]);
+   let ctx = null;
+   const oneLine = 12;
+   const drawLine = (info, style = {}) => {
+      const { x, y, x1, y1 } = info;
+      const { color = 'black', width = 0 } = style;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x1, y1);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.stroke();
+   };
+   const calcDrawers = (datas) => {
+      // drawLine({ x: 0, y: 748, x1: 150, y1: 233.51 }, { color: 'red' });
+      var startXP = 0;
+      var startYP = 692;
+      var startXR = 80;
+      var startYR = 692;
+      var startXT = 160;
+      var startYT = 692;
+      datas.map((data, index) => {
+         // pulse
+         const pulse = data.pulse - 40;
+         const pulseLines = (pulse * 58) / 116;
+         const totalPulseLinew = 692 - pulseLines * oneLine;
+         // amisgal
+         const respiratoryRate = data.respiratoryRate;
+         const totalRespiratoryRate = 692 - respiratoryRate * oneLine;
+         // haluun
+         const temp = data.temp - 35;
+         const tempLines = (temp * 58) / 5.8;
+         const totalTemp = 692 - tempLines * oneLine;
+         //
+         drawLine(
+            {
+               x: startXP,
+               y: startYP,
+               x1: 250 + 24 * index,
+               y1: totalPulseLinew
+            },
+            { color: 'red' }
+         );
+         drawLine(
+            {
+               x: startXR,
+               y: startYR,
+               x1: 250 + 24 * index,
+               y1: totalRespiratoryRate
+            },
+            { color: 'blue' }
+         );
+         drawLine(
+            {
+               x: startXT,
+               y: startYT,
+               x1: 250 + 24 * index,
+               y1: totalTemp
+            },
+            { color: 'black' }
+         );
+         startXP = 250 + 24 * index;
+         startYP = totalPulseLinew;
+         startXR = 250 + 24 * index;
+         startYR = totalRespiratoryRate;
+         startXT = 250 + 24 * index;
+         startYT = totalTemp;
+      });
+   };
+   //
+
    let handleChange = (e, p) => {
       if (p === 'mind') {
          //Зөвхөн SELECT үед
@@ -85,11 +163,16 @@ export default function EarlyWarning({ PatientId, listId }) {
    };
    const getAssesment = async (type) => {
       //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
-      config.params.patientId = PatientId;
+      if (UsageType === 'OUT') {
+         config.params.patientId = PatientId;
+      } else {
+         config.params.inpatientRequestId = ListId;
+      }
       const response = await Get('assesment', token, config);
       if (response.data.length != 0) {
          setPatientAssesments(response.data);
          setPatientAssesmentsResult(response.data);
+         calcDrawers(response.data);
          if (response.data.length <= 7) {
             var demoLineLabels = [];
             var demoBreathData = [];
@@ -159,13 +242,32 @@ export default function EarlyWarning({ PatientId, listId }) {
          });
       }
    };
+   const get = async () => {
+      const response = await Get('report/assesment', token, config);
+      setReportAssesments(response);
+   };
    const createAssesment = async () => {
       formValues.patientId = PatientId;
-      formValues.appointmentId = listId;
-      const response = await Post('assesment', token, config, formValues);
+      if (UsageType === 'IN') {
+         formValues.inpatientRequestId = ListId;
+      }
+      // const response = await Post('assesment', token, config, formValues);
+      const response = await DefaultPost(
+         'assesment',
+         token,
+         config,
+         formValues
+      );
       resetFormFields();
       getAssesment('save');
+      get();
    };
+   const handlePrint = useReactToPrint({
+      onBeforeGetContent: () => setPrintLoading(true),
+      onBeforePrint: () => setPrintLoading(false),
+      onPrintError: () => console.log('asda'),
+      content: () => vsPrintRef.current
+   });
    //
    ChartJS.register(
       CategoryScale,
@@ -257,12 +359,168 @@ export default function EarlyWarning({ PatientId, listId }) {
       ]
    };
    //
+   useEffect(() => {
+      if (PatientId) {
+         getAssesment();
+         get();
+      }
+   }, [PatientId]);
+   // initialize the canvas context
+   useEffect(() => {
+      // dynamically assign the width and height to canvas
+      const canvasEle = vsCanvas.current;
+      canvasEle.width = 716.13;
+      canvasEle.height = 692;
+
+      // get context of the canvas
+      ctx = canvasEle.getContext('2d');
+   }, []);
+   //
    return (
       <>
          <div className="flex flex-wrap">
             <div className="w-full md:w-full xl:w-1/2">
                <div className="p-4">
+                  <Button
+                     className="ml-2"
+                     icon={<PrinterOutlined />}
+                     onClick={handlePrint}
+                     loading={printLoading}
+                  >
+                     Хэвлэх
+                  </Button>
                   <Line options={vsOptions} data={LineGraphVS} />
+                  <div className="hidden">
+                     <div ref={vsPrintRef}>
+                        <div className="page">
+                           <div className="subpage">
+                              <div className="flow-root">
+                                 <div className="float-right">
+                                    <p>
+                                       Эрүүл мэндийн сайдын 2019 оны 12 дугаар
+                                       сарын 30-ны
+                                    </p>
+                                    <p>
+                                       өдрийн A/611 дүгээр тушаалын
+                                       арваннэгдүгээр хавсралт
+                                    </p>
+                                    <p className="font-bold">
+                                       Эрүүд мэндийн бүртгэлийн маягт CT-1,2
+                                       Хавсралт 2
+                                    </p>
+                                 </div>
+                              </div>
+                              <p
+                                 className="font-bold text-center"
+                                 style={{ fontSize: 16 }}
+                              >
+                                 ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС
+                              </p>
+                              <div className="flow-root py-1">
+                                 <div className="float-left inline-flex">
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       Эмчлүүлэгчийн овог, нэр:
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       {patientData?.lastName.substring(0, 1) +
+                                          '.' +
+                                          patientData?.firstName}
+                                    </p>
+                                 </div>
+                                 <div className="float-right inline-flex">
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       Нас:
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       {getAge(patientData?.registerNumber)}
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                       className="pl-1"
+                                    >
+                                       Хүйс:
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       {patientData?.genderType === 'MAN'
+                                          ? 'Эр'
+                                          : 'Эм'}
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                       className="pl-1"
+                                    >
+                                       Тасаг:
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       {location?.state?.departmentName}
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                       className="pl-1"
+                                    >
+                                       Өрөө:
+                                    </p>
+                                    <p
+                                       style={{
+                                          fontSize: 10,
+                                          fontWeight: 'bold'
+                                       }}
+                                    >
+                                       {location?.state?.roomNumber}
+                                    </p>
+                                 </div>
+                              </div>
+                              <canvas
+                                 className="absolute border-none p-0"
+                                 style={{
+                                    marginTop: 99.2
+                                 }}
+                                 ref={vsCanvas}
+                              ></canvas>
+                              <EarlyWarningPrint Data={reportAssesments} />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
             <div className="w-full md:w-full xl:w-1/2">

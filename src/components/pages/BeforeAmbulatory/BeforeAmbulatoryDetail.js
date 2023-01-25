@@ -145,10 +145,7 @@ function BeforeAmbulatoryDetail() {
             </div>
             <div className="w-full p-1">
                {location?.state?.type === 0 ? (
-                  <BeforeAmbulatoryTabs
-                     patientId={selectedPatient?.id}
-                     listId={location.state?.appointmentId}
-                  />
+                  <BeforeAmbulatoryTabs patientId={selectedPatient?.id} />
                ) : (
                   <BeforeInPatientTabs
                      patientId={selectedPatient?.id}

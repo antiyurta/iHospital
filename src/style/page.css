@@ -20,6 +20,21 @@ body {
    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.page-landscape {
+   min-width: 29.7cm;
+   height: 209mm;
+   margin: 1cm auto;
+   border: 1px #d3d3d3 solid;
+   border-radius: 5px;
+   background: white;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.subpage-landscape{
+   padding: 10mm;
+   height: 190mm;
+}
+
 .subpage {
    padding: 10mm;
    height: 277mm;
@@ -37,6 +52,10 @@ body {
 
 @media print {
    .page {
+      margin: 0;
+      page-break-after: always;
+   }
+   .page-landscape {
       margin: 0;
       page-break-after: always;
    }
