@@ -299,9 +299,9 @@ function InputOutput({ PatientId, ListId, PatientData }) {
             }
             onCancel={() => setIsOpen(false)}
             width={'10cm'}
-            cancelText="Болих"
             confirmLoading={loading}
-            okText="Хадагалах"
+            cancelText="Болих"
+            okText="Хадгалах"
          >
             <Form form={form} labelAlign="right" labelCol={{ span: 6 }}>
                <Form.Item label="Төрөл" name="type">

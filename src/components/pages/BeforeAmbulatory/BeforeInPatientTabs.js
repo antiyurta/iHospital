@@ -101,7 +101,7 @@ function BeforeInPatientTabs({
                   }}
                   className={pageId === 8 ? 'button-active m-1' : 'm-1'}
                >
-                  Тэмдэглэл
+                  Сувилгааны тэмдэглэл
                </Button>
                <Button
                   type="primary"
@@ -180,7 +180,13 @@ function BeforeInPatientTabs({
                      PatientData={patientData}
                   />
                )}
-               {pageId === 8 && <NursingNote PatientId={patientId} />}
+               {pageId === 8 && (
+                  <NursingNote
+                     PatientId={patientId}
+                     ListId={listId}
+                     PatientData={patientData}
+                  />
+               )}
                {pageId === 9 && (
                   <Epicriz
                      PatientId={patientId}

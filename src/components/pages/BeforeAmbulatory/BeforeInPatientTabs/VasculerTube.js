@@ -1,4 +1,8 @@
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+   MinusOutlined,
+   PlusOutlined,
+   PrinterOutlined
+} from '@ant-design/icons';
 import {
    Button,
    Cascader,
@@ -23,6 +27,7 @@ function VasculerTube({ PatientData, ListId }) {
    const printRef = useRef();
    const [form] = Form.useForm();
    const [datas, setDatas] = useState([]);
+   const [printLoading, setPrintLoading] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const [vascularList, setVascularList] = useState([]);
@@ -30,10 +35,9 @@ function VasculerTube({ PatientData, ListId }) {
    const conf = {
       headers: {},
       params: {
-         patientId: PatientData.id
+         inpatientRequestId: ListId
       }
    };
-
    const getVascularTube = async () => {
       setVascularList([]);
       setIsLoading(true);
@@ -214,6 +218,8 @@ function VasculerTube({ PatientData, ListId }) {
             onOk={() =>
                form.validateFields().then((values) => onFinish(values))
             }
+            cancelText="Болих"
+            okText="Хадгалах"
          >
             <Form form={form} layout="vertical">
                <Row justify="space-between">
@@ -426,14 +432,21 @@ function VasculerTube({ PatientData, ListId }) {
             <Spinner animation="grow" style={{ color: '#1890ff' }} />
          ) : (
             <>
-               <Button onClick={handlePrint}>Хэвлэх</Button>
                <Button
+                  type="primary"
                   onClick={() => {
-                     setIsOpen(true);
+                     setIsOpen(true), form.resetFields();
                   }}
-                  className="ml-2"
                >
-                  Нэмэх
+                  Бичих
+               </Button>
+               <Button
+                  className="ml-2"
+                  icon={<PrinterOutlined />}
+                  onClick={handlePrint}
+                  loading={printLoading}
+               >
+                  Хэвлэх
                </Button>
                <div ref={printRef}>
                   <div className="page-landscape">

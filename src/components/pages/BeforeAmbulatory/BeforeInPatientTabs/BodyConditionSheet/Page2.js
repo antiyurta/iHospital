@@ -31,6 +31,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.needle === 'Тавьсан/Сольсон' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.needle === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -61,6 +63,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.needle === 'Бэхэлгээ хийсэн' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.needle === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -78,6 +82,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.tubeCare === 'Хийх шаардлагагүй' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.tubeCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -92,6 +98,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.tubeCare === 'Хийгдсэн' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.tubeCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -101,7 +109,7 @@ function Page2({ form }) {
                   </tr>
                   <tr>
                      <th rowSpan={3} colSpan={3}>
-                        Бургүй хийсэн
+                        Бургуй хийсэн
                      </th>
                      <th colSpan={3}>Цэвэрлэх бургуй/ тосон</th>
                      {form?.map((item, index) => {
@@ -110,6 +118,8 @@ function Page2({ form }) {
                               {item.daily?.burgui ===
                               'Цэвэрлэх бургуй/ тосгон' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.burgui === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -124,6 +134,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.burgui === 'Эмчилгээний бургуй' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.burgui === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -138,6 +150,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.burgui === 'Хий гаргах гуурс' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.burgui === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -155,6 +169,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.partCare === 'Халуун жин тавьсан' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.partCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -169,6 +185,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.partCare === 'Хүйтэн жин тавьсан' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.partCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -184,6 +202,8 @@ function Page2({ form }) {
                               {item.daily?.partCare ===
                               'Халуун бигнүүр тавьсан' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.partCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -199,6 +219,8 @@ function Page2({ form }) {
                               {item.daily?.partCare ===
                               'Хүйтэн бигнүүр тавьсан' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.partCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -213,6 +235,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.partCare === 'Гич тавьсан' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.partCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -227,6 +251,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.partCare === 'Бумба тавьсан' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.partCare === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -245,6 +271,8 @@ function Page2({ form }) {
                               {item.daily?.advice ===
                               'Өөрт нь зөвлөгөө өгсөн' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.advice === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -260,6 +288,8 @@ function Page2({ form }) {
                               {item.daily?.advice ===
                               'Гэр бүлд нь зөвлөгөө өгсөн' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.advice === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -278,6 +308,8 @@ function Page2({ form }) {
                               {item.daily?.reHealt ===
                               'Дасгал хөдөлгөөн хийлгэсэн' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.reHealt === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -292,6 +324,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.reHealt === 'Иллэг массаж хийсэн' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.reHealt === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -307,9 +341,10 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.position ===
-                              'Иллэг массаж хийсэн' ? (
+                              {item.daily?.position === 'Сольсон /Цаг/' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.position === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -324,6 +359,8 @@ function Page2({ form }) {
                            <td key={index}>
                               {item.daily?.position === 'Солих шаардлагагүй' ? (
                                  <CheckOutlined />
+                              ) : item.daily?.position === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -646,7 +683,14 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td rowSpan={2} key={index}>
-                              <p>{moment(item.createdAt).format('DD/hh')}</p>
+                              <p>
+                                 {moment(item.createdAt).format('MM-DD HH:mm')}
+                              </p>
+                              <p>
+                                 {item.createdLastName?.substring(0, 1) +
+                                    '.' +
+                                    item.createdFirstName}
+                              </p>
                            </td>
                         );
                      })}
@@ -665,7 +709,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td rowSpan={2} key={index}>
-                              <p>{moment(item.createdAt).format('DD/hh')}</p>
+                              <p></p>
                            </td>
                         );
                      })}

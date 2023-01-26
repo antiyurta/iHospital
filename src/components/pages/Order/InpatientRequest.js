@@ -62,7 +62,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
             onCancel={() => {
                isClose('inpatient', false);
             }}
-            okText="Захилах"
+            okText="Захиалах"
             cancelText="Болих"
             onOk={() => {
                InpatientRequestForm.validateFields().then((values) => {

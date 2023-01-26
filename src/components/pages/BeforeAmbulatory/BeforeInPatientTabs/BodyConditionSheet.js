@@ -212,6 +212,10 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                                    value: 'Тоо цөөрсөн'
                                                 }
                                              ]
+                                          },
+                                          {
+                                             label: 'Хамаарахгүй',
+                                             value: 'Хамаарахгүй'
                                           }
                                        ]}
                                     />
@@ -251,6 +255,10 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                                    value: 'Тод'
                                                 }
                                              ]
+                                          },
+                                          {
+                                             label: 'Хамаарахгүй',
+                                             value: 'Хамаарахгүй'
                                           }
                                        ]}
                                     />
@@ -272,6 +280,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Үгүй'}>Үгүй</Radio>
                                           <Radio value={'Цэргүй'}>Цэргүй</Radio>
                                           <Radio value={'Цэртэй'}>Цэртэй</Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -322,6 +333,10 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                                    value: 'Шилбэнд'
                                                 }
                                              ]
+                                          },
+                                          {
+                                             label: 'Хамаарахгүй',
+                                             value: 'Хамаарахгүй'
                                           }
                                        ]}
                                     />
@@ -346,6 +361,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'2 секундээс удаан'}>
                                              2 секундээс удаан
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -368,6 +386,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Жигд'}>Жигд</Radio>
                                           <Radio value={'Хэм алдагдсан'}>
                                              Хэм алдагдсан
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -401,6 +422,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Бусад замаар'}>
                                              Бусад замаар
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -423,6 +447,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Хоол хориотой'}>
                                              Хоол хориотой
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -451,6 +478,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Бөөлжүүлнэ'}>
                                              Бөөлжүүлнэ
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -475,6 +505,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Хонхойж татагдсан'}>
                                              Хонхойж татагдсан
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -497,6 +530,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Шингэн'}>Шингэн</Radio>
                                           <Radio value={'Өнгө өөрчлөгдсөн'}>
                                              Өнгө өөрчлөгдсөн
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -530,6 +566,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Багассан'}>
                                              Багассан
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -559,6 +598,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Задгайрсан'}>
                                              Задгайрсан
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -582,6 +624,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Өөрчлөлттэй'}>
                                              Өөрчлөлттэй
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -604,6 +649,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Шээлгүүртэй'}>
                                              Шээлгүүртэй
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -667,6 +715,10 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                                    value: 'Цооролттой'
                                                 }
                                              ]
+                                          },
+                                          {
+                                             label: 'Хамаарахгүй',
+                                             value: 'Хамаарахгүй'
                                           }
                                        ]}
                                     />
@@ -697,6 +749,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Шаардлагатай'}>
                                              Шаардлагатай
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -720,6 +775,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Шаардлагатай'}>
                                              Шаардлагатай
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -742,6 +800,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Шаардлагатай'}>
                                              Шаардлагатай
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -777,6 +838,10 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           {
                                              label: 'Гуурстай',
                                              value: 'Гуурстай'
+                                          },
+                                          {
+                                             label: 'Хамаарахгүй',
+                                             value: 'Хамаарахгүй'
                                           }
                                        ]}
                                     />
@@ -801,6 +866,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Хавдсан'}>
                                              Хавдсан
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -841,6 +909,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Ухаангүй'}>
                                              Ухаангүй
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -865,6 +936,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Харьцаагүй'}>
                                              Харьцаагүй
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -887,6 +961,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Өвдөлттэй'}>
                                              Өвдөлттэй
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -911,6 +988,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Үений хавдалттай'}>
                                              Үений хавдалттай
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -943,6 +1023,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Бэхэлгээ хийсэн'}>
                                              Бэхэлгээ хийсэн
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -965,6 +1048,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Хийгдсэн'}>
                                              Хийгдсэн
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -993,6 +1079,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Хий гаргах гуурс'}>
                                              Хий гаргах гуурс
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1033,6 +1122,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Бумба тавьсан'}>
                                              Бумба тавьсан
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1062,6 +1154,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           >
                                              Гэр бүлд нь зөвлөгөө өгсөн
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1089,6 +1184,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'Иллэг массаж хийсэн'}>
                                              Иллэг массаж хийсэн
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1111,6 +1209,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Солих шаардлагагүй'}>
                                              Солих шаардлагагүй
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1144,6 +1245,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1169,6 +1273,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1196,6 +1303,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1221,6 +1331,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1248,6 +1361,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1273,6 +1389,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1300,6 +1419,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
                                           </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
+                                          </Radio>
                                        </Space>
                                     </Radio.Group>
                                  </Form.Item>
@@ -1325,6 +1447,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'СА(сахиур)'}>
                                              СА(сахиур)
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>
@@ -1359,6 +1484,9 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                                           </Radio>
                                           <Radio value={'Тэргэнцэр, таяг'}>
                                              Тэргэнцэр, таяг
+                                          </Radio>
+                                          <Radio value={'Хамаарахгүй'}>
+                                             Хамаарахгүй
                                           </Radio>
                                        </Space>
                                     </Radio.Group>

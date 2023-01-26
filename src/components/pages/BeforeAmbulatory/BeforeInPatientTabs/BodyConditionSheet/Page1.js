@@ -100,6 +100,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Жигд' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.breathing ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -137,6 +140,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Өнгөц' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.breathing ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -151,6 +157,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Гүн' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.breathing ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -166,6 +175,9 @@ function Page1({ patientData, form }) {
                               {item.respiratory?.breathing ===
                               'Тоо олширсон' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.breathing ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -180,6 +192,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Тоо цөөрсөн' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.breathing ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -195,6 +210,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.noise === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.noise === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -210,6 +227,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.noise === 'Сул' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.noise === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -224,6 +243,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.noise === 'Тод' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.noise === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -239,6 +260,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.cough === 'Үгүй' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.cough === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -253,6 +276,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.cough === 'Цэргүй' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.cough === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -267,6 +292,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.cough === 'Цэртэй' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.cough === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -282,6 +309,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.edema === 'Хавангүй' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.edema === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -297,6 +326,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.edema === 'Бүр биеэр' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.edema === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -311,6 +342,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.edema === 'Нүүрэнд' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.edema === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -325,6 +358,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.edema === 'Зовхонд' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.edema === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -339,6 +374,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.edema === 'Хэвлийд' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.edema === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -353,6 +390,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.edema === 'Шилбэнд' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.edema === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -371,6 +410,9 @@ function Page1({ patientData, form }) {
                               {item.respiratory?.capillary ===
                               '2 секундээс бага' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.capillary ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -386,6 +428,9 @@ function Page1({ patientData, form }) {
                               {item.respiratory?.capillary ===
                               '2 секундээс удаан' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.capillary ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -401,6 +446,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.heartPoint === 'Жигд' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.heartPoint ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -416,6 +464,9 @@ function Page1({ patientData, form }) {
                               {item.respiratory?.heartPoint ===
                               'Хэм алдагдсан' ? (
                                  <CheckOutlined />
+                              ) : item.respiratory?.heartPoint ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -441,6 +492,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.eat === 'Амаар' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.eat === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -484,6 +537,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.eat === 'Гуурсаар' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.eat === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -498,6 +553,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.eat === 'Бусад замаар' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.eat === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -514,6 +571,9 @@ function Page1({ patientData, form }) {
                               {item.indigestion?.sitiology ===
                               'Хоол хориогүй' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.sitiology ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -529,6 +589,9 @@ function Page1({ patientData, form }) {
                               {item.indigestion?.sitiology ===
                               'Хоол хориотой' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.sitiology ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -544,6 +607,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.appetite ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -558,6 +624,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Өөрчлөлттэй' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.appetite ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -572,6 +641,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Огиулалттай' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.appetite ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -586,6 +658,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Бөөлжүүлнэ' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.appetite ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -601,6 +676,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.stomach === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.stomach ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -615,6 +693,9 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.stomach === 'Цэрдийсэн' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.stomach ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -630,6 +711,9 @@ function Page1({ patientData, form }) {
                               {item.indigestion?.stomach ===
                               'Хонхойж татагдсан' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.stomach ===
+                                'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -645,6 +729,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.grease === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.grease === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -659,6 +745,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.grease === 'Хатуу' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.grease === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -673,6 +761,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.grease === 'Шингэн' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.grease === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -688,6 +778,8 @@ function Page1({ patientData, form }) {
                               {item.indigestion?.grease ===
                               'Өнгө өөрчлөгдсөн' ? (
                                  <CheckOutlined />
+                              ) : item.indigestion?.grease === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -714,6 +806,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeOut === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeOut === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -737,6 +831,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeOut === 'Ихэссэн' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeOut === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -751,6 +847,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeOut === 'Багассан' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeOut === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -766,6 +864,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peePain === 'Өвдөлттэй' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peePain === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -780,6 +880,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peePain === 'Дүлэлттэй' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peePain === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -794,6 +896,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peePain === 'Тасалдсан' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peePain === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -808,6 +912,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peePain === 'Задгайрсан' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peePain === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -823,6 +929,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeColor === 'Өөрчлөлтгүй' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeColor === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -837,6 +945,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeColor === 'Өөрчлөлттэй' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeColor === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -851,6 +961,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeStatus === 'Шээлгүүргүй' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -865,6 +977,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.pee?.peeStatus === 'Шээлгүүртэй' ? (
                                  <CheckOutlined />
+                              ) : item.pee?.peeStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -888,8 +1002,10 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.skin?.skinStatus === 'Хэвийн' ? (
+                              {item.skin?.skinStatus === 'Шээлгүүртэй' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -918,6 +1034,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Улайсан' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -932,6 +1050,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Хавдсан' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -946,6 +1066,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Зүсэгдсэн' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -960,6 +1082,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Шүүс гарсан' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -974,6 +1098,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Идээлсэн' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -988,6 +1114,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Тууралттай' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1002,6 +1130,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.skinStatus === 'Цооролттой' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.skinStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1018,6 +1148,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.bodyWash === 'Шаардлагагүй' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.bodyWash === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1032,6 +1164,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.bodyWash === 'Шаардлагатай' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.bodyWash === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1047,6 +1181,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.partWash === 'Шаардлагагүй' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.partWash === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1061,6 +1197,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.partWash === 'Шаардлагатай' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.partWash === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1076,6 +1214,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.bedWash === 'Шаардлагагүй' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.bedWash === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1090,6 +1230,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.bedWash === 'Шаардлагатай' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.bedWash === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1106,6 +1248,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.surgery === 'Цэвэр' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.surgery === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1120,6 +1264,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.surgery === 'Бохир' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.surgery === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1134,6 +1280,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.surgery === 'Гуурстай' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.surgery === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1151,6 +1299,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.targetNeedle === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.targetNeedle === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1165,6 +1315,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.targetNeedle === 'Улайсан' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.targetNeedle === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1179,6 +1331,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.skin?.targetNeedle === 'Хавдсан' ? (
                                  <CheckOutlined />
+                              ) : item.skin?.targetNeedle === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1204,6 +1358,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.mindStatus === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.mindStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1238,6 +1394,8 @@ function Page1({ patientData, form }) {
                               {item.mind?.mindStatus ===
                               'Сэтгэл хөөрлийн байдалтай' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.mindStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1253,6 +1411,8 @@ function Page1({ patientData, form }) {
                               {item.mind?.mindStatus ===
                               'Сэтгэл түгшсэн байдалтай' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.mindStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1267,6 +1427,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.mindStatus === 'Ухаангүй' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.mindStatus === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1282,6 +1444,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.roomTemp === 'Харьцаатай' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.roomTemp === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1296,6 +1460,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.roomTemp === 'Сул' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.roomTemp === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1310,6 +1476,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.roomTemp === 'Харьцаагүй' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.roomTemp === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1325,6 +1493,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.pain === 'Өвдөлтгүй' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.pain === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1339,6 +1509,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.pain === 'Өвдөлттэй' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.pain === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1354,6 +1526,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.bodyShake === 'Хэвийн' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.bodyShake === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1368,6 +1542,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.bodyShake === 'Хязгаардлагдмал' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.bodyShake === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}
@@ -1382,6 +1558,8 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.mind?.bodyShake === 'Үений хавдалттай' ? (
                                  <CheckOutlined />
+                              ) : item.mind?.bodyShake === 'Хамаарахгүй' ? (
+                                 '/'
                               ) : (
                                  <CloseOutlined />
                               )}

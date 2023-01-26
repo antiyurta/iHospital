@@ -1,25 +1,17 @@
-import {
-   Button,
-   DatePicker,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Table,
-   Row,
-   Col
-} from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Form, Input, Modal, Table } from 'antd';
+import { PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Post } from '../../../comman';
+import { Get, getAge, Post } from '../../../comman';
 import { useReactToPrint } from 'react-to-print';
+import { useLocation } from 'react-router-dom';
 
 const { TextArea } = Input;
-function NursingNote({ ListId, PatientId, PatientData }) {
+function NursingNote({ PatientId, ListId, PatientData }) {
+   let location = useLocation();
    const [form] = Form.useForm();
    const printRef = useRef();
    const today = new Date();
@@ -37,11 +29,13 @@ function NursingNote({ ListId, PatientId, PatientData }) {
    };
    const token = useSelector(selectCurrentToken);
    const [spinner, setSpinner] = useState(false);
+   const [printLoading, setPrintLoading] = useState(false);
    const [nursingNotes, setNursingNotes] = useState([]);
    const [meta, setMeta] = useState({});
    const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
+   const [pageCount, setPageCount] = useState([]);
    const columns = [
       {
          title: '№',
@@ -60,14 +54,14 @@ function NursingNote({ ListId, PatientId, PatientData }) {
          title: 'Асуудлын дугаар',
          dataIndex: 'issueNumber'
       },
-      {
-         title: 'NANDA код',
-         dataIndex: 'nandaCode'
-      },
-      {
-         title: 'Зорилго',
-         dataIndex: 'purpose'
-      },
+      // {
+      //    title: 'NANDA код',
+      //    dataIndex: 'nandaCode'
+      // },
+      // {
+      //    title: 'Зорилго',
+      //    dataIndex: 'purpose'
+      // },
       {
          title: 'Сувилахуйн төлөвлөгөө',
          dataIndex: 'nursingPlan'
@@ -81,6 +75,22 @@ function NursingNote({ ListId, PatientId, PatientData }) {
          dataIndex: 'conclusion'
       }
    ];
+   const calcPageCount = (data) => {
+      let dd = [];
+      let datas = [];
+      data
+         .map((item, index) => {
+            dd.push(item);
+            if ((index + 1) % 4 === 0) {
+               datas.push(dd);
+               dd = [];
+            } else if (index + 1 === data.length) {
+               datas.push(dd);
+            }
+         })
+         .reverse();
+      setPageCount(datas);
+   };
    const getNursingNote = async (page, pageSize, start, end) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -98,12 +108,11 @@ function NursingNote({ ListId, PatientId, PatientData }) {
       setStart(start);
       setEnd(end);
       const response = await Get('inpatient/nursing-note', token, conf);
-      console.log('RES========>', response);
+      calcPageCount(response.data);
       setNursingNotes(response.data);
       setMeta(response.meta);
       setSpinner(false);
    };
-   console.log('PatientData', PatientData);
    const onFinish = async (values) => {
       const conf = {
          headers: {},
@@ -131,6 +140,9 @@ function NursingNote({ ListId, PatientId, PatientData }) {
    }, [PatientId]);
 
    const handlePrint = useReactToPrint({
+      onBeforeGetContent: () => setPrintLoading(true),
+      onBeforePrint: () => setPrintLoading(false),
+      onPrintError: () => console.log('asda'),
       content: () => printRef.current
    });
    return (
@@ -138,10 +150,20 @@ function NursingNote({ ListId, PatientId, PatientData }) {
          <div className="flex flex-wrap">
             <div className="w-full p-1">
                <div className="float-left">
-                  <Button onClick={() => setIsOpenNoteModal(true)}>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setIsOpenNoteModal(true), form.resetFields();
+                     }}
+                  >
                      Тэмдэглэл бичих
                   </Button>
-                  <Button onClick={() => handlePrint()} className="ml-2">
+                  <Button
+                     className="ml-2"
+                     icon={<PrinterOutlined />}
+                     onClick={handlePrint}
+                     loading={printLoading}
+                  >
                      Хэвлэх
                   </Button>
                </div>
@@ -216,7 +238,7 @@ function NursingNote({ ListId, PatientId, PatientData }) {
                         <Input />
                      </Form.Item>
                   </div>
-                  <div className="basis-1/2 p-1">
+                  {/* <div className="basis-1/2 p-1">
                      <Form.Item
                         label="NANDA код"
                         name="nandaCode"
@@ -233,7 +255,7 @@ function NursingNote({ ListId, PatientId, PatientData }) {
                      >
                         <Input />
                      </Form.Item>
-                  </div>
+                  </div> */}
                   <div className="w-full p-1">
                      <Form.Item
                         label="Сувлахуйн төлөвлөгөө"
@@ -265,115 +287,158 @@ function NursingNote({ ListId, PatientId, PatientData }) {
             </Form>
          </Modal>
          <div style={{ display: 'none' }}>
-            <div ref={printRef} className="p-8">
-               <h2 className="font-bold text-center">СУВИЛАГЧИЙН ТЭМДЭГЛЭЛ</h2>
-               <Row className="mt-2">
-                  <Col span={18}>
-                     <b>Эмчлүүлэгчийн овог, нэр: </b>
-                     {`${PatientData?.lastName?.substr(0, 1)}. ${
-                        PatientData?.firstName
-                     }`}
-                  </Col>
-                  <Col span={6}>
-                     <b>Өвчний түүх №</b> {PatientData?.cardNumber}
-                  </Col>
-               </Row>
-               <Row className="mt-2">
-                  <Col span={6}>
-                     <b>Нас:</b> {PatientData?.age}
-                  </Col>
-                  <Col span={6}>
-                     <b>Хүйс: </b>
-                     {PatientData?.genderType === 'MAN' ? 'Эрэгтэй' : 'Эмэгтэй'}
-                  </Col>
-                  <Col span={6}>
-                     <b>Тасаг: </b>
-                     {nursingNotes[0]?.inpatientRequests?.structure?.name}
-                  </Col>
-                  <Col span={6}>
-                     <b>Өрөө: </b>
-                     {nursingNotes[0]?.inpatientRequests?.rooms?.roomNumber}
-                  </Col>
-               </Row>
-               <table
-                  style={{
-                     borderWidth: '1px',
-                     borderColor: '#aaaaaa',
-                     borderStyle: 'solid',
-                     width: '100%',
-                     marginTop: 20
-                  }}
-                  className="border-collapse border border-slate-500"
-               >
-                  <thead>
-                     <tr>
-                        <th className="border border-slate-600 p-1 text-center w-32">
-                           Огноо
-                        </th>
-                        <th className="border border-slate-600 p-1 text-center">
-                           Асуудлын дугаар
-                        </th>
-                        <th className="border border-slate-600 p-1 text-center">
-                           Сувлахуйн төлөвлөгөө
-                        </th>
-                        <th className="border border-slate-600 p-1 text-center">
-                           Хэрэгжүүлсэн
-                        </th>
-                        <th className="border border-slate-600 p-1 text-center">
-                           Дүгнэлт
-                        </th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {nursingNotes &&
-                        nursingNotes?.map((el, index) => {
-                           return (
-                              <>
-                                 <tr key={index}>
-                                    <td
-                                       rowSpan="2"
-                                       className="border border-slate-600 p-1 text-center"
-                                    >
-                                       {moment(el.date).format(
-                                          'YYYY-MM-DD HH:mm'
-                                       )}
-                                    </td>
-                                    <td
-                                       rowSpan="2"
-                                       className="border border-slate-600 p-1 text-center"
-                                    >
-                                       {el.issueNumber}
-                                    </td>
-                                    <td
-                                       rowSpan="2"
-                                       className="border border-slate-600 p-1 w-1/4"
-                                    >
-                                       {el.nursingPlan}
-                                    </td>
-                                    <td
-                                       rowSpan="2"
-                                       className="border border-slate-600 p-1 w-1/4"
-                                    >
-                                       {el.implemented}
-                                    </td>
-                                    <td className="border border-slate-600 p-1 w-1/4">
-                                       <td>{el.conclusion}</td>
-                                    </td>
-                                 </tr>
+            <div ref={printRef}>
+               {pageCount.map((item, index) => {
+                  return (
+                     <div key={index} className="page">
+                        <div className="subpage">
+                           <div className="flow-root">
+                              <p
+                                 className="float-right"
+                                 style={{ fontSize: 14 }}
+                              >
+                                 СМ-2-Хавсралт 12
+                              </p>
+                           </div>
+                           <p
+                              className="font-bold text-center"
+                              style={{ fontSize: 16 }}
+                           >
+                              СУВИЛГААНЫ ТЭМДЭГЛЭЛ
+                           </p>
+                           <div className="flow-root py-1">
+                              <div className="float-left inline-flex">
+                                 <p style={{ fontSize: 14 }}>
+                                    Эмчлүүлэгчийн овог, нэр:
+                                 </p>
+                                 <p style={{ fontSize: 14 }}>
+                                    {PatientData?.lastName.substring(0, 1) +
+                                       '.' +
+                                       PatientData?.firstName}
+                                 </p>
+                              </div>
+                              <div className="float-right inline-flex">
+                                 <p style={{ fontSize: 14 }}>Нас:</p>
+                                 <p style={{ fontSize: 14 }}>
+                                    {getAge(PatientData?.registerNumber)}
+                                 </p>
+                                 <p style={{ fontSize: 14 }} className="pl-1">
+                                    Хүйс:
+                                 </p>
+                                 <p style={{ fontSize: 14 }}>
+                                    {PatientData?.genderType === 'MAN'
+                                       ? 'Эр'
+                                       : 'Эм'}
+                                 </p>
+                                 <p style={{ fontSize: 14 }} className="pl-1">
+                                    Тасаг:
+                                 </p>
+                                 <p style={{ fontSize: 14 }}>
+                                    {location?.state?.departmentName}
+                                 </p>
+                                 <p style={{ fontSize: 14 }} className="pl-1">
+                                    Өрөө:
+                                 </p>
+                                 <p style={{ fontSize: 14 }}>
+                                    {location?.state?.roomNumber}
+                                 </p>
+                              </div>
+                           </div>
+                           <table
+                              style={{
+                                 borderWidth: '1px',
+                                 borderColor: '#aaaaaa',
+                                 borderStyle: 'solid',
+                                 width: '100%',
+                                 marginTop: 20
+                              }}
+                              className="border-collapse border border-slate-500"
+                           >
+                              <thead>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       <b>Сувилагчийн нэр: </b>{' '}
-                                       {`${el?.createdLastName?.substr(
-                                          0,
-                                          1
-                                       )}. ${el?.createdFirstName}`}
-                                    </td>
+                                    <th className="border border-slate-600 p-1 text-center w-32">
+                                       Огноо
+                                    </th>
+                                    <th className="border border-slate-600 p-1 text-center">
+                                       Асуудлын дугаар
+                                    </th>
+                                    <th className="border border-slate-600 p-1 text-center">
+                                       Сувлахуйн төлөвлөгөө
+                                    </th>
+                                    <th className="border border-slate-600 p-1 text-center">
+                                       Хэрэгжүүлсэн
+                                    </th>
+                                    <th className="border border-slate-600 p-1 text-center">
+                                       Дүгнэлт
+                                    </th>
                                  </tr>
-                              </>
-                           );
-                        })}
-                  </tbody>
-               </table>
+                              </thead>
+                              <tbody>
+                                 {item &&
+                                    item
+                                       ?.map((el, index) => {
+                                          return (
+                                             <>
+                                                <tr key={index}>
+                                                   <td
+                                                      rowSpan="2"
+                                                      className="border border-slate-600 p-1 text-center"
+                                                      style={{
+                                                         writingMode:
+                                                            'vertical-rl',
+                                                         textAlign: 'center',
+                                                         verticalAlign:
+                                                            'middle',
+                                                         fontWeight: 'bold'
+                                                      }}
+                                                   >
+                                                      {moment(el.date).format(
+                                                         'YYYY-MM-DD HH:mm'
+                                                      )}
+                                                   </td>
+                                                   <td
+                                                      rowSpan="2"
+                                                      className="border border-slate-600 p-1 text-center"
+                                                   >
+                                                      {el.issueNumber}
+                                                   </td>
+                                                   <td
+                                                      rowSpan="2"
+                                                      className="border border-slate-600 p-1 w-1/4"
+                                                   >
+                                                      {el.nursingPlan}
+                                                   </td>
+                                                   <td
+                                                      rowSpan="2"
+                                                      className="border border-slate-600 p-1 w-1/4"
+                                                   >
+                                                      {el.implemented}
+                                                   </td>
+                                                   <td className="border border-slate-600 p-1 w-1/4">
+                                                      <td>{el.conclusion}</td>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td className="border border-slate-600 p-1">
+                                                      <b>Сувилагчийн нэр: </b>{' '}
+                                                      {`${el?.createdLastName?.substr(
+                                                         0,
+                                                         1
+                                                      )}. ${
+                                                         el?.createdFirstName
+                                                      }`}
+                                                   </td>
+                                                </tr>
+                                             </>
+                                          );
+                                       })
+                                       .reverse()}
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  );
+               })}
             </div>
          </div>
       </>
