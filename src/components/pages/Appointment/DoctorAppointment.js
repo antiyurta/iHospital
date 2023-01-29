@@ -1,6 +1,5 @@
-import { Card, Pagination, Tabs } from 'antd';
-import Table from 'react-bootstrap/Table';
-import { Get, openNofi, ScrollRef } from '../../comman';
+import { Card, Empty, Input, Pagination, Table } from 'antd';
+import { Get, ScrollRef } from '../../comman';
 import React, { useRef, useState } from 'react';
 import PatientInformation from '../PatientInformation';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -8,10 +7,8 @@ import { useSelector } from 'react-redux';
 import Appointment from './Schedule/Appointment';
 import { useEffect } from 'react';
 import Index from './Doctor/Index';
-const config = {
-   headers: {},
-   params: {}
-};
+import { SearchOutlined } from '@ant-design/icons';
+const { Search } = Input;
 
 function DoctorAppointment() {
    const token = useSelector(selectCurrentToken);
@@ -19,13 +16,14 @@ function DoctorAppointment() {
    const [selectedPatient, setSelectedPatient] = useState([]);
    //
    const [notPatientsList, setNotPatientsList] = useState([]);
+   const [notPatientsListLoading, setNotPatientListLoading] = useState(false);
    const [notPatientsMeta, setNotPatientsMeta] = useState({
       page: 1,
       limit: 10
    });
    const [notPatientsValue, setNotPatientsValue] = useState('');
    //
-   const onSearchSchedule = async (page, pageSize, value) => {
+   const onSearchSchedule = async (page, pageSize, value, value1, index) => {
       if (value != undefined) {
          setNotPatientsValue(value);
       }
@@ -37,10 +35,50 @@ function DoctorAppointment() {
             limit: pageSize
          }
       };
+      if ((value1, index)) {
+         conf.params[index] = value1;
+      }
       const response = await Get('pms/patient', token, conf);
       setNotPatientsList(response.data);
       setNotPatientsMeta(response.meta);
    };
+   const getColumnSearchProps = (dataIndex) => ({
+      filterDropdown: ({}) => (
+         <div style={{ padding: 8 }}>
+            <Search
+               placeholder={`Хайх`}
+               allowClear
+               onSearch={(e) =>
+                  onSearchSchedule(1, 10, notPatientsValue, e, dataIndex)
+               }
+               enterButton={'Хайх'}
+            />
+         </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: '#2d8cff' }} />
+   });
+   const notPatientsListColumn = [
+      {
+         title: 'Картын №',
+         dataIndex: 'cardNumber',
+         ...getColumnSearchProps('cardNumber')
+      },
+      {
+         title: 'Овог',
+         dataIndex: 'lastName',
+         ...getColumnSearchProps('lastName')
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'firstName',
+         ...getColumnSearchProps('firstName')
+      },
+      {
+         title: 'Регистр',
+         dataIndex: 'registerNumber',
+         ...getColumnSearchProps('registerNumber')
+      }
+   ];
    //
    useEffect(() => {
       ScrollRef(scrollRef);
@@ -85,51 +123,29 @@ function DoctorAppointment() {
                      </>
                   }
                >
-                  <div
-                     className="table-responsive"
-                     id="style-8"
-                     style={{ maxHeight: '150px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
-                        <thead className="ant-table-thead bg-slate-200">
-                           <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Картын №
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Овог
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Регистрийн дугаар
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody className="ant-table-tbody">
-                           {notPatientsList.map((patient, index) => {
-                              return (
-                                 <tr
-                                    className="hover:cursor-pointer ant-table-row ant-table-row-level-0"
-                                    key={index}
-                                    onDoubleClick={() =>
-                                       setSelectedPatient(patient)
-                                    }
-                                 >
-                                    <td>{patient.cardNumber}</td>
-                                    <td>{patient.lastName}</td>
-                                    <td>{patient.firstName}</td>
-                                    <td>{patient.registerNumber}</td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </Table>
-                  </div>
+                  <Table
+                     rowKey={'id'}
+                     loading={{
+                        spinning: notPatientsListLoading,
+                        tip: 'Уншиж байна...'
+                     }}
+                     scroll={{
+                        y: 100
+                     }}
+                     bordered
+                     onRow={(row) => {
+                        return {
+                           onClick: () => {
+                              setSelectedPatient(row);
+                           }
+                        };
+                     }}
+                     rowClassName="hover:cursor-pointer"
+                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                     columns={notPatientsListColumn}
+                     dataSource={notPatientsList}
+                     pagination={false}
+                  />
                </Card>
             </div>
             <div className="w-full md:w-4/12 p-1">

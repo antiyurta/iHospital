@@ -1,5 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons';
-import { Button, Form, InputNumber, Modal, Select, Spin } from 'antd';
+import { Button, Card, Form, InputNumber, Modal, Select, Spin } from 'antd';
 import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
@@ -11,48 +11,51 @@ import { Get, getAge, Post } from '../../../comman';
 const { Option } = Select;
 function InputOutput({ PatientId, ListId, PatientData }) {
    let location = useLocation();
-   console.log('location', location);
    const token = useSelector(selectCurrentToken);
    const printRef = useRef();
    const [form] = Form.useForm();
    const [loading, setLoading] = useState(false);
    const [spinner, setSpinner] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
-   const [datas, setDatas] = useState([]);
+   const [fluidBalance, setFluidBalance] = useState([]);
+   const [printLoading, setPrintLoading] = useState(false);
    const getData = async () => {
       setSpinner(true);
       const conf = {
          headers: {},
          params: {
-            inpatientRequestId: ListId
+            inpatientRequestId: ListId,
+            pageInSize: 3
          }
       };
       const response = await Get('report/fluid-balance', token, conf);
-      response.map((item) => {
-         let morningTotal = 0;
-         let afternoonTotal = 0;
-         let eveningTotal = 0;
-         item.inputs?.map((value) => {
-            morningTotal += value.morning;
-            afternoonTotal += value.afternoon;
-            eveningTotal += value.evening;
+      response.map((el) => {
+         el.map((item) => {
+            let morningTotal = 0;
+            let afternoonTotal = 0;
+            let eveningTotal = 0;
+            item.inputs?.map((value) => {
+               morningTotal += value.morning;
+               afternoonTotal += value.afternoon;
+               eveningTotal += value.evening;
+            });
+            item['iMorningTotal'] = morningTotal;
+            item['iAfternoonTotal'] = afternoonTotal;
+            item['iEveningTotal'] = eveningTotal;
+            morningTotal = 0;
+            afternoonTotal = 0;
+            eveningTotal = 0;
+            item.outputs?.map((value) => {
+               morningTotal += value.morning;
+               afternoonTotal += value.afternoon;
+               eveningTotal += value.evening;
+            });
+            item['oMorningTotal'] = morningTotal;
+            item['oAternoonTotal'] = afternoonTotal;
+            item['oEveningTotal'] = eveningTotal;
          });
-         item['iMorningTotal'] = morningTotal;
-         item['iAfternoonTotal'] = afternoonTotal;
-         item['iEveningTotal'] = eveningTotal;
-         morningTotal = 0;
-         afternoonTotal = 0;
-         eveningTotal = 0;
-         item.outputs?.map((value) => {
-            morningTotal += value.morning;
-            afternoonTotal += value.afternoon;
-            eveningTotal += value.evening;
-         });
-         item['oMorningTotal'] = morningTotal;
-         item['oAternoonTotal'] = afternoonTotal;
-         item['oEveningTotal'] = eveningTotal;
       });
-      setDatas(response);
+      setFluidBalance(response);
       setSpinner(false);
    };
    const checkNumber = (event) => {
@@ -86,6 +89,9 @@ function InputOutput({ PatientId, ListId, PatientData }) {
       setLoading(false);
    };
    const handlePrint = useReactToPrint({
+      onBeforeGetContent: () => setPrintLoading(true),
+      onBeforePrint: () => setPrintLoading(false),
+      onPrintError: () => console.log('asda'),
       content: () => printRef.current
    });
    //
@@ -97,7 +103,13 @@ function InputOutput({ PatientId, ListId, PatientData }) {
       getData();
    }, []);
    return (
-      <>
+      <Card
+         bordered={false}
+         bodyStyle={{
+            padding: 7
+         }}
+         className="header-solid max-h-max rounded-md"
+      >
          <div className="flow-root">
             <div className="float-left">
                <Button
@@ -113,180 +125,193 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                   className="ml-2"
                   icon={<PrinterOutlined />}
                   onClick={handlePrint}
+                  loading={printLoading}
                >
                   Хэвлэх
                </Button>
             </div>
             <div className="float-right"></div>
          </div>
-         <Spin spinning={spinner}>
+         <Spin spinning={spinner} tip="Уншиж байна...">
             <div ref={printRef}>
-               <div className="page">
-                  <div className="subpage">
-                     <div className="flow-root">
-                        <p className="float-right">СМ-3 хавсралт 13</p>
-                     </div>
-                     <p className="font-bold text-center">
-                        ШИНГЭНИЙ БАЛАНС ХЯНАХ ХУУДАС
-                     </p>
-                     <div className="flow-root">
-                        <div className="float-left inline-flex">
-                           <p>Эмчлүүлэгчийн овог, нэр:</p>
-                           <p>
-                              {PatientData?.lastName.substring(0, 1) +
-                                 '.' +
-                                 PatientData?.firstName}
+               {fluidBalance?.map((datas, idx) => {
+                  return (
+                     <div className="page">
+                        <div className="subpage">
+                           <div className="flow-root">
+                              <p className="float-right">СМ-3 хавсралт 13</p>
+                           </div>
+                           <p className="font-bold text-center">
+                              ШИНГЭНИЙ БАЛАНС ХЯНАХ ХУУДАС
                            </p>
-                        </div>
-                        <div className="float-right inline-flex">
-                           <p>Нас:</p>
-                           <p>{getAge(PatientData?.registerNumber)}</p>
-                           <p className="pl-1">Хүйс:</p>
-                           <p>
-                              {PatientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
-                           </p>
-                           <p className="pl-1">Тасаг:</p>
-                           <p>{location?.state?.departmentName}</p>
-                           <p className="pl-1">Өрөө:</p>
-                           <p>{location?.state?.roomNumber}</p>
-                        </div>
-                     </div>
-                     <Table bordered className="IO">
-                        <thead>
-                           <tr>
-                              <th rowSpan={2} className="align-middle">
-                                 Огноо
-                              </th>
-                              <th colSpan={5}>
-                                 Биед орсон шингэн /ml хэмжих нэгж/
-                              </th>
-                              <th colSpan={5}>
-                                 Биеэс гарсан шингэн /ml хэмжих нэгж/
-                              </th>
-                           </tr>
-                           <tr>
-                              <th>Хэрхэн</th>
-                              <th>Өглөө</th>
-                              <th>Өдөр</th>
-                              <th>Орой</th>
-                              <th>Тус бүpийн жэмжээ</th>
-                              <th>Хэрхэн</th>
-                              <th>Өглөө</th>
-                              <th>Өдөр</th>
-                              <th>Орой</th>
-                              <th>Тус бүpийн жэмжээ</th>
-                           </tr>
-                        </thead>
-                        <>
-                           {datas.map((t, index) => {
-                              return (
-                                 <tbody key={index}>
-                                    <tr>
-                                       <th
-                                          rowSpan={6}
-                                          style={{
-                                             writingMode: 'vertical-rl',
-                                             textAlign: 'center',
-                                             verticalAlign: 'middle'
-                                          }}
-                                       >
-                                          {t.date}
-                                       </th>
-                                    </tr>
-                                    {t.inputs.map((item, index) => {
-                                       return (
-                                          <tr key={index}>
-                                             <th className="text-center">
-                                                {item.how}
+                           <div className="flow-root">
+                              <div className="float-left inline-flex">
+                                 <p>Эмчлүүлэгчийн овог, нэр:</p>
+                                 <p>
+                                    {PatientData?.lastName.substring(0, 1) +
+                                       '.' +
+                                       PatientData?.firstName}
+                                 </p>
+                              </div>
+                              <div className="float-right inline-flex">
+                                 <p>Нас:</p>
+                                 <p>{getAge(PatientData?.registerNumber)}</p>
+                                 <p className="pl-1">Хүйс:</p>
+                                 <p>
+                                    {PatientData?.genderType === 'MAN'
+                                       ? 'Эр'
+                                       : 'Эм'}
+                                 </p>
+                                 <p className="pl-1">Тасаг:</p>
+                                 <p>{location?.state?.departmentName}</p>
+                                 <p className="pl-1">Өрөө:</p>
+                                 <p>{location?.state?.roomNumber}</p>
+                              </div>
+                           </div>
+                           <Table bordered className="IO">
+                              <thead>
+                                 <tr>
+                                    <th rowSpan={2} className="align-middle">
+                                       Огноо
+                                    </th>
+                                    <th colSpan={5}>
+                                       Биед орсон шингэн /ml хэмжих нэгж/
+                                    </th>
+                                    <th colSpan={5}>
+                                       Биеэс гарсан шингэн /ml хэмжих нэгж/
+                                    </th>
+                                 </tr>
+                                 <tr>
+                                    <th>Хэрхэн</th>
+                                    <th>Өглөө</th>
+                                    <th>Өдөр</th>
+                                    <th>Орой</th>
+                                    <th>Тус бүpийн жэмжээ</th>
+                                    <th>Хэрхэн</th>
+                                    <th>Өглөө</th>
+                                    <th>Өдөр</th>
+                                    <th>Орой</th>
+                                    <th>Тус бүpийн жэмжээ</th>
+                                 </tr>
+                              </thead>
+                              <>
+                                 {datas.map((t, index) => {
+                                    return (
+                                       <tbody key={index}>
+                                          <tr>
+                                             <th
+                                                rowSpan={6}
+                                                style={{
+                                                   writingMode: 'vertical-rl',
+                                                   textAlign: 'center',
+                                                   verticalAlign: 'middle'
+                                                }}
+                                             >
+                                                {t.date}
                                              </th>
-                                             <td className="text-center">
-                                                {item.morning}
-                                             </td>
-                                             <td className="text-center">
-                                                {item.afternoon}
-                                             </td>
-                                             <td className="text-center">
-                                                {item.evening}
-                                             </td>
-                                             <td className="text-center">
-                                                {item.morning +
-                                                   item.afternoon +
-                                                   item.evening}
-                                             </td>
-                                             <th className="text-center">
-                                                {t.outputs[index].how}
-                                             </th>
-                                             <td className="text-center">
-                                                {t.outputs[index].morning}
-                                             </td>
-                                             <td className="text-center">
-                                                {t.outputs[index].afternoon}
-                                             </td>
-                                             <td className="text-center">
-                                                {t.outputs[index].evening}
-                                             </td>
-                                             <td className="text-center">
-                                                {t.outputs[index].morning +
-                                                   t.outputs[index].afternoon +
-                                                   t.outputs[index].evening}
-                                             </td>
                                           </tr>
-                                       );
-                                    })}
-                                    <tr className="bg-gray-50">
-                                       <th className="text-center">
-                                          Нийт хэмжээ
-                                       </th>
-                                       <th className="text-center">
-                                          {t.iMorningTotal}
-                                       </th>
-                                       <th className="text-center">
-                                          {t.iAfternoonTotal}
-                                       </th>
-                                       <th className="text-center">
-                                          {t.iEveningTotal}
-                                       </th>
-                                       <th className="text-center"></th>
-                                       <th className="text-center">
-                                          Нийт хэмжээ
-                                       </th>
-                                       <th className="text-center">
-                                          {t.oMorningTotal}
-                                       </th>
-                                       <th className="text-center">
-                                          {t.oAfternoonTotal}
-                                       </th>
-                                       <th className="text-center">
-                                          {t.oEveningTotal}
-                                       </th>
-                                       <th className="text-center"></th>
-                                    </tr>
-                                    <tr>
-                                       <th colSpan={2}>
-                                          Сувилагчийн гарын үсэг
-                                       </th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                       <th></th>
-                                    </tr>
-                                 </tbody>
-                              );
-                           })}
-                        </>
-                     </Table>
-                     <p>
-                        *Сувилагч энэ хүснэгтийг өөрөө хөтлөх буюу,
-                        эмчлүүлэгчийн ар гэрийхэнд хэрхэн хөтлөх тухай мэдлэг
-                        олгож, хөтлөх аргыг зааварчилна.
-                     </p>
-                  </div>
-               </div>
+                                          {t.inputs.map((item, index) => {
+                                             return (
+                                                <tr key={index}>
+                                                   <th className="text-center">
+                                                      {item.how}
+                                                   </th>
+                                                   <td className="text-center">
+                                                      {item.morning}
+                                                   </td>
+                                                   <td className="text-center">
+                                                      {item.afternoon}
+                                                   </td>
+                                                   <td className="text-center">
+                                                      {item.evening}
+                                                   </td>
+                                                   <td className="text-center">
+                                                      {item.morning +
+                                                         item.afternoon +
+                                                         item.evening}
+                                                   </td>
+                                                   <th className="text-center">
+                                                      {t.outputs[index].how}
+                                                   </th>
+                                                   <td className="text-center">
+                                                      {t.outputs[index].morning}
+                                                   </td>
+                                                   <td className="text-center">
+                                                      {
+                                                         t.outputs[index]
+                                                            .afternoon
+                                                      }
+                                                   </td>
+                                                   <td className="text-center">
+                                                      {t.outputs[index].evening}
+                                                   </td>
+                                                   <td className="text-center">
+                                                      {t.outputs[index]
+                                                         .morning +
+                                                         t.outputs[index]
+                                                            .afternoon +
+                                                         t.outputs[index]
+                                                            .evening}
+                                                   </td>
+                                                </tr>
+                                             );
+                                          })}
+                                          <tr className="bg-gray-50">
+                                             <th className="text-center">
+                                                Нийт хэмжээ
+                                             </th>
+                                             <th className="text-center">
+                                                {t.iMorningTotal}
+                                             </th>
+                                             <th className="text-center">
+                                                {t.iAfternoonTotal}
+                                             </th>
+                                             <th className="text-center">
+                                                {t.iEveningTotal}
+                                             </th>
+                                             <th className="text-center"></th>
+                                             <th className="text-center">
+                                                Нийт хэмжээ
+                                             </th>
+                                             <th className="text-center">
+                                                {t.oMorningTotal}
+                                             </th>
+                                             <th className="text-center">
+                                                {t.oAfternoonTotal}
+                                             </th>
+                                             <th className="text-center">
+                                                {t.oEveningTotal}
+                                             </th>
+                                             <th className="text-center"></th>
+                                          </tr>
+                                          <tr>
+                                             <th colSpan={2}>
+                                                Сувилагчийн гарын үсэг
+                                             </th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                             <th></th>
+                                          </tr>
+                                       </tbody>
+                                    );
+                                 })}
+                              </>
+                           </Table>
+                           <p>
+                              *Сувилагч энэ хүснэгтийг өөрөө хөтлөх буюу,
+                              эмчлүүлэгчийн ар гэрийхэнд хэрхэн хөтлөх тухай
+                              мэдлэг олгож, хөтлөх аргыг зааварчилна.
+                           </p>
+                        </div>
+                     </div>
+                  );
+               })}
             </div>
          </Spin>
          <Modal
@@ -298,7 +323,7 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                })
             }
             onCancel={() => setIsOpen(false)}
-            width={'10cm'}
+            width={'12cm'}
             confirmLoading={loading}
             cancelText="Болих"
             okText="Хадгалах"
@@ -397,7 +422,7 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                )}
             </Form>
          </Modal>
-      </>
+      </Card>
    );
 }
 export default InputOutput;

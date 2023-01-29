@@ -10,13 +10,14 @@ function Medicine({ isOpen, isClose, handleclick }) {
    const [loading, setLoading] = useState(false);
    const [medicines, setMedicines] = useState([]);
    const [selectedMedicines, setSelectedMedicines] = useState([]);
+   const [searchField, setSearchField] = useState('');
    const config = {
       headers: {},
       params: {}
    };
    const getMedicine = async () => {
       setLoading(true);
-      config.params.depId = 4078;
+      config.params.depId = 4079;
       config.params.typeId = 13;
       const response = await DefualtGet(
          'finance/type-materials',
@@ -84,6 +85,9 @@ function Medicine({ isOpen, isClose, handleclick }) {
          }
       }
    ];
+   const filteredMedicine = medicines.filter((medicine) => {
+      return medicine.name.toLowerCase().includes(searchField.toLowerCase());
+   });
    useEffect(() => {
       getMedicine();
    }, [isOpen]);
@@ -104,12 +108,18 @@ function Medicine({ isOpen, isClose, handleclick }) {
          >
             <div className="flex flex-wrap">
                <div className="w-2/3">
+                  <Input
+                     placeholder="Хайх"
+                     allowClear
+                     onChange={(e) => setSearchField(e.target.value)}
+                  />
                   <div className="p-2">
                      <Table
                         rowKey={'id'}
                         bordered
                         loading={loading}
                         rowClassName="hover: cursor-pointer"
+                        className="whitespace-pre-wrap"
                         scroll={{
                            y: 200
                         }}

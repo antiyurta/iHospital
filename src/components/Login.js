@@ -136,7 +136,10 @@ function Login() {
                               }
                            ]}
                         >
-                           <Input type="password" placeholder="Нууц үг" />
+                           <Input.Password
+                              type="password"
+                              placeholder="Нууц үг"
+                           />
                         </Form.Item>
 
                         <Form.Item>

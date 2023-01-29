@@ -78,7 +78,6 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
       });
    };
    const onFinish = async (values) => {
-      console.log(values);
       const data = {
          patientId: PatientId,
          inpatientRequestId: ListId,
@@ -100,7 +99,6 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
          conf,
          data
       );
-      console.log(response);
       if (response === 201) {
          setIsOpenModal(false);
          bodyForm.resetFields();
@@ -111,7 +109,8 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
       const conf = {
          headers: {},
          params: {
-            inpatientRequestId: ListId
+            inpatientRequestId: ListId,
+            pageInSize: 8
          }
       };
       const response = await Get('inpatient/physical-assesment', token, conf);
@@ -130,7 +129,14 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
          <div className="flow-root">
             <div className="float-left">
                <Button type="primary" onClick={() => setIsOpenModal(true)}>
-                  Хуудас бөглөх
+                  Өдөр тутамын үнэлгээ бөглөх
+               </Button>
+               <Button
+                  type="primary"
+                  className="ml-2"
+                  onClick={() => setIsOpenModal(true)}
+               >
+                  Өдөр тутамын сувилгаа бөглөх
                </Button>
                <Button
                   className="ml-2"

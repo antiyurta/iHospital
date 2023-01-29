@@ -378,7 +378,7 @@ function Patient() {
       filterDropdown: ({}) => (
          <div style={{ padding: 8 }}>
             <Search
-               placeholder={`Картын № хайх`}
+               placeholder={`хайх`}
                allowClear
                onSearch={(e) => getData(1, 20, e, dataIndex)}
                enterButton={'Хайх'}

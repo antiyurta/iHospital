@@ -1,8 +1,7 @@
-import { Card, Checkbox, Radio } from 'antd';
+import { Empty, Table } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useRef, useEffect } from 'react';
-import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get, numberToCurrency, ScrollRef } from '../../../comman';
@@ -32,17 +31,20 @@ function PaymentHistory({ patientId }) {
       {
          title: 'Огноо',
          dataIndex: 'updatedAt',
+         className: 'whitespace-pre-line',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return moment(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {
          title: 'Үйлчилгээний нэр',
-         dataIndex: 'name'
+         dataIndex: 'name',
+         className: 'whitespace-pre-line text-black'
       },
       {
          title: 'Төлбөр',
          dataIndex: 'amount',
+         className: 'whitespace-pre-line',
          render: (text) => {
             return numberToCurrency(text);
          }
@@ -53,35 +55,20 @@ function PaymentHistory({ patientId }) {
    }, [patientId]);
    return (
       <>
-         <div
-            className="table-responsive"
-            id="style-8"
-            style={{ maxHeight: '150px' }}
-         >
-            <Table className="ant-border-space" style={{ width: '100%' }}>
-               <thead className="ant-table-thead bg-slate-200">
-                  <tr>
-                     <th className="font-bold text-sm align-middle">Огноо</th>
-                     <th className="font-bold text-sm align-middle">Нэр</th>
-                     <th className="font-bold text-sm align-middle">Төлбөр</th>
-                  </tr>
-               </thead>
-               <tbody className="ant-table-tbody">
-                  {pays.map((pay, index) => {
-                     return (
-                        <tr
-                           className="ant-table-row ant-table-row-level-0"
-                           key={index}
-                        >
-                           <td>{moment(pay.updateAt).format('YYYY-MM-DD')}</td>
-                           <td>{pay.name}</td>
-                           <td>{numberToCurrency(pay.amount)}</td>
-                        </tr>
-                     );
-                  })}
-               </tbody>
-            </Table>
-         </div>
+         <Table
+            bordered
+            loading={{
+               spinning: spinner,
+               tip: 'Уншиж байна...'
+            }}
+            scroll={{
+               y: 100
+            }}
+            locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+            columns={columns}
+            dataSource={pays}
+            pagination={false}
+         />
       </>
    );
 }

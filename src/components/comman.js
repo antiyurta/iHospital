@@ -126,7 +126,7 @@ export async function Patch(url, token, config, data) {
          .catch((error) => {
             console.log(error);
             if (error.response.status === 400) {
-               const message = error.response.data.message.replaceAll(
+               const message = error.response?.data?.message?.replaceAll(
                   'HttpException:',
                   ''
                );

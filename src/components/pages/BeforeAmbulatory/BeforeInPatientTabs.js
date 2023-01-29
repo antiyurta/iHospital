@@ -142,6 +142,23 @@ function BeforeInPatientTabs({
             </Card>
          </div>
          <div className="w-full pt-1">
+            {pageId === 4 && (
+               <InputOutput
+                  PatientId={patientId}
+                  ListId={listId}
+                  PatientData={patientData}
+               />
+            )}
+            {pageId === 8 && (
+               <NursingNote
+                  PatientId={patientId}
+                  ListId={listId}
+                  PatientData={patientData}
+               />
+            )}
+            {pageId === 10 && (
+               <VasculerTube PatientData={patientData} ListId={listId} />
+            )}
             <Card
                bordered={false}
                className="header-solid max-h-max rounded-md"
@@ -162,13 +179,6 @@ function BeforeInPatientTabs({
                      PatientData={patientData}
                   />
                )}
-               {pageId === 4 && (
-                  <InputOutput
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )}
                {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
                {pageId === 6 && (
                   <PainAssessment PatientId={patientId} ListId={listId} />
@@ -180,13 +190,7 @@ function BeforeInPatientTabs({
                      PatientData={patientData}
                   />
                )}
-               {pageId === 8 && (
-                  <NursingNote
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )}
+
                {pageId === 9 && (
                   <Epicriz
                      PatientId={patientId}
@@ -194,9 +198,7 @@ function BeforeInPatientTabs({
                      PatientData={patientData}
                   />
                )}
-               {pageId === 10 && (
-                  <VasculerTube PatientData={patientData} ListId={listId} />
-               )}
+
                {pageId === 11 && (
                   <Acting
                      PatientData={patientData}
