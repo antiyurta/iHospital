@@ -238,7 +238,7 @@ function NursingNote({ PatientId, ListId, PatientData }) {
                                                    'repeat(7,minmax(0,1fr))'
                                              }}
                                           >
-                                             {el.issueNumber.map(
+                                             {el?.issueNumber?.map(
                                                 (number, index) => {
                                                    return (
                                                       <div key={index}>
