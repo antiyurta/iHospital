@@ -7,110 +7,100 @@ export default function Step4() {
    return (
       <div>
          <Divider orientation="left" className="text-sm my-2">
-            Ахуйн нөхцөл
+            Ахуйн нөхцөл / Ажлын нөхцөл
          </Divider>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Хаана амьдардаг вэ"
-                  name={['lifeCondition', 'homeCondition', 'locate']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{ span: 6 }}
-               >
-                  <Radio.Group>
-                     <Radio value="APARTMENT">Орон сууц</Radio>
-                     <Radio value="GER">Гэр хороолол</Radio>
-                     <Radio value="HOUSE">Хувийн орон сууц</Radio>
-                  </Radio.Group>
-               </Form.Item>
-            </Col>
-         </Row>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Гэрлэлтийн байдал"
-                  name={['lifeCondition', 'homeCondition', 'isMarried']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{ span: 6 }}
-               >
-                  <Radio.Group>
-                     <Radio value={true}>Гэрлэсэн</Radio>
-                     <Radio value={false}>Гэрлээгүй</Radio>
-                  </Radio.Group>
-               </Form.Item>
-            </Col>
-         </Row>
-         <Divider orientation="left" className="text-sm my-2">
-            Ажлын нөхцөл
-         </Divider>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Ажлын нөхцөл"
-                  name={['lifeCondition', 'workCondition', 'condition']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{ span: 6 }}
-               >
-                  <Radio.Group>
-                     <Radio value="NORMAL">Энгийн</Radio>
-                     <Radio value="VIPER">Хортой</Radio>
-                     <Radio value="HARD">Хүнд</Radio>
-                  </Radio.Group>
-               </Form.Item>
-            </Col>
-         </Row>
-         <Row align="middle" className="mb-1">
-            <Col span={12}>
-               <Form.Item
-                  label="Хаана ямар ажил эрхэлдэг"
-                  name={['lifeCondition', 'workCondition', 'locate']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{
-                     span: 10
-                  }}
-                  wrapperCol={{
-                     span: 12
-                  }}
-               >
-                  <Input
-                     size="small"
-                     style={{
-                        minHeight: INPUT_HEIGHT,
-                        padding: 5,
-                        height: INPUT_HEIGHT
-                     }}
-                  />
-               </Form.Item>
-            </Col>
-            <Col span={12}>
-               <Form.Item
-                  label="Ажлын цаг"
-                  name={['lifeCondition', 'workCondition', 'clock']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{
-                     span: 10
-                  }}
-                  wrapperCol={{
-                     span: 12
-                  }}
-                  labelAlign="right"
-               >
-                  <Input
-                     size="small"
-                     style={{
-                        minHeight: INPUT_HEIGHT,
-                        padding: 5,
-                        height: INPUT_HEIGHT
-                     }}
-                  />
-               </Form.Item>
-            </Col>
-         </Row>
+         <div className="flex flex-wrap">
+            <div className="md:w-1/5 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Хаана амьдардаг вэ"
+                        name={['lifeCondition', 'homeCondition', 'locate']}
+                        className="mb-0"
+                     >
+                        <Radio.Group>
+                           <Radio value="APARTMENT">Орон сууц</Radio>
+                           <Radio value="GER">Гэр хороолол</Radio>
+                           <Radio value="HOUSE">Хувийн орон сууц</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/5 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Гэрлэлтийн байдал"
+                        name={['lifeCondition', 'homeCondition', 'isMarried']}
+                        className="mb-0"
+                     >
+                        <Radio.Group>
+                           <Radio value={true}>Гэрлэсэн</Radio>
+                           <Radio value={false}>Гэрлээгүй</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/5 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Ажлын нөхцөл"
+                        name={['lifeCondition', 'workCondition', 'condition']}
+                        className="mb-0"
+                     >
+                        <Radio.Group>
+                           <Radio value="NORMAL">Энгийн</Radio>
+                           <Radio value="VIPER">Хортой</Radio>
+                           <Radio value="HARD">Хүнд</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/5 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Хаана ямар ажил эрхэлдэг"
+                        name={['lifeCondition', 'workCondition', 'locate']}
+                        className="mb-0"
+                     >
+                        <Input
+                           size="small"
+                           style={{
+                              minHeight: INPUT_HEIGHT,
+                              padding: 5,
+                              height: INPUT_HEIGHT
+                           }}
+                        />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/5 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Ажлын цаг"
+                        name={['lifeCondition', 'workCondition', 'clock']}
+                        className="mb-0"
+                     >
+                        <Input
+                           size="small"
+                           style={{
+                              minHeight: INPUT_HEIGHT,
+                              padding: 5,
+                              height: INPUT_HEIGHT
+                           }}
+                        />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
    );
 }

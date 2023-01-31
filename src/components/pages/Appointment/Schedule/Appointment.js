@@ -143,6 +143,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       } else {
          data.type = 3;
          data.status = 1;
+         data.appointmentWorkDate = filterForm.getFieldValue('date');
          config.params = {};
          const response = await Post('appointment', token, config, data);
          if (response === 201) {

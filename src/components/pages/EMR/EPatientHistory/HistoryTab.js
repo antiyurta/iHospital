@@ -22,13 +22,14 @@ export default function HistoryTab({ patientId, inspection }) {
       params: {}
    };
    const [historyForm] = Form.useForm();
+   const [state, setState] = useState(false);
    const [historyId, setHistoryId] = useState(Number);
 
    const saveHistory = () => {
       historyForm.validateFields().then(async (values) => {
          values['patientId'] = patientId;
          // inspection = 1 bol dawtan
-         if (inspection === 2) {
+         if (inspection === 2 || state) {
             await Patch(
                'emr/patient-history/' + historyId,
                token,
@@ -38,6 +39,7 @@ export default function HistoryTab({ patientId, inspection }) {
          } else {
             await Post('emr/patient-history', token, config, values);
          }
+         getPatientHistory(patientId);
       });
    };
 
@@ -48,6 +50,9 @@ export default function HistoryTab({ patientId, inspection }) {
          response.data[0].birth.birthDate
       );
       setHistoryId(response.data[0].id);
+      if (response.data.length > 0) {
+         setState(true);
+      }
       historyForm.setFieldsValue(response.data[0]);
       config.params.patientId = null;
    };
@@ -62,15 +67,10 @@ export default function HistoryTab({ patientId, inspection }) {
          autoComplete="off"
          labelAlign="left"
          scrollToFirstError
-         labelCol={{
-            span: 8
-         }}
-         wrapperCol={{
-            span: 16
-         }}
+         layout="vertical"
       >
          <Collapse accordion defaultActiveKey={['1']}>
-            <Panel header="Төрөлт, өсөлт бойжилт" key="1">
+            <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
                <Step1 />
             </Panel>
             <Panel header="Өвчний түүх" key="2">

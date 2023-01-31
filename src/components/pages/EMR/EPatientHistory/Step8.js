@@ -9,45 +9,37 @@ export default function Step8() {
          <Divider orientation="left" className="text-sm my-2">
             Удамшлын асуумж
          </Divider>
-         <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
-               <Form.Item
-                  label="Удамд ижил өвчтэй хүн байсан уу"
-                  name={['geneticQuestion', 'painDesc']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  wrapperCol={{
-                     span: 10
-                  }}
-                  labelCol={{
-                     span: 14
-                  }}
-               >
-                  <Radio.Group>
-                     <Radio value={true}>Тийм</Radio>
-                     <Radio value={false}>Үгүй</Radio>
-                  </Radio.Group>
-               </Form.Item>
-            </Col>
-         </Row>
-         <Row align="middle" className="mb-1">
-            <Col span={24} className="text-left">
-               <Form.Item
-                  label="Удамшлын өвчинүүд"
-                  name={['geneticQuestion', 'geneticPainDesc']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  wrapperCol={{
-                     span: 10
-                  }}
-                  labelCol={{
-                     span: 14
-                  }}
-               >
-                  <TextArea />
-               </Form.Item>
-            </Col>
-         </Row>
+         <div className="flex flex-wrap">
+            <div className="md:w-1/3 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Удамд ижил өвчтэй хүн байсан уу"
+                        name={['geneticQuestion', 'painDesc']}
+                        className="mb-0"
+                     >
+                        <Radio.Group>
+                           <Radio value={true}>Тийм</Radio>
+                           <Radio value={false}>Үгүй</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/3 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Удамшлын өвчинүүд"
+                        name={['geneticQuestion', 'geneticPainDesc']}
+                        className="mb-0"
+                     >
+                        <TextArea />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
    );
 }

@@ -9,13 +9,12 @@ export default function Step6() {
       <div>
          <Row align="middle" className="mb-1">
             <Col span={24}>
-               <Form.Item
-                  label=""
-                  name="usuallyMedicine"
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-               >
-                  <TextArea rows={3} style={{ padding: 2 }} />
+               <Form.Item name="usuallyMedicine" className="mb-0">
+                  <TextArea
+                     placeholder="Эмийн хэрэглээ"
+                     rows={3}
+                     style={{ padding: 2 }}
+                  />
                </Form.Item>
             </Col>
          </Row>

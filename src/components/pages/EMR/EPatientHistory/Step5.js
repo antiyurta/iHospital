@@ -10,71 +10,75 @@ export default function Step5() {
          <Divider orientation="left" className="text-sm my-2">
             Харшил
          </Divider>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Ямар нэг зүйлд харшилдаг уу"
-                  name={['allergy', 'isAllergy']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{
-                     span: 10
-                  }}
-               >
-                  <Radio.Group>
-                     <Radio value={true}>Тийм</Radio>
-                     <Radio value={false}>Үгүй</Radio>
-                  </Radio.Group>
-               </Form.Item>
-            </Col>
-         </Row>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Хоол хүнс"
-                  name={['allergy', 'food']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{ span: 6 }}
-               >
-                  <TextArea
-                     rows={2}
-                     style={{ padding: 2 }}
-                     placeholder="Хүнс"
-                  />
-               </Form.Item>
-            </Col>
-         </Row>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Эмийн бодис"
-                  name={['allergy', 'medicine']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{ span: 6 }}
-               >
-                  <TextArea rows={2} style={{ padding: 2 }} placeholder="Эм" />
-               </Form.Item>
-            </Col>
-         </Row>
-         <Row align="middle" className="mb-1">
-            <Col span={24}>
-               <Form.Item
-                  label="Бусад"
-                  name={['allergy', 'other']}
-                  rules={[{ required: false, message: '' }]}
-                  className="mb-0"
-                  labelCol={{ span: 6 }}
-               >
-                  <TextArea
-                     rows={2}
-                     style={{ padding: 2 }}
-                     placeholder="Бусад бодис"
-                  />
-               </Form.Item>
-            </Col>
-         </Row>
+         <div className="flex flex-wrap">
+            <div className="md:w-1/4 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Ямар нэг зүйлд харшилдаг уу"
+                        name={['allergy', 'isAllergy']}
+                        className="mb-0"
+                     >
+                        <Radio.Group>
+                           <Radio value={true}>Тийм</Radio>
+                           <Radio value={false}>Үгүй</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/4 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Хоол хүнс"
+                        name={['allergy', 'food']}
+                        className="mb-0"
+                     >
+                        <TextArea
+                           rows={2}
+                           style={{ padding: 2 }}
+                           placeholder="Хүнс"
+                        />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/4 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Эмийн бодис"
+                        name={['allergy', 'medicine']}
+                        className="mb-0"
+                     >
+                        <TextArea
+                           rows={2}
+                           style={{ padding: 2 }}
+                           placeholder="Эм"
+                        />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+            <div className="md:w-1/4 sm:w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Бусад"
+                        name={['allergy', 'other']}
+                        className="mb-0"
+                     >
+                        <TextArea
+                           rows={2}
+                           style={{ padding: 2 }}
+                           placeholder="Бусад бодис"
+                        />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
    );
 }
