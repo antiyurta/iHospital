@@ -26,6 +26,7 @@ import Diagnose from '../../service/Diagnose';
 // import { Table } from "react-bootstrap";
 import { CloseOutlined } from '@ant-design/icons';
 import Index from '../InPatient/document/Index';
+import MainInpatientHistory from './MainInpatientHistory';
 const { Option } = Select;
 function MainPatientHistory({
    AppointmentId,
@@ -407,7 +408,6 @@ function MainPatientHistory({
       }
       config.params.usageType = UsageType;
       const response = await Get('emr/inspection-form', token, config);
-      console.log(response.data);
       if (response.data.length > 0) {
          response?.data?.map((el) => {
             setItems((items) => [
@@ -506,6 +506,7 @@ function MainPatientHistory({
    };
    const getDefualtTab = () => {
       setItems([
+         ...items,
          {
             label: 'Асуумж',
             key: `item-second`,
@@ -523,20 +524,23 @@ function MainPatientHistory({
       ]);
    };
    useEffect(() => {
-      if (inspection === 1) {
-         getInspectionTabs();
-      } else if (inspection === 2) {
-         getDefualtTab();
-      } else if (inspection === 11) {
-         getXrayDefualtTab();
-      } else if (inspection === 12) {
-         getExoInspectionTabs();
+      if (UsageType === 'OUT') {
+         if (inspection === 1) {
+            getInspectionTabs();
+         } else if (inspection === 2) {
+            getDefualtTab();
+         } else if (inspection === 11) {
+            getXrayDefualtTab();
+         } else if (inspection === 12) {
+            getExoInspectionTabs();
+         }
+      } else {
       }
-      console.log('==>', inspection);
    }, [UsageType]);
    return (
       <>
-         <Tabs type="card" items={items} />
+         {UsageType === 'OUT' && <Tabs type="card" items={items} />}
+         {UsageType === 'IN' && <MainInpatientHistory />}
          <Modal
             open={confirmModal}
             onCancel={() => setConfirmModal(false)}

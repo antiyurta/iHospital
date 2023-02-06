@@ -5,11 +5,10 @@ import { blue } from '@ant-design/colors';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Table } from 'react-bootstrap';
-import { DefaultPost, Get, getAge, Post } from '../../comman';
+import { DefaultPost, Get, getAge } from '../../comman';
 //
 import {
    Chart as ChartJS,
-   ArcElement,
    Tooltip,
    Legend,
    CategoryScale,
@@ -163,12 +162,16 @@ export default function EarlyWarning({
    };
    const getAssesment = async (type) => {
       //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
+      const conf = {
+         headers: {},
+         params: {}
+      };
       if (UsageType === 'OUT') {
-         config.params.patientId = PatientId;
+         conf.params.patientId = PatientId;
       } else {
-         config.params.inpatientRequestId = ListId;
+         conf.params.inpatientRequestId = ListId;
       }
-      const response = await Get('assesment', token, config);
+      const response = await Get('assesment', token, conf);
       if (response.data.length > 0) {
          setPatientAssesments(response.data);
          setPatientAssesmentsResult(response.data);
@@ -245,6 +248,12 @@ export default function EarlyWarning({
       }
    };
    const get = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            inpatientRequestId: ListId
+         }
+      };
       const response = await Get('report/assesment', token, config);
       setReportAssesments(response);
    };

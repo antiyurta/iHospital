@@ -542,7 +542,6 @@ table .formTable tr > td {
    padding: 0px !important;
    font-size: 13px !important;
    font-family: Arial, Helvetica, sans-serif;
-   vertical-align: top !important;
 }
 
 .document2 thead > tr > td {
@@ -550,7 +549,6 @@ table .formTable tr > td {
    padding: 0px !important;
    font-size: 11px !important;
    font-family: Arial, Helvetica, sans-serif;
-   vertical-align: top !important;
 }
 
 .document thead > tr > td p {
@@ -558,7 +556,6 @@ table .formTable tr > td {
    padding: 0px !important;
    font-size: 13px !important;
    font-family: Arial, Helvetica, sans-serif;
-   vertical-align: middle !important;
 }
 
 .document2 thead > tr > td p {
@@ -566,7 +563,19 @@ table .formTable tr > td {
    padding: 0px !important;
    font-size: 11px !important;
    font-family: Arial, Helvetica, sans-serif;
-   vertical-align: middle !important;
+}
+.document thead > tr > th p {
+   margin-left: 4px !important;
+   padding: 0px !important;
+   font-size: 13px !important;
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+.document2 thead > tr > th p {
+   margin-left: 4px !important;
+   padding: 0px !important;
+   font-size: 11px !important;
+   font-family: Arial, Helvetica, sans-serif;
 }
 
 .document thead > tr > th {
@@ -574,6 +583,7 @@ table .formTable tr > td {
    padding: 0px 4px !important;
    font-size: 13px !important;
    font-family: Arial, Helvetica, sans-serif;
+   vertical-align: top !important;
 }
 
 .document2 thead > tr > th {
@@ -581,21 +591,21 @@ table .formTable tr > td {
    padding: 0px 4px !important;
    font-size: 11px !important;
    font-family: Arial, Helvetica, sans-serif;
+   vertical-align: top !important;
 }
 
 .document .ant-checkbox-inner,
 .document2 .ant-checkbox-inner {
    width: 12px !important;
    height: 12px !important;
-   border-color: black;
+   border-color: #000 !important;
+   background-color: white !important;
 }
 
-.document .ant-checkbox-checked .ant-checkbox-inner,
-.document2 .ant-checkbox-checked .ant-checkbox-inner {
-   width: 13px !important;
-   height: 13px !important;
-   background-color: black;
-   border-color: black;
+.document .ant-checkbox-inner::after,
+.document2 .ant-checkbox-inner::after {
+   background-color: white !important;
+   border-color: black !important;
 }
 
 .document .ant-checkbox-wrapper {
@@ -649,4 +659,32 @@ table .formTable tr > td {
 }
 .vsdocument thead > tr {
    border-color: #000 !important;
+}
+.document .ant-input:disabled {
+   border: none !important;
+   height: 18px !important;
+   /* max-height: 100px !important; */
+   font-size: 13px !important;
+   background-color: transparent !important;
+   color: black !important;
+   width: min-content;
+   padding: 0px !important;
+   resize: none !important;
+}
+.document .amaraInputTextArea.ant-input {
+   resize: none !important;
+   height: 76px !important;
+}
+.document .amaraInput.ant-input {
+   resize: none !important;
+   height: 18px !important;
+}
+.document2 .ant-input {
+   border: none !important;
+   height: 18px !important;
+   font-size: 11px !important;
+   background-color: transparent !important;
+   color: black !important;
+   width: min-content;
+   padding: 0px !important;
 }

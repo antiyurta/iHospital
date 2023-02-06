@@ -74,7 +74,11 @@ export default function ProgressNotes({ Appointments }) {
                            return (
                               <Panel
                                  header={
-                                    <div className="grid">
+                                    <div className="row-auto">
+                                       <span className="font-bold">
+                                          {el.cabinet?.name}
+                                       </span>
+                                       <span>&nbsp;</span>
                                        <span>
                                           {el.createdAt
                                              ?.replace(/T/, ' ')

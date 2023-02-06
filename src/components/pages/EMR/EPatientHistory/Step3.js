@@ -1,6 +1,6 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Амьдралын хэв маяг
 import React from 'react';
-import { Col, Radio, Row, Divider, Input, Form } from 'antd';
+import { Col, Radio, Row, Divider, Input, Form, InputNumber } from 'antd';
 import { INPUT_HEIGHT } from '../../../../constant';
 
 export default function Step3() {
@@ -30,7 +30,7 @@ export default function Step3() {
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
-                        label="Хэр удаан"
+                        label="Хэр удаан(Cар)"
                         name={['lifeStyle', 'alcohol', 'howLong']}
                         className="mb-0"
                      >

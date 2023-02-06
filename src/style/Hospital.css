@@ -37,3 +37,14 @@
    border-color: green;
    background-color: green;
 }
+.checkTag .ant-tag-checkable-checked {
+   background-color: white !important;
+   color: #1890ff !important;
+}
+.checkTag .ant-tag {
+   font-size: 14px !important;
+}
+.antiStatis .ant-statistic-content {
+   font-size: 19px !important;
+   font-weight: bold !important;
+}

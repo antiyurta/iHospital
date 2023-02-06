@@ -84,14 +84,22 @@ function Index({ type, isDoctor }) {
          if (isPayment === false) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
+            const data = {
+               patientId: id,
+               inspection: inspectionType === undefined ? 1 : inspectionType
+            };
+            console.log('type', type);
+            if (type === 0) {
+               data['usageType'] = 'OUT';
+               data['appointmentId'] = listId;
+               data['cabinetId'] = cabinetId;
+            } else if (type === 2) {
+               data['usageType'] = 'IN';
+               data['inpatientRequestId'] = listId;
+               data['dapartmentId'] = cabinetId;
+            }
             navigate(`/emr`, {
-               state: {
-                  usageType: (type === 0 && 'OUT') || (type === 2 && 'IN'),
-                  appointmentId: listId,
-                  patientId: id,
-                  cabinetId: cabinetId,
-                  inspection: inspectionType === undefined ? 1 : inspectionType
-               }
+               state: data
             });
          }
       }
@@ -633,7 +641,7 @@ function Index({ type, isDoctor }) {
                                          row.id,
                                          row.patientId,
                                          type === 2
-                                            ? row.departmentId
+                                            ? row.inDepartmentId
                                             : row.cabinetId,
                                          // row.cabinetId,
                                          // row.inspectionType,

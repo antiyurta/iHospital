@@ -1,10 +1,21 @@
 //EMR -> Явцын үзлэг -> Ерөнхий үзлэг
 import React, { useState, useEffect } from 'react';
-import { Col, Radio, Row, Divider, Input, Button, Form, Collapse } from 'antd';
+import {
+   Col,
+   Radio,
+   Row,
+   Divider,
+   Input,
+   Button,
+   Form,
+   Collapse,
+   InputNumber
+} from 'antd';
 import { blue } from '@ant-design/colors';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, openNofi, Patch, Post } from '../../comman';
+import { useLocation } from 'react-router-dom';
 const { Panel } = Collapse;
 export default function GeneralInspection({ patientId, inspection }) {
    const token = useSelector(selectCurrentToken);
@@ -12,9 +23,11 @@ export default function GeneralInspection({ patientId, inspection }) {
       headers: {},
       params: {}
    };
+   const location = useLocation();
    const { TextArea } = Input;
    const [form] = Form.useForm();
    const [historyId, setHistoryId] = useState(Number);
+   const [state, setState] = useState(false);
 
    useEffect(() => {
       getGeneralInspection();
@@ -25,7 +38,9 @@ export default function GeneralInspection({ patientId, inspection }) {
          .validateFields()
          .then(async (values) => {
             values['patientId'] = patientId;
-            if (inspection === 2) {
+            values['appointmentId'] = location?.state?.appointmentId;
+            if (state) {
+               console.log('====END');
                await Patch(
                   'emr/general-inspection/' + historyId,
                   token,
@@ -42,13 +57,18 @@ export default function GeneralInspection({ patientId, inspection }) {
    };
 
    const getGeneralInspection = async () => {
-      config.params.patientId = patientId;
-      const response = await Get('emr/general-inspection', token, config);
+      const conf = {
+         headers: {},
+         params: {
+            appointmentId: location?.state?.appointmentId
+         }
+      };
+      const response = await Get('emr/general-inspection', token, conf);
       if (response.data.length > 0) {
          form.setFieldsValue(response.data[0]);
          setHistoryId(response.data[0].id);
+         setState(true);
       }
-      config.params.patientId = null;
    };
    return (
       <Form
@@ -240,7 +260,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                               ]}
                               className="mb-0"
                            >
-                              <Input size="small" />
+                              <InputNumber size="small" />
                            </Form.Item>
                         </div>
                      </div>

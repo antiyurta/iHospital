@@ -14,16 +14,31 @@ import Ophthalmologist from './Ophthalmologist/Index'; // нүдний эмч
 import Gastroenterologist from './Gastroenterologist/Index'; // хоол боловсруулах эрхтний
 import Neurologist from './Neurologist/Index'; // Мэдрэлийн эмчийн үзлэг
 import Rebuild from './Rebuild/Index';
+import { Button } from 'antd';
+import Painstory from './painStory/Index';
 
-function Index({ id, data }) {
+function Index({ handleClick }) {
    /// id nas depId ym ennes hamarch hewleh maygt oor2 bn
-   console.log(id);
+   const items = [
+      {
+         label: 'ДОТРЫН ЭМЧИЙН ҮЗЛЭГ',
+         key: 1,
+         children: <Painstory id={1} />
+      }
+   ];
    return (
       <>
          {/* {data.inpatientRequestId === 31 && <Rebuild data={data} />} */}
          {/* {id === 31 && <Rebuild data={data} />} */}
          {/* {id === 2 && <Endocrinology data={data} />} */}
-         <Rebuild data={data} />
+         {/* <Rebuild data={data} /> */}
+         {items.map((item) => {
+            return (
+               <Button key={item.key} onClick={() => handleClick(item)}>
+                  {item.label}
+               </Button>
+            );
+         })}
       </>
    );
 }

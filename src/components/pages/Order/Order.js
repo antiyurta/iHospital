@@ -147,8 +147,6 @@ function Order({
    //
    const [showDoctorInspection, setShowDoctorInspection] = useState(false);
    const [showReinspection, setShowReinspection] = useState(false);
-   const [showAnamnez, setShowAnamnez] = useState(false);
-   const [formAnamnez] = Form.useForm();
    const [inPatientId, setInPatientId] = useState(Number);
    //
    const [orderForm] = Form.useForm();
@@ -233,23 +231,10 @@ function Order({
          setShowReinspection(state);
       }
    };
-   const onFinishAnamnez = async (values) => {
-      const data = {
-         appointmentId: IncomeAppointmentId,
-         patientId: IncomePatientId,
-         inpatientRequestId: inPatientId,
-         inPatientPain: values.inPatientPain,
-         lifeStory: values.lifeStory,
-         painStory: values.painStory
-      };
-      const response = await Post('emr/anemis', token, config, data);
-      if (response === 201) {
-         setShowAnamnez(false);
-      }
-   };
    const inpatientRequestClick = async (values) => {
       values.patientId = IncomePatientId;
       values.cabinetId = IncomeCabinetId;
+      values.appointmentId = IncomeAppointmentId;
       const response = await DefaultPost(
          'service/inpatient-request',
          token,
@@ -257,10 +242,8 @@ function Order({
          values
       );
       if (response) {
-         console.log(response);
          setInPatientId(response.id);
          setShowInpatient(false);
-         setShowAnamnez(true);
       }
    };
    const newModalCategory = (category) => {
@@ -822,58 +805,6 @@ function Order({
                </div>
             </div>
          </div>
-         <Modal
-            title={'Эмчлүүлэгчийн анамнез'}
-            open={showAnamnez}
-            footer={null}
-         >
-            <Form layout="vertical" form={formAnamnez}>
-               <div className="rounded-md bg-gray-100 w-full inline-block my-1">
-                  <div className="p-1">
-                     <Form.Item
-                        label={'Хэвтэх үеийн зовиур'}
-                        name={'inPatientPain'}
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
-                        <TextArea />
-                     </Form.Item>
-                  </div>
-               </div>
-               <div className="rounded-md bg-gray-100 w-full inline-block my-1">
-                  <div className="p-1">
-                     <Form.Item
-                        label={'Өвчний түүх'}
-                        name={'painStory'}
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
-                        <TextArea />
-                     </Form.Item>
-                  </div>
-               </div>
-               <div className="rounded-md bg-gray-100 w-full inline-block my-1">
-                  <div className="p-1">
-                     <Form.Item
-                        label={'Амьдралын түүх'}
-                        name={'lifeStory'}
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
-                        <TextArea />
-                     </Form.Item>
-                  </div>
-               </div>
-            </Form>
-            <Button
-               type="primary"
-               className="w-full p-1 mb-0"
-               onClick={() => {
-                  formAnamnez.validateFields().then((values) => {
-                     onFinishAnamnez(values);
-                  });
-               }}
-            >
-               Хадгалах
-            </Button>
-         </Modal>
       </>
    );
 }

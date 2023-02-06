@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { notification } from 'antd';
-import { useNavigate } from 'react-router-dom';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -18,7 +17,6 @@ export async function Get(url, token, config) {
             }
          })
          .catch((error) => {
-            console.log('========>', error);
             if (error.response.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
             } else if (error.response.status === 400) {
@@ -45,7 +43,6 @@ export async function DefualtGet(url, token, config) {
             }
          })
          .catch((error) => {
-            console.log('========>', error);
             if (error.response.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
             } else if (error.response.status === 400) {
@@ -75,7 +72,18 @@ export async function Post(url, token, config, data) {
             }
          })
          .catch((error) => {
-            openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
+            if (
+               error?.response?.status === 400 &&
+               error?.response?.data?.status === 409
+            ) {
+               const message = error.response?.data?.message?.replaceAll(
+                  'HttpException:',
+                  ''
+               );
+               openNofi('error', 'Алдаа', message);
+            } else {
+               openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
+            }
             resolve(400);
          });
    });
@@ -131,6 +139,32 @@ export async function Patch(url, token, config, data) {
                   ''
                );
                openNofi('error', 'Алдаа', message);
+            } else {
+               openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
+            }
+            resolve(400);
+         });
+   });
+}
+export async function DefaultPatch(url, token, config, data) {
+   config.headers['Authorization'] = `Bearer ${token}`;
+   config.headers['x-api-key'] = API_KEY;
+   return new Promise((resolve, reject) => {
+      axios
+         .patch(DEV_URL + url, data, config)
+         .then((response) => {
+            if (response.status === 201) {
+               openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
+               resolve(response.data.response);
+            } else if (response.status === 401) {
+               console.log('NEWTER COMMAN JS');
+            } else {
+               resolve(201);
+            }
+         })
+         .catch((error) => {
+            if (error.response.status === 400) {
+               openNofi('error', 'Алдаа', error.response.data.response);
             } else {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
             }

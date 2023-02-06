@@ -15,7 +15,11 @@ import {
    Tag,
    Modal,
    Select,
-   InputNumber
+   InputNumber,
+   Divider,
+   Card,
+   Form,
+   DatePicker
 } from 'antd';
 import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import usageType from './usageType.json';
@@ -24,8 +28,24 @@ import Barcode from 'react-barcode';
 import { useReactToPrint } from 'react-to-print';
 import axios from 'axios';
 import universal from '../../../assets/logo/universal.png';
-
+import { Tab } from 'react-bootstrap';
+import mnMN from 'antd/es/calendar/locale/mn_MN';
+import moment from 'moment';
+//
+const { RangePicker } = DatePicker;
+const dateFormat = 'YYYY/MM/DD';
+//
 function RequestAnalys() {
+   //
+   const [searchForm] = Form.useForm();
+   const [requestList, setRequestList] = useState([]);
+   const [requestListMeta, setRequestListMeta] = useState({});
+   const [requestListLoading, setRequestListLoading] = useState(false);
+   const [requestDetailList, setRequestDetailList] = useState([]);
+   const [requestDetailListMeta, setRequestDetailListMeta] = useState({});
+   const [requestDetailListLoading, setRequestDetailListLoading] =
+      useState(false);
+   //
    const token = useSelector(selectCurrentToken);
    const [patientReqList, setPatientReqList] = useState([]); //Нийт хүсэлт
    const [patientReqDtl, setPatientReqDtl] = useState([]); //Сонгосон хүсэлтийн шижилгээнүүд
@@ -287,7 +307,6 @@ function RequestAnalys() {
          //Дараагийн BARCODE -г хэвлэхэд бэлдэх
          var arr = [...selectedExaminations];
          var newArrayKeys = [...selectedExaminationKeys];
-
          var theRemovedElement = arr.slice(1);
          setSelectedExaminations(theRemovedElement);
          setCheckPrintClosed(!checkPrintClosed);
@@ -306,7 +325,9 @@ function RequestAnalys() {
    const handleResultPrint = useReactToPrint({
       content: () => componentResultPrint.current,
       onBeforePrint: () => {},
-      onAfterPrint: () => {}
+      onAfterPrint: () => {
+         console.log('sadsasad');
+      }
    });
 
    const rowSelectionExamination = {
@@ -430,28 +451,304 @@ function RequestAnalys() {
       setUsedMaterials(rows);
    };
 
-   const getExaminationResult = () => {
-      axios
-         .get('http://192.168.1.232:8001/laboratory')
-         .then((response) => {
-            console.log('res========>', response.data.response.data);
-            if (response.status === 200) {
-               setExaminationResult(response.data.response.data);
-            } else if (response.status === 401) {
-               console.log('NEWTER COMMAN JS');
-            }
-         })
-         .catch((error) => {
-            console.log('========>', error);
-            if (error.response.status === 401) {
-            } else if (error.response.status === 400) {
-            } else {
-            }
-         });
+   const getExaminationResult = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            barCode: '638066940195743400'
+         }
+      };
+      const response = await Get('laboratory', token, conf);
+      console.log(response.response.data);
+      setExaminationResult(response.response.data);
+      // axios
+      //    .get('http://192.168.1.232:8001/laboratory')
+      //    .then((response) => {
+      //       console.log('res========>', response.data.response.data);
+      //       if (response.status === 200) {
+      //          setExaminationResult(response.data.response.data);
+      //       } else if (response.status === 401) {
+      //          console.log('NEWTER COMMAN JS');
+      //       }
+      //    })
+      //    .catch((error) => {
+      //       console.log('========>', error);
+      //       if (error.response.status === 401) {
+      //       } else if (error.response.status === 400) {
+      //       } else {
+      //       }
+      //    });
    };
-
+   //
+   const filter = async (values) => {
+      setRequestListLoading(true);
+      const conf = {
+         headers: {},
+         params: {
+            page: 1,
+            limit: 10,
+            firstName: values?.firstName,
+            registerNumber: values?.registerNumber
+               ? values.registerNumber
+               : null,
+            startDate: values?.date
+               ? moment(values.date[0]).format('YYYY-MM-DD HH:mm')
+               : null,
+            endDate: values?.date
+               ? moment(values.date[1]).format('YYYY-MM-DD HH:mm')
+               : null
+         }
+      };
+      const response = await Get('service/erequest', token, conf);
+      setRequestList(response.data);
+      setRequestListMeta(response.meta);
+      setRequestListLoading(false);
+   };
+   const getErequestDtl = async (id, process) => {
+      if (process === 0) {
+         filter();
+      } else {
+         setRequestDetailListLoading(true);
+         const conf = {
+            headers: {},
+            params: {}
+         };
+         if (id) {
+            conf.params.examinationRequestId = id;
+         }
+         if (process && process != 0) {
+            conf.params.examinationProcess = process;
+         }
+         const response = await Get(
+            'service/examinationRequestDetail',
+            token,
+            conf
+         );
+         setRequestDetailList(response.data);
+         setRequestDetailListMeta(response.meta);
+         setRequestDetailListLoading(false);
+      }
+   };
+   const requestListColumn = [
+      {
+         title: '№',
+         render: (_, record, index) => {
+            return (
+               requestListMeta.page * requestListMeta.limit -
+               (requestListMeta.limit - index - 1)
+            );
+         }
+      },
+      {
+         title: 'Овог',
+         dataIndex: ['patient', 'lastName']
+      },
+      {
+         title: 'Нэр',
+         dataIndex: ['patient', 'firstName']
+      },
+      {
+         title: 'Регистр',
+         dataIndex: ['patient', 'registerNumber']
+      },
+      {
+         title: 'Огноо',
+         dataIndex: 'requestDate',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'Төлөв',
+         dataIndex: 'usageType',
+         render: (text) => {
+            return text === 'IN' ? 'Хэвтэн' : 'Амбулатори';
+         }
+      }
+   ];
+   const requestDetailListColumn = [
+      {
+         title: '№',
+         render: (_, record, index) => {
+            return (
+               requestDetailListMeta.page * requestDetailListMeta.limit -
+               (requestDetailListMeta.limit - index - 1)
+            );
+         }
+      },
+      {
+         title: 'Шинжилгээ',
+         dataIndex: ['examinations', 'name'],
+         key: 'examination',
+         className: 'whitespace-pre-line'
+      },
+      {
+         title: 'Баркод',
+         dataIndex: 'barCode'
+      },
+      {
+         title: 'Төлөв',
+         dataIndex: 'examinationProcess',
+         render: (text) => {
+            if (text === 0) {
+               return <Tag color="magenta">Захиалга өгсөн</Tag>;
+            } else if (text === 1) {
+               return <Tag color="purple">Сорьц авсан</Tag>;
+            } else if (text === 2) {
+               return <Tag color="green">Шинжилсэн</Tag>;
+            } else if (text === 3) {
+               return <Tag color="volcano">Хариу гарсан</Tag>;
+            } else if (text === 4) {
+               return <Tag color="cyan">Хариу баталгаажсан</Tag>;
+            }
+         }
+      },
+      {
+         title: 'Төхөөрөмж',
+         dataIndex: ['examinations', 'types', 'name']
+      },
+      {
+         title: 'Үйлдэл'
+      }
+   ];
+   useEffect(() => {}, []);
+   //
    return (
       <Spin spinning={loadingSpin}>
+         <div className="flex flex-wrap">
+            <div className="w-full">
+               <Card
+                  bordered={false}
+                  bodyStyle={{
+                     padding: 7
+                  }}
+                  className="header-solid max-h-max rounded-md"
+               >
+                  <Form onFinish={filter} form={searchForm} layout="vertical">
+                     <div className="flex flex-wrap">
+                        <div className="md:w-1/3 xl:w-1/4 p-1">
+                           <Form.Item label="Өдөрөөр:" name="date">
+                              <RangePicker format="YYYY-MM-DD" locale={mnMN} />
+                           </Form.Item>
+                        </div>
+                        <div className="md:w-1/3 xl:w-1/4 p-1">
+                           <Form.Item
+                              label="Регистрийн дугаар:"
+                              name="registerNumber"
+                           >
+                              <Input />
+                           </Form.Item>
+                        </div>
+                        <div className="md:w-1/3 xl:w-1/4 p-1">
+                           <Form.Item label="Нэрээр:" name="firstName">
+                              <Input />
+                           </Form.Item>
+                        </div>
+                        <div className="md:w-2/12 xl:w-1/12">
+                           <Form.Item>
+                              <Button
+                                 type="primary"
+                                 icon={<SearchOutlined />}
+                                 htmlType="submit"
+                              >
+                                 Хайх
+                              </Button>
+                           </Form.Item>
+                        </div>
+                     </div>
+                  </Form>
+               </Card>
+            </div>
+            <div className="w-full pt-2">
+               <Card
+                  bordered={false}
+                  bodyStyle={{
+                     padding: 7
+                  }}
+                  className="header-solid max-h-max rounded-md"
+               >
+                  <Segmented
+                     className="department-bed-segment text-black"
+                     size="small"
+                     options={examinationProcess.map((el, index) => {
+                        return {
+                           label: el.label,
+                           value: el.value,
+                           icon: null
+                        };
+                     })}
+                     value={statusFilter}
+                     onChange={(e) => {
+                        getErequestDtl(null, e);
+                        setStatusFilter(e);
+                     }}
+                  />
+               </Card>
+            </div>
+            <div className="md:w-1/2 pt-2 pr-1">
+               <Card
+                  bordered={false}
+                  bodyStyle={{
+                     padding: 7
+                  }}
+                  className="header-solid max-h-max rounded-md"
+               >
+                  <Table
+                     rowKey={'id'}
+                     loading={{
+                        spinning: requestListLoading,
+                        tip: 'Уншиж байна...'
+                     }}
+                     bordered
+                     rowClassName="hover:cursor-pointer"
+                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                     columns={requestListColumn}
+                     dataSource={requestList}
+                     onRow={(row) => {
+                        return {
+                           onClick: () => {
+                              getErequestDtl(row.id, null);
+                           }
+                        };
+                     }}
+                     pagination={{
+                        simple: true,
+                        pageSize: 10,
+                        total: requestListMeta.itemCount,
+                        current: requestListMeta.page
+                        // onChange: (page, pageSize) =>
+                        //    getAppointment(page, pageSize, start, end)
+                     }}
+                  />
+               </Card>
+            </div>
+            <div className="md:w-1/2 pt-2 pl-1">
+               <Card
+                  bordered={false}
+                  bodyStyle={{
+                     padding: 7
+                  }}
+                  className="header-solid max-h-max rounded-md"
+               >
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                     rowClassName="hover:cursor-pointer"
+                     // loading={requestDetailListLoading}
+                     loading={{
+                        spinning: requestDetailListLoading,
+                        tip: 'Уншиж байна...'
+                     }}
+                     columns={requestDetailListColumn}
+                     dataSource={requestDetailList}
+                     pagination={{
+                        simple: true
+                     }}
+                  />
+               </Card>
+            </div>
+         </div>
          <Row gutter={16} className="mb-2">
             <Col span={4}>
                <Input
@@ -740,124 +1037,246 @@ function RequestAnalys() {
                </div>
             </div>
          )}
-         <div style={{ display: 'none' }}>
-            <div ref={componentResultPrint} className="p-4">
-               <div
-                  style={{
-                     display: 'flex',
-                     flexDirection: 'row',
-                     justifyContent: 'flex-start',
-                     alignItems: 'center'
-                  }}
-               >
-                  <img
-                     src={require('../../../assets/logo/universal.png')}
-                     style={{ width: 200 }}
-                  />
-                  <span
-                     style={{
-                        color: '#2d8cff',
-                        fontSize: 28,
-                        fontWeight: 'bold'
-                     }}
-                  >
-                     Universal Med Эмнэлэг
-                  </span>
-               </div>
-               <span
-                  style={{
-                     width: 250,
-                     position: 'absolute',
-                     top: 0,
-                     right: 10,
-                     fontSize: 12
-                  }}
-               >
-                  ЭМСайдын 2019 оны 12 сарын 30-ны өдрийн A/611 тоот тушаалаар
-                  батлав.
-               </span>
-               <div
-                  style={{
-                     width: '100%',
-                     height: 2,
-                     backgroundColor: '#2d8cff',
-                     marginTop: 5
-                  }}
-               ></div>
-               <div className="p-2">
-                  <Row gutter={[8, 8]}>
-                     <Col span={6} style={{ fontWeight: 'bold' }}>
-                        Эцэг/Эхийн нэр:
-                     </Col>
-                     <Col span={6}>{selectedReqData.firstName}</Col>
-                     <Col span={6} style={{ fontWeight: 'bold' }}>
-                        Дугаар:
-                     </Col>
-                     <Col span={6}>{selectedReqData.cardNumber}</Col>
-                  </Row>
-                  <Row gutter={[8, 8]}>
-                     <Col span={6} style={{ fontWeight: 'bold' }}>
-                        Нэр:
-                     </Col>
-                     <Col span={6}>{selectedReqData.lastName}</Col>
-                     <Col span={6} style={{ fontWeight: 'bold' }}>
-                        Нас:
-                     </Col>
-                     <Col span={6}>{selectedReqData.age}</Col>
-                  </Row>
-                  <Row gutter={[8, 8]}>
-                     <Col span={6} style={{ fontWeight: 'bold' }}>
-                        Регистр:
-                     </Col>
-                     <Col span={6}>{selectedReqData.registerNumber}</Col>
-                     <Col span={6} style={{ fontWeight: 'bold' }}>
-                        Хүйс:
-                     </Col>
-                     <Col span={6}>{selectedReqData.genderType}</Col>
-                  </Row>
-               </div>
-               <div
-                  style={{
-                     width: '100%',
-                     height: 2,
-                     backgroundColor: '#2d8cff',
-                     marginBottom: 5
-                  }}
-               ></div>
-               <span>Төхөөрөмжийн нэр: {examinationResult[1]?.deviceName}</span>
-               <div>
-                  <span>
-                     Баркод:{' '}
-                     {examinationResult[1]?.patientIdentification?.patientId}
-                  </span>
-               </div>
-               <table style={{ width: '100%' }}>
-                  <thead>
-                     <tr>
-                        <th className="text-center">Үзүүлэлт</th>
-                        <th className="text-center">Хариу</th>
-                        <th className="text-center">Нэгж</th>
-                        <th className="text-center">Лавлах хэмжээ</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {examinationResult &&
-                        examinationResult[27]?.observations?.map(
-                           (el, index) => {
-                              return (
-                                 <tr key={index}>
-                                    <td className="text-left">
-                                       {el.observationSubId}
-                                    </td>
-                                    <td>{el.observationValue}</td>
-                                    <td>{el.units}</td>
-                                    <td>-</td>
-                                 </tr>
-                              );
+         <div style={{ display: '' }}>
+            <div ref={componentResultPrint}>
+               <div className="labPage">
+                  <div className="labsubpage">
+                     <div className="flow-root">
+                        <p className="float-left">
+                           <img
+                              src={require('../../../assets/logo/universal.png')}
+                              style={{ width: 200 }}
+                           />
+                        </p>
+                        <p className="float-right">
+                           <p>ЭМСайдын 2019 оны 12 сарын 30-ны</p>
+                           <p>өдрийн A/611 тоот тушаалаар батлав.</p>
+                        </p>
+                     </div>
+                     <p
+                        className="font-bold text-center"
+                        style={{ fontSize: 28, color: '#2d8cff' }}
+                     >
+                        УНИВЕРСАЛ МЕД ЭМНЭЛЭГ
+                     </p>
+                     <p
+                        className="font-bold text-center"
+                        style={{ fontSize: 21 }}
+                     >
+                        Эмнэлзүй эмгэг судлалын нэгдсэн төв лаборатори
+                     </p>
+                     <div
+                        style={{
+                           width: '100%',
+                           height: 2,
+                           backgroundColor: '#2d8cff',
+                           marginTop: 5
+                        }}
+                     ></div>
+                     <div className="py-2">
+                        <Row gutter={[8, 8]}>
+                           <Col span={6} style={{ fontWeight: 'bold' }}>
+                              Эцэг/Эхийн нэр:
+                           </Col>
+                           <Col span={6}>{selectedReqData.firstName}</Col>
+                           <Col span={6} style={{ fontWeight: 'bold' }}>
+                              Дугаар:
+                           </Col>
+                           <Col span={6}>{selectedReqData.cardNumber}</Col>
+                        </Row>
+                        <Row gutter={[8, 8]}>
+                           <Col span={6} style={{ fontWeight: 'bold' }}>
+                              Нэр:
+                           </Col>
+                           <Col span={6}>{selectedReqData.lastName}</Col>
+                           <Col span={6} style={{ fontWeight: 'bold' }}>
+                              Нас:
+                           </Col>
+                           <Col span={6}>{selectedReqData.age}</Col>
+                        </Row>
+                        <Row gutter={[8, 8]}>
+                           <Col span={6} style={{ fontWeight: 'bold' }}>
+                              Регистр:
+                           </Col>
+                           <Col span={6}>{selectedReqData.registerNumber}</Col>
+                           <Col span={6} style={{ fontWeight: 'bold' }}>
+                              Хүйс:
+                           </Col>
+                           <Col span={6}>{selectedReqData.genderType}</Col>
+                        </Row>
+                     </div>
+                     <div
+                        style={{
+                           width: '100%',
+                           height: 2,
+                           backgroundColor: '#2d8cff',
+                           marginBottom: 5
+                        }}
+                     ></div>
+                     <span>
+                        Төхөөрөмжийн нэр: {examinationResult[1]?.deviceName}
+                     </span>
+                     <div>
+                        <span>
+                           Баркод:{' '}
+                           {
+                              examinationResult[1]?.patientIdentification
+                                 ?.patientId
                            }
-                        )}
-                  </tbody>
-               </table>
+                        </span>
+                     </div>
+                     <table style={{ width: '100%' }}>
+                        <thead>
+                           <tr>
+                              <th
+                                 className="text-center"
+                                 style={{
+                                    borderColor: 'black',
+                                    borderWidth: 1
+                                 }}
+                              >
+                                 Үзүүлэлт
+                              </th>
+                              <th
+                                 className="text-center"
+                                 style={{
+                                    borderColor: 'black',
+                                    borderWidth: 1
+                                 }}
+                              >
+                                 Хариу
+                              </th>
+                              <th
+                                 className="text-center"
+                                 style={{
+                                    borderColor: 'black',
+                                    borderWidth: 1
+                                 }}
+                              >
+                                 Нэгж
+                              </th>
+                              <th
+                                 className="text-center"
+                                 style={{
+                                    borderColor: 'black',
+                                    borderWidth: 1
+                                 }}
+                              >
+                                 Лавлах утга
+                              </th>
+                              <th
+                                 className="text-center"
+                                 style={{
+                                    borderColor: 'black',
+                                    borderWidth: 1
+                                 }}
+                              >
+                                 Тэмдэглэгээ
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {examinationResult &&
+                              examinationResult?.observations?.map(
+                                 (el, index) => {
+                                    return (
+                                       <tr key={index}>
+                                          <td
+                                             className="text-left"
+                                             style={{
+                                                borderColor: 'black',
+                                                borderWidth: 1
+                                             }}
+                                          >
+                                             {el.observationSubId}
+                                          </td>
+                                          <td
+                                             className="text-center"
+                                             style={{
+                                                borderColor: 'black',
+                                                borderWidth: 1
+                                             }}
+                                          >
+                                             {el.observationValue}
+                                          </td>
+                                          <td
+                                             className="text-center"
+                                             style={{
+                                                borderColor: 'black',
+                                                borderWidth: 1
+                                             }}
+                                          >
+                                             {el.units}
+                                          </td>
+                                          <td
+                                             className="text-center"
+                                             style={{
+                                                borderColor: 'black',
+                                                borderWidth: 1
+                                             }}
+                                          >
+                                             -
+                                          </td>
+                                          <td
+                                             style={{
+                                                borderColor: 'black',
+                                                borderWidth: 1
+                                             }}
+                                          ></td>
+                                       </tr>
+                                    );
+                                 }
+                              )}
+                        </tbody>
+                     </table>
+                     <div className="flex flex-wrap px-4 py-2">
+                        <div className="basis-2/3">
+                           <p className="font-bold">Сорьц авсан:</p>
+                           <p className="font-bold">Шинжилсэн:</p>
+                           <p className="font-bold">Баталгаажуулсан:</p>
+                           <p className="font-bold">Шинжилгээний дүгнэлт:</p>
+                        </div>
+                        <div className="basis-1/3">
+                           <img
+                              src={require('./Untitled-1.png')}
+                              style={{ width: '50%' }}
+                           />
+                        </div>
+                     </div>
+                     <div className="footerAna" style={{ width: '190mm' }}>
+                        <div className="inline-flex">
+                           <p className="font-bold pl-4">Санамж:</p>
+                           <p className="pl-2">
+                              Энэхүү шинжилгээ хариу зөвхөн тухайн өдрийн
+                              сорьцонд хүчинтэй болно.
+                           </p>
+                        </div>
+                        <div
+                           style={{
+                              width: '100%',
+                              height: 2,
+                              backgroundColor: '#2d8cff',
+                              marginBottom: 5
+                           }}
+                        ></div>
+                        <div className="inline-flex">
+                           <p className="font-bold pl-4">Хаяг:</p>
+                           <p className="pl-2">
+                              Улаанбаатар хот, Баянгол дүүрэг, 11 дүүрэг хороо,
+                              4дүгээр
+                           </p>
+                        </div>
+                        <p className="px-4">
+                           хороолол, Л.Энэбишийн өргөн чөлөө 22, Универсал мед
+                           эмнэлэг
+                        </p>
+                        <div className="inline-flex pt-2">
+                           <p className="font-bold pl-4">Утас:</p>
+                           <p className="pl-2">77739999</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
       </Spin>
