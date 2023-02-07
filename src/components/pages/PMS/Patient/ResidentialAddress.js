@@ -15,7 +15,7 @@ function ResidentialAddress({ form }) {
          headers: {},
          params: {
             type: 3,
-            parantId: value
+            parentId: value
          }
       };
       const response = await Get('reference/country', token, conf);
@@ -44,7 +44,16 @@ function ResidentialAddress({ form }) {
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >
-               <Select onChange={filterTowns}>
+               <Select
+                  onChange={filterTowns}
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                     (option?.children ?? '')
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                  }
+               >
                   {provices.map((provice, index) => {
                      return (
                         <Option key={index} value={provice.id}>
@@ -63,7 +72,15 @@ function ResidentialAddress({ form }) {
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >
-               <Select>
+               <Select
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                     (option?.children ?? '')
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                  }
+               >
                   {towns.map((town, index) => {
                      return (
                         <Option key={index} value={town.id}>
