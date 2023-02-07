@@ -55,6 +55,7 @@ function Index({ type, isDoctor }) {
       if (type === 0) {
          response = await Get('appointment', token, conf);
       } else if (type === 1) {
+         conf.params.doctorId = null;
          response = await Get('appointment/pre-order', token, conf);
       } else {
          // conf.params.process = 2;
@@ -244,8 +245,12 @@ function Index({ type, isDoctor }) {
       {
          title: 'Он сар',
          dataIndex: ['slots', 'schedule', 'workDate'],
-         render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+         render: (text, row) => {
+            if (text != null) {
+               return moment(text).format('YYYY-MM-DD');
+            } else {
+               return moment(row.createdAt).format('YYYY-MM-DD');
+            }
          }
       },
       {
