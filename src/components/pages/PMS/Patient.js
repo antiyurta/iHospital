@@ -49,11 +49,14 @@ function Patient() {
    const [form] = Form.useForm();
    const scrollRef = useRef();
    //
+   const dd = (value) => {
+      setIsGlobalDb(value);
+   };
    const items = [
       {
          label: 'Ерөнхий мэдээлэл',
          key: 1,
-         children: <GeneralInfo form={form} />
+         children: <GeneralInfo form={form} gbase={dd} />
       },
       { label: 'Нэмэлт мэдээлэл', key: 2, children: <MoreInfo form={form} /> },
       {
@@ -163,7 +166,7 @@ function Patient() {
          params: {}
       };
       console.log(data);
-      if (!data.contacts) {
+      if (data.contacts.length === 0) {
          openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
       } else {
          if (editMode) {

@@ -43,6 +43,7 @@ function EMR() {
    const Inspection = useLocation().state.inspection;
    const AppointmentId = useLocation().state.appointmentId;
    const XrayRequestId = useLocation().state.xrayRequestId;
+   const InpatientRequestId = useLocation().state?.inpatientRequestId;
    const [cardLoading, setCardLoading] = useState(false);
    const token = useSelector(selectCurrentToken);
    const employeeId = useSelector(selectCurrentUserId);
@@ -88,7 +89,7 @@ function EMR() {
          });
          const data = {};
          if (IncomeUsageType === 'IN') {
-            data['inpatientRequestId'] = AppointmentId;
+            data['inpatientRequestId'] = InpatientRequestId;
          } else {
             data['appointmentId'] = AppointmentId;
          }
@@ -214,7 +215,10 @@ function EMR() {
                            patient={selectedPatient}
                            handlesearch={handleSearch}
                            handleTypeChange={handleTypeChange}
-                           OCS={AppointmentId ? true : false}
+                           // OCS={AppointmentId ? true : false}
+                           OCS={
+                              AppointmentId || InpatientRequestId ? true : false
+                           }
                            type={type}
                         />
                      </div>

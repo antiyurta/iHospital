@@ -1,9 +1,14 @@
-import { Checkbox, DatePicker, Form, Input, Radio } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, Radio, Select } from 'antd';
 import moment from 'moment';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Table } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import logo from '../../../../../../assets/logo/universal.png';
-import { getAge } from '../../../../../comman';
+import { selectCurrentToken } from '../../../../../../features/authReducer';
+import { Get, getAge } from '../../../../../comman';
+const { TextArea } = Input;
+const { Option } = Select;
 const educationType = [
    {
       label: 'Боловсролгүй',
@@ -39,6 +44,8 @@ const educationType = [
    }
 ];
 function Page1() {
+   const token = useSelector(selectCurrentToken);
+   const [options, setOptions] = useState([]);
    const [eeo, setEeo] = useState(false);
    const [te, setTe] = useState(false);
    const [echm, setEchm] = useState(false);
@@ -54,6 +61,17 @@ function Page1() {
          setO(!o);
       }
    };
+   const getDiagnoses = async () => {
+      const config = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('reference/diagnose', token, config);
+      setOptions(response.data);
+   };
+   useEffect(() => {
+      getDiagnoses();
+   }, []);
    return (
       <div className="page">
          <div className="subpage">
@@ -457,6 +475,7 @@ function Page1() {
                                     {diagnoses.map(
                                        ({ key, name, ...restField }) => (
                                           <Form.Item
+                                             key={key}
                                              {...restField}
                                              name={[name, 'name']}
                                              shouldUpdate
@@ -477,7 +496,49 @@ function Page1() {
                      </th>
                   </tr>
                   <tr>
-                     <th colSpan={4}>Үндсэн онош</th>
+                     <th colSpan={4}>
+                        <span>
+                           <span>Үндсэн онош</span>
+                           <span>
+                              <Button className="diagnoseButton">ICD10</Button>
+                           </span>
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'testt']}
+                           >
+                              <Select
+                                 mode="multiple"
+                                 className="oned"
+                                 placeholder="Онош сонгох"
+                                 style={{
+                                    width: '100%',
+                                    fontSize: 11
+                                 }}
+                                 showSearch
+                                 optionFilterProp="children"
+                                 filterOption={(input, option) =>
+                                    (option?.children ?? '')
+                                       .toLowerCase()
+                                       .includes(input.toLowerCase())
+                                 }
+                              >
+                                 {options.map((option, index) => {
+                                    return (
+                                       <Option
+                                          key={index}
+                                          value={option.code}
+                                          style={{ fontSize: 11 }}
+                                       >
+                                          {option.code + '' + option.nameMn}
+                                       </Option>
+                                    );
+                                 })}
+                              </Select>
+                           </Form.Item>
+                        </span>
+                     </th>
                      <th className="text-center">
                         <p>ӨОУА-код</p>
                         <p>2023он 02сар 02өдөр</p>
@@ -556,7 +617,33 @@ function Page1() {
                      <th colSpan={2}>
                         <p>Эмчлэгч эмчийн нэр, гарын үсэг</p>
                      </th>
-                     <th colSpan={3}></th>
+                     <th colSpan={3}>
+                        <span>
+                           Хянасан эмчийн нэр, гарын үсэг{' '}
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'doctors']}
+                           >
+                              <Checkbox.Group className="inline">
+                                 <Checkbox className="test" value={0}>
+                                    Эмчилгээ эрхэлсэн орлогч
+                                 </Checkbox>
+                                 <Checkbox className="ml-0 test" value={1}>
+                                    тасгийн эрхлэгч
+                                 </Checkbox>
+                                 <Checkbox className="ml-0 test" value={2}>
+                                    эмчилгээний чанарын менежер
+                                 </Checkbox>
+                                 <Checkbox className="ml-0 test" value={3}>
+                                    бусад
+                                 </Checkbox>
+                              </Checkbox.Group>
+                           </Form.Item>
+                           /зур/
+                        </span>
+                     </th>
                   </tr>
                </thead>
             </Table>

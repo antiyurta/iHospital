@@ -1,7 +1,11 @@
 import { Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
 const { TextArea } = Input;
-function Index() {
+function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
+   const style = {
+      minHeight: `${mainHeight} !important`,
+      width: '100%'
+   };
    return (
       <div className="page">
          <div className="subpage">
@@ -12,7 +16,7 @@ function Index() {
                         КЛИНИКИЙН УРЬДЧИЛСАН ОНОШ
                      </th>
                   </tr>
-                  <tr>
+                  <tr style={{ height: mainHeight }}>
                      <td colSpan={3}>
                         <p className="font-bold">Үндсэн онош</p>
                         <Form.Item
@@ -21,11 +25,17 @@ function Index() {
                            noStyle
                            name={['clinicDiagnoses', 'main']}
                         >
-                           <TextArea className="amaraInputTextArea w-full" />
+                           <TextArea
+                              className="amaraInputTextArea"
+                              style={{
+                                 minHeight: mainHeight - 20,
+                                 width: '100%'
+                              }}
+                           />
                         </Form.Item>
                      </td>
                   </tr>
-                  <tr>
+                  <tr style={{ height: comboHeight }}>
                      <td colSpan={3}>
                         <p className="font-bold">Дагалдах онош</p>
                         <Form.Item
@@ -34,11 +44,17 @@ function Index() {
                            noStyle
                            name={['clinicDiagnoses', 'combo']}
                         >
-                           <TextArea className="amaraInputTextArea w-full" />
+                           <TextArea
+                              className="amaraInputTextArea"
+                              style={{
+                                 minHeight: comboHeight - 20,
+                                 width: '100%'
+                              }}
+                           />
                         </Form.Item>
                      </td>
                   </tr>
-                  <tr>
+                  <tr style={{ height: complicationsHeight }}>
                      <td colSpan={3}>
                         <p className="font-bold">Хүндрэл</p>
                         <Form.Item
@@ -47,11 +63,17 @@ function Index() {
                            noStyle
                            name={['clinicDiagnoses', 'complications']}
                         >
-                           <TextArea className="amaraInputTextArea w-full" />
+                           <TextArea
+                              className="amaraInputTextArea"
+                              style={{
+                                 minHeight: complicationsHeight - 20,
+                                 width: '100%'
+                              }}
+                           />
                         </Form.Item>
                      </td>
                   </tr>
-                  <tr>
+                  <tr style={{ height: subHeight }}>
                      <td>
                         <p className="font-bold">Ялган оношлох эмгэгүүд</p>
                         <p className="font-bold">ба хам шинжүүд</p>
@@ -61,7 +83,13 @@ function Index() {
                            noStyle
                            name={['clinicDiagnoses', 'syndromes']}
                         >
-                           <TextArea className="amaraInputTextArea w-full" />
+                           <TextArea
+                              className="amaraInputTextArea"
+                              style={{
+                                 minHeight: subHeight - 40,
+                                 width: '100%'
+                              }}
+                           />
                         </Form.Item>
                      </td>
                      <td>
@@ -73,7 +101,13 @@ function Index() {
                            noStyle
                            name={['clinicDiagnoses', 'examination']}
                         >
-                           <TextArea className="amaraInputTextArea w-full" />
+                           <TextArea
+                              className="amaraInputTextArea"
+                              style={{
+                                 minHeight: subHeight - 40,
+                                 width: '100%'
+                              }}
+                           />
                         </Form.Item>
                      </td>
                      <td>
@@ -84,7 +118,13 @@ function Index() {
                            noStyle
                            name={['clinicDiagnoses', 'immediateTreatment']}
                         >
-                           <TextArea className="amaraInputTextArea w-full" />
+                           <TextArea
+                              className="amaraInputTextArea"
+                              style={{
+                                 minHeight: subHeight - 20,
+                                 width: '100%'
+                              }}
+                           />
                         </Form.Item>
                      </td>
                   </tr>

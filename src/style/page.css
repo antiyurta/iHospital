@@ -65,6 +65,30 @@ body {
    border-color: #000 !important;
    background-color: white !important;
 }
+.story .ant-checkbox-wrapper.test span.ant-checkbox {
+   display: none !important;
+}
+.story .ant-checkbox-wrapper.test.ant-checkbox-wrapper-checked span {
+   text-decoration: underline !important;
+}
+.dstory .ant-checkbox-wrapper.test span.ant-checkbox {
+   display: none !important;
+}
+.dstory .ant-checkbox-wrapper.test.ant-checkbox-wrapper-checked span {
+   text-decoration: underline !important;
+}
+/* gaduur ni hure zurah start */
+.dstory .ant-checkbox-wrapper.test2 {
+   font-size: 14px !important;
+}
+.dstory .ant-checkbox-wrapper.test2 span.ant-checkbox {
+   display: none !important;
+}
+.dstory .ant-checkbox-wrapper.test2.ant-checkbox-wrapper-checked span {
+   border: 1px solid black !important;
+   border-radius: 50% !important;
+}
+/* gaduur ni hure zurah end */
 .story .ant-checkbox-wrapper {
    font-size: 11px !important;
 }
@@ -110,7 +134,7 @@ body {
 }
 .story .amaraInputTextArea.ant-input {
    resize: none !important;
-   height: 76px !important;
+   min-height: 76px;
 }
 .story .amaraInput.ant-input {
    resize: none !important;
@@ -125,6 +149,50 @@ body {
    color: black !important;
    width: min-content;
    padding: 0px !important;
+   border-radius: 0% !important;
+   text-align: center !important;
+   border-bottom: 1px solid black !important;
+}
+.dstory .ant-picker.ant-picker-disabled {
+   background-color: transparent !important;
+   border: none !important;
+   padding: 0px !important;
+   border-radius: 0% !important;
+   text-align: center !important;
+   width: 50px !important;
+   height: 19px !important;
+   border-bottom: 1px solid black !important;
+}
+.dstory .ant-picker-input > input:disabled {
+   color: black !important;
+   font-size: 13px !important;
+   font-weight: 600 !important;
+   text-align: center !important;
+}
+.dstory .ant-picker-suffix {
+   display: none !important;
+}
+.dstory .ant-input {
+   border: none !important;
+   height: 19px !important;
+   font-size: 13px !important;
+   background-color: transparent !important;
+   color: black !important;
+   width: min-content;
+   padding: 0px !important;
+   border-radius: 0% !important;
+   text-align: center !important;
+   border-bottom: 1px solid black !important;
+}
+.story .oned .ant-select-selector {
+   border: none !important;
+   height: 60px !important;
+}
+.story .ant-select-multiple .ant-select-selection-item {
+   background-color: transparent !important;
+   border: none !important;
+   font-weight: bold !important;
+   height: 18px !important;
 }
 .story .ant-input:disabled {
    border: none !important;
@@ -136,6 +204,27 @@ body {
    width: min-content;
    padding: 0px !important;
    resize: none !important;
+}
+.dstory .ant-input:disabled {
+   border: none !important;
+   height: 19px !important;
+   /* max-height: 100px !important; */
+   font-size: 13px !important;
+   background-color: transparent !important;
+   color: black !important;
+   width: min-content;
+   padding: 0px !important;
+   resize: none !important;
+   border-radius: 0% !important;
+   text-align: center !important;
+   border-bottom: 1px solid black !important;
+}
+.diagnoseButton {
+   float: right !important;
+   font-size: 10px !important;
+   height: 15px !important;
+   background-color: green;
+   color: white;
 }
 /* @page {
    .document,
@@ -154,6 +243,9 @@ body {
    .page-landscape {
       margin: 0;
       page-break-after: always;
+   }
+   .diagnoseButton{
+      display: none !important;
    }
 }
 /* lab */

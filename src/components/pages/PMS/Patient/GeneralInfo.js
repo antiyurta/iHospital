@@ -14,9 +14,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+import { Get, openNofi } from '../../../comman';
 
-function GeneralInfo({ form }) {
+function GeneralInfo({ form, gbase }) {
    const token = useSelector(selectCurrentToken);
    const [imageUrl, setImageUrl] = useState();
    const [loading, setLoading] = useState(false);
@@ -88,7 +88,12 @@ function GeneralInfo({ form }) {
             response['birthDay'] = moment(response['birthDay']);
             filterTowns(response.aimagId);
             form.setFieldsValue(response);
-            setIsGlobalDb(true);
+            gbase(true);
+            openNofi(
+               'error',
+               'Үйлчлүүлэгч',
+               'Бүртгэлтэй байгаа тул бүртгэх шаардлагагүй'
+            );
          }
       }
    };

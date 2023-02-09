@@ -669,10 +669,6 @@ function Index({ type, isDoctor }) {
                         }}
                         locale={{ emptyText: 'Мэдээлэл байхгүй' }}
                         bordered
-                        // columns={isDoctor ?
-                        //     type === 2 ? InPatientColumns : columns
-                        //     :
-                        //     nurseColumns}
                         columns={
                            type === 2
                               ? InPatientColumns

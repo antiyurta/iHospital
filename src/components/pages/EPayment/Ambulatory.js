@@ -1,6 +1,5 @@
-import { Card, Button, Modal, Select, Pagination } from 'antd';
+import { Card, Button, Modal, Select, Pagination, Table, Result } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { DefaultPost, Get, openNofi, Post, ScrollRef } from '../../comman';
@@ -38,9 +37,11 @@ function Ambulatory() {
    const onSearch = async (page, pageSize, value) => {
       config.params.registerNumber = value;
       const response = await Get('payment/patient', token, config);
+      console.log(response);
       setPatientsList(response);
    };
    const onSearchPayment = async (page, pageSize, value) => {
+      setNotPatientLoading(true);
       if (value != undefined) {
          setNotPatientsValue(value);
       }
@@ -55,6 +56,7 @@ function Ambulatory() {
       const response = await Get('pms/patient', token, conf);
       setNotPatientsMeta(response.meta);
       setNotPatientsList(response.data);
+      setNotPatientLoading(false);
    };
    const getPayment = async (id) => {
       setIsOpen(true);
@@ -98,21 +100,21 @@ function Ambulatory() {
       }
    };
 
-   const checkAPI = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('ebarimt/checkApi', token, conf);
-      if (!response.database.success) {
-         Get('ebarimt/sendData', token, config);
-      }
-   };
+   // const checkAPI = async () => {
+   //    const conf = {
+   //       headers: {},
+   //       params: {}
+   //    };
+   //    const response = await Get('ebarimt/checkApi', token, conf);
+   //    if (!response.database.success) {
+   //       Get('ebarimt/sendData', token, config);
+   //    }
+   // };
 
    useEffect(() => {
       ScrollRef(scrollRef);
    }, []);
-
+   const [notPatientLoading, setNotPatientLoading] = useState(false);
    const categories = [
       {
          //shinejilgee
@@ -143,6 +145,53 @@ function Ambulatory() {
          //bagts
          name: 'Package',
          label: 'Багц'
+      }
+   ];
+   const notPatientColumn = [
+      {
+         title: 'Картын №',
+         dataIndex: 'cardNumber'
+      },
+      {
+         title: 'Овог',
+         dataIndex: 'lastName'
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'firstName'
+      },
+      {
+         title: 'Регистрийн дугаар',
+         dataIndex: 'registerNumber'
+      }
+   ];
+   const columns = [
+      {
+         title: 'Картын №',
+         dataIndex: 'cardNumber'
+      },
+      {
+         title: 'Овог',
+         dataIndex: 'lastName'
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'firstName'
+      },
+      {
+         title: 'Регистрийн дугаар',
+         dataIndex: 'registerNumber'
+      },
+      {
+         title: 'Төлбөр',
+         dataIndex: 'id',
+         render: (text) => {
+            return (
+               <Button type="primary" onClick={() => getPayment(text)}>
+                  Төлбөр авах
+               </Button>
+            );
+         }
       }
    ];
 
@@ -180,9 +229,6 @@ function Ambulatory() {
                            Оношилгоо шинжилгээ захиалах
                         </Button>
                      </div>
-                     <div>
-                        <Button onClick={() => checkAPI()}>CheckAPI</Button>
-                     </div>
                   </div>
                </Card>
             </div>
@@ -192,52 +238,19 @@ function Ambulatory() {
                   className="header-solid max-h-max rounded-md"
                   loading={cardLoading}
                >
-                  <div
-                     className="table-responsive p-4"
-                     id="style-8"
-                     ref={scrollRef}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
-                        <thead className="ant-table-thead">
-                           <tr>
-                              <th>Картын №</th>
-                              <th>Овог</th>
-                              <th>Нэр</th>
-                              <th>Регистрийн дугаар</th>
-                              <th>Захиалсан огноо</th>
-                              <th>Үзлэг</th>
-                           </tr>
-                        </thead>
-                        <tbody className="ant-table-tbody">
-                           {patientsList.map((patient, index) => {
-                              return (
-                                 <tr key={index}>
-                                    <td>{patient.cardNumber}</td>
-                                    <td>{patient.lastName}</td>
-                                    <td>{patient.firstName}</td>
-                                    <td>{patient.registerNumber}</td>
-                                    <td>
-                                       {moment(patient.createdAt).format(
-                                          'YYYY-MM-DD'
-                                       )}
-                                    </td>
-                                    <td>
-                                       <Button
-                                          type="primary"
-                                          onClick={() => getPayment(patient.id)}
-                                       >
-                                          Төлбөр авах
-                                       </Button>
-                                    </td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </Table>
-                  </div>
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     locale={{
+                        emptyText: <Result title="Мэдээлэл байхгүй байна" />
+                     }}
+                     columns={columns}
+                     dataSource={patientsList}
+                     pagination={{
+                        simple: true,
+                        pageSize: 15
+                     }}
+                  />
                </Card>
             </div>
          </div>
@@ -298,51 +311,15 @@ function Ambulatory() {
                         </>
                      }
                   >
-                     <div
-                        className="table-responsive"
-                        id="style-8"
-                        style={{ maxHeight: '150px' }}
-                     >
-                        <Table
-                           className="ant-border-space"
-                           style={{ width: '100%' }}
-                        >
-                           <thead className="ant-table-thead bg-slate-200">
-                              <tr>
-                                 <th className="font-bold text-sm align-middle">
-                                    Картын №
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Овог
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Нэр
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Регистрийн дугаар
-                                 </th>
-                              </tr>
-                           </thead>
-                           <tbody className="ant-table-tbody">
-                              {notPatientsList.map((patient, index) => {
-                                 return (
-                                    <tr
-                                       className="hover:cursor-pointer ant-table-row ant-table-row-level-0"
-                                       key={index}
-                                       onDoubleClick={() =>
-                                          setSelectedPatient(patient)
-                                       }
-                                    >
-                                       <td>{patient.cardNumber}</td>
-                                       <td>{patient.lastName}</td>
-                                       <td>{patient.firstName}</td>
-                                       <td>{patient.registerNumber}</td>
-                                    </tr>
-                                 );
-                              })}
-                           </tbody>
-                        </Table>
-                     </div>
+                     <Table
+                        rowKey={'id'}
+                        bordered
+                        loading={notPatientLoading}
+                        columns={notPatientColumn}
+                        dataSource={notPatientsList}
+                        pagination={false}
+                        scroll={{ y: 100 }}
+                     />
                   </Card>
                </div>
             </div>

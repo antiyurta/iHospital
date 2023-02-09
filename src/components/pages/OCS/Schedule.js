@@ -50,7 +50,8 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             time.push(payment);
          } else if (
             payment.type === 1 &&
-            payment.xrayRequest?.slotId === null
+            payment.xrayRequest?.slotId === null &&
+            payment.xrayRequest?.usageType === 'OUT'
          ) {
             time.push(payment);
          } else {

@@ -9,9 +9,12 @@ import { selectCurrentToken } from '../../../../../../features/authReducer';
 import { DefaultPatch, Get } from '../../../../../comman';
 import Page1 from './Page1';
 import Page2 from './Page2';
-import InternalMedicine from '../InternalMedicine/Index';
 import moment from 'moment';
-
+import Epicriz from '../../../../BeforeAmbulatory/Lists/Epicriz';
+//
+import InternalMedicine from '../InternalMedicine/Index';
+import Neurologist from '../Neurologist/Index';
+//
 function Index({ id }) {
    const token = useSelector(selectCurrentToken);
    let location = useLocation();
@@ -58,6 +61,7 @@ function Index({ id }) {
          params: {}
       };
       values['doctorInspection'] = JSON.stringify(values['doctorInspection']);
+      values['templateId'] = 1;
       const response = await DefaultPatch(
          'inpatient/story/' + storyId,
          token,
@@ -68,8 +72,11 @@ function Index({ id }) {
       // form.setFieldsValue(response);
    };
    const RenderDoctorInspection = () => {
-      console.log(id);
-      return <InternalMedicine />;
+      if (id === 1) {
+         return <InternalMedicine />;
+      } else if (id === 2) {
+         return <Neurologist />;
+      }
    };
    useEffect(() => {
       getStory();
@@ -82,10 +89,10 @@ function Index({ id }) {
                   <Page1 />
                   <Page2 />
                   <RenderDoctorInspection />
+                  <Epicriz />
                </Form>
             </div>
          </Spin>
-
          <Button onClick={() => handlePrint()}>Хэвлэх</Button>
          <Button
             onClick={() =>

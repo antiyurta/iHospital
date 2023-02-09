@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';
+import Epicriz from '../../BeforeAmbulatory/Lists/Epicriz';
 import Diagnose from '../../service/Diagnose';
 import Index from '../InPatient/document/Index';
 const { Panel } = Collapse;
@@ -103,6 +104,8 @@ function MainInpatientHistory() {
          ]);
       } else if (e.key == 3) {
          setIsOpenDocumentModal(true);
+      } else if (e.key == 7) {
+         setItems([{ label: 'Гарах', key: 1, children: <Epicriz /> }]);
       }
    };
    const menu = (

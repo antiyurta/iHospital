@@ -24,6 +24,11 @@ function Index({ handleClick }) {
          label: 'ДОТРЫН ЭМЧИЙН ҮЗЛЭГ',
          key: 1,
          children: <Painstory id={1} />
+      },
+      {
+         label: 'МЭДРЭЛИЙН ЭМЧИЙН ҮЗЛЭГ',
+         key: 2,
+         children: <Painstory id={2} />
       }
    ];
    return (
