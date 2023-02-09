@@ -314,6 +314,14 @@ function Ambulatory() {
                      <Table
                         rowKey={'id'}
                         bordered
+                        rowClassName="hover:cursor-pointer"
+                        onRow={(row, rowIndex) => {
+                           return {
+                              onDoubleClick: () => {
+                                 setSelectedPatient(row);
+                              }
+                           };
+                        }}
                         loading={notPatientLoading}
                         columns={notPatientColumn}
                         dataSource={notPatientsList}

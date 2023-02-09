@@ -153,13 +153,14 @@ function IndexAfter({ type, params }) {
       inspectionType,
       xrayProcess,
       deviceType,
+      usageType,
       isPayment
    ) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
       if (xrayProcess === 0 && deviceType === 0) {
          openNofi('warning', 'Зураг', 'Зураг оруулагүй');
-      } else if (!isPayment) {
+      } else if (!isPayment && usageType === 'OUT') {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
          console.log(listId, id, cabinetId, inspectionType);
@@ -337,6 +338,7 @@ function IndexAfter({ type, params }) {
                                           row?.deviceType === 0 ? 11 : 12,
                                           row?.xrayProcess,
                                           row?.deviceType,
+                                          row?.usageType,
                                           row?.isPayment
                                        );
                                     }
