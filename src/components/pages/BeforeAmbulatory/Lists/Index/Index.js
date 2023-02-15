@@ -11,6 +11,7 @@ import {
 } from '../../../../../features/authReducer';
 import { Get, openNofi, ScrollRef } from '../../../../comman';
 import orderType from './orderType.json';
+import Ambulatory from '../../../EMR/InPatient/document/Ambulatory/Index';
 
 const { RangePicker } = DatePicker;
 const { CheckableTag } = Tag;
@@ -524,6 +525,7 @@ function Index({ type, isDoctor }) {
 
    return (
       <div className="flex flex-wrap">
+         <Ambulatory />
          <div className="w-full">
             <Card
                bordered={false}
@@ -624,6 +626,7 @@ function Index({ type, isDoctor }) {
                            </div>
                         </>
                      )}
+                     <div className="float-right">AA</div>
                      <div className="float-right">
                         <Button
                            title="Сэргээх"
