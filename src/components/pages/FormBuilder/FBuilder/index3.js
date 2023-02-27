@@ -7,8 +7,10 @@ import {
 import { Button, Form, Input, Select } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
-
-function Index3({ options, namePanel, handleChange }) {
+function index3({ options, namePanel, handleChange }) {
+   const addOptions = (namePanel, name) => {
+      console.log(namePanel, name);
+   };
    return (
       <div>
          <Form.List name={namePanel}>
@@ -49,7 +51,7 @@ function Index3({ options, namePanel, handleChange }) {
                                        style={{ backgroundColor: '#d1d1d1' }}
                                     >
                                        <div className="flex flex-wrap p-1">
-                                          <div className="basis-5/12">
+                                          <div className="basis-3/12">
                                              <Form.Item
                                                 {...restField}
                                                 label="Төрөл"
@@ -86,7 +88,20 @@ function Index3({ options, namePanel, handleChange }) {
                                                 </Select>
                                              </Form.Item>
                                           </div>
-                                          <div className="basis-6/12">
+                                          <div className="basis-4/12">
+                                             <Form.Item
+                                                {...restField}
+                                                label="Түлхүүр"
+                                                name={[
+                                                   optionField.name,
+                                                   'keyWord'
+                                                ]}
+                                                style={{ marginBottom: 0 }}
+                                             >
+                                                <TextArea />
+                                             </Form.Item>
+                                          </div>
+                                          <div className="basis-4/12">
                                              <Form.Item
                                                 {...restField}
                                                 label="Асуулт"
@@ -220,4 +235,4 @@ function Index3({ options, namePanel, handleChange }) {
       </div>
    );
 }
-export default Index3;
+export default index3;

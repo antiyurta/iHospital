@@ -1,4 +1,5 @@
 import { Button, Checkbox, DatePicker, Form, Input, Radio, Select } from 'antd';
+import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import { useSelector } from 'react-redux';
 import logo from '../../../../../../assets/logo/universal.png';
 import { selectCurrentToken } from '../../../../../../features/authReducer';
 import { Get, getAge } from '../../../../../comman';
+import Diagnose from '../Diagnose';
 const { TextArea } = Input;
 const { Option } = Select;
 const educationType = [
@@ -43,35 +45,7 @@ const educationType = [
       value: 7
    }
 ];
-function Page1() {
-   const token = useSelector(selectCurrentToken);
-   const [options, setOptions] = useState([]);
-   const [eeo, setEeo] = useState(false);
-   const [te, setTe] = useState(false);
-   const [echm, setEchm] = useState(false);
-   const [o, setO] = useState(false);
-   const ddd = (index) => {
-      if (index === 0) {
-         setEeo(!eeo);
-      } else if (index === 1) {
-         setTe(!te);
-      } else if (index === 2) {
-         setEchm(!echm);
-      } else if (index === 3) {
-         setO(!o);
-      }
-   };
-   const getDiagnoses = async () => {
-      const config = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('reference/diagnose', token, config);
-      setOptions(response.data);
-   };
-   useEffect(() => {
-      getDiagnoses();
-   }, []);
+function Page1({ form }) {
    return (
       <div className="page">
          <div className="subpage">
@@ -119,15 +93,25 @@ function Page1() {
                   </tr>
                   <tr>
                      <th colSpan={2}>
-                        Өвчний түүх нээсэн:{' '}
                         <span>
+                           Өвчний түүх нээсэн:
                            <Form.Item
                               shouldUpdate
                               className="mb-0"
                               noStyle
                               name={'createdAt'}
+                              getValueProps={(i) => ({ value: moment(i) })}
                            >
-                              <Input disabled={true} />
+                              <DatePicker
+                                 showTime={{
+                                    format: 'HH:mm'
+                                 }}
+                                 format="YYYY он MM сар DD өдөр HH цаг mm мин"
+                                 disabled={true}
+                                 style={{
+                                    width: 200
+                                 }}
+                              />
                            </Form.Item>
                         </span>
                      </th>
@@ -187,8 +171,15 @@ function Page1() {
                               className="mb-0"
                               noStyle
                               name={['patient', 'birthDate']}
+                              getValueProps={(i) => ({ value: moment(i) })}
                            >
-                              <Input disabled={true} className="w-52" />
+                              <DatePicker
+                                 format="YYYY он MM сар DD өдөр"
+                                 disabled={true}
+                                 style={{
+                                    width: 200
+                                 }}
+                              />
                            </Form.Item>
                         </p>
                         <p>
@@ -211,7 +202,7 @@ function Page1() {
                            className="mb-0"
                            name={['patient', 'genderType']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
+                           <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'MAN'}>
                                  Эрэгтэй
                               </Checkbox>
@@ -225,7 +216,7 @@ function Page1() {
                            className="mb-0"
                            name={['patient', 'marriageStatus']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
+                           <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Огт гэрлээгүй
                               </Checkbox>
@@ -251,7 +242,7 @@ function Page1() {
                            className="mb-0"
                            name={['patient', 'educationType']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
+                           <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Боловсролгүй
                               </Checkbox>
@@ -305,10 +296,7 @@ function Page1() {
                                  noStyle
                                  name={['patient', 'address', 'soum']}
                               >
-                                 <Input
-                                    disabled={true}
-                                    style={{ width: 100 }}
-                                 />
+                                 <Input disabled={true} />
                               </Form.Item>
                            </span>
                            <span>&nbsp;</span>
@@ -320,10 +308,7 @@ function Page1() {
                                  noStyle
                                  name={['patient', 'address', 'committee']}
                               >
-                                 <Input
-                                    disabled={true}
-                                    style={{ width: 100 }}
-                                 />
+                                 <Input disabled={true} />
                               </Form.Item>
                            </span>
                         </p>
@@ -335,7 +320,7 @@ function Page1() {
                               noStyle
                               name={['patient', 'address', 'building']}
                            >
-                              <Input disabled={true} style={{ width: 100 }} />
+                              <Input disabled={true} />
                            </Form.Item>
                            <span>&nbsp;</span>
                            Тоот:{' '}
@@ -345,7 +330,7 @@ function Page1() {
                               noStyle
                               name={['patient', 'address', 'address']}
                            >
-                              <Input disabled={true} style={{ width: 100 }} />
+                              <Input disabled={true} />
                            </Form.Item>
                         </p>
                      </th>
@@ -370,7 +355,30 @@ function Page1() {
                         </Form.Item>
                      </th>
                      <th>
-                        <p>Цусны бүлэг:</p>
+                        <p>
+                           Цусны бүлэг:
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'bloodType']}
+                           >
+                              <Input className="w-9 text-center" />
+                           </Form.Item>
+                        </p>
+                        <p>Баталгаажуулсан</p>
+                        <p>хүний нэр гарын</p>
+                        <p>
+                           үсэг:
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'bloodTypeVerify']}
+                           >
+                              <Input className="w-16" />
+                           </Form.Item>
+                        </p>
                      </th>
                   </tr>
                </thead>
@@ -497,70 +505,249 @@ function Page1() {
                   </tr>
                   <tr>
                      <th colSpan={4}>
+                        Үндсэн онош:
                         <span>
-                           <span>Үндсэн онош</span>
-                           <span>
-                              <Button className="diagnoseButton">ICD10</Button>
-                           </span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'testt']}
-                           >
-                              <Select
-                                 mode="multiple"
-                                 className="oned"
-                                 placeholder="Онош сонгох"
-                                 style={{
-                                    width: '100%',
-                                    fontSize: 11
-                                 }}
-                                 showSearch
-                                 optionFilterProp="children"
-                                 filterOption={(input, option) =>
-                                    (option?.children ?? '')
-                                       .toLowerCase()
-                                       .includes(input.toLowerCase())
-                                 }
-                              >
-                                 {options.map((option, index) => {
-                                    return (
-                                       <Option
+                           <Form.List name={['patient', 'main']}>
+                              {(diagnoses) => (
+                                 <>
+                                    {diagnoses.map((diagnose, index) => (
+                                       <Form.Item
                                           key={index}
-                                          value={option.code}
-                                          style={{ fontSize: 11 }}
+                                          shouldUpdate
+                                          noStyle
+                                          className="mb-0"
                                        >
-                                          {option.code + '' + option.nameMn}
-                                       </Option>
-                                    );
-                                 })}
-                              </Select>
-                           </Form.Item>
+                                          {() => {
+                                             return (
+                                                <span>
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'main',
+                                                      diagnose.name,
+                                                      'nameMn'
+                                                   ])}
+                                                   -
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'main',
+                                                      diagnose.name,
+                                                      'code'
+                                                   ])}
+                                                   &nbsp;
+                                                </span>
+                                             );
+                                          }}
+                                       </Form.Item>
+                                    ))}
+                                 </>
+                              )}
+                           </Form.List>
                         </span>
                      </th>
                      <th className="text-center">
                         <p>ӨОУА-код</p>
-                        <p>2023он 02сар 02өдөр</p>
+                        <p>
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'mainDate']}
+                              getValueProps={(i) => ({ value: moment(i) })}
+                           >
+                              <DatePicker
+                                 disabled={true}
+                                 format={'YYYY он MM сар DD өдөр'}
+                              />
+                           </Form.Item>
+                        </p>
                      </th>
                   </tr>
                   <tr>
-                     <th colSpan={4}>Дагалдах онош</th>
+                     <th colSpan={4}>
+                        Дагалдах онош:
+                        <span>
+                           <Form.List name={['patient', 'combo']}>
+                              {(diagnoses) => (
+                                 <>
+                                    {diagnoses.map((diagnose, index) => (
+                                       <Form.Item
+                                          key={index}
+                                          shouldUpdate
+                                          noStyle
+                                          className="mb-0"
+                                       >
+                                          {() => {
+                                             return (
+                                                <span>
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'combo',
+                                                      diagnose.name,
+                                                      'nameMn'
+                                                   ])}
+                                                   -
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'combo',
+                                                      diagnose.name,
+                                                      'code'
+                                                   ])}
+                                                   &nbsp;
+                                                </span>
+                                             );
+                                          }}
+                                       </Form.Item>
+                                    ))}
+                                 </>
+                              )}
+                           </Form.List>
+                        </span>
+                     </th>
                      <th></th>
                   </tr>
                   <tr>
-                     <th colSpan={4}>Хүндрэл</th>
+                     <th colSpan={4}>
+                        Хүндрэл:
+                        <span>
+                           <Form.List name={['patient', 'complications']}>
+                              {(diagnoses) => (
+                                 <>
+                                    {diagnoses.map((diagnose, index) => (
+                                       <Form.Item
+                                          key={index}
+                                          shouldUpdate
+                                          noStyle
+                                          className="mb-0"
+                                       >
+                                          {() => {
+                                             return (
+                                                <span>
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'complications',
+                                                      diagnose.name,
+                                                      'nameMn'
+                                                   ])}
+                                                   -
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'complications',
+                                                      diagnose.name,
+                                                      'code'
+                                                   ])}
+                                                   &nbsp;
+                                                </span>
+                                             );
+                                          }}
+                                       </Form.Item>
+                                    ))}
+                                 </>
+                              )}
+                           </Form.List>
+                        </span>
+                     </th>
                      <th></th>
                   </tr>
                   <tr>
-                     <th colSpan={4}>Үйлдлийн онош (Мэс засал, мэс ажилбар)</th>
+                     <th colSpan={4}>
+                        Үйлдлийн онош (Мэс засал, мэс ажилбар):
+                        <span>
+                           <Form.List name={['patient', 'operational']}>
+                              {(diagnoses) => (
+                                 <>
+                                    {diagnoses.map((diagnose, index) => (
+                                       <Form.Item
+                                          key={index}
+                                          shouldUpdate
+                                          noStyle
+                                          className="mb-0"
+                                       >
+                                          {() => {
+                                             return (
+                                                <span>
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'operational',
+                                                      diagnose.name,
+                                                      'nameMn'
+                                                   ])}
+                                                   -
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'operational',
+                                                      diagnose.name,
+                                                      'code'
+                                                   ])}
+                                                   &nbsp;
+                                                </span>
+                                             );
+                                          }}
+                                       </Form.Item>
+                                    ))}
+                                 </>
+                              )}
+                           </Form.List>
+                        </span>
+                     </th>
                      <th className="text-center">
                         <p>ӨОУА-код</p>
-                        <p>2023он 02сар 02өдөр</p>
+                        <p>
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'operationalDate']}
+                              getValueProps={(i) => ({ value: moment(i) })}
+                           >
+                              <DatePicker
+                                 disabled={true}
+                                 format={'YYYY он MM сар DD өдөр'}
+                              />
+                           </Form.Item>
+                        </p>
                      </th>
                   </tr>
                   <tr>
-                     <th colSpan={4}>Уламжлалтын онош</th>
+                     <th colSpan={4}>
+                        Уламжлалтын онош:
+                        <span>
+                           <Form.List name={['patient', 'treatmentD']}>
+                              {(diagnoses) => (
+                                 <>
+                                    {diagnoses.map((diagnose, index) => (
+                                       <Form.Item
+                                          key={index}
+                                          shouldUpdate
+                                          noStyle
+                                          className="mb-0"
+                                       >
+                                          {() => {
+                                             return (
+                                                <span>
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'treatmentD',
+                                                      diagnose.name,
+                                                      'nameMn'
+                                                   ])}
+                                                   -
+                                                   {form.getFieldValue([
+                                                      'patient',
+                                                      'treatmentD',
+                                                      diagnose.name,
+                                                      'code'
+                                                   ])}
+                                                   &nbsp;
+                                                </span>
+                                             );
+                                          }}
+                                       </Form.Item>
+                                    ))}
+                                 </>
+                              )}
+                           </Form.List>
+                        </span>
+                     </th>
                      <th></th>
                   </tr>
                   <tr>
@@ -615,7 +802,17 @@ function Page1() {
                   </tr>
                   <tr>
                      <th colSpan={2}>
-                        <p>Эмчлэгч эмчийн нэр, гарын үсэг</p>
+                        <span>
+                           Эмчлэгч эмчийн нэр, гарын үсэг:
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['patient', 'doctor']}
+                           >
+                              <Input />
+                           </Form.Item>
+                        </span>
                      </th>
                      <th colSpan={3}>
                         <span>
@@ -647,11 +844,48 @@ function Page1() {
                   </tr>
                </thead>
             </Table>
-            <div className="w-full">
+            <div className="w-full story">
                <p className="ml-4">
-                  Үзлэг эхэлсэн ----он----сар----өдөр---цаг-----минут
+                  <span>
+                     Үзлэг эхэлсэн:
+                     <Form.Item
+                        shouldUpdate
+                        className="mb-0"
+                        noStyle
+                        name={['patient', 'startDateInspection']}
+                        getValueProps={(i) => ({ value: moment(i) })}
+                     >
+                        <DatePicker
+                           showTime={{
+                              format: 'HH:mm'
+                           }}
+                           disabled={true}
+                           locale={mnMN}
+                           style={{
+                              width: 200
+                           }}
+                           format={'YYYY он MM сар DD өдөр HH цаг mm минут'}
+                        />
+                     </Form.Item>
+                  </span>
                </p>
-               <p className="ml-4">ХЧТА-ын ---- хоног</p>
+               <p className="ml-4">
+                  ХЧТА-ын
+                  <span>
+                     <Form.Item
+                        shouldUpdate
+                        className="mb-0"
+                        noStyle
+                        name={['patient', 'hchtaDay']}
+                     >
+                        <Input
+                           disabled={true}
+                           style={{ width: 25, textAlign: 'center' }}
+                        />
+                     </Form.Item>
+                  </span>
+                  хоног
+               </p>
             </div>
             <Table bordered className="story mb-0">
                <thead>
@@ -741,48 +975,6 @@ function Page1() {
                   </tr>
                </thead>
             </Table>
-            <div className="flex flex-wrap">
-               {/* <div className="w-5/12 amaraDeer amaraZuun amaraDoor">
-                  <p>Эмчлэгч эмчийн нэр, гарын үсэг</p>
-               </div>
-               <div className="w-7/12 amaraDeer amaraZuun amaraBaruun amaraDoor">
-                  <div className="inline-flex">
-                     <p>Хянасан эмчийн нэр, гарын үсэг</p>
-                     <p>(</p>
-                     <a
-                        style={{ fontSize: '14px' }}
-                        className={eeo ? 'underline pr-1' : 'pr-1'}
-                        onClick={() => ddd(0)}
-                     >
-                        Эмчилгээ эрхэлсэн орлогч
-                     </a>
-                  </div>
-                  <div className="inline-flex">
-                     <a
-                        style={{ fontSize: '14px' }}
-                        className={te ? 'underline pr-1' : 'pr-1'}
-                        onClick={() => ddd(1)}
-                     >
-                        тасгийн эрхлэгч
-                     </a>
-                     <a
-                        style={{ fontSize: '14px' }}
-                        className={echm ? 'underline pr-1' : 'pr-1'}
-                        onClick={() => ddd(2)}
-                     >
-                        эмчилгээний чанарын менежер
-                     </a>
-                     <a
-                        style={{ fontSize: '14px' }}
-                        className={o ? 'underline pr-1' : 'pr-1'}
-                        onClick={() => ddd(3)}
-                     >
-                        бусад
-                     </a>
-                     <p>)/зур/</p>
-                  </div>
-               </div> */}
-            </div>
          </div>
       </div>
    );

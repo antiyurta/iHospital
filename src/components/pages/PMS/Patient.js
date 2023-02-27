@@ -165,8 +165,7 @@ function Patient() {
          headers: {},
          params: {}
       };
-      console.log(data);
-      if (data.contacts.length === 0) {
+      if (data?.contacts?.length === 0) {
          openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
       } else {
          if (editMode) {

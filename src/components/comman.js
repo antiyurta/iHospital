@@ -153,7 +153,7 @@ export async function DefaultPatch(url, token, config, data) {
       axios
          .patch(DEV_URL + url, data, config)
          .then((response) => {
-            if (response.status === 201) {
+            if (response.status === 200) {
                openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
                resolve(response.data.response);
             } else if (response.status === 401) {

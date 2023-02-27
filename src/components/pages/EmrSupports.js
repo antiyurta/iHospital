@@ -1,6 +1,10 @@
-import { Button, Card, Modal } from 'antd';
+import { PrinterFilled } from '@ant-design/icons';
+import { Button, Card, Modal, Table } from 'antd';
+import moment from 'moment';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../features/authReducer';
 import { Get } from '../comman';
 //
@@ -9,22 +13,22 @@ import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 
 function EmrSupports({ appointmentId, usageType }) {
    const token = useSelector(selectCurrentToken);
-   const [data, setData] = useState({});
+   let location = useLocation();
+   const [storyLists, setStoryLists] = useState([]);
    const [isOpen, setIsOpen] = useState(false);
-   const dd = async () => {
+   const getStoryTEST = async () => {
       const conf = {
          headers: {},
-         params: {}
+         params: {
+            patientId: location?.state?.patientId
+         }
       };
-      if (usageType === 'OUT') {
-         conf.params['appointmentId'] = appointmentId;
-      } else {
-         conf.params['inpatientRequestId'] = appointmentId;
-      }
-      const response = await Get('report/pain-story', token, conf);
-      setData(response);
-      setIsOpen(true);
+      var response = await Get('inpatient/story', token, conf);
+      setStoryLists(response.data);
    };
+   useEffect(() => {
+      getStoryTEST();
+   }, [isOpen]);
    //
    return (
       <>
@@ -39,15 +43,33 @@ function EmrSupports({ appointmentId, usageType }) {
                maxHeight: 50
             }}
          >
-            <Button onClick={() => dd()}>Өвчний түүх</Button>
+            <Button onClick={() => setIsOpen(true)}>Өвчний түүх</Button>
          </Card>
          <Modal
-            title="sdas"
+            title="Өвчний түүх"
             open={isOpen}
             onCancel={() => setIsOpen(false)}
             width={'23cm'}
          >
-            <PaintStory data={data} />
+            <Table
+               rowKey={'id'}
+               columns={[
+                  {
+                     title: 'Түүх нээсэн огноо',
+                     dataIndex: 'createdAt',
+                     render: (text) => {
+                        return moment(text).format('YYYY-MM-DD HH:mm');
+                     }
+                  },
+                  {
+                     title: 'Үйлдэл',
+                     render: (_, row) => {
+                        return <PaintStory data={row} />;
+                     }
+                  }
+               ]}
+               dataSource={storyLists}
+            />
          </Modal>
       </>
    );

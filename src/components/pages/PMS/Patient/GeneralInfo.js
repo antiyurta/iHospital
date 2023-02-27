@@ -308,6 +308,12 @@ function GeneralInfo({ form, gbase }) {
             <Form.Item
                label="И-мэйл"
                name="email"
+               rules={[
+                  {
+                     required: true,
+                     message: 'И-мэйл оруулна уу'
+                  }
+               ]}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >

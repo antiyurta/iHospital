@@ -507,13 +507,20 @@ function SOAPForm({ docType }) {
                               </div>
                               <div className="w-full md:w-1/2 p-1">
                                  <Form.Item
-                                    label="sdad"
+                                    label="Хэлбэр"
                                     name="formId"
                                     rules={basisRule}
                                  >
                                     <Select>
-                                       <Option value={1}>asdasd</Option>
-                                       <Option value={2}>asdasd</Option>
+                                       <Option value={1}>
+                                          Дотрын эмчийн үзлэг
+                                       </Option>
+                                       <Option value={2}>
+                                          Хүүхдийн эмчийн үзлэг
+                                       </Option>
+                                       <Option value={3}>
+                                          Мэдрэлийн эмчийн үзлэг
+                                       </Option>
                                     </Select>
                                  </Form.Item>
                               </div>
@@ -571,7 +578,7 @@ function SOAPForm({ docType }) {
                                  forceRender={true}
                               >
                                  {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
-                                 <Index2
+                                 <Index3
                                     options={options}
                                     namePanel={panel.key}
                                     handleChange={HandleChangeTest}

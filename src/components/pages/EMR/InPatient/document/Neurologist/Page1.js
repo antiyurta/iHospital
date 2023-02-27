@@ -19,154 +19,236 @@ function Page1() {
                      <td className="w-48">
                         <p>Ухаан санааны байдал:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL1.1']}
                         >
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={0}>
                                  Саруул
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={1}>
                                  Саруул бус
+                                 <span>
+                                    <Form.Item
+                                       shouldUpdate
+                                       className="mb-0"
+                                       noStyle
+                                       name={['doctorInspection', 'ct1NL1.2']}
+                                    >
+                                       <Input
+                                          style={{
+                                             textAlign: 'center',
+                                             width: 50
+                                          }}
+                                       />
+                                    </Form.Item>
+                                 </span>
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={2}>
                                  Баримжаалал алдагдсан:
-                              </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
-                                 Цаг хугацааны:
-                              </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
-                                 Орон зайн:
-                              </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
-                                 Өөрийн:
                               </Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
-                        <p>GCS: E ___V___ M____</p>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL1.3']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox className="ml-4" value={0}>
+                                 Цаг хугацааны
+                              </Checkbox>
+                              <Checkbox className="ml-4 w-full" value={1}>
+                                 Орон зайн
+                              </Checkbox>
+                              <Checkbox className="ml-4" value={2}>
+                                 Өөрийн
+                              </Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                        <p>
+                           <span>
+                              GCS: &nbsp;E
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.4']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center',
+                                       width: 25
+                                    }}
+                                 />
+                              </Form.Item>
+                              V
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.5']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center',
+                                       width: 25
+                                    }}
+                                 />
+                              </Form.Item>
+                              M
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.6']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center',
+                                       width: 25
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </p>
                      </td>
                      <td>
                         <p>Сэтгэцийн байдал:</p>
-                        <div className="grid grid-cols-2 grid-rows-1">
-                           <p>Анхаарал:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
-                              <Input style={{ height: 22 }} />
-                           </Form.Item>
-                        </div>
-                        <div className="grid grid-cols-2 grid-rows-1">
-                           <p>Ой тогтоолт:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
-                              <Input style={{ height: 22 }} />
-                           </Form.Item>
-                        </div>
-                        <div className="grid grid-cols-2 grid-rows-1">
-                           <p>Тоолох чадвар:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
-                              <Input style={{ height: 22 }} />
-                           </Form.Item>
-                        </div>
-                        <div className="grid grid-cols-2 grid-rows-1">
-                           <p>Бүтээх чадвар:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
-                              <Input style={{ height: 22 }} />
-                           </Form.Item>
-                        </div>
-                        <div className="grid grid-cols-2 grid-rows-1">
-                           <p>Сэтгэл хөдлөл:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
-                              <Input style={{ height: 22 }} />
-                           </Form.Item>
-                        </div>
-                        <div className="grid grid-cols-2 grid-rows-1">
-                           <p>Зан төрөх:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
-                              <Input style={{ height: 22 }} />
-                           </Form.Item>
-                        </div>
+                        <Checkbox className="ml-2">
+                           Анхаарал:
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.7']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </Checkbox>
+                        <Checkbox className="ml-2">
+                           Ой тогтоолт:
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.8']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </Checkbox>
+                        <Checkbox className="ml-2">
+                           Тоолох чадвар:
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.9']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </Checkbox>
+                        <Checkbox className="ml-2">
+                           Бүтээх чадвар:
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.10']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </Checkbox>
+                        <Checkbox className="ml-2">
+                           Сэтгэл хөдлөл:
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.11']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </Checkbox>
+                        <Checkbox className="ml-2">
+                           Зан төрх:
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL1.12']}
+                              >
+                                 <Input
+                                    style={{
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </span>
+                        </Checkbox>
                      </td>
                      <td className="w-48">
                         <p>Хэл ярианы байдал:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL1.13']}
                         >
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={1}>
                                  Ойлгохын хэлгүйдэл
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={2}>
                                  Ярихын хэлгүйдэл
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={3}>
                                  Нэрлэхийн хэлгүйдэл
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={4}>
                                  Уншихгүйдэл
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={5}>
                                  Бичихгүйдэл
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={6}>
                                  Давтан хэлэх чадвар
                               </Checkbox>
                            </Checkbox.Group>
@@ -178,31 +260,320 @@ function Page1() {
                   </tr>
                </thead>
             </Table>
-            <Table bordered className="document2">
+            <Table bordered className="story">
                <thead>
                   <tr>
-                     <td rowSpan={16} colSpan={4}>
-                        <p>sadas</p>
-                     </td>
+                     <th rowSpan={16} colSpan={4} className="w-1/2">
+                        <div className="flex flex-wrap">
+                           <div className="w-full">
+                              <span>
+                                 I: &nbsp;
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.1']}
+                                 >
+                                    <Checkbox.Group className="inline-flex">
+                                       <Checkbox value={0}>Хэвийн</Checkbox>
+                                       <Checkbox value={1}>Хэвийн бус</Checkbox>
+                                    </Checkbox.Group>
+                                 </Form.Item>
+                              </span>
+                              <span>
+                                 Б
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.2']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 75,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                              <span>
+                                 З
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.3']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 75,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="w-full">II:</div>
+                           <div className="basis-1/2">
+                              <span>
+                                 ХХХ: &nbsp;Б
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.4']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                                 З
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.5']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                                 (мм)
+                              </span>
+                           </div>
+                           <div className="basis-1/2">Харах чадал:</div>
+                           <div className="basis-1/2">Гэрлийн гурвал:</div>
+                           <div className="basis-1/2">
+                              <span>
+                                 Б: &nbsp;
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.10']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                                 З
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.11']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="basis-1/2">
+                              <span>
+                                 Шууд: &nbsp;Б:
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.6']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                                 З
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.7']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="basis-1/2">Харааны талбай:</div>
+                           <div className="basis-1/2">
+                              <span>
+                                 Шууд бус: &nbsp;Б:
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.8']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                                 З
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.9']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="basis-1/2">
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['doctorInspection', 'ct1NL2.12']}
+                              >
+                                 <Input
+                                    style={{
+                                       width: 75,
+                                       textAlign: 'center'
+                                    }}
+                                 />
+                              </Form.Item>
+                           </div>
+                           <div className="w-full">
+                              <span>
+                                 Нүдний уг:
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.13']}
+                                 >
+                                    <Input
+                                       style={{
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="w-full">III-IV-VI:</div>
+                           <div className="basis-1/2">
+                              <span>
+                                 Птоз: &nbsp;Б:
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.14']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                                 З
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.15']}
+                                 >
+                                    <Input
+                                       style={{
+                                          width: 40,
+                                          textAlign: 'center'
+                                       }}
+                                    />
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="basis-1/2">Нистагм:</div>
+                           <div className="basis-1/2">
+                              <span>
+                                 Диплопи:
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.16']}
+                                 >
+                                    <Checkbox.Group className="inline">
+                                       <Checkbox value={0}>Эерэг</Checkbox>
+                                       <Checkbox value={1}>Сөрөг</Checkbox>
+                                    </Checkbox.Group>
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="basis-1/2">
+                              <span>
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.17']}
+                                 >
+                                    <Checkbox.Group className="inline">
+                                       <Checkbox value={0}>Илрээгүй</Checkbox>
+                                       <Checkbox value={1}>Илэрсэн</Checkbox>
+                                    </Checkbox.Group>
+                                 </Form.Item>
+                              </span>
+                           </div>
+                           <div className="w-full">
+                              <span>
+                                 НХБ:
+                                 <Form.Item
+                                    shouldUpdate
+                                    className="mb-0"
+                                    noStyle
+                                    name={['doctorInspection', 'ct1NL2.18']}
+                                 >
+                                    <Checkbox.Group className="inline">
+                                       <Checkbox value={0}>Хэвийн</Checkbox>
+                                       <Checkbox value={1}>Хэвийн бус</Checkbox>
+                                    </Checkbox.Group>
+                                 </Form.Item>
+                              </span>
+                           </div>
+                        </div>
+                     </th>
                      <td rowSpan={4} className="w-24">
                         <p>VII:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.23']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                           <Checkbox.Group>
+                              <Checkbox className="ml-2" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
-                                 Хэвийн бус
-                              </Checkbox>
+                              <Checkbox value={1}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
@@ -216,43 +587,103 @@ function Page1() {
                      <td>
                         <p>Нүдний анилт</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.24']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.24']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td>
                         <p>Духны атираа</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.25']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.25']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td>
                         <p>Хамар уруулын нугалаа</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.26']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.26']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td rowSpan={4}>
                         <p>VIII:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.27']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                           <Checkbox.Group>
+                              <Checkbox className="ml-2" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
-                                 Хэвийн бус
-                              </Checkbox>
+                              <Checkbox value={1}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
@@ -268,36 +699,74 @@ function Page1() {
                      <td>
                         <p>Сонсгол</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.28']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.28']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td>
                         <p>Чих шуугих</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.29']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.29']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td rowSpan={4}>
                         <p>IX, X:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.30']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                           <Checkbox.Group>
+                              <Checkbox className="ml-2" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
-                                 Хэвийн бус
-                              </Checkbox>
+                              <Checkbox value={1}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
@@ -313,27 +782,73 @@ function Page1() {
                      <td>
                         <p>Хүүхэн хэлний хазайлт</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.31']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.31']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td>
                         <p>Залгиурын рефлекс</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.32']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={0} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.32']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox value={1} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td colSpan={4}>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.33']}
                         >
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'Хэвийн'}>
+                              <Checkbox className="ml-2" value={0}>
                                  Дисфони
                               </Checkbox>
-                              <Checkbox className="ml-2" value={'Хэвийн'}>
+                              <Checkbox className="ml-2" value={1}>
                                  Дисфаги
                               </Checkbox>
                            </Checkbox.Group>
@@ -344,20 +859,16 @@ function Page1() {
                      <td rowSpan={3}>
                         <p>XI:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.34']}
                         >
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={1}>
                                  Хэвийн бус
                               </Checkbox>
                            </Checkbox.Group>
@@ -377,15 +888,59 @@ function Page1() {
                      <td>
                         <p>Стерноклейдомастойд</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.35']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={0} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.35']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={1} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td>
                         <p>Трапец хэлбэрт булчин</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.36']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={0} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.36']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={1} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                   <tr>
                      <td rowSpan={2}>
@@ -397,20 +952,16 @@ function Page1() {
                      <td rowSpan={2}>
                         <p>XII:</p>
                         <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
+                           shouldUpdate
                            className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.37']}
                         >
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={1}>
                                  Хэвийн бус
                               </Checkbox>
                            </Checkbox.Group>
@@ -426,13 +977,57 @@ function Page1() {
                      <td>
                         <p>Нүүрний мэдрэхүй</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.20']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={0}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.20']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={1}></Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                      <td>
                         <p>Хэлний хазайлт</p>
                      </td>
-                     <td></td>
-                     <td></td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.38']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={0} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
+                     <td>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['doctorInspection', 'ct1NL2.38']}
+                        >
+                           <Checkbox.Group className="ddd ml-0">
+                              <Checkbox value={1} />
+                           </Checkbox.Group>
+                        </Form.Item>
+                     </td>
                   </tr>
                </thead>
             </Table>
