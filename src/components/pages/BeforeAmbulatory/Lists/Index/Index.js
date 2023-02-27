@@ -525,7 +525,6 @@ function Index({ type, isDoctor }) {
 
    return (
       <div className="flex flex-wrap">
-         <Ambulatory />
          <div className="w-full">
             <Card
                bordered={false}
@@ -626,7 +625,6 @@ function Index({ type, isDoctor }) {
                            </div>
                         </>
                      )}
-                     <div className="float-right">AA</div>
                      <div className="float-right">
                         <Button
                            title="Сэргээх"
