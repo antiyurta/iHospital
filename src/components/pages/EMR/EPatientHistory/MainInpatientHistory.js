@@ -8,23 +8,38 @@ import {
    Modal,
    Tabs
 } from 'antd';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';
+import { Get } from '../../../comman';
 import Epicriz from '../../BeforeAmbulatory/Lists/Epicriz';
 import Diagnose from '../../service/Diagnose';
 import Index from '../InPatient/document/Index';
+import StoryGeneral from './StoryGeneral';
 const { Panel } = Collapse;
 const { TextArea } = Input;
-function MainInpatientHistory() {
+function MainInpatientHistory({ selectedPatient }) {
    const token = useSelector(selectCurrentToken);
    let location = useLocation();
-   console.log(location);
    const inpatientRequestId = location?.state?.inpatientRequestId;
    const patientId = location?.state?.patientId;
    const [doctorDailyForm] = Form.useForm();
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
+   const [story, setStory] = useState({});
+   const getStory = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            inpatientRequestId: location?.state?.inpatientRequestId
+         }
+      };
+      var response = await Get('inpatient/story', token, conf);
+      if (response.data.length > 0) {
+         setStory(response.data[0]);
+      }
+   };
    const onFinishDaily = (values) => {
       var diagnoseData = [];
       values.diagnose?.map((diagnose) => {
@@ -98,14 +113,37 @@ function MainInpatientHistory() {
       { label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }
    ]);
    const handleMenuClick = (e) => {
+      getStory();
       if (e.key == 1) {
          setItems([
             { label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }
          ]);
+      } else if (e.key == 2) {
+         setItems([
+            {
+               label: 'Ерөнхий мэдээлэл',
+               key: 1,
+               children: (
+                  <StoryGeneral
+                     id={story.id}
+                     patient={story.patient}
+                     diagnoses={story.diagnoses}
+                     anemis={story.anemis}
+                     general={story.general}
+                  />
+               )
+            }
+         ]);
       } else if (e.key == 3) {
          setIsOpenDocumentModal(true);
       } else if (e.key == 7) {
-         setItems([{ label: 'Гарах', key: 1, children: <Epicriz /> }]);
+         setItems([
+            {
+               label: 'Гарах',
+               key: 1,
+               children: <Epicriz />
+            }
+         ]);
       }
    };
    const menu = (
@@ -147,6 +185,9 @@ function MainInpatientHistory() {
       setItems([document]);
       setIsOpenDocumentModal(false);
    };
+   useEffect(() => {
+      getStory();
+   }, []);
    return (
       <div>
          <div>
@@ -164,11 +205,17 @@ function MainInpatientHistory() {
             <Tabs type="card" items={items} />
          </div>
          <Modal
-            title="asdsa"
+            title="Маягт сонгох"
             open={isOpenDocumentModal}
             onCancel={() => setIsOpenDocumentModal(false)}
          >
-            <Index handleClick={documentHandleClick} />
+            <Index
+               handleClick={documentHandleClick}
+               structureId={location?.state?.dapartmentId}
+               story={story}
+               id={story.id}
+               doctorInspection={story.doctorInspection}
+            />
          </Modal>
       </div>
    );

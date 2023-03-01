@@ -112,7 +112,11 @@ function Xrays({ PatientId }) {
       });
    };
    const refresh = () => (
-      <Button title="Сэргээх" type="primary" onClick={() => getPatientXrays()}>
+      <Button
+         title="Сэргээх"
+         type="primary"
+         onClick={() => getPatientXrays(PatientId)}
+      >
          <ReloadOutlined spin={spinner} />
       </Button>
    );

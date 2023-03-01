@@ -1,6 +1,6 @@
 import { Checkbox, Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
-
+const { TextArea } = Input;
 function General() {
    return (
       <>
@@ -17,15 +17,15 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'bodyCondition']}
+                        name={['general', 'bodyCondition']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'middle'}>
+                           <Checkbox className="ml-2" value={0}>
                               Дунд
                            </Checkbox>
-                           <Checkbox value={'moreHeavy'}>Хүндэвтэр</Checkbox>
-                           <Checkbox value={'heavy'}>Хүнд</Checkbox>
-                           <Checkbox value={'veryHeavy'}>Маш хүнд</Checkbox>
+                           <Checkbox value={1}>Хүндэвтэр</Checkbox>
+                           <Checkbox value={2}>Хүнд</Checkbox>
+                           <Checkbox value={3}>Маш хүнд</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                   </td>
@@ -34,14 +34,14 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'mindStatus']}
+                        name={['general', 'mindStatus']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'normal'}>
+                           <Checkbox className="ml-2" value={0}>
                               Саруул
                            </Checkbox>
-                           <Checkbox value={'dim'}>Бүдгэвтэр</Checkbox>
-                           <Checkbox value={'noSense'}>Ухаангүй</Checkbox>
+                           <Checkbox value={1}>Бүдгэвтэр</Checkbox>
+                           <Checkbox value={2}>Ухаангүй</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                   </td>
@@ -51,20 +51,20 @@ function General() {
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={['doctorInspection', 'general', 'skin']}
+                           name={['general', 'skincolor']}
                         >
                            <Checkbox.Group className="ml-0">
-                              <Checkbox className="ml-2" value={'normal'}>
+                              <Checkbox className="ml-2" value={0}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox value={'unNormal'}>Хэвийн бус</Checkbox>
+                              <Checkbox value={1}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                         <Form.Item
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={['doctorInspection', 'general', 'isSkin']}
+                           name={['general', 'unNormalskincolor']}
                         >
                            <Input className="w-24" />
                         </Form.Item>
@@ -86,13 +86,12 @@ function General() {
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={[
-                              'doctorInspection',
-                              'general',
-                              'breathOneMinute'
-                           ]}
+                           name={['general', 'breathOneMinute']}
                         >
-                           <Input className="w-24" />
+                           <Input
+                              className="amaraInput w-10"
+                              style={{ textAlign: 'center' }}
+                           />
                         </Form.Item>
                         удаа
                      </span>
@@ -105,15 +104,13 @@ function General() {
                               shouldUpdate
                               className="mb-0"
                               noStyle
-                              name={['doctorInspection', 'general', 'hear']}
+                              name={['general', 'hear']}
                            >
                               <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={'lungs'}>
+                                 <Checkbox className="ml-2" value={0}>
                                     Уушги цулцангийн
                                  </Checkbox>
-                                 <Checkbox value={'tube'}>
-                                    Гуурсан хоолойн
-                                 </Checkbox>
+                                 <Checkbox value={1}>Гуурсан хоолойн</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
@@ -122,15 +119,13 @@ function General() {
                               shouldUpdate
                               className="mb-0"
                               noStyle
-                              name={['doctorInspection', 'general', 'hear2']}
+                              name={['general', 'hear']}
                            >
                               <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={'unNormal'}>
+                                 <Checkbox className="ml-2" value={2}>
                                     Хэржигнүүртэй
                                  </Checkbox>
-                                 <Checkbox value={'breathSlow'}>
-                                    Амьсгал сулавтар
-                                 </Checkbox>
+                                 <Checkbox value={3}>Амьсгал сулавтар</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                            <span>
@@ -139,11 +134,7 @@ function General() {
                                  shouldUpdate
                                  className="mb-0"
                                  noStyle
-                                 name={[
-                                    'doctorInspection',
-                                    'general',
-                                    'breathSlow'
-                                 ]}
+                                 name={['general', 'unNormalBreath']}
                               >
                                  <Checkbox.Group className="inline">
                                     <Checkbox className="test" value={0}>
@@ -153,9 +144,13 @@ function General() {
                                     <Checkbox className="ml-0 test" value={1}>
                                        зүүн
                                     </Checkbox>
+                                    ,
+                                    <Checkbox className="ml-0 test" value={2}>
+                                       2 талдаа
+                                    </Checkbox>
                                  </Checkbox.Group>
                               </Form.Item>
-                              талдаа)
+                              )
                            </span>
                         </div>
                      </div>
@@ -178,13 +173,12 @@ function General() {
                               shouldUpdate
                               className="mb-0"
                               noStyle
-                              name={[
-                                 'doctorInspection',
-                                 'general',
-                                 'vascularOneMinute'
-                              ]}
+                              name={['general', 'veinsOneMinute']}
                            >
-                              <Input className="w-14" />
+                              <Input
+                                 className="amaraInput w-10"
+                                 style={{ textAlign: 'center' }}
+                              />
                            </Form.Item>
                         </span>
                         удаа
@@ -197,13 +191,12 @@ function General() {
                               shouldUpdate
                               className="mb-0"
                               noStyle
-                              name={[
-                                 'doctorInspection',
-                                 'general',
-                                 'strongFull'
-                              ]}
+                              name={['general', 'voltage']}
                            >
-                              <Input className="w-14" />
+                              <Input
+                                 className="amaraInput w-14"
+                                 style={{ textAlign: 'center' }}
+                              />
                            </Form.Item>
                         </span>
                      </p>
@@ -215,13 +208,13 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'touchHeart']}
+                        name={['general', 'touchHeart']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2 w-full" value={'normal'}>
+                           <Checkbox className="ml-2 w-full" value={0}>
                               Хэвийн
                            </Checkbox>
-                           <Checkbox className="w-4" value={'bigger'}>
+                           <Checkbox className="w-4" value={1}>
                               Томорсон
                            </Checkbox>
                         </Checkbox.Group>
@@ -232,11 +225,7 @@ function General() {
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={[
-                              'doctorInspection',
-                              'general',
-                              'touchHeartBigger'
-                           ]}
+                           name={['general', 'touchHeartUnNormal']}
                         >
                            <Checkbox.Group className="inline">
                               <Checkbox className="test" value={0}>
@@ -258,28 +247,28 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'hearHeart']}
+                        name={['general', 'hearHeart']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'bright'}>
+                           <Checkbox className="ml-2" value={0}>
                               Тод
                            </Checkbox>
-                           <Checkbox value={'dim'}>Бүдэг</Checkbox>
-                           <Checkbox value={'dimmer'}>Бүдгэвтэр</Checkbox>
-                           <Checkbox value={'normal'}>Хэм жигд</Checkbox>
+                           <Checkbox value={1}>Бүдэг</Checkbox>
+                           <Checkbox value={2}>Бүдгэвтэр</Checkbox>
+                           <Checkbox value={3}>Хэм жигд</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                      <Form.Item
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'hearHeart2']}
+                        name={['general', 'hearHeart']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'unNormal'}>
+                           <Checkbox className="ml-2" value={4}>
                               Жигд бус
                            </Checkbox>
-                           <Checkbox value={'lossHem'}>Хэм алдалттай</Checkbox>
+                           <Checkbox value={5}>Хэм алдалттай</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                      <p>
@@ -288,36 +277,24 @@ function General() {
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={['doctorInspection', 'general', 'adRightOne']}
+                           name={['general', 'adRight']}
                         >
-                           <Input className="w-10" />
-                        </Form.Item>
-                        /
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'general', 'adRightTwo']}
-                        >
-                           <Input className="w-10" />
+                           <Input
+                              className="w-10"
+                              style={{ textAlign: 'center' }}
+                           />
                         </Form.Item>
                         Зүүн талд
                         <Form.Item
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={['doctorInspection', 'general', 'adLeftOne']}
+                           name={['general', 'adLeft']}
                         >
-                           <Input className="w-10" />
-                        </Form.Item>
-                        /
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'general', 'adLeftTwo']}
-                        >
-                           <Input className="w-10" />
+                           <Input
+                              className="w-10"
+                              style={{ textAlign: 'center' }}
+                           />
                         </Form.Item>
                         талдаа
                      </p>
@@ -333,15 +310,15 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'toungh']}
+                        name={['general', 'tongue']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'normal'}>
+                           <Checkbox className="ml-2" value={0}>
                               Ердийн
                            </Checkbox>
-                           <Checkbox value={'dry'}>Хуурай</Checkbox>
-                           <Checkbox value={'noColor'}>Өнгөргүй</Checkbox>
-                           <Checkbox value={'color'}>Өнгөртэй</Checkbox>
+                           <Checkbox value={1}>Хуурай</Checkbox>
+                           <Checkbox value={2}>Өнгөргүй</Checkbox>
+                           <Checkbox value={3}>Өнгөртэй</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                   </td>
@@ -351,25 +328,23 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'abdominal']}
+                        name={['general', 'abdominal']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'lowerTouch'}>
+                           <Checkbox className="ml-2" value={0}>
                               Өнгөц тэмтрэлтээр
                            </Checkbox>
-                           <Checkbox value={'highTouch'}>
-                              Гүн тэмтрэлтээр
-                           </Checkbox>
-                           <Checkbox value={'painFul'}>Эмзэглэлтэй</Checkbox>
+                           <Checkbox value={1}>Гүн тэмтрэлтээр</Checkbox>
+                           <Checkbox value={2}>Эмзэглэлтэй</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                      <p className="ml-24">
-                        (байрлал
+                        (байрлал:&nbsp;
                         <Form.Item
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={['doctorInspection', 'general', 'position']}
+                           name={['general', 'injury2']}
                         >
                            <Input className="w-16" />
                         </Form.Item>
@@ -379,16 +354,16 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'abdominal2']}
+                        name={['general', 'abdominal']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'normal'}>
+                           <Checkbox className="ml-2" value={3}>
                               Ердийн
                            </Checkbox>
-                           <Checkbox value={'isSoft'}>
+                           <Checkbox value={4}>
                               Зөөлөн гялтан цочрол үгүй
                            </Checkbox>
-                           <Checkbox value={'isIssuse'}>
+                           <Checkbox value={5}>
                               Гялтан цочролыэн шинж илэрсэн
                            </Checkbox>
                         </Checkbox.Group>
@@ -409,13 +384,13 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'listenAbility']}
+                        name={['general', 'hearStatus']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'normal'}>
+                           <Checkbox className="ml-2" value={0}>
                               Хэвийн
                            </Checkbox>
-                           <Checkbox value={'decreased'}>Буурсан</Checkbox>
+                           <Checkbox value={1}>Буурсан</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                      (
@@ -423,11 +398,7 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={[
-                           'doctorInspection',
-                           'general',
-                           'listenAbilityDecreased'
-                        ]}
+                        name={['general', 'hearStatusIsLow']}
                      >
                         <Checkbox.Group className="inline">
                            <Checkbox className="test" value={0}>
@@ -447,13 +418,13 @@ function General() {
                         shouldUpdate
                         className="mb-0"
                         noStyle
-                        name={['doctorInspection', 'general', 'reflex']}
+                        name={['general', 'reflex']}
                      >
                         <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={'saved'}>
+                           <Checkbox className="ml-2" value={0}>
                               Хадгалагдана
                            </Checkbox>
-                           <Checkbox value={'unSaved'}>Хадгалагдахгүй</Checkbox>
+                           <Checkbox value={1}>Хадгалагдахгүй</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                   </td>
@@ -461,40 +432,28 @@ function General() {
                <tr>
                   <td colSpan={2}>
                      <p>
-                        Бусад
+                        Бусад &nbsp;:
                         <Form.Item
                            shouldUpdate
                            className="mb-0"
                            noStyle
-                           name={['doctorInspection', 'general', 'others']}
+                           name={['general', 'others']}
                         >
                            <Input className="w-11/12" />
                         </Form.Item>
                      </p>
                      <p>
-                        Сэтгэцийн байдал:
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'general', 'mentalState']}
-                        >
-                           <Input className="w-10/12" />
-                        </Form.Item>
-                     </p>
-                     <p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={[
-                              'doctorInspection',
-                              'general',
-                              'mentalState2'
-                           ]}
-                        >
-                           <Input className="w-full mb-1" />
-                        </Form.Item>
+                        <span>
+                           Сэтгэцийн байдал &nbsp;:
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['general', 'mindStatus2']}
+                           >
+                              <TextArea style={{ width: '15cm' }} />
+                           </Form.Item>
+                        </span>
                      </p>
                   </td>
                </tr>

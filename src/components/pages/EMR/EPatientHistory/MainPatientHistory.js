@@ -354,7 +354,6 @@ function MainPatientHistory({
          data['appointmentId'] = appointmentId;
       }
       data['diagnoses'] = diagnoseData;
-      console.log(data);
       const response = await Post('emr/inspectionNote', token, config, data);
       if (response === 201) {
          if (inspection === 11 || inspection === 12) {

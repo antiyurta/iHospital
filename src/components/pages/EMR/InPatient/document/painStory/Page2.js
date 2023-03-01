@@ -1,7 +1,8 @@
 import { Checkbox, Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
+import General from '../General';
 const { TextArea } = Input;
-function Page2() {
+function Page2({ templateId }) {
    return (
       <div className="page">
          <div className="subpage">
@@ -60,7 +61,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'locate']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
+                           <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'APARTMENT'}>
                                  Орон сууцанд
                               </Checkbox>
@@ -77,7 +78,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'workCondition']}
                         >
-                           <Checkbox.Group className="ddd ml-0">
+                           <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'NORMAL'}>
                                  Ердийн
                               </Checkbox>
@@ -100,7 +101,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'contagious']}
                         >
-                           <Checkbox.Group className="ddd">
+                           <Checkbox.Group>
                               <Checkbox className="ml-2" value={'measles'}>
                                  Улаан бурхан
                               </Checkbox>
@@ -153,7 +154,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'allergy']}
                         >
-                           <Checkbox.Group className="ddd">
+                           <Checkbox.Group>
                               <Checkbox className="ml-2" value={'Хоол хүнс'}>
                                  Хоол хүнс
                               </Checkbox>
@@ -188,7 +189,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'whatFoodie']}
                         >
-                           <Checkbox.Group className="ddd">
+                           <Checkbox.Group>
                               <Checkbox className="ml-2" value={'0'}>
                                  Ердийн
                               </Checkbox>
@@ -205,7 +206,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'isAlcoholUse']}
                         >
-                           <Checkbox.Group className="ddd">
+                           <Checkbox.Group>
                               <Checkbox className="ml-2" value={true}>
                                  Тийм
                               </Checkbox>
@@ -221,7 +222,7 @@ function Page2() {
                            noStyle
                            name={['anemis', 'isCigarUse']}
                         >
-                           <Checkbox.Group className="ddd">
+                           <Checkbox.Group>
                               <Checkbox className="ml-2" value={true}>
                                  Тийм
                               </Checkbox>
@@ -255,300 +256,352 @@ function Page2() {
                         </p>
                      </th>
                   </tr>
-                  <tr>
-                     <th colSpan={4} className="text-center">
-                        ЕРӨНХИЙ ҮЗЛЭГ
-                     </th>
-                  </tr>
-                  <tr>
-                     <th>
-                        <p>Биеийн ерөнхий байдал:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хөнгөн
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Дунд</Checkbox>
-                              <Checkbox value={'VIPER'}>Хүндэвтэр</Checkbox>
-                              <Checkbox value={'OTHER'}>Хүнд</Checkbox>
-                              <Checkbox value={'OTHER'}>Маш хүнд</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>Ухаан санаа:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Саруул
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Бүдгэрсэн</Checkbox>
-                              <Checkbox value={'VIPER'}>Ступор</Checkbox>
-                              <Checkbox value={'OTHER'}>Солор</Checkbox>
-                              <Checkbox value={'OTHER'}>Кома</Checkbox>
-                              <Checkbox value={'OTHER'}>Бусад</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>Орчиндоо:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Харьцаатай
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Харьцаагүй</Checkbox>
-                              <Checkbox value={'VIPER'}>Сул</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>Байрлал:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Идэвхтэй
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Идэвхгүй</Checkbox>
-                              <Checkbox value={'VIPER'}>Албадмал</Checkbox>
-                              <Checkbox value={'VIPER'}>Хагас суугаа</Checkbox>
-                              <Checkbox value={'VIPER'}>Хэвтрийн</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                  </tr>
-                  <tr>
-                     <th colSpan={4}>
-                        <p>Арьс салстын байдал:</p>
-                     </th>
-                  </tr>
                </thead>
             </Table>
-            <Table bordered className="story mb-0">
-               <thead>
-                  <tr className="border-t-0">
-                     <th>
-                        <p>а. Арьс салсын өнгө</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Хэвийн бус</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>б. Арьсны уян чанар:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Ихэссэн</Checkbox>
-                              <Checkbox value={'HARD'}>Алдагдсан</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>в.Арьсны чийглэг байдал</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хэвийн ихэссэн
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Багассан</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                  </tr>
-                  <tr>
-                     <th>
-                        <p>г.Арьсан дээрх тууралт</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Тууралтгүй
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Тууралттай</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>Хаван:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хавангүй
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Хавантай</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>а. Ерөнхий</p>
-                        <p>б. Хэсгийн:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Нүүрэнд
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Зовхинд</Checkbox>
-                              <Checkbox value={'HARD'}>Хэвлийд</Checkbox>
-                              <Checkbox value={'HARD'}>Шилбээр</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                  </tr>
-                  <tr>
-                     <th>
-                        <p>Захын тунгалагийн булчирхай:</p>
-                        <p>а. Хэмжээ</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>
-                                 Харахад томорсон
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>
-                                 Тэмтрэлтээр томорсон
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>б. Байрлал</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хүзүүний
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Суганы</Checkbox>
-                              <Checkbox value={'HARD'}>Цавины</Checkbox>
-                              <Checkbox value={'HARD'}>Бусад</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>в. Эмзэглэл</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Эмзэглэлтэй
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Эмзэглэлгүй</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                  </tr>
-               </thead>
-            </Table>
-            <Table bordered className="story mb-0">
-               <thead>
-                  <tr className="border-t-0">
-                     <th className="w-1/2">
-                        <p>Үе мөчний хэлбэр:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Өөрчлөгдсөн</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                     <th>
-                        <p>Үений хөдөлгөөн:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'workCondition']}
-                        >
-                           <Checkbox.Group className="ddd ml-0">
-                              <Checkbox className="ml-2" value={'NORMAL'}>
-                                 Идэвхтэй
-                              </Checkbox>
-                              <Checkbox value={'HARD'}>Идэвхгүй</Checkbox>
-                              <Checkbox value={'HARD'}>Хязгаарлагдмал</Checkbox>
-                           </Checkbox.Group>
-                        </Form.Item>
-                     </th>
-                  </tr>
-               </thead>
-            </Table>
+            {templateId === 1 && (
+               <>
+                  <Table bordered className="story mb-0">
+                     <thead>
+                        <tr className="border-t-0">
+                           <th colSpan={4} className="text-center">
+                              ЕРӨНХИЙ ҮЗЛЭГ
+                           </th>
+                        </tr>
+                        <tr>
+                           <th>
+                              <p>Биеийн ерөнхий байдал:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'bodyCondition']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'easy'}>
+                                       Хөнгөн
+                                    </Checkbox>
+                                    <Checkbox value={'middle'}>Дунд</Checkbox>
+                                    <Checkbox value={'hard'}>
+                                       Хүндэвтэр
+                                    </Checkbox>
+                                    <Checkbox value={'harder'}>Хүнд</Checkbox>
+                                    <Checkbox value={'soHard'}>
+                                       Маш хүнд
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>Ухаан санаа:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'mindStatus']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'normal'}>
+                                       Саруул
+                                    </Checkbox>
+                                    <Checkbox value={'faded'}>
+                                       Бүдгэрсэн
+                                    </Checkbox>
+                                    <Checkbox value={'stupor'}>Ступор</Checkbox>
+                                    <Checkbox value={'solor'}>Солор</Checkbox>
+                                    <Checkbox value={'coma'}>Кома</Checkbox>
+                                    <Checkbox value={'other'}>Бусад</Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>Орчиндоо:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'area']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'normal'}>
+                                       Харьцаатай
+                                    </Checkbox>
+                                    <Checkbox value={'unNormal'}>
+                                       Харьцаагүй
+                                    </Checkbox>
+                                    <Checkbox value={'unknown'}>Сул</Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>Байрлал:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'position']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'active'}>
+                                       Идэвхтэй
+                                    </Checkbox>
+                                    <Checkbox value={'inactive'}>
+                                       Идэвхгүй
+                                    </Checkbox>
+                                    <Checkbox value={'pusher'}>
+                                       Албадмал
+                                    </Checkbox>
+                                    <Checkbox value={'haf'}>
+                                       Хагас суугаа
+                                    </Checkbox>
+                                    <Checkbox value={'inbed'}>
+                                       Хэвтрийн
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                        </tr>
+                        <tr>
+                           <th colSpan={4}>
+                              <p>Арьс салстын байдал:</p>
+                           </th>
+                        </tr>
+                     </thead>
+                  </Table>
+                  <Table bordered className="story mb-0">
+                     <thead>
+                        <tr className="border-t-0">
+                           <th>
+                              <p>а. Арьс салсын өнгө</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'skincolor']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'normal'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'unNormal'}>
+                                       Хэвийн бус
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>б. Арьсны уян чанар:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'skinElasticity']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'normal'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'increased'}>
+                                       Ихэссэн
+                                    </Checkbox>
+                                    <Checkbox value={'decreased'}>
+                                       Алдагдсан
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>в.Арьсны чийглэг байдал</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'skinMoisture']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox
+                                       className="ml-2"
+                                       value={'increased'}
+                                    >
+                                       Хэвийн ихэссэн
+                                    </Checkbox>
+                                    <Checkbox value={'decreased'}>
+                                       Багассан
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                        </tr>
+                        <tr>
+                           <th>
+                              <p>г.Арьсан дээрх тууралт</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'skinRash']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'noRash'}>
+                                       Тууралтгүй
+                                    </Checkbox>
+                                    <Checkbox value={'rash'}>
+                                       Тууралттай
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>Хаван:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'edema']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox
+                                       className="ml-2"
+                                       value={'noEdema'}
+                                    >
+                                       Хавангүй
+                                    </Checkbox>
+                                    <Checkbox value={'edema'}>
+                                       Хавантай
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>а. Ерөнхий</p>
+                              <p>б. Хэсгийн:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'skinArea']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'face'}>
+                                       Нүүрэнд
+                                    </Checkbox>
+                                    <Checkbox value={'eye'}>Зовхинд</Checkbox>
+                                    <Checkbox value={'stomach'}>
+                                       Хэвлийд
+                                    </Checkbox>
+                                    <Checkbox value={'foot'}>Шилбээр</Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                        </tr>
+                        <tr>
+                           <th>
+                              <p>Захын тунгалагийн булчирхай:</p>
+                              <p>а. Хэмжээ</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'ztb']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'normal'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'hard'}>
+                                       Харахад томорсон
+                                    </Checkbox>
+                                    <Checkbox value={'harder'}>
+                                       Тэмтрэлтээр томорсон
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>б. Байрлал</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'b.position']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'neck'}>
+                                       Хүзүүний
+                                    </Checkbox>
+                                    <Checkbox value={'armpit'}>Суганы</Checkbox>
+                                    <Checkbox value={'groin'}>Цавины</Checkbox>
+                                    <Checkbox value={'others'}>Бусад</Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>в. Эмзэглэл</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'injury']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'injury'}>
+                                       Эмзэглэлтэй
+                                    </Checkbox>
+                                    <Checkbox value={'uninjury'}>
+                                       Эмзэглэлгүй
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                        </tr>
+                     </thead>
+                  </Table>
+                  <Table bordered className="story mb-0">
+                     <thead>
+                        <tr className="border-t-0">
+                           <th className="w-1/2">
+                              <p>Үе мөчний хэлбэр:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'bodyShape']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'normal'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'unNormal'}>
+                                       Өөрчлөгдсөн
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                           <th>
+                              <p>Үений хөдөлгөөн:</p>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['general', 'bodyMove']}
+                              >
+                                 <Checkbox.Group className="ml-0">
+                                    <Checkbox className="ml-2" value={'active'}>
+                                       Идэвхтэй
+                                    </Checkbox>
+                                    <Checkbox value={'inactive'}>
+                                       Идэвхгүй
+                                    </Checkbox>
+                                    <Checkbox value={'limited'}>
+                                       Хязгаарлагдмал
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                              </Form.Item>
+                           </th>
+                        </tr>
+                     </thead>
+                  </Table>
+               </>
+            )}
          </div>
       </div>
    );

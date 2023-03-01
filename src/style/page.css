@@ -93,7 +93,7 @@ body {
    font-size: 11px !important;
 }
 .story .ant-checkbox-inner::after {
-   background-color: white !important;
+   background-color: transparent !important;
    border-color: black !important;
 }
 .story thead > tr > td {
@@ -145,12 +145,12 @@ body {
    border: none !important;
    height: 18px !important;
    font-size: 11px !important;
+   font-weight: 400 !important;
    background-color: transparent !important;
    color: black !important;
    width: min-content;
    padding: 0px !important;
    border-radius: 0% !important;
-   text-align: center !important;
    border-bottom: 1px solid black !important;
 }
 .dstory .ant-picker.ant-picker-disabled {
@@ -163,6 +163,14 @@ body {
    height: 19px !important;
    border-bottom: 1px solid black !important;
 }
+.story .ant-picker.ant-picker-disabled {
+   background-color: transparent !important;
+   border: none !important;
+   padding: 0px !important;
+   border-radius: 0% !important;
+   text-align: center !important;
+   height: 17px !important;
+}
 .dstory .ant-picker-input > input:disabled {
    color: black !important;
    font-size: 13px !important;
@@ -170,6 +178,15 @@ body {
    text-align: center !important;
 }
 .dstory .ant-picker-suffix {
+   display: none !important;
+}
+.story .ant-picker-input > input:disabled {
+   color: black !important;
+   font-size: 11px !important;
+   font-weight: 600 !important;
+   text-align: center !important;
+}
+.story .ant-picker-suffix {
    display: none !important;
 }
 .dstory .ant-input {
@@ -221,8 +238,6 @@ body {
 }
 .diagnoseButton {
    float: right !important;
-   font-size: 10px !important;
-   height: 15px !important;
    background-color: green;
    color: white;
 }
@@ -244,7 +259,7 @@ body {
       margin: 0;
       page-break-after: always;
    }
-   .diagnoseButton{
+   .diagnoseButton {
       display: none !important;
    }
 }

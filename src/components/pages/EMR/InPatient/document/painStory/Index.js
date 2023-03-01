@@ -1,4 +1,4 @@
-import { Button, Form, Spin } from 'antd';
+import { Button, Form, Spin, Table } from 'antd';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { useEffect } from 'react';
@@ -7,21 +7,24 @@ import { useLocation } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../../../features/authReducer';
 import { DefaultPatch, Get } from '../../../../../comman';
+import { PrinterFilled } from '@ant-design/icons';
 import Page1 from './Page1';
 import Page2 from './Page2';
 import moment from 'moment';
 import Epicriz from '../../../../BeforeAmbulatory/Lists/Epicriz';
 //
-import InternalMedicine from '../InternalMedicine/Index';
-import Neurologist from '../Neurologist/Index';
+import InternalMedicine from '../InternalMedicine/Index'; // Дотрын эмчийн үзлэг
+import Neurologist from '../Neurologist/Index'; // МЭДРЭЛИЙН ЭМЧИЙН ҮЗЛЭГ
+import Page1ForCT2 from './Page1ForCT2'; // CT2 Nuur
+import Children from '../Children/Index'; // CT2
 //
-function Index({ id }) {
+function Index({ data }) {
    const token = useSelector(selectCurrentToken);
    let location = useLocation();
+   const [form] = Form.useForm();
    const [storyId, setStoryId] = useState(Number);
    const [testData, setTestData] = useState({});
    const [loading, setLoading] = useState(false);
-   const [form] = Form.useForm();
    const printRef = useRef();
    const handlePrint = useReactToPrint({
       content: () => printRef.current
@@ -72,41 +75,50 @@ function Index({ id }) {
       // form.setFieldsValue(response);
    };
    const RenderDoctorInspection = () => {
-      if (id === 1) {
-         return <InternalMedicine />;
-      } else if (id === 2) {
-         return <Neurologist />;
+      if (data.templateId === 1) {
+         return (
+            <>
+               <Page1 form={form} />
+               <Page2 templateId={data.templateId} />
+               <InternalMedicine />
+            </>
+         );
+      } else if (data.templateId === 2) {
+         return (
+            <>
+               <Page1ForCT2 />
+               <Children />
+            </>
+         );
+      } else if (data.templateId === 3) {
+         return <Neurologist form={form} />;
       }
    };
    useEffect(() => {
-      getStory();
-   }, [location]);
+      setLoading(true);
+      if (typeof data.doctorInspection === 'string') {
+         data.doctorInspection = JSON.parse(data.doctorInspection);
+      }
+      form.setFieldsValue(data);
+      console.log(data);
+      setLoading(false);
+   }, [data]);
    return (
-      <>
-         <Spin spinning={loading}>
-            <div ref={printRef}>
-               <Form form={form}>
-                  <Page1 />
-                  <Page2 />
-                  <RenderDoctorInspection />
-                  <Epicriz />
-               </Form>
-            </div>
-         </Spin>
-         <Button onClick={() => handlePrint()}>Хэвлэх</Button>
-         <Button
-            onClick={() =>
-               form.validateFields().then((values) => {
-                  updateStory(values);
-               })
-            }
-         >
-            хадгалах
+      <div>
+         <Button icon={<PrinterFilled />} onClick={() => handlePrint()}>
+            Хэвлэх
          </Button>
-         <Button onClick={() => console.log(form.getFieldsValue())}>
-            АРЙЫБЙЫБ
-         </Button>
-      </>
+         <div className="hidden">
+            <Spin spinning={loading}>
+               <div ref={printRef}>
+                  <Form form={form}>
+                     <RenderDoctorInspection />
+                     <Epicriz />
+                  </Form>
+               </div>
+            </Spin>
+         </div>
+      </div>
    );
 }
 export default Index;

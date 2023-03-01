@@ -1,9 +1,9 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Modal, Table } from 'antd';
+import { Input, Modal, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, openNofi } from '../../comman';
+import { DefualtGet, numberToCurrency, openNofi } from '../../comman';
 
 function Medicine({ isOpen, isClose, handleclick }) {
    const token = useSelector(selectCurrentToken);
@@ -11,6 +11,10 @@ function Medicine({ isOpen, isClose, handleclick }) {
    const [medicines, setMedicines] = useState([]);
    const [selectedMedicines, setSelectedMedicines] = useState([]);
    const [searchField, setSearchField] = useState('');
+   //
+   const [testField, setTestField] = useState('');
+   const [testData, setTestData] = useState([]);
+   //
    const config = {
       headers: {},
       params: {}
@@ -28,6 +32,18 @@ function Medicine({ isOpen, isClose, handleclick }) {
          setMedicines(response);
       }
       setLoading(false);
+   };
+   const getHealtInsurance = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await DefualtGet(
+         'health-insurance/tablets',
+         token,
+         conf
+      );
+      setTestData(response);
    };
    const add = (medicine) => {
       const state = selectedMedicines.includes(medicine);
@@ -50,11 +66,26 @@ function Medicine({ isOpen, isClose, handleclick }) {
       },
       {
          title: 'Нэр',
-         dataIndex: 'm_name'
+         dataIndex: 'm_name',
+         render: (text) => {
+            return <p className="whitespace-pre-wrap text-black">{text}</p>;
+         }
       },
       {
-         title: 'Тоо ширхэг',
+         title: 'Үлдэгдэл',
          dataIndex: 'countC2'
+      },
+      {
+         title: 'Хэмжих нэгж',
+         dataIndex: 'ratecode',
+         width: 90
+      },
+      {
+         title: 'Үнэ',
+         dataIndex: 'price_low',
+         render: (text) => {
+            return numberToCurrency(text);
+         }
       }
    ];
    const selectedColumns = [
@@ -85,11 +116,35 @@ function Medicine({ isOpen, isClose, handleclick }) {
          }
       }
    ];
+   //
+   const dd = [
+      {
+         title: 'sad',
+         dataIndex: 'tbltBarCode'
+      },
+      {
+         title: 'sadsa',
+         dataIndex: 'tbltNameMon'
+      },
+      {
+         title: 'sada',
+         dataIndex: 'tbltSizeMixture'
+      }
+   ];
+   //
    const filteredMedicine = medicines.filter((medicine) => {
-      return medicine.name.toLowerCase().includes(searchField.toLowerCase());
+      return medicine.m_name.toLowerCase().includes(searchField.toLowerCase());
    });
+   //
+   const filteredMedicineTest = testData.filter((medicine) => {
+      return medicine.tbltBarCode
+         .toLowerCase()
+         .includes(testField.toLowerCase());
+   });
+   //
    useEffect(() => {
       getMedicine();
+      getHealtInsurance();
    }, [isOpen]);
 
    return (
@@ -119,9 +174,8 @@ function Medicine({ isOpen, isClose, handleclick }) {
                         bordered
                         loading={loading}
                         rowClassName="hover: cursor-pointer"
-                        className="whitespace-pre-wrap"
                         scroll={{
-                           y: 200
+                           y: 400
                         }}
                         onRow={(row, rowIndex) => {
                            return {
@@ -132,8 +186,12 @@ function Medicine({ isOpen, isClose, handleclick }) {
                         }}
                         locale={{ emptyText: 'Мэдээлэл байхгүй' }}
                         columns={columns}
-                        dataSource={medicines}
-                        pagination={false}
+                        // dataSource={medicines}
+                        dataSource={filteredMedicine}
+                        pagination={{
+                           simple: true,
+                           pageSize: 20
+                        }}
                      />
                   </div>
                </div>
@@ -148,6 +206,18 @@ function Medicine({ isOpen, isClose, handleclick }) {
                         pagination={false}
                      />
                   </div>
+               </div>
+               <div className="w-full">
+                  <Input
+                     placeholder="Хайх"
+                     allowClear
+                     onChange={(e) => setTestField(e.target.value)}
+                  />
+                  <Table
+                     rowKey={'id'}
+                     columns={dd}
+                     dataSource={filteredMedicineTest}
+                  />
                </div>
             </div>
          </Modal>
