@@ -22,14 +22,19 @@ import { Table } from 'react-bootstrap';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost, Get, openNofi, Post } from '../../comman';
+import {
+   DefaultPost,
+   Get,
+   numberToCurrency,
+   openNofi,
+   Post
+} from '../../comman';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
 import { useEffect } from 'react';
-//
-const { TextArea } = Input;
+import mnMN from 'antd/es/calendar/locale/mn_MN';
 function Order({
    isPackage,
    selectedPatient,
@@ -73,12 +78,17 @@ function Order({
             const service = {};
             service.id = item.id;
             service.name = item.name;
-            service.price = item.price;
-            service.oPrice = item.price;
+            if (usageType === 'IN') {
+               service.price = item.inpatientPrice;
+               service.oPrice = item.inpatientPrice;
+            } else {
+               service.price = item.price;
+               service.oPrice = item.price;
+            }
             service.type = item.types?.type;
             if (item.type === 8) {
-               service.id = item.m_id;
-               service.name = item.m_name;
+               service.id = item.id;
+               service.name = item.name;
                service.dose = '';
                service.price = 0;
                service.oPrice = 0;
@@ -130,7 +140,6 @@ function Order({
       }
    };
    const removeOrder = (name) => {
-      console.log(name);
       const orders = orderForm.getFieldsValue('services');
       var arr = [...orders.services];
       arr.splice(name, 1);
@@ -744,34 +753,39 @@ function Order({
                                                       />
                                                    </Form.Item>
                                                 </td>
-                                                <td>
-                                                   <Form.Item
-                                                      name={[name, 'startAt']}
-                                                      className="mb-0"
-                                                   >
-                                                      <DatePicker />
-                                                   </Form.Item>
-                                                </td>
+                                                {usageType === 'IN' && (
+                                                   <td>
+                                                      <Form.Item
+                                                         name={[
+                                                            name,
+                                                            'startAt'
+                                                         ]}
+                                                         className="mb-0"
+                                                      >
+                                                         <DatePicker
+                                                            locale={mnMN}
+                                                            placeholder="Өдөр сонгох"
+                                                         />
+                                                      </Form.Item>
+                                                   </td>
+                                                )}
                                                 <td>
                                                    <Form.Item
                                                       shouldUpdate
                                                       className="mb-0"
                                                    >
                                                       {() => {
-                                                         return orderForm
-                                                            .getFieldValue([
-                                                               'services',
-                                                               name,
-                                                               'price'
-                                                            ])
-                                                            .toLocaleString(
-                                                               'mn-MN',
-                                                               {
-                                                                  style: 'currency',
-                                                                  currency:
-                                                                     'MNT'
-                                                               }
+                                                         const price =
+                                                            orderForm.getFieldValue(
+                                                               [
+                                                                  'services',
+                                                                  name,
+                                                                  'price'
+                                                               ]
                                                             );
+                                                         return numberToCurrency(
+                                                            price
+                                                         );
                                                       }}
                                                    </Form.Item>
                                                 </td>

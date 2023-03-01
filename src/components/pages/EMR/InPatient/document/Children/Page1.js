@@ -160,16 +160,43 @@ function Page1() {
                      <th>
                         <p>
                            <span className="font-bold">Ам бүл</span>
-                           <span>____</span>
+                           <span>
+                              <Form.Item
+                                 shouldUpdate
+                                 className="mb-0"
+                                 noStyle
+                                 name={['anemis', 'familyCondition']}
+                              >
+                                 <Input className="amaraInput w-10" />
+                              </Form.Item>
+                           </span>
                            <span>хэнтэйгээ амьдардаг</span>
                         </p>
-                        <p>____________</p>
+                        <p>
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['anemis', 'familyConditionOthers']}
+                           >
+                              <Input className="amaraInput w-full" />
+                           </Form.Item>
+                        </p>
                      </th>
                   </tr>
                   <tr>
                      <th colSpan={2}>
                         <p>Урьд өвчилсөн өвчин, эмгэгийн байдал:</p>
-                        <p>__________</p>
+                        <p>
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              name={['anemis', 'beforoProblems']}
+                           >
+                              <Input className="amaraInput w-full" />
+                           </Form.Item>
+                        </p>
                      </th>
                   </tr>
                </thead>
@@ -179,6 +206,29 @@ function Page1() {
                   <tr>
                      <th>
                         <p>Халдварт:</p>
+                        <Form.Item
+                           shouldUpdate
+                           className="mb-0"
+                           noStyle
+                           name={['anemis', 'contagious']}
+                        >
+                           <Checkbox.Group>
+                              <Checkbox className="ml-2" value={'measles'}>
+                                 Улаан бурхан{' '}
+                                 <span>
+                                    <Form.Item
+                                       shouldUpdate
+                                       className="mb-0"
+                                       noStyle
+                                       name={['anemis', 'isMeasles']}
+                                    >
+                                       <Input className="amaraInput w-10" />
+                                    </Form.Item>
+                                 </span>
+                                 онд
+                              </Checkbox>
+                           </Checkbox.Group>
+                        </Form.Item>
                      </th>
                      <th>
                         <p>Мэс засал, мэс ажилбар хийлгэсэн эсэх:</p>

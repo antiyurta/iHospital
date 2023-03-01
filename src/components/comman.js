@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { notification } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -96,7 +97,6 @@ export async function DefaultPost(url, token, config, data) {
       axios
          .post(DEV_URL + url, data, config)
          .then((response) => {
-            console.log('=======>', response);
             if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
                resolve(response.data.response);

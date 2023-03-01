@@ -3,12 +3,13 @@ import { Input, Modal, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, numberToCurrency, openNofi } from '../../comman';
+import { DefualtGet, Get, numberToCurrency, openNofi } from '../../comman';
 
 function Medicine({ isOpen, isClose, handleclick }) {
    const token = useSelector(selectCurrentToken);
    const [loading, setLoading] = useState(false);
    const [medicines, setMedicines] = useState([]);
+   const [medicineMeta, setMedicineMeta] = useState({});
    const [selectedMedicines, setSelectedMedicines] = useState([]);
    const [searchField, setSearchField] = useState('');
    //
@@ -19,17 +20,19 @@ function Medicine({ isOpen, isClose, handleclick }) {
       headers: {},
       params: {}
    };
-   const getMedicine = async () => {
+   const getMedicine = async (page, pageSize) => {
       setLoading(true);
-      config.params.depId = 4079;
-      config.params.typeId = 13;
-      const response = await DefualtGet(
-         'finance/type-materials',
-         token,
-         config
-      );
+      const conf = {
+         headers: {},
+         params: {
+            page: page,
+            limit: pageSize
+         }
+      };
+      const response = await Get('service/medicine', token, conf);
       if (response) {
-         setMedicines(response);
+         setMedicines(response.data);
+         setMedicineMeta(response.meta);
       }
       setLoading(false);
    };
@@ -62,27 +65,31 @@ function Medicine({ isOpen, isClose, handleclick }) {
    const columns = [
       {
          title: 'Код',
-         dataIndex: 'barcode'
+         dataIndex: 'code'
       },
       {
-         title: 'Нэр',
-         dataIndex: 'm_name',
+         title: 'Худалдааны нэршил',
+         dataIndex: 'name'
+      },
+      {
+         title: 'Монгол нэршил',
+         dataIndex: 'mnName',
          render: (text) => {
             return <p className="whitespace-pre-wrap text-black">{text}</p>;
          }
       },
-      {
-         title: 'Үлдэгдэл',
-         dataIndex: 'countC2'
-      },
-      {
-         title: 'Хэмжих нэгж',
-         dataIndex: 'ratecode',
-         width: 90
-      },
+      // {
+      //    title: 'Үлдэгдэл',
+      //    dataIndex: 'countC2'
+      // },
+      // {
+      //    title: 'Хэмжих нэгж',
+      //    dataIndex: 'ratecode',
+      //    width: 90
+      // },
       {
          title: 'Үнэ',
-         dataIndex: 'price_low',
+         dataIndex: 'price',
          render: (text) => {
             return numberToCurrency(text);
          }
@@ -91,11 +98,11 @@ function Medicine({ isOpen, isClose, handleclick }) {
    const selectedColumns = [
       {
          title: 'Код',
-         dataIndex: 'barcode'
+         dataIndex: 'code'
       },
       {
          title: 'Нэр',
-         dataIndex: 'm_name'
+         dataIndex: 'name'
       },
       {
          title: 'Үйлдэл',
@@ -132,9 +139,9 @@ function Medicine({ isOpen, isClose, handleclick }) {
       }
    ];
    //
-   const filteredMedicine = medicines.filter((medicine) => {
-      return medicine.m_name.toLowerCase().includes(searchField.toLowerCase());
-   });
+   // const filteredMedicine = medicines.filter((medicine) => {
+   //    return medicine.m_name.toLowerCase().includes(searchField.toLowerCase());
+   // });
    //
    const filteredMedicineTest = testData.filter((medicine) => {
       return medicine.tbltBarCode
@@ -143,8 +150,8 @@ function Medicine({ isOpen, isClose, handleclick }) {
    });
    //
    useEffect(() => {
-      getMedicine();
-      getHealtInsurance();
+      getMedicine(1, 10);
+      // getHealtInsurance();
    }, [isOpen]);
 
    return (
@@ -174,9 +181,9 @@ function Medicine({ isOpen, isClose, handleclick }) {
                         bordered
                         loading={loading}
                         rowClassName="hover: cursor-pointer"
-                        scroll={{
-                           y: 400
-                        }}
+                        // scroll={{
+                        //    y: 400
+                        // }}
                         onRow={(row, rowIndex) => {
                            return {
                               onDoubleClick: () => {
@@ -186,11 +193,15 @@ function Medicine({ isOpen, isClose, handleclick }) {
                         }}
                         locale={{ emptyText: 'Мэдээлэл байхгүй' }}
                         columns={columns}
-                        // dataSource={medicines}
-                        dataSource={filteredMedicine}
+                        dataSource={medicines}
+                        // dataSource={filteredMedicine}
                         pagination={{
                            simple: true,
-                           pageSize: 20
+                           pageSize: 10,
+                           total: medicineMeta.itemCount,
+                           current: medicineMeta.page,
+                           onChange: (page, pageSize) =>
+                              getMedicine(page, pageSize)
                         }}
                      />
                   </div>

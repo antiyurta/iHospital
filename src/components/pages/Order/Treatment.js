@@ -5,14 +5,16 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { openNofi } from '../../comman';
+import { numberToCurrency, openNofi } from '../../comman';
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 function Treatment({ isOpen, isClose, handleclick }) {
    const token = useSelector(selectCurrentToken);
+   let usageType = useLocation()?.state?.usageType;
    const [searchField, setSearchField] = useState('');
    const [treatments, setTreatments] = useState([]);
    const [treatment, setTreatment] = useState([]);
@@ -144,7 +146,13 @@ function Treatment({ isOpen, isClose, handleclick }) {
                                     className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                  >
                                     <td>{item.name}</td>
-                                    <td>{item.price}₮</td>
+                                    <td>
+                                       {numberToCurrency(
+                                          usageType === 'IN'
+                                             ? item.inpatientPrice
+                                             : item.price
+                                       )}
+                                    </td>
                                  </tr>
                               );
                            })}
@@ -181,7 +189,13 @@ function Treatment({ isOpen, isClose, handleclick }) {
                                     className="ant-table-row ant-table-row-level-0"
                                  >
                                     <td>{item.name}</td>
-                                    <td>{item.price}₮</td>
+                                    <td>
+                                       {numberToCurrency(
+                                          usageType === 'IN'
+                                             ? item.inpatientPrice
+                                             : item.price
+                                       )}
+                                    </td>
                                     <td
                                        onDoubleClick={() => remove(index)}
                                        className="hover:cursor-pointer"

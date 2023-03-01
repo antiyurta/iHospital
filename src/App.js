@@ -69,6 +69,7 @@ import Settings from './components/pages/reference/Settings';
 import XrayRequest from './components/pages/Xray/XrayRequest';
 import DeviceSchedule from './components/pages/Appointment/Device/DeviceSchedule';
 import BeforeXrayRequest from './components/pages/Xray/BeforeXrayRequest';
+import TreatmentRequest from './components/pages/treatment/BeforeTreatmentRequest';
 import FinanceMaterialXray from './components/pages/Finance/FinanceMaterialXray';
 import FinanceMaterialTreatment from './components/pages/Finance/FinanceMaterialTreatment';
 import FinanceMaterialSurgery from './components/pages/Finance/FinanceMaterialSurgery';
@@ -342,6 +343,14 @@ function App() {
                   element={
                      <PrivateRoute>
                         <BeforeAmbulatoryList />
+                     </PrivateRoute>
+                  }
+               />
+               <Route
+                  path="/treatmentList"
+                  element={
+                     <PrivateRoute>
+                        <TreatmentRequest />
                      </PrivateRoute>
                   }
                />

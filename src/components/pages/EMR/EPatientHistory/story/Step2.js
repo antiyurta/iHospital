@@ -1,7 +1,7 @@
 import { Checkbox, Form, Input } from 'antd';
 
 const { TextArea } = Input;
-function Step2() {
+function Step2({ templateId }) {
    return (
       <div className="flex flex-wrap">
          <div className="w-full p-1">
@@ -30,6 +30,21 @@ function Step2() {
                </div>
             </div>
          </div>
+         {templateId === 2 && (
+            <div className="w-full p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        className="mb-0"
+                        label="Хэвтэхээс өмнө хийгдсэн эмчилгээ /гэрээр хийсэн эмчилгээ/:"
+                        name={['anemis', 'painStoryBefore']}
+                     >
+                        <TextArea rows={5} className="w-full" />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         )}
          <div className="w-full p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
@@ -65,23 +80,63 @@ function Step2() {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Ажил хөдөлмөрийн нөхцөл:"
-                     name={['anemis', 'workCondition']}
-                     className="mb-0"
-                  >
-                     <Checkbox.Group>
-                        <Checkbox className="ml-2" value={'NORMAL'}>
-                           Ердийн
-                        </Checkbox>
-                        <Checkbox value={'HARD'}>Хүнд</Checkbox>
-                        <Checkbox value={'VIPER'}>Хортой</Checkbox>
-                        <Checkbox value={'OTHER'}>Бусад</Checkbox>
-                     </Checkbox.Group>
-                  </Form.Item>
+                  {templateId === 2 ? (
+                     <Form.Item
+                        label="Ам бүл хэдүүл"
+                        name={['anemis', 'familyCondition']}
+                        className="mb-0"
+                     >
+                        <Input />
+                     </Form.Item>
+                  ) : (
+                     <Form.Item
+                        label="Ажил хөдөлмөрийн нөхцөл:"
+                        name={['anemis', 'workCondition']}
+                        className="mb-0"
+                     >
+                        <Checkbox.Group>
+                           <Checkbox className="ml-2" value={'NORMAL'}>
+                              Ердийн
+                           </Checkbox>
+                           <Checkbox value={'HARD'}>Хүнд</Checkbox>
+                           <Checkbox value={'VIPER'}>Хортой</Checkbox>
+                           <Checkbox value={'OTHER'}>Бусад</Checkbox>
+                        </Checkbox.Group>
+                     </Form.Item>
+                  )}
                </div>
             </div>
          </div>
+         {templateId === 2 && (
+            <div className="w-1/4 p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Хэнтэйгээ амьдардаг:"
+                        name={['anemis', 'familyConditionOthers']}
+                        className="mb-0"
+                     >
+                        <TextArea rows={5} className="w-full" />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         )}
+         {templateId === 2 && (
+            <div className="w-1/4 p-1">
+               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="p-1">
+                     <Form.Item
+                        label="Урьд өвчилсөн өвчин, эмгэгийн байдал:"
+                        name={['anemis', 'beforoProblems']}
+                        className="mb-0"
+                     >
+                        <TextArea rows={4} className="w-full" />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         )}
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
@@ -95,16 +150,90 @@ function Step2() {
                            Улаан бурхан
                         </Checkbox>
                         <Checkbox value={'varicella'}>Салхин цэцэг</Checkbox>
-                        <Checkbox value={'avirus'}>Вирус хепатит A</Checkbox>
-                        <Checkbox value={'bvirus'}>Вирус хепатит B</Checkbox>
-                        <Checkbox value={'cvirus'}>Вирус хепатит C</Checkbox>
-                        <Checkbox value={'tuberculosis'}>Сүрьеэ</Checkbox>
+                        {templateId === 2 && (
+                           <Checkbox value={'mumps'}>Гахайн хавдар</Checkbox>
+                        )}
+                        <Checkbox value={'avirus'}>
+                           {templateId === 2 ? 'Гепатит A' : 'Вирус хепатит A'}
+                        </Checkbox>
+                        <Checkbox value={'bvirus'}>
+                           {templateId === 2 ? 'Гепатит B' : 'Вирус хепатит B'}
+                        </Checkbox>
+                        <Checkbox value={'cvirus'}>
+                           {templateId === 2 ? 'Гепатит C' : 'Вирус хепатит C'}
+                        </Checkbox>
+                        <Checkbox value={'stomatchInfection'}>
+                           Гэдэсний халдвар
+                        </Checkbox>
+                        <Checkbox className="w-full" value={'tuberculosis'}>
+                           Сүрьеэ
+                        </Checkbox>
+                        {templateId === 2 && (
+                           <>
+                              <Checkbox
+                                 className="ml-6 w-full"
+                                 value={'1tuberculosis'}
+                              >
+                                 Уушигны
+                              </Checkbox>
+                              <Checkbox
+                                 className="ml-6 w-full"
+                                 value={'2tuberculosis'}
+                              >
+                                 Булчирхайн
+                              </Checkbox>
+                              <Checkbox
+                                 className="ml-6 w-full"
+                                 value={'3tuberculosis'}
+                              >
+                                 Гэдэсний
+                              </Checkbox>
+                              <Checkbox
+                                 className="ml-6 w-full"
+                                 value={'4tuberculosis'}
+                              >
+                                 Бусад
+                              </Checkbox>
+                           </>
+                        )}
                         <Checkbox value={'other'}>Бусад</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
             </div>
          </div>
+         {templateId === 2 && (
+            <div className="w-1/4 p-1">
+               <div className="flex flex-wrap">
+                  <div className="w-full">
+                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                        <div className="p-1">
+                           <Form.Item
+                              label="Улаан бурхан хэдэн онд:"
+                              name={['anemis', 'isMeasles']}
+                              className="mb-0"
+                           >
+                              <Input />
+                           </Form.Item>
+                        </div>
+                     </div>
+                  </div>
+                  <div className="w-full">
+                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                        <div className="p-1">
+                           <Form.Item
+                              label="Улаан бурхан хэдэн онд:"
+                              name={['anemis', 'isMeasles']}
+                              className="mb-0"
+                           >
+                              <Input />
+                           </Form.Item>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         )}
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">

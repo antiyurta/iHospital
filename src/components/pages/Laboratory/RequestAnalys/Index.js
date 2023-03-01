@@ -1,5 +1,9 @@
 import {
+   ArrowLeftOutlined,
+   ArrowRightOutlined,
    BarcodeOutlined,
+   EditOutlined,
+   PrinterOutlined,
    ReloadOutlined,
    SearchOutlined
 } from '@ant-design/icons';
@@ -7,9 +11,11 @@ import {
    Button,
    Card,
    DatePicker,
+   Divider,
    Empty,
    Form,
    Input,
+   Modal,
    Segmented,
    Space,
    Table,
@@ -24,21 +30,23 @@ import Barcode from 'react-barcode';
 import { useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { DefaultPatch, Get } from '../../../comman';
+import { DefaultPatch, Get, Patch } from '../../../comman';
 import examinationProcess from '../examinationProcess.json';
 
+const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 function Index() {
    const today = new Date();
    const token = useSelector(selectCurrentToken);
    const barcodeRef = useRef();
+   const [callbackForm] = Form.useForm();
    const [searchForm] = Form.useForm();
+   const [formValues, setFormValues] = useState({});
    const [statusFilter, setStatusFilter] = useState(0);
    const [requestList, setRequestList] = useState([]);
    const [requestListMeta, setRequestListMeta] = useState({});
    const [requestListLoading, setRequestListLoading] = useState(false);
    const [requestDetailList, setRequestDetailList] = useState([]);
-   const [requestDetailListMeta, setRequestDetailListMeta] = useState({});
    const [requestDetailListLoading, setRequestDetailListLoading] =
       useState(false);
    const [Dstart, setStart] = useState('');
@@ -48,6 +56,43 @@ function Index() {
    const [selectedRequestDtl, setSelectedRequestDtl] = useState([]);
    const [barcodeLoading, setBarcodeLoading] = useState(false);
    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+   const [isOpenCallBack, setIsOpenCallBack] = useState(false);
+   const [callback, setCallback] = useState(Number);
+   const [isOpenResult, setIsOpenResult] = useState(false);
+   const [selectedResult, setSelectedResult] = useState([]);
+   const onFinishCallback = async (values) => {
+      values['examinationProcess'] = callback.examinationProcess - 1;
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Patch(
+         'service/examinationRequestDetail/' + callback.id,
+         token,
+         conf,
+         values
+      );
+      if (response) {
+         setIsOpenCallBack(false);
+         await getErequestDtl(selectedRequest);
+         getErequest(1, 10, Dstart, Dend, null, statusFilter);
+      }
+   };
+   const getResult = async (row) => {
+      const conf = {
+         headers: {},
+         params: {
+            examinationRequestId: row.erequests_id,
+            examinationProcess: 3
+         }
+      };
+      const response = await Get(
+         'service/examinationRequestDetail',
+         token,
+         conf
+      );
+      setSelectedResult(response.data);
+   };
    // columns
    const requestListColumn = [
       {
@@ -97,6 +142,69 @@ function Index() {
          }
       }
    ];
+   const requestListColumn2 = [
+      {
+         title: '№',
+         render: (_, record, index) => {
+            return (
+               requestListMeta.page * requestListMeta.limit -
+               (requestListMeta.limit - index - 1)
+            );
+         }
+      },
+      {
+         title: 'Овог',
+         dataIndex: 'lastName'
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'firstName'
+      },
+      {
+         title: 'Регистр',
+         dataIndex: 'registerNumber'
+      },
+      {
+         title: 'Огноо',
+         dataIndex: 'erequests_requestDate',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'Төлөв',
+         render: (_, row) => {
+            if (row.erequests_isCito) {
+               return (
+                  <p className="bg-[#dd4b39] text-white">
+                     {row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}
+                  </p>
+               );
+            } else {
+               return (
+                  <p className="bg-[#5cb85c] text-white">
+                     {row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}
+                  </p>
+               );
+            }
+         }
+      },
+      {
+         title: 'Хариу оруулах',
+         render: (_, row) => {
+            return (
+               <Button
+                  type="primary"
+                  icon={<EditOutlined />}
+                  onClick={() => {
+                     setIsOpenResult(true);
+                     getResult(row);
+                  }}
+               />
+            );
+         }
+      }
+   ];
    const requestDetailListColumn = [
       {
          title: '№',
@@ -143,7 +251,8 @@ function Index() {
                <Tag
                   color="processing"
                   onClick={() => {
-                     //  returnChange(record);
+                     setCallback(record);
+                     setIsOpenCallBack(true);
                   }}
                   className="cursor-pointer"
                >
@@ -156,6 +265,9 @@ function Index() {
    // columns end
    const getErequest = async (page, pageSize, start, end, values, process) => {
       setRequestListLoading(true);
+      if (values) {
+         setFormValues(values);
+      }
       setStatusFilter(process);
       const conf = {
          headers: {},
@@ -185,25 +297,24 @@ function Index() {
       setRequestListMeta(response.meta);
       setRequestListLoading(false);
    };
-   const getErequestDtl = async (id) => {
+   const getErequestDtl = async (row) => {
       setRequestDetailListLoading(true);
       const conf = {
          headers: {},
          params: {
-            examinationRequestId: id,
+            examinationRequestId: row.erequests_id,
             examinationProcess: statusFilter
          }
       };
-      //   setBarcodeLoading(false);
-      //   setRequestDetailList(row.examinationRequestDetials);
-      //   setSelectedRequest(row);
-      //   setBarCodeState(false);
+      setSelectedRequest(row);
       const response = await Get(
          'service/examinationRequestDetail',
          token,
          conf
       );
-      setSelectedRequestDtl(response.data);
+      setSelectedRowKeys([]);
+      setBarCodeState(false);
+      setRequestDetailList(response.data);
       setRequestDetailListLoading(false);
    };
    const rowSelection = {
@@ -230,20 +341,22 @@ function Index() {
             headers: {},
             params: {}
          };
-         selectedRequestDtl.map((dtl) => {
-            if (dtl.examinationProcess === 0) {
-               DefaultPatch(
-                  'service/examinationRequestDetail/' + dtl.id,
-                  token,
-                  conf,
-                  {
-                     examinationProcess: 1
-                  }
-               );
-            }
+         Promise.all(
+            selectedRequestDtl?.map(async (dtl) => {
+               if (dtl.examinationProcess === 0) {
+                  await DefaultPatch(
+                     'service/examinationRequestDetail/' + dtl.id,
+                     token,
+                     conf,
+                     {
+                        examinationProcess: 1
+                     }
+                  );
+               }
+            })
+         ).then(() => {
+            getErequestDtl(selectedRequest);
          });
-         setSelectedRowKeys([]);
-         getErequestDtl(selectedRequest);
       },
       onPrintError: () => {
          console.log('asdasd');
@@ -257,17 +370,37 @@ function Index() {
          headers: {},
          params: {}
       };
-      selectedRequestDtl.map((dtl) => {
-         DefaultPatch(
-            'service/examinationRequestDetail/' + dtl.id,
-            token,
-            conf,
-            {
-               examinationProcess: dtl.examinationProcess + 1
-            }
-         );
-      });
+      Promise.all(
+         selectedRequestDtl.map(async (dtl) => {
+            await DefaultPatch(
+               'service/examinationRequestDetail/' + dtl.id,
+               token,
+               conf,
+               {
+                  examinationProcess: dtl.examinationProcess + 1
+               }
+            );
+         })
+      )
+         .then(async () => {
+            await getErequestDtl(selectedRequest);
+         })
+         .then(async () => {
+            await getErequest(1, 10, null, null, formValues, statusFilter);
+         });
    };
+   var groupBarcode = selectedRequestDtl.reduce(function (r, a) {
+      // Barcode bulegleh
+      r[a.barCode] = r[a.barCode] || [];
+      r[a.barCode].push(a);
+      return r;
+   }, Object.create(null));
+   var groupResult = selectedResult.reduce(function (r, a) {
+      // hariu zasah ued bulegleh
+      r[a.examinations?.types?.name] = r[a.examinations?.types?.name] || [];
+      r[a.examinations?.types?.name].push(a);
+      return r;
+   }, Object.create(null));
    useEffect(() => {
       getErequest(1, 10, today, today, null, 0);
    }, []);
@@ -296,6 +429,8 @@ function Index() {
                      onChange={(e) => {
                         getErequest(1, 10, Dstart, Dend, null, e);
                         setSelectedRequestDtl([]);
+                        setRequestDetailList([]);
+                        setBarCodeState(false);
                         setStatusFilter(e);
                      }}
                   />
@@ -326,7 +461,7 @@ function Index() {
                                  e.date ? e.date[0] : null,
                                  e.date ? e.date[1] : null,
                                  e,
-                                 0
+                                 statusFilter
                               )
                            }
                            form={searchForm}
@@ -398,7 +533,7 @@ function Index() {
                   </div>
                   <div className="py-2">
                      <Table
-                        rowKey={'id'}
+                        rowKey={'erequests_id'}
                         loading={{
                            spinning: requestListLoading,
                            tip: 'Уншиж байна...'
@@ -406,12 +541,16 @@ function Index() {
                         bordered
                         rowClassName="hover:cursor-pointer"
                         locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                        columns={requestListColumn}
+                        columns={
+                           statusFilter != 3
+                              ? requestListColumn
+                              : requestListColumn2
+                        }
                         dataSource={requestList}
                         onRow={(row) => {
                            return {
                               onClick: () => {
-                                 getErequestDtl(row.erequests_id);
+                                 getErequestDtl(row);
                               }
                            };
                         }}
@@ -436,7 +575,7 @@ function Index() {
                   className="header-solid max-h-max rounded-md"
                >
                   <Table
-                     rowKey={'erequests_id'}
+                     rowKey={'id'}
                      bordered
                      locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                      rowClassName="hover:cursor-pointer"
@@ -448,8 +587,7 @@ function Index() {
                         ...rowSelection
                      }}
                      columns={requestDetailListColumn}
-                     dataSource={selectedRequestDtl}
-                     //  dataSource={selectedRequest.examinationRequestsDetails}
+                     dataSource={requestDetailList}
                      pagination={{
                         simple: true,
                         pageSize: 5
@@ -469,11 +607,21 @@ function Index() {
                                  </Button>
                                  {statusFilter != 0 && (
                                     <Button
+                                       icon={<ArrowRightOutlined />}
+                                       className="ml-2"
                                        onClick={() =>
                                           changeExaminationProcess()
                                        }
                                     >
                                        Шилжүүлэх
+                                    </Button>
+                                 )}
+                                 {statusFilter === 4 && (
+                                    <Button
+                                       icon={<PrinterOutlined />}
+                                       className="ml-2"
+                                    >
+                                       Хариу хэвлэх
                                     </Button>
                                  )}
                               </>
@@ -486,15 +634,57 @@ function Index() {
          </div>
          <div style={{ display: 'none' }}>
             <div ref={barcodeRef} className="mt-4">
-               <p>{selectedRequestDtl[0]?.examinations?.types?.name}</p>
-               <p>{selectedRequest.patient?.registerNumber}</p>
-               <p>
-                  {selectedRequest.patient?.lastName}
-                  {selectedRequest.patient?.firstName}
-               </p>
-               <Barcode value={selectedRequestDtl[0]?.barCode} height={50} />
+               {Object.entries(groupBarcode).map(([key, value]) => {
+                  return (
+                     <div key={key}>
+                        <p>{value[0]?.examinations?.types?.name}</p>
+                        <p>{selectedRequest.registerNumber}</p>
+                        <p>
+                           {selectedRequest.lastName}
+                           {selectedRequest.firstName}
+                        </p>
+                        <Barcode value={key} height={50} />
+                     </div>
+                  );
+               })}
             </div>
          </div>
+         <Modal
+            title="Буцаалт"
+            open={isOpenCallBack}
+            onCancel={() => setIsOpenCallBack(false)}
+            onOk={() =>
+               callbackForm
+                  .validateFields()
+                  .then((values) => onFinishCallback(values))
+            }
+            okText="Буцаах"
+            cancelText="Болих"
+         >
+            <Form form={callbackForm}>
+               <Form.Item label="Шалтгаан" name={'description'}>
+                  <TextArea />
+               </Form.Item>
+            </Form>
+         </Modal>
+         <Modal
+            title="Хариу оруулах хэсэг"
+            open={isOpenResult}
+            onCancel={() => setIsOpenResult(false)}
+            cancelText="Болих"
+            okText="Хадгалах"
+         >
+            {Object.entries(groupResult).map(([key, value]) => {
+               return (
+                  <div key={key}>
+                     <Divider>{key}</Divider>
+                     {value?.map((item, idx) => {
+                        return <p>{item.examinations?.name}</p>;
+                     })}
+                  </div>
+               );
+            })}
+         </Modal>
       </div>
    );
 }

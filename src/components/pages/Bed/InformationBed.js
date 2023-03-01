@@ -22,7 +22,7 @@ import {
 } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch } from '../../comman';
+import { Get, numberToCurrency, Patch } from '../../comman';
 import Spinner from 'react-bootstrap/Spinner';
 import orderType from './orderType.json';
 import roomType from './roomType.json';
@@ -512,7 +512,8 @@ const InformationBed = (props) => {
                                           {el.roomNumber} -{' '}
                                           {el.isVip
                                              ? 'VIP өрөө'
-                                             : 'Энгийн өрөө'}
+                                             : 'Энгийн өрөө'}{' '}
+                                          - {numberToCurrency(el.price)}
                                        </p>
                                     </div>
                                     <p style={styles.total}>

@@ -11,7 +11,7 @@ import {
    Space
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { DefaultPost, DefualtGet, Get, Post } from '../../../comman';
+import { DefualtGet, Get, Post } from '../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import {
@@ -43,13 +43,12 @@ function Acting({ PatientData, ListId, DepartmentId }) {
       };
       values['dep_id2'] = DepartmentId;
       values['mt_type'] = 70;
-      const response = await DefaultPost(
+      const response = await Post(
          `finance/create-expenses`,
          token,
          conf,
          values
       );
-      console.log(response);
       if (response === 201) {
          setIsModalOpen(false);
       }
@@ -91,14 +90,14 @@ function Acting({ PatientData, ListId, DepartmentId }) {
       }
    ];
 
-   const getMaterials = async () => {
+   const getMaterials = async (id) => {
       setSpinner(true);
       const conf = {
          headers: {},
          params: {}
       };
       const response = await DefualtGet(
-         `finance/department-material/${DepartmentId}`,
+         `finance/department-material/${id}`,
          token,
          conf
       );
@@ -128,9 +127,11 @@ function Acting({ PatientData, ListId, DepartmentId }) {
       const response = await Get('finance/department', token, conf);
       setFDepartments(response.data);
    };
+   const test = (e) => {
+      getMaterials(e);
+   };
    useEffect(() => {
       getActing(1, 10, 7);
-      getMaterials();
       getDepartments();
    }, []);
    return (
@@ -190,7 +191,7 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                                     ]}
                                     name={'dep_id'}
                                  >
-                                    <Select>
+                                    <Select onChange={test}>
                                        {fDepartments.map((dep, index) => {
                                           return (
                                              <Option
@@ -277,7 +278,10 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                                                                   }
                                                                   key={index}
                                                                >
-                                                                  {el.m_name}
+                                                                  {el.m_name +
+                                                                     '->' +
+                                                                     el.countC2 +
+                                                                     el.ratecode}
                                                                </Option>
                                                             );
                                                          }

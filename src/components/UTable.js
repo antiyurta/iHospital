@@ -438,6 +438,7 @@ function UTable(props) {
             </div>
             <div>
                <Pagination
+                  simple={true}
                   className="pagination"
                   pageSize={10}
                   current={meta.page}

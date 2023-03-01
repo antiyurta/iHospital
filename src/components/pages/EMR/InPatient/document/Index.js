@@ -74,7 +74,7 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
                   <Step1 form={form} templateId={templateId} />
                </Panel>
                <Panel header="Эмчлүүлэгчийн анамнез" key="2" forceRender={true}>
-                  <Step2 />
+                  <Step2 templateId={templateId} />
                </Panel>
                <Panel header="ЕРӨНХИЙ ҮЗЛЭГ" key="3" forceRender={true}>
                   <Step3 id={templateId} />

@@ -17,7 +17,10 @@ const { RangePicker } = DatePicker;
 const { CheckableTag } = Tag;
 
 function Index({ type, isDoctor }) {
-   //type 0 bol ambultor 1 bol urdcilsan sergiileh 2 bol hewten
+   //type 0 bol ambultor
+   //1 bol urdcilsan sergiileh
+   //2 bol hewten
+   //3 bol emiin bus emchilgee
    const scrollRef = useRef();
    const today = new Date();
    const token = useSelector(selectCurrentToken);

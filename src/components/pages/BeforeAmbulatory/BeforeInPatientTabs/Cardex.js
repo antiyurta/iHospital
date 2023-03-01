@@ -2,20 +2,28 @@ import {
    CheckCircleOutlined,
    CheckOutlined,
    CloseCircleOutlined,
+   CloseOutlined,
    EditOutlined,
+   LoadingOutlined,
    MinusOutlined,
    PauseCircleOutlined,
    PlusOutlined,
+   QuestionOutlined,
+   StarOutlined,
    WarningOutlined
 } from '@ant-design/icons';
 import { DatePicker, Empty, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get } from '../../../comman';
 
 function Cardex({ PatientId, ListId }) {
+   const today = new Date();
+   const [start, setStart] = useState('');
+   const [end, setEnd] = useState('');
    const token = useSelector(selectCurrentToken);
    const [requestDetailListLoading, setRequestDetailListLoading] =
       useState(false);
@@ -23,24 +31,77 @@ function Cardex({ PatientId, ListId }) {
    const [selectedRequestDtl, setSelectedRequestDtl] = useState([]);
    const [xrayList, setXrayList] = useState([]);
    //
+   const [treatmentList, setTreatmentList] = useState([]);
+   const [treatmentListMeta, setTreatmentListMeta] = useState({});
+   const [treatmentListLoading, setTreatmentListLoading] = useState(false);
+   //
+   const getRequestInfo = (text) => {
+      if (text === 'implemented') {
+         return <CheckCircleOutlined style={{ color: 'green' }} />;
+      } else if (text === 'cancelled') {
+         return <WarningOutlined style={{ color: '#f0ad4e' }} />;
+      } else if (text === 'cancelled') {
+         return <CloseCircleOutlined style={{ color: '#dd4b39' }} />;
+      } else if (text === 'refused') {
+         return <PauseCircleOutlined style={{ color: '#5bc0de' }} />;
+      }
+   };
+   //
    const treatmentColumn = [
       {
-         title: 'Огноо'
+         title: 'Огноо',
+         dataIndex: 'date',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD');
+         }
       },
       {
-         title: 'Төрөл'
+         title: 'Эмчилгээний нэр',
+         dataIndex: 'treatmentName'
       },
       {
-         title: 'Эмийн нэр'
+         title: 'Өглөө',
+         dataIndex: 'isMorning',
+         render: (text, row) => {
+            return row.treatmentRequests?.isMorning && text === null ? (
+               <EditOutlined />
+            ) : (
+               getRequestInfo(text)
+            );
+         }
       },
       {
-         title: 'Хугацаа'
+         title: 'Өдөр',
+         dataIndex: 'isAfternoon',
+         render: (text, row) => {
+            return row.treatmentRequests?.isAfternoon && text === null ? (
+               <EditOutlined />
+            ) : (
+               getRequestInfo(text)
+            );
+         }
       },
       {
-         title: 'Төлөв'
+         title: 'Орой',
+         dataIndex: 'isEvening',
+         render: (text, row) => {
+            return row.treatmentRequests?.isEvening && text === null ? (
+               <EditOutlined />
+            ) : (
+               getRequestInfo(text)
+            );
+         }
       },
       {
-         title: 'Сувилагч'
+         title: 'Шөнө',
+         dataIndex: 'isNight',
+         render: (text, row) => {
+            return row.treatmentRequests?.isNight && text === null ? (
+               <EditOutlined />
+            ) : (
+               getRequestInfo(text)
+            );
+         }
       }
    ];
    const examinationColumn = [
@@ -119,7 +180,29 @@ function Cardex({ PatientId, ListId }) {
       }
    ];
    //
-   const getTreatmentData = async () => {};
+   const getTreatmentData = async (page, pageSize, start, end) => {
+      setTreatmentListLoading(true);
+      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
+      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
+      const conf = {
+         headers: {},
+         params: {
+            page: page,
+            limit: pageSize,
+            patientId: PatientId,
+            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
+            endDate: moment(end).format('YYYY-MM-DD HH:mm')
+         }
+      };
+      setStart(start);
+      setEnd(end);
+      const response = await Get('treatment-plan', token, conf);
+      if (response.data) {
+         setTreatmentList(response.data);
+         setTreatmentListMeta(response.meta);
+      }
+      setTreatmentListLoading(false);
+   };
 
    const getErequestDtl = async (page, pageSize) => {
       setSelectedRequestDtl([]);
@@ -133,7 +216,6 @@ function Cardex({ PatientId, ListId }) {
          }
       };
       const response = await Get('service/erequest', token, conf);
-      // console.log('response.data', response.data);
       if (response.data) {
          response?.data?.map((el) => {
             el.examinationRequestDetials?.map((dtl) => {
@@ -174,8 +256,13 @@ function Cardex({ PatientId, ListId }) {
          return <CheckOutlined style={{ color: 'green' }} />;
       }
    };
+   const getData = async (e) => {
+      getTreatmentData(1, 5, e, e);
+      getErequestDtl();
+      getXrayList();
+   };
    useEffect(() => {
-      getTreatmentData();
+      getTreatmentData(1, 5, today, today);
       getErequestDtl();
       getXrayList();
    }, []);
@@ -183,7 +270,14 @@ function Cardex({ PatientId, ListId }) {
       <div className="flex flex-wrap">
          <div className="w-full">
             <div className="flex float-left">
-               <DatePicker locale={mnMN} />
+               <DatePicker
+                  locale={mnMN}
+                  onChange={(e) => {
+                     if (e != null) {
+                        getData(e);
+                     }
+                  }}
+               />
             </div>
             <div className="flex float-right">
                <div
@@ -239,7 +333,24 @@ function Cardex({ PatientId, ListId }) {
             >
                <span className="font-medium mx-1">Эмийн бус эмчилгээ</span>
             </div>
-            <Table columns={treatmentColumn} />
+            <Table
+               key={'id'}
+               bordered
+               loading={{
+                  spinning: treatmentListLoading,
+                  tip: 'Уншиж байна...'
+               }}
+               locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+               columns={treatmentColumn}
+               dataSource={treatmentList}
+               pagination={{
+                  simple: true,
+                  pageSize: 5,
+                  total: treatmentListMeta.itemCount,
+                  current: treatmentListMeta.page,
+                  onChange: (page, pageSize) => getTreatmentData(page, pageSize)
+               }}
+            />
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pl-2">
             <div
