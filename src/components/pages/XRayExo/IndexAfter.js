@@ -66,6 +66,7 @@ function IndexAfter({ type, params }) {
       setStart(start);
       setEnd(end);
       const response = await Get('service/xrayRequest', token, conf);
+      console.log(('Res', response));
       setXrayLists(response.data);
       setMeta(response.meta);
       setSpinner(false);
