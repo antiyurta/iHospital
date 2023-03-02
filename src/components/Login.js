@@ -124,7 +124,6 @@ function Login() {
                         >
                            <Input placeholder="Нэвтрэх нэр" />
                         </Form.Item>
-
                         <Form.Item
                            className="username"
                            label="Нууц үг"
@@ -169,7 +168,7 @@ function Login() {
                {/* <Menu mode="horizontal" className="menu-nav-social" items={MenuNav} /> */}
                <p className="copyright">
                   {' '}
-                  Copyright © 2022 by <a href="gurensoft.com">
+                  Copyright © 2023 by <a href="gurensoft.com">
                      GurenSoft LLC
                   </a>.{' '}
                </p>

@@ -9,5 +9,5 @@ module.exports = {
          }
       }
    },
-   plugins: [require('tailwindcss/nesting')]
+   plugins: [require('tailwindcss/nesting'), require('tailwindcss')]
 };

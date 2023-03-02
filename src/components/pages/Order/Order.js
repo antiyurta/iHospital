@@ -98,7 +98,7 @@ function Order({
                service.isAfternoon = false;
                service.isEvening = false;
                service.isNight = false;
-               service.desc = '';
+               service.description = '';
                service.dayCount = 1;
                service.total = 0;
             } else if (item.type === 2) {
@@ -189,7 +189,7 @@ function Order({
          }
       });
       orderForm.setFieldValue(['services', key, 'total'], counter * dayCount);
-      orderForm.setFieldValue(['services', key, 'desc'], message);
+      // orderForm.setFieldValue(['services', key, 'description'], message);
    };
    const totalCalculator = (value, key) => {
       var counter = 0;
@@ -417,6 +417,9 @@ function Order({
                                              Сорьц
                                           </th>
                                           <th className="font-bold text-sm align-middle">
+                                             Тайлбар
+                                          </th>
+                                          <th className="font-bold text-sm align-middle">
                                              m
                                           </th>
                                           <th className="font-bold text-sm align-middle">
@@ -427,9 +430,6 @@ function Order({
                                           </th>
                                           <th className="font-bold text-sm align-middle">
                                              n
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Заавар (тэмдэглэл)
                                           </th>
                                           <th className="font-bold text-sm align-middle">
                                              Хугацаа(Өдөр)
@@ -529,6 +529,26 @@ function Order({
                                                                   'type'
                                                                ]
                                                             ) === 0
+                                                               ? false
+                                                               : true
+                                                         }
+                                                      />
+                                                   </Form.Item>
+                                                </td>
+                                                <td>
+                                                   <Form.Item
+                                                      name={[name, 'description']}
+                                                      className="mb-0"
+                                                   >
+                                                      <Input
+                                                         disabled={
+                                                            orderForm.getFieldValue(
+                                                               [
+                                                                  'services',
+                                                                  name,
+                                                                  'type'
+                                                               ]
+                                                            ) === 8
                                                                ? false
                                                                : true
                                                          }
@@ -682,14 +702,14 @@ function Order({
                                                       />
                                                    </Form.Item>
                                                 </td>
-                                                <td>
+                                                {/* <td>
                                                    <Form.Item
-                                                      name={[name, 'desc']}
+                                                      name={[name, 'description']}
                                                       className="mb-0"
                                                    >
                                                       <Input disabled={true} />
                                                    </Form.Item>
-                                                </td>
+                                                </td> */}
                                                 <td>
                                                    <Form.Item
                                                       name={[name, 'dayCount']}

@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import './style/main.css';
 @import './style/responsive.css';
 @import './style/Hospital.css';
-@import '~antd/dist/antd.css';
+/* @import '../node_modules/antd/dist/antd.css'; */
+@import 'antd/dist/antd.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 label {
    white-space: normal !important;
@@ -124,12 +125,12 @@ legend.scheduler-border {
 
 .ant-input {
    height: 28px;
-   border-radius: 6px;
+   border-radius: 6px !important;
    background: transparent;
 }
 
 .ant-input-search-button {
-   height: 28px;
+   height: 26px !important;
    /* border-top-right-radius: 6px !important; */
    /* border-bottom-right-radius: 6px !important; */
    border-radius: 6px !important;
@@ -149,9 +150,12 @@ input::-webkit-inner-spin-button {
 }
 
 .ant-input-affix-wrapper {
-   height: 28px;
+   height: 28px !important;
    border-radius: 6px !important;
    align-items: center;
+}
+.ant-input-affix-wrapper > input.ant-input {
+   height: 26px !important;
 }
 
 .ant-alert {
@@ -178,7 +182,6 @@ input[type='number'] {
    display: inline-flex !important;
    /* Collapse -н сумыг голлуулах */
 }
-
 .ant-table-thead > tr > th {
    padding: 7px 10px !important;
    text-align: center;
@@ -212,7 +215,7 @@ input[type='number'] {
 
 .ant-btn {
    height: 28px !important;
-   line-height: 1;
+   line-height: 0 !important;
    border-radius: 6px !important;
 }
 

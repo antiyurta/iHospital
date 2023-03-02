@@ -28,8 +28,12 @@ function Cardex({ PatientId, ListId }) {
    const [requestDetailListLoading, setRequestDetailListLoading] =
       useState(false);
    const [xrayLoading, setXrayLoading] = useState(false);
+   //
    const [selectedRequestDtl, setSelectedRequestDtl] = useState([]);
+   const [selectedRequestDtlMeta, setSelectedRequestDtlMeta] = useState({});
+   //
    const [xrayList, setXrayList] = useState([]);
+   const [xrayListMeta, setXrayListMeta] = useState({});
    //
    const [treatmentList, setTreatmentList] = useState([]);
    const [treatmentListMeta, setTreatmentListMeta] = useState({});
@@ -107,15 +111,10 @@ function Cardex({ PatientId, ListId }) {
    const examinationColumn = [
       {
          title: 'Огноо',
-         dataIndex: 'createdAt',
-         render: (_, row, rowIndex) => {
-            return (
-               <span style={{ width: 100, textAlign: 'center' }}>
-                  {row.createdAt?.substr(0, 10) ?? ''}
-               </span>
-            );
-         },
-         width: 100
+         dataIndex: 'requestDate',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD');
+         }
       },
       {
          title: 'Шинжилгээний нэр',
@@ -155,13 +154,9 @@ function Cardex({ PatientId, ListId }) {
    const xrayColumn = [
       {
          title: 'Огноо',
-         dataIndex: 'createdAt',
-         render: (_, row, rowIndex) => {
-            return (
-               <span style={{ width: 80, textAlign: 'center' }}>
-                  {row.createdAt?.substr(0, 10) ?? ''}
-               </span>
-            );
+         dataIndex: 'startAt',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD');
          }
       },
       {
@@ -204,19 +199,25 @@ function Cardex({ PatientId, ListId }) {
       setTreatmentListLoading(false);
    };
 
-   const getErequestDtl = async (page, pageSize) => {
-      setSelectedRequestDtl([]);
+   const getErequestDtl = async (page, pageSize, start, end) => {
       setRequestDetailListLoading(true);
+      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
+      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
       const conf = {
          headers: {},
          params: {
             page: page,
             limit: pageSize,
-            patientId: PatientId
+            patientId: PatientId,
+            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
+            endDate: moment(end).format('YYYY-MM-DD HH:mm')
          }
       };
+      setStart(start);
+      setEnd(end);
       const response = await Get('service/erequest', token, conf);
-      if (response.data) {
+      if (response.data.length > 0) {
+         setSelectedRequestDtlMeta(response.meta);
          response?.data?.map((el) => {
             el.examinationRequestDetials?.map((dtl) => {
                setSelectedRequestDtl((selectedRequestDtl) => [
@@ -225,24 +226,32 @@ function Cardex({ PatientId, ListId }) {
                ]);
             });
          });
+      } else {
+         setSelectedRequestDtlMeta({});
+         setSelectedRequestDtl([]);
       }
       setRequestDetailListLoading(false);
    };
-   const getXrayList = async (page, pageSize) => {
-      setXrayList([]);
+   const getXrayList = async (page, pageSize, start, end) => {
       setXrayLoading(true);
+      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
+      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
       const conf = {
          headers: {},
          params: {
             page: page,
             limit: pageSize,
-            patientId: PatientId
+            patientId: PatientId,
+            findStartDate: moment(start).format('YYYY-MM-DD HH:mm'),
+            findEndDate: moment(end).format('YYYY-MM-DD HH:mm')
          }
       };
+      setStart(start);
+      setEnd(end);
       const response = await Get('service/xrayRequest', token, conf);
-      // console.log('response.data xxx', response.data);
       if (response.data) {
          setXrayList(response.data);
+         setXrayListMeta(response.meta);
       }
       setXrayLoading(false);
    };
@@ -258,13 +267,13 @@ function Cardex({ PatientId, ListId }) {
    };
    const getData = async (e) => {
       getTreatmentData(1, 5, e, e);
-      getErequestDtl();
-      getXrayList();
+      getErequestDtl(1, 5, e, e);
+      getXrayList(1, 5, e, e);
    };
    useEffect(() => {
       getTreatmentData(1, 5, today, today);
-      getErequestDtl();
-      getXrayList();
+      getErequestDtl(1, 5, today, today);
+      getXrayList(1, 5, today, today);
    }, []);
    return (
       <div className="flex flex-wrap">
@@ -334,7 +343,7 @@ function Cardex({ PatientId, ListId }) {
                <span className="font-medium mx-1">Эмийн бус эмчилгээ</span>
             </div>
             <Table
-               key={'id'}
+               rowKey={'id'}
                bordered
                loading={{
                   spinning: treatmentListLoading,
@@ -370,7 +379,11 @@ function Cardex({ PatientId, ListId }) {
                locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                dataSource={selectedRequestDtl}
                pagination={{
-                  pageSize: 5
+                  simple: true,
+                  pageSize: 5,
+                  total: selectedRequestDtlMeta.itemCount,
+                  current: selectedRequestDtlMeta.page,
+                  onChange: (page, pageSize) => getErequestDtl(page, pageSize)
                }}
             />
          </div>
@@ -392,7 +405,11 @@ function Cardex({ PatientId, ListId }) {
                locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                dataSource={xrayList}
                pagination={{
-                  pageSize: 5
+                  simple: true,
+                  pageSize: 5,
+                  total: xrayListMeta.itemCount,
+                  current: xrayListMeta.page,
+                  onChange: (page, pageSize) => getXrayList(page, pageSize)
                }}
             />
          </div>

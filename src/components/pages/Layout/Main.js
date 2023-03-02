@@ -88,7 +88,7 @@ const Main = () => {
                      key: `${indx}-${idx}`,
                      icon: (
                         <p
-                           style={{ width: 20 }}
+                           style={{ width: 20, marginBottom: 0 }}
                            dangerouslySetInnerHTML={{ __html: subMenu.icon }}
                         ></p>
                      ),
@@ -111,11 +111,11 @@ const Main = () => {
                   key: indx,
                   icon: (
                      <p
-                        style={{ width: 20 }}
+                        style={{ width: 20, marginBottom: 0 }}
                         dangerouslySetInnerHTML={{ __html: menu.icon }}
                      ></p>
                   ),
-                  label: <p>{menu.title}</p>,
+                  label: menu.title,
                   children: children
                });
             } else {
@@ -123,7 +123,7 @@ const Main = () => {
                   key: menu.id,
                   icon: (
                      <p
-                        style={{ width: 20 }}
+                        style={{ width: 20, marginBottom: 0 }}
                         dangerouslySetInnerHTML={{ __html: menu.icon }}
                      ></p>
                   ),

@@ -277,15 +277,14 @@ function BeforeTreatmentRequest() {
                               getTreatmentRequest(1, 10, start, end)
                            }
                         >
-                           <ReloadOutlined
-                           // spin={!spinner}
+                           <ReloadOutlined // spin={!spinner}
                            />
                         </Button>
                      </div>
                   </div>
                   <div className="w-full py-2">
                      <Table
-                        key={'id'}
+                        rowKey={'id'}
                         bordered
                         locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                         loading={{

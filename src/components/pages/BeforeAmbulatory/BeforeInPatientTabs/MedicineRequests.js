@@ -133,6 +133,10 @@ function MedicineRequests({ PatientId, ListId }) {
          dataIndex: ['medicineRequest', 'dose']
       },
       {
+         title: 'Тайлбар',
+         dataIndex: ['medicineRequest', 'description']
+      },
+      {
          title: 'Өглөө',
          dataIndex: 'isMorning',
          render: (text, row) => {
