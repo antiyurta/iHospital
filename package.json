@@ -33,7 +33,7 @@
    "scripts": {
       "start": "webpack-dev-server --mode development --progress",
       "watch": "webpack --watch --mode development",
-      "build": "webpack --mode production",
+      "build": "webpack --mode production --max_old_space_size=4096",
       "analyze": "webpack-bundle-analyzer build/bundle-stats.json",
       "test": "react-scripts test",
       "lint": "eslint --fix --ext .js,.jsx .",
