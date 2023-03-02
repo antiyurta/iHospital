@@ -9,9 +9,8 @@ module.exports = {
    context: __dirname,
    entry: './src/index.js',
    output: {
-      path: path.resolve(__dirname, '/build'),
+      path: path.resolve(__dirname, './build'),
       filename: 'index_bundle.js',
-      publicPath: '/'
    },
    devServer: {
       port: 3000,
