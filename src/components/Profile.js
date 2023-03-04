@@ -32,6 +32,8 @@ import { DefaultPost, Get, openNofi, Patch, Post } from './comman';
 import { KeyOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
+import { useCookies } from 'react-cookie';
+
 function Profile() {
    const token = useSelector(selectCurrentToken);
    const depId = useSelector(selectCurrentDepId);
@@ -49,6 +51,8 @@ function Profile() {
    const [isLoading, setIsLoading] = useState(false);
    const [passwordValid, setPasswordValid] = useState(false);
    const [password, setPassword] = useState('');
+   const [cookies, setCookie] = useCookies();
+
    const config = {
       headers: {},
       params: {}
@@ -126,6 +130,7 @@ function Profile() {
    };
    useEffect(() => {
       getProfile();
+      setCookie('current_token', token);
    }, []);
    const validPasswordHandle = (isValid) => {
       isValid ? setPasswordValid(true) : setPasswordValid(false);
