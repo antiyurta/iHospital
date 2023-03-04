@@ -8,7 +8,9 @@ export const auth = createSlice({
       token: null,
       depId: [],
       appId: null,
-      userId: null
+      userId: null,
+      note: null,
+      insuranceToken: null
    },
    reducers: {
       login: (state, action) => {
@@ -36,14 +38,24 @@ export const auth = createSlice({
          state.userId = null;
       },
       setUserInfo: (state, action) => {
-         console.log(action.payload.firstName);
-         console.log(action.payload.lastName);
          state.firstName = action.payload.firstName;
          state.lastName = action.payload.lastName;
       },
       DelUserInfo: (state) => {
          state.firstName = null;
          state.lastName = null;
+      },
+      setNote: (state, action) => {
+         state.note = action.payload;
+      },
+      DelNote: (state) => {
+         state.note = null;
+      },
+      setInsuranceToken: (state, action) => {
+         state.insuranceToken = action.payload;
+      },
+      DelInsurranceToken: (state) => {
+         state.insuranceToken = null;
       }
    }
 });
@@ -58,7 +70,11 @@ export const {
    setUserId,
    DelUserId,
    setUserInfo,
-   DelUserInfo
+   DelUserInfo,
+   setNote,
+   DelNote,
+   setInsuranceToken,
+   DelInsurranceToken
 } = auth.actions;
 export default auth.reducer;
 
@@ -68,3 +84,6 @@ export const selectCurrentAppId = (state) => state.authReducer.appId;
 export const selectCurrentUserId = (state) => state.authReducer.userId;
 export const selectCurrentFirstName = (state) => state.authReducer.firstName;
 export const selectCurrentLastName = (state) => state.authReducer.lastName;
+export const selectCurrentNote = (state) => state.authReducer.note;
+export const selectCurrentInsuranceToken = (state) =>
+   state.authReducer.insuranceToken;

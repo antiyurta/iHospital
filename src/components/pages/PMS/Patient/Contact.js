@@ -9,7 +9,10 @@ function Contact({ form }) {
             {(fields, { add, remove }) => (
                <>
                   {fields.map(({ key, name, ...restField }) => (
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div
+                        key={key}
+                        className="rounded-md bg-gray-100 w-full inline-block m-1"
+                     >
                         <div className="p-1">
                            <Form.Item
                               {...restField}

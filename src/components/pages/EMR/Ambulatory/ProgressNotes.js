@@ -1,6 +1,6 @@
 //Явцын тэмдэглэл
 import React, { useState } from 'react';
-import { Card, Collapse, Empty, Modal, Spin } from 'antd';
+import { Collapse, Modal, Spin } from 'antd';
 import { FolderOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';

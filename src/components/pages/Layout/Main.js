@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import '../../../style/Layout.css';
 import '../../../style/Hospital.css';
-import { Button, Layout, Dropdown, Row, Col, Menu, Drawer } from 'antd';
+import {
+   Button,
+   Layout,
+   Dropdown,
+   Row,
+   Col,
+   Menu,
+   Drawer,
+   Skeleton
+} from 'antd';
 import Sidenav from './Sidenav';
 import male from '../../../assets/images/maleAvatar.svg';
 import { useNavigate, Outlet, NavLink, Link } from 'react-router-dom';
@@ -23,6 +32,8 @@ import axios from 'axios';
 import logo from '../../../assets/logo/iHospital.png';
 import { useEffect } from 'react';
 import { Get, Post } from '../../comman';
+import { Fragment } from 'react';
+import { Suspense } from 'react';
 
 const { Header, Content, Sider } = Layout;
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -202,7 +213,13 @@ const Main = () => {
                </Sider>
                <Content className="bg-slate-50">
                   <div className="body">
-                     <div className="tabled">{<Outlet />}</div>
+                     <div className="tabled">
+                        <Fragment>
+                           <Suspense fallback={<Skeleton />}>
+                              {<Outlet />}
+                           </Suspense>
+                        </Fragment>
+                     </div>
                   </div>
                </Content>
             </Layout>

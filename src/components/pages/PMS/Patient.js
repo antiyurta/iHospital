@@ -8,7 +8,8 @@ import {
    Card,
    Descriptions,
    Table,
-   Tabs
+   Tabs,
+   Empty
 } from 'antd';
 import { EyeOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Delete, Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
@@ -317,39 +318,51 @@ function Patient() {
       },
       {
          title: 'Гэрийн хаяг',
-         colSpan: 4,
-         dataIndex: 'countryId',
-         render: (text) => {
-            if (text != null) {
-               return ddcitizen(text);
+         children: [
+            {
+               title: 'Улс',
+               dataIndex: 'countryId',
+               render: (text) => {
+                  if (text != null) {
+                     return ddcitizen(text);
+                  }
+               }
+            },
+            {
+               title: 'Аймаг/Хот',
+               dataIndex: 'aimagId',
+               render: (text) => {
+                  if (text != null) {
+                     return ddprovices(text);
+                  } else {
+                     return 'Байхгүй';
+                  }
+               }
+            },
+            {
+               title: 'Сум/Дүүрэг',
+               dataIndex: 'soumId',
+               render: (text) => {
+                  if (text != null) {
+                     return ddtowns(text);
+                  } else {
+                     return 'Байхгүй';
+                  }
+               }
+            },
+            {
+               title: 'Баг/Хороо',
+               dataIndex: 'committee'
+            },
+            {
+               title: 'Гудамж/Байшин',
+               dataIndex: 'building'
+            },
+            {
+               title: 'Тоот',
+               dataIndex: 'address'
             }
-         }
-      },
-      {
-         colSpan: 0,
-         dataIndex: 'aimagId',
-         render: (text) => {
-            if (text != null) {
-               return ddprovices(text);
-            } else {
-               return 'Байхгүй';
-            }
-         }
-      },
-      {
-         colSpan: 0,
-         dataIndex: 'soumId',
-         render: (text) => {
-            if (text != null) {
-               return ddtowns(text);
-            } else {
-               return 'Байхгүй';
-            }
-         }
-      },
-      {
-         colSpan: 0,
-         dataIndex: 'address'
+         ]
       },
       {
          title: 'Карт нээлгэсэн огноо',
@@ -413,7 +426,11 @@ function Patient() {
                scroll={{
                   x: 1500
                }}
-               loading={spinner}
+               locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+               loading={{
+                  spinning: spinner,
+                  tip: 'Уншиж байна...'
+               }}
                pagination={{
                   simple: true,
                   pageSize: 20,

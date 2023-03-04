@@ -8,12 +8,15 @@ import {
    Select,
    Table,
    Modal,
-   Result
+   Result,
+   Spin
 } from 'antd';
 import GeneralInspection from '../GeneralInspection';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
+   DelNote,
    selectCurrentDepId,
+   selectCurrentNote,
    selectCurrentToken,
    selectCurrentUserId
 } from '../../../../features/authReducer';
@@ -27,6 +30,7 @@ import Diagnose from '../../service/Diagnose';
 import { CloseOutlined } from '@ant-design/icons';
 import Index from '../InPatient/document/Index';
 import MainInpatientHistory from './MainInpatientHistory';
+import TextArea from 'antd/lib/input/TextArea';
 const { Option } = Select;
 function MainPatientHistory({
    AppointmentId,
@@ -41,7 +45,7 @@ function MainPatientHistory({
    const [tabs, setTabs] = useState([]);
    const [validStep, setValidStep] = useState(false);
    const token = useSelector(selectCurrentToken);
-   const depId = useSelector(selectCurrentDepId);
+   const editNote = useSelector(selectCurrentNote);
    const userId = useSelector(selectCurrentUserId);
    const config = {
       headers: {},
@@ -52,7 +56,10 @@ function MainPatientHistory({
    const cabinetId = CabinetId;
    const appointmentId = AppointmentId;
    const xrayRequestId = XrayRequestId;
+   const [activeKey, setActiveKey] = useState('item-history');
    const [confirmModal, setConfirmModal] = useState(false);
+   const [loading, setLoading] = useState(false);
+   const dispatch = useDispatch();
    const DiagnoseHandleClick = (diagnoses) => {
       form.setFieldValue('diagnose', diagnoses);
    };
@@ -66,265 +73,306 @@ function MainPatientHistory({
    }, []);
    const DynamicTabContent = useCallback((props) => {
       return (
-         <Form
-            name="basic"
-            initialValues={{ remember: true }}
-            onFinish={(e) => saveDynamicTab(e, props.formKey)}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-            labelAlign="left"
-            scrollToFirstError
-            className="overflow-auto"
-            layout={UsageType === 'OUT' ? '' : 'vertical'}
-            form={form}
-         >
-            <>
-               {UsageType === 'OUT' ? (
-                  <>
-                     {'pain' in props.data && props.data.pain.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Зовиур
-                           </Divider>
-                           {props.data['pain'].map((pain, index) => {
-                              return (
-                                 <div key={index}>
-                                    {inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">
-                                             {pain.label}
-                                          </p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={pain.options}
-                                          forkey={pain.label}
-                                          unikey={pain.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'inspection' in props.data &&
-                     props.data.inspection.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Бодит үзлэг
-                           </Divider>
-                           {props.data['inspection'].map(
-                              (inspection, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">
-                                                {inspection.label}
-                                             </p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={inspection.options}
-                                             forkey={inspection.label}
-                                             unikey={inspection.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              }
-                           )}
-                        </>
-                     ) : null}
-                     {'question' in props.data &&
-                     props.data.question.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Асуумж
-                           </Divider>
-                           {props.data['question'].map((question, index) => {
-                              return (
-                                 <div key={index}>
-                                    {inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">
-                                             {question.label}
-                                          </p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={question.options}
-                                          forkey={question.label}
-                                          unikey={question.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'plan' in props.data && props.data.plan.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Төлөвлөгөө
-                           </Divider>
-                           {props.data['plan'].map((plan, index) => {
-                              return (
-                                 <div key={index}>
-                                    {inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">
-                                             {plan.label}
-                                          </p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={plan.options}
-                                          forkey={plan.label}
-                                          unikey={plan.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'conclusion' in props.data &&
-                     props.data.conclusion.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Дүгнэлт
-                           </Divider>
-                           {props.data['conclusion'].map(
-                              (conclusion, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">
-                                                {conclusion.label}
-                                             </p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={conclusion.options}
-                                             forkey={conclusion.label}
-                                             unikey={conclusion.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              }
-                           )}
-                        </>
-                     ) : null}
-                     {'advice' in props.data && props.data.advice.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Зөвлөгөө
-                           </Divider>
-                           {props.data['advice'].map((advice, index) => {
-                              return (
-                                 <div key={index}>
-                                    {inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">
-                                             {advice.label}
-                                          </p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={advice.options}
-                                          forkey={advice.label}
-                                          unikey={advice.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {props.data && Inspection != 11 && UsageType === 'OUT' ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Онош
-                           </Divider>
-                           <Diagnose handleClick={DiagnoseHandleClick} />
-                        </>
-                     ) : null}
-                  </>
-               ) : (
-                  <>
-                     {'pain' in props.data && props.data.pain.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Зовиур
-                           </Divider>
-                           {props.data['pain'].map((pain, index) => {
-                              return (
-                                 <div key={index}>
-                                    {inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">
-                                             {pain.label}
-                                          </p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={pain.options}
-                                          forkey={pain.label}
-                                          unikey={pain.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {/* {<Index id={props.formKey} data={props.data} />} */}
-                  </>
-               )}
-            </>
-            <Form.Item
-               wrapperCol={{
-                  span: 16
-               }}
+         <Spin spinning={loading}>
+            <Form
+               name="basic"
+               // initialValues={{ remember: true }}
+               onFinish={(e) => saveDynamicTab(e, props.formKey)}
+               onFinishFailed={onFinishFailed}
+               // autoComplete="off"
+               labelAlign="left"
+               scrollToFirstError
+               className="overflow-auto"
+               layout={UsageType === 'OUT' ? '' : 'vertical'}
+               form={form}
             >
-               <Row className="mt-2">
-                  <Button
-                     type="primary"
-                     htmlType="submit"
-                     onClick={() => validStep && saveDynamicTab()}
-                     style={{ backgroundColor: blue.primary }}
-                  >
-                     EMR хадгалах
-                  </Button>
-               </Row>
-            </Form.Item>
-         </Form>
+               <>
+                  {UsageType === 'OUT' ? (
+                     <>
+                        <div className="hidden">
+                           <Form.Item name="description">
+                              <TextArea disabled={true} />
+                           </Form.Item>
+                        </div>
+                        {'pain' in props.data && props.data.pain.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Зовиур
+                              </Divider>
+                              {props.data['pain'].map((pain, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
+                                          <div>
+                                             <p className="mt-2 font-semibold">
+                                                {pain.label}
+                                             </p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                          </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={pain.options}
+                                             forkey={pain.label}
+                                             unikey={pain.inspectionType}
+                                          />
+                                       </div>
+                                    </div>
+                                 );
+                              })}
+                           </>
+                        ) : null}
+                        {'inspection' in props.data &&
+                        props.data.inspection.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Бодит үзлэг
+                              </Divider>
+                              {props.data['inspection'].map(
+                                 (inspection, index) => {
+                                    return (
+                                       <div key={index}>
+                                          {inspection === 1 && (
+                                             <div>
+                                                <p className="mt-2 font-semibold">
+                                                   {inspection.label}
+                                                </p>
+                                                <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                             </div>
+                                          )}
+                                          <div>
+                                             <DynamicFormInspection
+                                                data={inspection.options}
+                                                forkey={inspection.label}
+                                                unikey={
+                                                   inspection.inspectionType
+                                                }
+                                             />
+                                          </div>
+                                       </div>
+                                    );
+                                 }
+                              )}
+                           </>
+                        ) : null}
+                        {'question' in props.data &&
+                        props.data.question.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Асуумж
+                              </Divider>
+                              {props.data['question'].map((question, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
+                                          <div>
+                                             <p className="mt-2 font-semibold">
+                                                {question.label}
+                                             </p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                          </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={question.options}
+                                             forkey={question.label}
+                                             unikey={question.inspectionType}
+                                          />
+                                       </div>
+                                    </div>
+                                 );
+                              })}
+                           </>
+                        ) : null}
+                        {'plan' in props.data && props.data.plan.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Төлөвлөгөө
+                              </Divider>
+                              {props.data['plan'].map((plan, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
+                                          <div>
+                                             <p className="mt-2 font-semibold">
+                                                {plan.label}
+                                             </p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                          </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={plan.options}
+                                             forkey={plan.label}
+                                             unikey={plan.inspectionType}
+                                          />
+                                       </div>
+                                    </div>
+                                 );
+                              })}
+                           </>
+                        ) : null}
+                        {'conclusion' in props.data &&
+                        props.data.conclusion.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Дүгнэлт
+                              </Divider>
+                              {props.data['conclusion'].map(
+                                 (conclusion, index) => {
+                                    return (
+                                       <div key={index}>
+                                          {inspection === 1 && (
+                                             <div>
+                                                <p className="mt-2 font-semibold">
+                                                   {conclusion.label}
+                                                </p>
+                                                <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                             </div>
+                                          )}
+                                          <div>
+                                             <DynamicFormInspection
+                                                data={conclusion.options}
+                                                forkey={conclusion.label}
+                                                unikey={
+                                                   conclusion.inspectionType
+                                                }
+                                             />
+                                          </div>
+                                       </div>
+                                    );
+                                 }
+                              )}
+                           </>
+                        ) : null}
+                        {'advice' in props.data &&
+                        props.data.advice.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Зөвлөгөө
+                              </Divider>
+                              {props.data['advice'].map((advice, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
+                                          <div>
+                                             <p className="mt-2 font-semibold">
+                                                {advice.label}
+                                             </p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                          </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={advice.options}
+                                             forkey={advice.label}
+                                             unikey={advice.inspectionType}
+                                          />
+                                       </div>
+                                    </div>
+                                 );
+                              })}
+                           </>
+                        ) : null}
+                        {props.data &&
+                        Inspection != 11 &&
+                        UsageType === 'OUT' ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Онош
+                              </Divider>
+                              <Diagnose handleClick={DiagnoseHandleClick} />
+                           </>
+                        ) : null}
+                     </>
+                  ) : (
+                     <>
+                        {'pain' in props.data && props.data.pain.length > 0 ? (
+                           <>
+                              <Divider
+                                 orientation="left"
+                                 className="text-sm my-2"
+                              >
+                                 Зовиур
+                              </Divider>
+                              {props.data['pain'].map((pain, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
+                                          <div>
+                                             <p className="mt-2 font-semibold">
+                                                {pain.label}
+                                             </p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
+                                          </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={pain.options}
+                                             forkey={pain.label}
+                                             unikey={pain.inspectionType}
+                                          />
+                                       </div>
+                                    </div>
+                                 );
+                              })}
+                           </>
+                        ) : null}
+                        {/* {<Index id={props.formKey} data={props.data} />} */}
+                     </>
+                  )}
+               </>
+               <Form.Item
+                  wrapperCol={{
+                     span: 16
+                  }}
+               >
+                  <Row className="mt-2">
+                     <Button
+                        type="primary"
+                        htmlType="submit"
+                        // onClick={() => validStep && saveDynamicTab()}
+                        style={{ backgroundColor: blue.primary }}
+                        loading={loading}
+                     >
+                        EMR хадгалах
+                     </Button>
+                  </Row>
+               </Form.Item>
+            </Form>
+         </Spin>
       );
    }, []);
 
    const saveDynamicTab = async (values, key) => {
+      setLoading(true);
       const data = {
          cabinetId: cabinetId,
          patientId: patientId,
          doctorId: userId,
-         usageType: UsageType
+         usageType: UsageType,
+         description: values.description
       };
       var diagnoseData = [];
       values.diagnose?.map((diagnose) => {
@@ -349,13 +397,15 @@ function MainPatientHistory({
       }
       if (UsageType === 'IN') {
          data['inpatientRequestId'] = appointmentId;
-         data['formId'] = key;
       } else if (UsageType === 'OUT') {
          data['appointmentId'] = appointmentId;
       }
+      data['formId'] = key;
       data['diagnoses'] = diagnoseData;
       const response = await Post('emr/inspectionNote', token, config, data);
       if (response === 201) {
+         setActiveKey('');
+         dispatch(DelNote());
          if (inspection === 11 || inspection === 12) {
             Patch('service/xrayRequest/' + XrayRequestId, token, config, {
                xrayProcess: 2
@@ -364,6 +414,7 @@ function MainPatientHistory({
             setConfirmModal(true);
          }
       }
+      setLoading(false);
    };
 
    const onFinishFailed = (errorInfo) => {
@@ -417,7 +468,7 @@ function MainPatientHistory({
                   children: (
                      <DynamicTabContent
                         data={el.formItem}
-                        formKey={el.formId}
+                        formKey={el.formId != null ? el.formId : el.id}
                         formName={el.name}
                      />
                   )
@@ -536,9 +587,32 @@ function MainPatientHistory({
       } else {
       }
    }, [UsageType]);
+   const configure = () => {
+      const data = JSON.parse(editNote);
+      if (data) {
+         setActiveKey(`item-${data.formId}`);
+         data.diagnose?.map((diagnose, index) => {
+            data['diagnose'][index] = diagnose.diagnose;
+         });
+         data['inspection'] = JSON.parse(data.inspection);
+         data['pain'] = JSON.parse(data.pain);
+         data['plan'] = JSON.parse(data.plan);
+         data['question'] = JSON.parse(data.question);
+         form.setFieldsValue(data);
+      } else {
+         form.resetFields();
+      }
+   };
+   useEffect(() => {
+      configure();
+   }, [editNote]);
    return (
       <>
-         {UsageType === 'OUT' && <Tabs type="card" items={items} />}
+         {UsageType === 'OUT' && (
+            <Spin spinning={loading} tip="Уншиж байна ...">
+               <Tabs type="card" defaultActiveKey={activeKey} items={items} />
+            </Spin>
+         )}
          {UsageType === 'IN' && <MainInpatientHistory />}
          <Modal
             open={confirmModal}

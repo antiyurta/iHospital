@@ -36,7 +36,6 @@ const config = {
 const { Option } = Select;
 const { Text } = Typography;
 function EMR() {
-   console.log('========>?', useLocation());
    const IncomeUsageType = useLocation().state.usageType;
    const IncomePatientId = useLocation().state.patientId;
    const IncomeCabinetId = useLocation().state.cabinetId;

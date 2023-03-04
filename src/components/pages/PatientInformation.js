@@ -1,5 +1,10 @@
 import { Input, Card, Radio, Descriptions } from 'antd';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import male from '../../assets/images/maleAvatar.svg';
+import { selectCurrentToken } from '../../features/authReducer';
+import { Get } from '../comman';
 
 const { Search } = Input;
 
@@ -10,10 +15,14 @@ function PatientInformation({
    OCS,
    type
 }) {
+   console.log('==========>', patient);
+   const token = useSelector(selectCurrentToken);
+   const [citizens, setCitizens] = useState([]);
+   const [provices, setProvices] = useState([]);
+   const [towns, setTowns] = useState([]);
    const onSearch = async (value) => {
       handlesearch(1, 10, value);
    };
-
    const handleTypeChangePatient = async (value) => {
       handleTypeChange(value);
       console.log(value);
@@ -48,9 +57,76 @@ function PatientInformation({
          return null;
       }
    };
-   const getAddress = (aimag, soum, address) => {
-      // console.log(aimag, soum, address)
+   const getAddress = (
+      countryId,
+      aimagId,
+      soumId,
+      committee,
+      building,
+      address
+   ) => {
+      var message = '';
+      if (countryId != undefined) {
+         const country = citizens.filter((citizen) => citizen.id === countryId);
+         if (country.length > 0) {
+            message += country[0].name + ' ';
+         } else {
+            message += '';
+         }
+      }
+      if (aimagId != undefined) {
+         const aimag = provices.filter((provice) => provice.id === aimagId);
+         if (aimag.length > 0) {
+            message += aimag[0].name + ' ';
+         } else {
+            message += '';
+         }
+      }
+      if (soumId != undefined) {
+         const soum = towns.filter((town) => town.id === soumId);
+         if (soum.length > 0) {
+            message += soum[0].name + ' ';
+         } else {
+            message += '';
+         }
+      }
+      return <p>{message + committee + ' ' + building + ' ' + address}</p>;
    };
+   const getCitizens = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            type: 1
+         }
+      };
+      const response = await Get('reference/country', token, conf);
+      setCitizens(response.data);
+   };
+   const getProvices = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            type: 2
+         }
+      };
+      const response = await Get('reference/country', token, conf);
+      setProvices(response.data);
+   };
+   const getTowns = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            type: 3
+         }
+      };
+      const response = await Get('reference/country', token, conf);
+      setTowns(response.data);
+   };
+   useEffect(() => {
+      getCitizens();
+      getProvices();
+      getTowns();
+   }, []);
    return (
       <Card
          bordered={false}
@@ -119,8 +195,11 @@ function PatientInformation({
                      </Descriptions.Item>
                      <Descriptions.Item label="Хаяг">
                         {getAddress(
+                           patient?.countryId,
                            patient?.aimagId,
                            patient?.soumId,
+                           patient?.committee,
+                           patient?.building,
                            patient?.address
                         )}
                      </Descriptions.Item>

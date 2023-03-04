@@ -31,8 +31,19 @@ function ResidentialAddress({ form }) {
       const response = await Get('reference/country', token, conf);
       setProvices(response.data);
    };
+   const getTowns = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            type: 3
+         }
+      };
+      const response = await Get('reference/country', token, conf);
+      setTowns(response.data);
+   };
    useEffect(() => {
       getProvices();
+      getTowns();
    }, []);
    return (
       <div>
@@ -81,7 +92,7 @@ function ResidentialAddress({ form }) {
                         .includes(input.toLowerCase())
                   }
                >
-                  {towns.map((town, index) => {
+                  {towns?.map((town, index) => {
                      return (
                         <Option key={index} value={town.id}>
                            {town.name}
