@@ -28,8 +28,10 @@ const DoctorAppointment = React.lazy(() =>
 );
 //
 const Patient = React.lazy(() => import('./components/pages/PMS/Patient'));
-import Country from './components/pages/reference/CountryDictionary';
-import Degree from './components/pages/reference/Degree';
+const Country = React.lazy(() =>
+   import('./components/pages/reference/CountryDictionary')
+);
+const Degree = React.lazy(() => import('./components/pages/reference/Degree'));
 //
 import Home from './components/Home';
 import Profile from './components/Profile';
