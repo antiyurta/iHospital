@@ -11,7 +11,9 @@ import {
    setUserInfo,
    selectCurrentUserInfo,
    selectCurrentLastName,
-   selectCurrentFirstName
+   selectCurrentFirstName,
+   selectCurrentInsuranceToken,
+   setInsuranceToken
 } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
@@ -37,6 +39,7 @@ function Profile() {
    const userId = useSelector(selectCurrentUserId);
    const userFirstName = useSelector(selectCurrentFirstName);
    const userLastName = useSelector(selectCurrentLastName);
+   const insuranceToken = useSelector(selectCurrentInsuranceToken);
    const dispatch = useDispatch();
    const [profileForm] = Form.useForm();
    const [passwordForm] = Form.useForm();
@@ -69,6 +72,9 @@ function Profile() {
                lastName: response.employee?.lastName
             })
          );
+      }
+      if (insuranceToken === null) {
+         dispatch(setInsuranceToken(response.hospital?.createToken));
       }
       setUser(response);
    };
