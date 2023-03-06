@@ -1,5 +1,5 @@
 import { Button, Tabs, Tag } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Anemiz from './Anemiz';
 import InPatient from './InPatient';
 import InPatientNotes from './InPatientNotes';

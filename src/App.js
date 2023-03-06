@@ -33,71 +33,133 @@ const Country = React.lazy(() =>
 );
 const Degree = React.lazy(() => import('./components/pages/reference/Degree'));
 //
-import Home from './components/Home';
-import Profile from './components/Profile';
-import History from './components/History';
-import PrivateRoute from './features/PrivateRoute';
+const Home = React.lazy(() => import('./components/Home'));
+const Profile = React.lazy(() => import('./components/Profile'));
+const PrivateRoute = React.lazy(() => import('./features/PrivateRoute'));
 //service start
-import Examination from './components/pages/service/Examination';
-import Xray from './components/pages/service/Xray';
-import Treatment from './components/pages/service/Treatment';
-import Surgury from './components/pages/service/Surgury';
-import Medicine from './components/pages/service/Medicine/Medicine';
+const Examination = React.lazy(() =>
+   import('./components/pages/service/Examination')
+);
+const Xray = React.lazy(() => import('./components/pages/service/Xray'));
+const Treatment = React.lazy(() =>
+   import('./components/pages/service/Treatment')
+);
+const Surgury = React.lazy(() => import('./components/pages/service/Surgury'));
+const Medicine = React.lazy(() =>
+   import('./components/pages/service/Medicine/Medicine')
+);
 //service end
 //emr start
-import EMR from './components/pages/EMR/emr';
-import BeforeAmbulatoryList from './components/pages/BeforeAmbulatory/BeforeAmbulatoryList';
-import BeforeAmbulatoryDetail from './components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail';
+const EMR = React.lazy(() => import('./components/pages/EMR/emr'));
+const BeforeAmbulatoryList = React.lazy(() =>
+   import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryList')
+);
+const BeforeAmbulatoryDetail = React.lazy(() =>
+   import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail')
+);
 //emr end
 // inpatient HEWTENT start
-import Menu from './components/pages/reference/Menu';
-import Packages from './components/pages/service/Packages';
-import Position from './components/pages/Organization/Position';
-import SetOrder from './components/pages/service/SetOrder';
-import DeviceAppointment from './components/pages/DeviceAppointment/DeviceAppointment';
-import DemoEmployee from './components/pages/Organization/DemoEmployee';
-import MainBed from './components/pages/Bed/MainBed';
-import RoomtDtl from './components/pages/Bed/RoomDtl';
+const Menu = React.lazy(() => import('./components/pages/reference/Menu'));
+const Packages = React.lazy(() =>
+   import('./components/pages/service/Packages')
+);
+const Position = React.lazy(() =>
+   import('./components/pages/Organization/Position')
+);
+const SetOrder = React.lazy(() =>
+   import('./components/pages/service/SetOrder')
+);
+const DeviceAppointment = React.lazy(() =>
+   import('./components/pages/DeviceAppointment/DeviceAppointment')
+);
+const DemoEmployee = React.lazy(() =>
+   import('./components/pages/Organization/DemoEmployee')
+);
+const MainBed = React.lazy(() => import('./components/pages/Bed/MainBed'));
+const RoomtDtl = React.lazy(() => import('./components/pages/Bed/RoomDtl'));
 // inpatient HEWTEN end
-import DemoForm2 from './components/pages/FormBuilder/FormBuilder2';
-import Builder from './components/pages/FormBuilder/FBuilder/PatientForm';
+const DemoForm2 = React.lazy(() =>
+   import('./components/pages/FormBuilder/FormBuilder2')
+);
+const Builder = React.lazy(() =>
+   import('./components/pages/FormBuilder/FBuilder/PatientForm')
+);
 // lab start
-import EquipmentList from './components/pages/Laboratory/EquipmentList';
-import SOAPForm from './components/pages/FormBuilder/FBuilder/SOAPForm';
-import MedicineSupport from './components/pages/service/MedicineSupport';
-import Finance from './components/pages/Finance/Finance';
-import FinanceMaterialExamination from './components/pages/Finance/FinanceMaterialExamination';
-import RequestAnalys from './components/pages/Laboratory/RequestAnalys';
-import PatientForm from './components/pages/FormBuilder/FBuilder/PatientForm';
-import Role from './components/pages/Organization/Role';
-import Permission from './components/pages/Organization/Permission';
-import Discount from './components/pages/reference/Discount';
-import NotFound from './features/notFound';
-import NotPermission from './features/notPermission';
-import Nurse from './components/pages/BeforeAmbulatory/Lists/Nurse';
-import Schedule from './components/pages/Appointment/Schedule/Schedule';
-import DailyIncome from './components/pages/EPayment/DailyIncome/DailyIncome';
-import Settings from './components/pages/reference/Settings';
-import XrayRequest from './components/pages/Xray/XrayRequest';
-import DeviceSchedule from './components/pages/Appointment/Device/DeviceSchedule';
-import BeforeXrayRequest from './components/pages/Xray/BeforeXrayRequest';
-import TreatmentRequest from './components/pages/treatment/BeforeTreatmentRequest';
-import FinanceMaterialXray from './components/pages/Finance/FinanceMaterialXray';
-import FinanceMaterialTreatment from './components/pages/Finance/FinanceMaterialTreatment';
-import FinanceMaterialSurgery from './components/pages/Finance/FinanceMaterialSurgery';
-import ExoRequest from './components/pages/Exo/ExoRequest';
-import BeforeEkgRequest from './components/pages/Ekg/BeforeEkgRequest';
-import Dashboard from './components/pages/Organization/Dashboard';
-import Report from './components/pages/Report/Report';
-import BeforeAmbulatoryListEnr from './components/pages/BeforeAmbulatory/BeforeAmbulatoryListEnr';
-import FormIndex from './components/pages/FormBuilder/FBuilder/FormIndex';
-// lab end
+const EquipmentList = React.lazy(() =>
+   import('./components/pages/Laboratory/EquipmentList')
+);
+const MedicineSupport = React.lazy(() =>
+   import('./components/pages/service/MedicineSupport')
+);
+const Finance = React.lazy(() => import('./components/pages/Finance/Finance'));
+const FinanceMaterialExamination = React.lazy(() =>
+   import('./components/pages/Finance/FinanceMaterialExamination')
+);
+const RequestAnalys = React.lazy(() =>
+   import('./components/pages/Laboratory/RequestAnalys')
+);
+const PatientForm = React.lazy(() =>
+   import('./components/pages/FormBuilder/FBuilder/PatientForm')
+);
+const Role = React.lazy(() => import('./components/pages/Organization/Role'));
+const Permission = React.lazy(() =>
+   import('./components/pages/Organization/Permission')
+);
+const Discount = React.lazy(() =>
+   import('./components/pages/reference/Discount')
+);
+const NotFound = React.lazy(() => import('./features/notFound'));
+const NotPermission = React.lazy(() => import('./features/notPermission'));
+const Schedule = React.lazy(() =>
+   import('./components/pages/Appointment/Schedule/Schedule')
+);
+const DailyIncome = React.lazy(() =>
+   import('./components/pages/EPayment/DailyIncome/DailyIncome')
+);
+const Settings = React.lazy(() =>
+   import('./components/pages/reference/Settings')
+);
+const XrayRequest = React.lazy(() =>
+   import('./components/pages/Xray/XrayRequest')
+);
+const DeviceSchedule = React.lazy(() =>
+   import('./components/pages/Appointment/Device/DeviceSchedule')
+);
+const BeforeXrayRequest = React.lazy(() =>
+   import('./components/pages/Xray/BeforeXrayRequest')
+);
+const TreatmentRequest = React.lazy(() =>
+   import('./components/pages/treatment/BeforeTreatmentRequest')
+);
+const FinanceMaterialXray = React.lazy(() =>
+   import('./components/pages/Finance/FinanceMaterialXray')
+);
+const FinanceMaterialTreatment = React.lazy(() =>
+   import('./components/pages/Finance/FinanceMaterialTreatment')
+);
+const FinanceMaterialSurgery = React.lazy(() =>
+   import('./components/pages/Finance/FinanceMaterialSurgery')
+);
+const ExoRequest = React.lazy(() =>
+   import('./components/pages/Exo/ExoRequest')
+);
+const BeforeEkgRequest = React.lazy(() =>
+   import('./components/pages/Ekg/BeforeEkgRequest')
+);
+const Dashboard = React.lazy(() =>
+   import('./components/pages/Organization/Dashboard')
+);
+const Report = React.lazy(() => import('./components/pages/Report/Report'));
+const BeforeAmbulatoryListEnr = React.lazy(() =>
+   import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryListEnr')
+);
+const FormIndex = React.lazy(() =>
+   import('./components/pages/FormBuilder/FBuilder/FormIndex')
+);
+const Acting = React.lazy(() =>
+   import('./components/pages/BeforeAmbulatory/BeforeInPatientTabs/Acting')
+);
 
-///
-// import http from 'http';
-// import ReactDOMServer from 'react-dom/server';
-// import { StaticRouter } from 'react-router';
-///
 function App() {
    return (
       <div className="App">
@@ -117,6 +179,7 @@ function App() {
                      />
                      <Route path="/notPermission" element={<NotPermission />} />
                      <Route path="/profile" element={<Profile />} />
+                     <Route path="/acting" element={<Acting />} />
                      <Route
                         path="/schedule"
                         element={
@@ -347,14 +410,6 @@ function App() {
                            }
                         />
                      </Route>
-                     <Route
-                        path="/history"
-                        element={
-                           <PrivateRoute>
-                              <History />
-                           </PrivateRoute>
-                        }
-                     />
                      <Route
                         path="/ambulatoryList"
                         element={

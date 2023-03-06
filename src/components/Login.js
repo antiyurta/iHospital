@@ -14,11 +14,10 @@ import {
    DelDepId,
    DelUserId,
    DelUserInfo,
-   DelInsurranceToken
+   DelInsurrance
 } from '../features/authReducer';
 import { openNofi } from './comman';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -82,7 +81,7 @@ function Login() {
       dispatch(DelDepId());
       dispatch(DelUserId());
       dispatch(DelUserInfo());
-      dispatch(DelInsurranceToken());
+      dispatch(DelInsurrance());
    };
    useEffect(() => {
       clearStorage();

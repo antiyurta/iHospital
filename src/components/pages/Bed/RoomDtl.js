@@ -1,11 +1,10 @@
 import React from 'react';
 import { Col, Row, Card, Button } from 'antd';
 import { ArrowLeftOutlined, UserAddOutlined } from '@ant-design/icons';
-import { blue } from '@ant-design/colors';
 import { useNavigate } from 'react-router-dom';
 
 const cardStyle = {
-   borderColor: blue.primary
+   borderColor: '#2d8cff'
 };
 const cardBodyStyle = {
    flex: 1,
@@ -19,7 +18,7 @@ const cardBodyStyle = {
    width: '100%'
 };
 const iconStyle = {
-   backgroundColor: blue.primary,
+   backgroundColor: '#2d8cff',
    padding: 15,
    borderRadius: 12,
    fontSize: 20,

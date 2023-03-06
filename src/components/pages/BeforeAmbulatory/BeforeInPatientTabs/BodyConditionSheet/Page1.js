@@ -1,3 +1,4 @@
+import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { Table } from 'react-bootstrap';
@@ -74,7 +75,7 @@ function Page1({ patientData, form }) {
                         style={{
                            writingMode: 'vertical-rl',
                            textAlign: 'center',
-                           verticalAlign: 'middle',
+                           verticalAlign: 'middle'
                         }}
                      >
                         ӨДӨР ТУТМЫН ҮНЭЛГЭЭ
@@ -84,7 +85,7 @@ function Page1({ patientData, form }) {
                         style={{
                            writingMode: 'vertical-rl',
                            textAlign: 'center',
-                           verticalAlign: 'middle',
+                           verticalAlign: 'middle'
                         }}
                      >
                         <p className="font-semibold" style={{ fontSize: 7 }}>

@@ -1,5 +1,5 @@
 import { Form, InputNumber, Modal, Select } from 'antd';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Get } from '../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';

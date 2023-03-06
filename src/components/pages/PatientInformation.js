@@ -1,6 +1,5 @@
 import { Input, Card, Radio, Descriptions } from 'antd';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import male from '../../assets/images/maleAvatar.svg';
 import { selectCurrentToken } from '../../features/authReducer';
@@ -15,7 +14,6 @@ function PatientInformation({
    OCS,
    type
 }) {
-   console.log('==========>', patient);
    const token = useSelector(selectCurrentToken);
    const [citizens, setCitizens] = useState([]);
    const [provices, setProvices] = useState([]);
@@ -89,6 +87,16 @@ function PatientInformation({
          } else {
             message += '';
          }
+      }
+      if (
+         countryId === undefined &&
+         aimagId === undefined &&
+         soumId === undefined &&
+         committee === undefined &&
+         building === undefined &&
+         address === undefined
+      ) {
+         return;
       }
       return <p>{message + committee + ' ' + building + ' ' + address}</p>;
    };

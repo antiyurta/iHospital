@@ -1,3 +1,4 @@
+import React from 'react';
 import Index from '../Schedule/Index';
 
 function TreatmentSchedule() {

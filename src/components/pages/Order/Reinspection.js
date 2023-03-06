@@ -1,3 +1,4 @@
+import React from 'react';
 import { Modal } from 'antd';
 import Appointment from '../Appointment/Schedule/Appointment';
 

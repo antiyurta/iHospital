@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, Input, Radio, Switch } from 'antd';
 
 function Insurance({ form }) {

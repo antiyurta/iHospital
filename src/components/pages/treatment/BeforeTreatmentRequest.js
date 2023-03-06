@@ -17,12 +17,10 @@ import {
 } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, getAge, openNofi, Patch } from '../../comman';
-import IndexBefore from '../XRayExo/IndexBefore';
 const { RangePicker } = DatePicker;
 function BeforeTreatmentRequest() {
    const today = new Date();

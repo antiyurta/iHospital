@@ -9,11 +9,10 @@ import {
    setDepId,
    setUserId,
    setUserInfo,
-   selectCurrentUserInfo,
    selectCurrentLastName,
    selectCurrentFirstName,
-   selectCurrentInsuranceToken,
-   setInsuranceToken
+   selectCurrentInsurance,
+   setInsurrance
 } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
@@ -41,10 +40,10 @@ function Profile() {
    const userId = useSelector(selectCurrentUserId);
    const userFirstName = useSelector(selectCurrentFirstName);
    const userLastName = useSelector(selectCurrentLastName);
-   const insuranceToken = useSelector(selectCurrentInsuranceToken);
+   const isInsurance = useSelector(selectCurrentInsurance);
+   console.log(':========>', isInsurance);
    const dispatch = useDispatch();
    const [profileForm] = Form.useForm();
-   const [passwordForm] = Form.useForm();
    const [user, setUser] = useState([]);
    const [profileModal, setProfileModal] = useState(false);
    const [passwordModal, setPasswordModal] = useState(false);
@@ -77,8 +76,8 @@ function Profile() {
             })
          );
       }
-      if (insuranceToken === null) {
-         dispatch(setInsuranceToken(response.hospital?.createToken));
+      if (isInsurance === null) {
+         dispatch(setInsurrance(response.hospital?.isInsurance));
       }
       setUser(response);
    };
@@ -209,7 +208,12 @@ function Profile() {
                   {user?.employee?.homeAddress}
                </Descriptions.Item>
                <Descriptions.Item label="Эмнэлэг" span={3}>
-                  {user?.hospital?.name}
+                  <p
+                     className="text-white p-1"
+                     style={{ background: isInsurance ? 'green' : 'red' }}
+                  >
+                     {user?.hospital?.name}
+                  </p>
                </Descriptions.Item>
             </Descriptions>
          </Card>

@@ -1,16 +1,4 @@
-import {
-   Button,
-   Card,
-   Col,
-   Empty,
-   InputNumber,
-   List,
-   Modal,
-   Radio,
-   Row,
-   Select,
-   Typography
-} from 'antd';
+import { Card, List, Radio, Select, Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
 import male from '../../../assets/images/maleAvatar.svg';
 import Ocs from '../OCS/Ocs';
@@ -24,7 +12,6 @@ import {
 import PatientInformation from '../PatientInformation';
 import { Get, openNofi, Post } from '../../comman';
 import { useLocation } from 'react-router-dom';
-import { Table } from 'react-bootstrap';
 import moment from 'moment';
 import Schedule from '../OCS/Schedule';
 import MainInPatient from './InPatient/MainInPatient';
@@ -192,6 +179,7 @@ function EMR() {
                <EmrSupports
                   appointmentId={AppointmentId}
                   usageType={IncomeUsageType}
+                  patient={selectedPatient}
                />
             </div>
             <div

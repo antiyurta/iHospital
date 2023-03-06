@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, Form, Input } from 'antd';
 const { TextArea } = Input;
 function Step3({ id }) {

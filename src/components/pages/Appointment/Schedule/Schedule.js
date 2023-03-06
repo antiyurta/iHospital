@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tabs } from 'antd';
 import TreatmentSchedule from '../Nurse/TreatmentSchedule';
 import DoctorSchedule from '../Doctor/DoctorSchedule';

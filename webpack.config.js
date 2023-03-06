@@ -1,16 +1,18 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require('webpack');
 module.exports = {
    devtool: 'inline-source-map',
    context: __dirname,
+   target: ['web', 'es5'],
    entry: './src/index.js',
    output: {
-      path: path.resolve(__dirname, './build'),
-      filename: 'index_bundle.js',
+      filename: '[name].js',
+      chunkFilename: '[name].bundle.js',
+      path: path.resolve(__dirname, './build')
+      // filename: 'index_bundle.js'
+      // chunkFilename: 'vendor-react.js'
    },
    devServer: {
       port: 3000,
@@ -36,17 +38,38 @@ module.exports = {
          }
       ]
    },
+   optimization: {
+      runtimeChunk: 'single',
+      splitChunks: {
+         cacheGroups: {
+            reactVender: {
+               test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+               name: 'vendor-react',
+               chunks: 'all'
+            },
+            corejsVendor: {
+               test: /[\\/]node_modules[\\/](core-js)[\\/]/,
+               name: 'vendor-corejs',
+               chunks: 'all'
+            }
+         }
+      }
+   },
    plugins: [
+      new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
          template: path.resolve(__dirname, './public/index.html'),
          filename: 'index.html',
          favicon: './public/Rfavicon.png'
       }),
+      new webpack.IgnorePlugin({
+         resourceRegExp: /^\.\/locale$/,
+         contextRegExp: /moment$/
+      }),
       new Dotenv({
          path: './.env',
          systemvars: true
-      }),
-      new webpack.HotModuleReplacementPlugin()
+      })
    ],
    externals: {
       React: 'react'

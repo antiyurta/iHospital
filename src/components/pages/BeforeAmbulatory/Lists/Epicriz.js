@@ -15,15 +15,11 @@ import {
    DatePicker
 } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Post } from '../../../comman';
-import mn from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
-import dayjs from 'dayjs';
 import { useReactToPrint } from 'react-to-print';
-import { Table } from 'react-bootstrap';
 
 const { TextArea } = Input;
 const { Panel } = Collapse;

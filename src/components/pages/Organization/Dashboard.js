@@ -13,9 +13,8 @@ import {
 import { Pie, Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Post } from '../../comman';
+import { Get } from '../../comman';
 import { BarChartOutlined } from '@ant-design/icons';
-import { blue } from '@ant-design/colors';
 
 export default function Dashboard() {
    const token = useSelector(selectCurrentToken);
@@ -407,7 +406,7 @@ export default function Dashboard() {
 }
 const styles = {
    cardStyle: {
-      borderColor: blue.primary
+      // borderColor: blue.primary
    },
    cardBodyStyle: {
       flex: 1,
@@ -421,7 +420,7 @@ const styles = {
       width: '100%'
    },
    iconStyle: {
-      backgroundColor: blue.primary,
+      // backgroundColor: blue.primary,
       padding: 15,
       borderRadius: 12,
       fontSize: 20,

@@ -8,8 +8,7 @@ import {
    Modal,
    Tabs
 } from 'antd';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';

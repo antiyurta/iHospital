@@ -1,6 +1,5 @@
 import { Button, Checkbox, Divider } from 'antd';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';

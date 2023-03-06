@@ -1,5 +1,5 @@
 import { Button, Card, Divider, Form, Input, Modal } from 'antd';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import {
    PrinterOutlined,
    MedicineBoxOutlined,
@@ -92,18 +92,20 @@ export default function Index({
             className="m-3"
             extra={
                <>
-                  <MediumOutlined
-                     title="Магадлага"
-                     className="p-1"
-                     onClick={(event) => {}}
-                  />
-                  <PrinterOutlined
-                     title="Маягт хэвлэх"
-                     className="p-1"
-                     onClick={(event) => {
-                        handlePrint();
-                     }}
-                  />
+                  <Button
+                     className="ml-2 p-1"
+                     icon={<PrinterOutlined />}
+                     // onClick={() => handlePrint()}
+                  >
+                     Магадлага
+                  </Button>
+                  <Button
+                     className="ml-2 p-1"
+                     icon={<PrinterOutlined />}
+                     onClick={() => handlePrint()}
+                  >
+                     Маягт хэвлэх
+                  </Button>
                   <Button className="ml-2 p-1" icon={<MedicineBoxOutlined />}>
                      Жор хэвлэх
                   </Button>

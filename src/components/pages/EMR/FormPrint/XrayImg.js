@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
 function XrayImg({ printImage, type }) {

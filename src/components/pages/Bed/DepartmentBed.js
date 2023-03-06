@@ -14,7 +14,6 @@ import {
    Empty,
    Select
 } from 'antd';
-import { blue } from '@ant-design/colors';
 import { LineOutlined, SearchOutlined } from '@ant-design/icons';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -421,7 +420,7 @@ const DepartmentBed = (props) => {
                                        borderColor:
                                           selectedBed.status === 3 &&
                                           selectedBed.id === el.id
-                                             ? blue.primary
+                                             ? '#2d8cff'
                                              : null
                                     }
                                  }}

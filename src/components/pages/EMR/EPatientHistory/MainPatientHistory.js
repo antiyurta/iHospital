@@ -20,7 +20,6 @@ import {
    selectCurrentToken,
    selectCurrentUserId
 } from '../../../../features/authReducer';
-import { blue } from '@ant-design/colors';
 import DynamicFormInspection from '../../DynamicFormInspection';
 import DynamicFormInPatient from '../../DynamicFormInPatient';
 import HistoryTab from './HistoryTab';
@@ -353,7 +352,6 @@ function MainPatientHistory({
                         type="primary"
                         htmlType="submit"
                         // onClick={() => validStep && saveDynamicTab()}
-                        style={{ backgroundColor: blue.primary }}
                         loading={loading}
                      >
                         EMR хадгалах

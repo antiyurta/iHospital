@@ -2,7 +2,7 @@ import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Input, Modal } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';

@@ -23,9 +23,7 @@ import {
 } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
-import { useRef } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Barcode from 'react-barcode';
 import { useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';

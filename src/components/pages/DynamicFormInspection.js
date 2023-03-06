@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-   Col,
-   Row,
-   Input,
-   Form,
-   Radio,
-   Checkbox,
-   Select,
-   DatePicker,
-   Button,
-   AutoComplete
-} from 'antd';
+import { Input, Form, Radio, Checkbox, Select } from 'antd';
 
 export default function DynamicFormInspection({ data, forkey, unikey }) {
    const { TextArea } = Input;

@@ -1,3 +1,4 @@
+import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { Table } from 'react-bootstrap';

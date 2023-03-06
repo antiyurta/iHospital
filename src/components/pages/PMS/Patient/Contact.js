@@ -1,3 +1,4 @@
+import React from 'react';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Select } from 'antd';
 import ContactPerson from '../ContactPerson.json';
@@ -14,6 +15,24 @@ function Contact({ form }) {
                         className="rounded-md bg-gray-100 w-full inline-block m-1"
                      >
                         <div className="p-1">
+                           <Form.Item
+                              {...restField}
+                              label="Нэр"
+                              labelCol={{ span: 8 }}
+                              wrapperCol={{ span: 16 }}
+                              name={[name, 'name']}
+                           >
+                              <Input />
+                           </Form.Item>
+                           <Form.Item
+                              {...restField}
+                              label="Имайл"
+                              labelCol={{ span: 8 }}
+                              wrapperCol={{ span: 16 }}
+                              name={[name, 'email']}
+                           >
+                              <Input />
+                           </Form.Item>
                            <Form.Item
                               {...restField}
                               label="Утас"

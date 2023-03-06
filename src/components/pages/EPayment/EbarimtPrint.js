@@ -1,14 +1,12 @@
 import { Button } from 'antd';
-import { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
 import moment from 'moment';
 import { numberToCurrency, Patch } from '../../comman';
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { useState } from 'react';
 
 function EbarimtPrint(props) {
    const printRef = useRef();

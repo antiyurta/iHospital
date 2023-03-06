@@ -1,7 +1,6 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт -> Эрт сэрэмжлүүлэх үнэлгээ
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Col, Input, Row, Select, Modal, List } from 'antd';
-import { blue } from '@ant-design/colors';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Table } from 'react-bootstrap';
@@ -900,7 +899,6 @@ export default function EarlyWarning({
                   type="primary"
                   htmlType="submit"
                   onClick={() => createAssesment()}
-                  style={{ backgroundColor: blue.primary }}
                   className="float-right mt-2"
                >
                   Хадгалах

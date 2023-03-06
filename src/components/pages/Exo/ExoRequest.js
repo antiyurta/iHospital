@@ -1,3 +1,4 @@
+import React from 'react';
 import IndexAfter from '../XRayExo/IndexAfter';
 
 function ExoRequest() {

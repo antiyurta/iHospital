@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse, Row, Button, Form } from 'antd';
-import { blue } from '@ant-design/colors';
 import Step2 from './Step2';
 import Step3 from './Step3';
 import Step1 from './Step1';
@@ -105,7 +104,6 @@ export default function HistoryTab({ patientId, inspection }) {
                   type="primary"
                   htmlType="submit"
                   onClick={() => saveHistory()}
-                  style={{ backgroundColor: blue.primary }}
                >
                   Амьдралын түүх xадгалах
                </Button>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card, Radio, Tabs } from 'antd';
 import { useState } from 'react';
 import InspectionHistory from './InspectionHistory';

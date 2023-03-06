@@ -14,7 +14,6 @@ import {
    Empty,
    Select
 } from 'antd';
-import { blue } from '@ant-design/colors';
 import {
    LineOutlined,
    SearchOutlined,
@@ -608,7 +607,7 @@ const InformationBed = (props) => {
                                        borderColor:
                                           selectedBed &&
                                           selectedBed.id === el.id
-                                             ? blue.primary
+                                             ? '#2d8cff'
                                              : null
                                     }
                                  }}

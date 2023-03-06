@@ -1,3 +1,4 @@
+import React from 'react';
 import IndexBefore from '../XRayExo/IndexBefore';
 
 function BeforeXrayRequest() {

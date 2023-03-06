@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tabs } from 'antd';
 import Nurse from './Lists/Nurse';
 import NurseInPatientList from './Lists/NurseInPatientList';

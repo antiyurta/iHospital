@@ -1,3 +1,4 @@
+import React from 'react';
 import {
    Button,
    InputNumber,
@@ -8,7 +9,9 @@ import {
    Col,
    Form,
    Input,
-   Space
+   Space,
+   Card,
+   Empty
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { DefualtGet, Get, Post } from '../../../comman';
@@ -109,7 +112,7 @@ function Acting({ PatientData, ListId, DepartmentId }) {
       const conf = {
          headers: {},
          params: {
-            page: 1,
+            page: page,
             limit: pageSize,
             mt_type: type
          }
@@ -135,7 +138,7 @@ function Acting({ PatientData, ListId, DepartmentId }) {
       getDepartments();
    }, []);
    return (
-      <>
+      <Card bordered={false} className="header-solid max-h-max rounded-md">
          <Row gutter={16} className="mb-2">
             <Col span={4}>
                <Button className="mr-2" onClick={() => showModal()}>
@@ -157,12 +160,22 @@ function Acting({ PatientData, ListId, DepartmentId }) {
          <div className="w-full p-1">
             <Table
                bordered
-               rowKey={(record) => record.id}
+               rowKey={(record) => record.mt_id}
                className="whitespace-pre-wrap"
-               locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-               loading={spinner}
                columns={columns}
                dataSource={data}
+               locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+               loading={{
+                  spinning: spinner,
+                  tip: 'Уншиж байна...'
+               }}
+               pagination={{
+                  simple: true,
+                  pageSize: 10,
+                  total: meta.itemCount,
+                  current: meta.page,
+                  onChange: (page, pageSize) => getActing(page, pageSize, 7)
+               }}
             />
             <Modal
                title="Шилжүүлэх"
@@ -332,7 +345,7 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                </div>
             </Modal>
          </div>
-      </>
+      </Card>
    );
 }
 

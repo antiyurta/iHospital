@@ -1,5 +1,5 @@
 import { Button, Card } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import BodyConditionSheet from './BeforeInPatientTabs/BodyConditionSheet';
 import NursingNote from './BeforeInPatientTabs/NursingNote';
 import PainAssessment from './BeforeInPatientTabs/PainAssessment';
@@ -121,7 +121,7 @@ function BeforeInPatientTabs({
                >
                   Судасны гуурстай холбоотой тандалт
                </Button>
-               <Button
+               {/* <Button
                   type="primary"
                   onClick={() => {
                      setPageId(11);
@@ -129,7 +129,7 @@ function BeforeInPatientTabs({
                   className={pageId === 11 ? 'button-active m-1' : 'm-1'}
                >
                   Acting
-               </Button>
+               </Button> */}
                <Button
                   type="primary"
                   onClick={() => {
@@ -199,13 +199,13 @@ function BeforeInPatientTabs({
                   />
                )}
 
-               {pageId === 11 && (
+               {/* {pageId === 11 && (
                   <Acting
                      PatientData={patientData}
                      ListId={listId}
                      DepartmentId={departmentId}
                   />
-               )}
+               )} */}
                {pageId === 12 && (
                   <NursingLog
                      PatientData={patientData}

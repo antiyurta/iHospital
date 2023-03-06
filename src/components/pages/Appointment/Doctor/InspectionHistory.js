@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card, Result } from 'antd';
 function InspectionHistory({ patientId }) {
    return (

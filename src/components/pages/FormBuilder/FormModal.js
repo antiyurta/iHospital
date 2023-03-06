@@ -10,7 +10,6 @@ import {
    Typography
 } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { blue, red } from '@ant-design/colors';
 import { INPUT_HEIGHT } from '../../../constant';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -249,19 +248,13 @@ export default function FormModal(props) {
                     <Button
                        key="delete"
                        type="danger"
-                       style={{ backgroundColor: red.primary }}
                        onClick={() => deleteForm()}
                     >
                        Устгах
                     </Button>
                  ]
                : []),
-            <Button
-               key="save"
-               type="primary"
-               onClick={handleOk}
-               style={{ backgroundColor: blue.primary }}
-            >
+            <Button key="save" type="primary" onClick={handleOk}>
                Хадгалах
             </Button>
          ]}
@@ -339,7 +332,6 @@ export default function FormModal(props) {
                            <Button
                               key="save"
                               type="primary"
-                              style={{ backgroundColor: blue.primary }}
                               onClick={() => addParam(key)}
                               size="small"
                            >
@@ -598,9 +590,6 @@ export default function FormModal(props) {
                                                 addOption(key, data_index)
                                              }
                                              type="primary"
-                                             style={{
-                                                backgroundColor: blue.primary
-                                             }}
                                           >
                                              Хариулт нэмэх
                                           </Button>

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import UTable from '../../UTable';
 
 const column = [

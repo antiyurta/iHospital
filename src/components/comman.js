@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { notification } from 'antd';
-import { useNavigate } from 'react-router-dom';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 

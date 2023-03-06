@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, DatePicker, Divider, Form, Input } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';

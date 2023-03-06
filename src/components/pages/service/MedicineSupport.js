@@ -1,5 +1,5 @@
 import UTable from '../../UTable';
-
+import React from 'react';
 function MedicineSupport() {
    const medicineTypeParams = {
       params: {

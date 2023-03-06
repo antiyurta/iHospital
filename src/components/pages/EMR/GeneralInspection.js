@@ -1,17 +1,6 @@
 //EMR -> Явцын үзлэг -> Ерөнхий үзлэг
 import React, { useState, useEffect } from 'react';
-import {
-   Col,
-   Radio,
-   Row,
-   Divider,
-   Input,
-   Button,
-   Form,
-   Collapse,
-   InputNumber
-} from 'antd';
-import { blue } from '@ant-design/colors';
+import { Radio, Row, Input, Button, Form, Collapse, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, openNofi, Patch, Post } from '../../comman';
@@ -583,7 +572,6 @@ export default function GeneralInspection({ patientId, inspection }) {
                   type="primary"
                   htmlType="submit"
                   onClick={() => saveGeneralInspection()}
-                  style={{ backgroundColor: blue.primary }}
                >
                   Ерөнхий үзлэг хадгалах
                </Button>

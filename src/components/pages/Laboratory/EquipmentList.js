@@ -11,8 +11,7 @@ import {
    Upload
 } from 'antd';
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, Patch, Post } from '../../comman';

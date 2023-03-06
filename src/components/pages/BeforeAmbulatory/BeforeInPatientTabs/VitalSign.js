@@ -1,3 +1,4 @@
+import React from 'react';
 import EarlyWarning from '../EarlyWarning';
 
 function VitalSign({ PatientId, ListId, PatientData }) {

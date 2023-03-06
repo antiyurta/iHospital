@@ -37,6 +37,8 @@ function Patient() {
    const [isConfirmLoading, setIsConfirmLoading] = useState(false);
    const [spinner, setSpinner] = useState(false);
    const [editMode, setEditMode] = useState(false);
+   const [pIndex, setPindex] = useState('');
+   const [pValue, setPvalue] = useState('');
    //
    const [id, setId] = useState([]);
    const [data, setData] = useState([]);
@@ -98,6 +100,8 @@ function Patient() {
       };
       if ((value, index)) {
          conf.params[index] = value;
+         setPindex(index);
+         setPvalue(value);
       }
       const response = await Get('pms/patient', token, conf);
       setData(response.data);
@@ -436,7 +440,8 @@ function Patient() {
                   pageSize: 20,
                   total: meta.itemCount,
                   current: meta.page,
-                  onChange: (page, pageSize) => getData(page, pageSize)
+                  onChange: (page, pageSize) =>
+                     getData(page, pageSize, pValue, pIndex)
                }}
             />
          </Card>

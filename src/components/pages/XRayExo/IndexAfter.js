@@ -6,19 +6,8 @@ import {
    ReloadOutlined,
    UploadOutlined
 } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   DatePicker,
-   Empty,
-   Form,
-   Modal,
-   Pagination,
-   Table,
-   Upload
-} from 'antd';
-import { useRef, useState } from 'react';
-import { useEffect } from 'react';
+import { Button, Card, DatePicker, Form, Modal, Table, Upload } from 'antd';
+import React, { useRef, useState, useEffect } from 'react';
 // import { Table } from "react-bootstrap";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

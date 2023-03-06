@@ -1,4 +1,5 @@
-import { Checkbox, Form, Input, Radio } from 'antd';
+import React from 'react';
+import { Form, Input, Radio } from 'antd';
 
 function DynamicFormInPatient({ data, forkey, unikey }) {
    console.log(data);

@@ -1,6 +1,5 @@
 import { Form, Input, Select, Switch } from 'antd';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get } from '../../../comman';

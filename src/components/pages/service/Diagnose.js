@@ -1,7 +1,6 @@
 import { CloseOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Pagination, Select } from 'antd';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';

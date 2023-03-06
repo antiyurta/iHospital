@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row, Card } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
-import { blue } from '@ant-design/colors';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -112,7 +111,7 @@ function DashboardBed(props) {
 export default DashboardBed;
 const styles = {
    cardStyle: {
-      borderColor: blue.primary
+      // borderColor: blue.primary
    },
    cardBodyStyle: {
       flex: 1,
@@ -126,7 +125,7 @@ const styles = {
       width: '100%'
    },
    iconStyle: {
-      backgroundColor: blue.primary,
+      // backgroundColor: blue.primary,
       padding: 15,
       borderRadius: 12,
       fontSize: 20,

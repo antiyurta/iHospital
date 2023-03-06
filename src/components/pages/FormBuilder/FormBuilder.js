@@ -1,8 +1,7 @@
-import { Col, Row, List, Card, Button, Input } from 'antd';
+import { Card, Button, Input } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken, setDepId } from '../../../features/authReducer';
-import { blue } from '@ant-design/colors';
+import { selectCurrentToken } from '../../../features/authReducer';
 import FormModal from './FormModal';
 import MainContext from '../../../contexts/MainContext';
 import { Get } from '../../comman';
@@ -64,7 +63,6 @@ export default function FormBuilder() {
                      type="primary"
                      htmlType="submit"
                      onClick={() => showModal('add', null)}
-                     style={{ backgroundColor: blue.primary }}
                   >
                      Нэмэх
                   </Button>

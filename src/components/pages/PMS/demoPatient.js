@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, Card, Input, Space, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 const { Search } = Input;
@@ -16,7 +17,7 @@ function DemoPatient() {
             />
          </div>
       ),
-      filterIcon: (filtered) => <SearchOutlined style={{ color: '#2d8cff' }} />
+      filterIcon: () => <SearchOutlined style={{ color: '#2d8cff' }} />
    });
    const colums = [
       {

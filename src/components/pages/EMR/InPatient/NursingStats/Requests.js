@@ -6,7 +6,7 @@ import {
    WarningOutlined
 } from '@ant-design/icons';
 import { Button, Empty, Table } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function Requests() {
    const [data, setData] = useState([]);

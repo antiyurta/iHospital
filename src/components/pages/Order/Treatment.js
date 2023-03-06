@@ -2,7 +2,7 @@ import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { configure } from '@testing-library/react';
 import { Button, Input, InputNumber, Modal } from 'antd';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';

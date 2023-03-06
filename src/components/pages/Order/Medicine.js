@@ -1,26 +1,23 @@
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
 import { Input, Modal, Table } from 'antd';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { DefualtGet, Get, numberToCurrency, openNofi } from '../../comman';
-
+const { Search } = Input;
 function Medicine({ isOpen, isClose, handleclick }) {
    const token = useSelector(selectCurrentToken);
    const [loading, setLoading] = useState(false);
    const [medicines, setMedicines] = useState([]);
    const [medicineMeta, setMedicineMeta] = useState({});
    const [selectedMedicines, setSelectedMedicines] = useState([]);
-   const [searchField, setSearchField] = useState('');
+   const [pIndex, setPindex] = useState('');
+   const [pValue, setPvalue] = useState('');
    //
    const [testField, setTestField] = useState('');
    const [testData, setTestData] = useState([]);
    //
-   const config = {
-      headers: {},
-      params: {}
-   };
-   const getMedicine = async (page, pageSize) => {
+   const getMedicine = async (page, pageSize, value, index) => {
       setLoading(true);
       const conf = {
          headers: {},
@@ -29,6 +26,11 @@ function Medicine({ isOpen, isClose, handleclick }) {
             limit: pageSize
          }
       };
+      if ((value, index)) {
+         conf.params[index] = value;
+         setPindex(index);
+         setPvalue(value);
+      }
       const response = await Get('service/medicine', token, conf);
       if (response) {
          setMedicines(response.data);
@@ -62,18 +64,34 @@ function Medicine({ isOpen, isClose, handleclick }) {
       arr.splice(index, 1);
       setSelectedMedicines(arr);
    };
+   const getColumnSearchProps = (dataIndex) => ({
+      filterDropdown: ({}) => (
+         <div style={{ padding: 8 }}>
+            <Search
+               placeholder={`хайх`}
+               allowClear
+               onSearch={(e) => getMedicine(1, 20, e, dataIndex)}
+               enterButton={'Хайх'}
+            />
+         </div>
+      ),
+      filterIcon: () => <SearchOutlined style={{ color: '#2d8cff' }} />
+   });
    const columns = [
       {
          title: 'Код',
-         dataIndex: 'code'
+         dataIndex: 'code',
+         ...getColumnSearchProps('code')
       },
       {
          title: 'Худалдааны нэршил',
-         dataIndex: 'name'
+         dataIndex: 'name',
+         ...getColumnSearchProps('name')
       },
       {
          title: 'Монгол нэршил',
          dataIndex: 'mnName',
+         ...getColumnSearchProps('mnName'),
          render: (text) => {
             return <p className="whitespace-pre-wrap text-black">{text}</p>;
          }
@@ -124,31 +142,6 @@ function Medicine({ isOpen, isClose, handleclick }) {
       }
    ];
    //
-   const dd = [
-      {
-         title: 'sad',
-         dataIndex: 'tbltBarCode'
-      },
-      {
-         title: 'sadsa',
-         dataIndex: 'tbltNameMon'
-      },
-      {
-         title: 'sada',
-         dataIndex: 'tbltSizeMixture'
-      }
-   ];
-   //
-   // const filteredMedicine = medicines.filter((medicine) => {
-   //    return medicine.m_name.toLowerCase().includes(searchField.toLowerCase());
-   // });
-   //
-   const filteredMedicineTest = testData.filter((medicine) => {
-      return medicine.tbltBarCode
-         .toLowerCase()
-         .includes(testField.toLowerCase());
-   });
-   //
    useEffect(() => {
       getMedicine(1, 10);
       // getHealtInsurance();
@@ -170,11 +163,6 @@ function Medicine({ isOpen, isClose, handleclick }) {
          >
             <div className="flex flex-wrap">
                <div className="w-2/3">
-                  <Input
-                     placeholder="Хайх"
-                     allowClear
-                     onChange={(e) => setSearchField(e.target.value)}
-                  />
                   <div className="p-2">
                      <Table
                         rowKey={'id'}
@@ -201,7 +189,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
                            total: medicineMeta.itemCount,
                            current: medicineMeta.page,
                            onChange: (page, pageSize) =>
-                              getMedicine(page, pageSize)
+                              getMedicine(page, pageSize, pValue, pIndex)
                         }}
                      />
                   </div>
@@ -217,18 +205,6 @@ function Medicine({ isOpen, isClose, handleclick }) {
                         pagination={false}
                      />
                   </div>
-               </div>
-               <div className="w-full">
-                  <Input
-                     placeholder="Хайх"
-                     allowClear
-                     onChange={(e) => setTestField(e.target.value)}
-                  />
-                  <Table
-                     rowKey={'id'}
-                     columns={dd}
-                     dataSource={filteredMedicineTest}
-                  />
                </div>
             </div>
          </Modal>

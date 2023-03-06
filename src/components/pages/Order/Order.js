@@ -17,7 +17,7 @@ import Surgery from './Surgery';
 import Endo from './Endo';
 import Package from './Package';
 import InpatientRequest from './InpatientRequest';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -33,7 +33,6 @@ import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
-import { useEffect } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 function Order({
    isPackage,
@@ -537,7 +536,10 @@ function Order({
                                                 </td>
                                                 <td>
                                                    <Form.Item
-                                                      name={[name, 'description']}
+                                                      name={[
+                                                         name,
+                                                         'description'
+                                                      ]}
                                                       className="mb-0"
                                                    >
                                                       <Input

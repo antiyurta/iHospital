@@ -1,3 +1,4 @@
+import React from 'react';
 import { MinusOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Card, DatePicker, Form, Pagination, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';

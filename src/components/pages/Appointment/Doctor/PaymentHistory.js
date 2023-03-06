@@ -1,3 +1,4 @@
+import React from 'react';
 import { Empty, Table } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
