@@ -287,7 +287,7 @@ function BeforeTreatmentRequest() {
                         locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                         loading={{
                            spinning: spinner,
-                           tip: 'Уншиж байна...'
+                           tip: 'Уншиж байна....'
                         }}
                         columns={columns}
                         dataSource={treatments}
