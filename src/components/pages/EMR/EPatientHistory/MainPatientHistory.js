@@ -586,19 +586,21 @@ function MainPatientHistory({
       }
    }, [UsageType]);
    const configure = () => {
-      const data = JSON.parse(editNote);
-      if (data) {
-         setActiveKey(`item-${data.formId}`);
-         data.diagnose?.map((diagnose, index) => {
-            data['diagnose'][index] = diagnose.diagnose;
-         });
-         data['inspection'] = JSON.parse(data.inspection);
-         data['pain'] = JSON.parse(data.pain);
-         data['plan'] = JSON.parse(data.plan);
-         data['question'] = JSON.parse(data.question);
-         form.setFieldsValue(data);
-      } else {
-         form.resetFields();
+      if (editNote) {
+         const data = JSON.parse(editNote);
+         if (data) {
+            setActiveKey(`item-${data.formId}`);
+            data.diagnose?.map((diagnose, index) => {
+               data['diagnose'][index] = diagnose.diagnose;
+            });
+            data['inspection'] = JSON.parse(data.inspection);
+            data['pain'] = JSON.parse(data.pain);
+            data['plan'] = JSON.parse(data.plan);
+            data['question'] = JSON.parse(data.question);
+            form.setFieldsValue(data);
+         } else {
+            form.resetFields();
+         }
       }
    };
    useEffect(() => {
