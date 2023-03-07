@@ -64,6 +64,30 @@ export default function EarlyWarning({
    const [tempData, setTempData] = useState([]);
    const [printLoading, setPrintLoading] = useState(false);
    const [reportAssesments, setReportAssesments] = useState([]);
+   let handleChange = (e, p) => {
+      if (p === 'mind') {
+         //Зөвхөн SELECT үед
+         setFormValues({ ...formValues, ['mind']: e });
+      } else {
+         const { name, value } = e.target;
+         setFormValues({ ...formValues, [name]: parseFloat(value) });
+      }
+   };
+   let resetFormFields = () => {
+      setFormValues({
+         patientId: null,
+         highPressureRight: null, //Систол
+         lowPressureRight: null, //Диастол
+         weight: null,
+         height: null,
+         temp: null, //Биеийн халуун
+         respiratoryRate: null, //Амьсгал
+         spO2: null, //SpO`2
+         pulse: null,
+         mind: null, //Ухаан санаа
+         nurse: null
+      });
+   };
    //
    let ctx = null;
    const oneLine = 12;
@@ -134,31 +158,6 @@ export default function EarlyWarning({
       });
    };
    //
-
-   let handleChange = (e, p) => {
-      if (p === 'mind') {
-         //Зөвхөн SELECT үед
-         setFormValues({ ...formValues, ['mind']: e });
-      } else {
-         const { name, value } = e.target;
-         setFormValues({ ...formValues, [name]: parseFloat(value) });
-      }
-   };
-   let resetFormFields = () => {
-      setFormValues({
-         patientId: null,
-         highPressureRight: null, //Систол
-         lowPressureRight: null, //Диастол
-         weight: null,
-         height: null,
-         temp: null, //Биеийн халуун
-         respiratoryRate: null, //Амьсгал
-         spO2: null, //SpO`2
-         pulse: null,
-         mind: null, //Ухаан санаа
-         nurse: null
-      });
-   };
    const getAssesment = async (type) => {
       //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
       const conf = {
@@ -253,7 +252,7 @@ export default function EarlyWarning({
             inpatientRequestId: ListId
          }
       };
-      const response = await Get('report/assesment', token, config);
+      const response = await Get('report/assesment', token, conf);
       setReportAssesments(response);
    };
    const createAssesment = async () => {

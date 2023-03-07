@@ -21,6 +21,12 @@ function Contact({ form }) {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'name']}
+                              rules={[
+                                 {
+                                    required: true,
+                                    message: 'Холбоо барих хүний нэр'
+                                 }
+                              ]}
                            >
                               <Input />
                            </Form.Item>
@@ -30,6 +36,12 @@ function Contact({ form }) {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'email']}
+                              rules={[
+                                 {
+                                    required: true,
+                                    message: 'Холбоо барих хүний имэйл'
+                                 }
+                              ]}
                            >
                               <Input />
                            </Form.Item>
@@ -39,6 +51,12 @@ function Contact({ form }) {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'contactPhoneNo']}
+                              rules={[
+                                 {
+                                    required: true,
+                                    message: 'Холбоо барих хүний дугаар'
+                                 }
+                              ]}
                            >
                               <Input />
                            </Form.Item>
@@ -48,6 +66,12 @@ function Contact({ form }) {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'contactPersonStatusType']}
+                              rules={[
+                                 {
+                                    required: true,
+                                    message: 'Холбоо барих хүний хамаарал'
+                                 }
+                              ]}
                            >
                               <Select>
                                  {ContactPerson.map((person, index) => {

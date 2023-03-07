@@ -159,12 +159,21 @@ const FormIndex = React.lazy(() =>
 const Acting = React.lazy(() =>
    import('./components/pages/BeforeAmbulatory/BeforeInPatientTabs/Acting')
 );
+const DepBalance = React.lazy(() =>
+   import('./components/pages/EMR/InPatient/DepBalance')
+);
 
 function App() {
    return (
       <div className="App">
          <Fragment>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+               fallback={
+                  <div className="text-center">
+                     Уншиж байна ... та түр хүлээнэ үү
+                  </div>
+               }
+            >
                <Routes>
                   <Route path="/" element={<Login />} />
                   <Route element={<Main />}>
@@ -179,7 +188,22 @@ function App() {
                      />
                      <Route path="/notPermission" element={<NotPermission />} />
                      <Route path="/profile" element={<Profile />} />
-                     <Route path="/acting" element={<Acting />} />
+                     <Route
+                        path="/acting"
+                        element={
+                           <PrivateRoute>
+                              <Acting />
+                           </PrivateRoute>
+                        }
+                     />
+                     <Route
+                        path="/depBalance"
+                        element={
+                           <PrivateRoute>
+                              <DepBalance />
+                           </PrivateRoute>
+                        }
+                     />
                      <Route
                         path="/schedule"
                         element={
@@ -313,7 +337,14 @@ function App() {
                            </PrivateRoute>
                         }
                      />
-                     <Route path="/Bed" element={<Bed />} />
+                     <Route
+                        path="/Bed"
+                        element={
+                           <PrivateRoute>
+                              <Bed />
+                           </PrivateRoute>
+                        }
+                     />
                      <Route>
                         <Route
                            path="/payment"
@@ -486,7 +517,11 @@ function App() {
                      <Route path="/roomDtl" element={<RoomtDtl />} />
                      <Route
                         path="/request_analys"
-                        element={<RequestAnalys />}
+                        element={
+                           <PrivateRoute>
+                              <RequestAnalys />
+                           </PrivateRoute>
+                        }
                      />
                      <Route path="/dashboard" element={<Dashboard />} />
                      <Route path="/report" element={<Report />} />

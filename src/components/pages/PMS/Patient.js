@@ -23,6 +23,7 @@ import MoreInfo from './Patient/MoreInfo';
 import ResidentialAddress from './Patient/ResidentialAddress';
 import Insurance from './Patient/Insurance';
 import Contact from './Patient/Contact';
+import TabPane from 'antd/lib/tabs/TabPane';
 
 const { Search } = Input;
 
@@ -63,6 +64,7 @@ function Patient() {
       },
       { label: 'Нэмэлт мэдээлэл', key: 2, children: <MoreInfo form={form} /> },
       {
+         forceRender: true,
          label: 'Оршин суугаа хаяг',
          key: 3,
          children: <ResidentialAddress form={form} />
@@ -170,7 +172,12 @@ function Patient() {
          headers: {},
          params: {}
       };
-      if (data?.contacts?.length === 0) {
+      console.log(data);
+      if (
+         data?.contacts === undefined ||
+         data?.contacts === null ||
+         data?.contacts.length === 0
+      ) {
          openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
       } else {
          if (editMode) {

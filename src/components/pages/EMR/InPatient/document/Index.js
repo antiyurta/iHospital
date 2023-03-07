@@ -16,7 +16,7 @@ import Neurologist from './Neurologist/Index'; // Мэдрэлийн эмчий�
 import Rebuild from './Rebuild/Index';
 import { Button, Checkbox, Collapse, Form, Input } from 'antd';
 import Painstory from './painStory/Index';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { DefaultPatch, Get } from '../../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';

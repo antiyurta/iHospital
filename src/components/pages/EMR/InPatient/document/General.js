@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
 const { TextArea } = Input;

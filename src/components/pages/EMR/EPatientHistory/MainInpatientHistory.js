@@ -6,18 +6,18 @@ import {
    Input,
    Menu,
    Modal,
+   Spin,
    Tabs
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+import { Get, Post } from '../../../comman';
 import Epicriz from '../../BeforeAmbulatory/Lists/Epicriz';
 import Diagnose from '../../service/Diagnose';
 import Index from '../InPatient/document/Index';
 import StoryGeneral from './StoryGeneral';
-const { Panel } = Collapse;
 const { TextArea } = Input;
 function MainInpatientHistory({ selectedPatient }) {
    const token = useSelector(selectCurrentToken);
@@ -27,6 +27,7 @@ function MainInpatientHistory({ selectedPatient }) {
    const [doctorDailyForm] = Form.useForm();
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
    const [story, setStory] = useState({});
+   const [dailyNotes, setDailyNotes] = useState([]);
    const getStory = async () => {
       const conf = {
          headers: {},
@@ -39,25 +40,14 @@ function MainInpatientHistory({ selectedPatient }) {
          setStory(response.data[0]);
       }
    };
-   const onFinishDaily = (values) => {
-      var diagnoseData = [];
-      values.diagnose?.map((diagnose) => {
-         diagnoseData.push({
-            patientId: patientId,
-            usageType: 'IN',
-            diagnoseId: diagnose.id,
-            diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId: inpatientRequestId
-         });
-      });
-      values['pain'] = JSON.stringify(values['pain']);
-      values['question'] = JSON.stringify(values['question']);
-      values['inspection'] = JSON.stringify(values['inspection']);
-      values['plan'] = JSON.stringify(values['plan']);
-      values['patientId'] = patientId;
-      values['inpatientRequestId'] = inpatientRequestId;
-      values['diagnoses'] = diagnoseData;
-      console.log(values);
+   const onFinishDaily = async (values) => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      values['inpatientRequestId'] = location?.state?.inpatientRequestId;
+      values['patientId'] = location?.state?.patientId;
+      const response = await Post('inaptient-daily-note', token, conf, values);
    };
    const DiagnoseHandleClick = (diagnoses) => {
       doctorDailyForm.setFieldValue('diagnose', diagnoses);
@@ -65,37 +55,14 @@ function MainInpatientHistory({ selectedPatient }) {
    const DoctorDaily = () => {
       return (
          <div>
-            <Form onFinish={onFinishDaily} form={doctorDailyForm}>
-               <Collapse
-                  Collapse
-                  collapsible="header"
-                  defaultActiveKey={[1]}
-                  accordion
-               >
-                  <Panel key={1} header="Зовиурь">
-                     <Form.Item name="pain">
-                        <TextArea rows={5} placeholder="Зовиурь" />
-                     </Form.Item>
-                  </Panel>
-                  <Panel key={2} header="Асуумж">
-                     <Form.Item name="question">
-                        <TextArea rows={5} placeholder="Асуумж" />
-                     </Form.Item>
-                  </Panel>
-                  <Panel key={3} header="Бодит үзлэг">
-                     <Form.Item name="inspection">
-                        <TextArea rows={5} placeholder="Бодит үзлэг" />
-                     </Form.Item>
-                  </Panel>
-                  <Panel key={4} header="Төлөвлөгөө">
-                     <Form.Item name="plan">
-                        <TextArea rows={5} placeholder="Төлөвлөгөө" />
-                     </Form.Item>
-                  </Panel>
-                  <Panel key={5} header="Онош">
-                     <Diagnose handleClick={DiagnoseHandleClick} />
-                  </Panel>
-               </Collapse>
+            <Form
+               onFinish={onFinishDaily}
+               form={doctorDailyForm}
+               layout="vertical"
+            >
+               <Form.Item label="Үзлэгийн тэмдэглэл" name="description">
+                  <TextArea rows={20} placeholder="Үзлэгийн тэмдэглэл" />
+               </Form.Item>
                <Form.Item className="pt-2">
                   <Button type="primary" htmlType="submit">
                      Хадгалах

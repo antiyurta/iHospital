@@ -1,5 +1,6 @@
 import { FolderOpenOutlined, FolderOutlined } from '@ant-design/icons';
-import { Button, Card, Collapse, Modal } from 'antd';
+import { Button, Card, Collapse, Modal, Table } from 'antd';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,13 +10,7 @@ import Index from './document/Index';
 const { Panel } = Collapse;
 function InPatientNotes({ Appointments }) {
    const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
-   const [inspectionNotes, setInspectionNotes] = useState([]);
-   const [isOpen, setIsOpen] = useState(false);
-   const [datas, setDatas] = useState({});
+   const [dailyNotes, setDailyNotes] = useState([]);
    const onChangee = async (id) => {
       if (id) {
          const conf = {
@@ -27,33 +22,28 @@ function InPatientNotes({ Appointments }) {
             token,
             conf
          );
-         if (response.inspectionNotes?.length > 0) {
-            setInspectionNotes(response.inspectionNotes);
+         if (response.dailyNotes?.length > 0) {
+            setDailyNotes(response.dailyNotes);
          } else {
-            setInspectionNotes([]);
+            setDailyNotes([]);
          }
       }
    };
-   const RenderNotesDetail = (data) => {
-      if (data.data) {
-         return Object.entries(data?.data).map(([key, value], index) => {
-            return (
-               <div key={index} className="flex flex-wrap">
-                  {Object.entries(value).map((elValues, index) => {
-                     return (
-                        <p className="pr-2">
-                           {elValues[0] + ': ' + elValues[1]}
-                        </p>
-                     );
-                  })}
-               </div>
-            );
-         });
+   const column = [
+      {
+         title: 'Огноо',
+         dataIndex: 'createdAt',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'Үзлэгийн тэмдэгэлэл',
+         dataIndex: 'description'
       }
-   };
+   ];
    return (
       <>
-         <Button onClick={() => setIsOpen(true)}>ЫБй</Button>
          <Collapse
             collapsible="header"
             expandIcon={({ isActive }) => {
@@ -91,33 +81,13 @@ function InPatientNotes({ Appointments }) {
                                  }
                                  key={value[index].id}
                               >
-                                 {inspectionNotes.length > 0 ? (
-                                    inspectionNotes.map((note, index) => {
-                                       return (
-                                          <Card
-                                             extra={
-                                                <>
-                                                   <Button
-                                                      onClick={() => {
-                                                         setIsOpen(true);
-                                                         setDatas(note);
-                                                         console.log(note);
-                                                      }}
-                                                   >
-                                                      {note.inpatientRequestId}
-                                                   </Button>
-                                                </>
-                                             }
-                                          >
-                                             <RenderNotesDetail
-                                                data={JSON.parse(note['pain'])}
-                                             />
-                                          </Card>
-                                       );
-                                    })
-                                 ) : (
-                                    <p>Тэмдэглэл байхгүй</p>
-                                 )}
+                                 <Table
+                                    rowKey={'id'}
+                                    bordered
+                                    columns={column}
+                                    dataSource={dailyNotes}
+                                    pagination={false}
+                                 />
                               </Panel>
                            );
                         })}
@@ -126,15 +96,6 @@ function InPatientNotes({ Appointments }) {
                );
             })}
          </Collapse>
-         <Modal
-            title="sada"
-            open={isOpen}
-            onCancel={() => setIsOpen(false)}
-            width={'23cm'}
-            footer={null}
-         >
-            <Index id={datas.formId} data={datas} />
-         </Modal>
       </>
    );
 }

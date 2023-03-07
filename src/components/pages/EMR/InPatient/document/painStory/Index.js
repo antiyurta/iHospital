@@ -1,7 +1,5 @@
-import { Button, Form, Spin, Table } from 'antd';
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import { Button, Form, Spin } from 'antd';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';

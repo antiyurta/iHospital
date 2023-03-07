@@ -198,12 +198,12 @@ function NursingNote({ PatientId, ListId, PatientData }) {
                                        Асуудлын дугаар #
                                     </p>
                                  </div>
-                                 <div className="basis-4/12 amaraDeer amaraBaruun amaraDoor">
+                                 <div className="basis-3/12 amaraDeer amaraBaruun amaraDoor">
                                     <p className="font-bold text-center">
                                        Сувилах төлөвлөгөө
                                     </p>
                                  </div>
-                                 <div className="basis-5/12 amaraDeer amaraDoor amaraBaruun">
+                                 <div className="basis-6/12 amaraDeer amaraDoor amaraBaruun">
                                     <p className="font-bold text-center">
                                        Хэрэгжүүлэлт/Дүгнэлт
                                     </p>
@@ -242,17 +242,25 @@ function NursingNote({ PatientId, ListId, PatientData }) {
                                                 (number, index) => {
                                                    return (
                                                       <div key={index}>
-                                                         {number}
+                                                         <p
+                                                            style={{
+                                                               fontSize: 11
+                                                            }}
+                                                         >
+                                                            {number}
+                                                         </p>
                                                       </div>
                                                    );
                                                 }
                                              )}
                                           </div>
                                        </div>
-                                       <div className="basis-4/12 amaraDoor amaraBaruun">
-                                          <p>{el.nursingPlan}</p>
+                                       <div className="basis-3/12 amaraDoor amaraBaruun">
+                                          <p style={{ fontSize: 11 }}>
+                                             {el.nursingPlan}
+                                          </p>
                                        </div>
-                                       <div className="basis-5/12 amaraDoor amaraBaruun">
+                                       <div className="basis-6/12 amaraDoor amaraBaruun">
                                           {el.conclusion === null &&
                                           el.implemented === null ? (
                                              <div className="text-center">
@@ -269,15 +277,28 @@ function NursingNote({ PatientId, ListId, PatientData }) {
                                              </div>
                                           ) : (
                                              <>
-                                                <p className="font-bold">
+                                                <p
+                                                   className="font-bold"
+                                                   style={{ fontSize: 11 }}
+                                                >
                                                    Хэрэгжүүлсэн:
                                                 </p>
-                                                {el.conclusion}
-                                                <p className="font-bold">
+                                                <p style={{ fontSize: 11 }}>
+                                                   {el.conclusion}
+                                                </p>
+                                                <p
+                                                   className="font-bold"
+                                                   style={{ fontSize: 11 }}
+                                                >
                                                    Дүгнэлт:
                                                 </p>
-                                                {el.implemented}
-                                                <p className="amaraDeer">
+                                                <p style={{ fontSize: 11 }}>
+                                                   {el.implemented}
+                                                </p>
+                                                <p
+                                                   style={{ fontSize: 11 }}
+                                                   className="amaraDeer"
+                                                >
                                                    Сувилагчийн нэр:
                                                    {`${el?.createdLastName?.substr(
                                                       0,

@@ -88,17 +88,10 @@ function PatientInformation({
             message += '';
          }
       }
-      if (
-         countryId === undefined &&
-         aimagId === undefined &&
-         soumId === undefined &&
-         committee === undefined &&
-         building === undefined &&
-         address === undefined
-      ) {
-         return;
+      if (message) {
+         return <p>{message + committee + ' ' + building + ' ' + address}</p>;
       }
-      return <p>{message + committee + ' ' + building + ' ' + address}</p>;
+      return;
    };
    const getCitizens = async () => {
       const conf = {

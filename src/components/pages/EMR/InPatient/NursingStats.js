@@ -1,6 +1,5 @@
-import React from 'react';
 import { Tag } from 'antd';
-import { useState } from 'react';
+import React , { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import EarlyWarning from '../../BeforeAmbulatory/EarlyWarning';
 import Requests from './NursingStats/Requests';

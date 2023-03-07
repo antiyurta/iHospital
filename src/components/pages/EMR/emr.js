@@ -133,6 +133,8 @@ function EMR() {
          }
       };
       const response = await Get('service/inPatient-request', token, conf);
+
+      // const response = await Get('inaptient-daily-note', token, conf);
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
             //Оноор бүлэглэх

@@ -28,7 +28,16 @@
          }
       ]
    ],
-   "plugins": ["transform-class-properties"],
+   // "plugins": ["transform-class-properties"],
+   "plugins": [
+      ["transform-class-properties"],
+      ["import", { "libraryName": "antd", "libraryDirectory": "lib" }, "antd"],
+      [
+         "import",
+         { "libraryName": "antd-mobile", "libraryDirectory": "lib" },
+         "antd-mobile"
+      ]
+   ],
    "env": {
       "test": {
          "plugins": ["transform-es2015-modules-commonjs"]

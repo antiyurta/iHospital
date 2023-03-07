@@ -1,16 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment, Suspense } from 'react';
 import '../../../style/Layout.css';
 import '../../../style/Hospital.css';
-import {
-   Button,
-   Layout,
-   Dropdown,
-   Row,
-   Col,
-   Menu,
-   Drawer,
-   Skeleton
-} from 'antd';
+import { Button, Layout, Dropdown, Menu, Drawer } from 'antd';
 import Sidenav from './Sidenav';
 import male from '../../../assets/images/maleAvatar.svg';
 import { useNavigate, Outlet, NavLink, Link } from 'react-router-dom';
@@ -18,7 +9,8 @@ import {
    selectCurrentToken,
    logout,
    DelDepId,
-   DelAppId
+   DelAppId,
+   DelNote
 } from '../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -27,13 +19,9 @@ import {
    RightOutlined,
    LeftOutlined
 } from '@ant-design/icons';
-import axios from 'axios';
-// import logo from '../../../assets/logo/logo.png'
 import logo from '../../../assets/logo/iHospital.png';
-import { useEffect } from 'react';
 import { Get, Post } from '../../comman';
-import { Fragment } from 'react';
-import { Suspense } from 'react';
+import Fallback from './Fallback';
 
 const { Header, Content, Sider } = Layout;
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -55,6 +43,7 @@ const Main = () => {
          dispatch(logout());
          dispatch(DelDepId());
          dispatch(DelAppId());
+         dispatch(DelNote());
          navigate('/');
       } else if (e.key == 3) {
          setIsChatModal(true);
@@ -215,7 +204,7 @@ const Main = () => {
                   <div className="body">
                      <div className="tabled">
                         <Fragment>
-                           <Suspense fallback={<Skeleton />}>
+                           <Suspense fallback={<Fallback />}>
                               {<Outlet />}
                            </Suspense>
                         </Fragment>

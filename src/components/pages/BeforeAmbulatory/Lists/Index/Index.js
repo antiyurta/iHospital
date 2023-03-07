@@ -421,11 +421,9 @@ function Index({ type, isDoctor }) {
                      if (item.value === record.process) {
                         return (
                            <img
-                              src={
-                                 require(`../../../../../assets/bed/${
-                                    orderType[item.value].img
-                                 }`).default
-                              }
+                              src={require(`../../../../../assets/bed/${
+                                 orderType[item.value].img
+                              }`)}
                               width="20"
                               className="inline-block"
                               key={index}

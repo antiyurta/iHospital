@@ -1,36 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { selectCurrentToken } from './authReducer';
+import axios from 'axios';
+import { Spin } from 'antd';
 
-const PrivateRoute = ({ children }) => {
-   const token = useSelector((state) => state.authReducer.token);
-   const isauth = () => {
-      if (token) {
-         return true;
-      }
-      return false;
-   };
+function PrivateRoute({ children }) {
+   const [isAuth, setIsAuth] = useState('loading');
    const location = useLocation();
-
    const isPermission = () => {
       if (location.state) {
          return true;
       }
       return false;
    };
-
-   const authed = isauth();
    const permission = isPermission();
-
-   return authed ? (
-      permission ? (
-         children
-      ) : (
-         <Navigate to="/notPermission" />
-      )
-   ) : (
-      <Navigate to="/" />
-   );
-};
-
+   const token = useSelector(selectCurrentToken);
+   useEffect(() => {
+      axios
+         .get(process.env.REACT_APP_DEV_URL + 'authentication', {
+            headers: {
+               Authorization: `Bearer ${token}`,
+               'X-API-KEY': process.env.REACT_APP_API_KEY
+            }
+         })
+         .then((response) => {
+            if (response.status === 200) {
+               setIsAuth('done');
+            }
+         })
+         .catch((error) => {
+            console.log('=============>', error);
+            return false;
+         });
+   }, [children]);
+   if (isAuth === 'loading') {
+      return (
+         <div className="text-center">
+            <Spin tip="Уншиж байна ..." />
+         </div>
+      );
+   } else if (isAuth === 'done') {
+      return permission ? children : <Navigate to="/notPermission" />;
+   } else {
+      return <Navigate to="/" />;
+   }
+}
 export default PrivateRoute;

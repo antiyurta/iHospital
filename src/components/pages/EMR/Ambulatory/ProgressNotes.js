@@ -8,6 +8,7 @@ import { Get } from '../../../comman';
 import FormIndex from '../FormPrint';
 import Prescription from '../PrescriptionPrint';
 import Magadlaga from '../MagadlagaPrint';
+import moment from 'moment';
 
 export default function ProgressNotes({ Appointments }) {
    const { Panel } = Collapse;
@@ -80,9 +81,9 @@ export default function ProgressNotes({ Appointments }) {
                                        </span>
                                        <span>&nbsp;</span>
                                        <span>
-                                          {el.createdAt
-                                             ?.replace(/T/, ' ')
-                                             .replace(/\..+/, '')}
+                                          {moment(el.createdAt).format(
+                                             'YYYY-MM-DD HH:mm'
+                                          )}
                                        </span>
                                     </div>
                                  }

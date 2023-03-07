@@ -29,6 +29,7 @@ function Acting({ PatientData, ListId, DepartmentId }) {
    const [form] = Form.useForm();
    const [spinner, setSpinner] = useState(false);
    const [loading, setLoading] = useState(false);
+   const [filterStatus, setFilterStatus] = useState(7);
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [materialList, setMaterialList] = useState([]);
    const [fDepartments, setFDepartments] = useState([]);
@@ -44,7 +45,6 @@ function Acting({ PatientData, ListId, DepartmentId }) {
          headers: {},
          params: {}
       };
-      values['dep_id2'] = DepartmentId;
       values['mt_type'] = 70;
       const response = await Post(
          `finance/create-expenses`,
@@ -79,17 +79,16 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                   {text.map((item, index) => {
                      return (
                         <li key={index}>
-                           {item.material?.m_name + '/' + item.tcount}
+                           {item.material?.m_name +
+                              '/' +
+                              item.tcount +
+                              item.material?.xn}
                         </li>
                      );
                   })}
                </ul>
             );
          }
-      },
-      {
-         title: 'Тоо ширхэг',
-         dataIndex: 'tcount'
       }
    ];
 
@@ -148,8 +147,11 @@ function Acting({ PatientData, ListId, DepartmentId }) {
          </Row>
          <div className="w-full p-1">
             <Select
-               value={7}
-               onChange={(e) => getActing(1, 10, e)}
+               value={filterStatus}
+               onChange={(e) => {
+                  getActing(1, 10, e);
+                  setFilterStatus(e);
+               }}
                style={{ width: 200 }}
             >
                <Option value={7}>Зарлага</Option>
@@ -174,7 +176,8 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                   pageSize: 10,
                   total: meta.itemCount,
                   current: meta.page,
-                  onChange: (page, pageSize) => getActing(page, pageSize, 7)
+                  onChange: (page, pageSize) =>
+                     getActing(page, pageSize, filterStatus)
                }}
             />
             <Modal
@@ -221,6 +224,32 @@ function Acting({ PatientData, ListId, DepartmentId }) {
                            </div>
                         </div>
                         <div className="md:w-1/2 sm:w-full p-1">
+                           <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="p-1">
+                                 <Form.Item
+                                    label="Хааш нь"
+                                    rules={[
+                                       { required: true, message: 'Заавал' }
+                                    ]}
+                                    name={'dep_id2'}
+                                 >
+                                    <Select onChange={test}>
+                                       {fDepartments.map((dep, index) => {
+                                          return (
+                                             <Option
+                                                key={index}
+                                                value={dep.dep_id}
+                                             >
+                                                {dep.dep_name}
+                                             </Option>
+                                          );
+                                       })}
+                                    </Select>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="md:w-full sm:w-full p-1">
                            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                               <div className="p-1">
                                  <Form.Item

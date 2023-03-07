@@ -1,11 +1,14 @@
 import { PrinterFilled } from '@ant-design/icons';
-import { Button, Card, Form, Modal, Select, Table } from 'antd';
+import { Button, Card, Empty, Form, Modal, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { selectCurrentToken } from '../../features/authReducer';
+import {
+   selectCurrentInsurance,
+   selectCurrentToken
+} from '../../features/authReducer';
 import { DefualtGet, Get, Post } from '../comman';
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
@@ -15,6 +18,7 @@ const { Option } = Select;
 
 function EmrSupports({ appointmentId, usageType, patient }) {
    const token = useSelector(selectCurrentToken);
+   const isInsurance = useSelector(selectCurrentInsurance);
    let location = useLocation();
    console.log(patient);
    const [sentForm] = Form.useForm(); // shiljuuleh
@@ -22,6 +26,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
    const [moveForm] = Form.useForm(); // ilgeeh
    const [sentReason, setSentReason] = useState([]); // ilgeeh shaltgaan
    const [storyLists, setStoryLists] = useState([]);
+   const [storyLoading, setStoryLoading] = useState(false);
    // emnelegt shiljuuleh
    const [hospitalLists, setHospitalLists] = useState([]);
    const [hospitalListsLoading, setHospitalListsLoading] = useState(false);
@@ -38,6 +43,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
    const [hicsServices, setHicsServices] = useState([]); // uilcilgeenuud
    // zaalt oruulah
    const getStoryTEST = async () => {
+      setStoryLoading(true);
       const conf = {
          headers: {},
          params: {
@@ -46,6 +52,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
       };
       var response = await Get('inpatient/story', token, conf);
       setStoryLists(response.data);
+      setStoryLoading(false);
    };
    const getInsuranceHospitalList = async () => {
       setHospitalListsLoading(true);
@@ -142,9 +149,11 @@ function EmrSupports({ appointmentId, usageType, patient }) {
       getStoryTEST();
    }, [isOpenDocumentModal]);
    useEffect(() => {
-      getInsuranceHospitalList(); // emlegin jagsaalt,
-      getHicsService(); // uilcilgeenuud
-      getSentReason(); // ilgeeh shaltgaan
+      if (isInsurance) {
+         getInsuranceHospitalList(); // emlegin jagsaalt,
+         getHicsService(); // uilcilgeenuud
+         getSentReason(); // ilgeeh shaltgaan
+      }
    }, []);
    //
    return (
@@ -184,7 +193,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          <Modal
             title="Өвчний түүх"
             open={isOpenDocumentModal}
-            onCancel={() => setIsOpen(false)}
+            onCancel={() => setIsOpenDocumentModal(false)}
             width={'23cm'}
          >
             <Table
@@ -205,6 +214,11 @@ function EmrSupports({ appointmentId, usageType, patient }) {
                   }
                ]}
                dataSource={storyLists}
+               loading={{
+                  spinning: storyLoading,
+                  tip: 'Уншиж байна...'
+               }}
+               locale={{ emptyText: <Empty description={'Хоосон'} /> }}
             />
          </Modal>
          {/* 611 maygt */}

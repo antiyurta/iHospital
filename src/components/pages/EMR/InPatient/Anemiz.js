@@ -20,7 +20,7 @@ function Anemiz() {
             patientId: location?.state?.patientId
          }
       };
-      const response = await Get('emr/anemis', token, conf);
+      const response = await Get('inpatient/story', token, conf);
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
             //Оноор бүлэглэх
