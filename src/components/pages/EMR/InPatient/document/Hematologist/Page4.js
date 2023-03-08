@@ -1,5 +1,5 @@
 import Index from '../ClinicalDiagnosis/Index';
-
+import React from 'react';
 function Page4() {
    return (
       <div className="page">

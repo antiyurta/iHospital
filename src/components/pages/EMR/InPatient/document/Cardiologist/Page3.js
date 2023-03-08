@@ -1,3 +1,4 @@
+import React from 'react';
 import Index from '../ClinicalDiagnosis/Index';
 
 function Page3() {

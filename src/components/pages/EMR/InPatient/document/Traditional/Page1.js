@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, Form } from 'antd';
 import { Table } from 'react-bootstrap';
 import General from '../General';

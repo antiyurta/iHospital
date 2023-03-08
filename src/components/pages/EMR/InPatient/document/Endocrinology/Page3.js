@@ -1,6 +1,6 @@
 import { Checkbox, Form } from 'antd';
 import Index from '../ClinicalDiagnosis/Index';
-
+import React from 'react';
 function Page3({ form }) {
    return (
       <div className="page">

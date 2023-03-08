@@ -1,5 +1,5 @@
 import { Checkbox, Form } from 'antd';
-
+import React from 'react';
 function Page2({ form }) {
    return (
       <div className="page">

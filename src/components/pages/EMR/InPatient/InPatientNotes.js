@@ -11,8 +11,10 @@ const { Panel } = Collapse;
 function InPatientNotes({ Appointments }) {
    const token = useSelector(selectCurrentToken);
    const [dailyNotes, setDailyNotes] = useState([]);
+   const [loading, setLoading] = useState(false);
    const onChangee = async (id) => {
       if (id) {
+         setLoading(true);
          const conf = {
             headers: {},
             params: {}
@@ -27,6 +29,7 @@ function InPatientNotes({ Appointments }) {
          } else {
             setDailyNotes([]);
          }
+         setLoading(false);
       }
    };
    const column = [
@@ -70,9 +73,9 @@ function InPatientNotes({ Appointments }) {
                                  header={
                                     <div className="inline-flex">
                                        <span>
-                                          {el.createdAt
-                                             ?.replace(/T/, ' ')
-                                             .replace(/\..+/, '')}
+                                          {moment(el.createdAt).format(
+                                             'YYYY-MM-DD HH:mm'
+                                          )}
                                        </span>
                                        <p className="pl-2 font-extrabold">
                                           {el.structure?.name}
@@ -84,6 +87,7 @@ function InPatientNotes({ Appointments }) {
                                  <Table
                                     rowKey={'id'}
                                     bordered
+                                    loading={loading}
                                     columns={column}
                                     dataSource={dailyNotes}
                                     pagination={false}

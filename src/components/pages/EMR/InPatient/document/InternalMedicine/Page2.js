@@ -1,6 +1,7 @@
 import { Checkbox, Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
 const { TextArea } = Input;
+import React from 'react';
 function Page2() {
    return (
       <div className="page">

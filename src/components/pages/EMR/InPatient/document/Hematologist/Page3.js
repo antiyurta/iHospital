@@ -1,5 +1,5 @@
 import { Table } from 'react-bootstrap';
-
+import React from 'react';
 function Page3() {
    return (
       <div className="page">

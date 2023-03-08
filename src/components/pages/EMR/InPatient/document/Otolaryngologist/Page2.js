@@ -1,6 +1,6 @@
 import { Checkbox, Form } from 'antd';
 import { Table } from 'react-bootstrap';
-
+import React from 'react';
 function Page2() {
    return (
       <page size="A4">

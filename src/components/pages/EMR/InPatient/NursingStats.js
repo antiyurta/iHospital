@@ -1,5 +1,5 @@
 import { Tag } from 'antd';
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import EarlyWarning from '../../BeforeAmbulatory/EarlyWarning';
 import Requests from './NursingStats/Requests';
@@ -8,6 +8,7 @@ const { CheckableTag } = Tag;
 function NursingStats() {
    let location = useLocation();
    let state = location?.state;
+   console.log(state);
    const [section, setSection] = useState(Number);
    const onChange = (id) => {
       setSection(id);
@@ -25,7 +26,12 @@ function NursingStats() {
             <EarlyWarning
                PatientId={state?.patientId}
                UsageType={'IN'}
-               ListId={state?.appointmentId}
+               ListId={
+                  state?.usageType === 'OUT'
+                     ? state?.appointmentId
+                     : state?.inpatientRequestId
+               }
+               isDoctor={true}
             />
          )
       },

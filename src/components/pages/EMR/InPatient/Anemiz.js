@@ -69,9 +69,9 @@ function Anemiz() {
                                        </span>
                                        <span>&nbsp;</span>
                                        <span>
-                                          {item.createdAt
-                                             ?.replace(/T/, ' ')
-                                             .replace(/\..+/, '')}
+                                          {moment(item.createdAt).format(
+                                             'YYYY-MM-DD HH:mm'
+                                          )}
                                        </span>
                                     </div>
                                  }
@@ -82,21 +82,21 @@ function Anemiz() {
                                        Хэвтэх үеийн зовиур:
                                     </span>
                                     <span>&nbsp;</span>
-                                    <span>{item.inPatientPain}</span>
+                                    <span>{item.anemis?.inPatientPain}</span>
                                  </p>
                                  <p>
                                     <span className="font-bold">
                                        Өвчний түүх:
                                     </span>
                                     <span>&nbsp;</span>
-                                    <span>{item.painStory}</span>
+                                    <span>{item.anemis?.painStory}</span>
                                  </p>
                                  <p>
                                     <span className="font-bold">
                                        Амьдралын түүх:
                                     </span>
                                     <span>&nbsp;</span>
-                                    <span>{item.lifeStory}</span>
+                                    <span>{item.anemis?.lifeStory}</span>
                                  </p>
                               </Panel>
                            );

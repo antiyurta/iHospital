@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
 import man from './ct1NL3.1.png';

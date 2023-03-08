@@ -522,7 +522,7 @@ function MainPatientHistory({
                   value: 'Төлөвлөгөө'
                }
             ],
-            inspectionType: 'Төлөвлөгөө'
+            inspectionType: 'plan'
          }
       ]
    };

@@ -1,7 +1,7 @@
 import { Checkbox, Form } from 'antd';
 import { Table } from 'react-bootstrap';
 import Index from '../ClinicalDiagnosis/Index';
-
+import React from 'react';
 function Page2() {
    return (
       <div className="page">

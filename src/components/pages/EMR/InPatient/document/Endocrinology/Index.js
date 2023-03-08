@@ -1,6 +1,5 @@
 import { Button, Form } from 'antd';
-import { useEffect } from 'react';
-import { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import Page1 from './Page1';
 import Page2 from './Page2';

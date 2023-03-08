@@ -1,50 +1,9 @@
-import { Button, Checkbox, DatePicker, Form, Input, Radio, Select } from 'antd';
+import { Checkbox, DatePicker, Form, Input, Select } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React from 'react';
 import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import logo from '../../../../../../assets/logo/universal.png';
-import { selectCurrentToken } from '../../../../../../features/authReducer';
-import { Get, getAge } from '../../../../../comman';
-import Diagnose from '../Diagnose';
-const { TextArea } = Input;
-const { Option } = Select;
-const educationType = [
-   {
-      label: 'Боловсролгүй',
-      value: 0
-   },
-   {
-      label: 'Бага',
-      value: 1
-   },
-   {
-      label: 'Бүрэн дунд',
-      value: 2
-   },
-   {
-      label: 'Мэргэжлийн болон техникийн',
-      value: 3
-   },
-   {
-      label: 'Дипломын',
-      value: 4
-   },
-   {
-      label: 'Бакалавр',
-      value: 5
-   },
-   {
-      label: 'Магистр',
-      value: 6
-   },
-   {
-      label: 'Доктор',
-      value: 7
-   }
-];
 function Page1({ form }) {
    return (
       <div className="page">

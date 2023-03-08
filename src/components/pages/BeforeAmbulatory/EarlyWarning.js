@@ -28,7 +28,8 @@ export default function EarlyWarning({
    PatientId,
    UsageType,
    ListId,
-   patientData
+   patientData,
+   isDoctor
 }) {
    const token = useSelector(selectCurrentToken);
    const config = {
@@ -543,218 +544,227 @@ export default function EarlyWarning({
             </div>
          </div>
          <div className="flex flex-wrap">
-            <div className="w-full md:w-full xl:w-1/2">
-               <div className="table-responsive p-4" id="style-8">
-                  <Table className="ant-border-space" style={{ width: '100%' }}>
-                     <thead className="ant-table-thead bg-slate-200">
-                        <tr>
-                           <th className="font-medium text-x">Систол</th>
-                           <th className="font-medium text-x border-x">
-                              Диастол
-                           </th>
-                           <th className="font-medium text-x border-x">Жин</th>
-                           <th className="font-medium text-x border-x">
-                              Өндөр
-                           </th>
-                           <th className="font-medium text-x border-x">
-                              Халуун
-                           </th>
-                           <th className="font-medium text-x border-x">
-                              Амьсгал
-                           </th>
-                           <th className="font-medium text-x border-x">
-                              SpO'2
-                           </th>
-                           <th className="font-medium text-x border-x">
-                              Пульс
-                           </th>
-                           <th className="font-medium text-x">
-                              <div className="whitespace-normal">
-                                 Ухаан санаа
-                              </div>
-                           </th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {patientAssesments &&
-                           patientAssesments.map((element, index) => (
-                              <tr key={index}>
-                                 <td className="text-center px-0">
-                                    <Input
-                                       value={element.highPressureRight || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="highPressureRight"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.lowPressureRight || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="lowPressureRight"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.weight || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="weight"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.height || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="height"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.temp || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="temp"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.respiratoryRate || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="respiratoryRate"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.spO2 || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="spO2"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Input
-                                       value={element.pulse || ''}
-                                       className="p-1 h-7 rounded-md text-center"
-                                       name="pulse"
-                                       disabled
-                                    />
-                                 </td>
-                                 <td className="text-center">
-                                    <Select
-                                       defaultValue="lucy"
-                                       style={{
-                                          width: 120
-                                       }}
-                                       value={element.mind}
-                                       className="p-1 h-7 inline-table"
-                                       name="mind"
-                                       disabled
-                                    >
-                                       <Option value="A">A</Option>
-                                       <Option value="V,P,U">V,P,U</Option>
-                                    </Select>
-                                 </td>
-                              </tr>
-                           ))}
-                        <tr className="">
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.highPressureRight || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="highPressureRight"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.lowPressureRight || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="lowPressureRight"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.weight || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="weight"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.height || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="height"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.temp || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="temp"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.respiratoryRate || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="respiratoryRate"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.spO2 || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="spO2"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Input
-                                 value={formValues.pulse || ''}
-                                 onChange={(e) => handleChange(e)}
-                                 className="p-1 h-7 rounded-md text-center"
-                                 name="pulse"
-                                 type="number"
-                              />
-                           </td>
-                           <td className="text-center">
-                              <Select
-                                 defaultValue="choose"
-                                 style={{
-                                    width: 120
-                                 }}
-                                 onChange={(e) => handleChange(e, 'mind')}
-                                 value={formValues.mind}
-                                 className="p-1 h-7 inline-table"
-                                 name="mind"
-                              >
-                                 <Option value="choose">Сонгох</Option>
-                                 <Option value="A">A</Option>
-                                 <Option value="V,P,U">V,P,U</Option>
-                              </Select>
-                           </td>
-                        </tr>
-                     </tbody>
-                  </Table>
+            {!isDoctor && (
+               <div className="w-full md:w-full xl:w-1/2">
+                  <div className="table-responsive p-4" id="style-8">
+                     <Table
+                        className="ant-border-space"
+                        style={{ width: '100%' }}
+                     >
+                        <thead className="ant-table-thead bg-slate-200">
+                           <tr>
+                              <th className="font-medium text-x">Систол</th>
+                              <th className="font-medium text-x border-x">
+                                 Диастол
+                              </th>
+                              <th className="font-medium text-x border-x">
+                                 Жин
+                              </th>
+                              <th className="font-medium text-x border-x">
+                                 Өндөр
+                              </th>
+                              <th className="font-medium text-x border-x">
+                                 Халуун
+                              </th>
+                              <th className="font-medium text-x border-x">
+                                 Амьсгал
+                              </th>
+                              <th className="font-medium text-x border-x">
+                                 SpO'2
+                              </th>
+                              <th className="font-medium text-x border-x">
+                                 Пульс
+                              </th>
+                              <th className="font-medium text-x">
+                                 <div className="whitespace-normal">
+                                    Ухаан санаа
+                                 </div>
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {patientAssesments &&
+                              patientAssesments.map((element, index) => (
+                                 <tr key={index}>
+                                    <td className="text-center px-0">
+                                       <Input
+                                          value={
+                                             element.highPressureRight || ''
+                                          }
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="highPressureRight"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.lowPressureRight || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="lowPressureRight"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.weight || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="weight"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.height || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="height"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.temp || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="temp"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.respiratoryRate || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="respiratoryRate"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.spO2 || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="spO2"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Input
+                                          value={element.pulse || ''}
+                                          className="p-1 h-7 rounded-md text-center"
+                                          name="pulse"
+                                          disabled
+                                       />
+                                    </td>
+                                    <td className="text-center">
+                                       <Select
+                                          defaultValue="lucy"
+                                          style={{
+                                             width: 120
+                                          }}
+                                          value={element.mind}
+                                          className="p-1 h-7 inline-table"
+                                          name="mind"
+                                          disabled
+                                       >
+                                          <Option value="A">A</Option>
+                                          <Option value="V,P,U">V,P,U</Option>
+                                       </Select>
+                                    </td>
+                                 </tr>
+                              ))}
+                           <tr className="">
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.highPressureRight || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="highPressureRight"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.lowPressureRight || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="lowPressureRight"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.weight || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="weight"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.height || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="height"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.temp || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="temp"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.respiratoryRate || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="respiratoryRate"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.spO2 || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="spO2"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Input
+                                    value={formValues.pulse || ''}
+                                    onChange={(e) => handleChange(e)}
+                                    className="p-1 h-7 rounded-md text-center"
+                                    name="pulse"
+                                    type="number"
+                                 />
+                              </td>
+                              <td className="text-center">
+                                 <Select
+                                    defaultValue="choose"
+                                    style={{
+                                       width: 120
+                                    }}
+                                    onChange={(e) => handleChange(e, 'mind')}
+                                    value={formValues.mind}
+                                    className="p-1 h-7 inline-table"
+                                    name="mind"
+                                 >
+                                    <Option value="choose">Сонгох</Option>
+                                    <Option value="A">A</Option>
+                                    <Option value="V,P,U">V,P,U</Option>
+                                 </Select>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </Table>
+                  </div>
                </div>
-            </div>
-            <div className="w-full md:w-full xl:w-1/2">
+            )}
+            <div className={isDoctor ? 'w-full' : 'w-full md:w-full xl:w-1/2'}>
                <div className="table-responsive p-4" id="style-8">
                   <Table className="ant-border-space" style={{ width: '100%' }}>
                      <thead className="ant-table-thead bg-slate-200">
@@ -892,19 +902,20 @@ export default function EarlyWarning({
                </div>
             </div>
          </div>
-         <Row gutter={[8, 8]}>
-            <Col span={12} className="border-r-4">
-               <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() => createAssesment()}
-                  className="float-right mt-2"
-               >
-                  Хадгалах
-               </Button>
-            </Col>
-            <Col span={12}></Col>
-         </Row>
+         {!isDoctor && (
+            <Row gutter={[8, 8]}>
+               <Col span={12} className="border-r-4">
+                  <Button
+                     type="primary"
+                     htmlType="submit"
+                     onClick={() => createAssesment()}
+                     className="float-right mt-2"
+                  >
+                     Хадгалах
+                  </Button>
+               </Col>
+            </Row>
+         )}
       </>
    );
 }

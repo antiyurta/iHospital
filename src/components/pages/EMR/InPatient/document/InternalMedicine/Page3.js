@@ -1,4 +1,5 @@
 import Index from '../ClinicalDiagnosis/Index';
+import React from 'react';
 function Page3() {
    return (
       <Index

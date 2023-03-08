@@ -1,5 +1,6 @@
 import { Form, Input } from 'antd';
 import { Table } from 'react-bootstrap';
+import React from 'react';
 const { TextArea } = Input;
 function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
    const style = {

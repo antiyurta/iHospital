@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, DatePicker, Form, Input } from 'antd';
 import moment from 'moment';
 import { Table } from 'react-bootstrap';
