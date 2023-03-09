@@ -99,6 +99,10 @@ function Index({ type, isDoctor }) {
                data['usageType'] = 'OUT';
                data['appointmentId'] = listId;
                data['cabinetId'] = cabinetId;
+            } else if (type === 1) {
+               data['usageType'] = 'OUT';
+               data['appointmentId'] = listId;
+               data['cabinetId'] = cabinetId;
             } else if (type === 2) {
                data['usageType'] = 'IN';
                data['inpatientRequestId'] = listId;
