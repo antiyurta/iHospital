@@ -310,7 +310,8 @@ function GeneralInfo({ form, gbase }) {
                rules={[
                   {
                      required: true,
-                     message: 'И-мэйл оруулна уу'
+                     type: 'email',
+                     message: 'И-мэйл хэлбэр буруу !!!'
                   }
                ]}
                labelCol={{ span: 8 }}

@@ -1,7 +1,6 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Өвчний түүх
 import React from 'react';
 import { Col, Row, Input, Form, Radio, Checkbox } from 'antd';
-import { INPUT_HEIGHT } from '../../../../constant';
 const { TextArea } = Input;
 export default function Step2() {
    return (

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
    Tabs,
    Row,
@@ -6,31 +6,26 @@ import {
    Form,
    Divider,
    Select,
-   Table,
    Modal,
    Result,
-   Spin
+   Spin,
+   Input
 } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useDispatch, useSelector } from 'react-redux';
 import {
    DelNote,
-   selectCurrentDepId,
    selectCurrentNote,
    selectCurrentToken,
    selectCurrentUserId
 } from '../../../../features/authReducer';
 import DynamicFormInspection from '../../DynamicFormInspection';
-import DynamicFormInPatient from '../../DynamicFormInPatient';
 import HistoryTab from './HistoryTab';
-import { Get, openNofi, Patch, Post } from '../../../comman';
+import { Get, Patch, Post } from '../../../comman';
 import Diagnose from '../../service/Diagnose';
-// import { Table } from "react-bootstrap";
-import { CloseOutlined } from '@ant-design/icons';
-import Index from '../InPatient/document/Index';
 import MainInpatientHistory from './MainInpatientHistory';
-import TextArea from 'antd/lib/input/TextArea';
 const { Option } = Select;
+const { TextArea } = Input;
 function MainPatientHistory({
    AppointmentId,
    XrayRequestId,

@@ -103,7 +103,7 @@ function BeforeInPatientTabs({
                >
                   Сувилгааны тэмдэглэл
                </Button>
-               <Button
+               {/* <Button
                   type="primary"
                   onClick={() => {
                      setPageId(9);
@@ -111,7 +111,7 @@ function BeforeInPatientTabs({
                   className={pageId === 9 ? 'button-active m-1' : 'm-1'}
                >
                   Гарах үеийн эпикриз
-               </Button>
+               </Button> */}
                <Button
                   type="primary"
                   onClick={() => {
@@ -191,13 +191,13 @@ function BeforeInPatientTabs({
                   />
                )}
 
-               {pageId === 9 && (
+               {/* {pageId === 9 && (
                   <Epicriz
                      PatientId={patientId}
                      ListId={listId}
                      PatientData={patientData}
                   />
-               )}
+               )} */}
 
                {/* {pageId === 11 && (
                   <Acting

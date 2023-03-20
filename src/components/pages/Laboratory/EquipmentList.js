@@ -7,6 +7,7 @@ import {
    message,
    Modal,
    Select,
+   Space,
    Switch,
    Upload
 } from 'antd';
@@ -19,6 +20,7 @@ import {
    EditOutlined,
    EllipsisOutlined,
    LoadingOutlined,
+   MinusCircleOutlined,
    PlusOutlined,
    SettingOutlined
 } from '@ant-design/icons';
@@ -35,12 +37,14 @@ function EquipmentList() {
    const [equipments, setEquipments] = useState([]);
    const [searchField, setSearchField] = useState('');
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [isOpenReference, setIsOpenReference] = useState(false);
    const [editMode, setEditMode] = useState(false);
    const [loading, setLoading] = useState(false);
    const [imageUrl, setImageUrl] = useState();
    const [photoId, setPhotoId] = useState(Number);
    const [id, setId] = useState(Number);
    const [form] = Form.useForm();
+   const [referenceForm] = Form.useForm();
    const basisRule = [
       {
          required: true,
@@ -227,7 +231,10 @@ function EquipmentList() {
                               />
                            }
                            actions={[
-                              <SettingOutlined key="setting" />,
+                              <SettingOutlined
+                                 key="setting"
+                                 onClick={() => setIsOpenReference(true)}
+                              />,
                               <EditOutlined
                                  onClick={() => editModal(equipment)}
                                  key="edit"
@@ -409,6 +416,59 @@ function EquipmentList() {
                      </Form.Item>
                   </div>
                </div>
+            </Form>
+         </Modal>
+         <Modal
+            title="Лавлах нэгжүүд"
+            open={isOpenReference}
+            onCancel={() => setIsOpenReference(false)}
+         >
+            <Form form={referenceForm}>
+               <Form.List name="reference">
+                  {(fields, { add, remove }) => (
+                     <>
+                        {fields.map(({ key, name, ...restField }) => (
+                           <Space
+                              key={key}
+                              style={{ display: 'flex' }}
+                              align="baseline"
+                           >
+                              <Form.Item
+                                 {...restField}
+                                 label="Нэр"
+                                 name={[name, 'first']}
+                                 rules={[
+                                    {
+                                       required: true,
+                                       message: 'Missing first name'
+                                    }
+                                 ]}
+                              >
+                                 <Input />
+                              </Form.Item>
+                              <Form.Item>
+                                 <Button
+                                    onClick={() => remove(name)}
+                                    icon={<MinusCircleOutlined />}
+                                 >
+                                    Add field
+                                 </Button>
+                              </Form.Item>
+                           </Space>
+                        ))}
+                        <Form.Item>
+                           <Button
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                           >
+                              Нэмэх
+                           </Button>
+                        </Form.Item>
+                     </>
+                  )}
+               </Form.List>
             </Form>
          </Modal>
       </>

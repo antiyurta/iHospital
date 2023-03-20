@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get } from '../../../comman';
 import Index from './document/Index';
+import IndexCollapse from './IndexCollapse';
 const { Panel } = Collapse;
-function InPatientNotes({ Appointments }) {
+function InPatientNotes({ inpatientRequests }) {
    const token = useSelector(selectCurrentToken);
    const [dailyNotes, setDailyNotes] = useState([]);
    const [loading, setLoading] = useState(false);
@@ -46,61 +47,14 @@ function InPatientNotes({ Appointments }) {
       }
    ];
    return (
-      <>
-         <Collapse
-            collapsible="header"
-            expandIcon={({ isActive }) => {
-               return isActive ? (
-                  <FolderOpenOutlined style={{ fontSize: '24px' }} />
-               ) : (
-                  <FolderOutlined style={{ fontSize: '24px' }} />
-               );
-            }}
-            ghost
-         >
-            {Object.entries(Appointments).map(([key, value], index) => {
-               return (
-                  <Panel header={`${key} Он`} key={index}>
-                     <Collapse
-                        Collapse
-                        collapsible="header"
-                        onChange={onChangee}
-                        accordion
-                     >
-                        {value.map((el, index) => {
-                           return (
-                              <Panel
-                                 header={
-                                    <div className="inline-flex">
-                                       <span>
-                                          {moment(el.createdAt).format(
-                                             'YYYY-MM-DD HH:mm'
-                                          )}
-                                       </span>
-                                       <p className="pl-2 font-extrabold">
-                                          {el.structure?.name}
-                                       </p>
-                                    </div>
-                                 }
-                                 key={value[index].id}
-                              >
-                                 <Table
-                                    rowKey={'id'}
-                                    bordered
-                                    loading={loading}
-                                    columns={column}
-                                    dataSource={dailyNotes}
-                                    pagination={false}
-                                 />
-                              </Panel>
-                           );
-                        })}
-                     </Collapse>
-                  </Panel>
-               );
-            })}
-         </Collapse>
-      </>
+      <IndexCollapse
+         hookKey="id"
+         hookParamName={null}
+         url={'service/inPatient-request/show/'}
+         data={inpatientRequests}
+         column={column}
+         setDataType="dailyNotes"
+      />
    );
 }
 export default InPatientNotes;

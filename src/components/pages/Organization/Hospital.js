@@ -1,8 +1,11 @@
 import '../../../style/Hospital.css';
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Table, Modal, Select, Form } from 'antd';
 
 import UTable from '../../UTable';
+import { DefualtGet, Get, Patch } from '../../comman';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../../../features/authReducer';
 
 const column = [
    {
@@ -79,22 +82,179 @@ const column = [
       col: 12
    }
 ];
+const { Option } = Select;
 function Hospital() {
+   const token = useSelector(selectCurrentToken);
+   const [form] = Form.useForm();
+   const [isOpenHospital, setIsOpenHospital] = useState(false);
+   const [financeClients, setFinanceClients] = useState([]);
+   const [selectedRow, setSelectedRow] = useState({});
+   const [financeAccounts, setFinanceAccounts] = useState([]);
+   const [isRefresh, setIsRefresh] = useState(true);
+   const hospitalFunction = (row) => {
+      if (row) {
+         setIsOpenHospital(true);
+         setSelectedRow(row);
+      }
+   };
+   const getFinanceClient = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await DefualtGet('finance/client', token, conf);
+      setFinanceClients(response.response?.data);
+   };
+   const getAccounts = async (id) => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('finance/account/' + id, token, conf);
+      setFinanceAccounts(response.data);
+   };
+   const updateHospital = async (values) => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Patch(
+         'organization/hospital/' + selectedRow.id,
+         token,
+         conf,
+         values
+      );
+      if (response === 200) {
+         setIsOpenHospital(false);
+      }
+      setIsRefresh(!isRefresh);
+   };
+   useEffect(() => {
+      getFinanceClient();
+   }, [selectedRow]);
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Байгууллага'}
-               url={'organization/hospital'}
-               column={column}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               width="50%"
-            />
+      <>
+         <div className="flex flex-wrap">
+            <div className="w-full">
+               <UTable
+                  title={'Байгууллага'}
+                  url={'organization/hospital'}
+                  column={column}
+                  isCreate={true}
+                  isRead={true}
+                  isUpdate={true}
+                  isDelete={true}
+                  width="50%"
+                  isHospital={true}
+                  hospitalFunction={hospitalFunction}
+                  isRefresh={isRefresh}
+               />
+            </div>
          </div>
-      </div>
+         <Modal
+            title="Байгууллага сонгох"
+            open={isOpenHospital}
+            onCancel={() => setIsOpenHospital(false)}
+            onOk={() =>
+               form.validateFields().then((values) => {
+                  updateHospital(values);
+               })
+            }
+            okText="Хадгалах"
+            cancelText="Болих"
+         >
+            <Form form={form} layout="vertical">
+               <Form.Item
+                  name="financeOrganizationId"
+                  label="Байгууллага сонгох"
+               >
+                  <Select
+                     allowClear
+                     showSearch
+                     style={{
+                        minWidth: '100%'
+                     }}
+                     onChange={(e) => getAccounts(e)}
+                     size="small"
+                     placeholder="Сонгох"
+                     optionFilterProp="children"
+                     filterOption={(input, option) =>
+                        option.children.includes(input)
+                     }
+                     filterSort={(optionA, optionB) =>
+                        optionA.children
+                           .toLowerCase()
+                           .localeCompare(optionB.children.toLowerCase())
+                     }
+                  >
+                     {financeClients?.map((el, index) => {
+                        return (
+                           <Option value={el.b_id} key={index}>
+                              {el.b_name}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+               <Form.Item label="Авлагын данс" name="receiveAccountId">
+                  <Select
+                     allowClear
+                     showSearch
+                     style={{
+                        minWidth: '100%'
+                     }}
+                     size="small"
+                     placeholder="Сонгох"
+                     optionFilterProp="children"
+                     filterOption={(input, option) =>
+                        option.children.includes(input)
+                     }
+                     filterSort={(optionA, optionB) =>
+                        optionA.children
+                           .toLowerCase()
+                           .localeCompare(optionB.children.toLowerCase())
+                     }
+                  >
+                     {financeAccounts?.map((el, index) => {
+                        return (
+                           <Option value={el.accid} key={index}>
+                              {el.a_name + '->' + el.a_code}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+               <Form.Item label="Борлуулалтын данс" name="saleAccountId">
+                  <Select
+                     allowClear
+                     showSearch
+                     style={{
+                        minWidth: '100%'
+                     }}
+                     size="small"
+                     placeholder="Сонгох"
+                     optionFilterProp="children"
+                     filterOption={(input, option) =>
+                        option.children.includes(input)
+                     }
+                     filterSort={(optionA, optionB) =>
+                        optionA.children
+                           .toLowerCase()
+                           .localeCompare(optionB.children.toLowerCase())
+                     }
+                  >
+                     {financeAccounts?.map((el, index) => {
+                        return (
+                           <Option value={el.accid} key={index}>
+                              {el.a_name + '->' + el.a_code}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+            </Form>
+         </Modal>
+      </>
    );
 }
 

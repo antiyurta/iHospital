@@ -5,6 +5,7 @@ import '../src/style/page.css';
 import { Route, Routes } from 'react-router-dom';
 import { Fragment } from 'react';
 import { Suspense } from 'react';
+import FullScreenLoader from './components/FullScreenLoader';
 const Login = React.lazy(() => import('./components/Login'));
 const Main = React.lazy(() => import('./components/pages/Layout/Main'));
 const Hospital = React.lazy(() =>
@@ -39,6 +40,9 @@ const PrivateRoute = React.lazy(() => import('./features/PrivateRoute'));
 //service start
 const Examination = React.lazy(() =>
    import('./components/pages/service/Examination')
+);
+const ExaminationParams = React.lazy(() =>
+   import('./components/pages/service/ExaminationParams')
 );
 const Xray = React.lazy(() => import('./components/pages/service/Xray'));
 const Treatment = React.lazy(() =>
@@ -167,13 +171,7 @@ function App() {
    return (
       <div className="App">
          <Fragment>
-            <Suspense
-               fallback={
-                  <div className="text-center">
-                     Уншиж байна ... та түр хүлээнэ үү
-                  </div>
-               }
-            >
+            <Suspense fallback={<FullScreenLoader full={true} />}>
                <Routes>
                   <Route path="/" element={<Login />} />
                   <Route element={<Main />}>
@@ -397,6 +395,14 @@ function App() {
                            element={
                               <PrivateRoute>
                                  <Examination />
+                              </PrivateRoute>
+                           }
+                        />
+                        <Route
+                           path="/examinationParams"
+                           element={
+                              <PrivateRoute>
+                                 <ExaminationParams />
                               </PrivateRoute>
                            }
                         />

@@ -1,26 +1,60 @@
-import { Button, Tabs, Tag } from 'antd';
-import React, { useState } from 'react';
+import { Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../../../../features/authReducer';
+import { Get } from '../../../comman';
+import FullScreenLoader from '../../../FullScreenLoader';
 import Anemiz from './Anemiz';
 import InPatient from './InPatient';
 import InPatientNotes from './InPatientNotes';
 import NursingStats from './NursingStats';
 const { CheckableTag } = Tag;
-function MainInPatient({ appointments, patientId }) {
+function MainInPatient({ patientId }) {
+   const token = useSelector(selectCurrentToken);
+   const [checkedKey, setCheckedKey] = useState(1);
+   const [isLoading, setIsLoading] = useState(false);
+   const [inpatientRequests, setInpatientRequests] = useState([]);
+   const getInpatienRequests = async () => {
+      setIsLoading(true);
+      const conf = {
+         headers: {},
+         params: {
+            patientId: patientId
+         }
+      };
+      const response = await Get('service/inpatient-request', token, conf);
+      if (response.data.length > 0) {
+         var result = response.data.reduce(function (r, a) {
+            //Оноор бүлэглэх
+            r[a.createdAt.substring(0, 4)] =
+               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)].push(a);
+            return r;
+         }, Object.create(null));
+         setInpatientRequests(result);
+      } else {
+         setInpatientRequests([]);
+      }
+      setIsLoading(false);
+   };
+   useEffect(() => {
+      getInpatienRequests();
+   }, [patientId]);
    const items = [
       {
-         label: 'Аннамез',
+         label: 'Анамнез',
          key: 1,
-         children: <Anemiz />
+         children: <Anemiz inpatientRequests={inpatientRequests} />
       },
       {
          label: 'Хэвтэх үед',
          key: 2,
-         children: <InPatient />
+         children: <InPatient inpatientRequests={inpatientRequests} />
       },
       {
          label: 'Өдрийн тэмдэглэл',
          key: 3,
-         children: <InPatientNotes Appointments={appointments} />
+         children: <InPatientNotes inpatientRequests={inpatientRequests} />
       },
       {
          label: 'Жижүүр эмчийн тэмдэглэл',
@@ -60,16 +94,21 @@ function MainInPatient({ appointments, patientId }) {
          children: <NursingStats />
       }
    ];
-   // return <Tabs type="card" size="small" items={items} />;
-   const [dd, setDd] = useState(Number);
    const onChange = (key) => {
-      setDd(key);
+      setCheckedKey(key);
    };
    const Render = () => {
-      if (dd != 0) {
-         return <div className="p-2">{items[dd - 1].children}</div>;
+      if (checkedKey != 0) {
+         return <div className="p-2">{items[checkedKey - 1].children}</div>;
       }
    };
+   useEffect(() => {
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+         setIsLoading(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+   }, [checkedKey]);
    return (
       <div>
          <div className="bg-[#1890ff] checkTag">
@@ -77,7 +116,7 @@ function MainInPatient({ appointments, patientId }) {
                return (
                   <CheckableTag
                      key={index}
-                     checked={dd === item.key}
+                     checked={checkedKey === item.key}
                      onChange={() => {
                         onChange(item.key);
                      }}
@@ -89,7 +128,7 @@ function MainInPatient({ appointments, patientId }) {
             })}
          </div>
          <div className="pt-1">
-            <Render />
+            {isLoading ? <FullScreenLoader full={false} /> : <Render />}
          </div>
       </div>
    );

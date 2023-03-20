@@ -136,9 +136,9 @@ function Xrays({ PatientId }) {
                                     header={
                                        <div className="grid">
                                           <span>
-                                             {el.createdAt
-                                                ?.replace(/T/, ' ')
-                                                .replace(/\..+/, '')}
+                                             {moment(el.createdAt).format(
+                                                'YYYY-MM-DD HH:mm'
+                                             )}
                                           </span>
                                        </div>
                                     }

@@ -1,7 +1,6 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Амьдралын нөхцөл
 import React from 'react';
 import { Col, Radio, Row, Divider, Input, Form } from 'antd';
-import { INPUT_HEIGHT } from '../../../../constant';
 
 export default function Step4() {
    return (

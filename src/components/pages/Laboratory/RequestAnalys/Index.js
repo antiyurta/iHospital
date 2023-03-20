@@ -39,6 +39,7 @@ function Index() {
    const barcodeRef = useRef();
    const [callbackForm] = Form.useForm();
    const [searchForm] = Form.useForm();
+   const [resultForm] = Form.useForm();
    const [formValues, setFormValues] = useState({});
    const [statusFilter, setStatusFilter] = useState(0);
    const [requestList, setRequestList] = useState([]);
@@ -47,6 +48,7 @@ function Index() {
    const [requestDetailList, setRequestDetailList] = useState([]);
    const [requestDetailListLoading, setRequestDetailListLoading] =
       useState(false);
+   const [measurements, setMeasurements] = useState([]);
    const [Dstart, setStart] = useState('');
    const [Dend, setEnd] = useState('');
    const [barcodeState, setBarCodeState] = useState(false);
@@ -315,6 +317,14 @@ function Index() {
       setRequestDetailList(response.data);
       setRequestDetailListLoading(false);
    };
+   const getMeasurements = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('reference/measurement', token, conf);
+      setMeasurements(response.data);
+   };
    const rowSelection = {
       selectedRowKeys: selectedRowKeys,
       onChange: (selectedRowKeys, selectedRows) => {
@@ -401,6 +411,7 @@ function Index() {
    }, Object.create(null));
    useEffect(() => {
       getErequest(1, 10, today, today, null, 0);
+      getMeasurements();
    }, []);
    return (
       <div>
@@ -669,6 +680,9 @@ function Index() {
             title="Хариу оруулах хэсэг"
             open={isOpenResult}
             onCancel={() => setIsOpenResult(false)}
+            onOk={() =>
+               resultForm.validateFields().then((values) => console.log(values))
+            }
             cancelText="Болих"
             okText="Хадгалах"
          >
@@ -676,9 +690,60 @@ function Index() {
                return (
                   <div key={key}>
                      <Divider>{key}</Divider>
-                     {value?.map((item, idx) => {
-                        return <p>{item.examinations?.name}</p>;
-                     })}
+                     <Form form={resultForm} layout="vertical">
+                        {value?.map((item, idx) => {
+                           return (
+                              <div key={idx}>
+                                 <p>{item.examinations?.name}</p>
+                                 <Table
+                                    rowKey={'id'}
+                                    bordered
+                                    columns={[
+                                       {
+                                          title: 'Нэр',
+                                          dataIndex: 'parameterName'
+                                       },
+                                       {
+                                          title: 'Лавлах хэмжээ',
+                                          render: (_, row) => {
+                                             return `${row.low} -> ${row.high}`;
+                                          }
+                                       },
+                                       {
+                                          title: 'Хэмжих нэгж',
+                                          dataIndex: 'measurementId',
+                                          render: (text) => {
+                                             return measurements.find(
+                                                (e) => e.id === text
+                                             ).name;
+                                          }
+                                       },
+                                       {
+                                          title: 'Хариу',
+                                          render: (_, row) => {
+                                             return (
+                                                <Form.Item
+                                                   name={[
+                                                      row.parameterName,
+                                                      'result'
+                                                   ]}
+                                                >
+                                                   <Input />
+                                                </Form.Item>
+                                             );
+                                          }
+                                       },
+                                       {
+                                          title: 'HL'
+                                       }
+                                    ]}
+                                    dataSource={item?.examinations?.parameters}
+                                    pagination={false}
+                                 />
+                              </div>
+                           );
+                        })}
+                     </Form>
                   </div>
                );
             })}

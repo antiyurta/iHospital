@@ -30,7 +30,7 @@ function DoctorAppointment() {
       const conf = {
          headers: {},
          params: {
-            registerNumber: value,
+            filter: value,
             page: page,
             limit: pageSize
          }

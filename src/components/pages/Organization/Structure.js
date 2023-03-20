@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Post } from '../../comman';
+import { DefualtGet, Get, Post } from '../../comman';
 import UTable from '../../UTable';
 
 function Structure() {
    const token = useSelector(selectCurrentToken);
    const [testParam, setTestParam] = useState(true);
-   const [data, setData] = useState({});
+   const [financeDepartments, setFinanceDepartments] = useState([]);
    const config = {
       headers: {},
       params: {
@@ -63,6 +63,15 @@ function Structure() {
          label: 'Захиалга авах эсэх',
          isView: true,
          input: 'switch',
+         col: 24
+      },
+      {
+         label: 'Санхүүгийн тасаг',
+         index: 'financeDepId',
+         isView: true,
+         input: 'select',
+         inputData: financeDepartments,
+         relIndex: 'dep_name',
          col: 24
       }
    ];
@@ -139,20 +148,22 @@ function Structure() {
       const response = await Get('organization/structure', token, config);
       setDepartments(response.data);
    };
+   const getFinanceDepartments = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('finance/department', token, conf);
+      response?.data?.map((item, index) => {
+         item.id = item.dep_id;
+      });
+      console.log(response.data);
+      setFinanceDepartments(response.data);
+   };
    useEffect(() => {
       getDepartments();
+      getFinanceDepartments();
    }, []);
-
-   const connectFinance = async (el) => {
-      data.dep_id = el.id;
-      data.dep_name = el.name;
-      config.params = {};
-      const response = await Post(`finance/department`, token, config, data);
-      // console.log("RES ============> connectFinance", response);
-      if (response === 201) {
-         setTestParam(!testParam);
-      }
-   };
    return (
       <div className="flex flex-wrap">
          <div className="w-full p-1">
@@ -166,8 +177,6 @@ function Structure() {
                isUpdate={true}
                isDelete={true}
                width="80%"
-               isFinance={true}
-               financeFunction={(el) => connectFinance(el)}
                isRefresh={testParam}
             />
          </div>

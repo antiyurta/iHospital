@@ -1,265 +1,154 @@
-import { FolderOpenOutlined, FolderOutlined } from '@ant-design/icons';
-import { Collapse, Divider, Spin } from 'antd';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
-const { Panel } = Collapse;
-function InPatient() {
-   let location = useLocation();
-   const token = useSelector(selectCurrentToken);
-   const [isLoading, setIsLoading] = useState(false);
-   const [inpatient, setInpatient] = useState([]);
-   const getInPatient = async () => {
-      setIsLoading(true);
-      const conf = {
-         headers: {},
-         params: {
-            patientId: location?.state?.patientId
-         }
-      };
-      const response = await Get('emr/general-inspection', token, conf);
-      if (response.data.length > 0) {
-         var result = response.data.reduce(function (r, a) {
-            //Оноор бүлэглэх
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
-            r[a.createdAt.substring(0, 4)].push(a);
-            return r;
-         }, Object.create(null));
-         setInpatient(result);
-      } else {
-         setInpatient([]);
-      }
-      setIsLoading(false);
-   };
+import React from 'react';
+import IndexCollapse from './IndexCollapse';
+import {
+   bodyCondition,
+   mind,
+   skin,
+   respiratoryListen,
+   heartTapping,
+   heartSound,
+   tongue,
+   abdomen,
+   audition
+} from './General';
+function InPatient({ inpatientRequests }) {
    const RenderHTML = (data) => {
       if (data.data) {
          return Object.entries(data?.data).map(([key, value], index) => {
             return (
-               <div key={index} className="flex flex-wrap">
+               <span key={index} className="flex flex-wrap">
                   {Object.entries(value).map((elValues, index) => {
                      return (
-                        <p className="pr-2" key={index}>
+                        <span className="pr-2" key={index}>
                            {elValues[0] + ': ' + elValues[1]}
-                        </p>
+                        </span>
                      );
                   })}
-               </div>
+               </span>
             );
          });
       }
    };
-   useEffect(() => {
-      getInPatient();
-   }, [location]);
+   const ConvertData = (row) => {
+      var string = '';
+      if (row?.bodyCondition != null) {
+         string += `Биеийн ерөнхий байдал:${
+            bodyCondition[`${row.bodyCondition}`]
+         }, `;
+      }
+      if (row?.mind != null) {
+         string += `Ухаан санаа:${mind[`${row.mind}`]}, `;
+      }
+      if (row?.skin != null) {
+         string += ` Арьс салст:${skin[`${row.skin}`]}, `;
+      }
+      if (row?.respiratoryOneMinute != null) {
+         string += `Амьсгал 1 минутанд: ${row.respiratoryOneMinute}, `;
+      }
+      if (row?.respiratoryListen != null) {
+         string += `Чагналтаар: ${
+            respiratoryListen[`${row.respiratoryListen}`]
+         }, `;
+      }
+      if (row?.pulseOneMinute != null) {
+         string += `Судасны цохилт 1 минутанд: ${row.pulseOneMinute}, `;
+      }
+      if (row?.volt != null) {
+         string += `Хүчдэл дүүрэлт: ${row.volt}, `;
+      }
+      if (row?.heartTapping != null) {
+         string += `Тогшилтоор /Зүрхний хил/: ${
+            heartTapping[`${row.heartTapping}`]
+         }, `;
+      }
+      if (row?.heartSound != null) {
+         string += `Чагналтаар /Зүрхний авиа/: ${
+            heartSound[`${row.heartSound}`]
+         }`;
+      }
+      if (row?.heartBPRight != null) {
+         string += `АД баруун талд: ${row.heartBPRight}`;
+      }
+      if (row?.heartBPLeft != null) {
+         string += `Зүүн талд: ${row.heartBPLeft}`;
+      }
+      if (row?.tongue != null) {
+         string += `Хэл: ${tongue[`${row.tongue}`]}`;
+      }
+      if (row?.abdomen != null) {
+         string += `Хэвлийн үзлэг: ${abdomen[`${row.abdomen}`]}`;
+      }
+      if (row?.abdomen != null) {
+         string += `Сонсох чадвар: ${audition[`${row.audition}`]}`;
+      }
+      if (row?.other != null) {
+         string += `Бусад: ${row.other}`;
+      }
+      if (row?.mentalState != null) {
+         string += `Cэтгэцийн байдал: ${row.mentalState}`;
+      }
+      return string;
+   };
+   const column = [
+      {
+         title: 'Зовиурь',
+         dataIndex: ['appointment', 'inspectionNote', 'pain'],
+         render: (text) => {
+            return (
+               <p className="text-black">
+                  <RenderHTML data={JSON.parse(text)} />
+               </p>
+            );
+         }
+      },
+      {
+         title: 'Асуумж',
+         dataIndex: ['appointment', 'inspectionNote', 'question'],
+         render: (text) => {
+            return (
+               <p className="text-black">
+                  <RenderHTML data={JSON.parse(text)} />
+               </p>
+            );
+         }
+      },
+      {
+         title: 'Бодит үзлэг',
+         dataIndex: ['appointment', 'inspectionNote', 'inspection'],
+         render: (text) => {
+            return (
+               <p className="text-black">
+                  <RenderHTML data={JSON.parse(text)} />
+               </p>
+            );
+         }
+      },
+      {
+         title: 'Төлөвлөгөө',
+         dataIndex: ['appointment', 'inspectionNote', 'plan'],
+         render: (text) => {
+            return (
+               <p className="text-black">
+                  <RenderHTML data={JSON.parse(text)} />
+               </p>
+            );
+         }
+      },
+      {
+         title: 'Ерөнхий үзлэг',
+         render: (_, row) => {
+            return ConvertData(row);
+         }
+      }
+   ];
    return (
-      <Spin spinning={isLoading} tip="Уншиж байна...">
-         <Collapse
-            collapsible="header"
-            expandIcon={({ isActive }) => {
-               return isActive ? (
-                  <FolderOpenOutlined style={{ fontSize: '24px' }} />
-               ) : (
-                  <FolderOutlined style={{ fontSize: '24px' }} />
-               );
-            }}
-            ghost
-            accordion
-         >
-            {Object.entries(inpatient).map(([key, value], index) => {
-               return (
-                  <Panel header={`${key} Он`} key={index}>
-                     <Collapse
-                        Collapse
-                        collapsible="header"
-                        // onChange={onChange}
-                        accordion
-                     >
-                        {value?.map((item, index) => {
-                           return (
-                              <Panel
-                                 header={
-                                    <div className="grid">
-                                       <span>
-                                          {moment(item.createdAt)
-                                             .utcOffset('+0800')
-                                             .format('YYYY-MM-DD HH:mm')}
-                                       </span>
-                                    </div>
-                                 }
-                                 key={value[index].id}
-                              >
-                                 <p className="font-bold">Хэвтэх үе:</p>
-                                 <Divider
-                                    orientation="left"
-                                    className="text-sm my-2"
-                                 >
-                                    Зовиурь
-                                 </Divider>
-                                 <RenderHTML
-                                    data={JSON.parse(
-                                       item?.appointment?.inspectionNote?.pain
-                                    )}
-                                 />
-                                 <Divider
-                                    orientation="left"
-                                    className="text-sm my-2"
-                                 >
-                                    Асуумж
-                                 </Divider>
-                                 <RenderHTML
-                                    data={JSON.parse(
-                                       item?.appointment?.inspectionNote
-                                          ?.question
-                                    )}
-                                 />
-                                 <Divider
-                                    orientation="left"
-                                    className="text-sm my-2"
-                                 >
-                                    Бодит үзлэг
-                                 </Divider>
-                                 <RenderHTML
-                                    data={JSON.parse(
-                                       item?.appointment?.inspectionNote
-                                          ?.inspection
-                                    )}
-                                 />
-                                 <Divider
-                                    orientation="left"
-                                    className="text-sm my-2"
-                                 >
-                                    Төлөвлөгөө
-                                 </Divider>
-                                 <RenderHTML
-                                    data={JSON.parse(
-                                       item?.appointment?.inspectionNote?.plan
-                                    )}
-                                 />
-                                 <Divider
-                                    orientation="left"
-                                    className="text-sm my-2"
-                                 >
-                                    Онош
-                                 </Divider>
-                                 <span className="font-bold">
-                                    Ерөнхий үзлэг:
-                                 </span>
-                                 <span>
-                                    Биеийн ерөнхий байдал:{' '}
-                                    {item.bodyCondition === 0 && 'Дунд'}
-                                    {item.bodyCondition === 1 && 'Хүндэвтэр'}
-                                    {item.bodyCondition === 2 && 'Хүнд'}
-                                    {item.bodyCondition === 3 && 'Маш хүнд'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Ухаан санаа:{' '}
-                                    {item.mind === 'REASONABLE' && 'Саруул'}
-                                    {item.mind === 'FADED' && 'Бүдгэрсэн'}
-                                    {item.mind === 'UNREASONABLE' && 'Ухаангүй'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Арьс салст:{' '}
-                                    {item.skin === 'NORMAL' && 'Хэвийн'}
-                                    {item.skin === 'UNNORMAL' && 'Хэвийн бус'}
-                                 </span>
-                                 <span>
-                                    Амьсгал 1 минутанд:{' '}
-                                    {item.respiratoryOneMinute}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Чагналтаар:{' '}
-                                    {item.respiratoryListen === 'LUNG' &&
-                                       'Уушги цулцангийн'}
-                                    {item.respiratoryListen === 'TUBE' &&
-                                       'Гуурсан хоолойн'}
-                                    {item.respiratoryListen === 'IMPORTANT' &&
-                                       'Хэржигнүүртэй'}
-                                    {item.respiratoryListen ===
-                                       'SHORT_BREATH' && 'Амьсгал сулавтар'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Судасны цохилт 1 минутанд:{' '}
-                                    {item.pulseOneMinute}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>Хүчдэл дүүрэлт: {item.volt}</span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Тогшилтоор /Зүрхний хил/:{' '}
-                                    {item.heartTapping === 'NORMAL' && 'Хэвийн'}
-                                    {item.heartTapping === 'LARGER' &&
-                                       'Томорсон'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Чагналтаар /Зүрхний авиа/:{' '}
-                                    {item.heartSound === 'BRIGHT' && 'Тод'}
-                                    {item.heartSound === 'DIM' && 'Бүдэг'}
-                                    {item.heartSound === 'DIMMY' && 'Бүдгэвтэр'}
-                                    {item.heartSound === 'SMOOTH' && 'Хэм жигд'}
-                                    {item.heartSound === 'UNEVEN' && 'Жигд бус'}
-                                    {item.heartSound === 'HEMOLYSIS' &&
-                                       'Хэм алдалттай'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    АД баруун талд: {item.heartBPRight}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>Зүүн талд: {item.heartBPLeft}</span>
-                                 <span>{', '}</span>
-                                 <span>Зүүн талд: {item.heartBPLeft}</span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Хэл: {item.tongue === 'NORMAL' && 'Ердийн'}
-                                    {item.tongue === 'DRY' && 'Хуурай'}
-                                    {item.tongue === 'NO_COLORFUL' &&
-                                       'Өнгөргүй'}
-                                    {item.tongue === 'COLORFUL' && 'Өнгөртэй'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Хэвлийн үзлэг:
-                                    {item.abdomen === 'PALPATION' &&
-                                       'Өнгөц тэмтрэлтээр'}
-                                    {item.abdomen === 'DEEP_PALPATION' &&
-                                       'Гүн тэмтрэлтээр'}
-                                    {item.abdomen === 'HURFUL' && 'Ердийн'}
-                                    {item.abdomen === 'MILD_PLEURAL' &&
-                                       'Зөөлөн гялтан цочрол үгүй'}
-                                    {item.abdomen === 'SYMTOMS_SHOCK' &&
-                                       'Гялтан цочролтын шинж илэрсэн'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Сонсох чадвар:
-                                    {item.audition === 'NORMAL' && 'Хэвийн'}
-                                    {item.audition === 'DECREASED' && 'Буурсан'}
-                                 </span>
-                                 <span>{', '}</span>
-                                 <span>Бусад: {item.other}</span>
-                                 <span>{', '}</span>
-                                 <span>
-                                    Cэтгэцийн байдал: {item.mentalState}
-                                 </span>
-                                 <span>{', '}</span>
-                              </Panel>
-                           );
-                        })}
-                     </Collapse>
-                  </Panel>
-               );
-            })}
-         </Collapse>
-      </Spin>
+      <IndexCollapse
+         hookKey="appointmentId"
+         hookParamName="appointmentId"
+         url={'emr/general-inspection'}
+         data={inpatientRequests}
+         column={column}
+      />
    );
 }
 export default InPatient;

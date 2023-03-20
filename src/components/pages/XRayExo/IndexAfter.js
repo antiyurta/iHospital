@@ -62,9 +62,9 @@ function IndexAfter({ type, params }) {
    };
    const getGenderInfo = (gender) => {
       if (gender === 'MAN') {
-         return <td>Эр</td>;
+         return 'Эр';
       } else {
-         return <td>Эмэгтэй</td>;
+         return 'Эмэгтэй';
       }
    };
    const getAge = (registerNumber) => {
@@ -178,12 +178,26 @@ function IndexAfter({ type, params }) {
          );
       }
    };
+   const getUsageTypeInfo = (type) => {
+      if (type === 'IN') {
+         return <p className="bg-[#5bc0de] text-white">Хэвтэн</p>;
+      } else {
+         return <p className="bg-[#5cb85c] text-white">Амбулатори</p>;
+      }
+   };
    const xrayRequestColumns = [
+      {
+         title: 'Төрөл',
+         dataIndex: 'usageType',
+         render: (text) => {
+            return getUsageTypeInfo(text);
+         }
+      },
       {
          title: 'Он сар',
          dataIndex: 'updatedAt',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return moment(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {

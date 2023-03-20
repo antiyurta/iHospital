@@ -273,6 +273,19 @@ function Index({ type, isDoctor }) {
          }
       },
       {
+         title: 'Эмч',
+         children: [
+            {
+               title: 'Овог',
+               dataIndex: ['employee', 'lastName']
+            },
+            {
+               title: 'Нэр',
+               dataIndex: ['employee', 'firstName']
+            }
+         ]
+      },
+      {
          title: 'Үзлэг',
          render: (_, row) => {
             return getInspectionInfo(row.inspectionType);
@@ -356,6 +369,27 @@ function Index({ type, isDoctor }) {
          render: (text) => {
             return getInPatientType(text);
          }
+      },
+      {
+         title: 'Тасаг',
+         dataIndex: ['structure', 'name']
+      },
+      {
+         title: 'Өрөө',
+         dataIndex: ['rooms', 'roomNumber']
+      },
+      {
+         title: 'Эмч',
+         children: [
+            {
+               title: 'Овог',
+               dataIndex: ['employee', 'lastName']
+            },
+            {
+               title: 'Нэр',
+               dataIndex: ['employee', 'firstName']
+            }
+         ]
       },
       {
          title: 'Дугаар',

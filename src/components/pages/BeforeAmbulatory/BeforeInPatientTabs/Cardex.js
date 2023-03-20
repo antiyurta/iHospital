@@ -17,11 +17,13 @@ import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get } from '../../../comman';
 
-function Cardex({ PatientId, ListId }) {
+function Cardex() {
    const today = new Date();
+   let location = useLocation();
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const token = useSelector(selectCurrentToken);
@@ -184,7 +186,7 @@ function Cardex({ PatientId, ListId }) {
          params: {
             page: page,
             limit: pageSize,
-            patientId: PatientId,
+            patientId: location?.state?.patientId,
             startDate: moment(start).format('YYYY-MM-DD HH:mm'),
             endDate: moment(end).format('YYYY-MM-DD HH:mm')
          }
@@ -208,7 +210,7 @@ function Cardex({ PatientId, ListId }) {
          params: {
             page: page,
             limit: pageSize,
-            patientId: PatientId,
+            patientId: location?.state?.patientId,
             startDate: moment(start).format('YYYY-MM-DD HH:mm'),
             endDate: moment(end).format('YYYY-MM-DD HH:mm')
          }
@@ -217,6 +219,7 @@ function Cardex({ PatientId, ListId }) {
       setEnd(end);
       const response = await Get('service/erequest', token, conf);
       if (response.data.length > 0) {
+         setSelectedRequestDtl([]);
          setSelectedRequestDtlMeta(response.meta);
          response?.data?.map((el) => {
             el.examinationRequestDetials?.map((dtl) => {
@@ -241,7 +244,7 @@ function Cardex({ PatientId, ListId }) {
          params: {
             page: page,
             limit: pageSize,
-            patientId: PatientId,
+            patientId: location?.state?.patientId,
             findStartDate: moment(start).format('YYYY-MM-DD HH:mm'),
             findEndDate: moment(end).format('YYYY-MM-DD HH:mm')
          }

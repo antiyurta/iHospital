@@ -130,18 +130,14 @@ function MainInpatientHistory({ selectedPatient }) {
             },
             {
                key: 4,
-               label: 'Мэдээгүйжүүлэх'
+               label: 'Мэдээгүйжүүлэг'
             },
             {
                key: 5,
-               label: 'Хэвтэх үеийн үзлэг'
-            },
-            {
-               key: 6,
                label: 'Мэс засал'
             },
             {
-               key: 7,
+               key: 6,
                label: 'Эмнэлгээс гаргах'
             }
          ]}

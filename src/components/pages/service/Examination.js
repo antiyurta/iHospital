@@ -1,4 +1,3 @@
-import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -16,7 +15,6 @@ function Examination() {
          type: 0
       }
    };
-
    const getExaminationTypeData = async () => {
       const response = await Get('service/type', token, config);
       setExaminationTypeData(response.data);
@@ -93,19 +91,21 @@ function Examination() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Шинжилгээ'}
-               url={'service/examination'}
-               column={column}
-               isCreate={true}
-               isRead={false}
-               isUpdate={true}
-               isDelete={true}
-               refresh={getExaminationTypeData}
-               width="40%"
-            />
+      <div>
+         <div className="flex flex-wrap">
+            <div className="w-full">
+               <UTable
+                  title={'Шинжилгээ'}
+                  url={'service/examination'}
+                  column={column}
+                  isCreate={true}
+                  isRead={false}
+                  isUpdate={true}
+                  isDelete={true}
+                  refresh={getExaminationTypeData}
+                  width="40%"
+               />
+            </div>
          </div>
       </div>
    );

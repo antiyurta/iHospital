@@ -23,7 +23,6 @@ function PatientInformation({
    };
    const handleTypeChangePatient = async (value) => {
       handleTypeChange(value);
-      console.log(value);
    };
 
    const getGender = (registerNumber) => {
@@ -143,7 +142,7 @@ function PatientInformation({
          }}
          extra={
             <Search
-               placeholder="Регистр хайх"
+               placeholder="Регистр/Нэрээр хайх"
                onSearch={onSearch}
                enterButton="Хайх"
             />

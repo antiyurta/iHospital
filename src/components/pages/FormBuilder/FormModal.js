@@ -10,7 +10,6 @@ import {
    Typography
 } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { INPUT_HEIGHT } from '../../../constant';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';

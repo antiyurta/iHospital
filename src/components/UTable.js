@@ -270,6 +270,14 @@ function UTable(props) {
                               Санхүү
                            </th>
                         ) : null}
+                        {props.isHospital ? (
+                           <th
+                              className="w-3 font-bold text-sm align-middle"
+                              rowSpan={2}
+                           >
+                              Санхүү
+                           </th>
+                        ) : null}
                      </tr>
                      <tr>
                         {props.column.map((element, index) => {
@@ -404,6 +412,23 @@ function UTable(props) {
                                           <Button
                                              onClick={() =>
                                                 props.financeFunction(row)
+                                             }
+                                             type="text"
+                                             className="text-sky-500 font-semibold"
+                                          >
+                                             Холбох
+                                          </Button>
+                                       )}
+                                    </td>
+                                 ) : null}
+                                 {props.isHospital ? (
+                                    <td className="p-2">
+                                       {row.financeOrganizationId ? (
+                                          <CheckOutlined className="text-green-600" />
+                                       ) : (
+                                          <Button
+                                             onClick={() =>
+                                                props.hospitalFunction(row)
                                              }
                                              type="text"
                                              className="text-sky-500 font-semibold"

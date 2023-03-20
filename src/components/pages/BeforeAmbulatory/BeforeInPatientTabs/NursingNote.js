@@ -21,6 +21,7 @@ function NursingNote({ PatientId, ListId, PatientData }) {
    const [isOpenNoteModal, setIsOpenNoteModal] = useState(false);
    const [isOpenSecond, setIsOpenSecond] = useState(false);
    const [id, setId] = useState(Number);
+   const [loading, setLoading] = useState(false);
    const getNursingNote = async () => {
       setSpinner(true);
       const conf = {
@@ -35,6 +36,7 @@ function NursingNote({ PatientId, ListId, PatientData }) {
       setSpinner(false);
    };
    const onFinish = async (values) => {
+      setLoading(true);
       const conf = {
          headers: {},
          params: {}
@@ -55,6 +57,7 @@ function NursingNote({ PatientId, ListId, PatientData }) {
          getNursingNote();
          setIsOpenNoteModal(false);
       }
+      setLoading(false);
    };
    const onUpdate = async (values) => {
       const conf = {
@@ -327,6 +330,7 @@ function NursingNote({ PatientId, ListId, PatientData }) {
                   onFinish(values);
                });
             }}
+            confirmLoading={loading}
             cancelText="Болих"
             okText="Хадгалах"
             width={'35cm'}

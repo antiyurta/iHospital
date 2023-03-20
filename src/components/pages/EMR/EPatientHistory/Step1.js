@@ -11,7 +11,6 @@ import {
    Form,
    Select
 } from 'antd';
-import { INPUT_HEIGHT } from '../../../../constant';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 
 export default function Step1() {

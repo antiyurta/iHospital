@@ -9,7 +9,8 @@ import {
    Descriptions,
    Table,
    Tabs,
-   Empty
+   Empty,
+   ConfigProvider
 } from 'antd';
 import { EyeOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Delete, Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
@@ -23,7 +24,7 @@ import MoreInfo from './Patient/MoreInfo';
 import ResidentialAddress from './Patient/ResidentialAddress';
 import Insurance from './Patient/Insurance';
 import Contact from './Patient/Contact';
-import TabPane from 'antd/lib/tabs/TabPane';
+import mnMN from 'antd/es/locale/mn_MN';
 
 const { Search } = Input;
 
@@ -429,28 +430,39 @@ function Patient() {
                </Button>
             }
          >
-            <Table
-               rowKey={'id'}
-               bordered
-               columns={colums}
-               dataSource={data}
-               scroll={{
-                  x: 1500
-               }}
-               locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-               loading={{
-                  spinning: spinner,
-                  tip: 'Уншиж байна...'
-               }}
-               pagination={{
-                  simple: true,
-                  pageSize: 20,
-                  total: meta.itemCount,
-                  current: meta.page,
-                  onChange: (page, pageSize) =>
-                     getData(page, pageSize, pValue, pIndex)
-               }}
-            />
+            <ConfigProvider locale={mnMN}>
+               <Table
+                  rowKey={'id'}
+                  bordered
+                  size="small"
+                  columns={colums}
+                  dataSource={data}
+                  scroll={{
+                     x: 1500
+                  }}
+                  locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                  loading={{
+                     spinning: spinner,
+                     tip: 'Уншиж байна...'
+                  }}
+                  pagination={{
+                     position: ['topCenter', 'bottomCenter'],
+                     size: 'small',
+                     current: meta.page,
+                     total: meta.itemCount,
+                     showTotal: (total, range) =>
+                        `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                     pageSize: meta.limit,
+                     total: meta.itemCount,
+                     current: meta.page,
+                     showSizeChanger: true,
+                     pageSizeOptions: ['5', '10', '20', '50'],
+                     showQuickJumper: true,
+                     onChange: (page, pageSize) =>
+                        getData(page, pageSize, pValue, pIndex)
+                  }}
+               />
+            </ConfigProvider>
          </Card>
          <Modal
             title="Өвчтөн бүртгэх"

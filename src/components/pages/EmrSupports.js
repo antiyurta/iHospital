@@ -1,5 +1,14 @@
 import { PrinterFilled } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Modal, Select, Table } from 'antd';
+import {
+   Button,
+   Card,
+   DatePicker,
+   Empty,
+   Form,
+   Modal,
+   Select,
+   Table
+} from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -9,21 +18,32 @@ import {
    selectCurrentInsurance,
    selectCurrentToken
 } from '../../features/authReducer';
-import { DefualtGet, Get, Post } from '../comman';
+import {
+   DefaultPost,
+   DefualtGet,
+   Get,
+   localMn,
+   localMnC,
+   openNofi,
+   Post
+} from '../comman';
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
+import Diagnose from './service/Diagnose';
 //
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 function EmrSupports({ appointmentId, usageType, patient }) {
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    let location = useLocation();
-   console.log(patient);
+   console.log(location);
    const [sentForm] = Form.useForm(); // shiljuuleh
    const [clauseForm] = Form.useForm(); // zaalt
    const [moveForm] = Form.useForm(); // ilgeeh
+   const [sealForm] = Form.useForm(); // bituumj uusgeh
    const [sentReason, setSentReason] = useState([]); // ilgeeh shaltgaan
    const [storyLists, setStoryLists] = useState([]);
    const [storyLoading, setStoryLoading] = useState(false);
@@ -41,7 +61,11 @@ function EmrSupports({ appointmentId, usageType, patient }) {
    // zaalt oruulah
    const [isOpenClauseModal, setIsOpenClauseModal] = useState(false);
    const [hicsServices, setHicsServices] = useState([]); // uilcilgeenuud
+   const [isLoadingClause, setIsLoadingClause] = useState(false); // loading
    // zaalt oruulah
+   // bituumj uusgeh
+   const [isOpenSealModal, setIsOpenSealModal] = useState(false);
+   // bituumj uusgeh
    const getStoryTEST = async () => {
       setStoryLoading(true);
       const conf = {
@@ -120,17 +144,27 @@ function EmrSupports({ appointmentId, usageType, patient }) {
       console.log(response);
    };
    const setApproval = async (values) => {
+      setIsLoadingClause(true);
       const conf = {
          headers: {},
          params: {}
       };
       values['patientId'] = location?.state?.patientId;
-      const response = await Post(
+      const response = await DefaultPost(
          'health-insurance/set-approval',
          token,
          conf,
          values
       );
+      console.log(response);
+      if (response === 201) {
+         setIsOpenClauseModal(false);
+         openNofi('success', 'Даатгал', 'Мэдээллийг амжилттай хадгаллаа.');
+      } else {
+         setIsOpenClauseModal(false);
+         openNofi('error', 'Даатгал', 'Мэдээллийг хадгалахад алдаа гарлаа.');
+      }
+      setIsLoadingClause(false);
    };
    const sentReasonTo = async (values) => {
       const conf = {
@@ -145,6 +179,25 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          values
       );
    };
+   const sentSeal = async (values) => {
+      console.log(values);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      values['patientId'] = location?.state?.patientId;
+      const response = await Post(
+         'health-insurance/hics-service',
+         token,
+         conf,
+         values
+      );
+   };
+   //
+   const DiagnoseHandleClick = (diagnoses) => {
+      sealForm.setFieldValue('diagnose', diagnoses);
+   };
+   //
    useEffect(() => {
       getStoryTEST();
    }, [isOpenDocumentModal]);
@@ -183,6 +236,9 @@ function EmrSupports({ appointmentId, usageType, patient }) {
                </Button>
                <Button onClick={() => setIsOpenClauseModal(true)}>
                   Заалт оруулах
+               </Button>
+               <Button onClick={() => setIsOpenSealModal(true)}>
+                  Битүүмж үүсгэх
                </Button>
                <Button onClick={() => setIsOpenDocumentModal(true)}>
                   Өвчний түүх
@@ -281,6 +337,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
                   setApproval(values);
                })
             }
+            confirmLoading={isLoadingClause}
             okText="Оруулах"
             cancelText="Болих"
          >
@@ -414,6 +471,59 @@ function EmrSupports({ appointmentId, usageType, patient }) {
             </Form>
          </Modal>
          {/*  Эмнэлэгт өвчтөн илгээх хуудас */}
+         {/* Bituumj uusgeh */}
+         <Modal
+            title="Битүүмж үүсгэх"
+            open={isOpenSealModal}
+            onCancel={() => setIsOpenSealModal(false)}
+            onOk={() =>
+               sealForm.validateFields().then((values) => {
+                  sentSeal(values);
+               })
+            }
+         >
+            <Form form={sealForm} layout="vertical">
+               <div className="flex flex-wrap">
+                  <div className="w-1/2">
+                     <Form.Item label="Эхлэх огноо" name="startDate">
+                        <DatePicker locale={localMnC()} />
+                     </Form.Item>
+                  </div>
+                  <div className="w-1/2">
+                     <Form.Item label="Дуусах огноо" name="endDate">
+                        <DatePicker locale={localMnC()} />
+                     </Form.Item>
+                  </div>
+                  <div className="w-full">
+                     <Form.Item label="Үйлчилгээ" name="hicsServiceId">
+                        <Select
+                           showSearch
+                           optionFilterProp="children"
+                           filterOption={(input, option) =>
+                              (option?.children ?? '')
+                                 .toLowerCase()
+                                 .includes(input.toLowerCase())
+                           }
+                           style={{
+                              width: '100%'
+                           }}
+                        >
+                           {hicsServices.map((service, index) => {
+                              return (
+                                 <Option key={index} value={service.id}>
+                                    {service.name}
+                                 </Option>
+                              );
+                           })}
+                        </Select>
+                     </Form.Item>
+                  </div>
+                  <div className="w-full">
+                     <Diagnose handleClick={DiagnoseHandleClick} />
+                  </div>
+               </div>
+            </Form>
+         </Modal>
       </>
    );
 }

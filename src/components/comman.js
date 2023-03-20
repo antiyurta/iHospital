@@ -1,8 +1,16 @@
 import axios from 'axios';
 import { notification } from 'antd';
+import mnMn from 'antd/es/locale/mn_MN';
+import mnMnn from 'antd/es/calendar/locale/mn_MN';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+export function localMn() {
+   return mnMn;
+}
+export function localMnC() {
+   return mnMnn;
+}
 export async function Get(url, token, config) {
    config.headers['Authorization'] = `Bearer ${token}`;
    config.headers['x-api-key'] = API_KEY;
@@ -243,5 +251,13 @@ export const getAge = (registerNumber) => {
       return age;
    } else {
       return null;
+   }
+};
+export const checkNumber = (event) => {
+   var charCode = event.charCode;
+   if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+      event.preventDefault();
+   } else {
+      return true;
    }
 };

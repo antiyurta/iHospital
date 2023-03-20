@@ -31,7 +31,7 @@ function PrivateRoute({ children }) {
          })
          .catch((error) => {
             console.log('=============>', error);
-            return false;
+            setIsAuth('failed');
          });
    }, [children]);
    if (isAuth === 'loading') {

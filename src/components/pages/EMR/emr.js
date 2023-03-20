@@ -319,10 +319,7 @@ function EMR() {
                            />
                         )}
                         {isUsageType === 'IN' && (
-                           <MainInPatient
-                              appointments={inPatientAppointments}
-                              patientId={IncomePatientId}
-                           />
+                           <MainInPatient patientId={IncomePatientId} />
                         )}
                      </Card>
                   </div>

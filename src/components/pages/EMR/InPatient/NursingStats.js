@@ -8,8 +8,7 @@ const { CheckableTag } = Tag;
 function NursingStats() {
    let location = useLocation();
    let state = location?.state;
-   console.log(state);
-   const [section, setSection] = useState(Number);
+   const [section, setSection] = useState(1);
    const onChange = (id) => {
       setSection(id);
    };
@@ -59,7 +58,7 @@ function NursingStats() {
    };
    return (
       <div>
-         <div className="bg-[#1890ff]">
+         <div className="bg-[#1890ff] checkTag">
             {items.map((item, index) => {
                return (
                   <CheckableTag
