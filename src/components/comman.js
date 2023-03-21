@@ -80,9 +80,12 @@ export async function Post(url, token, config, data) {
             }
          })
          .catch((error) => {
+            console.log(error);
             if (
-               error?.response?.status === 400 &&
-               error?.response?.data?.status === 409
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.status === 409) ||
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.name === 'HttpException')
             ) {
                const message = error.response?.data?.message?.replaceAll(
                   'HttpException:',
