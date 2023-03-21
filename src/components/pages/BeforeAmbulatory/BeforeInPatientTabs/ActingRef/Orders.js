@@ -136,14 +136,16 @@ function Orders() {
       <>
          <Row gutter={16} className="mb-2">
             <Col span={4}>
-               <Button className="mr-2" onClick={() => showModal()}>
+               <Button
+                  type="primary"
+                  className="mr-2"
+                  onClick={() => showModal()}
+               >
                   Захиалга
                </Button>
             </Col>
          </Row>
-         <Card bordered={false} className="header-solid max-h-max rounded-md">
-            <MiddleTable typeId={70} />
-         </Card>
+         <MiddleTable typeId={70} />
          <div className="pt-2">
             <Card
                bordered={false}

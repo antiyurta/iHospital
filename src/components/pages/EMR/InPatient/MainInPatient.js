@@ -7,6 +7,7 @@ import FullScreenLoader from '../../../FullScreenLoader';
 import Anemiz from './Anemiz';
 import InPatient from './InPatient';
 import InPatientNotes from './InPatientNotes';
+import MedicineList from './MedicineList';
 import NursingStats from './NursingStats';
 const { CheckableTag } = Tag;
 function MainInPatient({ patientId }) {
@@ -74,7 +75,8 @@ function MainInPatient({ patientId }) {
       },
       {
          label: 'Эмийн эмчилгээ',
-         key: 8
+         key: 8,
+         children: <MedicineList inpatientRequests={inpatientRequests} />
       },
       {
          label: 'Мэдээгүйжүүлэг',
