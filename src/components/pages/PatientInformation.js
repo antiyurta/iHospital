@@ -87,7 +87,7 @@ function PatientInformation({
             message += '';
          }
       }
-      if (message) {
+      if (message && committee != null && building != null && address != null) {
          return <p>{message + committee + ' ' + building + ' ' + address}</p>;
       }
       return;

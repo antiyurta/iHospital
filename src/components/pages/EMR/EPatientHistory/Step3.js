@@ -33,14 +33,7 @@ export default function Step3() {
                         name={['lifeStyle', 'alcohol', 'howLong']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -53,14 +46,7 @@ export default function Step3() {
                         name={['lifeStyle', 'alcohol', 'whatAlc']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -73,14 +59,7 @@ export default function Step3() {
                         name={['lifeStyle', 'alcohol', 'size']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -114,14 +93,7 @@ export default function Step3() {
                         name={['lifeStyle', 'cigar', 'fromAge']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -134,14 +106,7 @@ export default function Step3() {
                         name={['lifeStyle', 'cigar', 'usedYear']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -154,14 +119,7 @@ export default function Step3() {
                         name={['lifeStyle', 'alcohol', 'size']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -234,14 +192,7 @@ export default function Step3() {
                         name={['lifeStyle', 'food', 'dayEatCount']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -307,14 +258,7 @@ export default function Step3() {
                         name={['lifeStyle', 'exercise', 'oneTime']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -327,14 +271,7 @@ export default function Step3() {
                         name={['lifeStyle', 'exercise', 'weeklyCount']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>

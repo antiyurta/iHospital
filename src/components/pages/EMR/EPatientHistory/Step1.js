@@ -86,23 +86,6 @@ export default function Step1() {
                   <div className="p-1">
                      <Form.Item
                         className="mb-0"
-                        label="Хугацаандаа"
-                        name={['birth', 'stateTime']}
-                     >
-                        <Select className="p-1 h-7 inline-table">
-                           <Option value="0">Хугацаандаа</Option>
-                           <Option value="1">Дутуу</Option>
-                           <Option value="2">Илүү</Option>
-                        </Select>
-                     </Form.Item>
-                  </div>
-               </div>
-            </div>
-            <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
-                  <div className="p-1">
-                     <Form.Item
-                        className="mb-0"
                         label="Хэдэн 7 хоног"
                         name={['birth', 'fewWeeks']}
                      >

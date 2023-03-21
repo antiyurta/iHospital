@@ -222,28 +222,30 @@ function EmrSupports({ appointmentId, usageType, patient }) {
                maxHeight: 50
             }}
          >
-            <Button.Group>
-               <Button
-                  loading={hospitalListsLoading}
-                  onClick={() => {
-                     setIsOpenSentModal(true);
-                  }}
-               >
-                  Эмнэлэгт шилжүүлэх
-               </Button>
-               <Button onClick={() => setIsOpenMoveModal(true)}>
-                  Эмнэлэгт өвчтөн илгээх
-               </Button>
-               <Button onClick={() => setIsOpenClauseModal(true)}>
-                  Заалт оруулах
-               </Button>
-               <Button onClick={() => setIsOpenSealModal(true)}>
-                  Битүүмж үүсгэх
-               </Button>
-               <Button onClick={() => setIsOpenDocumentModal(true)}>
-                  Өвчний түүх
-               </Button>
-            </Button.Group>
+            {isInsurance && (
+               <Button.Group>
+                  <Button
+                     loading={hospitalListsLoading}
+                     onClick={() => {
+                        setIsOpenSentModal(true);
+                     }}
+                  >
+                     Эмнэлэгт шилжүүлэх
+                  </Button>
+                  <Button onClick={() => setIsOpenMoveModal(true)}>
+                     Эмнэлэгт өвчтөн илгээх
+                  </Button>
+                  <Button onClick={() => setIsOpenClauseModal(true)}>
+                     Заалт оруулах
+                  </Button>
+                  <Button onClick={() => setIsOpenSealModal(true)}>
+                     Битүүмж үүсгэх
+                  </Button>
+               </Button.Group>
+            )}
+            <Button onClick={() => setIsOpenDocumentModal(true)}>
+               Өвчний түүх
+            </Button>
          </Card>
          {/* 611 maygt */}
          <Modal

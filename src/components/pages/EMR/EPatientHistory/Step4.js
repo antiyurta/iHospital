@@ -67,14 +67,7 @@ export default function Step4() {
                         name={['lifeCondition', 'workCondition', 'locate']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
@@ -87,14 +80,7 @@ export default function Step4() {
                         name={['lifeCondition', 'workCondition', 'clock']}
                         className="mb-0"
                      >
-                        <Input
-                           size="small"
-                           style={{
-                              minHeight: INPUT_HEIGHT,
-                              padding: 5,
-                              height: INPUT_HEIGHT
-                           }}
-                        />
+                        <Input size="small" />
                      </Form.Item>
                   </div>
                </div>
