@@ -54,6 +54,12 @@ function Medicine({ isOpen, isClose, handleclick }) {
       const state = selectedMedicines.includes(medicine);
       if (state) {
          openNofi('warning', 'Эм', 'эм сонгогдсон байна');
+      } else if (medicine.price === 0) {
+         openNofi(
+            'warning',
+            'Эм',
+            'Энэ эм эмийн санд байхгүй тул сонгох боломжгүй'
+         );
       } else {
          medicine.type = 8;
          setSelectedMedicines([...selectedMedicines, medicine]);

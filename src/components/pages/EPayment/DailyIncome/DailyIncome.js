@@ -61,7 +61,9 @@ function DailyIncome() {
       const response = await Patch('payment/payment/' + id, token, config, {
          id: id
       });
-      console.log(response);
+      if (response === 200) {
+         getDailyIncome(1, 10, start, end);
+      }
    };
    const incomeColumns = [
       {

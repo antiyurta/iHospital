@@ -5,6 +5,7 @@ import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get } from '../../../comman';
 import FullScreenLoader from '../../../FullScreenLoader';
 import Anemiz from './Anemiz';
+import ComingSoon from './ComingSoon';
 import InPatient from './InPatient';
 import InPatientNotes from './InPatientNotes';
 import MedicineList from './MedicineList';
@@ -59,19 +60,23 @@ function MainInPatient({ patientId }) {
       },
       {
          label: 'Жижүүр эмчийн тэмдэглэл',
-         key: 4
+         key: 4,
+         children: <ComingSoon />
       },
       {
          label: 'Гарах, шилжих үеийн тэмдэглэл',
-         key: 5
+         key: 5,
+         children: <ComingSoon />
       },
       {
          label: 'Мэс засал',
-         key: 6
+         key: 6,
+         children: <ComingSoon />
       },
       {
          label: 'Дүрс оношилгоо',
-         key: 7
+         key: 7,
+         children: <ComingSoon />
       },
       {
          label: 'Эмийн эмчилгээ',
@@ -80,15 +85,18 @@ function MainInPatient({ patientId }) {
       },
       {
          label: 'Мэдээгүйжүүлэг',
-         key: 9
+         key: 9,
+         children: <ComingSoon />
       },
       {
          label: 'Шинжилгээний хариу',
-         key: 10
+         key: 10,
+         children: <ComingSoon />
       },
       {
          label: 'Эмийн бус эмчилгээ',
-         key: 11
+         key: 11,
+         children: <ComingSoon />
       },
       {
          label: 'Сувилгааны тэмдэглэл',

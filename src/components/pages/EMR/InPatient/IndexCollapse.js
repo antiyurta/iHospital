@@ -18,17 +18,6 @@ function IndexCollapse({
    const token = useSelector(selectCurrentToken);
    const [panelData, setPanelData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
-   const checkColor = (severity) => {
-      if (severity === 0) {
-         return '#dd4b39';
-      } else if (severity === 1) {
-         return '#f0ad4e';
-      } else if (severity === 2) {
-         return '#5bc0de';
-      } else if (severity === 3) {
-         return '#5cb85c';
-      }
-   };
    const onChange = async (id) => {
       if (id != undefined) {
          setIsLoading(true);
@@ -52,32 +41,6 @@ function IndexCollapse({
    };
    return (
       <>
-         <div className="flex">
-            <div
-               className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
-               <span className="font-medium mx-1">Маш хүнд</span>
-            </div>
-            <div
-               className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
-               <span className="font-medium mx-1">Хүндэвтэр</span>
-            </div>
-            <div
-               className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
-               <span className="font-medium mx-1">Дунд</span>
-            </div>
-            <div
-               className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
-               <span className="font-medium mx-1">Хөнгөн</span>
-            </div>
-         </div>
          <Collapse
             collapsible="header"
             expandIcon={({ isActive }) => {
@@ -89,12 +52,6 @@ function IndexCollapse({
             }}
             ghost
             accordion
-            // style={{
-            //    borderRight: '1px solid',
-            //    borderBottom: '1px solid',
-            //    borderLeft: '1px solid',
-            //    borderRadius: '5px'
-            // }}
          >
             {Object.entries(data).map(([key, value], index) => {
                return (
@@ -108,7 +65,7 @@ function IndexCollapse({
                            return (
                               <Panel
                                  header={
-                                    <div className="row-auto text-white">
+                                    <div className="row-auto">
                                        <span className="font-bold">
                                           {item.structure?.name}
                                        </span>
@@ -125,9 +82,6 @@ function IndexCollapse({
                                     </div>
                                  }
                                  key={value[index][`${hookKey}`]}
-                                 style={{
-                                    background: checkColor(item?.severity)
-                                 }}
                               >
                                  {isLoading ? (
                                     <FullScreenLoader full={false} />
