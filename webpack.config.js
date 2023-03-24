@@ -11,8 +11,6 @@ module.exports = {
       filename: '[name].js',
       chunkFilename: '[name].bundle.js',
       path: path.resolve(__dirname, './build')
-      // filename: 'index_bundle.js'
-      // chunkFilename: 'vendor-react.js'
    },
    devServer: {
       port: 3000,
@@ -61,6 +59,10 @@ module.exports = {
          template: path.resolve(__dirname, './public/index.html'),
          filename: 'index.html',
          favicon: './public/Rfavicon.png'
+      }),
+      new webpack.IgnorePlugin({
+         resourceRegExp: /^\.\/locale$/,
+         contextRegExp: /moment$/
       }),
       new Dotenv({
          path: './.env',

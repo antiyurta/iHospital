@@ -25,7 +25,6 @@ import ResidentialAddress from './Patient/ResidentialAddress';
 import Insurance from './Patient/Insurance';
 import Contact from './Patient/Contact';
 import mnMN from 'antd/es/locale/mn_MN';
-
 const { Search } = Input;
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -189,14 +188,14 @@ function Patient() {
                data
             );
             if (response === 200) {
-               getData(1);
+               getData(1, 20);
                setIsConfirmLoading(false);
                setIsModalVisible(false);
             }
          } else {
             const response = await Post('pms/patient', token, conf, data);
             if (response === 201) {
-               getData(1);
+               getData(1, 20);
                setIsConfirmLoading(false);
                setIsModalVisible(false);
             }
