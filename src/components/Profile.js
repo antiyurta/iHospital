@@ -101,7 +101,7 @@ function Profile() {
       if (passwordValid) {
          await axios
             .post(
-               process.env.REACT_APP_DEV_URL + 'authentication/changePassword',
+               process.env.REACT_APP_DEV_URL + 'authentication/change-password',
                { password: password, token: token },
                {
                   headers: {
