@@ -62,10 +62,6 @@ module.exports = {
          filename: 'index.html',
          favicon: './public/Rfavicon.png'
       }),
-      new webpack.IgnorePlugin({
-         resourceRegExp: /^\.\/locale$/,
-         contextRegExp: /moment$/
-      }),
       new Dotenv({
          path: './.env',
          systemvars: true
