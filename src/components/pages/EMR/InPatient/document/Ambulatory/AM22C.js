@@ -1,4 +1,5 @@
 import React from 'react';
+import { Table } from 'react-bootstrap';
 
 //маягт АМ-22В
 function AM22C() {
