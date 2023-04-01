@@ -1,5 +1,5 @@
 import { Button, Form, Input, Radio, Space } from 'antd';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Table } from 'react-bootstrap';
 
 function Rebuild({ data }) {

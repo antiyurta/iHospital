@@ -1,8 +1,8 @@
 import React from "react";
 import { Table } from "react-bootstrap";
 
-//маягт АМ-22К
-function AM22К() {
+//маягт АМ-22Л
+function AM22L() {
   const styles = {
     generalText: {
       fontSize: 12,
@@ -67,7 +67,7 @@ function AM22К() {
                 }}
               ></span>
               <span style={{ fontWeight: "bold", fontSize: 12 }}>
-                Эрүүл мэндийн бүртгэлийн маягт АМ-22К
+                Эрүүл мэндийн бүртгэлийн маягт АМ-22Л
               </span>
             </div>
           </div>
@@ -78,7 +78,7 @@ function AM22К() {
           </div>
           <div style={{ textAlign: "center", marginBottom: 5 }}>
             <span style={{ fontWeight: "bold", fontSize: 12 }}>
-              Нян судлалын лабораторийн шинжилгээний дүн
+              ХДХВ-ийн халдвар илрүүлэх шинжилгээний дүн
             </span>
           </div>
           <Table
@@ -99,22 +99,24 @@ function AM22К() {
                 <td style={{ ...styles.centerText, ...{ width: "10%" } }}>
                   Зорилго
                 </td>
-                <td colSpan={8} style={styles.centerText}>
-                  БЗДХ-ын үүсгэгч илрүүлэх
+                <td colSpan={6} style={styles.centerText}>
+                  ХДХВ ½-н халдвар илрүүлэх
                 </td>
               </tr>
               <tr>
                 <td style={styles.centerText}>Төрөл</td>
+                <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
                 <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                  Наац
+                  Хурдавчилсан
                 </td>
                 <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
-                <td style={styles.centerText}>Өсгөвөр</td>
-                <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
-                <td colSpan={3} style={styles.centerText}>
-                  Ньюжентийн шалгуур
+                <td style={{ ...styles.centerText, ...{ width: 100 } }}>
+                  Наалдуулах
                 </td>
                 <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
+                <td style={{ ...styles.centerText, ...{ width: 100 } }}>
+                  ФХЭБУ
+                </td>
               </tr>
             </tbody>
           </Table>
@@ -196,7 +198,7 @@ function AM22К() {
                 </td>
                 <td style={styles.centerText}></td>
                 <td style={{ ...styles.centerText, ...{ width: 300 } }}>
-                  13 А маягтын дугаар
+                  Өвчний түүхийн дугаар
                 </td>
                 <td style={styles.centerText}></td>
               </tr>
@@ -241,27 +243,29 @@ function AM22К() {
           <Table bordered className="document" style={{ marginBottom: 0 }}>
             <tbody>
               <tr>
-                <td style={{ ...styles.centerText, ...{ width: 100 } }}>
+                <td style={{ ...styles.centerText, ...{ width: 50 } }}>
                   Төрөл
                 </td>
+                <td style={{ ...styles.centerText, ...{ width: 50 } }}>Цус</td>
+                <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
                 <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                  Ялгадас
+                  Ийлдэс
                 </td>
                 <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
-                <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                  Бусад
-                </td>
-                <td style={{ ...styles.centerText, ...{ width: 150 } }}></td>
               </tr>
             </tbody>
           </Table>
           <Table bordered className="document" style={{ marginBottom: 0 }}>
             <tbody>
               <tr>
-                <td style={{ ...styles.leftText, ...{ width: "50%" } }}>
-                  Сорьцын дугаар
+                <td style={{ ...styles.leftText, ...{ width: "20%" } }}>
+                  Дугаар
                 </td>
-                <td style={{ ...styles.centerText, ...{ width: "50%" } }}></td>
+                <td style={{ ...styles.centerText, ...{ width: "30%" } }}></td>
+                <td style={{ ...styles.centerText, ...{ width: "20%" } }}>
+                  Хэмжээ
+                </td>
+                <td style={{ ...styles.centerText, ...{ width: "30%" } }}></td>
               </tr>
             </tbody>
           </Table>
@@ -279,16 +283,6 @@ function AM22К() {
               </tr>
             </tbody>
           </Table>
-          <Table bordered className="document" style={{ marginBottom: 0 }}>
-            <tbody>
-              <tr>
-                <td style={{ ...styles.leftText, ...{ width: "20%" } }}>
-                  Онош
-                </td>
-                <td style={{ ...styles.centerText, ...{ width: "80%" } }}></td>
-              </tr>
-            </tbody>
-          </Table>
           <div
             style={{
               fontSize: 12,
@@ -297,144 +291,64 @@ function AM22К() {
               marginBottom: 10,
             }}
           >
-            Наацын шинжилгээний дүн:
+            Шинжилгээний дүн:
           </div>
           <Table bordered className="document">
             <tbody>
               <tr>
-                <td
-                  rowSpan={2}
-                  style={{ ...styles.centerText, ...{ width: "25%" } }}
-                >
-                  Шинжлэгдэхүүн
+                <td style={{ ...styles.centerText, ...{ width: "5%" } }}>№</td>
+                <td style={{ ...styles.centerText, ...{ width: "20%" } }}>
+                  Шинжилгээний төрөл
                 </td>
-                <td
-                  rowSpan={2}
-                  style={{ ...styles.centerText, ...{ width: "25%" } }}
-                >
-                  Эрэгтэй шээсний сүв
+                <td style={{ ...styles.centerText, ...{ width: "20%" } }}>
+                  Лавлах хэмжээ
                 </td>
-                <td
-                  colSpan={2}
-                  style={{ ...styles.centerText, ...{ width: "50%" } }}
-                >
-                  Эмэгтэй
+                <td style={{ ...styles.centerText, ...{ width: "20%" } }}>
+                  Үр дүн
+                </td>
+                <td style={{ ...styles.centerText, ...{ width: "15%" } }}>
+                  Тайлбар
                 </td>
               </tr>
               <tr>
-                <td style={{ ...styles.centerText, ...{ width: "25%" } }}>
-                  Үтрээнд
-                </td>
-                <td style={{ ...styles.centerText, ...{ width: "25%" } }}>
-                  Умайн хүзүүний суваг
-                </td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Хучуур эс</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Цагаан эс</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Грам /-/ диплококк</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Трихомонад</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Кокк</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Мөөгний эс</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Савханцар</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Түлхүүр эс</td>
-                <td style={styles.leftText}></td>
-                <td style={styles.leftText}></td>
+                <td style={styles.centerText}>1.</td>
+                <td style={styles.centerText}>Anti HIV1/2</td>
+                <td style={styles.centerText}>Сөрөг</td>
                 <td style={styles.leftText}></td>
               </tr>
             </tbody>
           </Table>
           <div
             style={{
-              fontSize: 12,
-              fontWeight: "bold",
-              marginTop: 20,
-              marginBottom: 10,
+              ...styles.rowStyle,
+              ...{ marginTop: 50 },
             }}
           >
-            Ньюжентийн шалгуур
+            Шинжилгээ эхэлсэн огноо:................................... Дууссан
+            огноо: ................................
           </div>
-          <Table bordered className="document">
-            <tbody>
-              <tr>
-                <td
-                  style={{
-                    ...styles.leftText,
-                    ...{ width: "50%", fontWeight: "bold" },
-                  }}
-                >
-                  Элементүүд
-                </td>
-                <td
-                  style={{
-                    ...styles.centerText,
-                    ...{ width: "50%", fontWeight: "bold" },
-                  }}
-                >
-                  Тоо
-                </td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Лактобацилл</td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Гарднерелла</td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Мобилункус</td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Нийт дүн</td>
-                <td style={styles.leftText}></td>
-              </tr>
-              <tr>
-                <td style={styles.leftText}>Хариу</td>
-                <td style={styles.leftText}></td>
-              </tr>
-            </tbody>
-          </Table>
+          <div
+            style={{
+              ...styles.rowStyle,
+              ...{ marginTop: 10 },
+            }}
+          >
+            Шинжилгээ хийсэн: Лаборант .............................. Шинжээч
+            эмч: .................................
+          </div>
+          <div
+            style={{
+              ...styles.rowStyle,
+              ...{ marginTop: 10 },
+            }}
+          >
+            Хянасан: Лабораторийн
+            эмч:.....................................................................................
+          </div>
         </div>
       </div>
     </>
   );
 }
 
-export default AM22К;
+export default AM22L;

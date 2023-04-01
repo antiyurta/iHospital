@@ -85,7 +85,9 @@ export async function Post(url, token, config, data) {
                (error?.response?.status === 400 &&
                   error?.response?.data?.status === 409) ||
                (error?.response?.status === 400 &&
-                  error?.response?.data?.name === 'HttpException')
+                  error?.response?.data?.name === 'HttpException') ||
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.statusCode === 400)
             ) {
                const message = error.response?.data?.message?.replaceAll(
                   'HttpException:',
@@ -252,6 +254,17 @@ export const getAge = (registerNumber) => {
       const currentYear = date.getFullYear();
       const age = currentYear - year;
       return age;
+   } else {
+      return null;
+   }
+};
+export const getGender = (registerNumber) => {
+   if (registerNumber != undefined) {
+      if (registerNumber[registerNumber.length - 2] % 2 === 1) {
+         return 'Эр';
+      } else {
+         return 'Эм';
+      }
    } else {
       return null;
    }

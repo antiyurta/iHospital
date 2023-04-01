@@ -33,5 +33,10 @@
       "label": "Эмнэлгээс гарсан",
       "value": 6,
       "img": "filter6.png"
+   },
+   {
+      "label": "Бүгд",
+      "value": null,
+      "img": "filter7.png"
    }
 ]
