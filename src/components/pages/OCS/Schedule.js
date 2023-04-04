@@ -1,12 +1,22 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
-import { Checkbox, Divider, Modal, Select } from 'antd';
+import {
+   Alert,
+   Checkbox,
+   Divider,
+   Input,
+   InputNumber,
+   Modal,
+   Select
+} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { DefaultPost, Get, numberToCurrency, openNofi } from '../../comman';
 import Appointment from '../Appointment/Schedule/Appointment';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
+import axios from 'axios';
 const { Option } = Select;
+const { Search } = Input;
 function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    // isOCS = true bol emch OSC false bol burgel tolbor awah ued
    const token = useSelector(selectCurrentToken);
@@ -31,7 +41,11 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    const [discounts, setDiscounts] = useState([]);
    const [ebarimtModal, setEbarimtModal] = useState(false);
    const [ebarimtData, setEbarimtData] = useState({});
-
+   ///
+   const [isCustomerNo, setIsCustomerNo] = useState(false);
+   const [customerNo, setCustomerNo] = useState('');
+   const [customerInfo, setCustomerInfo] = useState({});
+   ///
    const getDiscounts = async () => {
       const response = await Get('payment/discount', token, config);
       setDiscounts(response.data);
@@ -99,22 +113,58 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    };
    const PaymentRequest = async () => {
       setPaymentConfirmLoading(true);
-      if (invoiceRequest.length > 0) {
-         const response = await DefaultPost('payment/payment', token, config, {
-            invoiceIds: invoiceRequest,
-            patientId: selectedPatient.id,
-            discountPercentId: discountPercentRequest
-         });
-         if (response) {
-            isClose(false);
-            setPaymentModal(false);
-            setEbarimtData(response);
-            setEbarimtModal(true);
-         }
+      if (isCustomerNo && Object.keys(customerInfo).length === 0) {
+         openNofi('error', 'Алдаа', 'Байгууллага сонго');
       } else {
-         openNofi('warning', 'Сонгох', 'Аль нэг сонгох');
+         if (invoiceRequest.length > 0) {
+            const data = {
+               invoiceIds: invoiceRequest,
+               patientId: selectedPatient.id,
+               discountPercentId: discountPercentRequest
+            };
+            if (isCustomerNo && customerNo) {
+               data['customerNo'] = customerNo;
+            }
+            const response = await DefaultPost(
+               'payment/payment',
+               token,
+               config,
+               data
+            );
+            if (response) {
+               setTotalAmount(0);
+               isClose(false);
+               setPaymentModal(false);
+               setEbarimtData(response);
+               setEbarimtModal(true);
+            }
+         } else {
+            openNofi('warning', 'Сонгох', 'Аль нэг сонгох');
+         }
       }
       setPaymentConfirmLoading(false);
+   };
+   const onSearchCustomer = async (event) => {
+      setCustomerNo(event);
+      const response = await axios.get(
+         'http://info.ebarimt.mn/rest/merchant/info',
+         {
+            params: {
+               regno: event
+            }
+         }
+      );
+      if (response?.data?.found) {
+         openNofi(
+            'success',
+            'Амжиллтай',
+            `Байгууллага: ${response?.data?.name}`
+         );
+         setCustomerInfo(response?.data);
+      } else {
+         openNofi('error', 'Алдаа', 'Байгууллага олдсонгүй');
+         setCustomerInfo({});
+      }
    };
    useEffect(() => {
       getFilterPayments(incomeData);
@@ -124,6 +174,9 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    useEffect(() => {
       if (isOpen) {
          setPaymentModal(isOpen);
+         setIsCustomerNo(false);
+         setCustomerNo(null);
+         setCustomerInfo({});
       }
    }, [isOpen]);
    return (
@@ -169,6 +222,20 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                      Сонгосон төлбөр: {numberToCurrency(selectedAmount)}
                   </p>
                </div>
+               <div className="w-full p-1">
+                  <Checkbox
+                     checked={isCustomerNo}
+                     onChange={(e) => {
+                        setIsCustomerNo(e.target.checked);
+                        if (!e.target.checked) {
+                           setCustomerNo(null);
+                           setCustomerInfo({});
+                        }
+                     }}
+                  >
+                     Байгууллагаар бол:
+                  </Checkbox>
+               </div>
                {isDiscount && (
                   <div className="w-full p-1">
                      <label>Хөнгөлөх хувь</label>
@@ -184,6 +251,21 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                            );
                         })}
                      </Select>
+                  </div>
+               )}
+               {isCustomerNo && (
+                  <div className="w-full p-1">
+                     <p>Байгууллагын дугаар оруулах:</p>
+                     <Search
+                        onSearch={onSearchCustomer}
+                        placeholder="Байгууллагын РД"
+                        style={{
+                           width: '100%'
+                        }}
+                     />
+                     {Object.keys(customerInfo).length > 0 && (
+                        <Alert message={customerInfo.name} type="success" />
+                     )}
                   </div>
                )}
                <div className="w-full p-1">

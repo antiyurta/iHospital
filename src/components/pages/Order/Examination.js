@@ -44,7 +44,7 @@ function Examination({ isOpen, isClose, handleclick }) {
       setSelectedExaminations(arr);
    };
    const filteredExamination = examination.filter((exmintion) => {
-      return exmintion.name.toLowerCase().includes(searchField.toLowerCase());
+      return exmintion.name?.toLowerCase().includes(searchField?.toLowerCase());
    });
    useEffect(() => {
       getExamination();
