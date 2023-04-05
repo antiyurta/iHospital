@@ -11,7 +11,13 @@ import {
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost, Get, numberToCurrency, openNofi } from '../../comman';
+import {
+   DefaultPost,
+   DefualtGet,
+   Get,
+   numberToCurrency,
+   openNofi
+} from '../../comman';
 import Appointment from '../Appointment/Schedule/Appointment';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
 import axios from 'axios';
@@ -146,21 +152,23 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    };
    const onSearchCustomer = async (event) => {
       setCustomerNo(event);
-      const response = await axios.get(
-         'http://info.ebarimt.mn/rest/merchant/info',
-         {
-            params: {
-               regno: event
-            }
-         }
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await DefualtGet(
+         `ebarimt/organization/${event}`,
+         token,
+         conf
       );
-      if (response?.data?.found) {
+      console.log(response);
+      if (response?.response?.found) {
          openNofi(
             'success',
             'Амжиллтай',
-            `Байгууллага: ${response?.data?.name}`
+            `Байгууллага: ${response?.response?.name}`
          );
-         setCustomerInfo(response?.data);
+         setCustomerInfo(response?.response);
       } else {
          openNofi('error', 'Алдаа', 'Байгууллага олдсонгүй');
          setCustomerInfo({});

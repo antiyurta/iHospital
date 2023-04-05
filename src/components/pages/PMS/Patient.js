@@ -452,8 +452,6 @@ function Patient() {
                      showTotal: (total, range) =>
                         `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                      pageSize: meta.limit,
-                     total: meta.itemCount,
-                     current: meta.page,
                      showSizeChanger: true,
                      pageSizeOptions: ['5', '10', '20', '50'],
                      showQuickJumper: true,

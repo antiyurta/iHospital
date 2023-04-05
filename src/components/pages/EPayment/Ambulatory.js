@@ -1,4 +1,13 @@
-import { Card, Button, Modal, Select, Pagination, Table, Result } from 'antd';
+import {
+   Card,
+   Button,
+   Modal,
+   Select,
+   Pagination,
+   Table,
+   Result,
+   Spin
+} from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -7,6 +16,7 @@ import PatientInformation from '../PatientInformation';
 import Order from '../Order/Order';
 import Schedule from '../OCS/Schedule';
 import moment from 'moment';
+import FullScreenLoader from '../../FullScreenLoader';
 
 const { Option } = Select;
 
@@ -15,6 +25,12 @@ function Ambulatory() {
    const [cardLoading, setCardLoading] = useState(false);
    const [orderModal, setOrderModal] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
+   // owchton haih ued
+   const [isLoadingFilter, setIsLoadingFilter] = useState(false);
+   // owchton haih ued
+   // tolbor awah darah ued
+   const [isLoadingGetPayInfo, setIsLoadingGetPayInfo] = useState(false);
+   // tolbor awah darah ued
 
    const [isConfirmLoading, setIsConfirmLoading] = useState(false);
    const [patientsList, setPatientsList] = useState([]);
@@ -35,6 +51,7 @@ function Ambulatory() {
       params: {}
    };
    const onSearch = async (page, pageSize, value) => {
+      setIsLoadingFilter(true);
       const conf = {
          headers: {},
          params: {
@@ -43,6 +60,7 @@ function Ambulatory() {
       };
       const response = await Get('payment/patient', token, conf);
       setPatientsList(response);
+      setIsLoadingFilter(false);
    };
    const onSearchPayment = async (page, pageSize, value) => {
       setNotPatientLoading(true);
@@ -63,6 +81,7 @@ function Ambulatory() {
       setNotPatientLoading(false);
    };
    const getPayment = async (id) => {
+      setIsLoadingGetPayInfo(true);
       setIsOpen(true);
       const conf = {
          headers: {},
@@ -73,6 +92,7 @@ function Ambulatory() {
       const response = await Get('payment/invoice', token, conf);
       getPatient(id);
       setPayments(response.data);
+      setIsLoadingGetPayInfo(false);
    };
    const getPatient = async (id) => {
       const patient = await Get('pms/patient/' + id, token, config);
@@ -198,7 +218,9 @@ function Ambulatory() {
          }
       }
    ];
-
+   if (isLoadingGetPayInfo) {
+      return <FullScreenLoader />;
+   }
    return (
       <div>
          <div className="flex flex-wrap">
@@ -248,6 +270,7 @@ function Ambulatory() {
                      locale={{
                         emptyText: <Result title="Мэдээлэл байхгүй байна" />
                      }}
+                     loading={isLoadingFilter}
                      columns={columns}
                      dataSource={patientsList}
                      pagination={{
