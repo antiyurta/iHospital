@@ -1,13 +1,5 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
-import {
-   Alert,
-   Checkbox,
-   Divider,
-   Input,
-   InputNumber,
-   Modal,
-   Select
-} from 'antd';
+import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -20,7 +12,6 @@ import {
 } from '../../comman';
 import Appointment from '../Appointment/Schedule/Appointment';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
-import axios from 'axios';
 const { Option } = Select;
 const { Search } = Input;
 function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
@@ -124,7 +115,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
       } else {
          if (invoiceRequest.length > 0) {
             const data = {
-               invoiceIds: invoiceRequest,
+               invoiceIds: invoiceRequest.map((invoice) => invoice.id),
                patientId: selectedPatient.id,
                discountPercentId: discountPercentRequest
             };
@@ -174,11 +165,22 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
          setCustomerInfo({});
       }
    };
+   // nemelterer select table
+   const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+         setInvoiceRequest(selectedRows);
+         console.log(
+            `selectedRowKeys: ${selectedRowKeys}`,
+            'selectedRows: ',
+            selectedRows
+         );
+      }
+   };
+   // nemelterer select table
    useEffect(() => {
       getFilterPayments(incomeData);
       getDiscounts();
    }, [incomeData]);
-
    useEffect(() => {
       if (isOpen) {
          setPaymentModal(isOpen);
@@ -303,11 +305,55 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                      <Divider style={{ height: 'auto' }} type="vertical" />
                      {!isOCS && (
                         <div className="basis-1/2">
-                           <Checkbox.Group className="w-full" onChange={check}>
+                           <div className="w-full">
+                              <Table
+                                 rowKey={'id'}
+                                 bordered
+                                 rowSelection={rowSelection}
+                                 columns={[
+                                    {
+                                       title: 'Үйлчилгээ',
+                                       render: (_, record) => {
+                                          if (record.treatmentRequest?.qty) {
+                                             return (
+                                                <p>
+                                                   {record.name +
+                                                      ' ' +
+                                                      record.treatmentRequest
+                                                         ?.qty +
+                                                      'ш'}
+                                                </p>
+                                             );
+                                          } else {
+                                             return record.name;
+                                          }
+                                       }
+                                       // dataIndex: 'name'
+                                    },
+                                    {
+                                       title: 'Иргэн төлөх',
+                                       dataIndex: 'amount',
+                                       render: (text) => {
+                                          return numberToCurrency(text);
+                                       }
+                                    },
+                                    {
+                                       title: 'Даатгалаас төлөх',
+                                       dataIndex: 'hicsAmount',
+                                       render: (text) => {
+                                          return numberToCurrency(text);
+                                       }
+                                    }
+                                 ]}
+                                 dataSource={noTimeRequirePayments}
+                                 pagination={false}
+                              />
+                           </div>
+                           {/* <Checkbox.Group className="w-full" onChange={check}>
                               {noTimeRequirePayments?.map((element, index) => {
                                  return (
                                     <div key={index} className="flex flex-wrap">
-                                       <div className="basis-1/2">
+                                       <div className="basis-2/4">
                                           <Checkbox
                                              className="pl-1 ml-0 w-full"
                                              onChange={(e) => dd(element, e)}
@@ -326,15 +372,22 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                                              )}
                                           </Checkbox>
                                        </div>
-                                       <div className="basis-1/2">
+                                       <div className="basis-1/4">
                                           <p className="float-right">
                                              {numberToCurrency(element.amount)}
+                                          </p>
+                                       </div>
+                                       <div className="basis-1/4">
+                                          <p className="float-right">
+                                             {numberToCurrency(
+                                                element.hicsAmount
+                                             )}
                                           </p>
                                        </div>
                                     </div>
                                  );
                               })}
-                           </Checkbox.Group>
+                           </Checkbox.Group> */}
                         </div>
                      )}
                   </div>

@@ -89,11 +89,15 @@ export async function Post(url, token, config, data) {
                (error?.response?.status === 400 &&
                   error?.response?.data?.statusCode === 400)
             ) {
-               const message = error.response?.data?.message?.replaceAll(
-                  'HttpException:',
-                  ''
-               );
-               openNofi('error', 'Алдаа', message);
+               const err = error.response?.data?.message;
+               if (typeof err === 'object') {
+                  err.map((er) => {
+                     openNofi('error', 'Алдаа', `${er}`);
+                  });
+               } else {
+                  const message = err.replaceAll('HttpException:', '');
+                  openNofi('error', 'Алдаа', message);
+               }
             } else {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
             }
