@@ -169,6 +169,11 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
          setInvoiceRequest(selectedRows);
+         var tAmount = 0;
+         selectedRows?.map((item) => {
+            tAmount += item.amount;
+         });
+         setSelectedAmount(tAmount);
          console.log(
             `selectedRowKeys: ${selectedRowKeys}`,
             'selectedRows: ',
