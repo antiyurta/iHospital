@@ -100,7 +100,7 @@ const MainBed = () => {
             />
          </Sider>
          <Layout>
-            <Content>
+            <Content className="bg-slate-50">
                <Routes>
                   <Route
                      exact

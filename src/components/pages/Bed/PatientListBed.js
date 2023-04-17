@@ -14,6 +14,7 @@ import { selectCurrentToken } from '../../../features/authReducer';
 import UTable from '../../UTable';
 import orderType from './orderType.json';
 import { Get, Patch } from '../../comman';
+import PatientListBedd from './PatientListBedd';
 
 function PatientListBed() {
    const token = useSelector(selectCurrentToken);
@@ -320,18 +321,20 @@ function PatientListBed() {
          data.bedId = selectedNewBed;
          data.isOut = false;
          data.process = 0;
-         const response = await Patch(
-            `service/inpatient-request/bed/${selectedActionData.id}`,
-            token,
-            config,
-            data
-         );
-         if (response === 200) {
-            setTestParam(!testParam);
-            setActionType('');
-            setSelectedActionData('');
-            setIsModalOpen(false);
-         }
+         console.log(selectedActionData);
+         console.log(data);
+         // const response = await Patch(
+         //    `service/inpatient-request/bed/${selectedActionData.id}`,
+         //    token,
+         //    config,
+         //    data
+         // );
+         // if (response === 200) {
+         //    setTestParam(!testParam);
+         //    setActionType('');
+         //    setSelectedActionData('');
+         //    setIsModalOpen(false);
+         // }
       }
    };
    useEffect(() => {
@@ -362,6 +365,7 @@ function PatientListBed() {
    }, [selectedRoom]);
    return (
       <div className="p-6">
+         <PatientListBedd />
          <Row>
             <Col span={6}>
                <Search
