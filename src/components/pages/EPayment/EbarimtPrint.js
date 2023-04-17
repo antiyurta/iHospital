@@ -84,13 +84,20 @@ function EbarimtPrint(props) {
                   style={{ fontSize: 14, fontWeight: 'bold' }}
                   className="text-end"
                >
-                  Нийт үнэ: {numberToCurrency(total)}
+                  {/* Нийт үнэ: {numberToCurrency(total)} */}
+                  Нийт үнэ: {numberToCurrency(props?.props?.totalAmount)}
                </p>
                <p
                   style={{ fontSize: 14, fontWeight: 'bold' }}
                   className="text-end"
                >
-                  Төлөх үнэ: {numberToCurrency(props?.props?.totalAmount)}
+                  Төлөх үнэ: {numberToCurrency(props?.props?.paidAmount)}
+               </p>
+               <p
+                  style={{ fontSize: 14, fontWeight: 'bold' }}
+                  className="text-end"
+               >
+                  Даатгалаас: {numberToCurrency(props?.props?.insuranceAmount)}
                </p>
                <p style={{ fontSize: 14, fontWeight: 'bold' }}>
                   Cугалааны дугаар: {props?.props?.lottery}
