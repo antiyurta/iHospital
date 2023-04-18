@@ -255,7 +255,7 @@ function IndexBefore({ type }) {
       },
       {
          title: 'Оношилгооны нэр',
-         dataIndex: ['xrays', 'name'],
+         dataIndex: ['xray', 'name'],
          render: (text) => {
             return <div className="whitespace-pre-wrap">{text}</div>;
          }
@@ -285,30 +285,30 @@ function IndexBefore({ type }) {
       },
       {
          title: 'Картын №',
-         dataIndex: ['patients', 'cardNumber']
+         dataIndex: ['patient', 'cardNumber']
       },
       {
          title: 'Овог',
-         dataIndex: ['patients', 'lastName']
+         dataIndex: ['patient', 'lastName']
       },
       {
          title: 'Нэр',
-         dataIndex: ['patients', 'firstName']
+         dataIndex: ['patient', 'firstName']
       },
       {
          title: 'Регистр №',
-         dataIndex: ['patients', 'registerNumber']
+         dataIndex: ['patient', 'registerNumber']
       },
       {
          title: 'Нас',
          render: (_, row) => {
-            return getAge(row.patients?.registerNumber);
+            return getAge(row.patient?.registerNumber);
          }
       },
       {
          title: 'Хүйс',
          render: (_, row) => {
-            return getGenderInfo(row.patients?.genderType);
+            return getGenderInfo(row.patient?.genderType);
          }
       },
       {
@@ -318,6 +318,13 @@ function IndexBefore({ type }) {
       {
          title: 'Эмч',
          dataIndex: ['employees', 'firstName']
+      },
+      {
+         title: 'Даатгал',
+         dataIndex: 'isInsurance',
+         render: (text) => {
+            return getPaymentInfo(text);
+         }
       },
       {
          title: 'Төлбөр',
@@ -339,7 +346,11 @@ function IndexBefore({ type }) {
                <Button
                   type="primary"
                   onClick={() =>
-                     newModal(row.id, row?.isPayment, row?.usageType)
+                     newModal(
+                        row.id,
+                        row?.isPayment || row?.isInsurance,
+                        row?.usageType
+                     )
                   }
                >
                   Зураг оруулах

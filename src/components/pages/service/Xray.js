@@ -77,7 +77,7 @@ function Xray() {
          col: 24
       },
       {
-         index: 'hasInsurance',
+         index: 'isInsurance',
          label: 'Даатгал',
          isView: true,
          isSearch: false,

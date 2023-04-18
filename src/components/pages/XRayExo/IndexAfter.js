@@ -144,7 +144,8 @@ function IndexAfter({ type, params }) {
       xrayProcess,
       deviceType,
       usageType,
-      isPayment
+      isPayment,
+      confirmedDate
    ) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
@@ -154,6 +155,15 @@ function IndexAfter({ type, params }) {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
          console.log(listId, id, cabinetId, inspectionType);
+         if (confirmedDate === null) {
+            const conf = {
+               headers: {},
+               params: {}
+            };
+            Patch('service/xrayRequest/' + listId, token, conf, {
+               confirmedDate: new Date()
+            });
+         }
          navigate(`/emr`, {
             state: {
                usageType: 'OUT',
@@ -202,7 +212,7 @@ function IndexAfter({ type, params }) {
       },
       {
          title: 'Оношилгооны нэр',
-         dataIndex: ['xrays', 'name'],
+         dataIndex: ['xray', 'name'],
          render: (text) => {
             return <div className="whitespace-pre-wrap">{text}</div>;
          }
@@ -225,30 +235,30 @@ function IndexAfter({ type, params }) {
       },
       {
          title: 'Картын №',
-         dataIndex: ['patients', 'cardNumber']
+         dataIndex: ['patient', 'cardNumber']
       },
       {
          title: 'Овог',
-         dataIndex: ['patients', 'lastName']
+         dataIndex: ['patient', 'lastName']
       },
       {
          title: 'Нэр',
-         dataIndex: ['patients', 'firstName']
+         dataIndex: ['patient', 'firstName']
       },
       {
          title: 'Регистр №',
-         dataIndex: ['patients', 'registerNumber']
+         dataIndex: ['patient', 'registerNumber']
       },
       {
          title: 'Нас',
          render: (_, row) => {
-            return getAge(row.patients?.registerNumber);
+            return getAge(row.patient?.registerNumber);
          }
       },
       {
          title: 'Хүйс',
          render: (_, row) => {
-            return getGenderInfo(row.patients?.genderType);
+            return getGenderInfo(row.patient?.genderType);
          }
       },
       {
@@ -258,6 +268,13 @@ function IndexAfter({ type, params }) {
       {
          title: 'Эмч',
          dataIndex: ['employees', 'firstName']
+      },
+      {
+         title: 'Даатгал',
+         dataIndex: 'isInsurance',
+         render: (text) => {
+            return getPaymentInfo(text);
+         }
       },
       {
          title: 'Төлбөр',
@@ -343,7 +360,8 @@ function IndexAfter({ type, params }) {
                                           row?.xrayProcess,
                                           row?.deviceType,
                                           row?.usageType,
-                                          row?.isPayment
+                                          row?.isPayment || row?.isInsurance,
+                                          row?.confirmedDate
                                        );
                                     }
                                  };
