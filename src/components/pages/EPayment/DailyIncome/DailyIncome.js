@@ -31,6 +31,7 @@ function DailyIncome() {
    const [end, setEnd] = useState('');
    const [isBackPayment, setIsBackPayment] = useState(false);
    const [totalAmount, setTotalAmount] = useState(Number);
+   const [discount, setDiscount] = useState([]);
    const getDailyIncome = async (page, pageSize, start, end) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -50,6 +51,17 @@ function DailyIncome() {
       setIncomes(response.data);
       setMeta(response.meta);
       setSpinner(false);
+   };
+   const getDiscount = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('payment/discount', token, conf);
+      setDiscount(response.data);
+   };
+   const checkDiscount = (id) => {
+      return discount.find((e) => e.id === id)?.name;
    };
    const viewModal = async (id, isBack) => {
       setIsBackPayment(isBack);
@@ -78,6 +90,13 @@ function DailyIncome() {
          title: 'ТТ Огноо',
          render: (_, row) => {
             return moment(row.createdAt).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'Хөнгөлөлт',
+         dataIndex: 'discountPercentId',
+         render: (text) => {
+            return checkDiscount(text);
          }
       },
       {
@@ -141,6 +160,7 @@ function DailyIncome() {
    useEffect(() => {
       ScrollRef(scrollRef);
       getDailyIncome(1, 10, today, today);
+      getDiscount();
    }, []);
    return (
       <>
