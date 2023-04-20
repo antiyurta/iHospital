@@ -88,11 +88,6 @@ function GeneralInfo({ form, gbase }) {
             filterTowns(response.aimagId);
             form.setFieldsValue(response);
             gbase(true);
-            openNofi(
-               'error',
-               'Үйлчлүүлэгч',
-               'Бүртгэлтэй байгаа тул бүртгэх шаардлагагүй'
-            );
          }
       }
    };

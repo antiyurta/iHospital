@@ -505,11 +505,15 @@ function Patient() {
                <Descriptions.Item label="Нэр">
                   {view.firstName}
                </Descriptions.Item>
-               <Descriptions.Item label="Иргэншил">{}</Descriptions.Item>
+               <Descriptions.Item label="Иргэншил">
+                  {view.countryId}
+               </Descriptions.Item>
                <Descriptions.Item label="Регистр дугаар">
                   {view.registerNumber}
                </Descriptions.Item>
-               <Descriptions.Item label="Төрсөн огноо">{}</Descriptions.Item>
+               <Descriptions.Item label="Төрсөн огноо">
+                  {moment(view.birthDate).format('YYYY-MM-DD')}
+               </Descriptions.Item>
                <Descriptions.Item label="Утас">
                   {view.phoneNo}
                </Descriptions.Item>

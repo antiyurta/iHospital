@@ -24,7 +24,7 @@ function Contact({ form }) {
                               rules={[
                                  {
                                     required: true,
-                                    message: 'Холбоо барих хүний нэр'
+                                    message: 'Нэр заавал'
                                  }
                               ]}
                            >
@@ -32,7 +32,37 @@ function Contact({ form }) {
                            </Form.Item>
                            <Form.Item
                               {...restField}
-                              label="Имайл"
+                              label="Регистр дугаар"
+                              labelCol={{ span: 8 }}
+                              wrapperCol={{ span: 16 }}
+                              name={[name, 'registerNumber']}
+                              rules={[
+                                 {
+                                    required: true,
+                                    message: 'Регистр дугаар оруулна уу'
+                                 },
+                                 {
+                                    validator: async (_, registerNumber) => {
+                                       if (registerNumber === undefined) {
+                                          return Promise.reject(new Error(''));
+                                       } else {
+                                          if (registerNumber.length < 10) {
+                                             return Promise.reject(
+                                                new Error(
+                                                   'Хамгийн багадаа 10 үсэг'
+                                                )
+                                             );
+                                          }
+                                       }
+                                    }
+                                 }
+                              ]}
+                           >
+                              <Input />
+                           </Form.Item>
+                           <Form.Item
+                              {...restField}
+                              label="Имэйл"
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'email']}
