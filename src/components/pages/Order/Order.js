@@ -5,7 +5,8 @@ import {
    Form,
    Input,
    InputNumber,
-   Modal
+   Modal,
+   Select
 } from 'antd';
 import RecentRecipe from './RecentRecipe';
 import SetOrder from './SetOrder';
@@ -90,13 +91,9 @@ function Order({
                service.name = item.name;
                service.dose = '';
                service.price = 0;
-               service.oPrice = 0;
+               service.oPrice = item.price;
                service.type = item.type;
                service.medicineType = null;
-               service.isMorning = false;
-               service.isAfternoon = false;
-               service.isEvening = false;
-               service.isNight = false;
                service.description = '';
                service.dayCount = 1;
                service.total = 0;
@@ -158,64 +155,34 @@ function Order({
    const [inPatientId, setInPatientId] = useState(Number);
    //
    const [orderForm] = Form.useForm();
-   const tt = {
-      m: {
-         text: 'Өглөө ',
-         state: false
-      },
-      d: {
-         text: 'Өдөр ',
-         state: false
-      },
-      e: {
-         text: 'Орой ',
-         state: false
-      },
-      n: {
-         text: 'Шөнө ',
-         state: false
+   const checkNumber = (event) => {
+      var charCode = event.charCode;
+      if (
+         charCode > 31 &&
+         (charCode < 48 || charCode > 57) &&
+         charCode !== 46
+      ) {
+         event.preventDefault();
+      } else {
+         return true;
       }
-   };
-   const qtyCalculator = (type, e, key) => {
-      const dayCount = orderForm.getFieldValue(['services', key, 'dayCount']);
-      tt[type].state = e;
-      var message = '';
-      var counter = 0;
-      Object.values(tt).map((a, b) => {
-         if (a.state) {
-            message += a.text;
-            counter++;
-         }
-      });
-      orderForm.setFieldValue(['services', key, 'total'], counter * dayCount);
-      // orderForm.setFieldValue(['services', key, 'description'], message);
    };
    const totalCalculator = (value, key) => {
-      var counter = 0;
-      const m = orderForm.getFieldValue(['services', key, 'isMorning']);
-      const d = orderForm.getFieldValue(['services', key, 'isAfternoon']);
-      const e = orderForm.getFieldValue(['services', key, 'isEvening']);
-      const n = orderForm.getFieldValue(['services', key, 'isNight']);
+      const repeatTime = orderForm.getFieldValue([
+         'services',
+         key,
+         'repeatTime'
+      ]);
       const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
-      if (m) {
-         counter++;
-      }
-      if (d) {
-         counter++;
-      }
-      if (e) {
-         counter++;
-      }
-      if (n) {
-         counter++;
-      }
-      orderForm.setFieldValue(['services', key, 'total'], counter * value);
+      console.log(oPrice);
+      orderForm.setFieldValue(['services', key, 'total'], repeatTime * value);
       orderForm.setFieldValue(
          ['services', key, 'price'],
-         counter * value * oPrice
+         repeatTime * value * oPrice
       );
    };
    const calc = (e, key) => {
+      console.log(e, key);
       const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
       orderForm.setFieldValue(['services', key, 'qty'], e);
       orderForm.setFieldValue(['services', key, 'price'], e * oPrice);
@@ -391,6 +358,7 @@ function Order({
                               <Table
                                  className="ant-border-space"
                                  style={{ width: '100%' }}
+                                 bordered
                               >
                                  <thead className="ant-table-thead bg-slate-200">
                                     {isPackage ? (
@@ -419,19 +387,10 @@ function Order({
                                              Тайлбар
                                           </th>
                                           <th className="font-bold text-sm align-middle">
-                                             m
+                                             Өдөрт хэдэн удаа
                                           </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             d
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             e
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             n
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Хугацаа(Өдөр)
+                                          <th className="font-bold text-sm align-middle w-5">
+                                             Хэдэн өдөр
                                           </th>
                                           <th className="font-bold text-sm align-middle">
                                              Нийт хэмжээ
@@ -444,7 +403,9 @@ function Order({
                                           <th className="font-bold text-sm align-middle">
                                              Үнэ
                                           </th>
-                                          <th></th>
+                                          <th className="font-bold text-sm align-middle">
+                                             Үйлдэл
+                                          </th>
                                        </tr>
                                     )}
                                  </thead>
@@ -480,7 +441,7 @@ function Order({
                                                       <Checkbox className="bg-transparent align-middle items-center" />
                                                    </Form.Item>
                                                 </td>
-                                                <td>
+                                                <td className="whitespace-pre-line">
                                                    {orderForm.getFieldValue([
                                                       'services',
                                                       name,
@@ -543,53 +504,17 @@ function Order({
                                                       className="mb-0"
                                                    >
                                                       <Input
-                                                         disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item
-                                                      name={[name, 'isMorning']}
-                                                      valuePropName="checked"
-                                                      className="mb-0"
-                                                   >
-                                                      <Checkbox
-                                                         onChange={(e) =>
-                                                            qtyCalculator(
-                                                               'm',
-                                                               e.target.checked,
-                                                               name
-                                                            )
-                                                         }
-                                                         className="items-center"
-                                                         disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8 ||
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 2
-                                                               ? false
-                                                               : true
-                                                         }
+                                                      // disabled={
+                                                      //    orderForm.getFieldValue(
+                                                      //       [
+                                                      //          'services',
+                                                      //          name,
+                                                      //          'type'
+                                                      //       ]
+                                                      //    ) === 8
+                                                      //       ? false
+                                                      //       : true
+                                                      // }
                                                       />
                                                    </Form.Item>
                                                 </td>
@@ -597,20 +522,14 @@ function Order({
                                                    <Form.Item
                                                       name={[
                                                          name,
-                                                         'isAfternoon'
+                                                         'repeatTime'
                                                       ]}
-                                                      valuePropName="checked"
                                                       className="mb-0"
                                                    >
-                                                      <Checkbox
-                                                         onChange={(e) =>
-                                                            qtyCalculator(
-                                                               'd',
-                                                               e.target.checked,
-                                                               name
-                                                            )
+                                                      <InputNumber
+                                                         onKeyPress={
+                                                            checkNumber
                                                          }
-                                                         className="items-center"
                                                          disabled={
                                                             orderForm.getFieldValue(
                                                                [
@@ -632,86 +551,6 @@ function Order({
                                                       />
                                                    </Form.Item>
                                                 </td>
-                                                <td>
-                                                   <Form.Item
-                                                      name={[name, 'isEvening']}
-                                                      valuePropName="checked"
-                                                      className="mb-0"
-                                                   >
-                                                      <Checkbox
-                                                         onChange={(e) =>
-                                                            qtyCalculator(
-                                                               'e',
-                                                               e.target.checked,
-                                                               name
-                                                            )
-                                                         }
-                                                         className="items-center"
-                                                         disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8 ||
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 2
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item
-                                                      name={[name, 'isNight']}
-                                                      valuePropName="checked"
-                                                      className="mb-0"
-                                                   >
-                                                      <Checkbox
-                                                         onChange={(e) =>
-                                                            qtyCalculator(
-                                                               'n',
-                                                               e.target.checked,
-                                                               name
-                                                            )
-                                                         }
-                                                         className="items-center"
-                                                         disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8 ||
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 2
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                {/* <td>
-                                                   <Form.Item
-                                                      name={[name, 'description']}
-                                                      className="mb-0"
-                                                   >
-                                                      <Input disabled={true} />
-                                                   </Form.Item>
-                                                </td> */}
                                                 <td>
                                                    <Form.Item
                                                       name={[name, 'dayCount']}
@@ -785,6 +624,9 @@ function Order({
                                                          className="mb-0"
                                                       >
                                                          <DatePicker
+                                                            showTime={{
+                                                               format: 'HH:mm'
+                                                            }}
                                                             locale={mnMN}
                                                             placeholder="Өдөр сонгох"
                                                          />

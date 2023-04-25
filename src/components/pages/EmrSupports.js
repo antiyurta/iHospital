@@ -1,10 +1,11 @@
-import { PrinterFilled } from '@ant-design/icons';
+import { CloseCircleOutlined, PrinterFilled } from '@ant-design/icons';
 import {
    Button,
    Card,
    DatePicker,
    Empty,
    Form,
+   Input,
    Modal,
    Select,
    Table
@@ -13,7 +14,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
    selectCurrentInsurance,
    selectCurrentToken
@@ -35,11 +36,12 @@ import Diagnose from './service/Diagnose';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function EmrSupports({ appointmentId, usageType, patient }) {
+function EmrSupports({ appointmentId, usageType, patient, patientId }) {
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    let location = useLocation();
-   console.log(location);
+   const navigate = useNavigate();
+   const [fingerData] = Form.useForm();
    const [sentForm] = Form.useForm(); // shiljuuleh
    const [clauseForm] = Form.useForm(); // zaalt
    const [moveForm] = Form.useForm(); // ilgeeh
@@ -66,12 +68,20 @@ function EmrSupports({ appointmentId, usageType, patient }) {
    // bituumj uusgeh
    const [isOpenSealModal, setIsOpenSealModal] = useState(false);
    // bituumj uusgeh
+   // tolboring medeelel
+   const [isOpenPayment, setIsOpenPayment] = useState(false);
+   const [paymentServices, setPaymendServices] = useState([]);
+   const [paymentServiceId, setPaymentServiceId] = useState(Number);
+   // tolboring medeelel
+   //
+   const [isOpenFinger, setIsOpenFinger] = useState(false);
+   //
    const getStoryTEST = async () => {
       setStoryLoading(true);
       const conf = {
          headers: {},
          params: {
-            patientId: location?.state?.patientId
+            patientId: patientId
          }
       };
       var response = await Get('inpatient/story', token, conf);
@@ -133,7 +143,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          headers: {},
          params: {}
       };
-      values['patientId'] = location?.state?.patientId;
+      values['patientId'] = patientId;
       values['appointmentId'] = location?.state?.appointmentId;
       const response = Post(
          'health-insurance/sent-citizen',
@@ -149,7 +159,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          headers: {},
          params: {}
       };
-      values['patientId'] = location?.state?.patientId;
+      values['patientId'] = patientId;
       const response = await DefaultPost(
          'health-insurance/set-approval',
          token,
@@ -171,7 +181,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          headers: {},
          params: {}
       };
-      values['patientId'] = location?.state?.patientId;
+      values['patientId'] = patientId;
       const response = await Post(
          'health-insurance/patient-sheet',
          token,
@@ -185,7 +195,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          headers: {},
          params: {}
       };
-      values['patientId'] = location?.state?.patientId;
+      values['patientId'] = patientId;
       const response = await Post(
          'health-insurance/hics-service',
          token,
@@ -198,6 +208,88 @@ function EmrSupports({ appointmentId, usageType, patient }) {
       sealForm.setFieldValue('diagnose', diagnoses);
    };
    //
+   //
+   const getPaymentService = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            type: 201
+         }
+      };
+      const response = await DefualtGet('insurance/hics-service', token, conf);
+      // console.log(response);
+      setPaymendServices(response.data);
+   };
+   const onFInish = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const data = {
+         appointmentId: appointmentId
+      };
+      const response = await Post(
+         'insurance/appointment-seal',
+         token,
+         conf,
+         data
+      );
+      if (response === 201) {
+         openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+      }
+   };
+   //
+   const endInspection = async (values) => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      console.log(appointmentId);
+      var data = {
+         appointmentId: appointmentId
+      };
+      if (isInsurance) {
+         if (!values) {
+            setIsOpenFinger(true);
+         } else {
+            data['finger'] = values;
+            const response = await Post(
+               'insurance/appointment-seal',
+               token,
+               conf,
+               data
+            );
+            if (response === 201) {
+               openNofi(
+                  'success',
+                  'Амжиллтай',
+                  'Үзлэг амжиллтай хадгалагдлаа '
+               );
+               navigate('/ambulatoryList', {
+                  state: {
+                     isRead: true
+                  }
+               });
+            }
+         }
+      } else {
+         const response = await Post(
+            'insurance/appointment-seal',
+            token,
+            conf,
+            data
+         );
+         if (response === 201) {
+            openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+            navigate('/ambulatoryList', {
+               state: {
+                  isRead: true
+               }
+            });
+         }
+      }
+   };
+   //
    useEffect(() => {
       getStoryTEST();
    }, [isOpenDocumentModal]);
@@ -206,6 +298,7 @@ function EmrSupports({ appointmentId, usageType, patient }) {
          getInsuranceHospitalList(); // emlegin jagsaalt,
          getHicsService(); // uilcilgeenuud
          getSentReason(); // ilgeeh shaltgaan
+         getPaymentService(); // tolbin medeelel
       }
    }, []);
    //
@@ -222,30 +315,53 @@ function EmrSupports({ appointmentId, usageType, patient }) {
                maxHeight: 50
             }}
          >
-            {isInsurance && (
-               <Button.Group>
-                  <Button
-                     loading={hospitalListsLoading}
-                     onClick={() => {
-                        setIsOpenSentModal(true);
-                     }}
-                  >
-                     Эмнэлэгт шилжүүлэх
-                  </Button>
-                  <Button onClick={() => setIsOpenMoveModal(true)}>
-                     Эмнэлэгт өвчтөн илгээх
-                  </Button>
-                  <Button onClick={() => setIsOpenClauseModal(true)}>
-                     Заалт оруулах
-                  </Button>
-                  <Button onClick={() => setIsOpenSealModal(true)}>
-                     Битүүмж үүсгэх
-                  </Button>
-               </Button.Group>
+            {isInsurance ? (
+               <div className="flow-root">
+                  <div className="float-left">
+                     <Button.Group>
+                        <Button
+                           loading={hospitalListsLoading}
+                           onClick={() => {
+                              setIsOpenSentModal(true);
+                           }}
+                        >
+                           Эмнэлэгт шилжүүлэх
+                        </Button>
+                        <Button onClick={() => setIsOpenMoveModal(true)}>
+                           Эмнэлэгт өвчтөн илгээх
+                        </Button>
+                        <Button onClick={() => setIsOpenClauseModal(true)}>
+                           Заалт оруулах
+                        </Button>
+                        <Button onClick={() => setIsOpenSealModal(true)}>
+                           Битүүмж үүсгэх
+                        </Button>
+                     </Button.Group>
+                  </div>
+               </div>
+            ) : (
+               <div className="flow-root">
+                  <div className="float-right">
+                     <Button
+                        danger
+                        onClick={() => {
+                           endInspection();
+                           fingerData.resetFields();
+                        }}
+                        icon={<CloseCircleOutlined />}
+                        style={{
+                           display: 'flex',
+                           alignItems: 'center'
+                        }}
+                     >
+                        Үзлэг дуусгах
+                     </Button>
+                  </div>
+               </div>
             )}
-            <Button onClick={() => setIsOpenDocumentModal(true)}>
+            {/* <Button onClick={() => setIsOpenDocumentModal(true)}>
                Өвчний түүх
-            </Button>
+            </Button> */}
          </Card>
          {/* 611 maygt */}
          <Modal
@@ -524,6 +640,27 @@ function EmrSupports({ appointmentId, usageType, patient }) {
                      <Diagnose handleClick={DiagnoseHandleClick} />
                   </div>
                </div>
+            </Form>
+         </Modal>
+         <Modal
+            title="Хурууний хээ уншуулах"
+            open={isOpenPayment}
+            onCancel={() => setIsOpenFinger(false)}
+            onOk={() =>
+               fingerData
+                  .validateFields()
+                  .then((values) => endInspection(values))
+            }
+            cancelText="Болих"
+            okText="Хадгалах"
+         >
+            <Form form={fingerData} layout="vertical">
+               <Form.Item label="Эмчийн хурууний хээ" name="doctorFinger">
+                  <Input />
+               </Form.Item>
+               <Form.Item label="Өвчтний хурууний хээ" name="patientFinger">
+                  <Input />
+               </Form.Item>
             </Form>
          </Modal>
       </>

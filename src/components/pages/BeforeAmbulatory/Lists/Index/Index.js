@@ -1,16 +1,26 @@
 import React from 'react';
-import { MinusOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import {
+   CheckOutlined,
+   CloseOutlined,
+   ExclamationOutlined,
+   FormOutlined,
+   MinusOutlined,
+   PlusOutlined,
+   ReloadOutlined
+} from '@ant-design/icons';
 import { Button, Card, DatePicker, Form, Pagination, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createPath, useNavigate } from 'react-router-dom';
 import {
+   selectCurrentDepId,
    selectCurrentToken,
    selectCurrentUserId
 } from '../../../../../features/authReducer';
-import { Get, openNofi, ScrollRef } from '../../../../comman';
+import { setEmrData } from '../../../../../features/emrReducer';
+import { Get, openNofi, Patch, ScrollRef } from '../../../../comman';
 import orderType from './orderType.json';
 import Ambulatory from '../../../EMR/InPatient/document/Ambulatory/Index';
 
@@ -26,7 +36,9 @@ function Index({ type, isDoctor }) {
    const today = new Date();
    const token = useSelector(selectCurrentToken);
    const employeeId = useSelector(selectCurrentUserId);
+   const depIds = useSelector(selectCurrentDepId);
    const navigate = useNavigate();
+   const dispatch = useDispatch();
    const config = {
       headers: {},
       params: {}
@@ -37,7 +49,7 @@ function Index({ type, isDoctor }) {
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    //
-   const [selectedTags, setSelectedTags] = useState([]);
+   const [selectedTags, setSelectedTags] = useState([0]);
    //
    const getAppointment = async (page, pageSize, start, end, process) => {
       setSpinner(true);
@@ -63,7 +75,9 @@ function Index({ type, isDoctor }) {
          conf.params.doctorId = null;
          response = await Get('appointment/pre-order', token, conf);
       } else {
-         // conf.params.process = 2;
+         conf.params.doctorId = null;
+         conf.params.depIds = depIds.toString();
+         conf.params.process = process ? process.toString() : 0;
          response = await Get(`service/inpatient-request`, token, conf);
          conf.params.process = null;
       }
@@ -80,10 +94,13 @@ function Index({ type, isDoctor }) {
       cabinetId,
       inspectionType,
       isPayment,
-      process
+      process,
+      startDate,
+      insuranceServiceId
    ) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
+      console.log(isPayment);
       if (process != 2 && process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else {
@@ -92,9 +109,18 @@ function Index({ type, isDoctor }) {
          } else {
             const data = {
                patientId: id,
-               inspection: inspectionType === undefined ? 1 : inspectionType
+               inspection: inspectionType === undefined ? 1 : inspectionType,
+               insuranceServiceId: insuranceServiceId
             };
-            console.log('type', type);
+            if (startDate === null) {
+               const conf = {
+                  headers: {},
+                  params: {}
+               };
+               Patch('appointment/' + listId, token, conf, {
+                  startDate: new Date()
+               });
+            }
             if (type === 0) {
                data['usageType'] = 'OUT';
                data['appointmentId'] = listId;
@@ -108,6 +134,7 @@ function Index({ type, isDoctor }) {
                data['inpatientRequestId'] = listId;
                data['dapartmentId'] = cabinetId;
             }
+            dispatch(setEmrData(data));
             navigate(`/emr`, {
                state: data
             });
@@ -235,6 +262,49 @@ function Index({ type, isDoctor }) {
          return 'Дуудлагаа';
       }
    };
+   const checkInspection = (inspectionNote) => {
+      if (inspectionNote === null) {
+         return (
+            <p>
+               <CloseOutlined style={{ color: 'red', fontSize: '20px' }} />
+            </p>
+         );
+      } else {
+         var state = true;
+         const clonedInspectionNote = [];
+         clonedInspectionNote.push(JSON.parse(inspectionNote.inspection));
+         clonedInspectionNote.push(JSON.parse(inspectionNote.pain));
+         clonedInspectionNote.push(JSON.parse(inspectionNote.plan));
+         clonedInspectionNote.push(JSON.parse(inspectionNote.question));
+         clonedInspectionNote?.map((notes) => {
+            Object.values(notes)?.map((note) => {
+               Object.values(note)?.map((item) => {
+                  if (
+                     (typeof item === 'object' && item?.length === 0) ||
+                     (typeof item === 'string' && !item)
+                  ) {
+                     state = false;
+                  }
+               });
+            });
+         });
+         if (state) {
+            return (
+               <p>
+                  <CheckOutlined style={{ color: 'green', fontSize: '20px' }} />
+               </p>
+            );
+         } else {
+            return (
+               <p>
+                  <ExclamationOutlined
+                     style={{ color: 'yellowgreen', fontSize: '20px' }}
+                  />
+               </p>
+            );
+         }
+      }
+   };
    //
    const handleChangeTag = (tag, checked) => {
       const nextSelectedTags = checked
@@ -325,7 +395,13 @@ function Index({ type, isDoctor }) {
          }
       },
       {
-         title: 'Эхэлсэн цаг'
+         title: 'Эхэлсэн цаг',
+         dataIndex: 'startDate',
+         render: (text) => {
+            if (text) {
+               return moment(text).format('YYYY-MM-DD HH:mm');
+            }
+         }
       },
       {
          title: 'Дууссан цаг',
@@ -337,10 +413,22 @@ function Index({ type, isDoctor }) {
          }
       },
       {
-         title: 'Төлөв'
+         title: 'Онош',
+         dataIndex: 'patientDiagnosis',
+         render: (text) => {
+            var dDiagnose = '';
+            text?.map((diagnose) => {
+               dDiagnose += `${diagnose.diagnose?.code},`;
+            });
+            return dDiagnose;
+         }
       },
       {
-         title: 'Даатгал'
+         title: 'Даатгал',
+         dataIndex: 'isInsurance',
+         render: (text) => {
+            return getPaymentInfo(text);
+         }
       },
       {
          title: 'Төлбөр',
@@ -350,10 +438,28 @@ function Index({ type, isDoctor }) {
          }
       },
       {
-         title: 'Үзлэг'
+         title: 'Үзлэг',
+         dataIndex: 'inspectionNote',
+         render: (text) => {
+            return checkInspection(text);
+         }
       },
       {
-         title: 'Тайлбар'
+         title: 'Үйлдэл',
+         render: (_, row) => {
+            return (
+               <Button
+                  style={{
+                     display: 'flex',
+                     alignItems: 'center'
+                  }}
+                  type="primary"
+                  icon={<FormOutlined />}
+               >
+                  Үзлэг эхлүүлэх
+               </Button>
+            );
+         }
       }
    ];
    const InPatientColumns = [
@@ -694,8 +800,10 @@ function Index({ type, isDoctor }) {
                                          // row.cabinetId,
                                          // row.inspectionType,
                                          type === 2 ? 1 : row.inspectionType,
-                                         row.isPayment,
-                                         row.process
+                                         row.isPayment || row.isInsurance,
+                                         row.process,
+                                         row.startDate,
+                                         row.insuranceServiceId
                                       )
                                     : getENR(
                                          row.id,

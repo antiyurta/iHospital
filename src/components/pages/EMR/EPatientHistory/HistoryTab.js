@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Collapse, Row, Button, Form } from 'antd';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -10,7 +10,7 @@ import Step7 from './Step7';
 import Step8 from './Step8';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Patch, Post } from '../../../comman';
+import { Get, Post } from '../../../comman';
 import moment from 'moment';
 
 export default function HistoryTab({ patientId, inspection }) {
@@ -21,41 +21,28 @@ export default function HistoryTab({ patientId, inspection }) {
       params: {}
    };
    const [historyForm] = Form.useForm();
-   const [state, setState] = useState(false);
-   const [historyId, setHistoryId] = useState(Number);
-
    const saveHistory = () => {
+      config.params.patientId = null;
       historyForm.validateFields().then(async (values) => {
          values['patientId'] = patientId;
-         // inspection = 1 bol dawtan
-         if (inspection === 2 || state) {
-            await Patch(
-               'emr/patient-history/' + historyId,
-               token,
-               config,
-               values
-            );
-         } else {
-            await Post('emr/patient-history', token, config, values);
+         const response = await Post(
+            'emr/patient-history',
+            token,
+            config,
+            values
+         );
+         if (response === 201) {
+            getPatientHistory(patientId);
          }
-         getPatientHistory(patientId);
       });
    };
-
    const getPatientHistory = async (id) => {
       config.params.patientId = id;
       const response = await Get('emr/patient-history', token, config);
-      response.data[0].birth.birthDate = moment(
-         response.data[0].birth.birthDate
-      );
-      setHistoryId(response.data[0].id);
-      if (response.data.length > 0) {
-         setState(true);
-      }
-      historyForm.setFieldsValue(response.data[0]);
+      response['birth'].birthDate = moment(response.birth?.birthDate);
+      historyForm.setFieldsValue(response);
       config.params.patientId = null;
    };
-
    useEffect(() => {
       getPatientHistory(patientId);
    }, [inspection]);

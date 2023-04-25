@@ -27,8 +27,11 @@ function GeneralDrugInformation() {
       setMedTreatmentTypes(response.data);
    };
    const getMeasurements = async () => {
-      config.params.type = 3;
-      const response = await Get('medicine/reference', token, config);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('reference/measurement', token, conf);
       setMeasurements(response.data);
    };
    const getMedicineType = async () => {
@@ -49,7 +52,7 @@ function GeneralDrugInformation() {
             <div className="w-full md:w-1/2 px-1">
                <Form.Item
                   label="Эмийн код"
-                  name="code"
+                  name="barcode"
                   rules={[
                      {
                         required: true,
@@ -177,7 +180,7 @@ function GeneralDrugInformation() {
             <div className="w-full md:w-1/2 px-1">
                <Form.Item
                   label="1 Өдрийн тун"
-                  name="dayDose"
+                  name="dayMaxDose"
                   rules={[
                      {
                         required: true,

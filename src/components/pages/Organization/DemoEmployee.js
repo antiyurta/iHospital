@@ -47,6 +47,7 @@ function DemoEmployee() {
    const [degrees, setDegrees] = useState([]);
    const [roles, setRoles] = useState([]);
    const [id, setId] = useState();
+   const [mobile, setMoblie] = useState([]);
    //
    const [isOpenViewModal, setIsOpenViewModal] = useState(false);
    const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
@@ -133,6 +134,16 @@ function DemoEmployee() {
          setRoles(response.data);
       }
    };
+   const getMoblieStructure = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('sub-organization', token, conf);
+      if (response.data.length != 0) {
+         setMoblie(response.data);
+      }
+   };
    const connectFinance = async (el) => {
       data.clid = el.id;
       data.ccode = el.id?.toString();
@@ -184,6 +195,7 @@ function DemoEmployee() {
       getRoles();
       //
       getPositions();
+      getMoblieStructure();
       //
       ScrollRef(scrollRef);
    }, []);
@@ -553,6 +565,29 @@ function DemoEmployee() {
                         <Select onChange={getDepartment}>
                            <Option value={2}>Тасаг</Option>
                            <Option value={0}>Харьяалал</Option>
+                        </Select>
+                     </Form.Item>
+                  </div>
+                  <div className="md:w-1/4 sm:w-1/3 p-1">
+                     <Form.Item
+                        label="Тасаг(Mobile)"
+                        name="subOrganizationId"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Zaawal'
+                           }
+                        ]}
+                     >
+                        <Select>
+                           <Option value={1}>TEST</Option>
+                           {mobile?.map((item, index) => {
+                              return (
+                                 <Option key={index} value={item.id}>
+                                    {item.name}
+                                 </Option>
+                              );
+                           })}
                         </Select>
                      </Form.Item>
                   </div>

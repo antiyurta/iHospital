@@ -16,6 +16,7 @@ function Employee() {
    const [positions, setPositions] = useState([]);
    const [departments, setDepartments] = useState([]);
    const [roles, setRoles] = useState([]);
+   const [mobile, setMoblie] = useState([]);
    const getDegree = async () => {
       const response = await Get('reference/degree', token, config);
       if (response.data.length != 0) {
@@ -45,12 +46,22 @@ function Employee() {
          setRoles(response.data);
       }
    };
-
+   const getMoblieStructure = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('sub-organization', token, conf);
+      if (response.data.length != 0) {
+         setMoblie(response.data);
+      }
+   };
    useEffect(() => {
       getDegree();
       getPosition();
       getDepartment();
       getRoles();
+      getMoblieStructure();
    }, []);
    const column = [
       {
@@ -118,6 +129,21 @@ function Employee() {
          isView: false,
          input: 'select',
          inputData: departments,
+         relIndex: 'name',
+         col: 12
+      },
+      {
+         index: 'subOrganizationId',
+         label: 'Тасаг(Mobile)',
+         isView: false,
+         input: 'select',
+         // inputData: mobile,
+         inputData: [
+            {
+               id: 1,
+               name: 'dasd'
+            }
+         ],
          relIndex: 'name',
          col: 12
       },

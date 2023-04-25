@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, Form, Input, Select } from 'antd';
+import { Checkbox, DatePicker, Form, Input, Radio, Select } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React from 'react';
@@ -196,7 +196,16 @@ function Page1({ form }) {
                         </Form.Item>
                      </th>
                      <th className="w-52">
-                        <p>Боловсролын байдал:</p>
+                        <p>Боловсролын байда dddл:</p>
+                        <Form.Item
+                           className="mb-0"
+                           name={['patient', 'educationType']}
+                        >
+                           <Radio.Group>
+                              <Radio value="apple"> Apple </Radio>
+                              <Radio value="pear"> Pear </Radio>
+                           </Radio.Group>
+                        </Form.Item>
                         <Form.Item
                            className="mb-0"
                            name={['patient', 'educationType']}
@@ -333,7 +342,7 @@ function Page1({ form }) {
                               shouldUpdate
                               className="mb-0"
                               noStyle
-                              name={['patient', 'bloodTypeVerify']}
+                              name={['patient', 'bloodTypeVerifyBy']}
                            >
                               <Input className="w-16" />
                            </Form.Item>
@@ -406,12 +415,10 @@ function Page1({ form }) {
                            noStyle
                            name={['patient', 'underStage']}
                         >
-                           <Checkbox.Group className="ml-0">
-                              <Checkbox className="ml-2" value={0}>
-                                 Тийм
-                              </Checkbox>
-                              <Checkbox value={1}>Үгүй</Checkbox>
-                           </Checkbox.Group>
+                           <Radio.Group className="ml-0">
+                              <Radio value={0}>Тийм</Radio>
+                              <Radio value={1}>Үгүй</Radio>
+                           </Radio.Group>
                         </Form.Item>
                      </th>
                      <th className="w-36">

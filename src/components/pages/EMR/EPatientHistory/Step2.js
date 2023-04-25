@@ -15,15 +15,15 @@ export default function Step2() {
                         name={['healthRecord', 'contagious']}
                      >
                         <Checkbox.Group>
-                           <Checkbox className="ml-2" value={'measles'}>
+                           <Checkbox className="ml-2" value={'MEASLES'}>
                               Улаан бурхан
                            </Checkbox>
-                           <Checkbox value={'varicella'}>Салхин цэцэг</Checkbox>
-                           <Checkbox value={'avirus'}>Вирус хепатит A</Checkbox>
-                           <Checkbox value={'bvirus'}>Вирус хепатит B</Checkbox>
-                           <Checkbox value={'cvirus'}>Вирус хепатит C</Checkbox>
-                           <Checkbox value={'tuberculosis'}>Сүрьеэ</Checkbox>
-                           <Checkbox value={'other'}>Бусад</Checkbox>
+                           <Checkbox value={'VARICELLA'}>Салхин цэцэг</Checkbox>
+                           <Checkbox value={'AVIRUS'}>Вирус хепатит A</Checkbox>
+                           <Checkbox value={'BVIRUS'}>Вирус хепатит B</Checkbox>
+                           <Checkbox value={'CVIRUS'}>Вирус хепатит C</Checkbox>
+                           <Checkbox value={'TUBERCULOSIS'}>Сүрьеэ</Checkbox>
+                           <Checkbox value={'OTHER'}>Бусад</Checkbox>
                         </Checkbox.Group>
                      </Form.Item>
                   </div>

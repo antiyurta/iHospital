@@ -15,7 +15,7 @@ export default function Step8() {
                   <div className="p-1">
                      <Form.Item
                         label="Удамд ижил өвчтэй хүн байсан уу"
-                        name={['geneticQuestion', 'painDesc']}
+                        name={['geneticQuestion', 'isPain']}
                         className="mb-0"
                      >
                         <Radio.Group>

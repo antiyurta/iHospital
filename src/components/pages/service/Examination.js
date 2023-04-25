@@ -58,7 +58,7 @@ function Examination() {
          width: 100
       },
       {
-         index: 'hasInsurance',
+         index: 'isInsurance',
          label: 'Даатгал',
          isView: true,
          isSearch: false,

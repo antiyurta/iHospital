@@ -11,6 +11,7 @@
       "axios": "^0.27.2",
       "bootstrap": "^5.2.1",
       "chart.js": "^4.1.1",
+      "chartjs-plugin-datalabels": "^2.2.0",
       "moment": "^2.29.4",
       "react": "^18.2.0",
       "react-barcode": "^1.4.6",
@@ -28,6 +29,7 @@
       "web-vitals": "^2.1.4"
    },
    "scripts": {
+      "dev": "react-scripts start",
       "start": "webpack-dev-server --mode=development --progress",
       "watch": "webpack --watch --mode development",
       "build": "set NODE_OPTIONS=--max_old_space_size=4096 && webpack --mode production",

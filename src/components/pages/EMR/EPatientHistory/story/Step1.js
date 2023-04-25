@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, DatePicker, Divider, Form, Input } from 'antd';
+import { Checkbox, DatePicker, Divider, Form, Input, Radio } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import Diagnose from '../../InPatient/document/Diagnose';
@@ -94,8 +94,15 @@ function Step1({ form, templateId }) {
                      className="mb-0"
                      label="Төрсөн он сар өдөр:"
                      name={['patient', 'birthDate']}
+                     getValueProps={(i) => ({ value: moment(i) })}
                   >
-                     <Input disabled={true} />
+                     <DatePicker
+                        format="YYYY он MM сар DD өдөр"
+                        disabled={true}
+                        style={{
+                           width: '100%'
+                        }}
+                     />
                   </Form.Item>
                </div>
             </div>
@@ -121,12 +128,12 @@ function Step1({ form, templateId }) {
                      label="Хүйс:"
                      name={['patient', 'genderType']}
                   >
-                     <Checkbox.Group disabled={true}>
-                        <Checkbox className="ml-2" value={'MAN'}>
+                     <Radio.Group disabled={true}>
+                        <Radio className="ml-2" value={'MAN'}>
                            Эрэгтэй
-                        </Checkbox>
-                        <Checkbox value={'WOMEN'}>Эмэгтэй</Checkbox>
-                     </Checkbox.Group>
+                        </Radio>
+                        <Radio value={'WOMAN'}>Эмэгтэй</Radio>
+                     </Radio.Group>
                   </Form.Item>
                </div>
             </div>
@@ -140,22 +147,18 @@ function Step1({ form, templateId }) {
                         label="Гэрлэлтийн байдал"
                         name={['patient', 'marriageStatus']}
                      >
-                        <Checkbox.Group className="ml-0">
-                           <Checkbox className="ml-2" value={0}>
-                              Огт гэрлээгүй
-                           </Checkbox>
-                           <Checkbox value={1}>Батлуулсан гэр бүлтэй</Checkbox>
-                           <Checkbox value={2}>
-                              Батлуулаагүй гэр бүлтэй
-                           </Checkbox>
-                           <Checkbox value={3}>Тусгаарласан</Checkbox>
-                           <Checkbox className="w-full" value={4}>
+                        <Radio.Group className="ml-0">
+                           <Radio value={0}>Огт гэрлээгүй</Radio>
+                           <Radio value={1}>Батлуулсан гэр бүлтэй</Radio>
+                           <Radio value={2}>Батлуулаагүй гэр бүлтэй</Radio>
+                           <Radio value={3}>Тусгаарласан</Radio>
+                           <Radio className="w-full" value={4}>
                               Цуцалсан
-                           </Checkbox>
-                           <Checkbox className="w-full" value={5}>
+                           </Radio>
+                           <Radio className="w-full" value={5}>
                               Бэлэвсэн
-                           </Checkbox>
-                        </Checkbox.Group>
+                           </Radio>
+                        </Radio.Group>
                      </Form.Item>
                   )}
                </div>
@@ -169,28 +172,16 @@ function Step1({ form, templateId }) {
                      label="Боловсролын байдал"
                      name={['patient', 'educationType']}
                   >
-                     <Checkbox.Group className="ml-0">
-                        <Checkbox className="ml-2" value={0}>
-                           Боловсролгүй
-                        </Checkbox>
-                        <Checkbox value={1}>Бага</Checkbox>
-                        <Checkbox value={2}>Бүрэн дунд</Checkbox>
-                        <Checkbox value={3}>
-                           Мэргэжлийн болон техникийн
-                        </Checkbox>
-                        <Checkbox className="w-full" value={4}>
-                           Дипломын
-                        </Checkbox>
-                        <Checkbox className="w-full" value={5}>
-                           Бакалавр
-                        </Checkbox>
-                        <Checkbox className="w-full" value={6}>
-                           Магистр
-                        </Checkbox>
-                        <Checkbox className="w-full" value={7}>
-                           Доктор
-                        </Checkbox>
-                     </Checkbox.Group>
+                     <Radio.Group className="ml-0">
+                        <Radio value={0}>Боловсролгүй</Radio>
+                        <Radio value={1}>Бага</Radio>
+                        <Radio value={2}>Бүрэн дунд</Radio>
+                        <Radio value={3}>Мэргэжлийн болон техникийн</Radio>
+                        <Radio value={4}>Дипломын</Radio>
+                        <Radio value={5}>Бакалавр</Radio>
+                        <Radio value={6}>Магистр</Radio>
+                        <Radio value={7}>Доктор</Radio>
+                     </Radio.Group>
                   </Form.Item>
                </div>
             </div>
@@ -307,7 +298,7 @@ function Step1({ form, templateId }) {
                      label="Баталгаажуулсан
                         хүний нэр гарын
                         үсэг:"
-                     name={['patient', 'bloodTypeVerify']}
+                     name={['patient', 'bloodTypeVerifyBy']}
                   >
                      <Input />
                   </Form.Item>
@@ -348,16 +339,12 @@ function Step1({ form, templateId }) {
                      label="Төлбөрийн төрөл:"
                      name={['patient', 'paymentStatus']}
                   >
-                     <Checkbox.Group className="ml-0">
-                        <Checkbox className="ml-2" value={0}>
-                           Төр хариуцсан
-                        </Checkbox>
-                        <Checkbox value={1}>15%</Checkbox>
-                        <Checkbox className="w-full" value={2}>
-                           10%
-                        </Checkbox>
-                        <Checkbox value={3}>Өвчтөн хариуцсан</Checkbox>
-                     </Checkbox.Group>
+                     <Radio.Group className="ml-0">
+                        <Radio value={0}>Төр хариуцсан</Radio>
+                        <Radio value={15}>15%</Radio>
+                        <Radio value={10}>10%</Radio>
+                        <Radio value={100}>Өвчтөн хариуцсан</Radio>
+                     </Radio.Group>
                   </Form.Item>
                </div>
             </div>
@@ -371,12 +358,10 @@ function Step1({ form, templateId }) {
                         илгээсэн эсэх:"
                      name={['patient', 'underStage']}
                   >
-                     <Checkbox.Group className="ml-0">
-                        <Checkbox className="ml-2" value={0}>
-                           Тийм
-                        </Checkbox>
-                        <Checkbox value={1}>Үгүй</Checkbox>
-                     </Checkbox.Group>
+                     <Radio.Group>
+                        <Radio value={true}>Тийм</Radio>
+                        <Radio value={false}>Үгүй</Radio>
+                     </Radio.Group>
                   </Form.Item>
                </div>
             </div>
@@ -400,59 +385,85 @@ function Step1({ form, templateId }) {
                </div>
             </div>
          </div>
-         <div className="w-full p-1">
-            <Divider>Хэвтэх үеийн онош</Divider>
-            <Form.List name="diagnoses">
-               {(diagnoses) => (
-                  <>
-                     {diagnoses.map((diagnose, index) => {
-                        return (
-                           <Form.Item
-                              shouldUpdate
-                              noStyle
-                              key={index}
-                              className="mb-0"
-                           >
-                              {() => {
-                                 return (
-                                    <span>
-                                       {form.getFieldValue([
-                                          'diagnoses',
-                                          diagnose.name,
-                                          'name'
-                                       ])}
-                                       &nbsp;
-                                    </span>
-                                 );
-                              }}
-                           </Form.Item>
-                        );
-                     })}
-                  </>
-               )}
-            </Form.List>
+         <Divider>Хэвтэх үеийн онош</Divider>
+         <div className="w-1/2 p-1">
+            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="p-1">
+                  <Form.Item
+                     className="mb-0"
+                     label="Код"
+                     name={['diagnose', 'ambultoryDiagnoseCode']}
+                  >
+                     <Input
+                        disabled={true}
+                        style={{
+                           color: 'black'
+                        }}
+                     />
+                  </Form.Item>
+               </div>
+            </div>
          </div>
-         <div className="w-full p-1 story">
-            <Diagnose form={form} name="Үндсэн онош" formName="main" />
-         </div>
-         <div className="w-full p-1 story">
-            <Diagnose form={form} name="Дагалдах онош" formName="combo" />
-         </div>
-         <div className="w-full p-1 story">
-            <Diagnose form={form} name="Хүндрэл" formName="complications" />
+         <div className="w-1/2 p-1">
+            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="p-1">
+                  <Form.Item
+                     className="mb-0"
+                     label="Нэр"
+                     name={['diagnose', 'ambultoryDiagnoseName']}
+                  >
+                     <Input
+                        disabled={true}
+                        style={{
+                           color: 'black'
+                        }}
+                     />
+                  </Form.Item>
+               </div>
+            </div>
          </div>
          <div className="w-full p-1 story">
             <Diagnose
+               type={0}
                form={form}
-               name="Үйлдлийн онош (Мэс засал, мэс ажилбар)"
-               formName="operational"
+               name="Үндсэн онош"
+               multiple={false}
+               formCode="icd10DiagnoseCode"
+               formName="icd10DiagnoseName"
             />
          </div>
          <div className="w-full p-1 story">
             <Diagnose
+               type={0}
+               form={form}
+               name="Дагалдах онош"
+               multiple={true}
+               formCode="code"
+               formName="name"
+               index="addDiagnosis"
+            />
+         </div>
+         <div className="w-full p-1 story">
+            {/* <Diagnose form={form} name="Хүндрэл" formName="complications" /> */}
+         </div>
+         <div className="w-full p-1 story">
+            <Diagnose
+               type={1}
+               form={form}
+               name="Үйлдлийн онош (Мэс засал, мэс ажилбар)"
+               multiple={false}
+               formCode="addIcd9DiagnoseCode"
+               formName="addIcd9DiagnoseName"
+            />
+         </div>
+         <div className="w-full p-1 story">
+            <Diagnose
+               type={2}
                form={form}
                name="Уламжлалтын онош"
-               formName="treatmentD"
+               multiple={false}
+               formCode="addTraditionalDiagnoseCode"
+               formName="addTraditionalDiagnoseName"
             />
          </div>
          <div className="w-1/4 p-1">

@@ -5,7 +5,6 @@ const webpack = require('webpack');
 module.exports = {
    devtool: 'inline-source-map',
    context: __dirname,
-   target: ['web', 'es5'],
    entry: './src/index.js',
    output: {
       filename: '[name].js',
@@ -17,6 +16,9 @@ module.exports = {
       hot: true,
       open: true,
       historyApiFallback: true
+   },
+   resolve: {
+      extensions: ['.js', '.jsx']
    },
    module: {
       rules: [
@@ -30,9 +32,9 @@ module.exports = {
             use: ['style-loader', 'css-loader', 'postcss-loader']
          },
          {
-            test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/, // to import images and fonts
+            test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
             loader: 'url-loader',
-            options: { limit: false, esModule: false }
+            options: { limit: 100000, esModule: false }
          }
       ]
    },

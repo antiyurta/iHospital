@@ -28,16 +28,14 @@ export default function GeneralInspection({ patientId, inspection }) {
          .then(async (values) => {
             values['patientId'] = patientId;
             values['appointmentId'] = location?.state?.appointmentId;
-            if (state) {
-               console.log('====END');
-               await Patch(
-                  'emr/general-inspection/' + historyId,
-                  token,
-                  config,
-                  values
-               );
-            } else {
-               await Post('emr/general-inspection', token, config, values);
+            const response = await Post(
+               'emr/general-inspection',
+               token,
+               config,
+               values
+            );
+            if (response === 201) {
+               getGeneralInspection();
             }
          })
          .catch((error) => {
@@ -53,11 +51,7 @@ export default function GeneralInspection({ patientId, inspection }) {
          }
       };
       const response = await Get('emr/general-inspection', token, conf);
-      if (response.data.length > 0) {
-         form.setFieldsValue(response.data[0]);
-         setHistoryId(response.data[0].id);
-         setState(true);
-      }
+      form.setFieldsValue(response);
    };
    return (
       <Form
@@ -87,16 +81,16 @@ export default function GeneralInspection({ patientId, inspection }) {
                               className="mb-0"
                            >
                               <Radio.Group className="align-middle">
-                                 <Radio value={0} className="pl-1 ml-0">
+                                 <Radio value={1} className="pl-1 ml-0">
                                     Дунд
                                  </Radio>
-                                 <Radio value={1} className="pl-1 ml-0">
+                                 <Radio value={2} className="pl-1 ml-0">
                                     Хүндэвтэр
                                  </Radio>
-                                 <Radio value={2} className="pl-1 ml-0">
+                                 <Radio value={3} className="pl-1 ml-0">
                                     Хүнд
                                  </Radio>
-                                 <Radio value={3} className="pl-1 ml-0">
+                                 <Radio value={4} className="pl-1 ml-0">
                                     Маш хүнд
                                  </Radio>
                               </Radio.Group>

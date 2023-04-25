@@ -16,6 +16,7 @@ import moment from 'moment';
 import Schedule from '../OCS/Schedule';
 import MainInPatient from './InPatient/MainInPatient';
 import EmrSupports from '../EmrSupports';
+import { selectCurrentEmrData } from '../../../features/emrReducer';
 const config = {
    headers: {},
    params: {}
@@ -23,13 +24,23 @@ const config = {
 const { Option } = Select;
 const { Text } = Typography;
 function EMR() {
-   const IncomeUsageType = useLocation().state.usageType;
-   const IncomePatientId = useLocation().state.patientId;
-   const IncomeCabinetId = useLocation().state.cabinetId;
-   const Inspection = useLocation().state.inspection;
-   const AppointmentId = useLocation().state.appointmentId;
-   const XrayRequestId = useLocation().state.xrayRequestId;
-   const InpatientRequestId = useLocation().state?.inpatientRequestId;
+   const emrData = useSelector(selectCurrentEmrData);
+   console.log(emrData);
+   // const IncomeUsageType = useLocation().state.usageType;
+   const IncomeUsageType = emrData.usageType;
+   // const IncomePatientId = useLocation().state.patientId;
+   const IncomePatientId = emrData.patientId;
+   // const IncomeCabinetId = useLocation().state.cabinetId;
+   const IncomeCabinetId = emrData.cabinetId;
+   // const Inspection = useLocation().state.inspection;
+   const Inspection = emrData.Inspection;
+   // const AppointmentId = useLocation().state.appointmentId;
+   const AppointmentId = emrData.appointmentId;
+   // const XrayRequestId = useLocation().state.xrayRequestId;
+   const XrayRequestId = emrData.XrayRequestId;
+   // const InpatientRequestId = useLocation().state?.inpatientRequestId;
+   const InpatientRequestId = emrData.inpatientRequestId;
+
    const [cardLoading, setCardLoading] = useState(false);
    const token = useSelector(selectCurrentToken);
    const employeeId = useSelector(selectCurrentUserId);
@@ -182,9 +193,10 @@ function EMR() {
                   appointmentId={AppointmentId}
                   usageType={IncomeUsageType}
                   patient={selectedPatient}
+                  patientId={IncomePatientId}
                />
             </div>
-            <div
+            {/* <div
                className={
                   type === 'EMR'
                      ? 'w-full md:w-full xl:w-1/2'
@@ -202,7 +214,7 @@ function EMR() {
                      <div className="pb-1">
                         <PatientInformation
                            patient={selectedPatient}
-                           handlesearch={handleSearch}
+                           handlesearch={false}
                            handleTypeChange={handleTypeChange}
                            // OCS={AppointmentId ? true : false}
                            OCS={
@@ -406,15 +418,15 @@ function EMR() {
                      </Card>
                   ) : null}
                </div>
-            </div>
+            </div> */}
          </div>
-         <Schedule
+         {/* <Schedule
             isOpen={isOpen}
             isOCS={true}
             incomeData={payments}
             selectedPatient={selectedPatient}
             isClose={() => setIsOpen(false)}
-         />
+         /> */}
       </>
    );
 }

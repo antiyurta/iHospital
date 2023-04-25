@@ -9,7 +9,7 @@ import DiagnoseTypes from './DiagnoseTypes.json';
 const { Search } = Input;
 const { TextArea } = Input;
 const { Option } = Select;
-function Diagnose({ handleClick }) {
+function Diagnose({ handleClick, type }) {
    const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
@@ -33,6 +33,7 @@ function Diagnose({ handleClick }) {
       setLoading(true);
       config.params.page = page;
       config.params.limit = pageSize;
+      config.params.type = type;
       if (e && v) {
          setParam(v);
          setParamValue(e);

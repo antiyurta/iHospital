@@ -123,7 +123,9 @@ function Xray({ isOpen, isClose, handleclick }) {
                                     key={index}
                                     className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                  >
-                                    <td>{item.name}</td>
+                                    <td className="whitespace-pre-line">
+                                       {item.name}
+                                    </td>
                                     <td>{item.price}₮</td>
                                  </tr>
                               );
@@ -160,7 +162,9 @@ function Xray({ isOpen, isClose, handleclick }) {
                                     key={index}
                                     className="ant-table-row ant-table-row-level-0"
                                  >
-                                    <td>{item.name}</td>
+                                    <td className="whitespace-pre-line">
+                                       {item.name}
+                                    </td>
                                     <td>{item.price}₮</td>
                                     <td
                                        onDoubleClick={() => remove(index)}

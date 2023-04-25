@@ -22,7 +22,6 @@ function MedicineRequests({ PatientId, ListId }) {
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const [requestId, setRequestId] = useState(Number);
-   const [requestState, setRequestState] = useState('');
    const handleMenuClick = async (key) => {
       const conf = {
          headers: {},
@@ -30,13 +29,13 @@ function MedicineRequests({ PatientId, ListId }) {
       };
       var data = {};
       if (Number(key) === 1) {
-         data[requestState] = 'implemented';
+         data['state'] = 'implemented';
       } else if (Number(key) === 2) {
-         data[requestState] = 'cancelled';
+         data['state'] = 'cancelled';
       } else if (Number(key) === 3) {
-         data[requestState] = 'stopped';
+         data['state'] = 'stopped';
       } else {
-         data[requestState] = 'refused';
+         data['state'] = 'refused';
       }
       const response = await Patch(
          'medicine-plan/' + requestId,
@@ -113,7 +112,7 @@ function MedicineRequests({ PatientId, ListId }) {
    const columns = [
       {
          title: '№',
-         render: (_, record, index) => {
+         render: (_, _record, index) => {
             return meta.page * meta.limit - (meta.limit - index - 1);
          }
       },
@@ -121,7 +120,7 @@ function MedicineRequests({ PatientId, ListId }) {
          title: 'Хэрэгжүүлэх',
          dataIndex: 'date',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return moment(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {
@@ -137,10 +136,10 @@ function MedicineRequests({ PatientId, ListId }) {
          dataIndex: ['medicineRequest', 'description']
       },
       {
-         title: 'Өглөө',
-         dataIndex: 'isMorning',
+         title: 'Хэрэгжүүлэл',
+         dataIndex: 'state',
          render: (text, row) => {
-            return row.medicineRequest?.isMorning && text === null ? (
+            return text === null ? (
                <>
                   <Dropdown
                      overlay={items}
@@ -149,94 +148,14 @@ function MedicineRequests({ PatientId, ListId }) {
                         pointAtCenter: true
                      }}
                   >
-                     <EditOutlined
-                        onClick={(e) => {
-                           e.preventDefault();
-                           setRequestId(row.id);
-                           setRequestState('isMorning');
-                        }}
-                     />
-                  </Dropdown>
-               </>
-            ) : (
-               getRequestInfo(text)
-            );
-         }
-      },
-      {
-         title: 'Өдөр',
-         dataIndex: 'isAfternoon',
-         render: (text, row) => {
-            return row.medicineRequest?.isAfternoon && text === null ? (
-               <>
-                  <Dropdown
-                     overlay={items}
-                     trigger={['click']}
-                     arrow={{
-                        pointAtCenter: true
-                     }}
-                  >
-                     <EditOutlined
-                        onClick={(e) => {
-                           e.preventDefault();
-                           setRequestId(row.id);
-                           setRequestState('isAfternoon');
-                        }}
-                     />
-                  </Dropdown>
-               </>
-            ) : (
-               getRequestInfo(text)
-            );
-         }
-      },
-      {
-         title: 'Орой',
-         dataIndex: 'isEvening',
-         render: (text, row) => {
-            return row.medicineRequest?.isEvening && text === null ? (
-               <>
-                  <Dropdown
-                     overlay={items}
-                     trigger={['click']}
-                     arrow={{
-                        pointAtCenter: true
-                     }}
-                  >
-                     <EditOutlined
-                        onClick={(e) => {
-                           e.preventDefault();
-                           setRequestId(row.id);
-                           setRequestState('isEvening');
-                        }}
-                     />
-                  </Dropdown>
-               </>
-            ) : (
-               getRequestInfo(text)
-            );
-         }
-      },
-      {
-         title: 'Шөнө',
-         dataIndex: 'isNight',
-         render: (text, row) => {
-            return row.medicineRequest?.isNight && text === null ? (
-               <>
-                  <Dropdown
-                     overlay={items}
-                     trigger={['click']}
-                     arrow={{
-                        pointAtCenter: true
-                     }}
-                  >
-                     <EditOutlined
-                        onClick={(e) => {
-                           e.preventDefault();
-                           setRequestId(row.id);
-                           setRequestState('isNight');
-                        }}
-                     />
+                     <Button>
+                        <EditOutlined
+                           onClick={(e) => {
+                              e.preventDefault();
+                              setRequestId(row.id);
+                           }}
+                        />
+                     </Button>
                   </Dropdown>
                </>
             ) : (

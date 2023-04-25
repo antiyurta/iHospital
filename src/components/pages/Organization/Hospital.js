@@ -1,6 +1,6 @@
 import '../../../style/Hospital.css';
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Table, Modal, Select, Form } from 'antd';
+import { Row, Col, Table, Modal, Select, Form, Input } from 'antd';
 
 import UTable from '../../UTable';
 import { DefualtGet, Get, Patch } from '../../comman';
@@ -86,7 +86,9 @@ const { Option } = Select;
 function Hospital() {
    const token = useSelector(selectCurrentToken);
    const [form] = Form.useForm();
+   const [insuranceForm] = Form.useForm();
    const [isOpenHospital, setIsOpenHospital] = useState(false);
+   const [isOpenInsurance, setIsOpenInsurance] = useState(false);
    const [financeClients, setFinanceClients] = useState([]);
    const [selectedRow, setSelectedRow] = useState({});
    const [financeAccounts, setFinanceAccounts] = useState([]);
@@ -126,8 +128,38 @@ function Hospital() {
       );
       if (response === 200) {
          setIsOpenHospital(false);
+         setIsOpenInsurance(false);
       }
       setIsRefresh(!isRefresh);
+   };
+   const insuranceFunction = async (row) => {
+      if (row) {
+         setIsOpenInsurance(true);
+         insuranceForm.setFieldValue(
+            'insuranceUsername',
+            row.insuranceUsername
+         );
+         insuranceForm.setFieldValue(
+            'insurancePassword',
+            row.insurancePassword
+         );
+         setSelectedRow(row);
+      }
+   };
+   const insuranceSyncFunction = async (type, hospitalId) => {
+      const conf = {
+         headers: {},
+         params: {
+            isSync: type,
+            hospitalId: hospitalId
+         }
+      };
+      const response = await DefualtGet(
+         'health-insurance/hics-exam',
+         token,
+         conf
+      );
+      console.log(response);
    };
    useEffect(() => {
       getFinanceClient();
@@ -145,8 +177,12 @@ function Hospital() {
                   isUpdate={true}
                   isDelete={true}
                   width="50%"
+                  isInsurance={true}
                   isHospital={true}
+                  insuranceSync={true}
                   hospitalFunction={hospitalFunction}
+                  insuranceFunction={insuranceFunction}
+                  insuranceSyncFunction={insuranceSyncFunction}
                   isRefresh={isRefresh}
                />
             </div>
@@ -251,6 +287,47 @@ function Hospital() {
                         );
                      })}
                   </Select>
+               </Form.Item>
+            </Form>
+         </Modal>
+         <Modal
+            open={isOpenInsurance}
+            onCancel={() => {
+               setIsOpenInsurance(false);
+               insuranceForm.resetFields();
+            }}
+            onOk={() =>
+               insuranceForm
+                  .validateFields()
+                  .then((values) => updateHospital(values))
+            }
+            okText="Хадагалах"
+            cancelText="Болих"
+         >
+            <Form form={insuranceForm} layout="vertical">
+               <Form.Item
+                  label="Даатгалын нэвтрэх нэр"
+                  name="insuranceUsername"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Заавал'
+                     }
+                  ]}
+               >
+                  <Input />
+               </Form.Item>
+               <Form.Item
+                  label="Даатгалын нууц үг"
+                  name="insurancePassword"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Заавал'
+                     }
+                  ]}
+               >
+                  <Input />
                </Form.Item>
             </Form>
          </Modal>

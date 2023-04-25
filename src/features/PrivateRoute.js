@@ -8,6 +8,7 @@ import { Spin } from 'antd';
 function PrivateRoute({ children }) {
    const [isAuth, setIsAuth] = useState('loading');
    const location = useLocation();
+   console.log(location);
    const isPermission = () => {
       if (location.state) {
          return true;

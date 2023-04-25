@@ -27,12 +27,29 @@ export async function Get(url, token, config) {
          .catch((error) => {
             if (error.response.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
-            } else if (error.response.status === 400) {
-               openNofi('error', 'Муу хүсэлт', 'Та Админтай холбогдоно уу');
+            } else if (
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.status === 409) ||
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.name === 'HttpException') ||
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.statusCode === 400)
+            ) {
+               const err = error.response?.data?.message;
+               if (typeof err === 'object') {
+                  err.map((er) => {
+                     openNofi('error', 'Алдаа', `${er}`);
+                  });
+               } else {
+                  const message = err.replaceAll('HttpException:', '');
+                  openNofi('error', 'Алдаа', message);
+               }
             } else {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                reject({ data: [], meta: {} });
             }
+
+            resolve(400);
          });
    });
 }
@@ -53,12 +70,29 @@ export async function DefualtGet(url, token, config) {
          .catch((error) => {
             if (error.response.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
-            } else if (error.response.status === 400) {
-               openNofi('error', 'Муу хүсэлт', 'Та Админтай холбогдоно уу');
+            } else if (
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.status === 409) ||
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.name === 'HttpException') ||
+               (error?.response?.status === 400 &&
+                  error?.response?.data?.statusCode === 400)
+            ) {
+               const err = error.response?.data?.message;
+               if (typeof err === 'object') {
+                  err.map((er) => {
+                     openNofi('error', 'Алдаа', `${er}`);
+                  });
+               } else {
+                  const message = err.replaceAll('HttpException:', '');
+                  openNofi('error', 'Алдаа', message);
+               }
             } else {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
                reject({ data: [], meta: {} });
             }
+
+            resolve(400);
          });
    });
 }

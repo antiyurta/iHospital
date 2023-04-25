@@ -54,7 +54,7 @@ const Medicine = React.lazy(() =>
 );
 //service end
 //emr start
-const EMR = React.lazy(() => import('./components/pages/EMR/emr'));
+const EMR = React.lazy(() => import('./components/pages/EMR/NewEmr'));
 const BeforeAmbulatoryList = React.lazy(() =>
    import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryList')
 );
@@ -166,6 +166,17 @@ const Acting = React.lazy(() =>
 const DepBalance = React.lazy(() =>
    import('./components/pages/EMR/InPatient/DepBalance')
 );
+const Diagnoses = React.lazy(() =>
+   import('./components/pages/service/Diagnoses')
+);
+//
+const HicsCost = React.lazy(() =>
+   import('./components/pages/Insurance/HicsCost')
+);
+const HicsLists = React.lazy(() =>
+   import('./components/pages/Insurance/HicsLists')
+);
+//
 
 function App() {
    return (
@@ -184,6 +195,8 @@ function App() {
                            </PrivateRoute>
                         }
                      />
+                     <Route path="/hicsCost" element={<HicsCost />} />
+                     <Route path="/hicsList" element={<HicsLists />} />
                      <Route path="/notPermission" element={<NotPermission />} />
                      <Route path="/profile" element={<Profile />} />
                      <Route
@@ -400,11 +413,7 @@ function App() {
                         />
                         <Route
                            path="/examinationParams"
-                           element={
-                              <PrivateRoute>
-                                 <ExaminationParams />
-                              </PrivateRoute>
-                           }
+                           element={<ExaminationParams />}
                         />
                         <Route
                            path="/xray"
@@ -414,6 +423,7 @@ function App() {
                               </PrivateRoute>
                            }
                         />
+                        <Route path="/diagnoses" element={<Diagnoses />} />
                         <Route
                            path="/treatment"
                            element={

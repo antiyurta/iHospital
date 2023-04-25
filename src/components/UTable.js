@@ -150,6 +150,7 @@ function UTable(props) {
          }
       } else {
          response = await Post(props.url, token, config, data);
+         console.log(response);
          if (response === 201) {
             setIsConfirmLoading(false);
             setIsModalVisible(false);
@@ -163,9 +164,19 @@ function UTable(props) {
       console.log('Failed:', errorInfo);
    };
    const inputChecker = (index, row) => {
-      if (props.column[index]?.input === 'select') {
+      if (props.column[index]?.input === 'multipleSelect') {
+         var string = '';
+         row?.map((item) => {
+            string += `${item}|`;
+         });
+         return string;
+      } else if (props.column[index]?.input === 'select') {
          return props.column[index]?.inputData?.map((data) => {
-            if (data.id === row)
+            if (props.column[index]?.relValueIndex) {
+               if (data[`${props.column[index]?.relValueIndex}`] === row) {
+                  return data[`${props.column[index]?.relIndex}`];
+               }
+            } else if (data.id === row)
                return data[`${props.column[index]?.relIndex}`];
          });
       } else if (props.column[index]?.input === 'switch') {
@@ -268,6 +279,22 @@ function UTable(props) {
                               rowSpan={2}
                            >
                               Санхүү
+                           </th>
+                        ) : null}
+                        {props.isInsurance ? (
+                           <th
+                              className="w-3 font-bold text-sm align-middle"
+                              rowSpan={2}
+                           >
+                              Даатгал
+                           </th>
+                        ) : null}
+                        {props.insuranceSync ? (
+                           <th
+                              className="w-3 font-bold text-sm align-middle"
+                              rowSpan={2}
+                           >
+                              Даатгал Дата
                            </th>
                         ) : null}
                         {props.isHospital ? (
@@ -421,6 +448,56 @@ function UTable(props) {
                                        )}
                                     </td>
                                  ) : null}
+                                 {props.isInsurance ? (
+                                    <td className="p-2">
+                                       {!row.isInsurance ? (
+                                          <CloseOutlined className="text-red-600" />
+                                       ) : (
+                                          <Button
+                                             onClick={() =>
+                                                props.insuranceFunction(row)
+                                             }
+                                             type="text"
+                                             className="text-sky-500 font-semibold"
+                                          >
+                                             {row.insurancePassword != null &&
+                                             row.insuranceUsername != null
+                                                ? 'Засах'
+                                                : 'Холбох'}
+                                          </Button>
+                                       )}
+                                    </td>
+                                 ) : null}
+                                 {props.insuranceSync ? (
+                                    <td className="p-2">
+                                       <Button.Group>
+                                          <Button
+                                             onClick={() =>
+                                                props.insuranceSyncFunction(
+                                                   true,
+                                                   row.id
+                                                )
+                                             }
+                                             type="text"
+                                             className="text-sky-500 font-semibold"
+                                          >
+                                             Async Хийх
+                                          </Button>
+                                          <Button
+                                             onClick={() => {
+                                                props.insuranceSyncFunction(
+                                                   false,
+                                                   row.id
+                                                );
+                                             }}
+                                             type="text"
+                                             className="text-sky-500 font-semibold"
+                                          >
+                                             Харах
+                                          </Button>
+                                       </Button.Group>
+                                    </td>
+                                 ) : null}
                                  {props.isHospital ? (
                                     <td className="p-2">
                                        {row.financeOrganizationId ? (
@@ -553,10 +630,29 @@ function UTable(props) {
                                  name={element.index}
                                  rules={element.rules}
                               >
-                                 <Select allowClear placeholder={element.label}>
+                                 <Select
+                                    allowClear
+                                    showSearch
+                                    placeholder={element.label}
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                       (option?.value ?? '')
+                                          .toLowerCase()
+                                          .includes(input?.toLowerCase())
+                                    }
+                                 >
                                     {element.inputData?.map((data, index) => {
                                        return (
-                                          <Option key={index} value={data.id}>
+                                          <Option
+                                             key={index}
+                                             value={
+                                                element.relValueIndex
+                                                   ? data[
+                                                        `${element.relValueIndex}`
+                                                     ]
+                                                   : data.id
+                                             }
+                                          >
                                              {data[`${element.relIndex}`]}
                                           </Option>
                                        );
@@ -577,7 +673,16 @@ function UTable(props) {
                                  >
                                     {element.inputData?.map((data, index) => {
                                        return (
-                                          <Option key={index} value={data.id}>
+                                          <Option
+                                             key={index}
+                                             value={
+                                                element.relValueIndex
+                                                   ? data[
+                                                        `${element.relValueIndex}`
+                                                     ]
+                                                   : data.id
+                                             }
+                                          >
                                              {data[`${element.relIndex}`]}
                                           </Option>
                                        );

@@ -15,18 +15,29 @@ import {
 import moment from 'moment';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, openNofi, Patch, Post, ScrollRef } from '../../../comman';
+import {
+   selectCurrentInsurance,
+   selectCurrentToken
+} from '../../../../features/authReducer';
+import {
+   DefualtGet,
+   Get,
+   openNofi,
+   Patch,
+   Post,
+   ScrollRef
+} from '../../../comman';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { ClockCircleOutlined, SearchOutlined } from '@ant-design/icons';
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
 function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
    const [today] = useState(moment(new Date()));
    const token = useSelector(selectCurrentToken);
+   const isInsurance = useSelector(selectCurrentInsurance);
    const config = {
       headers: {},
       params: {}
@@ -48,7 +59,9 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
    const [isUrgent, setIsUrgent] = useState(false);
    const [isConfirmLoading, setIsConfirmLoading] = useState(false);
    //
-
+   const [insuranceService, setInsuranceService] = useState([]);
+   const [selectedInsuranceId, setSelectedInsuranceId] = useState(Number);
+   //
    const orderAppointment = async (type, desc, value) => {
       if (type) {
          setQwe(desc);
@@ -144,6 +157,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       } else {
          data.type = 3;
          data.status = 1;
+         data.hicsServiceId = selectedInsuranceId;
          data.appointmentWorkDate = filterForm.getFieldValue('date');
          config.params = {};
          const response = await Post('appointment', token, config, data);
@@ -180,9 +194,27 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
          })
          .catch((err) => {});
    };
+   const getInsuranceService = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            usageType: 'OUT'
+         }
+      };
+      const response = await DefualtGet(
+         'insurance/hics-service-group',
+         token,
+         conf
+      );
+      // console.log(response)
+      setInsuranceService(response.data);
+   };
    useEffect(() => {
       ScrollRef(scrollRef);
       getStructures();
+      if (isInsurance) {
+         getInsuranceService();
+      }
    }, [selectedPatient]);
    useEffect(() => {
       selectedSchedule && getSlots(0);
@@ -222,6 +254,34 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                   {qwe.roomNumber}
                </Descriptions.Item>
             </Descriptions>
+            {isInsurance && (
+               <>
+                  <label>Даатгалын үйлчилгээний төрөл</label>
+                  <Select
+                     style={{
+                        width: '100%'
+                     }}
+                     onChange={(e) => setSelectedInsuranceId(e)}
+                  >
+                     {insuranceService?.map((group, index) => {
+                        return (
+                           <OptGroup key={index} label={group.name}>
+                              {group?.hicsServices?.map((service, idx) => {
+                                 return (
+                                    <Option
+                                       key={`${index - idx}`}
+                                       value={service.id}
+                                    >
+                                       {service.name}
+                                    </Option>
+                                 );
+                              })}
+                           </OptGroup>
+                        );
+                     })}
+                  </Select>
+               </>
+            )}
          </Modal>
          <Card
             bordered={false}

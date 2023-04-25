@@ -1,6 +1,7 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Амьдралын хэв маяг
 import React from 'react';
 import { Col, Radio, Row, Divider, Input, Form, InputNumber } from 'antd';
+import { checkNumber } from '../../../comman';
 
 export default function Step3() {
    return (
@@ -111,19 +112,6 @@ export default function Step3() {
                   </div>
                </div>
             </div>
-            <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
-                  <div className="p-1">
-                     <Form.Item
-                        label="Нэг удаа хэрэглэх хэмжээ"
-                        name={['lifeStyle', 'alcohol', 'size']}
-                        className="mb-0"
-                     >
-                        <Input size="small" />
-                     </Form.Item>
-                  </div>
-               </div>
-            </div>
          </div>
          <Divider orientation="left" className="text-sm my-2">
             Донтолт
@@ -192,7 +180,7 @@ export default function Step3() {
                         name={['lifeStyle', 'food', 'dayEatCount']}
                         className="mb-0"
                      >
-                        <Input size="small" />
+                        <InputNumber onKeyPress={checkNumber} size="small" />
                      </Form.Item>
                   </div>
                </div>

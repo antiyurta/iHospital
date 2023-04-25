@@ -95,8 +95,8 @@ function MiddleTable({ typeId }) {
             pagination={{
                simple: true,
                pageSize: 10,
-               total: meta.itemCount,
-               current: meta.page,
+               total: meta?.itemCount,
+               current: meta?.page,
                onChange: (page, pageSize) => getActing(page, pageSize, typeId)
             }}
          />

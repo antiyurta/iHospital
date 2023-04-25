@@ -1,12 +1,8 @@
 module.exports = () => ({
-    output:{
-        filename: "production.js"
-    },
-    module:{
-        rules:[
-            {
-                
-            }
-        ]
-    }
-})
+   output: {
+      filename: 'production.js'
+   },
+   module: {
+      rules: [{}]
+   }
+});
