@@ -2,13 +2,13 @@ import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
+import { DefualtGet, Get } from '../../comman';
 import UTable from '../../UTable';
 
 function Treatment() {
    const token = useSelector(selectCurrentToken);
    const [treatmentTypeData, setTreatmentTypeData] = useState([]);
-
+   const [hicsServices, setHicsServices] = useState([]);
    const config = {
       headers: {},
       params: {
@@ -20,9 +20,19 @@ function Treatment() {
       const response = await Get('service/type', token, config);
       setTreatmentTypeData(response.data);
    };
-
+   const getInsuranceService = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            groupIds: '203,206,207,208'
+         }
+      };
+      const response = await DefualtGet('insurance/hics-service', token, conf);
+      setHicsServices(response.data);
+   };
    useEffect(() => {
       getTreatmentTypeData();
+      getInsuranceService();
    }, []);
    const column = [
       {
@@ -60,7 +70,7 @@ function Treatment() {
          col: 8
       },
       {
-         index: 'hasInsurance',
+         index: 'isInsurance',
          label: 'Даатгал',
          isView: true,
          isSearch: false,
@@ -74,6 +84,16 @@ function Treatment() {
          isSearch: false,
          input: 'switch',
          col: 8
+      },
+      {
+         index: 'insuranceServiceId',
+         label: 'Даатгалтай бол үйлчилгээ сонгох',
+         isView: true,
+         isSearch: false,
+         input: 'select',
+         inputData: hicsServices,
+         relIndex: 'name',
+         col: 24
       },
       {
          index: 'price',
