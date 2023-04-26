@@ -674,6 +674,50 @@ function Index({ type, isDoctor }) {
                </div>
             );
          }
+      },
+      {
+         title: 'Үйлдэл',
+         fixed: 'right',
+         width: 170,
+         render: (_text, row) => {
+            return (
+               <Button
+                  className="hover:border-[#5cb85c]"
+                  style={{
+                     backgroundColor: '#5cb85c',
+                     color: 'white'
+                  }}
+                  onClick={() => {
+                     isDoctor
+                        ? getEMR(
+                             row.id,
+                             row.patientId,
+                             type === 2 ? row.inDepartmentId : row.cabinetId,
+                             // row.cabinetId,
+                             // row.inspectionType,
+                             type === 2 ? 1 : row.inspectionType,
+                             row.isPayment || row.isInsurance,
+                             row.process,
+                             row.startDate,
+                             row.insuranceServiceId
+                          )
+                        : getENR(
+                             row.id,
+                             row.patientId,
+                             row.inDepartmentId,
+                             row.inspectionType,
+                             row.isPayment,
+                             row.patient?.registerNumber,
+                             row.rooms?.roomNumber,
+                             row.structure?.name
+                          );
+                  }}
+                  icon={<PlusCircleOutlined />}
+               >
+                  Үзлэг хийх
+               </Button>
+            );
+         }
       }
    ];
    const nurseColumns = [
