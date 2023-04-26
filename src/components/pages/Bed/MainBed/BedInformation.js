@@ -511,9 +511,17 @@ const BedInformation = (props) => {
                                           </p>
                                           <p style={styles.total}>
                                              {el.roomNumber} -{' '}
-                                             {el.isVip
-                                                ? 'VIP өрөө'
-                                                : 'Энгийн өрөө'}{' '}
+                                             {roomType.map((item, index) => {
+                                                if (
+                                                   item.value === el.roomType
+                                                ) {
+                                                   return (
+                                                      <span key={index}>
+                                                         {item.label}
+                                                      </span>
+                                                   );
+                                                }
+                                             })}
                                              - {numberToCurrency(el.price)}
                                           </p>
                                        </div>
