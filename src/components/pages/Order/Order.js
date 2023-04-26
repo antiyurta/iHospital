@@ -174,15 +174,19 @@ function Order({
          'repeatTime'
       ]);
       const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
-      console.log(oPrice);
       orderForm.setFieldValue(['services', key, 'total'], repeatTime * value);
       orderForm.setFieldValue(
          ['services', key, 'price'],
          repeatTime * value * oPrice
       );
+      const services = orderForm.getFieldValue('services');
+      var total = 0;
+      services.map((service) => {
+         total += service.price;
+      });
+      setTotal(total);
    };
    const calc = (e, key) => {
-      console.log(e, key);
       const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
       orderForm.setFieldValue(['services', key, 'qty'], e);
       orderForm.setFieldValue(['services', key, 'price'], e * oPrice);
@@ -260,6 +264,9 @@ function Order({
       orderForm.resetFields();
       setTotal(0);
    }, [selectedPatient]);
+   useEffect(() => {
+      console.log('asdasdas');
+   }, [orderForm.getFieldValue('services')]);
    return (
       <>
          {showExamination && (

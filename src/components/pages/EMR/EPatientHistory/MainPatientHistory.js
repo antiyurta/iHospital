@@ -24,6 +24,7 @@ import HistoryTab from './HistoryTab';
 import { Get, Patch, Post } from '../../../comman';
 import Diagnose from '../../service/Diagnose';
 import MainInpatientHistory from './MainInpatientHistory';
+import DynamicContent from './DynamicContent';
 const { Option } = Select;
 const { TextArea } = Input;
 function MainPatientHistory({
@@ -68,6 +69,21 @@ function MainPatientHistory({
       );
    }, []);
    const DynamicTabContent = useCallback((props) => {
+      return (
+         <DynamicContent
+            props={props}
+            incomeData={{
+               appointmentId: AppointmentId,
+               cabinetId: cabinetId,
+               patientId: patientId,
+               doctorId: userId,
+               usageType: UsageType,
+               xrayRequestId: XrayRequestId,
+               inspection: Inspection
+            }}
+            handleClick={handleClick}
+         />
+      );
       return (
          <Spin spinning={loading}>
             <Form
