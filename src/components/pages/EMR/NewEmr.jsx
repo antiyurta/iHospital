@@ -5,7 +5,8 @@ import { Get, Post, openNofi } from '../../comman';
 import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import moment from 'moment';
-import { Card, Radio, Select, Table } from 'antd';
+import { Alert, Card, Radio, Select, Table } from 'antd';
+import Marquee from 'react-fast-marquee';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
@@ -107,12 +108,6 @@ class NewEmr extends React.Component {
    };
    saveOrder = async (value) => {
       if (value?.length > 0 || value) {
-         var stateIsCito = false;
-         value.map((item) => {
-            if (!item.isCito) {
-               stateIsCito = true;
-            }
-         });
          const data = {};
          if (this.props.IncomeEMRData.usageType === 'IN') {
             data['inpatientRequestId'] =
@@ -123,7 +118,6 @@ class NewEmr extends React.Component {
          data['patientId'] = this.state.selectedPatient.id;
          data['employeeId'] = this.props.employeeId;
          data['requestDate'] = new Date();
-         data['isCito'] = stateIsCito ? true : false;
          data['usageType'] = this.props.IncomeEMRData.usageType;
          data['services'] = value;
          const conf = {
@@ -162,23 +156,33 @@ class NewEmr extends React.Component {
       }
    };
    async componentDidMount() {
-      console.log(this.props.token);
       await this.getByIdPatient();
       await this.getInspectionNotes();
    }
-   async componentDidUpdate(prevProps, prevState) {
+   async componentDidUpdate(_prevProps, prevState) {
       if (prevState.appointments !== this.state.appointments) {
          this.getProblems();
          this.setState({ problemsLoading: true });
       }
    }
    async componentWillUnmount() {
-      console.log('asdasd');
+      console.log('Үзлэг дуусав');
    }
    render() {
       return (
          <>
             <div className="flex flex-wrap">
+               <div className="w-full p-1">
+                  <Alert
+                     banner
+                     message={
+                        <Marquee pauseOnHover gradient={false}>
+                           Явцын үзлэгийн үед онош сонгож өгөөгүй үед засах
+                           боложмгүйг анхаарна уу
+                        </Marquee>
+                     }
+                  />
+               </div>
                <div className="w-full p-1">
                   <EmrSupports
                      appointmentId={this.props.IncomeEMRData.appointmentId}

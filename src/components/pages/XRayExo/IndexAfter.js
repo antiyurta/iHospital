@@ -9,17 +9,19 @@ import {
 import { Button, Card, DatePicker, Form, Modal, Table, Upload } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 // import { Table } from "react-bootstrap";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, openNofi, Patch, ScrollRef } from '../../comman';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
+import { setEmrData } from '../../../features/emrReducer';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 const { RangePicker } = DatePicker;
 function IndexAfter({ type, params }) {
    const token = useSelector(selectCurrentToken);
+   const dispatch = useDispatch();
    const config = {
       headers: {},
       params: {}
@@ -164,14 +166,16 @@ function IndexAfter({ type, params }) {
                confirmedDate: new Date()
             });
          }
+         const data = {
+            usageType: 'OUT',
+            xrayRequestId: listId,
+            patientId: id,
+            cabinetId: cabinetId,
+            inspection: inspectionType
+         };
+         dispatch(setEmrData(data));
          navigate(`/emr`, {
-            state: {
-               usageType: 'OUT',
-               xrayRequestId: listId,
-               patientId: id,
-               cabinetId: cabinetId,
-               inspection: inspectionType
-            }
+            state: data
          });
       }
    };

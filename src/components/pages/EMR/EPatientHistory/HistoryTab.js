@@ -38,8 +38,10 @@ export default function HistoryTab({ patientId, inspection }) {
    };
    const getPatientHistory = async (id) => {
       config.params.patientId = id;
-      const response = await Get('emr/patient-history', token, config);
-      response['birth'].birthDate = moment(response.birth?.birthDate);
+      var response = await Get('emr/patient-history', token, config);
+      if (Object.keys(response)?.length > 0) {
+         response['birth'].birthDate = moment(response.birth?.birthDate);
+      }
       historyForm.setFieldsValue(response);
       config.params.patientId = null;
    };
