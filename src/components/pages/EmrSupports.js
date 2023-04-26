@@ -315,7 +315,25 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                maxHeight: 50
             }}
          >
-            {isInsurance ? (
+            <div className="flow-root">
+               <div className="float-right">
+                  <Button
+                     danger
+                     onClick={() => {
+                        endInspection();
+                        fingerData.resetFields();
+                     }}
+                     icon={<CloseCircleOutlined />}
+                     style={{
+                        display: 'flex',
+                        alignItems: 'center'
+                     }}
+                  >
+                     Үзлэг дуусгах
+                  </Button>
+               </div>
+            </div>
+            {isInsurance && (
                <div className="flow-root">
                   <div className="float-left">
                      <Button.Group>
@@ -337,25 +355,6 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                            Битүүмж үүсгэх
                         </Button>
                      </Button.Group>
-                  </div>
-               </div>
-            ) : (
-               <div className="flow-root">
-                  <div className="float-right">
-                     <Button
-                        danger
-                        onClick={() => {
-                           endInspection();
-                           fingerData.resetFields();
-                        }}
-                        icon={<CloseCircleOutlined />}
-                        style={{
-                           display: 'flex',
-                           alignItems: 'center'
-                        }}
-                     >
-                        Үзлэг дуусгах
-                     </Button>
                   </div>
                </div>
             )}
