@@ -23,6 +23,8 @@ const { Sider, Content } = Layout;
 //
 import Dashboard from './MainBed/Dashboard';
 import Basic from './MainBed/Calender';
+import InpatientRequests from './MainBed/InpatientRequests';
+import BedInformation from './MainBed/BedInformation';
 //
 
 const MainBed = () => {
@@ -81,7 +83,8 @@ const MainBed = () => {
                />
                Орны мэдээлэл
             </span>
-         )
+         ),
+         children: <BedInformation />
       },
       {
          key: '5',
@@ -94,7 +97,8 @@ const MainBed = () => {
                />
                Өвчтөн
             </span>
-         )
+         ),
+         children: <InpatientRequests />
       },
       {
          key: '6',
@@ -180,7 +184,7 @@ const MainBed = () => {
    return (
       <>
          <Tabs type="card" destroyInactiveTabPane={true} items={menus} />
-         <Layout>
+         {/* <Layout>
             <Sider className="bg-white">
                <Menu
                   mode="inline"
@@ -233,7 +237,7 @@ const MainBed = () => {
                   </Routes>
                </Content>
             </Layout>
-         </Layout>
+         </Layout> */}
       </>
    );
 };

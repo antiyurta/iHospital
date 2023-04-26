@@ -143,7 +143,7 @@ function Ambulatory() {
       {
          //shinejilgee
          name: 'Examination',
-         label: 'Шинэжилгээ'
+         label: 'Шинжилгээ'
       },
       {
          //onshilgoo

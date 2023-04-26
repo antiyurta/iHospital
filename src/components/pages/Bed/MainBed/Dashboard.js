@@ -75,65 +75,6 @@ function Dashboard() {
             }
          });
    };
-   const onFinishSearchStructure = async (values) => {
-      setRefreshLoading(true);
-      const conf = {
-         headers: {},
-         params: {
-            type: 2,
-            name: values.name
-         }
-      };
-      const response = await Get('organization/structure/rooms', token, conf);
-      setStructures(response.data);
-      setRefreshLoading(false);
-   };
-   const dataConverterToPie = (rooms) => {
-      var data = [0, 0, 0, 0, 0];
-      rooms?.map((room) => {
-         if (room.isInpatient) {
-            if (room.roomType === 0) {
-               data[0] += 1;
-            } else if (room.roomType === 1) {
-               data[1] += 1;
-            }
-         }
-      });
-      console.log(data);
-      return {
-         labels: ['Энгийн', 'Люкс', 'Гэр бүл', 'VIP-1', 'VIP-2'],
-         datasets: [
-            {
-               label: 'Нийт',
-               data: [0, 1, 0, 0, 11111],
-               backgroundColor: ['#52c41a', '#ff4d4f', '#faad14'],
-               borderWidth: 1
-            }
-         ]
-      };
-   };
-   const checkRoomType = (rooms) => {
-      var countInpatient = 0;
-      var countPatient = 0;
-      rooms?.map((room) => {
-         if (room.isInpatient) {
-            countInpatient += 1;
-         } else {
-            countPatient += 1;
-         }
-      });
-      return (
-         <>
-            <p>Хэвтэн өрөө: {countInpatient}</p>
-            <Progress percent={(countInpatient / rooms?.length) * 100} />
-            <p>Үзлэгийн өрөө: {countPatient}</p>
-            <Progress percent={(countPatient / rooms?.length) * 100} />
-         </>
-      );
-   };
-   const onClickPie = (event) => {
-      console.log(getElementAtEvent(PieRef.current, event));
-   };
    useEffect(() => {
       getStructures();
       getAllBed();
@@ -141,46 +82,6 @@ function Dashboard() {
    }, []);
    return (
       <>
-         <Card bordered={false} className="header-solid max-h-max rounded-md">
-            <div className="flow-root">
-               <div className="float-left">
-                  <Form layout="inline" onFinish={onFinishSearchStructure}>
-                     <Form.Item
-                        className="mb-0"
-                        label="Тасгаар хайх"
-                        name="name"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Утга оруулна уу'
-                           }
-                        ]}
-                     >
-                        <Input />
-                     </Form.Item>
-                     <Form.Item className="mb-0">
-                        <Button type="primary" htmlType="submit">
-                           Хайх
-                        </Button>
-                     </Form.Item>
-                  </Form>
-               </div>
-               <div className="float-right">
-                  <Button
-                     style={{
-                        display: 'flex',
-                        alignItems: 'center'
-                     }}
-                     title="Сэргээх"
-                     type="primary"
-                     icon={<ReloadOutlined spin={refreshLoading} />}
-                     //   onClick={() => getAppointment(1, 20, start, end)}
-                  >
-                     Сэргээх
-                  </Button>
-               </div>
-            </div>
-         </Card>
          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
             <div>
                <Card
@@ -249,86 +150,6 @@ function Dashboard() {
                </Card>
             </div>
          </div>
-         <Spin spinning={refreshLoading}>
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
-               {structures?.map((structure, index) => {
-                  return (
-                     <Card
-                        key={index}
-                        bordered={false}
-                        title={structure.name}
-                        className="header-solid max-h-max rounded-md"
-                     >
-                        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
-                           <div>
-                              <Pie
-                                 ref={PieRef}
-                                 onClick={onClickPie}
-                                 data={dataConverterToPie(structure.rooms)}
-                                 plugins={[ChartDataLabels]}
-                                 options={{
-                                    responsive: true,
-                                    plugins: {
-                                       title: {
-                                          display: true,
-                                          position: 'top',
-                                          text: 'Өрөөний мэдээлэл'
-                                       },
-                                       datalabels: {
-                                          display: true,
-                                          align: 'bottom',
-                                          backgroundColor: '#ccc',
-                                          borderRadius: 3,
-                                          font: {
-                                             size: 18
-                                          }
-                                       }
-                                    }
-                                 }}
-                              />
-                           </div>
-                           <div
-                              style={{
-                                 display: 'flex',
-                                 alignItems: 'center'
-                              }}
-                           >
-                              <Bar
-                                 data={{
-                                    labels: ['Сул ор', 'Дүүрсэн', 'Засвартай'],
-                                    datasets: [
-                                       {
-                                          data: [0, 1, 0],
-                                          backgroundColor: [
-                                             '#52c41a',
-                                             '#ff4d4f',
-                                             '#faad14'
-                                          ],
-                                          borderWidth: 1
-                                       }
-                                    ]
-                                 }}
-                                 options={{
-                                    responsive: true,
-                                    plugins: {
-                                       legend: {
-                                          display: false
-                                       },
-                                       title: {
-                                          display: true,
-                                          position: 'top',
-                                          text: 'Орний мэдээлэл'
-                                       }
-                                    }
-                                 }}
-                              />
-                           </div>
-                        </div>
-                     </Card>
-                  );
-               })}
-            </div>
-         </Spin>
       </>
    );
 }

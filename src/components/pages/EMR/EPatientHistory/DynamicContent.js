@@ -6,7 +6,13 @@ import { DelNote, selectCurrentToken } from '../../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { Patch, Post } from '../../../comman';
 const { TextArea } = Input;
-function DynamicContent({ props, incomeData, handleClick, editForm }) {
+function DynamicContent({
+   props,
+   incomeData,
+   handleClick,
+   editForm,
+   editForOUT = true
+}) {
    const [form] = Form.useForm();
    const token = useSelector(selectCurrentToken);
    const dispatch = useDispatch();
@@ -114,7 +120,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm }) {
                            <TextArea disabled={true} />
                         </Form.Item>
                      </div>
-                     {props.data.pain.length > 0 ? (
+                     {props.data.pain?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Зовиур
@@ -173,7 +179,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm }) {
                         </>
                      ) : null}
                      {'question' in props.data &&
-                     props.data.question.length > 0 ? (
+                     props.data.question?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Асуумж
@@ -201,7 +207,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm }) {
                            })}
                         </>
                      ) : null}
-                     {'plan' in props.data && props.data.plan.length > 0 ? (
+                     {'plan' in props.data && props.data.plan?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Төлөвлөгөө
@@ -230,7 +236,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm }) {
                         </>
                      ) : null}
                      {'conclusion' in props.data &&
-                     props.data.conclusion.length > 0 ? (
+                     props.data.conclusion?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Дүгнэлт
@@ -260,7 +266,8 @@ function DynamicContent({ props, incomeData, handleClick, editForm }) {
                            )}
                         </>
                      ) : null}
-                     {'advice' in props.data && props.data.advice.length > 0 ? (
+                     {'advice' in props.data &&
+                     props.data.advice?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Зөвлөгөө
@@ -289,6 +296,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm }) {
                         </>
                      ) : null}
                      {props.data &&
+                     editForOUT &&
                      incomeData.inspection != 11 &&
                      incomeData.usageType === 'OUT' ? (
                         <>

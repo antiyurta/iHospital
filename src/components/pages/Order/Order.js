@@ -120,7 +120,6 @@ function Order({
                service.requestDate = new Date();
             }
             service.requestDate = moment(new Date()).format('YYYY-MM-DD');
-            service.usageType = usageType;
             subTotal += service.price;
             services.push(service);
          });

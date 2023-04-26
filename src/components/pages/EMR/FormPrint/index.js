@@ -1,20 +1,10 @@
-import { Button, Card, Divider, Form, Input, Modal } from 'antd';
+import { Button, Card, Divider } from 'antd';
 import React, { useRef } from 'react';
-import {
-   PrinterOutlined,
-   MedicineBoxOutlined,
-   MediumOutlined,
-   EditFilled
-} from '@ant-design/icons';
+import { PrinterOutlined, MedicineBoxOutlined } from '@ant-design/icons';
 import { useReactToPrint } from 'react-to-print';
 import logo from '../../../../assets/logo/universal.png';
 import moment from 'moment';
 import DiagnoseTypes from '../../service/DiagnoseTypes.json';
-import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setNote } from '../../../../features/authReducer';
-const { TextArea } = Input;
 export default function Index({
    patientInfo,
    inspectionNote,
@@ -22,11 +12,7 @@ export default function Index({
    services,
    employee
 }) {
-   let selectedAppointmentId = useLocation()?.state?.appointmentId;
    const printRef = useRef();
-   const dispatch = useDispatch();
-   const [editModal, setEditModal] = useState(false);
-   const [editForm] = Form.useForm();
    const handlePrint = useReactToPrint({
       content: () => printRef.current
    });
@@ -79,13 +65,6 @@ export default function Index({
          });
       }
    };
-   const createDescription = async (values) => {
-      let data = inspectionNote;
-      data['description'] = values.description;
-      data['diagnose'] = diagnoses;
-      dispatch(setNote(JSON.stringify(data)));
-      setEditModal(false);
-   };
    return (
       <div>
          <Card
@@ -109,15 +88,6 @@ export default function Index({
                   <Button className="ml-2 p-1" icon={<MedicineBoxOutlined />}>
                      Жор хэвлэх
                   </Button>
-                  {selectedAppointmentId === inspectionNote?.appointmentId && (
-                     <Button
-                        className="ml-2 p-1"
-                        onClick={() => setEditModal(true)}
-                        icon={<EditFilled />}
-                     >
-                        засах
-                     </Button>
-                  )}
                </>
             }
          >
@@ -236,33 +206,6 @@ export default function Index({
                </div>
             </div>
          </Card>
-         <Modal
-            title="Засах болсон шалтгаан"
-            open={editModal}
-            onCancel={() => setEditModal(false)}
-            onOk={() =>
-               editForm.validateFields().then((values) => {
-                  createDescription(values);
-               })
-            }
-            okText="Хадгалах"
-            cancelText="Болих"
-         >
-            <Form form={editForm} layout="vertical">
-               <Form.Item
-                  label="Тайлбар"
-                  name={'description'}
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Заавал'
-                     }
-                  ]}
-               >
-                  <TextArea />
-               </Form.Item>
-            </Form>
-         </Modal>
       </div>
    );
 }

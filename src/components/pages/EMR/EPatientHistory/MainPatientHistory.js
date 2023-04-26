@@ -591,6 +591,7 @@ function MainPatientHistory({
       ]);
    };
    useEffect(() => {
+      console.log(UsageType, inspection);
       if (UsageType === 'OUT') {
          if (inspection === 1) {
             getInspectionTabs();
