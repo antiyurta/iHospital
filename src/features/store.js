@@ -3,9 +3,11 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import authReducer from './authReducer';
+import emrReducer from './emrReducer';
 
 const reducers = combineReducers({
-   authReducer
+   authReducer,
+   emrReducer
 });
 
 const persistConfig = {

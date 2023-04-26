@@ -4,11 +4,13 @@ import {
    ConfigProvider,
    Empty,
    Form,
+   Input,
    Modal,
    Select,
    Table,
    Tag
 } from 'antd';
+import roomType from './roomType.json';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,10 +19,13 @@ import { Get, Patch, getAge, getGender, numberToCurrency } from '../../comman';
 import orderType from './orderType.json';
 import { localMn } from '../../comman';
 import PatientInformation from '../PatientInformation';
+import { SearchOutlined } from '@ant-design/icons';
 const { CheckableTag } = Tag;
 const { Option } = Select;
+const { Search } = Input;
 function PatientListBedd() {
    const token = useSelector(selectCurrentToken);
+   const [form] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
    const [inpatientRequests, setInpatientRequests] = useState([]);
    const [inpatientRequsetsMeta, setInpatientRequestsMeta] = useState({});
@@ -33,8 +38,10 @@ function PatientListBedd() {
    const [selectedRoom, setSelectedRoom] = useState(Number);
    const [selectedInpatientRequest, setSelectedInpatientRequest] =
       useState(Number);
+   const [patientInBedLoading, setPatientInBedLoading] = useState(false);
    //
-   const getInpatientRequests = async (page, pageSize, process) => {
+   const [pValue, setPvalue] = useState('');
+   const getInpatientRequests = async (page, pageSize, process, value) => {
       setIsLoading(true);
       const conf = {
          headers: {},
@@ -44,6 +51,10 @@ function PatientListBedd() {
             process: process
          }
       };
+      if (value) {
+         conf.params['filter'] = value;
+         setPvalue(value);
+      }
       const response = await Get('service/inpatient-request', token, conf);
       setInpatientRequests(response.data);
       setInpatientRequestsMeta(response.meta);
@@ -59,11 +70,12 @@ function PatientListBedd() {
       const response = await Get('organization/structure', token, conf);
       setDepartments(response.data);
    };
-   const getRooms = async () => {
+   const getRooms = async (depId) => {
       const conf = {
          headers: {},
          params: {
-            isInpatient: true
+            isInpatient: true,
+            structureId: depId
          }
       };
       const response = await Get('organization/room', token, conf);
@@ -76,6 +88,7 @@ function PatientListBedd() {
    const filteredBed = rooms?.find((room) => room.id === selectedRoom)?.beds;
    //
    const openModal = (process, state, patient, rowId) => {
+      form.resetFields();
       setSelectedInpatientRequest(rowId);
       setSelectedPatient(patient);
       if (process === 0) {
@@ -83,6 +96,7 @@ function PatientListBedd() {
       }
    };
    const setPatientInBed = async (values) => {
+      setPatientInBedLoading(true);
       const conf = {
          headers: {},
          params: {}
@@ -93,20 +107,21 @@ function PatientListBedd() {
          isOut: false,
          process: 0
       };
-      console.log(data);
       const response = await Patch(
          `service/inpatient-request/bed/${selectedInpatientRequest}`,
          token,
          conf,
          data
       );
-      // console.log(response);
       if (response === 200) {
-         // setTestParam(!testParam);
-         // setActionType('');
-         // setSelectedActionData('');
          setIsOpenBedModal(false);
+         getInpatientRequests(
+            inpatientRequsetsMeta.page,
+            inpatientRequsetsMeta.limit,
+            checkedKey
+         );
       }
+      setPatientInBedLoading(false);
    };
    const setPatientOutBed = async (bedId, rowId) => {
       const conf = {
@@ -133,6 +148,21 @@ function PatientListBedd() {
          }
       });
    };
+   const getColumnSearchProps = (dataIndex) => ({
+      filterDropdown: ({}) => (
+         <div style={{ padding: 8 }}>
+            <Search
+               placeholder={`хайх`}
+               allowClear
+               onSearch={(e) =>
+                  getInpatientRequests(1, 20, checkedKey, e, dataIndex)
+               }
+               enterButton={'Хайх'}
+            />
+         </div>
+      ),
+      filterIcon: () => <SearchOutlined style={{ color: '#2d8cff' }} />
+   });
    const column = [
       {
          title: '№',
@@ -151,11 +181,11 @@ function PatientListBedd() {
          }
       },
       {
-         title: 'Захиалгын төрөл',
+         title: 'Төрөл',
          key: 'type',
-         render: (_, record, index) => {
+         render: (_, record) => {
             return (
-               <div key={index}>
+               <>
                   {orderType.map((item, index) => {
                      if (item.value === record.process) {
                         return (
@@ -170,7 +200,7 @@ function PatientListBedd() {
                         );
                      }
                   })}
-               </div>
+               </>
             );
          }
       },
@@ -196,7 +226,8 @@ function PatientListBedd() {
             },
             {
                title: 'Нэр',
-               dataIndex: ['patient', 'firstName']
+               dataIndex: ['patient', 'firstName'],
+               ...getColumnSearchProps('filter')
             },
             {
                title: 'Регистр',
@@ -287,12 +318,23 @@ function PatientListBedd() {
          }
       }
    ];
+   const checkGenderType = (type) => {
+      if (type === 'WOMAN') {
+         return 'ЭМЭГТЭЙ';
+      } else if (type === 'MAN') {
+         return 'ЭРЭГТЭЙ';
+      }
+      return 'Нийтийн';
+   };
    useEffect(() => {
       getInpatientRequests(1, 10, checkedKey);
    }, [checkedKey]);
    useEffect(() => {
+      getRooms(selectedDepartment);
+      console.log(selectedDepartment);
+   }, [selectedDepartment]);
+   useEffect(() => {
       getDepartments();
-      getRooms();
       getInpatientRequests(1, 10, 0);
    }, []);
    return (
@@ -327,11 +369,18 @@ function PatientListBedd() {
                bordered={false}
                className="header-solid max-h-max rounded-md mb-2"
             >
+               <Search
+                  placeholder="Өвчтний нэр, регистр дугаар, Тасаг"
+                  allowClear
+                  enterButton="Хайх"
+                  size="large"
+                  onSearch={(e) => getInpatientRequests(1, 20, checkedKey, e)}
+               />
                <ConfigProvider locale={localMn()}>
                   <Table
                      rowKey={'id'}
                      scroll={{
-                        x: 1500
+                        x: 1000
                      }}
                      bordered
                      rowClassName={'hover:cursor-pointer'}
@@ -359,9 +408,14 @@ function PatientListBedd() {
                         pageSize: inpatientRequsetsMeta.limit,
                         showSizeChanger: true,
                         pageSizeOptions: ['5', '10', '20', '50'],
-                        showQuickJumper: true
-                        //  onChange: (page, pageSize) =>
-                        //     getData(page, pageSize, pValue, pIndex)
+                        showQuickJumper: true,
+                        onChange: (page, pageSize) =>
+                           getInpatientRequests(
+                              page,
+                              pageSize,
+                              checkedKey,
+                              pValue
+                           )
                      }}
                   />
                </ConfigProvider>
@@ -386,7 +440,7 @@ function PatientListBedd() {
                bordered={false}
                className="header-solid max-h-max rounded-md mt-2"
             >
-               <Form onFinish={setPatientInBed}>
+               <Form form={form} onFinish={setPatientInBed}>
                   <Form.Item
                      label="Тасаг"
                      name="depId"
@@ -401,7 +455,10 @@ function PatientListBedd() {
                         allowClear
                         showSearch
                         size="small"
-                        onSelect={(id) => setSelectedDepartment(id)}
+                        onSelect={(id) => {
+                           setSelectedDepartment(id);
+                           form.setFieldValue('roomId', null);
+                        }}
                         placeholder="Сонгох"
                         optionFilterProp="children"
                         filterOption={(input, option) =>
@@ -434,13 +491,18 @@ function PatientListBedd() {
                         }
                      ]}
                   >
-                     <Select onSelect={(room) => setSelectedRoom(room)}>
-                        {filteredRooms?.map((room, index) => {
+                     <Select
+                        onSelect={(room) => setSelectedRoom(room)}
+                        value={null}
+                     >
+                        {rooms?.map((room, index) => {
                            return (
                               <Option key={index} value={room.id}>
                                  {`${room.roomNumber} -> ${numberToCurrency(
                                     room.price
-                                 )}`}
+                                 )} -> ${checkGenderType(room.genderType)} -> ${
+                                    roomType[room.roomType]?.label
+                                 }`}
                               </Option>
                            );
                         })}
@@ -471,6 +533,7 @@ function PatientListBedd() {
                   <Form.Item>
                      <Button
                         style={{ width: '100%' }}
+                        loading={patientInBedLoading}
                         type="primary"
                         htmlType="submit"
                      >

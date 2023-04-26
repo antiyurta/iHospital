@@ -1,11 +1,15 @@
 import { Form, InputNumber, Modal, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { Get } from '../../comman';
+import { DefualtGet, Get } from '../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-const { Option } = Select;
+import {
+   selectCurrentInsurance,
+   selectCurrentToken
+} from '../../../features/authReducer';
+const { Option, OptGroup } = Select;
 
 function InpatientRequest({ isOpen, isClose, handleClick }) {
+   const isInsurance = useSelector(selectCurrentInsurance);
    const [InpatientRequestForm] = Form.useForm();
    const [isDuration, setIsDuration] = useState(true);
    const [doctors, setDoctors] = useState([]);
@@ -13,6 +17,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
    const [selectedDep, setSelectedDep] = useState();
    const [selectedDoctor, setSelectedDoctor] = useState();
    const token = useSelector(selectCurrentToken);
+   const [insuranceServices, setInsurranceServices] = useState([]);
 
    const config = {
       headers: {},
@@ -49,9 +54,23 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
       const selectedDoctor = doctors.filter((e) => e.id === value);
       setSelectedDoctor(selectedDoctor[0]);
    };
-
+   const getInsuranceServices = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            usageType: 'IN'
+         }
+      };
+      const response = await DefualtGet(
+         'insurance/hics-service-group',
+         token,
+         conf
+      );
+      setInsurranceServices(response.data);
+   };
    useEffect(() => {
       getStructures();
+      getInsuranceServices();
    }, []);
 
    return (
@@ -137,9 +156,10 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                      >
                         <Select>
                            <Option value={0}>Маш хүнд</Option>
-                           <Option value={1}>Хүндэвтэр</Option>
-                           <Option value={2}>Дунд</Option>
-                           <Option value={3}>Хөнгөн</Option>
+                           <Option value={1}>Хүнд</Option>
+                           <Option value={2}>Хүндэвтэр</Option>
+                           <Option value={3}>Дунд</Option>
+                           <Option value={4}>Хөнгөн</Option>
                         </Select>
                      </Form.Item>
                   </div>
@@ -175,24 +195,41 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                         <InputNumber disabled={isDuration} />
                      </Form.Item>
                   </div>
-                  <div className="w-full">
-                     <Form.Item
-                        label="Эмнэлэгт хэвтэх шалтгаан"
-                        name="reason"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Заавал'
-                           }
-                        ]}
-                     >
-                        <Select>
-                           <Option value={0}>Онош тодруулах</Option>
-                           <Option value={1}>Эмчилгээ хийлгэх</Option>
-                           <Option value={2}>Нөхөн сэргээх эмчилгээ</Option>
-                        </Select>
-                     </Form.Item>
-                  </div>
+                  {isInsurance && (
+                     <div className="w-full">
+                        <Form.Item
+                           label="Эмнэлэгт хэвтэх шалтгаан"
+                           name="insuranceServiceId"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Заавал'
+                              }
+                           ]}
+                        >
+                           <Select>
+                              {insuranceServices?.map((service, index) => {
+                                 return (
+                                    <OptGroup key={index} label={service.name}>
+                                       {service?.hicsServices?.map(
+                                          (item, idx) => {
+                                             return (
+                                                <Option
+                                                   key={`${index - idx}`}
+                                                   value={item.id}
+                                                >
+                                                   {item.name}
+                                                </Option>
+                                             );
+                                          }
+                                       )}
+                                    </OptGroup>
+                                 );
+                              })}
+                           </Select>
+                        </Form.Item>
+                     </div>
+                  )}
                </div>
             </Form>
          </Modal>

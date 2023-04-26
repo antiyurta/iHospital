@@ -51,6 +51,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
       setTotalAmount(payments.reduce((a, v) => (a = a + v.amount), 0));
       var noTime = [];
       var time = [];
+      console.log('========>', payments);
       payments?.map((payment) => {
          if (
             payment.type === 2 &&

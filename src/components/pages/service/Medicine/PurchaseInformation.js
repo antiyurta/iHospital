@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, InputNumber, Select, Switch } from 'antd';
 const { Option } = Select;
 function PurchaseInformation() {

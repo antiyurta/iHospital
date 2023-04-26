@@ -10,7 +10,8 @@ import {
    logout,
    DelDepId,
    DelAppId,
-   DelNote
+   DelNote,
+   DelInsurrance
 } from '../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -44,6 +45,7 @@ const Main = () => {
          dispatch(DelDepId());
          dispatch(DelAppId());
          dispatch(DelNote());
+         dispatch(DelInsurrance());
          navigate('/');
       } else if (e.key == 3) {
          setIsChatModal(true);

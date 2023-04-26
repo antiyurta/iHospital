@@ -7,32 +7,89 @@ import {
    Menu,
    Modal,
    Spin,
-   Tabs
+   Tabs,
+   Tag
 } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get, Post } from '../../../comman';
 import Epicriz from '../../BeforeAmbulatory/Lists/Epicriz';
 import Diagnose from '../../service/Diagnose';
 import Index from '../InPatient/document/Index';
 import StoryGeneral from './StoryGeneral';
+//
+import Anamnesis from './MainInpatient/Anamnesis';
+import ClinicalDiagnoeMain from './MainInpatient/ClinicalDiagnoseMain';
+import Epicrisis from './MainInpatient/Epicrisis';
+//
 const { TextArea } = Input;
-function MainInpatientHistory({ selectedPatient }) {
+const { CheckableTag } = Tag;
+function MainInpatientHistory({
+   patientId,
+   inpatientRequestId,
+   insuranceServiceId
+}) {
    const token = useSelector(selectCurrentToken);
-   let location = useLocation();
-   const inpatientRequestId = location?.state?.inpatientRequestId;
-   const patientId = location?.state?.patientId;
+   const [checkedKey, setCheckedKey] = useState(0);
    const [doctorDailyForm] = Form.useForm();
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
    const [story, setStory] = useState({});
    const [dailyNotes, setDailyNotes] = useState([]);
+   const testItems = [
+      {
+         key: '1',
+         label: 'Эмчлүүлэгчийн аннамез',
+         children: (
+            <Anamnesis
+               PatientId={patientId}
+               InpatientRequestId={inpatientRequestId}
+            />
+         )
+      },
+      { key: '2', label: 'Ерөнхий үзлэг', children: <div>Ерөнхий үзлэг</div> },
+      {
+         key: '3',
+         label: 'Эмчийн үзлэг',
+         children: <div>Ерөнхий үзлэг</div>
+      },
+      {
+         key: '4',
+         label: 'КЛИНИКИЙН УРЬДЧИЛСАН ОНОШ',
+         children: <div>Ерөнхий үзлэг</div>
+      },
+      {
+         key: '5',
+         label: 'КЛИНИКИЙН ОНОШИЙН ҮНДЭСЛЭЛ',
+         children: (
+            <ClinicalDiagnoeMain
+               PatientId={patientId}
+               InpatientRequestId={inpatientRequestId}
+            />
+         )
+      },
+      {
+         key: '6',
+         label: 'Үзлэгийн тэмдэглэл',
+         children: <div>Ерөнхий үзлэг</div>
+      },
+      {
+         key: '7',
+         label: 'Гарах үеийн эпекриз',
+         children: (
+            <Epicrisis
+               PatientId={patientId}
+               InpatientRequestId={inpatientRequestId}
+               InsuranceServiceId={insuranceServiceId}
+            />
+         )
+      }
+   ];
    const getStory = async () => {
       const conf = {
          headers: {},
          params: {
-            inpatientRequestId: location?.state?.inpatientRequestId
+            inpatientRequestId: inpatientRequestId
          }
       };
       var response = await Get('inpatient/story', token, conf);
@@ -45,8 +102,8 @@ function MainInpatientHistory({ selectedPatient }) {
          headers: {},
          params: {}
       };
-      values['inpatientRequestId'] = location?.state?.inpatientRequestId;
-      values['patientId'] = location?.state?.patientId;
+      values['inpatientRequestId'] = inpatientRequestId;
+      values['patientId'] = patientId;
       const response = await Post('inaptient-daily-note', token, conf, values);
    };
    const DiagnoseHandleClick = (diagnoses) => {
@@ -102,7 +159,7 @@ function MainInpatientHistory({ selectedPatient }) {
          ]);
       } else if (e.key == 3) {
          setIsOpenDocumentModal(true);
-      } else if (e.key == 7) {
+      } else if (e.key == 6) {
          setItems([
             {
                label: 'Гарах',
@@ -147,24 +204,16 @@ function MainInpatientHistory({ selectedPatient }) {
       setItems([document]);
       setIsOpenDocumentModal(false);
    };
+   const Render = () => {
+      return <div className="p-2">{testItems[checkedKey].children}</div>;
+   };
    useEffect(() => {
-      getStory();
+      // getStory();
    }, []);
    return (
       <div>
          <div>
-            <Dropdown overlay={menu} trigger={['click']}>
-               <Button
-                  type="primary"
-                  className="ant-dropdown-link"
-                  onClick={(e) => e.preventDefault()}
-               >
-                  Маягт сонгох
-               </Button>
-            </Dropdown>
-         </div>
-         <div>
-            <Tabs type="card" items={items} />
+            <Tabs type="card" items={testItems} />
          </div>
          <Modal
             title="Маягт сонгох"

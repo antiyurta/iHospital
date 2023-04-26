@@ -35,11 +35,12 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
    form.setFieldsValue(story);
    form.setFieldValue('doctorInspection', story.doctorInspection);
    const onFinish = async (values, templateId) => {
+      console.log(values);
       const data = {
          templateId: templateId,
          doctorInspection: JSON.stringify(values.doctorInspection),
          anemis: values.anemis,
-         diagnoses: values.diagnoses,
+         diagnose: values.diagnose,
          general: values.general,
          patient: values.patient
       };
@@ -48,14 +49,13 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
          params: {}
       };
       console.log(data);
-      //   values['doctorInspection'] = JSON.stringify(values['doctorInspection']);
-      //   values['templateId'] = 1;
       const response = await DefaultPatch(
          'inpatient/story/' + id,
          token,
          conf,
          data
       );
+      console.log(response);
    };
    const onFinishFailed = (error) => {
       console.log(error);

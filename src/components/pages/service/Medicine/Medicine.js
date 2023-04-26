@@ -15,11 +15,13 @@ import {
    Modal,
    Pagination,
    Select,
+   Space,
    Switch,
+   Table,
    Tabs
 } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Spinner, Table } from 'react-bootstrap';
+// import { Spinner, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Delete, Get, Patch, Post } from '../../../comman';
@@ -37,7 +39,9 @@ function Medicine() {
       params: {}
    };
    const [medicines, setMedicines] = useState([]);
-   const [meta, setMeta] = useState([]);
+   const [outMedicines, setOutMedicines] = useState([]);
+   const [meta, setMeta] = useState({});
+   const [outMeta, setOutMeta] = useState({});
    const [id, setId] = useState(Number);
    const [atcCategories, setAtcCategories] = useState([]);
    const [medTreatmentTypes, setMedTreatmentTypes] = useState([]);
@@ -46,7 +50,20 @@ function Medicine() {
    const [spinner, setSpinner] = useState(false);
    const [editMode, setEditMode] = useState(false);
    const [isOpenMedicineModal, setIsOpenMedicineModal] = useState(false);
+   const [isOpenOutMedicineModal, setIsOpenOutMedicineModal] = useState(false);
    const [medicineForm] = Form.useForm();
+   const [outMedicineForm] = Form.useForm();
+   const [pIndex, setPindex] = useState('');
+   const [pValue, setPvalue] = useState('');
+
+   const addModal = (state, type) => {
+      editMode(false);
+      if (type === 0) {
+         setIsOpenMedicineModal(state);
+      } else {
+         setIsOpenOutMedicineModal(state);
+      }
+   };
 
    const editModal = async (id) => {
       setEditMode(true);
@@ -89,6 +106,31 @@ function Medicine() {
          }
       }
    };
+   const onFinishOut = async (values) => {
+      if (editMode) {
+         const response = await Patch(
+            'service/global-medicine/' + id,
+            token,
+            config,
+            values
+         );
+         if (response === 200) {
+            setIsOpenOutMedicineModal(false);
+            getOutMedicines(1, 20);
+         }
+      } else {
+         const response = await Post(
+            'service/global-medicine',
+            token,
+            config,
+            values
+         );
+         if (response === 201) {
+            // setIsOpenMedicineModal(false);
+            // getMedicines(1);?
+         }
+      }
+   };
    const getAtcCategory = async () => {
       config.params.type = 1;
       const response = await Get('medicine/reference', token, config);
@@ -100,8 +142,7 @@ function Medicine() {
       setMedTreatmentTypes(response.data);
    };
    const getMeasurements = async () => {
-      config.params.type = 3;
-      const response = await Get('medicine/reference', token, config);
+      const response = await Get('reference/measurement', token, config);
       setMeasurements(response.data);
    };
    const getPregnancyWarnings = async () => {
@@ -109,14 +150,45 @@ function Medicine() {
       const response = await Get('medicine/reference', token, config);
       setPregnancyWarnings(response.data);
    };
-   const getMedicines = async (page) => {
+   const getMedicines = async (page, pageSize, value, index) => {
       setSpinner(false);
-      config.params.page = page;
-      config.params.limit = 10;
-      const response = await Get('service/medicine', token, config);
+      const conf = {
+         headers: {},
+         params: {
+            page: page,
+            limit: pageSize
+         }
+      };
+      if ((value, index)) {
+         conf.params[index] = value;
+         setPindex(index);
+         setPvalue(value);
+      }
+      const response = await Get('service/medicine', token, conf);
       if (response.data.length > 0) {
          setMedicines(response.data);
          setMeta(response.meta);
+         setSpinner(true);
+      }
+   };
+   const getOutMedicines = async (page, pageSize, value, index) => {
+      setSpinner(false);
+      const conf = {
+         headers: {},
+         params: {
+            page: page,
+            limit: pageSize
+         }
+      };
+      if ((value, index)) {
+         conf.params[index] = value;
+         setPindex(index);
+         setPvalue(value);
+      }
+      const response = await Get('service/global-medicine', token, conf);
+      if (response.data.length > 0) {
+         setOutMedicines(response.data);
+         setOutMeta(response.meta);
          setSpinner(true);
       }
    };
@@ -129,7 +201,8 @@ function Medicine() {
       return data[0]?.name;
    };
    useEffect(() => {
-      getMedicines(1);
+      getMedicines(1, 20);
+      getOutMedicines(1, 20);
       getAtcCategory();
       getMedTreatmentTypes();
       getMeasurements();
@@ -148,151 +221,159 @@ function Medicine() {
       },
       { label: 'DUR шалгуур', key: '3', children: <DURCriteria /> }
    ];
+   const inMedicineCols = [
+      {
+         title: '№',
+         render: (_, record, index) => {
+            return meta.page * meta.limit - (meta.limit - index - 1);
+         }
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'name'
+      },
+      {
+         title: 'Үнэ',
+         dataIndex: 'price'
+      },
+      {
+         title: 'Хэвтэнгийн үнэ',
+         dataIndex: 'inpatientPrice'
+      },
+      {
+         title: 'Үйлдэл',
+         dataIndex: 'id',
+         render: (text, row) => {
+            return (
+               <Space>
+                  <Button
+                     type="link"
+                     // onClick={() => editModal(text)}
+                     title="Засах"
+                     style={{ paddingRight: 5, paddingLeft: 5 }}
+                  >
+                     <EditOutlined />
+                  </Button>
+                  <Button
+                     type="link"
+                     // onClick={() => editModal(text)}
+                     title="Устгах"
+                     style={{ paddingRight: 5, paddingLeft: 5 }}
+                  >
+                     <DeleteOutlined style={{ color: 'red' }} />
+                  </Button>
+               </Space>
+            );
+         }
+      }
+   ];
+   const outMedicineCols = [
+      {
+         title: '№',
+         render: (_, record, index) => {
+            return outMeta.page * outMeta.limit - (outMeta.limit - index - 1);
+         }
+      },
+      {
+         title: 'Эмийн код',
+         dataIndex: 'barcode'
+      },
+      {
+         title: 'Нэршил',
+         children: [
+            {
+               title: 'Монгол',
+               dataIndex: 'mnName'
+            },
+            {
+               title: 'Олон улс',
+               dataIndex: 'iName'
+            }
+         ]
+      },
+      {
+         title: 'Засах',
+         render: (_, row) => {
+            return (
+               <Button
+                  onClick={() => {
+                     outMedicineForm.setFieldsValue(row);
+                     setId(row.id);
+                     setIsOpenOutMedicineModal(true);
+                     setEditMode(true);
+                  }}
+                  icon={<EditOutlined />}
+               />
+            );
+         }
+      }
+   ];
+   const IMedicine = ({ type }) => (
+      <Card bordered={false} className="header-solid max-h-max rounded-md">
+         <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => addModal(true, type)}
+         >
+            Нэмэх
+         </Button>
+         <Table
+            rowKey={'id'}
+            bordered
+            columns={type === 0 ? inMedicineCols : outMedicineCols}
+            dataSource={type === 0 ? medicines : outMedicines}
+            pagination={{
+               position: ['topCenter', 'bottomCenter'],
+               size: 'small',
+               current: type === 0 ? meta.page : outMeta.page,
+               total: type === 0 ? meta.itemCount : outMeta.itemCount,
+               showTotal: (total, range) =>
+                  `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+               pageSize: type === 0 ? meta.limit : outMeta.limit,
+               total: type === 0 ? meta.itemCount : outMeta.itemCount,
+               showSizeChanger: true,
+               pageSizeOptions: ['5', '10', '20', '50'],
+               showQuickJumper: true,
+               onChange: (page, pageSize) =>
+                  type === 0
+                     ? getMedicines(page, pageSize, pValue, pIndex)
+                     : getOutMedicines(page, pageSize, pValue, pIndex)
+            }}
+         />
+      </Card>
+   );
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               title={'Medicine'}
-               extra={
-                  <>
-                     <Button
-                        className="btn-add"
-                        onClick={() => {
-                           setIsOpenMedicineModal(true);
-                           setEditMode(false);
-                           // medicineForm.resetFields();
-                        }}
-                     >
-                        Нэмэх
-                     </Button>
-                  </>
+      <div>
+         <Tabs
+            type="card"
+            items={[
+               {
+                  key: 1,
+                  label: 'Дотоод эмийн сан',
+                  children: <IMedicine type={0} />
+               },
+               {
+                  key: 2,
+                  label: 'Гадаад эмийн сан',
+                  children: <IMedicine type={1} />
                }
-            >
-               <div className="table-responsive p-4" id="style-8">
-                  <Table className="ant-border-space" style={{ width: '100%' }}>
-                     <thead className="ant-table-thead bg-slate-200">
-                        <tr>
-                           <th className="font-bold text-sm align-middle">№</th>
-                           <th className="font-bold text-sm align-middle">
-                              Эмийн код
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Олон улсын нэршил
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Эмийн нэр
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Эмийн хэлбэр
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Тун
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              ATC ангилал
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Эмчилгээний төрөл
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Үнэ
-                           </th>
-                           <th className="font-bold text-sm align-middle">
-                              Идэвхтэй эсэх
-                           </th>
-                        </tr>
-                     </thead>
-                     <tbody className="ant-table-tbody p-0">
-                        {spinner ? (
-                           medicines?.map((medicine, index) => {
-                              return (
-                                 <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{medicine.code}</td>
-                                    <td>{medicine.iName}</td>
-                                    <td>{medicine.name}</td>
-                                    <td>
-                                       {getTreatment(medicine.medTreatmentId)}
-                                    </td>
-                                    <td>{}</td>
-                                    <td>{getATC(medicine.atcCategoryId)}</td>
-                                    <td>
-                                       <Button
-                                          type="link"
-                                          onClick={() => editModal(medicine.id)}
-                                          title="Засах"
-                                          style={{
-                                             paddingRight: 5,
-                                             paddingLeft: 5
-                                          }}
-                                       >
-                                          <EditOutlined />
-                                       </Button>
-                                       <Button
-                                          type="link"
-                                          onClick={() =>
-                                             deleteModal(medicine.id)
-                                          }
-                                          title="Устгах"
-                                          style={{ paddingLeft: 5 }}
-                                       >
-                                          <DeleteOutlined
-                                             style={{ color: 'red' }}
-                                          />
-                                       </Button>
-                                    </td>
-                                 </tr>
-                              );
-                           })
-                        ) : (
-                           <tr>
-                              <td
-                                 colSpan={11}
-                                 size="lg"
-                                 style={{
-                                    backgroundColor: 'white',
-                                    textAlign: 'center'
-                                 }}
-                              >
-                                 <Spinner
-                                    animation="grow"
-                                    style={{ color: '#1890ff' }}
-                                 />
-                              </td>
-                           </tr>
-                        )}
-                     </tbody>
-                  </Table>
-               </div>
-               <div>
-                  <Pagination
-                     className="pagination"
-                     pageSize={10}
-                     total={meta.itemCount}
-                     onChange={getMedicines}
-                  />
-               </div>
-            </Card>
-         </div>
+            ]}
+         />
          <Modal
-            title={editMode ? 'Эм засах' : 'Эм нэмэх'}
-            open={isOpenMedicineModal}
+            title="Гадаад эм нэмэх"
+            open={isOpenOutMedicineModal}
             onOk={() =>
-               medicineForm.validateFields().then((values) => {
-                  onFinish(values);
+               outMedicineForm.validateFields().then((values) => {
+                  onFinishOut(values);
                })
             }
-            onCancel={() => {
-               setIsOpenMedicineModal(false);
-            }}
+            onCancel={() => setIsOpenOutMedicineModal(false)}
             width={'60%'}
             cancelText="Болих"
             okText="Хадгалах"
          >
             <Form
-               form={medicineForm}
+               form={outMedicineForm}
                labelAlign={'right'}
                labelCol={{
                   span: 8

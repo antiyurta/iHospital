@@ -7,7 +7,7 @@ import {
    UserOutlined,
    ContactsOutlined
 } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Tabs } from 'antd';
 import DashboardBed from './DashboardBed';
 import CalendarBed from './CalendarBed';
 import PatientListBed from './PatientListBed';
@@ -20,8 +20,97 @@ import { Get, openNofi, Post } from '../../comman';
 import BedPlan from './BedPlan';
 const { Sider, Content } = Layout;
 
+//
+import Dashboard from './MainBed/Dashboard';
+import Basic from './MainBed/Calender';
+//
+
 const MainBed = () => {
    const token = useSelector(selectCurrentToken);
+   //
+   const menus = [
+      {
+         key: '1',
+         label: (
+            <span>
+               <FundViewOutlined
+                  style={{
+                     fontSize: '20px'
+                  }}
+               />
+               Хянах самбар
+            </span>
+         ),
+         children: <Dashboard />
+      },
+      {
+         key: '2',
+         label: (
+            <span>
+               <AppstoreOutlined
+                  style={{
+                     fontSize: '20px'
+                  }}
+               />
+               Тасаг
+            </span>
+         )
+      },
+      {
+         key: '3',
+         label: (
+            <span>
+               <CalendarOutlined
+                  style={{
+                     fontSize: '20px'
+                  }}
+               />
+               Хуанли
+            </span>
+         ),
+         children: <Basic />
+      },
+      {
+         key: '4',
+         label: (
+            <span>
+               <PicCenterOutlined
+                  style={{
+                     fontSize: '20px'
+                  }}
+               />
+               Орны мэдээлэл
+            </span>
+         )
+      },
+      {
+         key: '5',
+         label: (
+            <span>
+               <UserOutlined
+                  style={{
+                     fontSize: '20px'
+                  }}
+               />
+               Өвчтөн
+            </span>
+         )
+      },
+      {
+         key: '6',
+         label: (
+            <span>
+               <ContactsOutlined
+                  style={{
+                     fontSize: '20px'
+                  }}
+               />
+               Төлөвлөгөө
+            </span>
+         )
+      }
+   ];
+   //
    const [selectedMenuKey, setSelectedMenuKey] = useState('');
    let navigate = useNavigate();
    let location = useLocation();
@@ -89,60 +178,63 @@ const MainBed = () => {
    ];
 
    return (
-      <Layout>
-         <Sider className="bg-white">
-            <Menu
-               mode="inline"
-               items={items}
-               onSelect={onSelect}
-               defaultSelectedKeys={''}
-               selectedKeys={[selectedMenuKey]}
-            />
-         </Sider>
+      <>
+         <Tabs type="card" destroyInactiveTabPane={true} items={menus} />
          <Layout>
-            <Content className="bg-slate-50">
-               <Routes>
-                  <Route
-                     exact
-                     path="/"
-                     element={
-                        <DashboardBed
-                           setSelectedFn={setSelectedMenuKey}
-                           setStatus={(status_id) =>
-                              setRoomInformationStatus(status_id)
-                           }
-                        />
-                     }
-                  />
-                  <Route path="/calendar" element={<CalendarBed />} />
-                  <Route
-                     path="/rooms"
-                     element={
-                        <InformationBed
-                           status={roomInformationStatus}
-                           setStatus={(status_id) =>
-                              setRoomInformationStatus(status_id)
-                           }
-                           data={selectedStructureData}
-                           callFn={(dep_id) => getStructureById(dep_id)}
-                        />
-                     }
-                  />
-                  <Route path="/patient_list" element={<PatientListBed />} />
-                  <Route
-                     path="/:id/*"
-                     element={
-                        <DepartmentBed
-                           data={selectedStructureData}
-                           callFn={(dep_id) => getStructureById(dep_id)}
-                        />
-                     }
-                  />
-                  <Route path="/plan" element={<BedPlan />} />
-               </Routes>
-            </Content>
+            <Sider className="bg-white">
+               <Menu
+                  mode="inline"
+                  items={items}
+                  onSelect={onSelect}
+                  defaultSelectedKeys={''}
+                  selectedKeys={[selectedMenuKey]}
+               />
+            </Sider>
+            <Layout>
+               <Content className="bg-slate-50">
+                  <Routes>
+                     <Route
+                        exact
+                        path="/"
+                        element={
+                           <DashboardBed
+                              setSelectedFn={setSelectedMenuKey}
+                              setStatus={(status_id) =>
+                                 setRoomInformationStatus(status_id)
+                              }
+                           />
+                        }
+                     />
+                     <Route path="/calendar" element={<CalendarBed />} />
+                     <Route
+                        path="/rooms"
+                        element={
+                           <InformationBed
+                              status={roomInformationStatus}
+                              setStatus={(status_id) =>
+                                 setRoomInformationStatus(status_id)
+                              }
+                              data={selectedStructureData}
+                              callFn={(dep_id) => getStructureById(dep_id)}
+                           />
+                        }
+                     />
+                     <Route path="/patient_list" element={<PatientListBed />} />
+                     <Route
+                        path="/:id/*"
+                        element={
+                           <DepartmentBed
+                              data={selectedStructureData}
+                              callFn={(dep_id) => getStructureById(dep_id)}
+                           />
+                        }
+                     />
+                     <Route path="/plan" element={<BedPlan />} />
+                  </Routes>
+               </Content>
+            </Layout>
          </Layout>
-      </Layout>
+      </>
    );
 };
 export default MainBed;

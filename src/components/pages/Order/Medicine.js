@@ -31,7 +31,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
          setPindex(index);
          setPvalue(value);
       }
-      const response = await Get('service/medicine', token, conf);
+      const response = await Get('service/global-medicine', token, conf);
       if (response) {
          setMedicines(response.data);
          setMedicineMeta(response.meta);

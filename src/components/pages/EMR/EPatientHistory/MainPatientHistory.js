@@ -24,15 +24,18 @@ import HistoryTab from './HistoryTab';
 import { Get, Patch, Post } from '../../../comman';
 import Diagnose from '../../service/Diagnose';
 import MainInpatientHistory from './MainInpatientHistory';
+import DynamicContent from './DynamicContent';
 const { Option } = Select;
 const { TextArea } = Input;
 function MainPatientHistory({
    AppointmentId,
    XrayRequestId,
+   InpatientRequestId,
    PatientId,
    CabinetId,
    Inspection,
    UsageType,
+   insuranceServiceId,
    handleClick
 }) {
    const [form] = Form.useForm();
@@ -66,6 +69,21 @@ function MainPatientHistory({
       );
    }, []);
    const DynamicTabContent = useCallback((props) => {
+      return (
+         <DynamicContent
+            props={props}
+            incomeData={{
+               appointmentId: AppointmentId,
+               cabinetId: cabinetId,
+               patientId: patientId,
+               doctorId: userId,
+               usageType: UsageType,
+               xrayRequestId: XrayRequestId,
+               inspection: Inspection
+            }}
+            handleClick={handleClick}
+         />
+      );
       return (
          <Spin spinning={loading}>
             <Form
@@ -296,7 +314,10 @@ function MainPatientHistory({
                               >
                                  Онош
                               </Divider>
-                              <Diagnose handleClick={DiagnoseHandleClick} />
+                              <Diagnose
+                                 handleClick={DiagnoseHandleClick}
+                                 type={0}
+                              />
                            </>
                         ) : null}
                      </>
@@ -371,6 +392,7 @@ function MainPatientHistory({
       values.diagnose?.map((diagnose) => {
          diagnoseData.push({
             patientId: patientId,
+            type: 0,
             usageType: UsageType,
             diagnoseId: diagnose.id,
             diagnoseType: diagnose.diagnoseType,
@@ -378,6 +400,7 @@ function MainPatientHistory({
             appointmentId: UsageType === 'OUT' ? appointmentId : null
          });
       });
+      console.log(values);
       if (inspection === 11 || inspection === 12) {
          data['xrayRequestId'] = xrayRequestId;
          data['conclusion'] = JSON.stringify(values['conclusion']);
@@ -404,7 +427,8 @@ function MainPatientHistory({
                xrayProcess: 2
             });
          } else {
-            setConfirmModal(true);
+            // setConfirmModal(true);
+            handleClick({ target: { value: 'OCS' } });
          }
       }
       setLoading(false);
@@ -605,10 +629,21 @@ function MainPatientHistory({
       <>
          {UsageType === 'OUT' && (
             <Spin spinning={loading} tip="Уншиж байна ...">
-               <Tabs type="card" defaultActiveKey={activeKey} items={items} />
+               <Tabs
+                  type="card"
+                  destroyInactiveTabPane
+                  defaultActiveKey={activeKey}
+                  items={items}
+               />
             </Spin>
          )}
-         {UsageType === 'IN' && <MainInpatientHistory />}
+         {UsageType === 'IN' && (
+            <MainInpatientHistory
+               patientId={PatientId}
+               inpatientRequestId={InpatientRequestId}
+               insuranceServiceId={insuranceServiceId}
+            />
+         )}
          <Modal
             open={confirmModal}
             onCancel={() => setConfirmModal(false)}
@@ -616,7 +651,7 @@ function MainPatientHistory({
          >
             <Result
                status="success"
-               title="EMR амжилттай хадгалагдлаа та ОCS руу шилжих үү"
+               title="EMR амжилттай хадгалагдлаа та OT руу шилжих үү"
                // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
                extra={
                   <>

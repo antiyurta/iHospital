@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
 import { Get, openNofi } from '../../../../comman';
 const { Search } = Input;
-function Diagnose({ form, name, formName }) {
+function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
    const token = useSelector(selectCurrentToken);
    const [isOpen, setIsOpen] = useState(false);
    const [loading, setLoading] = useState(false);
@@ -23,6 +23,7 @@ function Diagnose({ form, name, formName }) {
    const [diagnoses, setDiagnoses] = useState([]);
    const [param, setParam] = useState('');
    const [paramValue, setParamValue] = useState('');
+   const [selectedDiagnose, setSelectedDiagnose] = useState(null);
    const [selectedDiagnoses, setSelectedDiagnoses] = useState([]);
    const getDiagnoses = async (page, pageSize, e, v) => {
       setLoading(true);
@@ -30,7 +31,8 @@ function Diagnose({ form, name, formName }) {
          headers: {},
          params: {
             page: page,
-            limit: pageSize
+            limit: pageSize,
+            type: type
          }
       };
       if (e && v) {
@@ -44,21 +46,45 @@ function Diagnose({ form, name, formName }) {
       setLoading(false);
    };
    const add = (diagnose) => {
-      const state = selectedDiagnoses.includes(diagnose);
-      if (state) {
-         openNofi('warning', 'EXA', 'EXA сонгогдсон байна');
+      if (multiple) {
+         const state = selectedDiagnoses.includes(diagnose);
+         if (state) {
+            openNofi('warning', 'Анхаар', 'Онош сонгогдсон байна');
+         } else {
+            setSelectedDiagnoses([...selectedDiagnoses, diagnose]);
+         }
       } else {
-         setSelectedDiagnoses([...selectedDiagnoses, diagnose]);
+         setSelectedDiagnose(diagnose);
       }
    };
    const remove = (index) => {
-      var arr = [...selectedDiagnoses];
-      arr.splice(index, 1);
-      setSelectedDiagnoses(arr);
+      if (multiple) {
+         let arr = [...selectedDiagnoses];
+         arr.splice(index, 1);
+         setSelectedDiagnoses(arr);
+      } else {
+         setSelectedDiagnose({});
+      }
    };
    const handleClick = () => {
-      form.setFieldValue(['patient', formName], selectedDiagnoses);
-      form.setFieldValue(['patient', `${formName}Date`], moment());
+      if (multiple) {
+         selectedDiagnoses?.map((diagnose, idx) => {
+            form.setFieldValue(
+               ['diagnose', index, idx, formCode],
+               diagnose.code
+            );
+            form.setFieldValue(
+               ['diagnose', index, idx, formName],
+               diagnose.nameMn
+            );
+         });
+      } else {
+         // form.setFieldValue({
+         //    'diagnose',`${formCode}` : selectedDiagnose.code,
+         // });
+         form.setFieldValue(['diagnose', formCode], selectedDiagnose.code);
+         form.setFieldValue(['diagnose', formName], selectedDiagnose.nameMn);
+      }
       setIsOpen(false);
    };
    useEffect(() => {
@@ -68,63 +94,85 @@ function Diagnose({ form, name, formName }) {
       <div>
          <Divider>{name}</Divider>
          <span>
-            <Button onClick={() => setIsOpen(true)} className="diagnoseButton">
+            <Button
+               onClick={() => {
+                  setIsOpen(true);
+                  setSelectedDiagnoses([]);
+                  setSelectedDiagnose(null);
+               }}
+               className="diagnoseButton"
+            >
                ICD10
             </Button>
          </span>
-         <Form.List name={['patient', formName]}>
-            {(fields) => (
-               <>
-                  {fields.map((field, index) => {
-                     return (
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           key={index}
-                        >
-                           {() => {
-                              return (
-                                 <span>
-                                    {form.getFieldValue([
-                                       'patient',
-                                       formName,
-                                       field.name,
-                                       'nameMn'
-                                    ])}
-                                    -
-                                    {form.getFieldValue([
-                                       'patient',
-                                       formName,
-                                       field.name,
-                                       'code'
-                                    ])}
-                                    &nbsp;
-                                 </span>
-                              );
-                           }}
-                        </Form.Item>
-                     );
-                  })}
-               </>
-            )}
-         </Form.List>
+         {multiple ? (
+            <Form.List name={['diagnose', index]}>
+               {(fields) => (
+                  <>
+                     {fields.map((field, idx) => {
+                        return (
+                           <Form.Item
+                              shouldUpdate
+                              className="mb-0"
+                              noStyle
+                              key={idx}
+                           >
+                              {() => {
+                                 return (
+                                    <span>
+                                       {form.getFieldValue([
+                                          'diagnose',
+                                          index,
+                                          idx,
+                                          `${formCode}`
+                                       ])}
+                                       -
+                                       {form.getFieldValue([
+                                          'diagnose',
+                                          index,
+                                          field.name,
+                                          formName
+                                       ])}
+                                       &nbsp;,
+                                    </span>
+                                 );
+                              }}
+                           </Form.Item>
+                        );
+                     })}
+                  </>
+               )}
+            </Form.List>
+         ) : (
+            <Form.Item shouldUpdate>
+               {() => {
+                  return (
+                     <span>
+                        {form.getFieldValue(['diagnose', `${formCode}`])}-
+                        {form.getFieldValue(['diagnose', `${formName}`])}
+                        &nbsp;
+                     </span>
+                  );
+               }}
+            </Form.Item>
+         )}
+
          <h2>
             <Form.Item
                shouldUpdate
                className="mb-0"
                noStyle
-               name={['patient', `${formName}Date`]}
+               name={['diagnose', `${formName}Date`]}
                getValueProps={(i) => ({ value: moment(i) })}
             >
                <DatePicker disabled={true} format={'YYYY он MM сар DD өдөр'} />
             </Form.Item>
          </h2>
          <Modal
-            title="sadad"
+            title="Онош сонгох хэсэг"
             open={isOpen}
             onOk={() => {
-               handleClick(selectedDiagnoses);
+               handleClick();
             }}
             onCancel={() => setIsOpen(false)}
             width="90%"
@@ -269,38 +317,66 @@ function Diagnose({ form, name, formName }) {
                            </tr>
                         </thead>
                         <tbody>
-                           {selectedDiagnoses.map((item, index) => {
-                              return (
-                                 <tr
-                                    key={index}
-                                    className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
+                           {multiple ? (
+                              selectedDiagnoses?.map((item, index) => {
+                                 return (
+                                    <tr
+                                       key={index}
+                                       className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
+                                    >
+                                       <td
+                                          className="whitespace-pre-line"
+                                          style={{ width: 50, maxWidth: 50 }}
+                                       >
+                                          {item.code}
+                                       </td>
+                                       <td
+                                          className="whitespace-pre-line"
+                                          style={{ maxWidth: 50 }}
+                                       >
+                                          {item.nameMn}
+                                       </td>
+                                       <td
+                                          onDoubleClick={() => remove(index)}
+                                          className="hover:cursor-pointer"
+                                       >
+                                          <CloseOutlined
+                                             style={{
+                                                color: 'red',
+                                                verticalAlign: 'middle'
+                                             }}
+                                          />
+                                       </td>
+                                    </tr>
+                                 );
+                              })
+                           ) : (
+                              <tr className="ant-table-row ant-table-row-level-0 hover:cursor-pointer">
+                                 <td
+                                    className="whitespace-pre-line"
+                                    style={{ width: 50, maxWidth: 50 }}
                                  >
-                                    <td
-                                       className="whitespace-pre-line"
-                                       style={{ width: 50, maxWidth: 50 }}
-                                    >
-                                       {item.code}
-                                    </td>
-                                    <td
-                                       className="whitespace-pre-line"
-                                       style={{ maxWidth: 50 }}
-                                    >
-                                       {item.nameMn}
-                                    </td>
-                                    <td
-                                       onDoubleClick={() => remove(index)}
-                                       className="hover:cursor-pointer"
-                                    >
-                                       <CloseOutlined
-                                          style={{
-                                             color: 'red',
-                                             verticalAlign: 'middle'
-                                          }}
-                                       />
-                                    </td>
-                                 </tr>
-                              );
-                           })}
+                                    {selectedDiagnose?.code}
+                                 </td>
+                                 <td
+                                    className="whitespace-pre-line"
+                                    style={{ maxWidth: 50 }}
+                                 >
+                                    {selectedDiagnose?.nameMn}
+                                 </td>
+                                 <td
+                                    onDoubleClick={() => remove()}
+                                    className="hover:cursor-pointer"
+                                 >
+                                    <CloseOutlined
+                                       style={{
+                                          color: 'red',
+                                          verticalAlign: 'middle'
+                                       }}
+                                    />
+                                 </td>
+                              </tr>
+                           )}
                         </tbody>
                      </Table>
                   </div>
