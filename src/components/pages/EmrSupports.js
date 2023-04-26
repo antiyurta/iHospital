@@ -250,6 +250,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
       };
       if (isInsurance) {
          if (!values) {
+            console.log(values);
             setIsOpenFinger(true);
          } else {
             data['finger'] = values;
@@ -643,7 +644,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          </Modal>
          <Modal
             title="Хурууний хээ уншуулах"
-            open={isOpenPayment}
+            open={isOpenFinger}
             onCancel={() => setIsOpenFinger(false)}
             onOk={() =>
                fingerData
