@@ -107,6 +107,7 @@ function Order({
             } else if (item.type === 7) {
                service.type = item.type;
                service.services = item.services;
+               service.price = item.price;
             }
             service.isCito = false;
             if (item.type === 1) {

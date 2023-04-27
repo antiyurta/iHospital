@@ -40,7 +40,7 @@ function Package({ isOpen, isClose, handleclick }) {
    return (
       <>
          <Modal
-            title="Шинжилгээ сонгох"
+            title="Багц сонгох"
             width={'80%'}
             open={isOpen}
             onCancel={() => isClose('package', false)}
@@ -67,6 +67,9 @@ function Package({ isOpen, isClose, handleclick }) {
                               <th className="font-bold text-sm align-middle">
                                  Нэр
                               </th>
+                              <th className="font-bold text-sm align-middle">
+                                 Үнэ
+                              </th>
                            </tr>
                         </thead>
                         <tbody className="ant-table-tbody p-0">
@@ -79,6 +82,9 @@ function Package({ isOpen, isClose, handleclick }) {
                                  >
                                     <td className="whitespace-pre-line">
                                        {item.name}
+                                    </td>
+                                    <td className="whitespace-pre-line">
+                                       {item.price}
                                     </td>
                                  </tr>
                               );
@@ -102,7 +108,9 @@ function Package({ isOpen, isClose, handleclick }) {
                               <th className="font-bold text-sm align-middle">
                                  Нэр
                               </th>
-                              <th></th>
+                              <th className="font-bold text-sm align-middle">
+                                 Үнэ
+                              </th>
                            </tr>
                         </thead>
                         <tbody className="ant-table-tbody p-0">
@@ -114,6 +122,9 @@ function Package({ isOpen, isClose, handleclick }) {
                                  >
                                     <td className="whitespace-pre-line">
                                        {item.name}
+                                    </td>
+                                    <td className="whitespace-pre-line">
+                                       {item.price}
                                     </td>
                                     <td
                                        onDoubleClick={() => remove(index)}
