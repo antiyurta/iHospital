@@ -290,7 +290,7 @@ function Index({ type, isDoctor }) {
       }
    };
    const checkInspection = (inspectionNote) => {
-      if (inspectionNote === null) {
+      if (inspectionNote === null || inspectionNote === undefined) {
          return (
             <p>
                <CloseOutlined style={{ color: 'red', fontSize: '20px' }} />
@@ -298,6 +298,7 @@ function Index({ type, isDoctor }) {
          );
       } else {
          var state = true;
+         console.log(inspectionNote);
          const clonedInspectionNote = [];
          clonedInspectionNote.push(JSON.parse(inspectionNote?.inspection));
          clonedInspectionNote.push(JSON.parse(inspectionNote?.pain));
