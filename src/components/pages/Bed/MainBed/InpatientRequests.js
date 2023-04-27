@@ -264,11 +264,11 @@ function InpatientRequests() {
          title: 'Хэвтэх үеийн мэдээлэл',
          children: [
             {
-               title: 'Тасагын нэр',
+               title: 'Тасгийн нэр',
                dataIndex: ['structure', 'name']
             },
             {
-               title: 'Өрөөны №',
+               title: 'Өрөө №',
                dataIndex: ['rooms', 'roomNumber']
             }
          ]

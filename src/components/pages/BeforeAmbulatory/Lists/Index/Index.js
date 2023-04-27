@@ -244,7 +244,7 @@ function Index({ type, isDoctor }) {
       if (gender === 'MAN') {
          return 'Эр';
       } else {
-         return 'Эмэгтэй';
+         return 'Эм';
       }
    };
    const getAge = (registerNumber) => {
@@ -434,6 +434,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Нас',
+         width: 40,
          dataIndex: ['patient', 'registerNumber'],
          render: (text) => {
             return getAge(text);
@@ -441,6 +442,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Хүйс',
+         width: 40,
          dataIndex: ['patient', 'genderType'],
          render: (text) => {
             return getGenderInfo(text);
@@ -484,6 +486,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Даатгал',
+         width: 60,
          dataIndex: 'isInsurance',
          render: (text) => {
             return getPaymentInfo(text);
@@ -491,6 +494,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Төлбөр',
+         width: 60,
          dataIndex: ['isPayment'],
          render: (text) => {
             return getPaymentInfo(text);
@@ -498,6 +502,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Үзлэг',
+         width: 60,
          dataIndex: 'inspectionNote',
          render: (text) => {
             return checkInspection(text);
@@ -534,8 +539,6 @@ function Index({ type, isDoctor }) {
                                 row.id,
                                 row.patientId,
                                 type === 2 ? row.inDepartmentId : row.cabinetId,
-                                // row.cabinetId,
-                                // row.inspectionType,
                                 type === 2 ? 1 : row.inspectionType,
                                 row.isPayment || row.isInsurance,
                                 row.process,
