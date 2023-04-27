@@ -172,27 +172,34 @@ class NewEmr extends React.Component {
       return (
          <>
             <div className="flex flex-wrap">
-               <div className="w-full p-1">
-                  <Alert
-                     banner
-                     message={
-                        <Marquee pauseOnHover gradient={false}>
-                           Эмчийн үзлэг хийсэн бол заавал онош тавигдана.
-                           Оношийг засварлах боломжгүйг анхаарна уу! EMR, OTS
-                           дуусгаад ҮЗЛЭГ ДУУСГАХ товчийг дарна уу. Таны үзлэг
-                           баталгаажиж байгаа болно.
-                        </Marquee>
-                     }
-                  />
-               </div>
-               <div className="w-full p-1">
-                  <EmrSupports
-                     appointmentId={this.props.IncomeEMRData.appointmentId}
-                     usageType={this.props.IncomeEMRData.usageType}
-                     patient={this.state.selectedPatient}
-                     patientId={this.props.IncomeEMRData.patientId}
-                  />
-               </div>
+               {this.props.IncomeEMRData.usageType === 'OUT' && (
+                  <>
+                     <div className="w-full p-1">
+                        <Alert
+                           banner
+                           message={
+                              <Marquee pauseOnHover gradient={false}>
+                                 Эмчийн үзлэг хийсэн бол заавал онош тавигдана.
+                                 Оношийг засварлах боломжгүйг анхаарна уу! EMR,
+                                 OTS дуусгаад ҮЗЛЭГ ДУУСГАХ товчийг дарна уу.
+                                 Таны үзлэг баталгаажиж байгаа болно.
+                              </Marquee>
+                           }
+                        />
+                     </div>
+                     <div className="w-full p-1">
+                        <EmrSupports
+                           appointmentId={
+                              this.props.IncomeEMRData.appointmentId
+                           }
+                           usageType={this.props.IncomeEMRData.usageType}
+                           patient={this.state.selectedPatient}
+                           patientId={this.props.IncomeEMRData.patientId}
+                        />
+                     </div>
+                  </>
+               )}
+
                <div
                   className={
                      this.state.type === 'EMR'
