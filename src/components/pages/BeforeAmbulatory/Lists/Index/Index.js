@@ -12,7 +12,9 @@ import {
 import {
    Button,
    Card,
+   ConfigProvider,
    DatePicker,
+   Empty,
    Form,
    Input,
    Modal,
@@ -31,7 +33,14 @@ import {
    selectCurrentUserId
 } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import { Get, openNofi, Patch, ScrollRef } from '../../../../comman';
+import {
+   Get,
+   localMn,
+   localMnC,
+   openNofi,
+   Patch,
+   ScrollRef
+} from '../../../../comman';
 import orderType from './orderType.json';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 
@@ -67,7 +76,7 @@ function Index({ type, isDoctor }) {
    const [formData, setFormData] = useState({});
    //
    const [selectedRowCabinetId, setSelectRowCabinetId] = useState(Number);
-   const [selectedTags, setSelectedTags] = useState([0]);
+   const [selectedTags, setSelectedTags] = useState(0);
    //
    const getAppointment = async (page, pageSize, start, end, process) => {
       setSpinner(true);
@@ -77,7 +86,7 @@ function Index({ type, isDoctor }) {
          headers: {},
          params: {
             doctorId: isDoctor ? employeeId : null,
-            process: process ? process.toString() : null,
+            process: process ? process : null,
             page: page,
             limit: pageSize,
             startDate: moment(start).format('YYYY-MM-DD HH:mm'),
@@ -122,7 +131,7 @@ function Index({ type, isDoctor }) {
       if (process != 2 && process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else {
-         if (isPayment === false) {
+         if (isPayment === false && type != 1) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
             const data = {
@@ -281,7 +290,7 @@ function Index({ type, isDoctor }) {
       }
    };
    const checkInspection = (inspectionNote) => {
-      if (inspectionNote === null) {
+      if (inspectionNote === null || inspectionNote === undefined) {
          return (
             <p>
                <CloseOutlined style={{ color: 'red', fontSize: '20px' }} />
@@ -289,22 +298,25 @@ function Index({ type, isDoctor }) {
          );
       } else {
          var state = true;
+         console.log(inspectionNote);
          const clonedInspectionNote = [];
          clonedInspectionNote.push(JSON.parse(inspectionNote?.inspection));
          clonedInspectionNote.push(JSON.parse(inspectionNote?.pain));
          clonedInspectionNote.push(JSON.parse(inspectionNote?.plan));
          clonedInspectionNote.push(JSON.parse(inspectionNote?.question));
          clonedInspectionNote?.map((notes) => {
-            Object.values(notes)?.map((note) => {
-               Object.values(note)?.map((item) => {
-                  if (
-                     (typeof item === 'object' && item?.length === 0) ||
-                     (typeof item === 'string' && !item)
-                  ) {
-                     state = false;
-                  }
+            if (notes != null) {
+               Object.values(notes)?.map((note) => {
+                  Object.values(note)?.map((item) => {
+                     if (
+                        (typeof item === 'object' && item?.length === 0) ||
+                        (typeof item === 'string' && !item)
+                     ) {
+                        state = false;
+                     }
+                  });
                });
-            });
+            }
          });
          if (state) {
             return (
@@ -323,14 +335,9 @@ function Index({ type, isDoctor }) {
          }
       }
    };
-   //
-   const handleChangeTag = (tag, checked) => {
-      const nextSelectedTags = checked
-         ? [...selectedTags, tag]
-         : selectedTags.filter((t) => t !== tag);
-      setSelectedTags(nextSelectedTags);
-      getAppointment(1, 20, today, today, nextSelectedTags);
-   };
+   useEffect(() => {
+      getAppointment(1, 20, today, today, selectedTags);
+   }, [selectedTags]);
    //
    // uzleg zasah ued uzleg er bhgu bol depId gar inspection awchrah uzleg baiwal formId gar formAwcirah
    const getInspectionFormDesc = async (inspectionNote, cabinetId) => {
@@ -827,15 +834,47 @@ function Index({ type, isDoctor }) {
                   className="header-solid max-h-max rounded-md"
                >
                   <div className="flex flex-wrap">
-                     <div className="basis-1/3">
-                        <RangePicker
-                           onChange={(e) => {
-                              if (e != null) {
-                                 getAppointment(1, 20, e[0], e[1]);
-                              }
-                           }}
-                           locale={mnMN}
-                        />
+                     <div className="w-full">
+                        <div className="flex justify-between">
+                           <div>
+                              <ConfigProvider locale={localMnC()}>
+                                 <RangePicker
+                                    style={{
+                                       width: 500
+                                    }}
+                                    onChange={(e) => {
+                                       if (e != null) {
+                                          getAppointment(
+                                             1,
+                                             20,
+                                             e[0],
+                                             e[1],
+                                             selectedTags
+                                          );
+                                       }
+                                    }}
+                                    locale={mnMN}
+                                 />
+                              </ConfigProvider>
+                           </div>
+                           <div>
+                              <Button
+                                 title="Сэргээх"
+                                 type="primary"
+                                 onClick={() =>
+                                    getAppointment(
+                                       1,
+                                       20,
+                                       start,
+                                       end,
+                                       selectedTags
+                                    )
+                                 }
+                              >
+                                 <ReloadOutlined spin={spinner} />
+                              </Button>
+                           </div>
+                        </div>
                      </div>
                      <div className="w-full py-2">
                         {type != 2 ? (
@@ -880,86 +919,81 @@ function Index({ type, isDoctor }) {
                            )
                         ) : (
                            <>
-                              <div className="flex float-left">
-                                 {orderType.map((tag) => {
-                                    return (
-                                       <div
-                                          key={tag.value}
-                                          className="border-blue-400 rounded-sm border mr-2 mb-2"
-                                       >
+                              <div className="w-full">
+                                 <div className="bg-[#1890ff] checkTag">
+                                    {orderType.map((tag, index) => {
+                                       return (
                                           <CheckableTag
-                                             checked={selectedTags.includes(
-                                                tag.value
-                                             )}
-                                             onChange={(checked) => {
-                                                handleChangeTag(
-                                                   tag.value,
-                                                   checked
-                                                );
+                                             key={index}
+                                             checked={
+                                                selectedTags === tag.value
+                                             }
+                                             onChange={() => {
+                                                setSelectedTags(tag.value);
                                              }}
-                                             style={{
-                                                display: 'flex',
-                                                fontSize: 14,
-                                                width: '100%'
-                                             }}
+                                             className="text-white m-1"
                                           >
-                                             <div
-                                                className="mr-2"
-                                                style={{
-                                                   display: 'flex',
-                                                   alignItems: 'center'
-                                                }}
-                                             >
+                                             <div className="flex">
                                                 <img
                                                    src={require(`../../../../../assets/bed/${tag.img}`)}
                                                    width="20"
                                                 />
+                                                {tag.label}
                                              </div>
-                                             {tag.label}
                                           </CheckableTag>
-                                       </div>
-                                    );
-                                 })}
+                                       );
+                                    })}
+                                 </div>
                               </div>
                            </>
                         )}
-                        <div className="float-right">
-                           <Button
-                              title="Сэргээх"
-                              type="primary"
-                              onClick={() => getAppointment(1, 20, start, end)}
-                           >
-                              <ReloadOutlined spin={spinner} />
-                           </Button>
-                        </div>
                      </div>
                      <div className="w-full py-2">
-                        <Table
-                           rowKey={'id'}
-                           rowClassName="hover: cursor-pointer"
-                           locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-                           bordered
-                           columns={
-                              type === 2
-                                 ? InPatientColumns
-                                 : isDoctor
-                                 ? columns
-                                 : nurseColumns
-                           }
-                           dataSource={appointments}
-                           scroll={{
-                              x: 1500
-                           }}
-                           loading={spinner}
-                           pagination={{
-                              simple: true,
-                              pageSize: 20,
-                              total: meta.itemCount,
-                              current: meta.page,
-                              onChange: (page, pageSize) =>
-                                 getAppointment(page, pageSize, start, end)
-                           }}
-                        />
+                        <ConfigProvider locale={localMn()}>
+                           <Table
+                              rowKey={'id'}
+                              rowClassName="hover: cursor-pointer"
+                              locale={{
+                                 emptyText: <Empty description={'Хоосон'} />
+                              }}
+                              loading={{
+                                 spinning: spinner,
+                                 tip: 'Уншиж байна....'
+                              }}
+                              bordered
+                              columns={
+                                 type === 2
+                                    ? InPatientColumns
+                                    : isDoctor
+                                    ? columns
+                                    : nurseColumns
+                              }
+                              dataSource={appointments}
+                              scroll={{
+                                 x: 1500
+                              }}
+                              pagination={{
+                                 position: ['topCenter', 'bottomCenter'],
+                                 size: 'small',
+                                 current: meta.page,
+                                 total: meta.itemCount,
+                                 showTotal: (total, range) =>
+                                    `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 pageSize: meta.limit,
+                                 showSizeChanger: true,
+                                 pageSizeOptions: ['5', '10', '20', '50'],
+                                 showQuickJumper: true,
+                                 onChange: (page, pageSize) =>
+                                    getAppointment(
+                                       page,
+                                       pageSize,
+                                       start,
+                                       end,
+                                       selectedTags
+                                    )
+                              }}
+                           />
+                        </ConfigProvider>
                      </div>
                   </div>
                </Card>

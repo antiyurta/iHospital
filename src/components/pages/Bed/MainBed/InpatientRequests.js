@@ -159,21 +159,6 @@ function InpatientRequests() {
          }
       });
    };
-   const getColumnSearchProps = (dataIndex) => ({
-      filterDropdown: ({}) => (
-         <div style={{ padding: 8 }}>
-            <Search
-               placeholder={`хайх`}
-               allowClear
-               onSearch={(e) =>
-                  getInpatientRequests(1, 20, checkedKey, e, dataIndex)
-               }
-               enterButton={'Хайх'}
-            />
-         </div>
-      ),
-      filterIcon: () => <SearchOutlined style={{ color: '#2d8cff' }} />
-   });
    const column = [
       {
          title: '№',
@@ -237,8 +222,7 @@ function InpatientRequests() {
             },
             {
                title: 'Нэр',
-               dataIndex: ['patient', 'firstName'],
-               ...getColumnSearchProps('filter')
+               dataIndex: ['patient', 'firstName']
             },
             {
                title: 'Регистр',
