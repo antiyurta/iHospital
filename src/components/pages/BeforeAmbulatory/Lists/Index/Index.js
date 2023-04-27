@@ -14,10 +14,11 @@ import {
    Card,
    DatePicker,
    Form,
+   Input,
    Modal,
-   Pagination,
    Table,
-   Tag
+   Tag,
+   Typography
 } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
@@ -32,10 +33,10 @@ import {
 import { setEmrData } from '../../../../../features/emrReducer';
 import { Get, openNofi, Patch, ScrollRef } from '../../../../comman';
 import orderType from './orderType.json';
-import Ambulatory from '../../../EMR/InPatient/document/Ambulatory/Index';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 
 const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 const { CheckableTag } = Tag;
 
 function Index({ type, isDoctor }) {
@@ -45,6 +46,7 @@ function Index({ type, isDoctor }) {
    //3 bol emiin bus emchilgee
    const scrollRef = useRef();
    const today = new Date();
+   const [editFormDesc] = Form.useForm();
    const token = useSelector(selectCurrentToken);
    const employeeId = useSelector(selectCurrentUserId);
    const depIds = useSelector(selectCurrentDepId);
@@ -60,9 +62,11 @@ function Index({ type, isDoctor }) {
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const [isOpenEditForm, setIsOpenEditForm] = useState(false); // uzleg zasah ued
+   const [isOpenEditFormDesc, setIsOpenEditFormDesc] = useState(false); // uzleg zasagdhin omnoh desc
    const [formStyle, setFormStyle] = useState({});
    const [formData, setFormData] = useState({});
    //
+   const [selectedRowCabinetId, setSelectRowCabinetId] = useState(Number);
    const [selectedTags, setSelectedTags] = useState([0]);
    //
    const getAppointment = async (page, pageSize, start, end, process) => {
@@ -90,7 +94,7 @@ function Index({ type, isDoctor }) {
          response = await Get('appointment/pre-order', token, conf);
       } else {
          conf.params.doctorId = null;
-         conf.params.depIds = depIds.toString();
+         conf.params.depIds = depIds?.toString();
          conf.params.process = process ? process.toString() : 0;
          response = await Get(`service/inpatient-request`, token, conf);
          conf.params.process = null;
@@ -240,7 +244,7 @@ function Index({ type, isDoctor }) {
       if (gender === 'MAN') {
          return 'Эр';
       } else {
-         return 'Эмэгтэй';
+         return 'Эм';
       }
    };
    const getAge = (registerNumber) => {
@@ -286,10 +290,10 @@ function Index({ type, isDoctor }) {
       } else {
          var state = true;
          const clonedInspectionNote = [];
-         clonedInspectionNote.push(JSON.parse(inspectionNote.inspection));
-         clonedInspectionNote.push(JSON.parse(inspectionNote.pain));
-         clonedInspectionNote.push(JSON.parse(inspectionNote.plan));
-         clonedInspectionNote.push(JSON.parse(inspectionNote.question));
+         clonedInspectionNote.push(JSON.parse(inspectionNote?.inspection));
+         clonedInspectionNote.push(JSON.parse(inspectionNote?.pain));
+         clonedInspectionNote.push(JSON.parse(inspectionNote?.plan));
+         clonedInspectionNote.push(JSON.parse(inspectionNote?.question));
          clonedInspectionNote?.map((notes) => {
             Object.values(notes)?.map((note) => {
                Object.values(note)?.map((item) => {
@@ -329,7 +333,8 @@ function Index({ type, isDoctor }) {
    };
    //
    // uzleg zasah ued uzleg er bhgu bol depId gar inspection awchrah uzleg baiwal formId gar formAwcirah
-   const getInspectionForm = async (inspectionNote, cabinetId) => {
+   const getInspectionFormDesc = async (inspectionNote, cabinetId) => {
+      setSelectRowCabinetId(cabinetId);
       if (inspectionNote) {
          const data = {};
          inspectionNote.diagnose?.map((diagnose, index) => {
@@ -340,32 +345,31 @@ function Index({ type, isDoctor }) {
          data['plan'] = JSON.parse(inspectionNote.plan);
          data['question'] = JSON.parse(inspectionNote.question);
          setFormData(data);
-      }
-      if (inspectionNote === null) {
-         const conf = {
-            headers: {},
-            params: {
-               cabinetId: cabinetId,
-               usageType: 'OUT'
-            }
-         };
-         const response = await Get('emr/inspection-form', token, conf);
-         setFormData({});
-         setFormStyle(response.data[0]);
-         setIsOpenEditForm(true);
       } else {
-         const conf = {
-            headers: {},
-            params: {}
-         };
-         const response = await Get(
-            'emr/inspection-form/' + inspectionNote.formId,
-            token,
-            conf
-         );
-         setFormStyle(response);
-         setIsOpenEditForm(true);
+         setFormData(null);
       }
+      editFormDesc.resetFields();
+      setIsOpenEditFormDesc(true);
+   };
+   const createDescription = async (values) => {
+      setIsOpenEditFormDesc(false);
+      const conf = {
+         headers: {},
+         params: {
+            cabinetId: selectedRowCabinetId,
+            usageType: 'OUT'
+         }
+      };
+      const response = await Get('emr/inspection-form', token, conf);
+      if (formData === null) {
+         setFormData({
+            description: values.description
+         });
+      } else {
+         formData['description'] = values.description;
+      }
+      setFormStyle(response.data[0]);
+      setIsOpenEditForm(true);
    };
    //
    const columns = [
@@ -430,6 +434,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Нас',
+         width: 40,
          dataIndex: ['patient', 'registerNumber'],
          render: (text) => {
             return getAge(text);
@@ -437,6 +442,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Хүйс',
+         width: 40,
          dataIndex: ['patient', 'genderType'],
          render: (text) => {
             return getGenderInfo(text);
@@ -480,6 +486,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Даатгал',
+         width: 60,
          dataIndex: 'isInsurance',
          render: (text) => {
             return getPaymentInfo(text);
@@ -487,6 +494,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Төлбөр',
+         width: 60,
          dataIndex: ['isPayment'],
          render: (text) => {
             return getPaymentInfo(text);
@@ -494,6 +502,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Үзлэг',
+         width: 60,
          dataIndex: 'inspectionNote',
          render: (text) => {
             return checkInspection(text);
@@ -508,9 +517,9 @@ function Index({ type, isDoctor }) {
             if (text) {
                return (
                   <Button
-                     // onClick={() =>
-                     //    getInspectionForm(row.inspectionNote, row.cabinetId)
-                     // }
+                     onClick={() =>
+                        getInspectionFormDesc(row.inspectionNote, row.cabinetId)
+                     }
                      icon={<EditOutlined />}
                   >
                      Тэмдэглэл засах
@@ -530,8 +539,6 @@ function Index({ type, isDoctor }) {
                                 row.id,
                                 row.patientId,
                                 type === 2 ? row.inDepartmentId : row.cabinetId,
-                                // row.cabinetId,
-                                // row.inspectionType,
                                 type === 2 ? 1 : row.inspectionType,
                                 row.isPayment || row.isInsurance,
                                 row.process,
@@ -930,37 +937,6 @@ function Index({ type, isDoctor }) {
                         <Table
                            rowKey={'id'}
                            rowClassName="hover: cursor-pointer"
-                           // onRow={(row, rowIndex) => {
-                           //    return {
-                           //       onDoubleClick: () => {
-                           //          isDoctor
-                           //             ? getEMR(
-                           //                  row.id,
-                           //                  row.patientId,
-                           //                  type === 2
-                           //                     ? row.inDepartmentId
-                           //                     : row.cabinetId,
-                           //                  // row.cabinetId,
-                           //                  // row.inspectionType,
-                           //                  type === 2 ? 1 : row.inspectionType,
-                           //                  row.isPayment || row.isInsurance,
-                           //                  row.process,
-                           //                  row.startDate,
-                           //                  row.insuranceServiceId
-                           //               )
-                           //             : getENR(
-                           //                  row.id,
-                           //                  row.patientId,
-                           //                  row.inDepartmentId,
-                           //                  row.inspectionType,
-                           //                  row.isPayment,
-                           //                  row.patient?.registerNumber,
-                           //                  row.rooms?.roomNumber,
-                           //                  row.structure?.name
-                           //               );
-                           //       }
-                           //    };
-                           // }}
                            locale={{ emptyText: 'Мэдээлэл байхгүй' }}
                            bordered
                            columns={
@@ -993,19 +969,48 @@ function Index({ type, isDoctor }) {
             title="Тэмдэглэл засах хэсэг"
             open={isOpenEditForm}
             onCancel={() => setIsOpenEditForm(false)}
+            footer={false}
          >
             <DynamicContent
                props={{
                   data: formStyle.formItem,
                   formKey:
-                     formData.formId != null ? formData.formId : formData.id,
-                  formName: formData.name
+                     formData?.formId != null ? formData?.formId : formData?.id,
+                  formName: formData?.name
                }}
                incomeData={{
                   usageType: 'OUT'
                }}
                editForm={formData}
+               editForOUT={false}
             />
+         </Modal>
+         <Modal
+            title="Засах болсон шалтгаан"
+            open={isOpenEditFormDesc}
+            onCancel={() => setIsOpenEditFormDesc(false)}
+            onOk={() =>
+               editFormDesc.validateFields().then((values) => {
+                  createDescription(values);
+               })
+            }
+            okText="Хадгалах"
+            cancelText="Болих"
+         >
+            <Form form={editFormDesc} layout="vertical">
+               <Form.Item
+                  label="Тайлбар"
+                  name={'description'}
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Заавал'
+                     }
+                  ]}
+               >
+                  <TextArea />
+               </Form.Item>
+            </Form>
          </Modal>
       </>
    );
