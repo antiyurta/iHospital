@@ -131,7 +131,7 @@ function Index({ type, isDoctor }) {
       if (process != 2 && process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else {
-         if (isPayment === false) {
+         if (isPayment === false && type != 1) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
             const data = {
