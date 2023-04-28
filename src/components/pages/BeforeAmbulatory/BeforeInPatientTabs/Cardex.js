@@ -162,9 +162,9 @@ function Cardex() {
          }
       },
       {
-         title: 'Оншилгооны нэр',
-         dataIndex: ['xrays', 'name']
-      },
+         title: 'Оношилгооны нэр',
+         dataIndex: ['xray', 'name']
+      },  
       {
          title: 'Үзлэг хийгдсэн эсэх',
          dataIndex: 'xrayProcess',
