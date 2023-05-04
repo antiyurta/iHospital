@@ -8,6 +8,42 @@
 @tailwind components;
 @tailwind utilities;
 
+ol {
+   list-style-type: none;
+   counter-reset: item;
+   margin: 0;
+   padding: 0;
+}
+
+ol > li {
+   display: table;
+   counter-increment: item;
+   margin-bottom: 0.6em;
+}
+
+ol > li:before {
+   color: rgb(45, 140, 255);
+   font-weight: 600;
+   font-size: 16px;
+   content: counters(item, '.') '. ';
+   display: table-cell;
+   padding-right: 0.6em;
+}
+
+li ol > li {
+   margin: 0;
+   font-size: 15px;
+   white-space: normal;
+}
+
+li::marker {
+   color: #2d8cff;
+}
+
+li ol > li:before {
+   content: counters(item, '.') ' ';
+}
+
 label {
    white-space: normal !important;
    /* text-align: center !important; */
@@ -221,6 +257,7 @@ input[type='number'] {
    height: 28px !important;
    line-height: 0 !important;
    border-radius: 6px !important;
+   white-space: normal;
 }
 
 .ant-btn-primary {
