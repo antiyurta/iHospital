@@ -23,11 +23,13 @@ function Index() {
                            bordered={false}
                         >
                            <p
-                              className="py-2"
+                              className="pb-6"
                               style={{
                                  color: 'rgb(45, 140, 255)',
                                  fontSize: 16,
-                                 fontWeight: 600
+                                 fontWeight: 600,
+                                 whiteSpace: 'normal',
+                                 textAlign: 'justify'
                               }}
                            >
                               Энэхүү үйлчилгээний нөхцөл нь iHospital платформыг
@@ -57,11 +59,11 @@ function Index() {
                                     </li>
                                     <li>
                                        Үйлчлүүлэгч гэдэг нь үйлчилгээний
-                                       нөхцөлийг хүлээн зөвшөөрч IHospial
+                                       нөхцөлийг хүлээн зөвшөөрч iHospital
                                        платформд бүртгэлтэй иргэнийг хэлнэ.
                                     </li>
                                     <li>
-                                       Үйлчлүүлэгч нь IHospial платформ дахь
+                                       Үйлчлүүлэгч нь iHospital платформ дахь
                                        мэдээлэл, захиалга, үйлчилгээ худалдан
                                        авах эрхтэй.
                                     </li>
