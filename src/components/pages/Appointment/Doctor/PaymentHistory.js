@@ -32,7 +32,7 @@ function PaymentHistory({ patientId }) {
       {
          title: 'Огноо',
          dataIndex: 'updatedAt',
-         className: 'whitespace-pre-line',
+         className: 'whitespace-normal',
          render: (text) => {
             return moment(text).format('YYYY-MM-DD HH:mm');
          }
@@ -40,12 +40,15 @@ function PaymentHistory({ patientId }) {
       {
          title: 'Үйлчилгээний нэр',
          dataIndex: 'name',
-         className: 'whitespace-pre-line text-black'
+         className: 'whitespace-normal text-black',
+         render: (text) => {
+            return <p className="whitespace-normal text-black">{text}</p>;
+         }
       },
       {
          title: 'Төлбөр',
          dataIndex: 'amount',
-         className: 'whitespace-pre-line',
+         className: 'whitespace-normal',
          render: (text) => {
             return numberToCurrency(text);
          }
@@ -57,6 +60,7 @@ function PaymentHistory({ patientId }) {
    return (
       <>
          <Table
+            rowKey={'id'}
             bordered
             loading={{
                spinning: spinner,

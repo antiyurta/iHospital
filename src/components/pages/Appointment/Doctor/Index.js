@@ -1,11 +1,28 @@
 import React from 'react';
-import { Card, Radio, Tabs } from 'antd';
+import { Card, Radio, Segmented, Tabs } from 'antd';
 import { useState } from 'react';
 import InspectionHistory from './InspectionHistory';
 import PaymentHistory from './PaymentHistory';
+import InsuranceHistory from './InsuranceHistory';
+import { OrderedListOutlined } from '@ant-design/icons';
 function Index({ PatientId }) {
-   const [type, setType] = useState(Number);
+   const [filter, setFilter] = useState(Number);
    // return <Tabs type="card" items={supportMenu} />
+   const items = [
+      {
+         children: <InsuranceHistory patientId={PatientId} />
+      },
+      {
+         children: <PaymentHistory patientId={PatientId} />
+      },
+      {
+         children: <InspectionHistory patientId={PatientId} />
+      }
+   ];
+   const Render = () => {
+      return items[filter].children;
+   };
+
    return (
       <Card
          bordered={false}
@@ -21,15 +38,33 @@ function Index({ PatientId }) {
          }}
          extra={
             <>
-               <Radio.Group onChange={(e) => setType(e.target.value)}>
-                  <Radio value={0}>Үзлэгийн түүх</Radio>
-                  <Radio value={1}>Төлбөрийн мэдээлэл</Radio>
-               </Radio.Group>
+               <Segmented
+                  className="department-bed-segment"
+                  size="small"
+                  options={[
+                     {
+                        label: 'Даатгал',
+                        value: 0,
+                        icon: <OrderedListOutlined />
+                     },
+                     {
+                        label: 'Үзлэгийн түүх',
+                        value: 1,
+                        icon: <OrderedListOutlined />
+                     },
+                     {
+                        label: 'Төлбөрийн мэдээлэл',
+                        value: 2,
+                        icon: <OrderedListOutlined />
+                     }
+                  ]}
+                  value={filter}
+                  onChange={(e) => setFilter(e)}
+               />
             </>
          }
       >
-         {type === 0 && <InspectionHistory patientId={PatientId} />}
-         {type === 1 && <PaymentHistory patientId={PatientId} />}
+         {PatientId ? <Render /> : <div>Өвчтөн сонгогдоогүй</div>}
       </Card>
    );
 }

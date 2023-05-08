@@ -176,6 +176,15 @@ const HicsCost = React.lazy(() =>
 const HicsLists = React.lazy(() =>
    import('./components/pages/Insurance/HicsLists')
 );
+
+const DocumentUpload = React.lazy(() =>
+   import('./components/pages/611/Document/DocumentUpload')
+);
+const DocForRoleList = React.lazy(() =>
+   import('./components/pages/611/DocForRoleList')
+);
+
+const Privacy = React.lazy(() => import('./privacy/Index'));
 //
 
 function App() {
@@ -185,8 +194,10 @@ function App() {
             <Suspense fallback={<FullScreenLoader full={true} />}>
                <Routes>
                   <Route path="/" element={<Login />} />
+                  <Route path="/privacy" element={<Privacy />} />
                   <Route element={<Main />}>
                      <Route path="*" element={<NotFound />} />
+                     <Route path="/docforlist" element={<DocForRoleList />} />
                      <Route
                         path="/home"
                         element={
@@ -195,6 +206,7 @@ function App() {
                            </PrivateRoute>
                         }
                      />
+                     <Route path="/documents" element={<DocumentUpload />} />
                      <Route path="/hicsCost" element={<HicsCost />} />
                      <Route path="/hicsList" element={<HicsLists />} />
                      <Route path="/notPermission" element={<NotPermission />} />

@@ -10,7 +10,8 @@ export const auth = createSlice({
       appId: null,
       userId: null,
       note: null,
-      isInsurance: null
+      isInsurance: null,
+      roleId: null
    },
    reducers: {
       login: (state, action) => {
@@ -56,6 +57,12 @@ export const auth = createSlice({
       },
       DelInsurrance: (state) => {
          state.isInsurance = null;
+      },
+      setRoleId: (state, action) => {
+         state.roleId = action.payload;
+      },
+      DelRoleId: (state) => {
+         state.roleId = null;
       }
    }
 });
@@ -74,7 +81,9 @@ export const {
    setNote,
    DelNote,
    setInsurrance,
-   DelInsurrance
+   DelInsurrance,
+   setRoleId,
+   DelRoleId
 } = auth.actions;
 export default auth.reducer;
 
@@ -86,3 +95,4 @@ export const selectCurrentFirstName = (state) => state.authReducer.firstName;
 export const selectCurrentLastName = (state) => state.authReducer.lastName;
 export const selectCurrentNote = (state) => state.authReducer.note;
 export const selectCurrentInsurance = (state) => state.authReducer.isInsurance;
+export const selectCurrentRoleId = (state) => state.authReducer.roleId;

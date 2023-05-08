@@ -54,7 +54,7 @@ function Diagnoses() {
          url={'reference/diagnose'}
          params={{
             params: {
-               type: type
+               types: type
             }
          }}
          column={configureCol({ l: title, t: type })}
@@ -69,17 +69,17 @@ function Diagnoses() {
       {
          key: 1,
          label: 'ICD9',
-         children: <Diagnose title="ICD9" type={1} />
+         children: <Diagnose title="ICD9" type={[1]} />
       },
       {
          key: 2,
          label: 'ICD10',
-         children: <Diagnose title="ICD10" type={0} />
+         children: <Diagnose title="ICD10" type={[0]} />
       },
       {
          key: 3,
          label: 'Уламжлалт',
-         children: <Diagnose title="Уламжлалт" type={2} />
+         children: <Diagnose title="Уламжлалт" type={[2]} />
       }
    ];
    return (

@@ -11,7 +11,10 @@ import {
    DelDepId,
    DelAppId,
    DelNote,
-   DelInsurrance
+   DelInsurrance,
+   DelRoleId,
+   selectCurrentRoleId,
+   selectCurrentUserId
 } from '../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -25,10 +28,10 @@ import { Get, Post } from '../../comman';
 import Fallback from './Fallback';
 
 const { Header, Content, Sider } = Layout;
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
 
 const Main = () => {
+   const UserId = useSelector(selectCurrentUserId);
+   const RoleId = useSelector(selectCurrentRoleId);
    const [collapsed, setCollapsed] = useState(false);
    const token = useSelector(selectCurrentToken);
    const [isChatModal, setIsChatModal] = useState(false);
@@ -46,6 +49,7 @@ const Main = () => {
          dispatch(DelAppId());
          dispatch(DelNote());
          dispatch(DelInsurrance());
+         dispatch(DelRoleId());
          navigate('/');
       } else if (e.key == 3) {
          setIsChatModal(true);
@@ -79,13 +83,21 @@ const Main = () => {
    );
    const [menus, setMenus] = useState([]);
    const getMenus = async () => {
-      const response = await Get('reference/menu/user', token, config);
-      if (response.data.length > 0) {
+      const conf = {
+         headers: {},
+         params: {
+            isAll: false,
+            roleId: RoleId,
+            userId: UserId
+         }
+      };
+      const response = await Get('organization/permission', token, conf);
+      if (response.length > 0) {
          var menus = [];
-         response.data.map((menu, indx) => {
-            if (menu.isSubMenu) {
+         response.map((menu, indx) => {
+            if (menu.menu?.menus?.length > 0) {
                var children = [];
-               menu.menus.map((subMenu, idx) => {
+               menu.menu.menus.map((subMenu, idx) => {
                   children.push({
                      key: `${indx}-${idx}`,
                      icon: (
@@ -98,10 +110,10 @@ const Main = () => {
                         <Link
                            to={subMenu.url}
                            state={{
-                              isCreate: subMenu.permission?.isCreate,
-                              isRead: subMenu.permission?.isRead,
-                              isUpdate: subMenu.permission?.isUpdate,
-                              isDelete: subMenu.permission?.isDelete
+                              isCreate: menu.isCreate,
+                              isRead: menu.isRead,
+                              isUpdate: menu.isUpdate,
+                              isDelete: menu.isDelete
                            }}
                         >
                            {subMenu.title}
@@ -114,10 +126,10 @@ const Main = () => {
                   icon: (
                      <p
                         style={{ width: 20, marginBottom: 0 }}
-                        dangerouslySetInnerHTML={{ __html: menu.icon }}
+                        dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
                      ></p>
                   ),
-                  label: menu.title,
+                  label: menu.menu.title,
                   children: children
                });
             } else {
@@ -126,20 +138,20 @@ const Main = () => {
                   icon: (
                      <p
                         style={{ width: 20, marginBottom: 0 }}
-                        dangerouslySetInnerHTML={{ __html: menu.icon }}
+                        dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
                      ></p>
                   ),
                   label: (
                      <Link
-                        to={menu.url}
+                        to={menu.menu.url}
                         state={{
-                           isCreate: menu.permission?.isCreate,
-                           isRead: menu.permission?.isRead,
-                           isUpdate: menu.permission?.isUpdate,
-                           isDelete: menu.permission?.isDelete
+                           isCreate: menu.isCreate,
+                           isRead: menu.isRead,
+                           isUpdate: menu.isUpdate,
+                           isDelete: menu.isDelete
                         }}
                      >
-                        {menu.title}
+                        {menu.menu.title}
                      </Link>
                   )
                };

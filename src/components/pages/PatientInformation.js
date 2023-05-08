@@ -1,11 +1,21 @@
-import { Input, Card, Radio, Descriptions, Button, Modal, Divider } from 'antd';
+import {
+   Input,
+   Card,
+   Radio,
+   Descriptions,
+   Button,
+   Modal,
+   Divider,
+   Table
+} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import male from '../../assets/images/maleAvatar.svg';
 import { selectCurrentToken } from '../../features/authReducer';
-import { Get } from '../comman';
+import { Get, openNofi } from '../comman';
 import { SnippetsOutlined } from '@ant-design/icons';
 import AMIndex from './EMR/InPatient/document/Ambulatory/Index';
+import { ReturnById, ReturnDetails } from './611/Document/Index';
 
 const { Search } = Input;
 
@@ -14,13 +24,16 @@ function PatientInformation({
    patient,
    handleTypeChange,
    OCS,
-   type
+   type,
+   deparmentId
 }) {
    const token = useSelector(selectCurrentToken);
    const [citizens, setCitizens] = useState([]);
    const [provices, setProvices] = useState([]);
    const [towns, setTowns] = useState([]);
    //
+   const [documents, setDocuments] = useState([]);
+   const [documentId, setDocumentId] = useState(Number);
    const [isOpenAM, setIsOpenAM] = useState(false);
    const [isOpenHistory, setIsOpenHistory] = useState(false);
    //
@@ -128,6 +141,26 @@ function PatientInformation({
       const response = await Get('reference/country', token, conf);
       setTowns(response.data);
    };
+   const getDocuments = async () => {
+      const conf = {
+         headers: {},
+         params: {
+            structureId: deparmentId,
+            usageType: 'OUT'
+         }
+      };
+      const response = await Get(
+         'organization/document-role/show',
+         token,
+         conf
+      );
+      if (response?.length === 0) {
+         openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
+      } else {
+         setDocuments(response);
+         setIsOpenAM(true);
+      }
+   };
    useEffect(() => {
       getCitizens();
       getProvices();
@@ -161,7 +194,8 @@ function PatientInformation({
                            Өвчний түүх
                         </Button>
                         <Button
-                           onClick={() => setIsOpenAM(true)}
+                           // onClick={() => setIsOpenAM(true)}
+                           onClick={() => getDocuments()}
                            className="ml-2"
                            icon={<SnippetsOutlined />}
                         >
@@ -243,8 +277,88 @@ function PatientInformation({
             open={isOpenAM}
             onCancel={() => setIsOpenAM(false)}
             width={'70%'}
+            footer={null}
          >
-            <AMIndex />
+            <div className="flex flex-row gap-3">
+               <div className="flex flex-col gap-3 p-3 border-r-[2px]">
+                  <Input placeholder="Хайх" />
+                  <div>
+                     <Table
+                        rowKey={'value'}
+                        bordered
+                        columns={[
+                           {
+                              title: 'ДТ',
+                              dataIndex: 'value',
+                              width: 40
+                           },
+                           {
+                              title: 'Нэр',
+                              dataIndex: 'label',
+                              render: (_text, row) => {
+                                 console.log(row);
+                              }
+                           }
+                        ]}
+                        dataSource={documents?.documents}
+                     />
+                  </div>
+                  {documents?.map((option, index) => {
+                     return (
+                        <div key={index}>
+                           {option?.documents?.map((document, indx) => {
+                              return (
+                                 <Button
+                                    key={indx}
+                                    onClick={() =>
+                                       setDocumentId(document.value)
+                                    }
+                                 >
+                                    {document.label}
+                                 </Button>
+                              );
+                           })}
+                        </div>
+                     );
+                  })}
+               </div>
+               <div className="m-auto">
+                  <ReturnById id={documentId} />
+               </div>
+            </div>
+            <div className="flex flex-wrap">
+               <div className="sm:w-full md:w-1/12 lg:w-1/12">
+                  <div
+                     style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px'
+                     }}
+                  >
+                     {documents?.map((option, index) => {
+                        return (
+                           <div key={index}>
+                              {option?.documents?.map((document, indx) => {
+                                 return (
+                                    <Button
+                                       key={indx}
+                                       onClick={() =>
+                                          setDocumentId(document.value)
+                                       }
+                                    >
+                                       {document.label}
+                                    </Button>
+                                 );
+                              })}
+                           </div>
+                        );
+                     })}
+                  </div>
+               </div>
+               <div className="sm:w-full md:w-11/12 lg:w-11/12">
+                  <ReturnById id={documentId} />
+               </div>
+            </div>
          </Modal>
          <Modal
             title="Өвчний түүх"
