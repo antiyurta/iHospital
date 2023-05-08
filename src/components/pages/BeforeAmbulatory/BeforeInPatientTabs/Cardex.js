@@ -163,7 +163,7 @@ function Cardex() {
       },
       {
          title: 'Оншилгооны нэр',
-         dataIndex: ['xrays', 'name']
+         dataIndex: ['xray', 'name']
       },
       {
          title: 'Үзлэг хийгдсэн эсэх',

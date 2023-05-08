@@ -189,20 +189,21 @@ function Xrays({ PatientId }) {
                                        );
                                     })}
                                     <Divider>Дүгнэлт</Divider>
-                                    {el.inspectionNotes?.map((note, index) => {
-                                       return (
-                                          <div key={index}>
+                                    {el.inspectionNotes != null &&
+                                       el.inspectionNotes != undefined && (
+                                          <>
                                              <RenderNotesDetail
                                                 data={JSON.parse(
-                                                   note.conclusion
+                                                   el.inspectionNotes.conclusion
                                                 )}
                                              />
                                              <RenderNotesDetail
-                                                data={JSON.parse(note.advice)}
+                                                data={JSON.parse(
+                                                   el.inspectionNotes.advice
+                                                )}
                                              />
-                                          </div>
-                                       );
-                                    })}
+                                          </>
+                                       )}
                                  </Panel>
                               );
                            })}
