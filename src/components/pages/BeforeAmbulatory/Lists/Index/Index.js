@@ -115,51 +115,43 @@ function Index({ type, isDoctor }) {
       config.params.limit = null;
       setSpinner(false);
    };
-   const getEMR = (
-      listId,
-      id,
-      cabinetId,
-      inspectionType,
-      isPayment,
-      process,
-      startDate,
-      insuranceServiceId
-   ) => {
+   const getEMR = (row) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
-      console.log(isPayment);
-      if (process != 2 && process != undefined) {
+      if (row.process != 2 && row.process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else {
-         if (isPayment === false && type != 1) {
+         if (row.isPayment === false && type != 1) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
+            const inspectionType = type === 2 ? 1 : row.inspectionType;
             const data = {
-               patientId: id,
+               patientId: row.patientId,
                inspection: inspectionType === undefined ? 1 : inspectionType,
-               insuranceServiceId: insuranceServiceId
+               insuranceServiceId: row.insuranceServiceId
             };
-            if (startDate === null) {
+            if (row.startDate === null) {
                const conf = {
                   headers: {},
                   params: {}
                };
-               Patch('appointment/' + listId, token, conf, {
+               Patch('appointment/' + row.id, token, conf, {
                   startDate: new Date()
                });
             }
             if (type === 0) {
                data['usageType'] = 'OUT';
-               data['appointmentId'] = listId;
-               data['cabinetId'] = cabinetId;
+               data['appointmentId'] = row.id;
+               data['cabinetId'] = row.cabinetId;
+               data['deparmentId'] = row.cabinet?.parentId;
             } else if (type === 1) {
                data['usageType'] = 'OUT';
-               data['appointmentId'] = listId;
-               data['cabinetId'] = cabinetId;
+               data['appointmentId'] = row.id;
+               data['cabinetId'] = row.cabinetId;
             } else if (type === 2) {
                data['usageType'] = 'IN';
-               data['inpatientRequestId'] = listId;
-               data['dapartmentId'] = cabinetId;
+               data['inpatientRequestId'] = row.id;
+               data['dapartmentId'] = row.inDepartmentId;
             }
             dispatch(setEmrData(data));
             navigate(`/emr`, {
@@ -542,16 +534,7 @@ function Index({ type, isDoctor }) {
                      }}
                      onClick={() => {
                         isDoctor
-                           ? getEMR(
-                                row.id,
-                                row.patientId,
-                                type === 2 ? row.inDepartmentId : row.cabinetId,
-                                type === 2 ? 1 : row.inspectionType,
-                                row.isPayment || row.isInsurance,
-                                row.process,
-                                row.startDate,
-                                row.insuranceServiceId
-                             )
+                           ? getEMR(row)
                            : getENR(
                                 row.id,
                                 row.patientId,
@@ -703,18 +686,7 @@ function Index({ type, isDoctor }) {
                   }}
                   onClick={() => {
                      isDoctor
-                        ? getEMR(
-                             row.id,
-                             row.patientId,
-                             type === 2 ? row.inDepartmentId : row.cabinetId,
-                             // row.cabinetId,
-                             // row.inspectionType,
-                             type === 2 ? 1 : row.inspectionType,
-                             row.isPayment || row.isInsurance,
-                             row.process,
-                             row.startDate,
-                             row.insuranceServiceId
-                          )
+                        ? getEMR(row)
                         : getENR(
                              row.id,
                              row.patientId,

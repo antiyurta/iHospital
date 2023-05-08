@@ -305,7 +305,7 @@ function DynamicContent({
                            </Divider>
                            <Diagnose
                               handleClick={DiagnoseHandleClick}
-                              type={0}
+                              types={[0, 1, 2]}
                            />
                         </>
                      ) : null}

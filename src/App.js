@@ -180,6 +180,10 @@ const HicsLists = React.lazy(() =>
 const DocumentUpload = React.lazy(() =>
    import('./components/pages/611/Document/DocumentUpload')
 );
+const DocForRoleList = React.lazy(() =>
+   import('./components/pages/611/DocForRoleList')
+);
+
 const Privacy = React.lazy(() => import('./privacy/Index'));
 //
 
@@ -193,6 +197,7 @@ function App() {
                   <Route path="/privacy" element={<Privacy />} />
                   <Route element={<Main />}>
                      <Route path="*" element={<NotFound />} />
+                     <Route path="/docforlist" element={<DocForRoleList />} />
                      <Route
                         path="/home"
                         element={

@@ -1,5 +1,5 @@
-import { Button, Card } from 'antd';
-import React, { useState } from 'react';
+import { Button, Card, Divider, Tabs, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
 import BodyConditionSheet from './BeforeInPatientTabs/BodyConditionSheet';
 import NursingNote from './BeforeInPatientTabs/NursingNote';
 import PainAssessment from './BeforeInPatientTabs/PainAssessment';
@@ -12,7 +12,11 @@ import InputOutput from './BeforeInPatientTabs/InputOutput';
 import VasculerTube from './BeforeInPatientTabs/VasculerTube';
 import Acting from './BeforeInPatientTabs/Acting';
 import NursingLog from './BeforeInPatientTabs/NursingLog';
-
+import { Get } from '../../comman';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../../../features/authReducer';
+const { CheckableTag } = Tag;
+import Customized from './Customized/Index';
 function BeforeInPatientTabs({
    patientId,
    listId,
@@ -20,10 +24,33 @@ function BeforeInPatientTabs({
    departmentName,
    departmentId
 }) {
+   const token = useSelector(selectCurrentToken);
+   const [documents, setDocuments] = useState([]);
    const [pageId, setPageId] = useState(Number);
+   const [selectedTag, setSelectedTag] = useState(Number);
+   const getDocuments = async () => {
+      console.log(departmentId);
+      const conf = {
+         headers: {},
+         params: {
+            usageType: 'IN',
+            documentType: 0,
+            structureId: departmentId
+         }
+      };
+      const response = await Get(
+         'organization/document-role/show',
+         token,
+         conf
+      );
+      setDocuments(response);
+   };
+   useEffect(() => {
+      getDocuments();
+   }, []);
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full pb-1">
+      <>
+         <div>
             <Card
                bordered={false}
                className="header-solid max-h-max rounded-md"
@@ -31,79 +58,128 @@ function BeforeInPatientTabs({
                   padding: 7
                }}
             >
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(1);
+               {documents?.map((item, index) => {
+                  return (
+                     <div key={index}>
+                        <div className="w-full">
+                           <div className="bg-[#1890ff] checkTag">
+                              {item.documents?.map((document, idx) => {
+                                 return (
+                                    <CheckableTag
+                                       key={idx}
+                                       checked={selectedTag === document.value}
+                                       onChange={() => {
+                                          setSelectedTag(document.value);
+                                       }}
+                                       className="text-white m-1"
+                                    >
+                                       {document.docName}
+                                    </CheckableTag>
+                                 );
+                              })}
+                           </div>
+                        </div>
+                     </div>
+                  );
+               })}
+            </Card>
+         </div>
+         <div>
+            <Card
+               bordered={false}
+               className="header-solid max-h-max rounded-md"
+               bodyStyle={{
+                  padding: 7
+               }}
+            >
+               <Customized
+                  selectedTag={selectedTag}
+                  structureId={departmentId}
+               />
+            </Card>
+         </div>
+         <div className="flex flex-wrap">
+            <div className="w-full pb-1">
+               <Card
+                  bordered={false}
+                  className="header-solid max-h-max rounded-md"
+                  bodyStyle={{
+                     padding: 7
                   }}
-                  className={pageId === 1 ? 'button-active m-1' : 'm-1'}
                >
-                  Cardex
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(2);
-                  }}
-                  className={pageId === 2 ? 'button-active m-1' : 'm-1'}
-               >
-                  Захиалга
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(3);
-                  }}
-                  className={pageId === 3 ? 'button-active m-1' : 'm-1'}
-               >
-                  VS
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(4);
-                  }}
-                  className={pageId === 4 ? 'button-active m-1' : 'm-1'}
-               >
-                  I/O
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(5);
-                  }}
-                  className={pageId === 5 ? 'button-active m-1' : 'm-1'}
-               >
-                  BST
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(6);
-                  }}
-                  className={pageId === 6 ? 'button-active m-1' : 'm-1'}
-               >
-                  Өвдөлтийн үнэлгээ
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(7);
-                  }}
-                  className={pageId === 7 ? 'button-active m-1' : 'm-1'}
-               >
-                  Биеийн байдлыг үнэлэх хуудас
-               </Button>
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(8);
-                  }}
-                  className={pageId === 8 ? 'button-active m-1' : 'm-1'}
-               >
-                  Сувилгааны тэмдэглэл
-               </Button>
-               {/* <Button
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(1);
+                     }}
+                     className={pageId === 1 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Cardex
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(2);
+                     }}
+                     className={pageId === 2 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Захиалга
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(3);
+                     }}
+                     className={pageId === 3 ? 'button-active m-1' : 'm-1'}
+                  >
+                     VS
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(4);
+                     }}
+                     className={pageId === 4 ? 'button-active m-1' : 'm-1'}
+                  >
+                     I/O
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(5);
+                     }}
+                     className={pageId === 5 ? 'button-active m-1' : 'm-1'}
+                  >
+                     BST
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(6);
+                     }}
+                     className={pageId === 6 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Өвдөлтийн үнэлгээ
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(7);
+                     }}
+                     className={pageId === 7 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Биеийн байдлыг үнэлэх хуудас
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(8);
+                     }}
+                     className={pageId === 8 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Сувилгааны тэмдэглэл
+                  </Button>
+                  {/* <Button
                   type="primary"
                   onClick={() => {
                      setPageId(9);
@@ -112,16 +188,16 @@ function BeforeInPatientTabs({
                >
                   Гарах үеийн эпикриз
                </Button> */}
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(10);
-                  }}
-                  className={pageId === 10 ? 'button-active m-1' : 'm-1'}
-               >
-                  Судасны гуурстай холбоотой тандалт
-               </Button>
-               {/* <Button
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(10);
+                     }}
+                     className={pageId === 10 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Судасны гуурстай холбоотой тандалт
+                  </Button>
+                  {/* <Button
                   type="primary"
                   onClick={() => {
                      setPageId(11);
@@ -130,68 +206,70 @@ function BeforeInPatientTabs({
                >
                   Acting
                </Button> */}
-               <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(12);
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(12);
+                     }}
+                     className={pageId === 12 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Nursing Log
+                  </Button>
+               </Card>
+            </div>
+            <div className="w-full pt-1">
+               {pageId === 4 && (
+                  <InputOutput
+                     PatientId={patientId}
+                     ListId={listId}
+                     PatientData={patientData}
+                  />
+               )}
+               {pageId === 8 && (
+                  <NursingNote
+                     PatientId={patientId}
+                     ListId={listId}
+                     PatientData={patientData}
+                  />
+               )}
+               {pageId === 10 && (
+                  <VasculerTube PatientData={patientData} ListId={listId} />
+               )}
+               <Card
+                  bordered={false}
+                  className="header-solid max-h-max rounded-md"
+                  bodyStyle={{
+                     padding: 7
                   }}
-                  className={pageId === 12 ? 'button-active m-1' : 'm-1'}
                >
-                  Nursing Log
-               </Button>
-            </Card>
-         </div>
-         <div className="w-full pt-1">
-            {pageId === 4 && (
-               <InputOutput
-                  PatientId={patientId}
-                  ListId={listId}
-                  PatientData={patientData}
-               />
-            )}
-            {pageId === 8 && (
-               <NursingNote
-                  PatientId={patientId}
-                  ListId={listId}
-                  PatientData={patientData}
-               />
-            )}
-            {pageId === 10 && (
-               <VasculerTube PatientData={patientData} ListId={listId} />
-            )}
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               bodyStyle={{
-                  padding: 7
-               }}
-            >
-               {pageId === 1 && (
-                  <Cardex PatientId={patientId} ListId={listId} />
-               )}
-               {pageId === 2 && (
-                  <MedicineRequests PatientId={patientId} ListId={listId} />
-               )}
-               {pageId === 3 && (
-                  <VitalSign
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )}
-               {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
-               {pageId === 6 && (
-                  <PainAssessment PatientId={patientId} ListId={listId} />
-               )}
-               {pageId === 7 && (
-                  <BodyConditionSheet
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )}
+                  {pageId === 1 && (
+                     <Cardex PatientId={patientId} ListId={listId} />
+                  )}
+                  {pageId === 2 && (
+                     <MedicineRequests PatientId={patientId} ListId={listId} />
+                  )}
+                  {pageId === 3 && (
+                     <VitalSign
+                        PatientId={patientId}
+                        ListId={listId}
+                        PatientData={patientData}
+                     />
+                  )}
+                  {pageId === 5 && (
+                     <BST PatientId={patientId} ListId={listId} />
+                  )}
+                  {pageId === 6 && (
+                     <PainAssessment PatientId={patientId} ListId={listId} />
+                  )}
+                  {pageId === 7 && (
+                     <BodyConditionSheet
+                        PatientId={patientId}
+                        ListId={listId}
+                        PatientData={patientData}
+                     />
+                  )}
 
-               {/* {pageId === 9 && (
+                  {/* {pageId === 9 && (
                   <Epicriz
                      PatientId={patientId}
                      ListId={listId}
@@ -199,23 +277,24 @@ function BeforeInPatientTabs({
                   />
                )} */}
 
-               {/* {pageId === 11 && (
+                  {/* {pageId === 11 && (
                   <Acting
                      PatientData={patientData}
                      ListId={listId}
                      DepartmentId={departmentId}
                   />
                )} */}
-               {pageId === 12 && (
-                  <NursingLog
-                     PatientData={patientData}
-                     ListId={listId}
-                     DepartmentId={departmentId}
-                  />
-               )}
-            </Card>
+                  {pageId === 12 && (
+                     <NursingLog
+                        PatientData={patientData}
+                        ListId={listId}
+                        DepartmentId={departmentId}
+                     />
+                  )}
+               </Card>
+            </div>
          </div>
-      </div>
+      </>
    );
 }
 export default BeforeInPatientTabs;

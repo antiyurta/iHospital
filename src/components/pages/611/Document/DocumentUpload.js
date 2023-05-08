@@ -1,111 +1,278 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Upload } from 'antd';
+import {
+   DeleteOutlined,
+   EditOutlined,
+   LoadingOutlined,
+   PlusOutlined
+} from '@ant-design/icons';
+import {
+   Button,
+   Card,
+   Form,
+   Input,
+   Modal,
+   Popconfirm,
+   Select,
+   Upload
+} from 'antd';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { DefualtGet } from '../../../comman';
-import { ReturnById, ReturnDetails } from './Index';
+import { DefualtGet, Get, Patch, Post } from '../../../comman';
+import { ReturnById, ReturnDetails, ReturnAll } from './Index';
+//
+import Index4 from '../../FormBuilder/FBuilder/index4';
+//
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
+const { Option } = Select;
+const { TextArea } = Input;
+
+const typeSelectData = [
+   {
+      label: 'Гарчиг',
+      value: 'title'
+   },
+   {
+      label: 'DropDown',
+      value: 'dropdown'
+   },
+   {
+      label: 'INPUT',
+      value: 'input'
+   },
+   {
+      label: 'TEXTAREA',
+      value: 'textarea'
+   },
+   {
+      label: 'RADIO',
+      value: 'radio'
+   },
+   {
+      label: 'CHECKBOX',
+      value: 'checkbox'
+   }
+];
+const basisRule = [
+   {
+      required: true,
+      message: 'Заавал'
+   }
+];
+const options = [
+   {
+      name: 'type',
+      label: 'Төрөл',
+      rules: basisRule,
+      type: 'select',
+      selectData: typeSelectData
+   },
+   {
+      name: 'label',
+      label: 'Асуумж',
+      rules: basisRule,
+      type: 'textarea'
+   }
+];
+
 function DocumentUpload() {
    const token = useSelector(selectCurrentToken);
+   const [form] = Form.useForm();
+   const [selectedId, setSelectedId] = useState(Number);
+   const [editMode, setEditMode] = useState(false);
+   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+   const [searchField, setSearchField] = useState('');
+   const [documentForms, setDocumentForms] = useState([]);
+   //
+   const [documents, setDocuments] = useState(ReturnAll());
    const [isOpen, setIsOpen] = useState(false);
    const [loading, setLoading] = useState(false);
    const [jsFilePath, setJsFilePath] = useState('');
    const [uploadForm] = Form.useForm();
    const [dd, setdd] = useState(false);
-   const [comp, setComp] = useState(
-      `<div class="page"><div class="subpage"></div></div>`
-   );
-   const headers = {
-      Authorization: `Bearer ${token}`,
-      'x-api-key': API_KEY
+   //
+   const openModal = (state, row) => {
+      if (row != null) {
+         setSelectedId(row.id);
+         form.setFieldsValue(row);
+      }
+      setEditMode(state);
+      setIsOpenEditModal(true);
    };
-   const beforeUpload = (file) => {
-      console.log(file);
-      const jsFile = file.type === 'application/pdf';
-      if (!jsFile) {
-         message.error('JS File байх');
+   const HandleChangeTest = (panelName, optionName, name) => {
+      console.log(panelName, optionName, name);
+      const formData = form.getFieldsValue();
+      const type = form.getFieldValue([
+         panelName,
+         optionName,
+         'options',
+         name,
+         'type'
+      ]);
+      console.log(type);
+      if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
+         formData[panelName][optionName].options[name] = {
+            type: type,
+            value: '',
+            options: [{ label: '' }]
+         };
+      } else {
+         formData[panelName][optionName].options[name] = {
+            type: type,
+            value: ''
+         };
       }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-         message.error('2MB бага байна');
-      }
-      return jsFile && isLt2M;
+      form.setFieldsValue(formData);
    };
-   const handleChange = (info) => {
-      if (info.file.status === 'uploading') {
-         setLoading(true);
-         return;
-      }
-      if (info.file.status === 'done') {
-         setJsFilePath(info.file.response.response.id);
-         setLoading(false);
-      }
-   };
-   const uploadButton = (
-      <div>
-         {loading ? <LoadingOutlined /> : <PlusOutlined />}
-         <div
-            style={{
-               marginTop: 8
-            }}
-         >
-            Зураг оруулах
-         </div>
-      </div>
-   );
-   const getDocumentById = async (id) => {
+   const onFinish = async (values) => {
       const conf = {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet('global-files/' + id, token, conf);
-      console.log(response);
-      setComp(response);
-      setdd(true);
+      if (editMode) {
+         const response = await Patch(
+            'organization/document-form/' + selectedId,
+            token,
+            conf,
+            values
+         );
+         if (response === 200) {
+            form.resetFields();
+            setIsOpenEditModal(false);
+         }
+      } else {
+         const response = await Post(
+            'organization/document-form',
+            token,
+            conf,
+            values
+         );
+         if (response === 201) {
+            form.resetFields();
+            setIsOpenEditModal(false);
+         }
+      }
    };
-   const UploadDocument = (values) => {
-      console.log(values);
+   const getDocumentForms = async () => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('organization/document-form', token, conf);
+      setDocumentForms(response.data);
    };
-   const handleChange2 = (values) => {
-      uploadForm.setFieldValue('ids', values);
-   };
+   const filteredForm = documentForms.filter((form) => {
+      return form.name.toLowerCase().includes(searchField.toLowerCase());
+   });
+   useEffect(() => {
+      getDocumentForms();
+   }, []);
    return (
       <>
-         <Button onClick={() => setIsOpen(true)}>sdas</Button>
-         <Button onClick={() => getDocumentById(5)}>asdasdsa</Button>
-         <ReturnById id={1} />
-         <ReturnDetails />
-         <ul>
-            <li>A41</li>
-            <li>uploads\\documents\\68f11a4e1ba3d81d54724d82edd388bf</li>
-            <li>uploads\documents\17489c7e2e398a3adb937852b9c05ce4</li>
-            <li></li>
-         </ul>
+         <div className="flex flex-wrap">
+            <div className="w-full md:w-1/2">
+               <div className="mx-3">
+                  <Input
+                     placeholder="Хайх"
+                     allowClear
+                     onChange={(e) => setSearchField(e.target.value)}
+                  />
+               </div>
+            </div>
+            <div className="w-full md:w-1/2">
+               <div className="mx-3">
+                  <Button
+                     type="primary"
+                     htmlType="submit"
+                     onClick={() => openModal(false, null)}
+                  >
+                     Нэмэх
+                  </Button>
+               </div>
+            </div>
+         </div>
+         <div className="grid grid-cols-4 gap-3 m-3">
+            {filteredForm?.map((form, index) => {
+               return (
+                  <Card
+                     key={index}
+                     className="custom-card"
+                     title={
+                        <>
+                           <p>{form?.name}</p>
+                        </>
+                     }
+                     size="small"
+                     extra={
+                        <div className="inline-flex">
+                           <div className="px-2">
+                              <EditOutlined
+                                 style={{
+                                    color: 'blue',
+                                    fontSize: '18px'
+                                 }}
+                                 onClick={() => openModal(true, form)}
+                              />
+                           </div>
+                           <div className="px-2">
+                              <Popconfirm
+                                 title="Устгасан тохиолдолд сэргээх боломжгүй"
+                                 onConfirm={() => deleteForm(form.id)}
+                                 okText="Тийм"
+                                 cancelText="Үгүй"
+                              >
+                                 <DeleteOutlined
+                                    style={{
+                                       color: 'red',
+                                       fontSize: '18px'
+                                    }}
+                                 />
+                              </Popconfirm>
+                           </div>
+                        </div>
+                     }
+                  >
+                     {form.name}
+                  </Card>
+               );
+            })}
+         </div>
          <Modal
-            title="ASdasd"
-            open={isOpen}
-            onCancel={() => setIsOpen(false)}
+            title="Маягтын асуумж"
+            open={isOpenEditModal}
+            onCancel={() => setIsOpenEditModal(false)}
             onOk={() =>
-               uploadForm.validateFields().then((values) => {
-                  UploadDocument(values);
+               form.validateFields().then((values) => {
+                  onFinish(values);
                })
             }
+            width="70%"
          >
-            <Form form={uploadForm}>
-               <Upload
-                  maxCount={1}
-                  action={`${DEV_URL}global-files/document-upload`}
-                  headers={headers}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-               >
-                  {uploadButton}
-               </Upload>
-               <Form.Item name="ids" label="sdsa">
-                  <ReturnDetails handleChange={handleChange2} />
+            <Form form={form} layout="vertical">
+               <Form.Item label="Form name Нэр" name="name">
+                  <Input />
                </Form.Item>
+               <Form.Item label="Холбогдох маягт" name="documentValue">
+                  <Select>
+                     {documents?.map((document, index) => {
+                        return (
+                           <Option key={index} value={document.value}>
+                              {document.label}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+               <div
+                  className="rounded-md"
+                  style={{ backgroundColor: '#fafafa' }}
+               >
+                  <Index4
+                     options={options}
+                     namePanel={'documentForm'}
+                     handleChange={HandleChangeTest}
+                  />
+               </div>
             </Form>
          </Modal>
       </>

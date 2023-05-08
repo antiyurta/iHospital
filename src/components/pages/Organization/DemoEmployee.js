@@ -12,7 +12,6 @@ import {
    Input,
    Modal,
    Switch,
-   Cascader,
    Select,
    DatePicker,
    Pagination
@@ -27,7 +26,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 const { Search } = Input;
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 
 function DemoEmployee() {
    const token = useSelector(selectCurrentToken);
@@ -111,10 +110,17 @@ function DemoEmployee() {
       config.params.type = null;
    };
    const selectDepartment = async (value) => {
-      config.params.parentId = value;
+      config.params.parentId = value?.toString();
       config.params.type = 1;
       const response = await Get('organization/structure', token, config);
-      setPositions(response.data);
+      if (response?.data?.length > 0) {
+         var result = response.data.reduce(function (r, a) {
+            r[a.parentId] = r[a.parentId] || [];
+            r[a.parentId].push(a);
+            return r;
+         }, Object.create(null));
+         setPositions(result);
+      }
       config.params.parentId = null;
       config.params.type = null;
    };
@@ -143,6 +149,10 @@ function DemoEmployee() {
       if (response.data.length != 0) {
          setMoblie(response.data);
       }
+   };
+   const getByIdStructureName = (parentId) => {
+      const name = departments?.find((e) => e.id === parseInt(parentId))?.name;
+      return name;
    };
    const connectFinance = async (el) => {
       data.clid = el.id;
@@ -602,10 +612,7 @@ function DemoEmployee() {
                            }
                         ]}
                      >
-                        <Select
-                           mode="multiple"
-                           // onChange={selectDepartment}
-                        >
+                        <Select mode="multiple" onChange={selectDepartment}>
                            {departments.map((department, index) => {
                               return (
                                  <Option key={index} value={department.id}>
@@ -619,7 +626,7 @@ function DemoEmployee() {
                   <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Албан Тушаал"
-                        name="appId"
+                        name="appIds"
                         rules={[
                            {
                               required: true,
@@ -627,14 +634,29 @@ function DemoEmployee() {
                            }
                         ]}
                      >
-                        <Select>
-                           {positions.map((position, index) => {
-                              return (
-                                 <Option key={index} value={position.id}>
-                                    {position.name}
-                                 </Option>
-                              );
-                           })}
+                        <Select mode="multiple">
+                           {Object.entries(positions)?.map(
+                              ([key, value], index) => {
+                                 return (
+                                    <OptGroup
+                                       key={index}
+                                       label={getByIdStructureName(key)}
+                                    >
+                                       {value?.length != undefined &&
+                                          value?.map((option, idx) => {
+                                             return (
+                                                <Option
+                                                   key={`${index}-${idx}`}
+                                                   value={option.id}
+                                                >
+                                                   {option.name}
+                                                </Option>
+                                             );
+                                          })}
+                                    </OptGroup>
+                                 );
+                              }
+                           )}
                         </Select>
                      </Form.Item>
                   </div>
