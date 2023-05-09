@@ -19,9 +19,8 @@ function Position() {
    const [departments, setDepartments] = useState([]);
    const getDepartment = async () => {
       config.params.types = '2,0';
-      config.params.isAll = true;
       const response = await Get('organization/structure', token, config);
-      setDepartments(response);
+      setDepartments(response.data);
    };
 
    useEffect(() => {

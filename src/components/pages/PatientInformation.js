@@ -11,11 +11,16 @@ import {
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import male from '../../assets/images/maleAvatar.svg';
-import { selectCurrentToken } from '../../features/authReducer';
+import {
+   selectCurrentAppId,
+   selectCurrentToken
+} from '../../features/authReducer';
 import { Get, openNofi } from '../comman';
 import { SnippetsOutlined } from '@ant-design/icons';
 import AMIndex from './EMR/InPatient/document/Ambulatory/Index';
 import { ReturnById, ReturnDetails } from './611/Document/Index';
+
+import Customized from './BeforeAmbulatory/Customized/Index';
 
 const { Search } = Input;
 
@@ -28,11 +33,14 @@ function PatientInformation({
    deparmentId
 }) {
    const token = useSelector(selectCurrentToken);
+   const AppIds = useSelector(selectCurrentAppId);
    const [citizens, setCitizens] = useState([]);
    const [provices, setProvices] = useState([]);
    const [towns, setTowns] = useState([]);
    //
    const [documents, setDocuments] = useState([]);
+   const [isLoadingGetDocuments, setIsLoadingGetDocuments] = useState(false);
+   const [documentSearchValue, setDocumentSearchValue] = useState('');
    const [documentId, setDocumentId] = useState(Number);
    const [isOpenAM, setIsOpenAM] = useState(false);
    const [isOpenHistory, setIsOpenHistory] = useState(false);
@@ -142,11 +150,14 @@ function PatientInformation({
       setTowns(response.data);
    };
    const getDocuments = async () => {
+      setIsLoadingGetDocuments(true);
       const conf = {
          headers: {},
          params: {
+            employeePositionIds: AppIds,
             structureId: deparmentId,
-            usageType: 'OUT'
+            usageType: 'OUT',
+            documentType: 0
          }
       };
       const response = await Get(
@@ -157,10 +168,22 @@ function PatientInformation({
       if (response?.length === 0) {
          openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
       } else {
-         setDocuments(response);
+         var data = [];
+         response?.map((item) =>
+            item?.documents?.map((document) => {
+               data.push(document);
+            })
+         );
+         setDocuments(data);
          setIsOpenAM(true);
       }
+      setIsLoadingGetDocuments(false);
    };
+   const filteredDocument = documents.filter((document) => {
+      return document.label
+         .toLowerCase()
+         .includes(documentSearchValue.toLowerCase());
+   });
    useEffect(() => {
       getCitizens();
       getProvices();
@@ -197,6 +220,7 @@ function PatientInformation({
                            // onClick={() => setIsOpenAM(true)}
                            onClick={() => getDocuments()}
                            className="ml-2"
+                           loading={isLoadingGetDocuments}
                            icon={<SnippetsOutlined />}
                         >
                            Маягт
@@ -280,83 +304,51 @@ function PatientInformation({
             footer={null}
          >
             <div className="flex flex-row gap-3">
-               <div className="flex flex-col gap-3 p-3 border-r-[2px]">
-                  <Input placeholder="Хайх" />
+               <div className="flex flex-col gap-3 p-3 border-r-[2px] w-[300px]">
+                  <Input
+                     placeholder="Хайх"
+                     value={documentSearchValue}
+                     onChange={(e) => setDocumentSearchValue(e.target.value)}
+                  />
                   <div>
                      <Table
                         rowKey={'value'}
+                        rowClassName="hover:cursor-pointer"
                         bordered
                         columns={[
                            {
                               title: 'ДТ',
-                              dataIndex: 'value',
-                              width: 40
+                              width: 40,
+                              dataIndex: 'value'
                            },
                            {
                               title: 'Нэр',
                               dataIndex: 'label',
-                              render: (_text, row) => {
-                                 console.log(row);
-                              }
+                              width: 100,
+                              className: 'whitespace-normal'
                            }
                         ]}
-                        dataSource={documents?.documents}
+                        scroll={{
+                           y: 3000
+                        }}
+                        onRow={(record, _rowIndex) => {
+                           return {
+                              onClick: () => {
+                                 setDocumentId(record.value);
+                              }
+                           };
+                        }}
+                        pagination={false}
+                        dataSource={filteredDocument}
                      />
                   </div>
-                  {documents?.map((option, index) => {
-                     return (
-                        <div key={index}>
-                           {option?.documents?.map((document, indx) => {
-                              return (
-                                 <Button
-                                    key={indx}
-                                    onClick={() =>
-                                       setDocumentId(document.value)
-                                    }
-                                 >
-                                    {document.label}
-                                 </Button>
-                              );
-                           })}
-                        </div>
-                     );
-                  })}
                </div>
-               <div className="m-auto">
-                  <ReturnById id={documentId} />
-               </div>
-            </div>
-            <div className="flex flex-wrap">
-               <div className="sm:w-full md:w-1/12 lg:w-1/12">
-                  <div
-                     style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '6px'
-                     }}
-                  >
-                     {documents?.map((option, index) => {
-                        return (
-                           <div key={index}>
-                              {option?.documents?.map((document, indx) => {
-                                 return (
-                                    <Button
-                                       key={indx}
-                                       onClick={() =>
-                                          setDocumentId(document.value)
-                                       }
-                                    >
-                                       {document.label}
-                                    </Button>
-                                 );
-                              })}
-                           </div>
-                        );
-                     })}
-                  </div>
-               </div>
-               <div className="sm:w-full md:w-11/12 lg:w-11/12">
-                  <ReturnById id={documentId} />
+               <div className="w-full">
+                  <Customized
+                     usageType={'OUT'}
+                     documentValue={documentId}
+                     structureId={deparmentId}
+                  />
                </div>
             </div>
          </Modal>

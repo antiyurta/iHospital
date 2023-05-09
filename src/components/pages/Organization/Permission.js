@@ -20,22 +20,18 @@ function Permission() {
    const getRoles = async () => {
       const conf = {
          headers: {},
-         params: {
-            isAll: true
-         }
+         params: {}
       };
       const response = await Get('reference/role', token, conf);
-      setRoles(response);
+      setRoles(response.data);
    };
    const getMenus = async () => {
       const conf = {
          headers: {},
-         params: {
-            isAll: true
-         }
+         params: {}
       };
       const response = await Get('reference/menu', token, conf);
-      setMenus(response);
+      setMenus(response.data);
    };
    const column = [
       {

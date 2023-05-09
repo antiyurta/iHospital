@@ -14,7 +14,7 @@ import {
 
 import EditableFormItem from './EditableFormItem';
 import { ReturnDetails } from '../Document/Index';
-import { Get, Post, openNofi } from '../../../comman';
+import { Get, Patch, Post, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 
@@ -25,10 +25,12 @@ function EditableTable(props) {
    const { documents, form, positions, add, remove } = props;
    const token = useSelector(selectCurrentToken);
    const [confForm] = Form.useForm();
+   const [editModePosition, setEditModePosition] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isOpenConfModal, setIsOpenConfModal] = useState(false);
    const [oldDocuments, setOldDocuments] = useState([]);
    const [documentForm, setDocumentForm] = useState({});
+   const [selectedStructureId, setSelectedStructureId] = useState(Number);
    const [selectedDocumentValue, setSelectDocumentValue] = useState(Number);
    const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]);
    const getPositionInfo = (positionId) => {
@@ -46,10 +48,33 @@ function EditableTable(props) {
       const documents = form.getFieldValue('documents');
       setOldDocuments(documents);
    };
+   const getDocumentOptions = async (
+      documentValue,
+      employeePositionIds,
+      structureId
+   ) => {
+      const conf = {
+         headers: {},
+         params: {
+            employeePositionIds: employeePositionIds,
+            documentValue: documentValue,
+            structureId: structureId
+         }
+      };
+      const response = await Get('organization/document-option', token, conf);
+      if (response.data?.length > 0) {
+         setEditModePosition(true);
+         response.data?.map((item) => {
+            confForm.setFieldValue(item.employeePositionId, item.formOptionIds);
+         });
+      }
+   };
    const getDocumentForm = async (index) => {
       const documentValue = form.getFieldValue(['documents', index, 'value']);
       const employeePositionIds = form.getFieldValue('employeePositionIds');
-      getPositionInfo(employeePositionIds[0]);
+      const structureId = form.getFieldValue('structureId');
+      getDocumentOptions(documentValue, employeePositionIds, structureId);
+      setSelectedStructureId(structureId);
       setSelectedEmployeeIds(employeePositionIds);
       setSelectDocumentValue(documentValue);
       const conf = {
@@ -68,6 +93,7 @@ function EditableTable(props) {
    };
    const confOnFinish = async (values) => {
       const data = {
+         structureId: selectedStructureId,
          documentValue: selectedDocumentValue,
          items: values
       };
@@ -75,13 +101,29 @@ function EditableTable(props) {
          headers: {},
          params: {}
       };
-      const response = await Post(
-         'organization/document-option/custom-all',
-         token,
-         conf,
-         data
-      );
-      console.log(response);
+      if (editModePosition) {
+         const response = await Patch(
+            'organization/document-option/update/custom',
+            token,
+            conf,
+            data
+         );
+         if (response === 200) {
+            confForm.resetFields();
+            setIsOpenConfModal(false);
+         }
+      } else {
+         const response = await Post(
+            'organization/document-option/custom-all',
+            token,
+            conf,
+            data
+         );
+         if (response === 201) {
+            confForm.resetFields();
+            setIsOpenConfModal(false);
+         }
+      }
    };
    return (
       <>

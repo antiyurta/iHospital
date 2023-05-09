@@ -7,7 +7,7 @@ export const auth = createSlice({
       lastName: null,
       token: null,
       depId: [],
-      appId: null,
+      appIds: [],
       userId: null,
       note: null,
       isInsurance: null,
@@ -27,10 +27,10 @@ export const auth = createSlice({
          state.depId = null;
       },
       setAppId: (state, action) => {
-         state.appId = action.payload;
+         state.appIds = action.payload;
       },
       DelAppId: (state) => {
-         state.appId = null;
+         state.appIds = null;
       },
       setUserId: (state, action) => {
          state.userId = action.payload;
@@ -89,7 +89,7 @@ export default auth.reducer;
 
 export const selectCurrentToken = (state) => state.authReducer.token;
 export const selectCurrentDepId = (state) => state.authReducer.depId;
-export const selectCurrentAppId = (state) => state.authReducer.appId;
+export const selectCurrentAppId = (state) => state.authReducer.appIds;
 export const selectCurrentUserId = (state) => state.authReducer.userId;
 export const selectCurrentFirstName = (state) => state.authReducer.firstName;
 export const selectCurrentLastName = (state) => state.authReducer.lastName;

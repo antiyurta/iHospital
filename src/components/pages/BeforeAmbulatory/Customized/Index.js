@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal } from 'antd';
+import { Button, Form, Modal, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { Get } from '../../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
+import {
+   selectCurrentAppId,
+   selectCurrentToken
+} from '../../../../features/authReducer';
 import FormRender from './FormRender';
-function Index({ selectedTag, structureId }) {
+import { PrinterOutlined } from '@ant-design/icons';
+function Index({ usageType, documentValue, structureId }) {
    const token = useSelector(selectCurrentToken);
+   const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
@@ -18,7 +23,7 @@ function Index({ selectedTag, structureId }) {
       const conf = {
          headers: {},
          params: {
-            documentValue: selectedTag
+            documentValue: documentValue
          }
       };
       const response = await Get('organization/document-form', token, conf);
@@ -30,16 +35,24 @@ function Index({ selectedTag, structureId }) {
       const conf = {
          headers: {},
          params: {
-            documentValue: selectedTag
+            structureId: structureId,
+            employeePositionIds: AppIds,
+            documentValue: documentValue
          }
       };
       const response = await Get('organization/document-option', token, conf);
       setDocumentOptions(response.data);
    };
    useEffect(() => {
-      getDocumentForm();
-      getDocumentOption();
-   }, [selectedTag]);
+      if (documentValue != 0) {
+         getDocumentForm();
+         getDocumentOption();
+         console.log('=------------->', documentValue);
+      }
+   }, [documentValue]);
+   if (documentValue === 0) {
+      return <Result title="Маягт сонгоно уу" />;
+   }
    return (
       <div>
          <div className="flow-root">
@@ -57,15 +70,26 @@ function Index({ selectedTag, structureId }) {
                   >
                      Бөглөх
                   </Button>
-                  <Button>Бөглөх</Button>
+                  <Button icon={<PrinterOutlined />}>Хэвлэх</Button>
                </div>
             </div>
             <div className="float-right">
                <Button>Сэргээх</Button>
             </div>
          </div>
-         <div className="w-full">
-            <ReturnById type={false} id={selectedTag} />
+         <div
+            style={
+               usageType === 'OUT'
+                  ? {
+                       zoom: '50%'
+                    }
+                  : { width: '100%' }
+            }
+         >
+            <ReturnById
+               type={usageType === 'OUT' ? true : false}
+               id={documentValue}
+            />
          </div>
          <Modal
             title="Маягт бөглөх"
@@ -95,13 +119,14 @@ function Index({ selectedTag, structureId }) {
                   return (
                      <Button
                         key={index}
+                        type="primary"
                         onClick={() => {
                            setSelectedOptionId(index);
                            setIsOpenSelectPositionModal(false);
                            setIsOpenFormModal(true);
                         }}
                      >
-                        {option.cabinet?.name}
+                        {option.structure?.name}
                      </Button>
                   );
                })}

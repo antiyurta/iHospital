@@ -86,15 +86,19 @@ const Main = () => {
       const conf = {
          headers: {},
          params: {
-            isAll: false,
             roleId: RoleId,
             userId: UserId
          }
       };
-      const response = await Get('organization/permission', token, conf);
-      if (response.length > 0) {
+      const response = await Get(
+         'organization/permission/role/user',
+         token,
+         conf
+      );
+      console.log(response);
+      if (response?.length > 0) {
          var menus = [];
-         response.map((menu, indx) => {
+         response?.map((menu, indx) => {
             if (menu.menu?.menus?.length > 0) {
                var children = [];
                menu.menu.menus.map((subMenu, idx) => {
@@ -163,6 +167,7 @@ const Main = () => {
    };
    useEffect(() => {
       getMenus();
+      console.log('-----<');
    }, []);
    return (
       <>

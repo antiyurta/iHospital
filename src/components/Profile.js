@@ -38,7 +38,7 @@ import { useCookies } from 'react-cookie';
 function Profile() {
    const token = useSelector(selectCurrentToken);
    const depId = useSelector(selectCurrentDepId);
-   const appId = useSelector(selectCurrentAppId);
+   const appIds = useSelector(selectCurrentAppId);
    const userId = useSelector(selectCurrentUserId);
    const roleId = useSelector(selectCurrentRoleId);
    const userFirstName = useSelector(selectCurrentFirstName);
@@ -64,8 +64,8 @@ function Profile() {
       if (depId === null) {
          dispatch(setDepId(response.employee?.depIds));
       }
-      if (appId === null) {
-         dispatch(setAppId(response.employee?.appId));
+      if (appIds === null) {
+         dispatch(setAppId(response.employee?.appIds));
       }
       if (userId === null) {
          dispatch(setUserId(response.employee?.id));

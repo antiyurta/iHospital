@@ -45,6 +45,7 @@ function DocForRoleList() {
       setSpinner(false);
    };
    const openModal = (state, row) => {
+      form.resetFields();
       if (row != null) {
          setSelectedId(row.id);
          form.setFieldsValue(row);
@@ -56,24 +57,22 @@ function DocForRoleList() {
       const conf = {
          headers: {},
          params: {
-            isAll: true,
             type: 1
          }
       };
       const response = await Get('organization/structure', token, conf);
-      setPositions(response);
-      setClonedPositions(response);
+      setPositions(response.data);
+      setClonedPositions(response.data);
    };
    const getStructures = async () => {
       const conf = {
          headers: {},
          params: {
-            isAll: true,
             types: '0,2'
          }
       };
       const response = await Get('organization/structure', token, conf);
-      setStructures(response);
+      setStructures(response.data);
    };
    const getByIdStructureName = (parentId) => {
       const name = structures?.find((e) => e.id === parseInt(parentId))?.name;
@@ -178,8 +177,10 @@ function DocForRoleList() {
                return 'Маягт';
             } else if (text === 1) {
                return 'Бүртгэл';
-            } else {
+            } else if (text === 2) {
                return 'Мэдээлэх хуудас';
+            } else {
+               return 'Зөвшөөрлийн хуудас';
             }
          }
       },
@@ -370,6 +371,7 @@ function DocForRoleList() {
                      <Option value={0}>Маягт</Option>
                      <Option value={1}>Бүртгэл</Option>
                      <Option value={2}>Мэдээлэх хуудас</Option>
+                     <Option value={3}>Зөвшөөрлийн хуудас</Option>
                   </Select>
                </Form.Item>
                <Form.Item

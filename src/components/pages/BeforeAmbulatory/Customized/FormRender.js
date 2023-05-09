@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Form, Input } from 'antd';
+import { Checkbox, Divider, Form, Input } from 'antd';
 
 function FormRender({ form, formOptionIds }) {
    const Render = ({ form, optionId }) => {
@@ -17,6 +17,28 @@ function FormRender({ form, formOptionIds }) {
                         className="mb-0"
                      >
                         <Input />
+                     </Form.Item>
+                  </div>
+               </div>
+            );
+         } else if (data.type === 'checkbox') {
+            return (
+               <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+                  <div className="inline-flex p-1">
+                     <Form.Item
+                        label={data.value}
+                        name={data.keyWord}
+                        className="mb-0"
+                     >
+                        <Checkbox.Group>
+                           {data?.options?.map((option, index) => {
+                              return (
+                                 <Checkbox key={index} value={index}>
+                                    {option.label}
+                                 </Checkbox>
+                              );
+                           })}
+                        </Checkbox.Group>
                      </Form.Item>
                   </div>
                </div>

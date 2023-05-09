@@ -149,6 +149,7 @@ function DocumentUpload() {
          );
          if (response === 201) {
             form.resetFields();
+            getDocumentForms();
             setIsOpenEditModal(false);
          }
       }
@@ -184,7 +185,10 @@ function DocumentUpload() {
                   <Button
                      type="primary"
                      htmlType="submit"
-                     onClick={() => openModal(false, null)}
+                     onClick={() => {
+                        openModal(false, null);
+                        form.resetFields();
+                     }}
                   >
                      Нэмэх
                   </Button>
@@ -231,9 +235,7 @@ function DocumentUpload() {
                            </div>
                         </div>
                      }
-                  >
-                     {form.name}
-                  </Card>
+                  />
                );
             })}
          </div>
