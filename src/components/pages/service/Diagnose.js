@@ -9,7 +9,7 @@ import DiagnoseTypes from './DiagnoseTypes.json';
 const { Search } = Input;
 const { TextArea } = Input;
 const { Option } = Select;
-function Diagnose({ handleClick, type }) {
+function Diagnose({ handleClick, types }) {
    const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
@@ -33,7 +33,7 @@ function Diagnose({ handleClick, type }) {
       setLoading(true);
       config.params.page = page;
       config.params.limit = pageSize;
-      config.params.type = type;
+      config.params.types = types;
       if (e && v) {
          setParam(v);
          setParamValue(e);
@@ -47,7 +47,7 @@ function Diagnose({ handleClick, type }) {
    const add = (diagnose) => {
       const state = selectedDiagnoses.includes(diagnose);
       if (state) {
-         openNofi('warning', 'EXA', 'EXA сонгогдсон байна');
+         openNofi('warning', 'Анхааруулга', 'Онош сонгогдсон байна');
       } else {
          setSelectedDiagnoses([...selectedDiagnoses, diagnose]);
       }

@@ -9,23 +9,32 @@ function Room() {
    const [blocks, setBlocks] = useState([]);
    const [roomData, setRoomData] = useState([]);
    const [structures, setStructures] = useState([]);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const token = useSelector(selectCurrentToken);
 
    const getBlocks = async () => {
-      const response = await Get('organization/block', token, config);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('organization/block', token, conf);
       setBlocks(response.data);
    };
    const getFloor = async () => {
-      const response = await Get('organization/floor', token, config);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('organization/floor', token, conf);
       setRoomData(response.data);
    };
    const getStructures = async () => {
-      config.params.type = 2;
-      const response = await Get('organization/structure', token, config);
+      const conf = {
+         headers: {},
+         params: {
+            type: 2
+         }
+      };
+      const response = await Get('organization/structure', token, conf);
       setStructures(response.data);
    };
 

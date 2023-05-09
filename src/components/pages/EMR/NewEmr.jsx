@@ -227,6 +227,7 @@ class NewEmr extends React.Component {
                                     : false
                               }
                               type={this.state.type}
+                              deparmentId={this.props.IncomeEMRData.deparmentId}
                            />
                         </div>
                         <div className="pt-1">

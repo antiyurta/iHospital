@@ -18,11 +18,19 @@ function Permission() {
       setPermissions(response.data);
    };
    const getRoles = async () => {
-      const response = await Get('reference/role', token, config);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('reference/role', token, conf);
       setRoles(response.data);
    };
    const getMenus = async () => {
-      const response = await Get('reference/menu', token, config);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const response = await Get('reference/menu', token, conf);
       setMenus(response.data);
    };
    const column = [

@@ -12,7 +12,9 @@ import {
    selectCurrentLastName,
    selectCurrentFirstName,
    selectCurrentInsurance,
-   setInsurrance
+   setInsurrance,
+   setRoleId,
+   selectCurrentRoleId
 } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
@@ -36,12 +38,12 @@ import { useCookies } from 'react-cookie';
 function Profile() {
    const token = useSelector(selectCurrentToken);
    const depId = useSelector(selectCurrentDepId);
-   const appId = useSelector(selectCurrentAppId);
+   const appIds = useSelector(selectCurrentAppId);
    const userId = useSelector(selectCurrentUserId);
+   const roleId = useSelector(selectCurrentRoleId);
    const userFirstName = useSelector(selectCurrentFirstName);
    const userLastName = useSelector(selectCurrentLastName);
    const isInsurance = useSelector(selectCurrentInsurance);
-   console.log(':========>', isInsurance);
    const dispatch = useDispatch();
    const [profileForm] = Form.useForm();
    const [user, setUser] = useState([]);
@@ -62,11 +64,14 @@ function Profile() {
       if (depId === null) {
          dispatch(setDepId(response.employee?.depIds));
       }
-      if (appId === null) {
-         dispatch(setAppId(response.employee?.appId));
+      if (appIds === null) {
+         dispatch(setAppId(response.employee?.appIds));
       }
       if (userId === null) {
          dispatch(setUserId(response.employee?.id));
+      }
+      if (roleId === null) {
+         dispatch(setRoleId(response.roleId));
       }
       if (userLastName === null && userFirstName === null) {
          dispatch(
