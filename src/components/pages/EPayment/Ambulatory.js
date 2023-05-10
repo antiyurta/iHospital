@@ -1,13 +1,4 @@
-import {
-   Card,
-   Button,
-   Modal,
-   Select,
-   Pagination,
-   Table,
-   Result,
-   Spin
-} from 'antd';
+import { Card, Button, Modal, Select, Pagination, Table, Result, Spin } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -225,10 +216,7 @@ function Ambulatory() {
       <div>
          <div className="flex flex-wrap">
             <div className="w-full md:w-full xl:w-1/2 p-1">
-               <PatientInformation
-                  patient={selectedPatient}
-                  handlesearch={onSearch}
-               />
+               <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
             </div>
             <div className="w-full md:w-full xl:w-1/2 p-1">
                <Card
@@ -247,11 +235,7 @@ function Ambulatory() {
                >
                   <div className="flex flex-wrap">
                      <div className="w-full md:w-1/3 xl:1/3">
-                        <Button
-                           className="bg-[#2d8cff]"
-                           type="primary"
-                           onClick={() => setOrderModal(true)}
-                        >
+                        <Button className="bg-[#2d8cff]" type="primary" onClick={() => setOrderModal(true)}>
                            Оношилгоо шинжилгээ захиалах
                         </Button>
                      </div>
@@ -259,11 +243,7 @@ function Ambulatory() {
                </Card>
             </div>
             <div className="w-full p-1">
-               <Card
-                  bordered={false}
-                  className="header-solid max-h-max rounded-md"
-                  loading={cardLoading}
-               >
+               <Card bordered={false} className="header-solid max-h-max rounded-md" loading={cardLoading}>
                   <Table
                      rowKey={'id'}
                      bordered
@@ -298,19 +278,12 @@ function Ambulatory() {
          >
             <div className="flex flex-wrap">
                <div className="w-full md:w-1/2 p-1">
-                  <PatientInformation
-                     patient={selectedPatient}
-                     handlesearch={onSearchPayment}
-                  />
+                  <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
                </div>
                <div className="w-full md:w-1/2 p-1">
                   <Card
                      bordered={false}
-                     title={
-                        <h6 className="font-semibold m-0">
-                           Үйлчлүүлэгчийн Жагсаалт
-                        </h6>
-                     }
+                     title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
                      className="header-solid max-h-max rounded-md"
                      bodyStyle={{
                         paddingTop: 0,
@@ -327,13 +300,7 @@ function Ambulatory() {
                               current={notPatientsMeta.page}
                               pageSize={notPatientsMeta.limit}
                               total={notPatientsMeta.itemCount}
-                              onChange={(page, pageSize) =>
-                                 onSearchPayment(
-                                    page,
-                                    pageSize,
-                                    notPatientsValue
-                                 )
-                              }
+                              onChange={(page, pageSize) => onSearchPayment(page, pageSize, notPatientsValue)}
                            />
                         </>
                      }
@@ -361,11 +328,7 @@ function Ambulatory() {
             <div className="p-1">
                <Card
                   bordered={false}
-                  title={
-                     <h6 className="font-semibold m-0">
-                        Үйлчлүүлэгчийн Жагсаалт
-                     </h6>
-                  }
+                  title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
                   className="header-solid max-h-max rounded-md"
                   bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
                >

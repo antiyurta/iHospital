@@ -17,13 +17,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 const { CheckableTag } = Tag;
 import Customized from './Customized/Index';
-function BeforeInPatientTabs({
-   patientId,
-   listId,
-   patientData,
-   departmentName,
-   departmentId
-}) {
+function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, departmentId }) {
    const token = useSelector(selectCurrentToken);
    const [documents, setDocuments] = useState([]);
    const [pageId, setPageId] = useState(Number);
@@ -38,11 +32,7 @@ function BeforeInPatientTabs({
             structureId: departmentId
          }
       };
-      const response = await Get(
-         'organization/document-role/show',
-         token,
-         conf
-      );
+      const response = await Get('organization/document-role/show', token, conf);
       setDocuments(response);
    };
    useEffect(() => {
@@ -92,10 +82,7 @@ function BeforeInPatientTabs({
                   padding: 7
                }}
             >
-               <Customized
-                  selectedTag={selectedTag}
-                  structureId={departmentId}
-               />
+               <Customized usageType={'IN'} selectedTag={selectedTag} structureId={departmentId} />
             </Card>
          </div>
          <div className="flex flex-wrap">
@@ -218,23 +205,9 @@ function BeforeInPatientTabs({
                </Card>
             </div>
             <div className="w-full pt-1">
-               {pageId === 4 && (
-                  <InputOutput
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )}
-               {pageId === 8 && (
-                  <NursingNote
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )}
-               {pageId === 10 && (
-                  <VasculerTube PatientData={patientData} ListId={listId} />
-               )}
+               {pageId === 4 && <InputOutput PatientId={patientId} ListId={listId} PatientData={patientData} />}
+               {pageId === 8 && <NursingNote PatientId={patientId} ListId={listId} PatientData={patientData} />}
+               {pageId === 10 && <VasculerTube PatientData={patientData} ListId={listId} />}
                <Card
                   bordered={false}
                   className="header-solid max-h-max rounded-md"
@@ -242,31 +215,13 @@ function BeforeInPatientTabs({
                      padding: 7
                   }}
                >
-                  {pageId === 1 && (
-                     <Cardex PatientId={patientId} ListId={listId} />
-                  )}
-                  {pageId === 2 && (
-                     <MedicineRequests PatientId={patientId} ListId={listId} />
-                  )}
-                  {pageId === 3 && (
-                     <VitalSign
-                        PatientId={patientId}
-                        ListId={listId}
-                        PatientData={patientData}
-                     />
-                  )}
-                  {pageId === 5 && (
-                     <BST PatientId={patientId} ListId={listId} />
-                  )}
-                  {pageId === 6 && (
-                     <PainAssessment PatientId={patientId} ListId={listId} />
-                  )}
+                  {pageId === 1 && <Cardex PatientId={patientId} ListId={listId} />}
+                  {pageId === 2 && <MedicineRequests PatientId={patientId} ListId={listId} />}
+                  {pageId === 3 && <VitalSign PatientId={patientId} ListId={listId} PatientData={patientData} />}
+                  {pageId === 5 && <BST PatientId={patientId} ListId={listId} />}
+                  {pageId === 6 && <PainAssessment PatientId={patientId} ListId={listId} />}
                   {pageId === 7 && (
-                     <BodyConditionSheet
-                        PatientId={patientId}
-                        ListId={listId}
-                        PatientData={patientData}
-                     />
+                     <BodyConditionSheet PatientId={patientId} ListId={listId} PatientData={patientData} />
                   )}
 
                   {/* {pageId === 9 && (
@@ -285,11 +240,7 @@ function BeforeInPatientTabs({
                   />
                )} */}
                   {pageId === 12 && (
-                     <NursingLog
-                        PatientData={patientData}
-                        ListId={listId}
-                        DepartmentId={departmentId}
-                     />
+                     <NursingLog PatientData={patientData} ListId={listId} DepartmentId={departmentId} />
                   )}
                </Card>
             </div>

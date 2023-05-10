@@ -10,16 +10,12 @@ function VasculerTube({ PatientData, ListId }) {
             {
                label: 'Уян зүү',
                key: 0,
-               children: (
-                  <Index type={0} PatientData={PatientData} ListId={ListId} />
-               )
+               children: <Index type={0} PatientData={PatientData} ListId={ListId} />
             },
             {
                label: 'Төвийн веннийн гуурс',
                key: 1,
-               children: (
-                  <Index type={1} PatientData={PatientData} ListId={ListId} />
-               )
+               children: <Index type={1} PatientData={PatientData} ListId={ListId} />
             }
          ]}
       />

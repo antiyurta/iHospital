@@ -8,17 +8,10 @@ import signinbg from '../assets/images/background/front.svg';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-   login,
-   logout,
-   DelAppId,
-   DelDepId,
-   DelUserId,
-   DelUserInfo,
-   DelInsurrance
-} from '../features/authReducer';
+import { login, logout, DelAppId, DelDepId, DelUserId, DelUserInfo, DelInsurrance } from '../features/authReducer';
 import { openNofi } from './comman';
 import { useEffect, useState } from 'react';
+import jwtInterceopter from './jwtInterceopter';
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -44,7 +37,7 @@ function Login() {
    const dispatch = useDispatch();
    const navigate = useNavigate();
    const [loginLoading, setLoginLoading] = useState(false);
-   const onFinish = (values) => {
+   const onFinish = async (values) => {
       setLoginLoading(true);
       axios
          .post(process.env.REACT_APP_DEV_URL + 'authentication/login', values, {
@@ -53,6 +46,7 @@ function Login() {
          .then((response) => {
             if (response.status === 200) {
                dispatch(login(response.data.response.accessToken));
+               localStorage.setItem('tokens', JSON.stringify(response.data.response));
                navigate('/profile');
             }
          })
@@ -61,11 +55,7 @@ function Login() {
             if (err.code === 'ERR_NETWORK') {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
             } else if (err.response.status == 400) {
-               openNofi(
-                  'warning',
-                  'Нэвтрэх',
-                  'Нэвтрэх нэр эсвэл нууц үг буруу'
-               );
+               openNofi('warning', 'Нэвтрэх', 'Нэвтрэх нэр эсвэл нууц үг буруу');
             }
          })
          .finally(() => {
@@ -98,21 +88,12 @@ function Login() {
             </Header>
             <Content className="signin">
                <Row gutter={[24, 0]} justify="space-around">
-                  <Col
-                     xs={{ span: 24, offset: 0 }}
-                     lg={{ span: 6, offset: 2 }}
-                     md={{ span: 12 }}
-                  >
+                  <Col xs={{ span: 24, offset: 0 }} lg={{ span: 6, offset: 2 }} md={{ span: 12 }}>
                      <Title className="mb-15">Нэвтрэх</Title>
                      <Title className="font-regular text-muted" level={5}>
                         Нэвтрэх нэр болон Нууц үгээ оруулна уу
                      </Title>
-                     <Form
-                        onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
-                        layout="vertical"
-                        className="row-col"
-                     >
+                     <Form onFinish={onFinish} onFinishFailed={onFinishFailed} layout="vertical" className="row-col">
                         <Form.Item
                            className="username"
                            label="Нэвтрэх нэр"
@@ -137,19 +118,11 @@ function Login() {
                               }
                            ]}
                         >
-                           <Input.Password
-                              type="password"
-                              placeholder="Нууц үг"
-                           />
+                           <Input.Password type="password" placeholder="Нууц үг" />
                         </Form.Item>
 
                         <Form.Item>
-                           <Button
-                              loading={loginLoading}
-                              type="primary"
-                              htmlType="submit"
-                              style={{ width: '100%' }}
-                           >
+                           <Button loading={loginLoading} type="primary" htmlType="submit" style={{ width: '100%' }}>
                               Нэвтрэх
                            </Button>
                         </Form.Item>
@@ -170,9 +143,7 @@ function Login() {
                {/* <Menu mode="horizontal" className="menu-nav-social" items={MenuNav} /> */}
                <p className="copyright">
                   {' '}
-                  Copyright © 2023 by <a href="gurensoft.com">
-                     GurenSoft LLC
-                  </a>.{' '}
+                  Copyright © 2023 by <a href="gurensoft.com">GurenSoft LLC</a>.{' '}
                </p>
             </Footer>
          </Layout>

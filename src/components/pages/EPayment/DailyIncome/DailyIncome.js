@@ -1,8 +1,4 @@
-import {
-   EyeOutlined,
-   RollbackOutlined,
-   DownloadOutlined
-} from '@ant-design/icons';
+import { EyeOutlined, RollbackOutlined, DownloadOutlined } from '@ant-design/icons';
 import { Button, Card, DatePicker, Modal, Table } from 'antd';
 import moment from 'moment';
 import React, { useState, useRef, useEffect } from 'react';
@@ -114,12 +110,7 @@ function DailyIncome() {
          width: 50,
          render: (_, row) => {
             return (
-               <Button
-                  type="link"
-                  onClick={() => viewModal(row.id, false)}
-                  title="Харах"
-                  style={{ paddingRight: 5 }}
-               >
+               <Button type="link" onClick={() => viewModal(row.id, false)} title="Харах" style={{ paddingRight: 5 }}>
                   <EyeOutlined />
                </Button>
             );
@@ -130,12 +121,7 @@ function DailyIncome() {
          width: 50,
          render: (_, row) => {
             return (
-               <Button
-                  type="link"
-                  onClick={() => reload(row.id)}
-                  title="ТАТАХ"
-                  style={{ paddingRight: 5 }}
-               >
+               <Button type="link" onClick={() => reload(row.id)} title="ТАТАХ" style={{ paddingRight: 5 }}>
                   <DownloadOutlined />
                </Button>
             );
@@ -172,10 +158,7 @@ function DailyIncome() {
                   title="Өдрийн орлогийн тайлан"
                   extra={
                      <>
-                        <Button
-                           type="primary"
-                           onClick={() => setPrintOneDay(true)}
-                        >
+                        <Button type="primary" onClick={() => setPrintOneDay(true)}>
                            Өдрийн орлого
                         </Button>
                      </>
@@ -192,9 +175,7 @@ function DailyIncome() {
                            locale={mnMN}
                         />
                      </div>
-                     <div className="basis-1/3">
-                        {/* <p>Нийт : {totalAmount}</p> */}
-                     </div>
+                     <div className="basis-1/3">{/* <p>Нийт : {totalAmount}</p> */}</div>
                      <div className="w-full py-2">
                         <Table
                            rowKey={'id'}
@@ -213,8 +194,7 @@ function DailyIncome() {
                               pageSize: 10,
                               total: meta.itemCount,
                               current: meta.page,
-                              onChange: (page, pageSize) =>
-                                 getDailyIncome(page, pageSize, start, end)
+                              onChange: (page, pageSize) => getDailyIncome(page, pageSize, start, end)
                            }}
                         />
                      </div>
@@ -222,12 +202,7 @@ function DailyIncome() {
                </Card>
             </div>
          </div>
-         <Modal
-            open={ebarimtModal}
-            onCancel={() => setEbarimtModal(false)}
-            footer={null}
-            width="360px"
-         >
+         <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
             <EbarimtPrint props={ebarimtData} isBackPayment={isBackPayment} />
          </Modal>
          <Modal

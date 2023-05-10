@@ -63,10 +63,7 @@ const DepartmentBed = (props) => {
       // console.log("response", response);
       if (response.data.length != 0) {
          response.data.map((el, index) => {
-            setDepartment((department) => [
-               ...department,
-               { label: el.name, value: el.id }
-            ]);
+            setDepartment((department) => [...department, { label: el.name, value: el.id }]);
          });
       }
    };
@@ -77,10 +74,7 @@ const DepartmentBed = (props) => {
       // console.log("response InformationBed", response);
       if (response.data.length != 0) {
          response.data.map((el, index) => {
-            setRooms((rooms) => [
-               ...rooms,
-               { label: el.roomNumber, value: el.id, beds: el.beds }
-            ]);
+            setRooms((rooms) => [...rooms, { label: el.roomNumber, value: el.id, beds: el.beds }]);
          });
       }
    };
@@ -121,11 +115,7 @@ const DepartmentBed = (props) => {
 
    //Орон дээр хэвтэж буй өвчтөний мэдээлэл
    const getPatientInformationOfBed = async (bed_data) => {
-      const response = await Get(
-         `service/inpatient-request/bedPatient/${bed_data.id}`,
-         token,
-         config
-      );
+      const response = await Get(`service/inpatient-request/bedPatient/${bed_data.id}`, token, config);
       if (response) {
          setPatientInfoOfBed(response);
       } else {
@@ -155,10 +145,7 @@ const DepartmentBed = (props) => {
                el.beds.map((el, bedIndex) => {
                   if (el.status === 3) {
                      //Зөвхөн сул ор харуулах
-                     setBeds((beds) => [
-                        ...beds,
-                        { label: el.bedNumber, value: el.id }
-                     ]);
+                     setBeds((beds) => [...beds, { label: el.bedNumber, value: el.id }]);
                   }
                });
             }
@@ -175,12 +162,7 @@ const DepartmentBed = (props) => {
       } else {
          data.roomId = selectedBed.roomId;
          data.bedId = selectedBed.id;
-         const response = await Patch(
-            `service/inpatient-request/bed/${inpatient_request_id}`,
-            token,
-            config,
-            data
-         );
+         const response = await Patch(`service/inpatient-request/bed/${inpatient_request_id}`, token, config, data);
          if (response === 200) {
             getOrderedPatient();
             props.callFn(location?.pathname?.split('/').pop()); // Тасагийн ID current route -с авах
@@ -196,12 +178,7 @@ const DepartmentBed = (props) => {
       data.isOut = true;
       data.process = 2;
       data.bedId = selectedBed.id;
-      const response = await Patch(
-         `service/inpatient-request/bed/${inpatient_request_id}`,
-         token,
-         config,
-         data
-      );
+      const response = await Patch(`service/inpatient-request/bed/${inpatient_request_id}`, token, config, data);
       if (response === 200) {
          getOrderedPatient();
          props.callFn(location?.pathname?.split('/').pop()); // Тасагийн ID current route -с авах
@@ -231,12 +208,7 @@ const DepartmentBed = (props) => {
       data.bedOutId = selectedBed.id;
       data.bedInId = selectedNewBed;
       data.process = 2;
-      const response = await Patch(
-         `service/inpatient-request/switch/${inpatient_request_id}`,
-         token,
-         config,
-         data
-      );
+      const response = await Patch(`service/inpatient-request/switch/${inpatient_request_id}`, token, config, data);
       if (response === 200) {
          getOrderedPatient();
          props.callFn(location?.pathname?.split('/').pop()); // Тасагийн ID current route -с авах
@@ -291,9 +263,7 @@ const DepartmentBed = (props) => {
                {props.data?.rooms
                   ?.filter((obj) => obj.roomNumber.includes(searchValue))
                   ?.filter((obj) =>
-                     genderSearchValue === 'all'
-                        ? obj
-                        : obj.genderType && obj.genderType === genderSearchValue
+                     genderSearchValue === 'all' ? obj : obj.genderType && obj.genderType === genderSearchValue
                   ) //Өрөөний дугаараар хайх
                   .map((el, index) => {
                      return (
@@ -306,34 +276,19 @@ const DepartmentBed = (props) => {
                            >
                               <div style={{ width: '15%' }}>
                                  {el.genderType === 'WOMAN' ? (
-                                    <img
-                                       src={require('../../../assets/bed/female.png')}
-                                       style={styles.iconStyle}
-                                    />
+                                    <img src={require('../../../assets/bed/female.png')} style={styles.iconStyle} />
                                  ) : el.genderType === 'MAN' ? (
-                                    <img
-                                       src={require('../../../assets/bed/male.png')}
-                                       style={styles.iconStyle}
-                                    />
+                                    <img src={require('../../../assets/bed/male.png')} style={styles.iconStyle} />
                                  ) : (
-                                    <img
-                                       src={require('../../../assets/bed/empty_room.png')}
-                                       style={styles.iconStyle}
-                                    />
+                                    <img src={require('../../../assets/bed/empty_room.png')} style={styles.iconStyle} />
                                  )}
                               </div>
                               <div style={{ width: '85%' }}>
-                                 <div
-                                    style={styles.cardRowContainer}
-                                    className="mb-6"
-                                 >
+                                 <div style={styles.cardRowContainer} className="mb-6">
                                     <p style={styles.total}>
-                                       {el.roomNumber} -{' '}
-                                       {el.isVip ? 'VIP өрөө' : 'Энгийн өрөө'}
+                                       {el.roomNumber} - {el.isVip ? 'VIP өрөө' : 'Энгийн өрөө'}
                                     </p>
-                                    <p style={styles.total}>
-                                       Орны тоо: {el.beds.length}
-                                    </p>
+                                    <p style={styles.total}>Орны тоо: {el.beds.length}</p>
                                  </div>
                                  <div style={styles.statusRowContainer}>
                                     <Tag color="success" className="rounded-xl">
@@ -384,10 +339,8 @@ const DepartmentBed = (props) => {
                <div className="grid">
                   <span>Өрөөний мэдээлэл</span>
                   <span className="text-xs">
-                     <b>Тасаг</b>: {props.data?.name} <LineOutlined />{' '}
-                     <b>Өрөө:</b> {selectedRoomBeds?.roomNumber}{' '}
-                     <LineOutlined /> <b>Орны тоо:</b>{' '}
-                     {selectedRoomBeds?.beds?.length}
+                     <b>Тасаг</b>: {props.data?.name} <LineOutlined /> <b>Өрөө:</b> {selectedRoomBeds?.roomNumber}{' '}
+                     <LineOutlined /> <b>Орны тоо:</b> {selectedRoomBeds?.beds?.length}
                   </span>
                </div>
             }
@@ -408,20 +361,13 @@ const DepartmentBed = (props) => {
                   <>
                      {selectedRoomBeds.beds.map((el, index) => {
                         return (
-                           <Col
-                              className="gutter-row mb-4 text-center"
-                              span={6}
-                              key={index}
-                           >
+                           <Col className="gutter-row mb-4 text-center" span={6} key={index}>
                               <div
                                  style={{
                                     ...styles.bedContainer,
                                     ...{
                                        borderColor:
-                                          selectedBed.status === 3 &&
-                                          selectedBed.id === el.id
-                                             ? '#2d8cff'
-                                             : null
+                                          selectedBed.status === 3 && selectedBed.id === el.id ? '#2d8cff' : null
                                     }
                                  }}
                                  onClick={() => selectBed(el)}
@@ -462,19 +408,11 @@ const DepartmentBed = (props) => {
                   </div>
                )}
             </Row>
-            <Divider
-               orientation="left"
-               className="text-sm my-2"
-               style={{ color: '#2d8cff' }}
-            >
+            <Divider orientation="left" className="text-sm my-2" style={{ color: '#2d8cff' }}>
                Өвчтөний мэдээлэл
             </Divider>
             <Col className="gutter-row" span={24}>
-               <Card
-                  style={styles.cardStyle}
-                  className="rounded-xl"
-                  bodyStyle={styles.containerCardBodyStyle}
-               >
+               <Card style={styles.cardStyle} className="rounded-xl" bodyStyle={styles.containerCardBodyStyle}>
                   <div className="w-3/12 pl-4 font-bold">Нэр</div>
                   <div className="w-2/12 font-bold">Регистр</div>
                   <div className="w-2/12 font-bold">Картын дугаар</div>
@@ -485,12 +423,7 @@ const DepartmentBed = (props) => {
             <Col className="gutter-row mt-2" span={24}>
                {selectedBed.status === 0
                   ? patientInfoOfBed && (
-                       <Collapse
-                          accordion
-                          expandIconPosition="end"
-                          ghost
-                          className="bed-collapse"
-                       >
+                       <Collapse accordion expandIconPosition="end" ghost className="bed-collapse">
                           <Panel
                              header={
                                 <div
@@ -501,30 +434,17 @@ const DepartmentBed = (props) => {
                                    className="rounded-xl cursor-pointer"
                                 >
                                    <div className="w-3/12 pl-4">
-                                      {patientInfoOfBed.patient?.lastName?.substr(
-                                         0,
-                                         1
-                                      )}
-                                      . {patientInfoOfBed.patient?.firstName}
+                                      {patientInfoOfBed.patient?.lastName?.substr(0, 1)}.{' '}
+                                      {patientInfoOfBed.patient?.firstName}
                                    </div>
-                                   <div className="w-2/12 text-xs">
-                                      {patientInfoOfBed.patient?.registerNumber}
-                                   </div>
-                                   <div className="w-2/12">
-                                      {patientInfoOfBed.patient?.cardNumber}
-                                   </div>
+                                   <div className="w-2/12 text-xs">{patientInfoOfBed.patient?.registerNumber}</div>
+                                   <div className="w-2/12">{patientInfoOfBed.patient?.cardNumber}</div>
                                    <div className="w-1/12">
-                                      {patientInfoOfBed.patient?.genderType ===
-                                      'MAN'
-                                         ? 'Эр'
-                                         : 'Эм'}
+                                      {patientInfoOfBed.patient?.genderType === 'MAN' ? 'Эр' : 'Эм'}
                                    </div>
                                    <div className="w-3/12">
                                       {orderType.map((item, index) => {
-                                         if (
-                                            item.value ===
-                                            patientInfoOfBed.process
-                                         ) {
+                                         if (item.value === patientInfoOfBed.process) {
                                             return (
                                                <div key={index}>
                                                   <img
@@ -545,18 +465,13 @@ const DepartmentBed = (props) => {
                           >
                              <div>
                                 <div className="text-right">
-                                   <Button
-                                      className="mr-3"
-                                      onClick={() => setIsTransfer(!isTransfer)}
-                                   >
+                                   <Button className="mr-3" onClick={() => setIsTransfer(!isTransfer)}>
                                       Шилжүүлэх
                                    </Button>
                                    <Button
                                       type="primary"
                                       className="custom-primary-btn"
-                                      onClick={() =>
-                                         outPatientBed(patientInfoOfBed.id)
-                                      }
+                                      onClick={() => outPatientBed(patientInfoOfBed.id)}
                                    >
                                       Гаргах
                                    </Button>
@@ -602,9 +517,7 @@ const DepartmentBed = (props) => {
                                                   width: 200
                                                }}
                                                onChange={handleChangeBed}
-                                               value={
-                                                  selectedNewBed || undefined
-                                               }
+                                               value={selectedNewBed || undefined}
                                                options={beds}
                                                placeholder="Сонгох"
                                             />
@@ -619,11 +532,7 @@ const DepartmentBed = (props) => {
                                                }}
                                                type="primary"
                                                className="custom-primary-btn"
-                                               onClick={() =>
-                                                  transferPatient(
-                                                     patientInfoOfBed.id
-                                                  )
-                                               }
+                                               onClick={() => transferPatient(patientInfoOfBed.id)}
                                             >
                                                Хадгалах
                                             </Button>
@@ -638,13 +547,7 @@ const DepartmentBed = (props) => {
                   : orderedPatientList &&
                     orderedPatientList.map((el, index) => {
                        return (
-                          <Collapse
-                             accordion
-                             expandIconPosition="end"
-                             ghost
-                             className="bed-collapse"
-                             key={index}
-                          >
+                          <Collapse accordion expandIconPosition="end" ghost className="bed-collapse" key={index}>
                              <Panel
                                 header={
                                    <div
@@ -655,20 +558,11 @@ const DepartmentBed = (props) => {
                                       className="rounded-xl cursor-pointer"
                                    >
                                       <div className="w-3/12 pl-4">
-                                         {el.patient?.lastName?.substr(0, 1)}.{' '}
-                                         {el.patient?.firstName}
+                                         {el.patient?.lastName?.substr(0, 1)}. {el.patient?.firstName}
                                       </div>
-                                      <div className="w-2/12 text-xs">
-                                         {el.patient?.registerNumber}
-                                      </div>
-                                      <div className="w-2/12">
-                                         {el.patient?.cardNumber}
-                                      </div>
-                                      <div className="w-1/12">
-                                         {el.patient?.genderType === 'MAN'
-                                            ? 'Эр'
-                                            : 'Эм'}
-                                      </div>
+                                      <div className="w-2/12 text-xs">{el.patient?.registerNumber}</div>
+                                      <div className="w-2/12">{el.patient?.cardNumber}</div>
+                                      <div className="w-1/12">{el.patient?.genderType === 'MAN' ? 'Эр' : 'Эм'}</div>
                                       <div className="w-3/12">
                                          {orderType.map((item, index) => {
                                             if (item.value === el.process) {

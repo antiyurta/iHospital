@@ -1,9 +1,4 @@
-import {
-   FolderOpenOutlined,
-   FolderOutlined,
-   PrinterOutlined,
-   ReloadOutlined
-} from '@ant-design/icons';
+import { FolderOpenOutlined, FolderOutlined, PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Collapse, Divider, Image, Modal, Select, Spin } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
@@ -49,8 +44,7 @@ function Xrays({ PatientId }) {
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
             //Оноор бүлэглэх
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
             return r;
          }, Object.create(null));
@@ -101,11 +95,7 @@ function Xrays({ PatientId }) {
       });
    };
    const refresh = () => (
-      <Button
-         title="Сэргээх"
-         type="primary"
-         onClick={() => getPatientXrays(PatientId)}
-      >
+      <Button title="Сэргээх" type="primary" onClick={() => getPatientXrays(PatientId)}>
          <ReloadOutlined spin={spinner} />
       </Button>
    );
@@ -135,11 +125,7 @@ function Xrays({ PatientId }) {
                                  <Panel
                                     header={
                                        <div className="grid">
-                                          <span>
-                                             {moment(el.createdAt).format(
-                                                'YYYY-MM-DD HH:mm'
-                                             )}
-                                          </span>
+                                          <span>{moment(el.createdAt).format('YYYY-MM-DD HH:mm')}</span>
                                        </div>
                                     }
                                     key={value[index].id}
@@ -179,31 +165,15 @@ function Xrays({ PatientId }) {
                                  >
                                     <Divider>Зураг</Divider>
                                     {el.photos.map((photo, index) => {
-                                       return (
-                                          <Image
-                                             className="p-1"
-                                             key={index}
-                                             width={200}
-                                             src={photo.photoSrc}
-                                          />
-                                       );
+                                       return <Image className="p-1" key={index} width={200} src={photo.photoSrc} />;
                                     })}
                                     <Divider>Дүгнэлт</Divider>
-                                    {el.inspectionNotes != null &&
-                                       el.inspectionNotes != undefined && (
-                                          <>
-                                             <RenderNotesDetail
-                                                data={JSON.parse(
-                                                   el.inspectionNotes.conclusion
-                                                )}
-                                             />
-                                             <RenderNotesDetail
-                                                data={JSON.parse(
-                                                   el.inspectionNotes.advice
-                                                )}
-                                             />
-                                          </>
-                                       )}
+                                    {el.inspectionNotes != null && el.inspectionNotes != undefined && (
+                                       <>
+                                          <RenderNotesDetail data={JSON.parse(el.inspectionNotes.conclusion)} />
+                                          <RenderNotesDetail data={JSON.parse(el.inspectionNotes.advice)} />
+                                       </>
+                                    )}
                                  </Panel>
                               );
                            })}
@@ -223,12 +193,7 @@ function Xrays({ PatientId }) {
          >
             <FormXray printData={printData} />
          </Modal>
-         <Modal
-            open={isOpenModalImg}
-            onCancel={() => setIsOpenModalImg(false)}
-            width="60%"
-            footer={null}
-         >
+         <Modal open={isOpenModalImg} onCancel={() => setIsOpenModalImg(false)} width="60%" footer={null}>
             <XrayImg printImage={printImg} type={isSizeType} />
          </Modal>
       </>

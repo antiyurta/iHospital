@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs, Card, Row, Col, Modal, Table } from 'antd';
-import {
-   Chart as ChartJS,
-   CategoryScale,
-   LinearScale,
-   BarElement,
-   ArcElement,
-   Tooltip,
-   Legend,
-   Title
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -23,15 +14,7 @@ export default function Dashboard() {
       headers: {},
       params: {}
    };
-   ChartJS.register(
-      ArcElement,
-      Tooltip,
-      CategoryScale,
-      LinearScale,
-      BarElement,
-      Title,
-      Legend
-   );
+   ChartJS.register(ArcElement, Tooltip, CategoryScale, LinearScale, BarElement, Title, Legend);
    const dataEx = {
       labels: ['Сул', 'Засвартай', 'Дүүрсэн'],
       datasets: [
@@ -92,10 +75,7 @@ export default function Dashboard() {
                el =
                   e.countPatients +
                   ' / ' +
-                  e.totalAmount?.replace(
-                     /(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g,
-                     '$1,'
-                  ) +
+                  e.totalAmount?.replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,') +
                   ' ₮';
             }
          });
@@ -110,11 +90,7 @@ export default function Dashboard() {
          }
       };
       const getInvoiceDetail = async (type) => {
-         const response = await Get(
-            `report/service-detail/receipt?type=${type}`,
-            token,
-            config
-         );
+         const response = await Get(`report/service-detail/receipt?type=${type}`, token, config);
          if (response.length != 0) {
             // console.log("get InvoiceDetail=======>", response);
             response.map((el, index) => {
@@ -197,12 +173,7 @@ export default function Dashboard() {
                      key: index,
                      name: el.lastName?.substr(0, 1) + '. ' + el.firstName,
                      totalAmount:
-                        el.totalAmount
-                           ?.toString()
-                           ?.replace(
-                              /(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g,
-                              '$1,'
-                           ) + ' ₮',
+                        el.totalAmount?.toString()?.replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,') + ' ₮',
                      countPatients: el.countPatients
                   }
                ]);
@@ -219,14 +190,7 @@ export default function Dashboard() {
                   key: 'total',
                   name: <strong>Нийт</strong>,
                   totalAmount: (
-                     <strong>
-                        {total
-                           ?.toString()
-                           ?.replace(
-                              /(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g,
-                              '$1,'
-                           ) + ' ₮'}
-                     </strong>
+                     <strong>{total?.toString()?.replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1,') + ' ₮'}</strong>
                   ),
                   countPatients: <strong>{totalPatient}</strong>
                }
@@ -243,17 +207,10 @@ export default function Dashboard() {
                            style={styles.cardStyle}
                            className="rounded-xl cursor-pointer"
                            bodyStyle={styles.cardBodyStyle}
-                           onClick={() =>
-                              showModal(
-                                 2,
-                                 'Эмчилгээ үйлчлүүлэгч тоо, орлого дүн'
-                              )
-                           }
+                           onClick={() => showModal(2, 'Эмчилгээ үйлчлүүлэгч тоо, орлого дүн')}
                         >
                            <div style={{ width: '70%' }}>
-                              <p style={{ width: '80%' }}>
-                                 Эмчилгээ үйлчлүүлэгч тоо, орлого дүн
-                              </p>
+                              <p style={{ width: '80%' }}>Эмчилгээ үйлчлүүлэгч тоо, орлого дүн</p>
                               <p style={styles.total}>{calcTotal('2')}</p>
                            </div>
                            <div>
@@ -266,17 +223,10 @@ export default function Dashboard() {
                            style={styles.cardStyle}
                            className="rounded-xl cursor-pointer"
                            bodyStyle={styles.cardBodyStyle}
-                           onClick={() =>
-                              showModal(
-                                 1,
-                                 'Оношилгоо үйлчлүүлэгч тоо, орлого дүн'
-                              )
-                           }
+                           onClick={() => showModal(1, 'Оношилгоо үйлчлүүлэгч тоо, орлого дүн')}
                         >
                            <div style={{ width: '70%' }}>
-                              <p style={{ width: '80%' }}>
-                                 Оношилгоо үйлчлүүлэгч тоо, орлого дүн
-                              </p>
+                              <p style={{ width: '80%' }}>Оношилгоо үйлчлүүлэгч тоо, орлого дүн</p>
                               <p style={styles.total}>{calcTotal('1')}</p>
                            </div>
                            <div>
@@ -289,17 +239,10 @@ export default function Dashboard() {
                            style={styles.cardStyle}
                            className="rounded-xl cursor-pointer"
                            bodyStyle={styles.cardBodyStyle}
-                           onClick={() =>
-                              showModal(
-                                 0,
-                                 'Шинжилгээ үйлчлүүлэгч тоо, орлого дүн'
-                              )
-                           }
+                           onClick={() => showModal(0, 'Шинжилгээ үйлчлүүлэгч тоо, орлого дүн')}
                         >
                            <div style={{ width: '70%' }}>
-                              <p style={{ width: '80%' }}>
-                                 Шинжилгээ үйлчлүүлэгч тоо, орлого дүн
-                              </p>
+                              <p style={{ width: '80%' }}>Шинжилгээ үйлчлүүлэгч тоо, орлого дүн</p>
                               <p style={styles.total}>{calcTotal('0')}</p>
                            </div>
                            <div>
@@ -312,14 +255,10 @@ export default function Dashboard() {
                            style={styles.cardStyle}
                            className="rounded-xl cursor-pointer"
                            bodyStyle={styles.cardBodyStyle}
-                           onClick={() =>
-                              showModal(7, 'Багц үйлчлүүлэгч тоо, орлого дүн')
-                           }
+                           onClick={() => showModal(7, 'Багц үйлчлүүлэгч тоо, орлого дүн')}
                         >
                            <div style={{ width: '70%' }}>
-                              <p style={{ width: '80%' }}>
-                                 Багц үйлчлүүлэгч тоо, орлого дүн
-                              </p>
+                              <p style={{ width: '80%' }}>Багц үйлчлүүлэгч тоо, орлого дүн</p>
                               <p style={styles.total}>{calcTotal('7')}</p>
                            </div>
                            <div>
@@ -327,39 +266,19 @@ export default function Dashboard() {
                            </div>
                         </Card>
                      </Col>
-                     <Modal
-                        title={modalTitle}
-                        open={isModalOpen}
-                        footer={false}
-                        onCancel={handleCancel}
-                        width={1000}
-                     >
-                        <Table
-                           columns={columns}
-                           dataSource={tableData}
-                           loading={dataLoading}
-                        />
+                     <Modal title={modalTitle} open={isModalOpen} footer={false} onCancel={handleCancel} width={1000}>
+                        <Table columns={columns} dataSource={tableData} loading={dataLoading} />
                      </Modal>
                   </Row>
                   <Row gutter={[16, 16]} className="mt-4">
                      <Col className="gutter-row" span={12}>
-                        <Card
-                           title="Орлогын мэдээ"
-                           className="rounded-xl cursor-pointer"
-                        >
+                        <Card title="Орлогын мэдээ" className="rounded-xl cursor-pointer">
                            <Bar options={options} data={chart1Data} />
                         </Card>
                      </Col>
                      <Col className="gutter-row" span={12}>
-                        <Card
-                           title="Хамгийн их үйлчилгээ хийсэн"
-                           className="rounded-xl cursor-pointer"
-                        >
-                           <Table
-                              columns={columnsDoctor}
-                              dataSource={doctorData}
-                              loading={dataLoadingDoctor}
-                           />
+                        <Card title="Хамгийн их үйлчилгээ хийсэн" className="rounded-xl cursor-pointer">
+                           <Table columns={columnsDoctor} dataSource={doctorData} loading={dataLoadingDoctor} />
                         </Card>
                      </Col>
                   </Row>

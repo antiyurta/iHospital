@@ -40,8 +40,7 @@ function BeforeAmbulatoryDetail() {
       if (response.data.length > 0) {
          response.data.reduce(function (r, a) {
             //Оноор бүлэглэх
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
             getProblems(a.id);
             return r;
@@ -58,10 +57,7 @@ function BeforeAmbulatoryDetail() {
          var problem = [];
          response.inspectionNotes.map((note) => {
             problem.push({
-               doctorId:
-                  note.employees.lastName.substring(0, 1) +
-                  '.' +
-                  note.employees.firstName,
+               doctorId: note.employees.lastName.substring(0, 1) + '.' + note.employees.firstName,
                diagnose: JSON.parse(note.diagnose),
                inspectionDate: note.createdAt
             });
@@ -79,10 +75,7 @@ function BeforeAmbulatoryDetail() {
       <div>
          <div className="flex flex-wrap">
             <div className="w-full md:w-full xl:w-1/3 p-1">
-               <PatientInformation
-                  patient={selectedPatient}
-                  handlesearch={onSearch}
-               />
+               <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
             </div>
             <div className="w-full md:w-full xl:w-1/3 p-1">
                <Card
@@ -113,27 +106,12 @@ function BeforeAmbulatoryDetail() {
                            return (
                               <div key={idx} className="inline-flex">
                                  <p>{problem.doctorId}</p>
-                                 <ul
-                                    className="list-disc list-inside"
-                                    style={{ width: 600, paddingLeft: 10 }}
-                                 >
-                                    {problem?.diagnose?.map(
-                                       (diagnose, index) => {
-                                          return (
-                                             <li key={index}>
-                                                {diagnose.code +
-                                                   ' ' +
-                                                   diagnose.nameEn}
-                                             </li>
-                                          );
-                                       }
-                                    )}
+                                 <ul className="list-disc list-inside" style={{ width: 600, paddingLeft: 10 }}>
+                                    {problem?.diagnose?.map((diagnose, index) => {
+                                       return <li key={index}>{diagnose.code + ' ' + diagnose.nameEn}</li>;
+                                    })}
                                  </ul>
-                                 <p>
-                                    {moment(problem.inspectionDate).format(
-                                       'YYYY-MM-DD'
-                                    )}
-                                 </p>
+                                 <p>{moment(problem.inspectionDate).format('YYYY-MM-DD')}</p>
                               </div>
                            );
                         })

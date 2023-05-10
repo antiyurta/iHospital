@@ -37,10 +37,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
       <>
          <div className="page">
             <div className="subpage">
-               <p
-                  className="text-center py-4"
-                  style={{ fontSize: '15px', fontWeight: 'bold' }}
-               >
+               <p className="text-center py-4" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                   ЭМНЭЛГЭЭС ГАРАХ, ШИЛЖИХ ҮЕИЙН ЭПИКРИЗ
                </p>
                <div className="flex flex-wrap">
@@ -48,12 +45,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Эцэг /эх/-ийн нэр
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'lastName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'lastName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -64,12 +56,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                         <span>
                            Өөрийн нэр
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'firstName']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'firstName']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -80,12 +67,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         <span>
                            Хүйс
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'genderType']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'genderType']}>
                               <Checkbox.Group className="ddd ml-0 inline">
                                  <Checkbox className="test ml-2" value={'MAN'}>
                                     Эрэгтэй
@@ -99,12 +81,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                         &nbsp;
                         <span>
                            Нас
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'age']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'age']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -149,12 +126,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                         </span>
                         -нд
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'epicrizDiagnose']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'epicrizDiagnose']}>
                               <Input style={{ width: 380 }} />
                            </Form.Item>
                         </span>
@@ -164,12 +136,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         оношоор эмнэлэгт &nbsp;
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'hospitalDayDuration']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'hospitalDayDuration']}>
                               <Input className="w-20" />
                            </Form.Item>
                         </span>
@@ -180,12 +147,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Нийт хэрэглэсэн эмийн зардал (₮): нийт дүн
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'hospitalPayment']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'hospitalPayment']}>
                               <Input style={{ width: 200 }} />
                            </Form.Item>
                         </span>
@@ -195,46 +157,26 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                   <div className="w-full">
                      <p className="dstory">
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'departmentName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'departmentName']}>
                               <Input style={{ width: 190 }} />
                            </Form.Item>
                         </span>
                         хагалгаанд
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'surgery']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'surgery']}>
                               <Input style={{ width: 150 }} />
                            </Form.Item>
                         </span>
                         мэдээ алдуулалтанд
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'anesthesia']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'anesthesia']}>
                               <Input style={{ width: 170 }} />
                            </Form.Item>
                         </span>
                      </p>
                   </div>
                   <div className="w-5/12 p-2 dstory">
-                     <Form.Item
-                        shouldUpdate
-                        className="mb-0"
-                        noStyle
-                        name={['epicriz', 'bodyConditionAround']}
-                     >
+                     <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'bodyConditionAround']}>
                         <Checkbox.Group>
                            <table
                               style={{
@@ -247,20 +189,14 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                            >
                               <thead>
                                  <tr>
-                                    <th className="border border-slate-600 p-1">
-                                       Биеийн байдал
-                                    </th>
-                                    <th className="border border-slate-600 p-1">
-                                       Ирэх үед
-                                    </th>
+                                    <th className="border border-slate-600 p-1">Биеийн байдал</th>
+                                    <th className="border border-slate-600 p-1">Ирэх үед</th>
                                     <th>Гарах үед</th>
                                  </tr>
                               </thead>
                               <tbody>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Хөнгөн
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Хөнгөн</td>
                                     <td className="border border-slate-600 p-1 text-center"></td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={1}>
@@ -269,9 +205,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Дунд
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Дунд</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={2}>
                                           1
@@ -284,9 +218,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Хүндэвтэр
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Хүндэвтэр</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={4}>
                                           2
@@ -299,9 +231,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Хүнд
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Хүнд</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={6}>
                                           3
@@ -314,9 +244,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Маш хүнд
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Маш хүнд</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={8}>
                                           4
@@ -334,12 +262,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      </Form.Item>
                   </div>
                   <div className="w-7/12 p-2 dstory">
-                     <Form.Item
-                        shouldUpdate
-                        className="mb-0"
-                        noStyle
-                        name={['epicriz', 'examinations']}
-                     >
+                     <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'examinations']}>
                         <Checkbox.Group>
                            <table
                               style={{
@@ -359,17 +282,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                               </thead>
                               <tbody>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Эмнэл зүйн
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Эмнэл зүйн</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={1}>
                                           1
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       Гэрлийн
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Гэрлийн</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={8}>
                                           8
@@ -377,17 +296,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Биохими
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Биохими</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={2}>
                                           2
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       ЭКГ
-                                    </td>
+                                    <td className="border border-slate-600 p-1">ЭКГ</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={9}>
                                           9
@@ -395,17 +310,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Нян судлал
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Нян судлал</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={3}>
                                           3
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       ЭХО
-                                    </td>
+                                    <td className="border border-slate-600 p-1">ЭХО</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={10}>
                                           10
@@ -413,17 +324,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Вирус
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Вирус</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={4}>
                                           4
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       Уян дуран
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Уян дуран</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={11}>
                                           11
@@ -431,17 +338,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Эд, эсийн
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Эд, эсийн</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={5}>
                                           5
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       Компьютер томографи
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Компьютер томографи</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={12}>
                                           12
@@ -449,17 +352,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Иммунологи
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Иммунологи</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={6}>
                                           6
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       Соронзон томографи
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Соронзон томографи</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={13}>
                                           13
@@ -467,17 +366,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Бусад
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Бусад</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={7}>
                                           7
                                        </Checkbox>
                                     </td>
-                                    <td className="border border-slate-600 p-1">
-                                       Хийгдээгүй
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Хийгдээгүй</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={14}>
                                           14
@@ -493,12 +388,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Үндсэн онош:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'main']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'main']}>
                               <Input className="w-10/12" />
                            </Form.Item>
                         </span>
@@ -506,12 +396,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Хүндрэл:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'complications']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'complications']}>
                               <Input className="w-10/12" />
                            </Form.Item>
                         </span>
@@ -519,12 +404,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Дагалдах онош:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'combo']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'combo']}>
                               <Input className="w-10/12" />
                            </Form.Item>
                         </span>
@@ -532,27 +412,16 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                   </div>
                   <div className="w-full">
                      <p className="dstory">
-                        Шинжилгээний өөрчлөлтүүд /зөвхөн өөрчлөлт бүхий
-                        шинжилгээний үзүүлэлтүүдийг бичнэ/
+                        Шинжилгээний өөрчлөлтүүд /зөвхөн өөрчлөлт бүхий шинжилгээний үзүүлэлтүүдийг бичнэ/
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'examinationChanges']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'examinationChanges']}>
                               <Input style={{ width: 100 }} />
                            </Form.Item>
                         </span>
                      </p>
                      <p className="dstory">
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'examinationChanges2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'examinationChanges2']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
@@ -562,24 +431,14 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Цусны ерөнхий шинжилгээ:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'generalBloodTest']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'generalBloodTest']}>
                               <Input className="w-9/12" />
                            </Form.Item>
                         </span>
                      </p>
                      <p className="dstory">
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'generalBloodTest2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'generalBloodTest2']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
@@ -587,12 +446,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Цусны биохимийн шинжилгээ:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'biochemicalBlood']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'biochemicalBlood']}>
                               <Input className="w-8/12" />
                            </Form.Item>
                         </span>
@@ -600,48 +454,28 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         Вирүс, маркерийн шинжилгээ:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'virusMarker']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'virusMarker']}>
                               <Input className="w-8/12" />
                            </Form.Item>
                         </span>
                      </p>
                      <p className="dstory">
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'virusMarker2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'virusMarker2']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
                      </p>
                      <p className="dstory">
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'virusMarker3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'virusMarker3']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
                      </p>
                   </div>
                   <div className="w-5/12 p-2 dstory">
-                     <Form.Item
-                        shouldUpdate
-                        className="mb-0"
-                        noStyle
-                        name={['epicriz', 'treatments']}
-                     >
+                     <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'treatments']}>
                         <Checkbox.Group className="w-full">
                            <table
                               style={{
@@ -669,9 +503,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </th>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Эмийн
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Эмийн</td>
                                     <td className="border border-slate-600 text-center">
                                        <Checkbox className="test2" value={1}>
                                           1
@@ -679,9 +511,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Эмийн бус
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Эмийн бус</td>
                                     <td className="border border-slate-600 text-center">
                                        <Checkbox className="test2" value={2}>
                                           2
@@ -689,9 +519,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Мэс заслын
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Мэс заслын</td>
                                     <td className="border border-slate-600 p-1 text-center">
                                        <Checkbox className="test2" value={3}>
                                           3
@@ -699,9 +527,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                     </td>
                                  </tr>
                                  <tr>
-                                    <td className="border border-slate-600 p-1">
-                                       Мэс заслын
-                                    </td>
+                                    <td className="border border-slate-600 p-1">Мэс заслын</td>
                                     <td className="border border-slate-600 text-center">
                                        <Checkbox className="test2" value={4}>
                                           4
@@ -759,21 +585,13 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                                  </span>
                                  <span className="font-normal">
                                     Цус, цусан бүтээгдэхүүн сэлбэсэн эсэх
-                                    <Form.Item
-                                       shouldUpdate
-                                       className="mb-0"
-                                       noStyle
-                                       name={['epicriz', 'bloodReplace']}
-                                    >
+                                    <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'bloodReplace']}>
                                        <Checkbox.Group className="inline">
                                           <Checkbox className="test" value={0}>
                                              Тийм
                                           </Checkbox>
                                           ,
-                                          <Checkbox
-                                             className="ml-0 test"
-                                             value={1}
-                                          >
+                                          <Checkbox className="ml-0 test" value={1}>
                                              Үгүй
                                           </Checkbox>
                                        </Checkbox.Group>
@@ -789,12 +607,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         <span>
                            Мэс заслын эмчилгээ
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'isSurgery']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'isSurgery']}>
                               <Checkbox.Group className="inline">
                                  <Checkbox className="test" value={0}>
                                     Хийсэн
@@ -809,32 +622,17 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                         </span>
                         Мэс заслын нэр
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'surguryName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'surguryName']}>
                               <Input className="w-5/12" />
                            </Form.Item>
                         </span>
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'surguryName2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'surguryName2']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'surguryName3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'surguryName3']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
@@ -842,12 +640,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory">
                         <span>
                            Шарх эдгэрэлт
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'healing']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'healing']}>
                               <Checkbox.Group className="inline">
                                  <Checkbox className="test" value={0}>
                                     анхдагчаар
@@ -884,32 +677,17 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                         </span>
                         Хүндрэлийн нэр
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'complicationsName1']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'complicationsName1']}>
                               <Input className="w-5/12" />
                            </Form.Item>
                         </span>
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'complicationsName2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'complicationsName2']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'complicationsName3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'complicationsName3']}>
                               <Input className="w-full" />
                            </Form.Item>
                         </span>
@@ -919,12 +697,7 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory text-center">
                         Эмчлэгч эмч
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['epicriz', 'doctorName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'doctorName']}>
                               <Input className="w-40" />
                            </Form.Item>
                         </span>
@@ -932,34 +705,19 @@ function Epicriz({ ListId, PatientId, PatientData }) {
                      <p className="dstory text-center">
                         <p className="dstory">
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['epicriz', 'hospitalEndYear']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'hospitalEndYear']}>
                                  <Input className="w-10" />
                               </Form.Item>
                            </span>
                            он
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['epicriz', 'hospitalEndMonth']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'hospitalEndMonth']}>
                                  <Input className="w-10" />
                               </Form.Item>
                            </span>
                            сар
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['epicriz', 'hospitalEndDay']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['epicriz', 'hospitalEndDay']}>
                                  <Input className="w-10" />
                               </Form.Item>
                            </span>

@@ -1,33 +1,12 @@
 import { CloseCircleOutlined, PrinterFilled } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   DatePicker,
-   Empty,
-   Form,
-   Input,
-   Modal,
-   Select,
-   Table
-} from 'antd';
+import { Button, Card, DatePicker, Empty, Form, Input, Modal, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-   selectCurrentInsurance,
-   selectCurrentToken
-} from '../../features/authReducer';
-import {
-   DefaultPost,
-   DefualtGet,
-   Get,
-   localMn,
-   localMnC,
-   openNofi,
-   Post
-} from '../comman';
+import { selectCurrentInsurance, selectCurrentToken } from '../../features/authReducer';
+import { DefaultPost, DefualtGet, Get, localMn, localMnC, openNofi, Post } from '../comman';
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 import Diagnose from './service/Diagnose';
@@ -94,11 +73,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         'health-insurance/hospital-list',
-         token,
-         conf
-      );
+      const response = await DefualtGet('health-insurance/hospital-list', token, conf);
       if (response.code === 200) {
          setHospitalLists(response.result);
       } else {
@@ -111,11 +86,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         'health-insurance/sent-reason',
-         token,
-         conf
-      );
+      const response = await DefualtGet('health-insurance/sent-reason', token, conf);
       if (response.code === 200) {
          setSentReason(response.result);
       } else {
@@ -127,11 +98,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         'health-insurance/hics-service',
-         token,
-         conf
-      );
+      const response = await DefualtGet('health-insurance/hics-service', token, conf);
       if (response.code === 200) {
          setHicsServices(response.result);
       } else {
@@ -145,12 +112,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
       };
       values['patientId'] = patientId;
       values['appointmentId'] = location?.state?.appointmentId;
-      const response = Post(
-         'health-insurance/sent-citizen',
-         token,
-         conf,
-         values
-      );
+      const response = Post('health-insurance/sent-citizen', token, conf, values);
       console.log(response);
    };
    const setApproval = async (values) => {
@@ -160,12 +122,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          params: {}
       };
       values['patientId'] = patientId;
-      const response = await DefaultPost(
-         'health-insurance/set-approval',
-         token,
-         conf,
-         values
-      );
+      const response = await DefaultPost('health-insurance/set-approval', token, conf, values);
       console.log(response);
       if (response === 201) {
          setIsOpenClauseModal(false);
@@ -182,12 +139,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          params: {}
       };
       values['patientId'] = patientId;
-      const response = await Post(
-         'health-insurance/patient-sheet',
-         token,
-         conf,
-         values
-      );
+      const response = await Post('health-insurance/patient-sheet', token, conf, values);
    };
    const sentSeal = async (values) => {
       console.log(values);
@@ -196,12 +148,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
          params: {}
       };
       values['patientId'] = patientId;
-      const response = await Post(
-         'health-insurance/hics-service',
-         token,
-         conf,
-         values
-      );
+      const response = await Post('health-insurance/hics-service', token, conf, values);
    };
    //
    const DiagnoseHandleClick = (diagnoses) => {
@@ -228,12 +175,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
       const data = {
          appointmentId: appointmentId
       };
-      const response = await Post(
-         'insurance/appointment-seal',
-         token,
-         conf,
-         data
-      );
+      const response = await Post('insurance/appointment-seal', token, conf, data);
       if (response === 201) {
          openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
       }
@@ -254,18 +196,9 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
             setIsOpenFinger(true);
          } else {
             data['finger'] = values;
-            const response = await Post(
-               'insurance/appointment-seal',
-               token,
-               conf,
-               data
-            );
+            const response = await Post('insurance/appointment-seal', token, conf, data);
             if (response === 201) {
-               openNofi(
-                  'success',
-                  'Амжиллтай',
-                  'Үзлэг амжиллтай хадгалагдлаа '
-               );
+               openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
                navigate('/ambulatoryList', {
                   state: {
                      isRead: true
@@ -274,12 +207,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
             }
          }
       } else {
-         const response = await Post(
-            'insurance/appointment-seal',
-            token,
-            conf,
-            data
-         );
+         const response = await Post('insurance/appointment-seal', token, conf, data);
          if (response === 201) {
             openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
             navigate('/ambulatoryList', {
@@ -346,15 +274,9 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                         >
                            Эмнэлэгт шилжүүлэх
                         </Button>
-                        <Button onClick={() => setIsOpenMoveModal(true)}>
-                           Эмнэлэгт өвчтөн илгээх
-                        </Button>
-                        <Button onClick={() => setIsOpenClauseModal(true)}>
-                           Заалт оруулах
-                        </Button>
-                        <Button onClick={() => setIsOpenSealModal(true)}>
-                           Битүүмж үүсгэх
-                        </Button>
+                        <Button onClick={() => setIsOpenMoveModal(true)}>Эмнэлэгт өвчтөн илгээх</Button>
+                        <Button onClick={() => setIsOpenClauseModal(true)}>Заалт оруулах</Button>
+                        <Button onClick={() => setIsOpenSealModal(true)}>Битүүмж үүсгэх</Button>
                      </Button.Group>
                   </div>
                </div>
@@ -416,9 +338,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      showSearch
                      optionFilterProp="children"
                      filterOption={(input, option) =>
-                        (option?.children ?? '')
-                           .toLowerCase()
-                           .includes(input.toLowerCase())
+                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                      }
                      style={{
                         width: '100%'
@@ -466,9 +386,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      showSearch
                      optionFilterProp="children"
                      filterOption={(input, option) =>
-                        (option?.children ?? '')
-                           .toLowerCase()
-                           .includes(input.toLowerCase())
+                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                      }
                      style={{
                         width: '100%'
@@ -489,9 +407,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      showSearch
                      optionFilterProp="children"
                      filterOption={(input, option) =>
-                        (option?.children ?? '')
-                           .toLowerCase()
-                           .includes(input.toLowerCase())
+                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                      }
                      style={{
                         width: '100%'
@@ -532,9 +448,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      showSearch
                      optionFilterProp="children"
                      filterOption={(input, option) =>
-                        (option?.children ?? '')
-                           .toLowerCase()
-                           .includes(input.toLowerCase())
+                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                      }
                      style={{
                         width: '100%'
@@ -555,9 +469,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      showSearch
                      optionFilterProp="children"
                      filterOption={(input, option) =>
-                        (option?.children ?? '')
-                           .toLowerCase()
-                           .includes(input.toLowerCase())
+                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                      }
                      style={{
                         width: '100%'
@@ -618,9 +530,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                            showSearch
                            optionFilterProp="children"
                            filterOption={(input, option) =>
-                              (option?.children ?? '')
-                                 .toLowerCase()
-                                 .includes(input.toLowerCase())
+                              (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
                            }
                            style={{
                               width: '100%'
@@ -646,11 +556,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
             title="Хурууний хээ уншуулах"
             open={isOpenFinger}
             onCancel={() => setIsOpenFinger(false)}
-            onOk={() =>
-               fingerData
-                  .validateFields()
-                  .then((values) => endInspection(values))
-            }
+            onOk={() => fingerData.validateFields().then((values) => endInspection(values))}
             cancelText="Болих"
             okText="Хадгалах"
          >

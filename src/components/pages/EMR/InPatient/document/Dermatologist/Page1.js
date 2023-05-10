@@ -11,27 +11,18 @@ function Page1() {
             <Table bordered className="document mb-0">
                <thead>
                   <tr className="border-t-0">
-                     <th className="text-center">
-                        Арьс, салст, дайвруудын үзлэг
-                     </th>
+                     <th className="text-center">Арьс, салст, дайвруудын үзлэг</th>
                   </tr>
                   <tr>
                      <td>
                         <div className="inline-flex">
-                           <p className="font-bold">
-                              Арьсны хүрэлцэх мэдрэхгүй байдал:{' '}
-                           </p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
+                           <p className="font-bold">Арьсны хүрэлцэх мэдрэхгүй байдал: </p>
+                           <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                               <Checkbox.Group className="ddd ml-0">
                                  <Checkbox className="ml-2" value={'Хэвийн'}>
                                     Мэдэрч байна
                                  </Checkbox>
-                                 <Checkbox value={'Хэвийн'}>
-                                    Мэдрэхгүй байна
-                                 </Checkbox>
+                                 <Checkbox value={'Хэвийн'}>Мэдрэхгүй байна</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
@@ -47,10 +38,7 @@ function Page1() {
                   <tr className="border-t-0">
                      <td>
                         <p>Арьсны өнгө:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Хэвийн
@@ -60,10 +48,7 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Хэвийн бус
@@ -76,15 +61,9 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Шарангуй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -95,15 +74,9 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хөхөрсөн
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -121,15 +94,9 @@ function Page1() {
                   <tr className="border-t-0">
                      <td>
                         <p>Уян чанар:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хэвийн
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -141,15 +108,9 @@ function Page1() {
                      </td>
                      <td>
                         <p>Арьсны халуун:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хэвийн
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -161,15 +122,9 @@ function Page1() {
                      </td>
                      <td>
                         <p>Чийглэг байдал:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хөхөрсөн
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -195,10 +150,7 @@ function Page1() {
                   <tr className="border-t-0">
                      <td>
                         <p>Өнгө:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Ягаан
@@ -210,10 +162,7 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Бор
@@ -229,50 +178,35 @@ function Page1() {
                      </td>
                      <td className="w-40">
                         <p>Хүрээ:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Хил хязгаар нь тод
                               </Checkbox>
-                              <Checkbox value={'Хэвийн'}>
-                                 Тод бус (well defined)(III-defined)
-                              </Checkbox>
+                              <Checkbox value={'Хэвийн'}>Тод бус (well defined)(III-defined)</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
                      <td>
                         <p>Хэлбэр:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Дугараг
                               </Checkbox>
                               <Checkbox value={'Хэвийн'}>Зууван</Checkbox>
                               <Checkbox value={'Хэвийн'}>Олон талт</Checkbox>
-                              <Checkbox value={'Хэвийн'}>
-                                 Олон цагирагт
-                              </Checkbox>
+                              <Checkbox value={'Хэвийн'}>Олон цагирагт</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Зоос хэлбэрийн
                               </Checkbox>
-                              <Checkbox value={'Хэвийн'}>
-                                 Могой хэлбэрийн
-                              </Checkbox>
+                              <Checkbox value={'Хэвийн'}>Могой хэлбэрийн</Checkbox>
                               <Checkbox value={'Хэвийн'}>Шугаман</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
@@ -281,10 +215,7 @@ function Page1() {
                   <tr>
                      <td>
                         <p>Тэмтрэхэд:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Тогтоц нь
@@ -294,10 +225,7 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Хатуувтар
@@ -308,10 +236,7 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Давгар
@@ -322,10 +247,7 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Хөдөлгөөнтэй
@@ -335,10 +257,7 @@ function Page1() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
                               <Checkbox className="ml-2" value={'Хэвийн'}>
                                  Эмзэглэлтэй
@@ -353,17 +272,12 @@ function Page1() {
                         <p>Эмх цэгц, хэв маяг болон тархалт</p>
                         <div className="inline-flex">
                            <p>Тоо хэмжээ:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
+                           <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                               <Checkbox.Group className="ddd ml-0">
                                  <Checkbox className="ml-2" value={'Хэвийн'}>
                                     Нэг
                                  </Checkbox>
-                                 <Checkbox value={'Хэвийн'}>
-                                    Олон тууралт
-                                 </Checkbox>
+                                 <Checkbox value={'Хэвийн'}>Олон тууралт</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
@@ -371,10 +285,7 @@ function Page1() {
                      <td colSpan={2}>
                         <div className="inline-flex">
                            <p>Эма цэгц:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
+                           <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                               <Checkbox.Group className="ddd ml-0">
                                  <Checkbox className="ml-2" value={'Хэвийн'}>
                                     Бүлэглэсэн
@@ -385,10 +296,7 @@ function Page1() {
                         </div>
                         <div className="inline-flex">
                            <p>Нягтрал:</p>
-                           <Form.Item
-                              name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                              className="mb-0"
-                           >
+                           <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                               <Checkbox.Group className="ddd ml-0">
                                  <Checkbox className="ml-2" value={'Хэвийн'}>
                                     Байгаа

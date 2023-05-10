@@ -26,9 +26,7 @@ function EarlyWarningPrint({ Data }) {
                      <p style={{ fontSize: 12 }}>Хэвтсэн хоног</p>
                   </div>
                   <div className="w-full amaraDeer amaraZuun amaraBaruun">
-                     <p style={{ fontSize: 12 }}>
-                        Мэс засал хийлгэсний дараах өдөр
-                     </p>
+                     <p style={{ fontSize: 12 }}>Мэс засал хийлгэсний дараах өдөр</p>
                   </div>
                   <div className="w-full amaraDeer amaraZuun amaraBaruun">
                      <p
@@ -794,10 +792,7 @@ function EarlyWarningPrint({ Data }) {
                               <div className="flex flex-wrap">
                                  {item.assesments.map((assesment, index) => {
                                     return (
-                                       <div
-                                          key={index}
-                                          className="basis-1/4 amaraDeer amaraBaruun"
-                                       >
+                                       <div key={index} className="basis-1/4 amaraDeer amaraBaruun">
                                           <p
                                              style={{
                                                 fontSize: 12,
@@ -805,9 +800,7 @@ function EarlyWarningPrint({ Data }) {
                                                 fontWeight: 'bold'
                                              }}
                                           >
-                                             {moment(
-                                                assesment.createdAt
-                                             ).format('HH')}
+                                             {moment(assesment.createdAt).format('HH')}
                                           </p>
                                        </div>
                                     );
@@ -825,11 +818,7 @@ function EarlyWarningPrint({ Data }) {
                                  </div>
                                  {line.map((el) => {
                                     return (
-                                       <div
-                                          key={el}
-                                          className="basis-1/4 amaraDeer amaraBaruun"
-                                          style={{ height: 12 }}
-                                       >
+                                       <div key={el} className="basis-1/4 amaraDeer amaraBaruun" style={{ height: 12 }}>
                                           <p
                                              style={{
                                                 fontSize: 7,
@@ -840,10 +829,7 @@ function EarlyWarningPrint({ Data }) {
                                        </div>
                                     );
                                  })}
-                                 <div
-                                    className="basis-1/2 amaraDeer amaraBaruun"
-                                    style={{ height: 18.86 }}
-                                 >
+                                 <div className="basis-1/2 amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                                     <p
                                        style={{
                                           fontSize: 12,
@@ -852,10 +838,7 @@ function EarlyWarningPrint({ Data }) {
                                        }}
                                     ></p>
                                  </div>
-                                 <div
-                                    className="basis-1/2 amaraDeer amaraBaruun"
-                                    style={{ height: 18.86 }}
-                                 >
+                                 <div className="basis-1/2 amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                                     <p
                                        style={{
                                           fontSize: 12,
@@ -866,10 +849,7 @@ function EarlyWarningPrint({ Data }) {
                                  </div>
                               </div>
                            </div>
-                           <div
-                              className="w-full amaraDeer amaraBaruun"
-                              style={{ height: 18.86 }}
-                           >
+                           <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                               <p
                                  style={{
                                     fontSize: 12,
@@ -878,10 +858,7 @@ function EarlyWarningPrint({ Data }) {
                                  }}
                               ></p>
                            </div>
-                           <div
-                              className="w-full amaraDeer amaraBaruun"
-                              style={{ height: 18.86 }}
-                           >
+                           <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                               <p
                                  style={{
                                     fontSize: 12,
@@ -892,10 +869,7 @@ function EarlyWarningPrint({ Data }) {
                            </div>
                            <div className="w-full">
                               <div className="flex flex-wrap">
-                                 <div
-                                    className="basis-1/2 amaraDeer amaraBaruun"
-                                    style={{ height: 18.86 }}
-                                 >
+                                 <div className="basis-1/2 amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                                     <p
                                        style={{
                                           fontSize: 12,
@@ -904,10 +878,7 @@ function EarlyWarningPrint({ Data }) {
                                        }}
                                     ></p>
                                  </div>
-                                 <div
-                                    className="basis-1/2 amaraDeer amaraBaruun"
-                                    style={{ height: 18.86 }}
-                                 >
+                                 <div className="basis-1/2 amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                                     <p
                                        style={{
                                           fontSize: 12,
@@ -916,10 +887,7 @@ function EarlyWarningPrint({ Data }) {
                                        }}
                                     ></p>
                                  </div>
-                                 <div
-                                    className="basis-1/2 amaraDeer amaraBaruun"
-                                    style={{ height: 18.86 }}
-                                 >
+                                 <div className="basis-1/2 amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                                     <p
                                        style={{
                                           fontSize: 12,
@@ -928,10 +896,7 @@ function EarlyWarningPrint({ Data }) {
                                        }}
                                     ></p>
                                  </div>
-                                 <div
-                                    className="basis-1/2 amaraDeer amaraBaruun"
-                                    style={{ height: 18.86 }}
-                                 >
+                                 <div className="basis-1/2 amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                                     <p
                                        style={{
                                           fontSize: 12,
@@ -942,10 +907,7 @@ function EarlyWarningPrint({ Data }) {
                                  </div>
                               </div>
                            </div>
-                           <div
-                              className="w-full amaraDeer amaraBaruun"
-                              style={{ height: 18.86 }}
-                           >
+                           <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                               <p
                                  style={{
                                     fontSize: 12,
@@ -954,10 +916,7 @@ function EarlyWarningPrint({ Data }) {
                                  }}
                               ></p>
                            </div>
-                           <div
-                              className="w-full amaraDeer amaraBaruun"
-                              style={{ height: 18.86 }}
-                           >
+                           <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
                               <p
                                  style={{
                                     fontSize: 12,
@@ -966,10 +925,7 @@ function EarlyWarningPrint({ Data }) {
                                  }}
                               ></p>
                            </div>
-                           <div
-                              className="w-full amaraDeer amaraBaruun amaraDoor"
-                              style={{ height: 18.86 }}
-                           >
+                           <div className="w-full amaraDeer amaraBaruun amaraDoor" style={{ height: 18.86 }}>
                               <p
                                  style={{
                                     fontSize: 12,

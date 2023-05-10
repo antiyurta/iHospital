@@ -9,38 +9,15 @@ import {
    PlusOutlined,
    ReloadOutlined
 } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   ConfigProvider,
-   DatePicker,
-   Empty,
-   Form,
-   Input,
-   Modal,
-   Table,
-   Tag,
-   Typography
-} from 'antd';
+import { Button, Card, ConfigProvider, DatePicker, Empty, Form, Input, Modal, Table, Tag, Typography } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-   selectCurrentDepId,
-   selectCurrentToken,
-   selectCurrentUserId
-} from '../../../../../features/authReducer';
+import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import {
-   Get,
-   localMn,
-   localMnC,
-   openNofi,
-   Patch,
-   ScrollRef
-} from '../../../../comman';
+import { Get, localMn, localMnC, openNofi, Patch, ScrollRef } from '../../../../comman';
 import orderType from './orderType.json';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 
@@ -121,7 +98,8 @@ function Index({ type, isDoctor }) {
       if (row.process != 2 && row.process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else {
-         if (row.isPayment === false && type != 1) {
+         const payment = row.isPayment || row.isInsurance;
+         if (!payment && type != 1) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
             const inspectionType = type === 2 ? 1 : row.inspectionType;
@@ -160,16 +138,7 @@ function Index({ type, isDoctor }) {
          }
       }
    };
-   const getENR = (
-      listId,
-      id,
-      departmentId,
-      inspectionType,
-      isPayment,
-      regNum,
-      roomNumber,
-      departmentName
-   ) => {
+   const getENR = (listId, id, departmentId, inspectionType, isPayment, regNum, roomNumber, departmentName) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
       if (isPayment === false) {
@@ -203,13 +172,7 @@ function Index({ type, isDoctor }) {
          const endTime = end.split(':');
          return (
             <p className="bg-[#5cb85c] text-white">
-               {beginTime[0] +
-                  ':' +
-                  beginTime[1] +
-                  '-' +
-                  endTime[0] +
-                  ':' +
-                  endTime[1]}
+               {beginTime[0] + ':' + beginTime[1] + '-' + endTime[0] + ':' + endTime[1]}
             </p>
          );
       } else {
@@ -300,10 +263,7 @@ function Index({ type, isDoctor }) {
             if (notes != null) {
                Object.values(notes)?.map((note) => {
                   Object.values(note)?.map((item) => {
-                     if (
-                        (typeof item === 'object' && item?.length === 0) ||
-                        (typeof item === 'string' && !item)
-                     ) {
+                     if ((typeof item === 'object' && item?.length === 0) || (typeof item === 'string' && !item)) {
                         state = false;
                      }
                   });
@@ -319,9 +279,7 @@ function Index({ type, isDoctor }) {
          } else {
             return (
                <p>
-                  <ExclamationOutlined
-                     style={{ color: 'yellowgreen', fontSize: '20px' }}
-                  />
+                  <ExclamationOutlined style={{ color: 'yellowgreen', fontSize: '20px' }} />
                </p>
             );
          }
@@ -393,11 +351,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Үзлэгийн цаг',
          render: (_, row) => {
-            return getTypeInfo(
-               row.type,
-               row.slots?.startTime,
-               row.slots?.endTime
-            );
+            return getTypeInfo(row.type, row.slots?.startTime, row.slots?.endTime);
          }
       },
       {
@@ -516,9 +470,7 @@ function Index({ type, isDoctor }) {
             if (text) {
                return (
                   <Button
-                     onClick={() =>
-                        getInspectionFormDesc(row.inspectionNote, row.cabinetId)
-                     }
+                     onClick={() => getInspectionFormDesc(row.inspectionNote, row.cabinetId)}
                      icon={<EditOutlined />}
                   >
                      Тэмдэглэл засах
@@ -620,25 +572,17 @@ function Index({ type, isDoctor }) {
       {
          title: 'Хүйс',
          key: 'gender',
-         render: (_, record, index) => (
-            <span key={index}>
-               {record.patient?.genderType === 'WOMAN' ? 'Эм' : 'Эр'}
-            </span>
-         )
+         render: (_, record, index) => <span key={index}>{record.patient?.genderType === 'WOMAN' ? 'Эм' : 'Эр'}</span>
       },
       {
          title: 'Хэвтэх өдөр',
          key: 'startDate',
-         render: (_, record, index) => (
-            <span key={index}>{record.startDate?.substr(0, 10)}</span>
-         )
+         render: (_, record, index) => <span key={index}>{record.startDate?.substr(0, 10)}</span>
       },
       {
          title: 'Гарах өдөр',
          key: 'endDate',
-         render: (_, record, index) => (
-            <span key={index}>{record.endDate?.substr(0, 10)}</span>
-         )
+         render: (_, record, index) => <span key={index}>{record.endDate?.substr(0, 10)}</span>
       },
       {
          title: 'Гарсан өдөр',
@@ -658,9 +602,7 @@ function Index({ type, isDoctor }) {
                      if (item.value === record.process) {
                         return (
                            <img
-                              src={require(`../../../../../assets/bed/${
-                                 orderType[item.value].img
-                              }`)}
+                              src={require(`../../../../../assets/bed/${orderType[item.value].img}`)}
                               width="20"
                               className="inline-block"
                               key={index}
@@ -723,11 +665,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Үзлэгийн цаг',
          render: (_, row) => {
-            return getTypeInfo(
-               row.type,
-               row.slots?.startTime,
-               row.slots?.endTime
-            );
+            return getTypeInfo(row.type, row.slots?.startTime, row.slots?.endTime);
          }
       },
       {
@@ -739,9 +677,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Эмч',
          render: (_, row) => {
-            return `${row.employee?.lastName?.substr(0, 1)}.${
-               row.employee?.firstName
-            }`;
+            return `${row.employee?.lastName?.substr(0, 1)}.${row.employee?.firstName}`;
          }
       },
       {
@@ -801,10 +737,7 @@ function Index({ type, isDoctor }) {
       <>
          <div className="flex flex-wrap">
             <div className="w-full">
-               <Card
-                  bordered={false}
-                  className="header-solid max-h-max rounded-md"
-               >
+               <Card bordered={false} className="header-solid max-h-max rounded-md">
                   <div className="flex flex-wrap">
                      <div className="w-full">
                         <div className="flex justify-between">
@@ -816,13 +749,7 @@ function Index({ type, isDoctor }) {
                                     }}
                                     onChange={(e) => {
                                        if (e != null) {
-                                          getAppointment(
-                                             1,
-                                             20,
-                                             e[0],
-                                             e[1],
-                                             selectedTags
-                                          );
+                                          getAppointment(1, 20, e[0], e[1], selectedTags);
                                        }
                                     }}
                                     locale={mnMN}
@@ -833,15 +760,7 @@ function Index({ type, isDoctor }) {
                               <Button
                                  title="Сэргээх"
                                  type="primary"
-                                 onClick={() =>
-                                    getAppointment(
-                                       1,
-                                       20,
-                                       start,
-                                       end,
-                                       selectedTags
-                                    )
-                                 }
+                                 onClick={() => getAppointment(1, 20, start, end, selectedTags)}
                               >
                                  <ReloadOutlined spin={spinner} />
                               </Button>
@@ -856,25 +775,19 @@ function Index({ type, isDoctor }) {
                                     className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                                     role="alert"
                                  >
-                                    <span className="font-medium mx-1">
-                                       Яаралтай
-                                    </span>
+                                    <span className="font-medium mx-1">Яаралтай</span>
                                  </div>
                                  <div
                                     className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                                     role="alert"
                                  >
-                                    <span className="font-medium mx-1">
-                                       Шууд
-                                    </span>
+                                    <span className="font-medium mx-1">Шууд</span>
                                  </div>
                                  <div
                                     className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                                     role="alert"
                                  >
-                                    <span className="font-medium mx-1">
-                                       Урьдчилсан захиалга
-                                    </span>
+                                    <span className="font-medium mx-1">Урьдчилсан захиалга</span>
                                  </div>
                               </div>
                            ) : (
@@ -883,9 +796,7 @@ function Index({ type, isDoctor }) {
                                     className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                                     role="alert"
                                  >
-                                    <span className="font-medium mx-1">
-                                       Урьдчилан сэргийлэх
-                                    </span>
+                                    <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
                                  </div>
                               </div>
                            )
@@ -897,19 +808,14 @@ function Index({ type, isDoctor }) {
                                        return (
                                           <CheckableTag
                                              key={index}
-                                             checked={
-                                                selectedTags === tag.value
-                                             }
+                                             checked={selectedTags === tag.value}
                                              onChange={() => {
                                                 setSelectedTags(tag.value);
                                              }}
                                              className="text-white m-1"
                                           >
                                              <div className="flex">
-                                                <img
-                                                   src={require(`../../../../../assets/bed/${tag.img}`)}
-                                                   width="20"
-                                                />
+                                                <img src={require(`../../../../../assets/bed/${tag.img}`)} width="20" />
                                                 {tag.label}
                                              </div>
                                           </CheckableTag>
@@ -933,13 +839,7 @@ function Index({ type, isDoctor }) {
                                  tip: 'Уншиж байна....'
                               }}
                               bordered
-                              columns={
-                                 type === 2
-                                    ? InPatientColumns
-                                    : isDoctor
-                                    ? columns
-                                    : nurseColumns
-                              }
+                              columns={type === 2 ? InPatientColumns : isDoctor ? columns : nurseColumns}
                               dataSource={appointments}
                               scroll={{
                                  x: 1500
@@ -949,20 +849,12 @@ function Index({ type, isDoctor }) {
                                  size: 'small',
                                  current: meta.page,
                                  total: meta.itemCount,
-                                 showTotal: (total, range) =>
-                                    `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                                  pageSize: meta.limit,
                                  showSizeChanger: true,
                                  pageSizeOptions: ['5', '10', '20', '50'],
                                  showQuickJumper: true,
-                                 onChange: (page, pageSize) =>
-                                    getAppointment(
-                                       page,
-                                       pageSize,
-                                       start,
-                                       end,
-                                       selectedTags
-                                    )
+                                 onChange: (page, pageSize) => getAppointment(page, pageSize, start, end, selectedTags)
                               }}
                            />
                         </ConfigProvider>
@@ -980,8 +872,7 @@ function Index({ type, isDoctor }) {
             <DynamicContent
                props={{
                   data: formStyle.formItem,
-                  formKey:
-                     formData?.formId != null ? formData?.formId : formData?.id,
+                  formKey: formData?.formId != null ? formData?.formId : formData?.id,
                   formName: formData?.name
                }}
                incomeData={{

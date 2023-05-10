@@ -18,19 +18,9 @@ import {
 } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
-import {
-   Avatar,
-   Button,
-   Card,
-   Col,
-   Descriptions,
-   Form,
-   Input,
-   Modal,
-   Row
-} from 'antd';
-import { DefaultPost, Get, openNofi, Patch, Post } from './comman';
-import { KeyOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
+import { Get, openNofi, Patch } from './comman';
+import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
@@ -88,12 +78,7 @@ function Profile() {
    };
    const onFinish = async (values) => {
       setIsLoading(true);
-      const response = await Patch(
-         'organization/employee/' + user.employee.id,
-         token,
-         config,
-         values.employee
-      );
+      const response = await Patch('organization/employee/' + user.employee.id, token, config, values.employee);
       if (response === 200) {
          profileForm.resetFields();
          getProfile();
@@ -141,10 +126,7 @@ function Profile() {
    };
    return (
       <div>
-         <div
-            className="profile-nav-bg"
-            style={{ backgroundImage: 'url(' + bg + ')' }}
-         ></div>
+         <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + bg + ')' }}></div>
          <Card
             className="card-profile-head rounded-md h-28"
             bodyStyle={{ display: 'none' }}
@@ -155,9 +137,7 @@ function Profile() {
                         <Avatar size={74} shape="square" src={profile} />
                         <div className="avatar-info">
                            <h4 className="font-semibold m-0">
-                              {user.employee?.lastName +
-                                 ' ' +
-                                 user.employee?.firstName}
+                              {user.employee?.lastName + ' ' + user.employee?.firstName}
                            </h4>
                            <p>
                               {user.role?.name} / {user.role?.description}
@@ -183,18 +163,10 @@ function Profile() {
             className="header-solid h-full card-profile-information rounded-md"
             extra={
                <>
-                  <Button
-                     className="mx-1"
-                     type="primary"
-                     onClick={() => setProfileModal(true)}
-                  >
+                  <Button className="mx-1" type="primary" icon={<UserOutlined />} onClick={() => setProfileModal(true)}>
                      Мэдээлэл солих
                   </Button>
-                  <Button
-                     className="mx-1"
-                     type="primary"
-                     onClick={() => setPasswordModal(true)}
-                  >
+                  <Button className="mx-1" type="primary" icon={<KeyOutlined />} onClick={() => setPasswordModal(true)}>
                      Нууц үг солих
                   </Button>
                </>
@@ -213,10 +185,7 @@ function Profile() {
                   {user?.employee?.homeAddress}
                </Descriptions.Item>
                <Descriptions.Item label="Эмнэлэг" span={3}>
-                  <p
-                     className="text-white p-1"
-                     style={{ background: isInsurance ? 'green' : 'red' }}
-                  >
+                  <p className="text-white p-1" style={{ background: isInsurance ? 'green' : 'red' }}>
                      {user?.hospital?.name}
                   </p>
                </Descriptions.Item>
@@ -224,6 +193,7 @@ function Profile() {
          </Card>
          <Modal
             title="Хувийн мэдээлэл засах"
+            forceRender={true}
             open={profileModal}
             onCancel={() => setProfileModal(false)}
             onOk={() => {
@@ -243,10 +213,10 @@ function Profile() {
             <Form
                form={profileForm}
                labelCol={{
-                  span: 8
+                  span: 5
                }}
                wrapperCol={{
-                  span: 16
+                  span: 19
                }}
             >
                <Form.Item

@@ -36,16 +36,10 @@ function AM13A() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-13А
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-13А</span>
                </div>
             </div>
             <span style={styles.generalText}>Бүртгэлийн код</span>
@@ -89,35 +83,24 @@ function AM13A() {
                   <div style={styles.rowCells}></div>
                </div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 10, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 10, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 14 }}>ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС</span>
             </div>
             <div style={styles.generalText}>
-               1. Эцэг /эх/-ийн нэр ____________________ Нэр ___________________
-               Нас ______ 2. Хүйс /зур/ эр, эм
+               1. Эцэг /эх/-ийн нэр ____________________ Нэр ___________________ Нас ______ 2. Хүйс /зур/ эр, эм
             </div>
             <div style={styles.generalText}>
-               Шилжүүлж буй эмнэлгийн нэр
-               _______________________________________________________________
+               Шилжүүлж буй эмнэлгийн нэр _______________________________________________________________
             </div>
             <div style={styles.generalText}>
-               3. Тогтмол хаяг:
-               ___________________________________________________________________________
+               3. Тогтмол хаяг: ___________________________________________________________________________
             </div>
             <div style={styles.generalText}>
-               4. Ажлын газар, албан тушаал:
-               ______________________________________________________________
+               4. Ажлын газар, албан тушаал: ______________________________________________________________
             </div>
             <div style={styles.generalText}>
                5. Шилжүүлж буй эрүүл мэндийн байгууллагад хийгдсэн шинжилгээ (
-               <span style={{ fontSize: 10, fontStyle: 'italic' }}>
-                  шинжилгээний гол өөрчлөлтийг бичнэ
-               </span>
-               )
+               <span style={{ fontSize: 10, fontStyle: 'italic' }}>шинжилгээний гол өөрчлөлтийг бичнэ</span>)
             </div>
             <div
                style={{
@@ -200,8 +183,7 @@ function AM13A() {
                   }
                }}
             >
-               6. Шилжүүлж буй эмнэлэгт хийгдсэн эмчилгээний үр дүн, өвчтөний
-               биеийн байдал
+               6. Шилжүүлж буй эмнэлэгт хийгдсэн эмчилгээний үр дүн, өвчтөний биеийн байдал
             </div>
             <div style={styles.blankSpaces}>
                _____________________________________________________________________________________________________________________________________________________________________________
@@ -223,16 +205,14 @@ function AM13A() {
                   }
                }}
             >
-               7. Үндсэн онош (Өвчний олон улсын 10-р ангиллын дагуу дэлгэрэнгүй
-               бичнэ.)
+               7. Үндсэн онош (Өвчний олон улсын 10-р ангиллын дагуу дэлгэрэнгүй бичнэ.)
             </div>
             <div style={styles.generalText}>
                Онош:
                _______________________________________________________________________________________________________________________________________
             </div>
             <div style={styles.generalText}>
-               8. Дараагийн шатлалын эмнэлэгт явуулж буй үндэслэл: (зур) 1. онош
-               тодруулах 2. эмчилгээ хийх
+               8. Дараагийн шатлалын эмнэлэгт явуулж буй үндэслэл: (зур) 1. онош тодруулах 2. эмчилгээ хийх
             </div>
             <div
                style={{
@@ -242,9 +222,7 @@ function AM13A() {
             >
                <div style={{ width: '40%', textAlign: 'center' }}>Тэмдэг</div>
                <div style={{ width: '60%', textAlign: 'right', fontSize: 12 }}>
-                  <span>
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-                  </span>
+                  <span>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн</span>
                </div>
             </div>
             <div
@@ -253,16 +231,12 @@ function AM13A() {
                   ...{ display: 'flex' }
                }}
             >
-               <div style={{ width: '40%', textAlign: 'right' }}>
-                  Эмчлэгч эмч
-               </div>
+               <div style={{ width: '40%', textAlign: 'right' }}>Эмчлэгч эмч</div>
                <div style={{ width: '60%', textAlign: 'right' }}>
                   <span>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                </div>
             </div>
-            <div style={{ ...styles.generalText, ...{ textAlign: 'right' } }}>
-               _________он______ сар_____ өдөр
-            </div>
+            <div style={{ ...styles.generalText, ...{ textAlign: 'right' } }}>_________он______ сар_____ өдөр</div>
             <div style={styles.generalText}>
                ....................................................................................................................................................................................................................................................................................
             </div>
@@ -321,16 +295,11 @@ function AM13A() {
                   <div style={styles.rowCells}></div>
                </div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 10, marginBottom: 10 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 10, marginBottom: 10 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 14 }}>ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС</span>
             </div>
             <div style={styles.generalText}>
-               1. Эцэг /эх/-ийн нэр ____________________ Нэр ___________________
-               Нас ______ 2. Хүйс /зур/ эр, эм
+               1. Эцэг /эх/-ийн нэр ____________________ Нэр ___________________ Нас ______ 2. Хүйс /зур/ эр, эм
             </div>
             <div style={styles.generalText}>
                Эмчилгээ оношлогоо хийлгэсэн эмнэлгийн нэр
@@ -344,18 +313,10 @@ function AM13A() {
                ___________________________________________________________________________________________________________________________________________________________________________
             </div>
             <div style={styles.generalText}>Хийгдсэн эмчилгээ:</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>
-               1
-            </div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>
-               2
-            </div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>
-               3
-            </div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>
-               4
-            </div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>1</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>2</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>3</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>4</div>
             <div style={styles.generalText}>
                Эмнэлгээс гарах үеийн биеийн байдал:
                ___________________________________________________________________________________________________
@@ -384,9 +345,7 @@ function AM13A() {
             <div style={styles.blankSpaces}>
                _____________________________________________________________________________________________________________________________________________________________________________
             </div>
-            <div style={styles.generalText}>
-               Хүлээн авч буй эрүүл мэндийн байгууллагад өгөх зөвлөмж:
-            </div>
+            <div style={styles.generalText}>Хүлээн авч буй эрүүл мэндийн байгууллагад өгөх зөвлөмж:</div>
             <div style={styles.blankSpaces}>
                _____________________________________________________________________________________________________________________________________________________________________________
             </div>
@@ -396,9 +355,7 @@ function AM13A() {
             <div style={styles.blankSpaces}>
                _____________________________________________________________________________________________________________________________________________________________________________
             </div>
-            <div style={styles.generalText}>
-               Шилжүүлж буй эмчийн нэр Хувийн тамга:
-            </div>
+            <div style={styles.generalText}>Шилжүүлж буй эмчийн нэр Хувийн тамга:</div>
             <div
                style={{
                   ...styles.generalText,

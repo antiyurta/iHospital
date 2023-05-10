@@ -10,11 +10,7 @@ export default function Step6() {
          <Row align="middle" className="mb-1">
             <Col span={24}>
                <Form.Item name="usuallyMedicine" className="mb-0">
-                  <TextArea
-                     placeholder="Эмийн хэрэглээ"
-                     rows={3}
-                     style={{ padding: 2 }}
-                  />
+                  <TextArea placeholder="Эмийн хэрэглээ" rows={3} style={{ padding: 2 }} />
                </Form.Item>
             </Col>
          </Row>

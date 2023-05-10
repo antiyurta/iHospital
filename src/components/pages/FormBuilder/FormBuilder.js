@@ -50,20 +50,12 @@ export default function FormBuilder() {
          <div className="flex flex-wrap">
             <div className="w-full md:w-1/2">
                <div className="mx-3">
-                  <Input
-                     placeholder="Хайх"
-                     allowClear
-                     onChange={(e) => setSearchField(e.target.value)}
-                  />
+                  <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
                </div>
             </div>
             <div className="w-full md:w-1/2">
                <div className="mx-3">
-                  <Button
-                     type="primary"
-                     htmlType="submit"
-                     onClick={() => showModal('add', null)}
-                  >
+                  <Button type="primary" htmlType="submit" onClick={() => showModal('add', null)}>
                      Нэмэх
                   </Button>
                </div>

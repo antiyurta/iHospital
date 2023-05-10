@@ -85,11 +85,7 @@ function DemoIndex() {
             <div className="grid grid-cols-1 gap-4">
                {items?.map((item, index) => {
                   return (
-                     <Button
-                        type="primary"
-                        onClick={() => setSelected(index)}
-                        key={index}
-                     >
+                     <Button type="primary" onClick={() => setSelected(index)} key={index}>
                         {item.title}
                      </Button>
                   );

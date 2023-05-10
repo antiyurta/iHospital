@@ -159,25 +159,16 @@ function UTable(props) {
    const inputChecker = (index, row) => {
       if (props.column[index]?.input === 'select') {
          return props.column[index]?.inputData?.map((data) => {
-            if (data.id === row)
-               return data[`${props.column[index]?.relIndex}`];
+            if (data.id === row) return data[`${props.column[index]?.relIndex}`];
          });
       } else if (props.column[index]?.input === 'switch') {
-         return row ? (
-            <CheckOutlined className="text-green-600" />
-         ) : (
-            <CloseOutlined className="text-red-600" />
-         );
+         return row ? <CheckOutlined className="text-green-600" /> : <CloseOutlined className="text-red-600" />;
       }
       return row;
    };
    const checkNumber = (event) => {
       var charCode = event.charCode;
-      if (
-         charCode > 31 &&
-         (charCode < 48 || charCode > 57) &&
-         charCode !== 46
-      ) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
          event.preventDefault();
       } else {
          return true;
@@ -227,10 +218,7 @@ function UTable(props) {
                <Table className="ant-border-space" style={{ width: '100%' }}>
                   <thead className="ant-table-thead bg-slate-200">
                      <tr>
-                        <th
-                           className="font-bold text-sm align-middle"
-                           rowSpan={2}
-                        >
+                        <th className="font-bold text-sm align-middle" rowSpan={2}>
                            №
                         </th>
                         {props.column.map((element, index) => {
@@ -246,10 +234,7 @@ function UTable(props) {
                               )
                            );
                         })}
-                        <th
-                           className="w-3 font-bold text-sm align-middle"
-                           rowSpan={2}
-                        >
+                        <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
                            Үйлдэл
                         </th>
                      </tr>
@@ -262,9 +247,7 @@ function UTable(props) {
                                     <Search
                                        placeholder={element.label + ' Хайх'}
                                        allowClear
-                                       onSearch={(e) =>
-                                          onSearch(e, element.index)
-                                       }
+                                       onSearch={(e) => onSearch(e, element.index)}
                                        enterButton={'Хайх'}
                                     />
                                  </td>
@@ -277,17 +260,12 @@ function UTable(props) {
                      {spinner ? (
                         data.map((row, indexData) => {
                            return (
-                              <tr
-                                 key={indexData}
-                                 className="ant-table-row ant-table-row-level-0"
-                              >
+                              <tr key={indexData} className="ant-table-row ant-table-row-level-0">
                                  <td className="ant-table-row-cell-break-word">
-                                    {meta.page * meta.limit -
-                                       (meta.limit - indexData - 1)}
+                                    {meta.page * meta.limit - (meta.limit - indexData - 1)}
                                  </td>
                                  {props.column?.map((column, index) => {
-                                    return column.relation &&
-                                       row[`${column.index[0]}`] !== null ? (
+                                    return column.relation && row[`${column.index[0]}`] !== null ? (
                                        <td
                                           key={index}
                                           style={{
@@ -296,17 +274,8 @@ function UTable(props) {
                                           }}
                                        >
                                           {column?.staticData
-                                             ? column.staticData(
-                                                  row[`${column.index[0]}`][
-                                                     `${column.index[1]}`
-                                                  ]
-                                               )
-                                             : inputChecker(
-                                                  index,
-                                                  row[`${column.index[0]}`][
-                                                     `${column.index[1]}`
-                                                  ]
-                                               )}
+                                             ? column.staticData(row[`${column.index[0]}`][`${column.index[1]}`])
+                                             : inputChecker(index, row[`${column.index[0]}`][`${column.index[1]}`])}
                                        </td>
                                     ) : (
                                        column.isView && (
@@ -318,13 +287,8 @@ function UTable(props) {
                                              }}
                                           >
                                              {column.staticData
-                                                ? column.staticData(
-                                                     row[`${column.index}`]
-                                                  )
-                                                : inputChecker(
-                                                     index,
-                                                     row[`${column.index}`]
-                                                  )}
+                                                ? column.staticData(row[`${column.index}`])
+                                                : inputChecker(index, row[`${column.index}`])}
                                           </td>
                                        )
                                     );
@@ -360,9 +324,7 @@ function UTable(props) {
                                           title="Устгах"
                                           style={{ paddingLeft: 5 }}
                                        >
-                                          <DeleteOutlined
-                                             style={{ color: 'red' }}
-                                          />
+                                          <DeleteOutlined style={{ color: 'red' }} />
                                        </Button>
                                     )}
                                  </td>
@@ -379,10 +341,7 @@ function UTable(props) {
                                  textAlign: 'center'
                               }}
                            >
-                              <Spinner
-                                 animation="grow"
-                                 style={{ color: '#1890ff' }}
-                              />
+                              <Spinner animation="grow" style={{ color: '#1890ff' }} />
                            </td>
                         </tr>
                      )}
@@ -390,12 +349,7 @@ function UTable(props) {
                </Table>
             </div>
             <div>
-               <Pagination
-                  className="pagination"
-                  pageSize={10}
-                  total={meta.itemCount}
-                  onChange={onStart}
-               />
+               <Pagination className="pagination" pageSize={10} total={meta.itemCount} onChange={onStart} />
             </div>
          </Card>
          <Modal
@@ -413,12 +367,7 @@ function UTable(props) {
                      <Descriptions.Item key={idx} label={element.label}>
                         {inputChecker(idx, view[`${element.index}`])}
                         {element.relation
-                           ? inputChecker(
-                                idx,
-                                view[`${element.index[0]}`]?.[
-                                   `${element.index[1]}`
-                                ]
-                             )
+                           ? inputChecker(idx, view[`${element.index[0]}`]?.[`${element.index[1]}`])
                            : inputChecker(idx, view[`${element.index}`])}
                      </Descriptions.Item>
                   );
@@ -446,11 +395,7 @@ function UTable(props) {
             cancelText="Болих"
             okText="Хадгалах"
          >
-            <Form
-               form={form}
-               wrapperCol={{ span: 14 }}
-               onValuesChange={handleFormValuesChange}
-            >
+            <Form form={form} wrapperCol={{ span: 14 }} onValuesChange={handleFormValuesChange}>
                <Row gutter={[24, 6]}>
                   {props.column.map((element, index) => {
                      return (
@@ -484,22 +429,14 @@ function UTable(props) {
                                     rules={element.rules}
                                     dependencies={[props.dependVal]}
                                  >
-                                    <Select
-                                       allowClear
-                                       placeholder={element.label}
-                                    >
-                                       {element.inputData?.map(
-                                          (data, index) => {
-                                             return (
-                                                <Option
-                                                   key={index}
-                                                   value={data.id}
-                                                >
-                                                   {data[`${element.relIndex}`]}
-                                                </Option>
-                                             );
-                                          }
-                                       )}
+                                    <Select allowClear placeholder={element.label}>
+                                       {element.inputData?.map((data, index) => {
+                                          return (
+                                             <Option key={index} value={data.id}>
+                                                {data[`${element.relIndex}`]}
+                                             </Option>
+                                          );
+                                       })}
                                     </Select>
                                  </Form.Item>
                               ) : null
@@ -509,28 +446,15 @@ function UTable(props) {
                               (element.isDepend && dependShow) ||
                               element.isDepend === undefined ||
                               !element.isDepend ? (
-                                 <Form.Item
-                                    label={element.label}
-                                    name={element.index}
-                                    rules={element.rules}
-                                 >
-                                    <Select
-                                       mode="multiple"
-                                       allowClear
-                                       placeholder={element.label}
-                                    >
-                                       {element.inputData?.map(
-                                          (data, index) => {
-                                             return (
-                                                <Option
-                                                   key={index}
-                                                   value={data.id}
-                                                >
-                                                   {data[`${element.relIndex}`]}
-                                                </Option>
-                                             );
-                                          }
-                                       )}
+                                 <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                                    <Select mode="multiple" allowClear placeholder={element.label}>
+                                       {element.inputData?.map((data, index) => {
+                                          return (
+                                             <Option key={index} value={data.id}>
+                                                {data[`${element.relIndex}`]}
+                                             </Option>
+                                          );
+                                       })}
                                     </Select>
                                  </Form.Item>
                               ) : null
@@ -546,11 +470,7 @@ function UTable(props) {
                                     rules={element.rules}
                                     valuePropName="checked"
                                  >
-                                    <Switch
-                                       className="bg-sky-700"
-                                       checkedChildren="Тийм"
-                                       unCheckedChildren="Үгүй"
-                                    />
+                                    <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                                  </Form.Item>
                               ) : null
                            ) : null}
@@ -559,11 +479,7 @@ function UTable(props) {
                               (element.isDepend && dependShow) ||
                               element.isDepend === undefined ||
                               !element.isDepend ? (
-                                 <Form.Item
-                                    label={element.label}
-                                    name={element.index}
-                                    rules={element.rules}
-                                 >
+                                 <Form.Item label={element.label} name={element.index} rules={element.rules}>
                                     <Input placeholder={element.label} />
                                  </Form.Item>
                               ) : null
@@ -573,15 +489,8 @@ function UTable(props) {
                               (element.isDepend && dependShow) ||
                               element.isDepend === undefined ||
                               !element.isDepend ? (
-                                 <Form.Item
-                                    label={element.label}
-                                    name={element.index}
-                                    rules={element.rules}
-                                 >
-                                    <InputNumber
-                                       placeholder={element.label}
-                                       onKeyPress={checkNumber}
-                                    />
+                                 <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                                    <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
                                  </Form.Item>
                               ) : null
                            ) : null}
@@ -590,11 +499,7 @@ function UTable(props) {
                               (element.isDepend && dependShow) ||
                               element.isDepend === undefined ||
                               !element.isDepend ? (
-                                 <Form.Item
-                                    label={element.label}
-                                    name={element.index}
-                                    rules={element.rules}
-                                 >
+                                 <Form.Item label={element.label} name={element.index} rules={element.rules}>
                                     <TextArea />
                                  </Form.Item>
                               ) : null
@@ -604,11 +509,7 @@ function UTable(props) {
                               (element.isDepend && dependShow) ||
                               element.isDepend === undefined ||
                               !element.isDepend ? (
-                                 <Form.Item
-                                    label={element.label}
-                                    name={element.index}
-                                    rules={element.rules}
-                                 >
+                                 <Form.Item label={element.label} name={element.index} rules={element.rules}>
                                     <DatePicker locale={mn} />
                                  </Form.Item>
                               ) : null
@@ -632,12 +533,7 @@ function UTable(props) {
                         }
                      });
                      values.type = type;
-                     const response = await Post(
-                        'service/type',
-                        token,
-                        config,
-                        values
-                     );
+                     const response = await Post('service/type', token, config, values);
                      if (response.length != 0) {
                         props.refresh();
                         setIsSubModalVisible(false);
@@ -659,11 +555,7 @@ function UTable(props) {
                   return (
                      <Col span={24} key={index}>
                         {element.isAdd && element.subInput === 'input' && (
-                           <Form.Item
-                              label={element.label}
-                              name={element.index}
-                              rules={element.rules}
-                           >
+                           <Form.Item label={element.label} name={element.index} rules={element.rules}>
                               <Input placeholder={element.label} />
                            </Form.Item>
                         )}
@@ -676,9 +568,7 @@ function UTable(props) {
                   <thead className="ant-table-thead bg-slate-200">
                      <tr>
                         <th className="font-bold text-sm align-middle">Нэр</th>
-                        <th className="font-bold text-sm align-middle">
-                           Үйлдэл
-                        </th>
+                        <th className="font-bold text-sm align-middle">Үйлдэл</th>
                      </tr>
                   </thead>
                   <tbody className="ant-table-tbody p-0">
@@ -690,11 +580,7 @@ function UTable(props) {
                                  <Popconfirm
                                     title="Устгасан дохиолдолд сэргээх боломжгүй"
                                     onConfirm={async () => {
-                                       const response = await Delete(
-                                          'service/type/' + data.id,
-                                          token,
-                                          config
-                                       );
+                                       const response = await Delete('service/type/' + data.id, token, config);
                                        if (response === 200) {
                                           getTypesDatas(data.type);
                                        }

@@ -78,24 +78,14 @@ function AM22D() {
                      >
                         Эмнэлгийн нэр: ____________________
                      </span>
-                     <span style={{ fontWeight: 'bold', fontSize: 10 }}>
-                        АМ-22Д
-                     </span>
+                     <span style={{ fontWeight: 'bold', fontSize: 10 }}>АМ-22Д</span>
                   </div>
                </div>
-               <div
-                  style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}
-               >
-                  <span style={{ fontWeight: 'bold', fontSize: 10 }}>
-                     ЦӨСНИЙ ШИНЖИЛГЭЭ №
-                  </span>
+               <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
+                  <span style={{ fontWeight: 'bold', fontSize: 10 }}>ЦӨСНИЙ ШИНЖИЛГЭЭ №</span>
                </div>
-               <span style={{ fontSize: 10 }}>
-                  Эцэг \эх\ийн нэр _________________________
-               </span>
-               <div style={{ fontSize: 10 }}>
-                  Нэр _____________________________
-               </div>
+               <span style={{ fontSize: 10 }}>Эцэг \эх\ийн нэр _________________________</span>
+               <div style={{ fontSize: 10 }}>Нэр _____________________________</div>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex' }}>
                      <span style={{ marginRight: 5 }}>РД </span>
@@ -109,33 +99,18 @@ function AM22D() {
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
-                     <span style={{ marginLeft: 10 }}>
-                        Нас__________Хүйс: /зур/ эр, эм
-                     </span>
+                     <span style={{ marginLeft: 10 }}>Нас__________Хүйс: /зур/ эр, эм</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>
-                  _____ он ____ сар _____ өдөр ____ цаг ______ минут
-               </div>
+               <div style={styles.rowStyle}>_____ он ____ сар _____ өдөр ____ цаг ______ минут</div>
                <Table bordered className="document" style={{ marginTop: 20 }}>
                   <tbody>
                      <tr>
-                        <td
-                           colSpan={2}
-                           style={{ ...styles.centerText, ...{ width: '40%' } }}
-                        >
+                        <td colSpan={2} style={{ ...styles.centerText, ...{ width: '40%' } }}>
                            Шинжилэгдэхүүн
                         </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        >
-                           Лавлах
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        >
-                           Хариу
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '30%' } }}>Лавлах</td>
+                        <td style={{ ...styles.centerText, ...{ width: '30%' } }}>Хариу</td>
                      </tr>
                      <tr>
                         <td rowSpan={4} style={styles.verticalText}>
@@ -211,22 +186,11 @@ function AM22D() {
                <Table bordered className="document" style={{ marginTop: 10 }}>
                   <tbody>
                      <tr>
-                        <td
-                           colSpan={2}
-                           style={{ ...styles.centerText, ...{ width: '40%' } }}
-                        >
+                        <td colSpan={2} style={{ ...styles.centerText, ...{ width: '40%' } }}>
                            Шинжилэгдэхүүн
                         </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        >
-                           Лавлах
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        >
-                           Хариу
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '30%' } }}>Лавлах</td>
+                        <td style={{ ...styles.centerText, ...{ width: '30%' } }}>Хариу</td>
                      </tr>
                      <tr>
                         <td rowSpan={5} style={styles.verticalText}>
@@ -252,9 +216,7 @@ function AM22D() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>
-                           Белирубинат кальцийн тест
-                        </td>
+                        <td style={styles.leftText}>Белирубинат кальцийн тест</td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                      </tr>
@@ -282,9 +244,7 @@ function AM22D() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>
-                           Белирубинат кальцийн тест
-                        </td>
+                        <td style={styles.leftText}>Белирубинат кальцийн тест</td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                      </tr>
@@ -312,9 +272,7 @@ function AM22D() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>
-                           Белирубинат кальцийн тест
-                        </td>
+                        <td style={styles.leftText}>Белирубинат кальцийн тест</td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                      </tr>
@@ -326,9 +284,7 @@ function AM22D() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Лаборантын нэр ____________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Лаборантын нэр ____________________</span>
                </div>
                <div
                   style={{
@@ -336,9 +292,7 @@ function AM22D() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Эмчийн нэр _________________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Эмчийн нэр _________________________</span>
                </div>
             </div>
          </div>

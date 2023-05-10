@@ -25,12 +25,7 @@ export default function HistoryTab({ patientId, inspection }) {
       config.params.patientId = null;
       historyForm.validateFields().then(async (values) => {
          values['patientId'] = patientId;
-         const response = await Post(
-            'emr/patient-history',
-            token,
-            config,
-            values
-         );
+         const response = await Post('emr/patient-history', token, config, values);
          if (response === 201) {
             getPatientHistory(patientId);
          }
@@ -50,13 +45,7 @@ export default function HistoryTab({ patientId, inspection }) {
    }, [inspection]);
 
    return (
-      <Form
-         form={historyForm}
-         autoComplete="off"
-         labelAlign="left"
-         scrollToFirstError
-         layout="vertical"
-      >
+      <Form form={historyForm} autoComplete="off" labelAlign="left" scrollToFirstError layout="vertical">
          <Collapse accordion defaultActiveKey={['1']}>
             <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
                <Step1 />
@@ -89,11 +78,7 @@ export default function HistoryTab({ patientId, inspection }) {
                   span: 16
                }}
             >
-               <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() => saveHistory()}
-               >
+               <Button type="primary" htmlType="submit" onClick={() => saveHistory()}>
                   Амьдралын түүх xадгалах
                </Button>
             </Form.Item>

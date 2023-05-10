@@ -27,8 +27,7 @@ function Cardex() {
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const token = useSelector(selectCurrentToken);
-   const [requestDetailListLoading, setRequestDetailListLoading] =
-      useState(false);
+   const [requestDetailListLoading, setRequestDetailListLoading] = useState(false);
    const [xrayLoading, setXrayLoading] = useState(false);
    //
    const [selectedRequestDtl, setSelectedRequestDtl] = useState([]);
@@ -69,44 +68,28 @@ function Cardex() {
          title: 'Өглөө',
          dataIndex: 'isMorning',
          render: (text, row) => {
-            return row.treatmentRequests?.isMorning && text === null ? (
-               <EditOutlined />
-            ) : (
-               getRequestInfo(text)
-            );
+            return row.treatmentRequests?.isMorning && text === null ? <EditOutlined /> : getRequestInfo(text);
          }
       },
       {
          title: 'Өдөр',
          dataIndex: 'isAfternoon',
          render: (text, row) => {
-            return row.treatmentRequests?.isAfternoon && text === null ? (
-               <EditOutlined />
-            ) : (
-               getRequestInfo(text)
-            );
+            return row.treatmentRequests?.isAfternoon && text === null ? <EditOutlined /> : getRequestInfo(text);
          }
       },
       {
          title: 'Орой',
          dataIndex: 'isEvening',
          render: (text, row) => {
-            return row.treatmentRequests?.isEvening && text === null ? (
-               <EditOutlined />
-            ) : (
-               getRequestInfo(text)
-            );
+            return row.treatmentRequests?.isEvening && text === null ? <EditOutlined /> : getRequestInfo(text);
          }
       },
       {
          title: 'Шөнө',
          dataIndex: 'isNight',
          render: (text, row) => {
-            return row.treatmentRequests?.isNight && text === null ? (
-               <EditOutlined />
-            ) : (
-               getRequestInfo(text)
-            );
+            return row.treatmentRequests?.isNight && text === null ? <EditOutlined /> : getRequestInfo(text);
          }
       }
    ];
@@ -223,10 +206,7 @@ function Cardex() {
          setSelectedRequestDtlMeta(response.meta);
          response?.data?.map((el) => {
             el.examinationRequestDetials?.map((dtl) => {
-               setSelectedRequestDtl((selectedRequestDtl) => [
-                  ...selectedRequestDtl,
-                  dtl
-               ]);
+               setSelectedRequestDtl((selectedRequestDtl) => [...selectedRequestDtl, dtl]);
             });
          });
       } else {
@@ -297,9 +277,7 @@ function Cardex() {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <CheckCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Хэрэгжүүлсэн
                   </span>
                </div>
@@ -308,9 +286,7 @@ function Cardex() {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <WarningOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <WarningOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Цуцалсан
                   </span>
                </div>
@@ -319,9 +295,7 @@ function Cardex() {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <CloseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CloseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Зогсоосон
                   </span>
                </div>
@@ -330,19 +304,14 @@ function Cardex() {
                   role="alert"
                >
                   <span className="font-medium mx-2">
-                     <PauseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <PauseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Татгалзсан
                   </span>
                </div>
             </div>
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pr-2">
-            <div
-               className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
+            <div className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800" role="alert">
                <span className="font-medium mx-1">Эмийн бус эмчилгээ</span>
             </div>
             <Table
@@ -365,10 +334,7 @@ function Cardex() {
             />
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pl-2">
-            <div
-               className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
+            <div className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800" role="alert">
                <span className="font-medium mx-1">Шинжилгээ</span>
             </div>
             <Table
@@ -391,10 +357,7 @@ function Cardex() {
             />
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pr-2">
-            <div
-               className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800"
-               role="alert"
-            >
+            <div className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800" role="alert">
                <span className="font-medium mx-1">Оношилгоо</span>
             </div>
             <Table

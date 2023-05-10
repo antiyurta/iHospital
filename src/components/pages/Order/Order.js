@@ -1,13 +1,4 @@
-import {
-   Button,
-   Checkbox,
-   DatePicker,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Select
-} from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Select } from 'antd';
 import RecentRecipe from './RecentRecipe';
 import SetOrder from './SetOrder';
 import Medicine from './Medicine';
@@ -23,26 +14,13 @@ import { Table } from 'react-bootstrap';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import {
-   DefaultPost,
-   Get,
-   numberToCurrency,
-   openNofi,
-   Post
-} from '../../comman';
+import { DefaultPost, Get, numberToCurrency, openNofi, Post } from '../../comman';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-function Order({
-   isPackage,
-   selectedPatient,
-   isDoctor,
-   usageType,
-   categories,
-   save
-}) {
+function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, save }) {
    const token = useSelector(selectCurrentToken);
    const IncomePatientId = useLocation()?.state?.patientId;
    const IncomeCabinetId = useLocation()?.state?.cabinetId;
@@ -157,28 +135,17 @@ function Order({
    const [orderForm] = Form.useForm();
    const checkNumber = (event) => {
       var charCode = event.charCode;
-      if (
-         charCode > 31 &&
-         (charCode < 48 || charCode > 57) &&
-         charCode !== 46
-      ) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
          event.preventDefault();
       } else {
          return true;
       }
    };
    const totalCalculator = (value, key) => {
-      const repeatTime = orderForm.getFieldValue([
-         'services',
-         key,
-         'repeatTime'
-      ]);
+      const repeatTime = orderForm.getFieldValue(['services', key, 'repeatTime']);
       const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
       orderForm.setFieldValue(['services', key, 'total'], repeatTime * value);
-      orderForm.setFieldValue(
-         ['services', key, 'price'],
-         repeatTime * value * oPrice
-      );
+      orderForm.setFieldValue(['services', key, 'price'], repeatTime * value * oPrice);
       const services = orderForm.getFieldValue('services');
       var total = 0;
       services.map((service) => {
@@ -214,12 +181,7 @@ function Order({
       values.patientId = IncomePatientId;
       values.cabinetId = IncomeCabinetId;
       values.appointmentId = IncomeAppointmentId;
-      const response = await DefaultPost(
-         'service/inpatient-request',
-         token,
-         config,
-         values
-      );
+      const response = await DefaultPost('service/inpatient-request', token, config, values);
       if (response) {
          setInPatientId(response.id);
          setShowInpatient(false);
@@ -269,61 +231,19 @@ function Order({
    }, [orderForm.getFieldValue('services')]);
    return (
       <>
-         {showExamination && (
-            <Examination
-               isOpen={showExamination}
-               isClose={isClose}
-               handleclick={handleclick}
-            />
-         )}
-         {showXray && (
-            <Xray
-               isOpen={showXray}
-               isClose={isClose}
-               handleclick={handleclick}
-            />
-         )}
-         {showTreatment && (
-            <Treatment
-               isOpen={showTreatment}
-               isClose={isClose}
-               handleclick={handleclick}
-            />
-         )}
-         {showMedicine && (
-            <Medicine
-               isOpen={showMedicine}
-               isClose={isClose}
-               handleclick={handleclick}
-            />
-         )}
-         {showPackage && (
-            <Package
-               isOpen={showPackage}
-               isClose={isClose}
-               handleclick={handleclick}
-            />
-         )}
+         {showExamination && <Examination isOpen={showExamination} isClose={isClose} handleclick={handleclick} />}
+         {showXray && <Xray isOpen={showXray} isClose={isClose} handleclick={handleclick} />}
+         {showTreatment && <Treatment isOpen={showTreatment} isClose={isClose} handleclick={handleclick} />}
+         {showMedicine && <Medicine isOpen={showMedicine} isClose={isClose} handleclick={handleclick} />}
+         {showPackage && <Package isOpen={showPackage} isClose={isClose} handleclick={handleclick} />}
          {showInpatient && (
-            <InpatientRequest
-               isOpen={showInpatient}
-               isClose={isClose}
-               handleClick={inpatientRequestClick}
-            />
+            <InpatientRequest isOpen={showInpatient} isClose={isClose} handleClick={inpatientRequestClick} />
          )}
          {showDoctorInspection && (
-            <DoctorInspection
-               isOpen={showDoctorInspection}
-               isClose={isClose}
-               handleclick={handleclick}
-            />
+            <DoctorInspection isOpen={showDoctorInspection} isClose={isClose} handleclick={handleclick} />
          )}
          {showReinspection && (
-            <Reinspection
-               isOpen={showReinspection}
-               isClose={isClose}
-               selectedPatient={selectedPatient}
-            />
+            <Reinspection isOpen={showReinspection} isClose={isClose} selectedPatient={selectedPatient} />
          )}
          <div className="flex flex-wrap">
             <div className="w-full pb-4">
@@ -349,7 +269,7 @@ function Order({
                      })
                   }
                >
-                  {isPackage ? 'Багц хадгалах' : 'OCS Хадгалах'}
+                  {isPackage ? 'Багц хадгалах' : 'OTS Хадгалах'}
                </Button>
             </div>
             <div className="w-full">
@@ -357,16 +277,8 @@ function Order({
                   <Form.List name="services">
                      {(fields, { add, remove }) => (
                         <>
-                           <div
-                              className="table-responsive pb-4"
-                              id="style-8"
-                              style={{ maxHeight: '420px' }}
-                           >
-                              <Table
-                                 className="ant-border-space"
-                                 style={{ width: '100%' }}
-                                 bordered
-                              >
+                           <div className="table-responsive pb-4" id="style-8" style={{ maxHeight: '420px' }}>
+                              <Table className="ant-border-space" style={{ width: '100%' }} bordered>
                                  <thead className="ant-table-thead bg-slate-200">
                                     {isPackage ? (
                                        <tr>
@@ -375,44 +287,20 @@ function Order({
                                        </tr>
                                     ) : (
                                        <tr>
-                                          <th className="font-bold text-sm align-middle">
-                                             cito
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Нэр
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Хэлбэр
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Тун
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Сорьц
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Тайлбар
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Өдөрт хэдэн удаа
-                                          </th>
-                                          <th className="font-bold text-sm align-middle w-5">
-                                             Хэдэн өдөр
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Нийт хэмжээ
-                                          </th>
+                                          <th className="font-bold text-sm align-middle">cito</th>
+                                          <th className="font-bold text-sm align-middle">Нэр</th>
+                                          <th className="font-bold text-sm align-middle">Хэлбэр</th>
+                                          <th className="font-bold text-sm align-middle">Тун</th>
+                                          <th className="font-bold text-sm align-middle">Сорьц</th>
+                                          <th className="font-bold text-sm align-middle">Тайлбар</th>
+                                          <th className="font-bold text-sm align-middle">Өдөрт хэдэн удаа</th>
+                                          <th className="font-bold text-sm align-middle w-5">Хэдэн өдөр</th>
+                                          <th className="font-bold text-sm align-middle">Нийт хэмжээ</th>
                                           {usageType === 'IN' && (
-                                             <th className="font-bold text-sm align-middle">
-                                                Хэрэгжүүлэх өдөр
-                                             </th>
+                                             <th className="font-bold text-sm align-middle">Хэрэгжүүлэх өдөр</th>
                                           )}
-                                          <th className="font-bold text-sm align-middle">
-                                             Үнэ
-                                          </th>
-                                          <th className="font-bold text-sm align-middle">
-                                             Үйлдэл
-                                          </th>
+                                          <th className="font-bold text-sm align-middle">Үнэ</th>
+                                          <th className="font-bold text-sm align-middle">Үйлдэл</th>
                                        </tr>
                                     )}
                                  </thead>
@@ -421,19 +309,11 @@ function Order({
                                        <tr key={key}>
                                           {isPackage ? (
                                              <>
-                                                <td>
-                                                   {orderForm.getFieldValue([
-                                                      'services',
-                                                      name,
-                                                      'serviceName'
-                                                   ])}
-                                                </td>
+                                                <td>{orderForm.getFieldValue(['services', name, 'serviceName'])}</td>
                                                 <td>
                                                    <MinusCircleOutlined
                                                       style={{ color: 'red' }}
-                                                      onClick={() =>
-                                                         remove(name)
-                                                      }
+                                                      onClick={() => remove(name)}
                                                    />
                                                 </td>
                                              </>
@@ -449,33 +329,14 @@ function Order({
                                                    </Form.Item>
                                                 </td>
                                                 <td className="whitespace-pre-line">
-                                                   {orderForm.getFieldValue([
-                                                      'services',
-                                                      name,
-                                                      'name'
-                                                   ])}
+                                                   {orderForm.getFieldValue(['services', name, 'name'])}
                                                 </td>
+                                                <td>{orderForm.getFieldValue(['services', name, 'medicineType'])}</td>
                                                 <td>
-                                                   {orderForm.getFieldValue([
-                                                      'services',
-                                                      name,
-                                                      'medicineType'
-                                                   ])}
-                                                </td>
-                                                <td>
-                                                   <Form.Item
-                                                      name={[name, 'dose']}
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item name={[name, 'dose']} className="mb-0">
                                                       <Input
                                                          disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 8
                                                                ? false
                                                                : true
                                                          }
@@ -483,19 +344,10 @@ function Order({
                                                    </Form.Item>
                                                 </td>
                                                 <td>
-                                                   <Form.Item
-                                                      name={[name, 'specimen']}
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item name={[name, 'specimen']} className="mb-0">
                                                       <Input
                                                          disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 0
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 0
                                                                ? false
                                                                : true
                                                          }
@@ -503,13 +355,7 @@ function Order({
                                                    </Form.Item>
                                                 </td>
                                                 <td>
-                                                   <Form.Item
-                                                      name={[
-                                                         name,
-                                                         'description'
-                                                      ]}
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item name={[name, 'description']} className="mb-0">
                                                       <Input
                                                       // disabled={
                                                       //    orderForm.getFieldValue(
@@ -526,32 +372,12 @@ function Order({
                                                    </Form.Item>
                                                 </td>
                                                 <td>
-                                                   <Form.Item
-                                                      name={[
-                                                         name,
-                                                         'repeatTime'
-                                                      ]}
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item name={[name, 'repeatTime']} className="mb-0">
                                                       <InputNumber
-                                                         onKeyPress={
-                                                            checkNumber
-                                                         }
+                                                         onKeyPress={checkNumber}
                                                          disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8 ||
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 2
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 2
                                                                ? false
                                                                : true
                                                          }
@@ -559,32 +385,12 @@ function Order({
                                                    </Form.Item>
                                                 </td>
                                                 <td>
-                                                   <Form.Item
-                                                      name={[name, 'dayCount']}
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item name={[name, 'dayCount']} className="mb-0">
                                                       <InputNumber
-                                                         onChange={(e) =>
-                                                            totalCalculator(
-                                                               e,
-                                                               name
-                                                            )
-                                                         }
+                                                         onChange={(e) => totalCalculator(e, name)}
                                                          disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8 ||
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 2
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 2
                                                                ? false
                                                                : true
                                                          }
@@ -592,29 +398,12 @@ function Order({
                                                    </Form.Item>
                                                 </td>
                                                 <td>
-                                                   <Form.Item
-                                                      name={[name, 'total']}
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item name={[name, 'total']} className="mb-0">
                                                       <InputNumber
-                                                         onChange={(e) =>
-                                                            calc(e, name)
-                                                         }
+                                                         onChange={(e) => calc(e, name)}
                                                          disabled={
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 8 ||
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'type'
-                                                               ]
-                                                            ) === 2
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 8 ||
+                                                            orderForm.getFieldValue(['services', name, 'type']) === 2
                                                                ? false
                                                                : true
                                                          }
@@ -623,13 +412,7 @@ function Order({
                                                 </td>
                                                 {usageType === 'IN' && (
                                                    <td>
-                                                      <Form.Item
-                                                         name={[
-                                                            name,
-                                                            'startAt'
-                                                         ]}
-                                                         className="mb-0"
-                                                      >
+                                                      <Form.Item name={[name, 'startAt']} className="mb-0">
                                                          <DatePicker
                                                             showTime={{
                                                                format: 'HH:mm'
@@ -641,31 +424,21 @@ function Order({
                                                    </td>
                                                 )}
                                                 <td>
-                                                   <Form.Item
-                                                      shouldUpdate
-                                                      className="mb-0"
-                                                   >
+                                                   <Form.Item shouldUpdate className="mb-0">
                                                       {() => {
-                                                         const price =
-                                                            orderForm.getFieldValue(
-                                                               [
-                                                                  'services',
-                                                                  name,
-                                                                  'price'
-                                                               ]
-                                                            );
-                                                         return numberToCurrency(
-                                                            price
-                                                         );
+                                                         const price = orderForm.getFieldValue([
+                                                            'services',
+                                                            name,
+                                                            'price'
+                                                         ]);
+                                                         return numberToCurrency(price);
                                                       }}
                                                    </Form.Item>
                                                 </td>
                                                 <td>
                                                    <MinusCircleOutlined
                                                       style={{ color: 'red' }}
-                                                      onClick={() =>
-                                                         removeOrder(name)
-                                                      }
+                                                      onClick={() => removeOrder(name)}
                                                    />
                                                 </td>
                                              </>

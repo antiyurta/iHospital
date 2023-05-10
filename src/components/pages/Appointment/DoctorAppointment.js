@@ -23,6 +23,20 @@ function DoctorAppointment() {
    });
    const [notPatientsValue, setNotPatientsValue] = useState('');
    //
+   const getPatientById = async (id) => {
+      console.log(id);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      await Get('pms/patient/' + id, token, conf)
+         .then((res) => {
+            setSelectedPatient(res);
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   };
    const onSearchSchedule = async (page, pageSize, value, value1, index) => {
       if (value != undefined) {
          setNotPatientsValue(value);
@@ -48,9 +62,7 @@ function DoctorAppointment() {
             <Search
                placeholder={`Хайх`}
                allowClear
-               onSearch={(e) =>
-                  onSearchSchedule(1, 10, notPatientsValue, e, dataIndex)
-               }
+               onSearch={(e) => onSearchSchedule(1, 10, notPatientsValue, e, dataIndex)}
                enterButton={'Хайх'}
             />
          </div>
@@ -87,19 +99,12 @@ function DoctorAppointment() {
       <div>
          <div className="flex flex-wrap">
             <div className="w-full md:w-4/12 p-1">
-               <PatientInformation
-                  patient={selectedPatient}
-                  handlesearch={onSearchSchedule}
-               />
+               <PatientInformation patient={selectedPatient} handlesearch={onSearchSchedule} />
             </div>
             <div className="w-full md:w-4/12 p-1">
                <Card
                   bordered={false}
-                  title={
-                     <h6 className="font-semibold m-0">
-                        Үйлчлүүлэгчийн Жагсаалт
-                     </h6>
-                  }
+                  title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
                   className="header-solid max-h-max rounded-md"
                   bodyStyle={{
                      paddingTop: 0,
@@ -116,9 +121,7 @@ function DoctorAppointment() {
                            current={notPatientsMeta.page}
                            pageSize={notPatientsMeta.limit}
                            total={notPatientsMeta.itemCount}
-                           onChange={(page, pageSize) =>
-                              onSearchSchedule(page, pageSize, notPatientsValue)
-                           }
+                           onChange={(page, pageSize) => onSearchSchedule(page, pageSize, notPatientsValue)}
                         />
                      </>
                   }
@@ -136,7 +139,7 @@ function DoctorAppointment() {
                      onRow={(row) => {
                         return {
                            onClick: () => {
-                              setSelectedPatient(row);
+                              getPatientById(row.id);
                            }
                         };
                      }}
@@ -149,7 +152,7 @@ function DoctorAppointment() {
                </Card>
             </div>
             <div className="w-full md:w-4/12 p-1">
-               <Index PatientId={selectedPatient.id} />
+               <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
             </div>
          </div>
          <div className="px-1">

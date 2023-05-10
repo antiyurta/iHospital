@@ -11,51 +11,30 @@ function Page2() {
                   <tr>
                      <td className="w-20"></td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Үнэр мэдрэхгүй болох
                               </Checkbox>
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Бусад
                               </Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Бусад
                               </Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Бусад
                               </Checkbox>
                            </Checkbox.Group>
@@ -65,15 +44,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Уруул</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хөхөлбөр өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -89,15 +62,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  {'Улбар шаргал өнгөтэй'}
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -113,15 +80,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Цайвар өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -140,15 +101,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Хэл</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Улаан, хөхөлбөр, ягаан өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -161,8 +116,7 @@ function Page2() {
                                  Хийн гүвдрүүтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Хөшүүн охор богино үзүүр нарийн, хэл чулчирна
-                                 хэлгийрнэ таталдана
+                                 Хөшүүн охор богино үзүүр нарийн, хэл чулчирна хэлгийрнэ таталдана
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
                                  Эхүүн амтагдана
@@ -174,15 +128,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Улаавтар өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -204,15 +152,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Цайвар ягаан өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -222,8 +164,7 @@ function Page2() {
                                  Чийлэг зөөлөн
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Нимгэн зузаан цайвар өнгөртэй, зах ирмэгээрээ
-                                 шүдний оромтой
+                                 Нимгэн зузаан цайвар өнгөртэй, зах ирмэгээрээ шүдний оромтой
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
                                  Ам заваарна
@@ -241,15 +182,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Баас</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Шингэн
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -265,15 +200,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Шар өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -289,15 +218,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Цайвар шаргал өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -319,15 +242,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Шээс</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хөхөлбөр өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -352,15 +269,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Шар, улбар шар, улаан өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -385,23 +296,16 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Цайвар шар өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
                                  Үнэр уур багатай
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
-                                 Хөөс нь жижиг удаан арилна, савны хананд
-                                 наалдана
+                                 Хөөс нь жижиг удаан арилна, савны хананд наалдана
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
                                  Доороо нарийн бөөгнөрсөн тунасан язмагтай
@@ -419,15 +323,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Хөлс</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Бага хэмжээтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -437,15 +335,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Их хэмжээтэй, үнэрлэг
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -455,15 +347,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Дунд зэрэг
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -476,15 +362,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Үс</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Бор хар өнгөтэй
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -503,15 +383,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Шаравтар
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -527,15 +401,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Бараан, гялалзсан
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -554,15 +422,9 @@ function Page2() {
                   <tr>
                      <td className="text-center">Шүд</td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Дорсгор иржгэр
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -575,15 +437,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Шарласан
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>
@@ -596,15 +452,9 @@ function Page2() {
                         </Form.Item>
                      </td>
                      <td>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Цагаан
                               </Checkbox>
                               <Checkbox className="w-full" value={'Хэвийн'}>

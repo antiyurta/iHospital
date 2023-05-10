@@ -244,11 +244,7 @@ function GeneralDrugInformation() {
                      span: 12
                   }}
                >
-                  <Switch
-                     className="bg-sky-700"
-                     checkedChildren="Тийм"
-                     unCheckedChildren="Үгүй"
-                  />
+                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                </Form.Item>
             </div>
          </div>

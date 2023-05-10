@@ -14,12 +14,7 @@ function Primary({ examinationHeight, diagnosticTestHeight }) {
                   <tr>
                      <td>
                         <p className="font-bold">Зовиураас:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicBasisDiagnoses', 'pain']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicBasisDiagnoses', 'pain']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -33,12 +28,7 @@ function Primary({ examinationHeight, diagnosticTestHeight }) {
                   <tr>
                      <td>
                         <p className="font-bold">Асуумжаас:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicBasisDiagnoses', 'question']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicBasisDiagnoses', 'question']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -71,12 +61,7 @@ function Primary({ examinationHeight, diagnosticTestHeight }) {
                   <tr style={{ height: examinationHeight }}>
                      <td>
                         <p className="font-bold">Лабораторийн шинжилгээ:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicBasisDiagnoses', 'examination']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicBasisDiagnoses', 'examination']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -109,12 +94,7 @@ function Primary({ examinationHeight, diagnosticTestHeight }) {
                   <tr>
                      <td>
                         <p className="font-bold">Үндсэн онош:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicBasisDiagnoses', 'main']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicBasisDiagnoses', 'main']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -128,12 +108,7 @@ function Primary({ examinationHeight, diagnosticTestHeight }) {
                   <tr>
                      <td>
                         <p className="font-bold">Дагалдах онош:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicBasisDiagnoses', 'combo']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicBasisDiagnoses', 'combo']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -173,9 +148,7 @@ function Primary({ examinationHeight, diagnosticTestHeight }) {
                               <p className="font-normal">Гарын үсэг:</p>
                            </div>
                            <div className="basis-1/3">
-                              <p className="font-normal">
-                                 он 2012 сар 17 өдөр 22
-                              </p>
+                              <p className="font-normal">он 2012 сар 17 өдөр 22</p>
                            </div>
                         </div>
                      </th>

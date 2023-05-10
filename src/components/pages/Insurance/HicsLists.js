@@ -40,11 +40,7 @@ function HicsLists() {
    const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
          setSelectedDetails(selectedRows);
-         console.log(
-            `selectedRowKeys: ${selectedRowKeys}`,
-            'selectedRows: ',
-            selectedRows
-         );
+         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       }
    };
 
@@ -135,17 +131,8 @@ function HicsLists() {
    return (
       <div className="flex flex-wrap">
          <div className="basis-1/3 pr-1">
-            <Card
-               title="Жагсаалт"
-               className="header-solid max-h-max rounded-md"
-            >
-               <Table
-                  rowKey={'id'}
-                  bordered
-                  loading={isLoadingList}
-                  columns={listCol}
-                  dataSource={lists}
-               />
+            <Card title="Жагсаалт" className="header-solid max-h-max rounded-md">
+               <Table rowKey={'id'} bordered loading={isLoadingList} columns={listCol} dataSource={lists} />
             </Card>
          </div>
          <div className="basis-2/3 pl-1">
@@ -158,9 +145,7 @@ function HicsLists() {
                   dataSource={listDetail}
                   pagination={false}
                   footer={() => {
-                     return (
-                        <Button onClick={() => insuranceSent()}>Илгээх</Button>
-                     );
+                     return <Button onClick={() => insuranceSent()}>Илгээх</Button>;
                   }}
                />
             </Card>

@@ -168,15 +168,11 @@ function Page2() {
             <div className="flex flex-wrap">
                <div className="basis-1/3"></div>
                <div className="basis-1/3">
-                  <p className="font-bold bg-gray-300 text-center mb-3">
-                     ХОЁР ДАХЬ ШАТНЫ ҮЗЛЭГ
-                  </p>
+                  <p className="font-bold bg-gray-300 text-center mb-3">ХОЁР ДАХЬ ШАТНЫ ҮЗЛЭГ</p>
                   <Table bordered className="document">
                      <thead>
                         <tr>
-                           <th className="bg-gray-300 text-center">
-                              Толгой, нүүр болон хүзүү
-                           </th>
+                           <th className="bg-gray-300 text-center">Толгой, нүүр болон хүзүү</th>
                         </tr>
                         <tr>
                            <td>

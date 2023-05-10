@@ -6,13 +6,7 @@ import { DelNote, selectCurrentToken } from '../../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { Patch, Post } from '../../../comman';
 const { TextArea } = Input;
-function DynamicContent({
-   props,
-   incomeData,
-   handleClick,
-   editForm,
-   editForOUT = true
-}) {
+function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true }) {
    const [form] = Form.useForm();
    const token = useSelector(selectCurrentToken);
    const dispatch = useDispatch();
@@ -37,10 +31,8 @@ function DynamicContent({
             usageType: incomeData.usageType,
             diagnoseId: diagnose.id,
             diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId:
-               incomeData.usageType === 'IN' ? incomeData.appointmentId : null,
-            appointmentId:
-               incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.appointmentId : null,
+            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
          });
       });
       if (incomeData.inspection === 11 || incomeData.inspection === 12) {
@@ -67,14 +59,9 @@ function DynamicContent({
       const response = await Post('emr/inspectionNote', token, config, data);
       if (response === 201) {
          if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-            Patch(
-               'service/xrayRequest/' + incomeData.xrayRequestId,
-               token,
-               config,
-               {
-                  xrayProcess: 2
-               }
-            );
+            Patch('service/xrayRequest/' + incomeData.xrayRequestId, token, config, {
+               xrayProcess: 2
+            });
          } else {
             handleClick({ target: { value: 'OCS' } });
          }
@@ -88,10 +75,7 @@ function DynamicContent({
    };
    useEffect(() => {
       if (editForm != undefined && editForm != null) {
-         if (
-            Object.keys(editForm)?.length > 0 &&
-            editForm?.constructor === Object
-         ) {
+         if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
             form.setFieldsValue(editForm);
          } else {
             form.resetFields();
@@ -130,9 +114,7 @@ function DynamicContent({
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (
                                        <div>
-                                          <p className="mt-2 font-semibold">
-                                             {pain.label}
-                                          </p>
+                                          <p className="mt-2 font-semibold">{pain.label}</p>
                                           <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
                                     )}
@@ -153,33 +135,28 @@ function DynamicContent({
                            <Divider orientation="left" className="text-sm my-2">
                               Бодит үзлэг
                            </Divider>
-                           {props.data['inspection'].map(
-                              (inspection, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {incomeData.inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">
-                                                {inspection.label}
-                                             </p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
+                           {props.data['inspection'].map((inspection, index) => {
+                              return (
+                                 <div key={index}>
+                                    {incomeData.inspection === 1 && (
                                        <div>
-                                          <DynamicFormInspection
-                                             data={inspection.options}
-                                             forkey={inspection.label}
-                                             unikey={inspection.inspectionType}
-                                          />
+                                          <p className="mt-2 font-semibold">{inspection.label}</p>
+                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
+                                    )}
+                                    <div>
+                                       <DynamicFormInspection
+                                          data={inspection.options}
+                                          forkey={inspection.label}
+                                          unikey={inspection.inspectionType}
+                                       />
                                     </div>
-                                 );
-                              }
-                           )}
+                                 </div>
+                              );
+                           })}
                         </>
                      ) : null}
-                     {'question' in props.data &&
-                     props.data.question?.length > 0 ? (
+                     {'question' in props.data && props.data.question?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Асуумж
@@ -189,9 +166,7 @@ function DynamicContent({
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (
                                        <div>
-                                          <p className="mt-2 font-semibold">
-                                             {question.label}
-                                          </p>
+                                          <p className="mt-2 font-semibold">{question.label}</p>
                                           <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
                                     )}
@@ -217,9 +192,7 @@ function DynamicContent({
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (
                                        <div>
-                                          <p className="mt-2 font-semibold">
-                                             {plan.label}
-                                          </p>
+                                          <p className="mt-2 font-semibold">{plan.label}</p>
                                           <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
                                     )}
@@ -235,39 +208,33 @@ function DynamicContent({
                            })}
                         </>
                      ) : null}
-                     {'conclusion' in props.data &&
-                     props.data.conclusion?.length > 0 ? (
+                     {'conclusion' in props.data && props.data.conclusion?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Дүгнэлт
                            </Divider>
-                           {props.data['conclusion'].map(
-                              (conclusion, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {incomeData.inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">
-                                                {conclusion.label}
-                                             </p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
+                           {props.data['conclusion'].map((conclusion, index) => {
+                              return (
+                                 <div key={index}>
+                                    {incomeData.inspection === 1 && (
                                        <div>
-                                          <DynamicFormInspection
-                                             data={conclusion.options}
-                                             forkey={conclusion.label}
-                                             unikey={conclusion.inspectionType}
-                                          />
+                                          <p className="mt-2 font-semibold">{conclusion.label}</p>
+                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
+                                    )}
+                                    <div>
+                                       <DynamicFormInspection
+                                          data={conclusion.options}
+                                          forkey={conclusion.label}
+                                          unikey={conclusion.inspectionType}
+                                       />
                                     </div>
-                                 );
-                              }
-                           )}
+                                 </div>
+                              );
+                           })}
                         </>
                      ) : null}
-                     {'advice' in props.data &&
-                     props.data.advice?.length > 0 ? (
+                     {'advice' in props.data && props.data.advice?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Зөвлөгөө
@@ -277,9 +244,7 @@ function DynamicContent({
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (
                                        <div>
-                                          <p className="mt-2 font-semibold">
-                                             {advice.label}
-                                          </p>
+                                          <p className="mt-2 font-semibold">{advice.label}</p>
                                           <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
                                     )}
@@ -295,18 +260,12 @@ function DynamicContent({
                            })}
                         </>
                      ) : null}
-                     {props.data &&
-                     editForOUT &&
-                     incomeData.inspection != 11 &&
-                     incomeData.usageType === 'OUT' ? (
+                     {props.data && editForOUT && incomeData.inspection != 11 && incomeData.usageType === 'OUT' ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Онош
                            </Divider>
-                           <Diagnose
-                              handleClick={DiagnoseHandleClick}
-                              types={[0, 1, 2]}
-                           />
+                           <Diagnose handleClick={DiagnoseHandleClick} types={[0, 1, 2]} />
                         </>
                      ) : null}
                   </>
@@ -322,9 +281,7 @@ function DynamicContent({
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (
                                        <div>
-                                          <p className="mt-2 font-semibold">
-                                             {pain.label}
-                                          </p>
+                                          <p className="mt-2 font-semibold">{pain.label}</p>
                                           <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                        </div>
                                     )}

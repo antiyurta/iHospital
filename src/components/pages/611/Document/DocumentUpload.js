@@ -1,19 +1,5 @@
-import {
-   DeleteOutlined,
-   EditOutlined,
-   LoadingOutlined,
-   PlusOutlined
-} from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Form,
-   Input,
-   Modal,
-   Popconfirm,
-   Select,
-   Upload
-} from 'antd';
+import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Form, Input, Modal, Popconfirm, Select, Upload } from 'antd';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
@@ -102,13 +88,7 @@ function DocumentUpload() {
    const HandleChangeTest = (panelName, optionName, name) => {
       console.log(panelName, optionName, name);
       const formData = form.getFieldsValue();
-      const type = form.getFieldValue([
-         panelName,
-         optionName,
-         'options',
-         name,
-         'type'
-      ]);
+      const type = form.getFieldValue([panelName, optionName, 'options', name, 'type']);
       console.log(type);
       if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
          formData[panelName][optionName].options[name] = {
@@ -130,23 +110,13 @@ function DocumentUpload() {
          params: {}
       };
       if (editMode) {
-         const response = await Patch(
-            'organization/document-form/' + selectedId,
-            token,
-            conf,
-            values
-         );
+         const response = await Patch('organization/document-form/' + selectedId, token, conf, values);
          if (response === 200) {
             form.resetFields();
             setIsOpenEditModal(false);
          }
       } else {
-         const response = await Post(
-            'organization/document-form',
-            token,
-            conf,
-            values
-         );
+         const response = await Post('organization/document-form', token, conf, values);
          if (response === 201) {
             form.resetFields();
             getDocumentForms();
@@ -173,11 +143,7 @@ function DocumentUpload() {
          <div className="flex flex-wrap">
             <div className="w-full md:w-1/2">
                <div className="mx-3">
-                  <Input
-                     placeholder="Хайх"
-                     allowClear
-                     onChange={(e) => setSearchField(e.target.value)}
-                  />
+                  <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
                </div>
             </div>
             <div className="w-full md:w-1/2">
@@ -265,15 +231,8 @@ function DocumentUpload() {
                      })}
                   </Select>
                </Form.Item>
-               <div
-                  className="rounded-md"
-                  style={{ backgroundColor: '#fafafa' }}
-               >
-                  <Index4
-                     options={options}
-                     namePanel={'documentForm'}
-                     handleChange={HandleChangeTest}
-                  />
+               <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
+                  <Index4 options={options} namePanel={'documentForm'} handleChange={HandleChangeTest} />
                </div>
             </Form>
          </Modal>

@@ -23,15 +23,9 @@ function AM26A() {
                      alignItems: 'flex-end'
                   }}
                >
-                  <span style={{ fontSize: 12 }}>
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-                  </span>
-                  <span style={{ fontSize: 12 }}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-26А
-                  </span>
+                  <span style={{ fontSize: 12 }}>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн</span>
+                  <span style={{ fontSize: 12 }}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-26А</span>
                </div>
                <div
                   style={{
@@ -50,10 +44,7 @@ function AM26A() {
             <Table bordered className="document">
                <tbody>
                   <tr>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         №
                      </td>
                      <td
@@ -66,53 +57,31 @@ function AM26A() {
                      >
                         Эцэг /эх/-ийн нэр, Нэр Регистрийн дугаар
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 60 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 60 } }}>
                         Нас
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 60 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 60 } }}>
                         Хүйс
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 100 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 100 } }}>
                         Тогтмол хаяг
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 100 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 100 } }}>
                         Онош
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 100 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 100 } }}>
                         Гэрээр очсон огноо (с/ө/о)
                      </td>
                      <td colSpan={2} style={textStyle.centerText}>
                         Тусламж үйлчилгээний төрөл
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 200 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 200 } }}>
                         Тайлбар
                      </td>
                   </tr>
                   <tr>
-                     <td style={{ ...textStyle.centerText, ...{ width: 80 } }}>
-                        Үнэгүй эм олгосон
-                     </td>
-                     <td style={{ ...textStyle.centerText, ...{ width: 80 } }}>
-                        Бусад
-                     </td>
+                     <td style={{ ...textStyle.centerText, ...{ width: 80 } }}>Үнэгүй эм олгосон</td>
+                     <td style={{ ...textStyle.centerText, ...{ width: 80 } }}>Бусад</td>
                   </tr>
                   <tr style={{ height: 20 }}>
                      <td

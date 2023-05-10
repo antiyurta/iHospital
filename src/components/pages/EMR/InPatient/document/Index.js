@@ -49,12 +49,7 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
          params: {}
       };
       console.log(data);
-      const response = await DefaultPatch(
-         'inpatient/story/' + id,
-         token,
-         conf,
-         data
-      );
+      const response = await DefaultPatch('inpatient/story/' + id, token, conf, data);
       console.log(response);
    };
    const onFinishFailed = (error) => {
@@ -85,25 +80,17 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
                         return (
                            <div key={index} className="w-full p-1">
                               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
-                                 <p className="p-1 font-bold">
-                                    {pain.label ? pain.label : ''}
-                                 </p>
+                                 <p className="p-1 font-bold">{pain.label ? pain.label : ''}</p>
                                  {pain.options?.length > 0 && (
                                     <div className="flex flex-wrap">
                                        {pain.options.map((option, idx) => {
                                           if (option.type === 'textarea') {
                                              return (
-                                                <div
-                                                   key={idx}
-                                                   className="w-full"
-                                                >
+                                                <div key={idx} className="w-full">
                                                    <div className="p-1">
                                                       <Form.Item
                                                          label={option.value}
-                                                         name={[
-                                                            'doctorInspection',
-                                                            option.keyWord
-                                                         ]}
+                                                         name={['doctorInspection', option.keyWord]}
                                                          className="mb-0"
                                                       >
                                                          <TextArea />
@@ -113,44 +100,26 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
                                              );
                                           } else {
                                              return (
-                                                <div
-                                                   key={idx}
-                                                   className="w-1/4"
-                                                >
+                                                <div key={idx} className="w-1/4">
                                                    <div className="p-1">
                                                       <Form.Item
                                                          label={option.value}
-                                                         name={[
-                                                            'doctorInspection',
-                                                            option.keyWord
-                                                         ]}
+                                                         name={['doctorInspection', option.keyWord]}
                                                          className="mb-0"
                                                       >
-                                                         {option.type ===
-                                                         'checkbox' ? (
+                                                         {option.type === 'checkbox' ? (
                                                             <Checkbox.Group className="align-middle grid">
-                                                               {option.options?.map(
-                                                                  (
-                                                                     el,
-                                                                     index
-                                                                  ) => {
-                                                                     return (
-                                                                        <Checkbox
-                                                                           className="pl-1 ml-0"
-                                                                           value={
-                                                                              index
-                                                                           }
-                                                                           key={
-                                                                              index
-                                                                           }
-                                                                        >
-                                                                           {
-                                                                              el.label
-                                                                           }
-                                                                        </Checkbox>
-                                                                     );
-                                                                  }
-                                                               )}
+                                                               {option.options?.map((el, index) => {
+                                                                  return (
+                                                                     <Checkbox
+                                                                        className="pl-1 ml-0"
+                                                                        value={index}
+                                                                        key={index}
+                                                                     >
+                                                                        {el.label}
+                                                                     </Checkbox>
+                                                                  );
+                                                               })}
                                                             </Checkbox.Group>
                                                          ) : (
                                                             <Input />
@@ -198,9 +167,7 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
             {
                label: note.name,
                key: index,
-               children: (
-                  <Render data={note.formItem} templateId={note.formId} />
-               )
+               children: <Render data={note.formItem} templateId={note.formId} />
             }
          ]);
       });

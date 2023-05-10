@@ -118,12 +118,7 @@ function IndexAfter({ type, params }) {
       }
    };
    const onFinish = async (values) => {
-      const response = await Patch(
-         'service/xrayRequest/' + id,
-         token,
-         config,
-         values
-      );
+      const response = await Patch('service/xrayRequest/' + id, token, config, values);
       if (response === 200) {
          setXrayModal(false);
          getXrayRequest();
@@ -231,10 +226,7 @@ function IndexAfter({ type, params }) {
       {
          title: 'Орох цаг',
          render: (_, row) => {
-            return getTypeInfo(
-               row.deviceSlots?.startTime?.substr(0, 5),
-               row.deviceSlots?.endTime?.substr(0, 5)
-            );
+            return getTypeInfo(row.deviceSlots?.startTime?.substr(0, 5), row.deviceSlots?.endTime?.substr(0, 5));
          }
       },
       {
@@ -327,20 +319,14 @@ function IndexAfter({ type, params }) {
                               className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                               role="alert"
                            >
-                              <span className="font-medium mx-1">
-                                 Урьдчилсан захиалга
-                              </span>
+                              <span className="font-medium mx-1">Урьдчилсан захиалга</span>
                            </div>
                            {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
                                         <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
                                     </div> */}
                         </div>
                         <div className="float-right">
-                           <Button
-                              title="Сэргээх"
-                              type="primary"
-                              onClick={() => getXrayRequest(1, 10, start, end)}
-                           >
+                           <Button title="Сэргээх" type="primary" onClick={() => getXrayRequest(1, 10, start, end)}>
                               <ReloadOutlined
                               // spin={!spinner}
                               />
@@ -382,8 +368,7 @@ function IndexAfter({ type, params }) {
                                  pageSize: 10,
                                  total: meta.itemCount,
                                  current: meta.page,
-                                 onChange: (page, pageSize) =>
-                                    getXrayRequest(page, pageSize, start, end)
+                                 onChange: (page, pageSize) => getXrayRequest(page, pageSize, start, end)
                               }}
                            />
                         </div>

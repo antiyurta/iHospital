@@ -7,9 +7,7 @@ function Page3({ form }) {
          <div className="subpage">
             <div className="flex flex-wrap">
                <div className="w-full amaraZuun amaraBaruun amaraDeer">
-                  <p className="ml-2 font-bold">
-                     Зүрх судасны вегетатив невропати:
-                  </p>
+                  <p className="ml-2 font-bold">Зүрх судасны вегетатив невропати:</p>
                </div>
                <div className="w-full amaraZuun amaraBaruun amaraDeer">
                   <p className="ml-2 font-bold">Бөөр:</p>
@@ -30,9 +28,7 @@ function Page3({ form }) {
                            <p className="text-center">Сахар</p>
                         </div>
                         <div className="w-4/12 amaraBaruun amaraDeer">
-                           <p className="text-center">
-                              {form.getFieldValue(['Бөөр', 'Сахар'])}
-                           </p>
+                           <p className="text-center">{form.getFieldValue(['Бөөр', 'Сахар'])}</p>
                         </div>
                         <div className="w-4/12 amaraDeer">
                            <p className="text-center">Хэвийн хэмжээ</p>
@@ -41,9 +37,7 @@ function Page3({ form }) {
                            <p className="text-center">Кетон</p>
                         </div>
                         <div className="w-4/12 amaraBaruun amaraDeer">
-                           <p className="text-center">
-                              {form.getFieldValue(['Бөөр', 'Кетон'])}
-                           </p>
+                           <p className="text-center">{form.getFieldValue(['Бөөр', 'Кетон'])}</p>
                         </div>
                         <div className="w-4/12 amaraDeer">
                            <p className="text-center">Хэвийн хэмжээ</p>
@@ -52,9 +46,7 @@ function Page3({ form }) {
                            <p className="text-center">Уураг</p>
                         </div>
                         <div className="w-4/12 amaraBaruun amaraDeer">
-                           <p className="text-center">
-                              {form.getFieldValue(['Бөөр', 'Уураг'])}
-                           </p>
+                           <p className="text-center">{form.getFieldValue(['Бөөр', 'Уураг'])}</p>
                         </div>
                         <div className="w-4/12 amaraDeer">
                            <p className="text-center">Хэвийн хэмжээ</p>
@@ -63,9 +55,7 @@ function Page3({ form }) {
                            <p className="text-center">Цагаан эс</p>
                         </div>
                         <div className="w-4/12 amaraBaruun amaraDeer">
-                           <p className="text-center">
-                              {form.getFieldValue(['Бөөр', 'Цагаан эс'])}
-                           </p>
+                           <p className="text-center">{form.getFieldValue(['Бөөр', 'Цагаан эс'])}</p>
                         </div>
                         <div className="w-4/12 amaraDeer">
                            <p className="text-center">Хэвийн хэмжээ</p>
@@ -74,9 +64,7 @@ function Page3({ form }) {
                            <p className="text-center">Улаан эс</p>
                         </div>
                         <div className="w-4/12 amaraBaruun amaraDeer">
-                           <p className="text-center">
-                              {form.getFieldValue(['Бөөр', 'Улаан эс'])}
-                           </p>
+                           <p className="text-center">{form.getFieldValue(['Бөөр', 'Улаан эс'])}</p>
                         </div>
                         <div className="w-4/12 amaraDeer">
                            <p className="text-center">Хэвийн хэмжээ</p>
@@ -85,9 +73,7 @@ function Page3({ form }) {
                            <p className="text-center">Цилиндр</p>
                         </div>
                         <div className="w-4/12 amaraBaruun amaraDeer">
-                           <p className="text-center">
-                              {form.getFieldValue(['Бөөр', 'Цилиндр'])}
-                           </p>
+                           <p className="text-center">{form.getFieldValue(['Бөөр', 'Цилиндр'])}</p>
                         </div>
                         <div className="w-4/12 amaraDeer">
                            <p className="text-center">Хэвийн хэмжээ</p>
@@ -97,9 +83,7 @@ function Page3({ form }) {
                   <div className="w-1/2 amaraDeer amaraZuun">
                      <div className="flex flex-wrap">
                         <div className="w-full amaraBaruun">
-                           <p className="ml-2 font-bold">
-                              Микроальбуминурийн шинжилгээ
-                           </p>
+                           <p className="ml-2 font-bold">Микроальбуминурийн шинжилгээ</p>
                         </div>
                         <div className="w-7/12 amaraDeer amaraBaruun">
                            <p>sdasd</p>
@@ -197,10 +181,7 @@ function Page3({ form }) {
                </div>
                <div className="w-2/12 amaraDeer amaraZuun">
                   <p className="ml-2">Дараах өөрчлөлт илэрсэн эсэх:</p>
-                  <Form.Item
-                     name={['Хөл', 'Дараах өөрчлөлт илэрсэн эсэх']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөл', 'Дараах өөрчлөлт илэрсэн эсэх']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Эвэр'}>
                            Эвэр
@@ -216,33 +197,23 @@ function Page3({ form }) {
                <div className="w-3/12 amaraDeer amaraZuun amaraBaruun">
                   <p className="ml-2">Хөлийн судасны лугшилт:</p>
                   <p className="ml-2">a.pedis dorsalis:</p>
-                  <Form.Item
-                     name={['Хөлийн судасны лугшилт', 'a.pedis dorsalis']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн судасны лугшилт', 'a.pedis dorsalis']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                   <p className="ml-2">a.tibialis posterior:</p>
-                  <Form.Item
-                     name={['Хөлийн судасны лугшилт', 'a.tabialis posterior']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн судасны лугшилт', 'a.tabialis posterior']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
@@ -251,86 +222,61 @@ function Page3({ form }) {
                </div>
                <div className="w-1/5 amaraDeer amaraZuun">
                   <p className="ml-2">Доргионы:</p>
-                  <Form.Item
-                     name={['Хөлийн мэдрэхүй', 'Доргионы']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн мэдрэхүй', 'Доргионы']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
                <div className="w-1/5 amaraDeer amaraZuun">
                   <p className="ml-2">Хүрэлцэхүйн:</p>
-                  <Form.Item
-                     name={['Хөлийн мэдрэхүй', 'Хүрэлцэхүйн']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн мэдрэхүй', 'Хүрэлцэхүйн']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
                <div className="w-1/5 amaraDeer amaraZuun">
                   <p className="ml-2">Температурын:</p>
-                  <Form.Item
-                     name={['Хөлийн мэдрэхүй', 'Температурын']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн мэдрэхүй', 'Температурын']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
                <div className="w-1/5 amaraDeer amaraZuun">
                   <p className="ml-2">Өвдөлтийн:</p>
-                  <Form.Item
-                     name={['Хөлийн мэдрэхүй', 'Өвдөлтийн']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн мэдрэхүй', 'Өвдөлтийн']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
                <div className="w-1/5 amaraDeer amaraZuun amaraBaruun">
                   <p className="ml-2">Монофиламент:</p>
-                  <Form.Item
-                     name={['Хөлийн мэдрэхүй', 'Монофиламент']}
-                     className="mb-0"
-                  >
+                  <Form.Item name={['Хөлийн мэдрэхүй', 'Монофиламент']} className="mb-0">
                      <Checkbox.Group className="ddd mx-auto">
                         <Checkbox className="ml-2" value={'Хэвийн'}>
                            Хэвийн
                         </Checkbox>
                         <Checkbox value={'Сул'}>Сул</Checkbox>
-                        <Checkbox value={'Тэмтрэгдэхгүй'}>
-                           Тэмтрэгдэхгүй
-                        </Checkbox>
+                        <Checkbox value={'Тэмтрэгдэхгүй'}>Тэмтрэгдэхгүй</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
                </div>
@@ -338,10 +284,7 @@ function Page3({ form }) {
                   <p>
                      <div className="inline-flex">
                         <p className="ml-2">Шагай, Бугалганы индекс:</p>
-                        <Form.Item
-                           name={['Хөлийн мэдрэхүй', 'Шагай, Бугалгын индекс']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Хөлийн мэдрэхүй', 'Шагай, Бугалгын индекс']} className="mb-0">
                            <Checkbox.Group className="ddd mx-auto">
                               <Checkbox className="ml-2" value={'Баруун'}>
                                  Баруун
@@ -354,10 +297,7 @@ function Page3({ form }) {
                   <p>
                      <div className="inline-flex">
                         <p className="ml-2">Борвины рефлекс:</p>
-                        <Form.Item
-                           name={['Хөлийн мэдрэхүй', 'Борвины рефлекс']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Хөлийн мэдрэхүй', 'Борвины рефлекс']} className="mb-0">
                            <Checkbox.Group className="ddd mx-auto">
                               <Checkbox className="ml-2" value={'Баруун'}>
                                  Баруун

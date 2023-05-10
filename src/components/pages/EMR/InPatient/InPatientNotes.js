@@ -20,11 +20,7 @@ function InPatientNotes({ inpatientRequests }) {
             headers: {},
             params: {}
          };
-         const response = await Get(
-            'service/inPatient-request/show/' + id,
-            token,
-            conf
-         );
+         const response = await Get('service/inPatient-request/show/' + id, token, conf);
          if (response.dailyNotes?.length > 0) {
             setDailyNotes(response.dailyNotes);
          } else {

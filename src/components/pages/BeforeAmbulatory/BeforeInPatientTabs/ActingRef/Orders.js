@@ -1,18 +1,5 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Col,
-   Empty,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Row,
-   Select,
-   Space,
-   Table
-} from 'antd';
+import { Button, Card, Col, Empty, Form, Input, InputNumber, Modal, Row, Select, Space, Table } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -51,11 +38,7 @@ function Orders() {
          headers: {},
          params: {}
       };
-      const response = await Get(
-         'service/medicine-request/calc/' + id,
-         token,
-         conf
-      );
+      const response = await Get('service/medicine-request/calc/' + id, token, conf);
       setCalcedPlan(response);
       setCalcedPlanLoading(false);
    };
@@ -75,9 +58,7 @@ function Orders() {
    const showModal = () => {
       setIsModalOpen(true);
       if (orderType) {
-         const fDep = fDepartments.find(
-            (e) => e.dep_id === filterOrderStatus
-         )?.dep_id;
+         const fDep = fDepartments.find((e) => e.dep_id === filterOrderStatus)?.dep_id;
          form.setFieldValue('dep_id2', fDep);
          var data = [];
          selectedRows?.map((expense) => {
@@ -100,12 +81,7 @@ function Orders() {
       values['mt_type'] = 70;
       values['medicineRequestIds'] = selectedRowKeys;
       console.log(values);
-      const response = await Post(
-         `finance/create-expenses`,
-         token,
-         conf,
-         values
-      );
+      const response = await Post(`finance/create-expenses`, token, conf, values);
       if (response === 201) {
          setIsModalOpen(false);
       }
@@ -121,11 +97,7 @@ function Orders() {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         `finance/department-material/${id}`,
-         token,
-         conf
-      );
+      const response = await DefualtGet(`finance/department-material/${id}`, token, conf);
       setMaterialList(response);
       setSpinner(false);
    };
@@ -136,11 +108,7 @@ function Orders() {
       <>
          <Row gutter={16} className="mb-2">
             <Col span={4}>
-               <Button
-                  type="primary"
-                  className="mr-2"
-                  onClick={() => showModal()}
-               >
+               <Button type="primary" className="mr-2" onClick={() => showModal()}>
                   Захиалга
                </Button>
             </Col>
@@ -258,18 +226,11 @@ function Orders() {
                      <div className="md:w-1/2 sm:w-full p-1">
                         <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                            <div className="p-1">
-                              <Form.Item
-                                 label="Ханаас"
-                                 rules={[{ required: true, message: 'Заавал' }]}
-                                 name={'dep_id'}
-                              >
+                              <Form.Item label="Ханаас" rules={[{ required: true, message: 'Заавал' }]} name={'dep_id'}>
                                  <Select onChange={test}>
                                     {fDepartments.map((dep, index) => {
                                        return (
-                                          <Option
-                                             key={index}
-                                             value={dep.dep_id}
-                                          >
+                                          <Option key={index} value={dep.dep_id}>
                                              {dep.dep_name}
                                           </Option>
                                        );
@@ -290,10 +251,7 @@ function Orders() {
                                  <Select onChange={test} disabled={orderType}>
                                     {fDepartments.map((dep, index) => {
                                        return (
-                                          <Option
-                                             key={index}
-                                             value={dep.dep_id}
-                                          >
+                                          <Option key={index} value={dep.dep_id}>
                                              {dep.dep_name}
                                           </Option>
                                        );
@@ -325,108 +283,74 @@ function Orders() {
                            <Form.List name="expenses">
                               {(fields, { add, remove }) => (
                                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
-                                    {fields.map(
-                                       ({ key, name, ...restField }) => (
-                                          <div
-                                             key={key}
-                                             className="flex flex-wrap items-center"
-                                          >
-                                             <div className="w-6/12 p-1">
-                                                <Form.Item
-                                                   {...restField}
-                                                   label="Матерал"
-                                                   name={[name, 'materialId']}
-                                                   rules={[
-                                                      {
-                                                         required: true,
-                                                         message: 'Заавал'
-                                                      }
-                                                   ]}
+                                    {fields.map(({ key, name, ...restField }) => (
+                                       <div key={key} className="flex flex-wrap items-center">
+                                          <div className="w-6/12 p-1">
+                                             <Form.Item
+                                                {...restField}
+                                                label="Матерал"
+                                                name={[name, 'materialId']}
+                                                rules={[
+                                                   {
+                                                      required: true,
+                                                      message: 'Заавал'
+                                                   }
+                                                ]}
+                                             >
+                                                <Select
+                                                   allowClear
+                                                   showSearch
+                                                   style={{
+                                                      minWidth: 200
+                                                   }}
+                                                   size="small"
+                                                   placeholder="Сонгох"
+                                                   optionFilterProp="children"
+                                                   filterOption={(input, option) => option.children.includes(input)}
+                                                   filterSort={(optionA, optionB) =>
+                                                      optionA.children
+                                                         .toLowerCase()
+                                                         .localeCompare(optionB.children.toLowerCase())
+                                                   }
                                                 >
-                                                   <Select
-                                                      allowClear
-                                                      showSearch
-                                                      style={{
-                                                         minWidth: 200
-                                                      }}
-                                                      size="small"
-                                                      placeholder="Сонгох"
-                                                      optionFilterProp="children"
-                                                      filterOption={(
-                                                         input,
-                                                         option
-                                                      ) =>
-                                                         option.children.includes(
-                                                            input
-                                                         )
-                                                      }
-                                                      filterSort={(
-                                                         optionA,
-                                                         optionB
-                                                      ) =>
-                                                         optionA.children
-                                                            .toLowerCase()
-                                                            .localeCompare(
-                                                               optionB.children.toLowerCase()
-                                                            )
-                                                      }
-                                                   >
-                                                      {materialList?.map(
-                                                         (el, index) => {
-                                                            return (
-                                                               <Option
-                                                                  value={
-                                                                     el.m_id
-                                                                  }
-                                                                  key={index}
-                                                               >
-                                                                  {el.m_name +
-                                                                     '->' +
-                                                                     el.countC2 +
-                                                                     el.ratecode}
-                                                               </Option>
-                                                            );
-                                                         }
-                                                      )}
-                                                   </Select>
-                                                </Form.Item>
-                                             </div>
-                                             <div className="w-5/12 p-1">
-                                                <Form.Item
-                                                   {...restField}
-                                                   label="Тоо ширхэг"
-                                                   name={[name, 'count']}
-                                                   rules={[
-                                                      {
-                                                         required: true,
-                                                         message: 'Заавал'
-                                                      }
-                                                   ]}
-                                                >
-                                                   <InputNumber />
-                                                </Form.Item>
-                                             </div>
-                                             {!orderType && (
-                                                <div className="w-1/12">
-                                                   <MinusCircleOutlined
-                                                      style={{ color: 'red' }}
-                                                      onClick={() =>
-                                                         remove(name)
-                                                      }
-                                                   />
-                                                </div>
-                                             )}
+                                                   {materialList?.map((el, index) => {
+                                                      return (
+                                                         <Option value={el.m_id} key={index}>
+                                                            {el.m_name + '->' + el.countC2 + el.ratecode}
+                                                         </Option>
+                                                      );
+                                                   })}
+                                                </Select>
+                                             </Form.Item>
                                           </div>
-                                       )
-                                    )}
+                                          <div className="w-5/12 p-1">
+                                             <Form.Item
+                                                {...restField}
+                                                label="Тоо ширхэг"
+                                                name={[name, 'count']}
+                                                rules={[
+                                                   {
+                                                      required: true,
+                                                      message: 'Заавал'
+                                                   }
+                                                ]}
+                                             >
+                                                <InputNumber />
+                                             </Form.Item>
+                                          </div>
+                                          {!orderType && (
+                                             <div className="w-1/12">
+                                                <MinusCircleOutlined
+                                                   style={{ color: 'red' }}
+                                                   onClick={() => remove(name)}
+                                                />
+                                             </div>
+                                          )}
+                                       </div>
+                                    ))}
                                     {!orderType && (
                                        <Form.Item>
-                                          <Button
-                                             type="dashed"
-                                             onClick={() => add()}
-                                             block
-                                             icon={<PlusOutlined />}
-                                          >
+                                          <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                              Матерал нэмэх
                                           </Button>
                                        </Form.Item>

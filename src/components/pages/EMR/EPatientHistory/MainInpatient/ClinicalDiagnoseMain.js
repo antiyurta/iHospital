@@ -80,14 +80,8 @@ function ClinicalDiagnoseMain({ PatientId, InpatientRequestId }) {
             renderItem={(item, index) => (
                <List.Item key={index}>
                   <List.Item.Meta title="Зовиураас:" description={item.pain} />
-                  <List.Item.Meta
-                     title="Асуумжаас:"
-                     description={item.question}
-                  />
-                  <List.Item.Meta
-                     title="Бодит үзлэгээс:"
-                     description={item.inspection}
-                  />
+                  <List.Item.Meta title="Асуумжаас:" description={item.question} />
+                  <List.Item.Meta title="Бодит үзлэгээс:" description={item.inspection} />
                </List.Item>
             )}
          />

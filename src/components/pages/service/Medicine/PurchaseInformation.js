@@ -28,11 +28,7 @@ function PurchaseInformation() {
                      span: 12
                   }}
                >
-                  <Switch
-                     className="bg-sky-700"
-                     checkedChildren="Тийм"
-                     unCheckedChildren="Үгүй"
-                  />
+                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                </Form.Item>
             </div>
             <div className="w-full md:w-1/2 px-1">
@@ -52,11 +48,7 @@ function PurchaseInformation() {
                      span: 12
                   }}
                >
-                  <Switch
-                     className="bg-sky-700"
-                     checkedChildren="Тийм"
-                     unCheckedChildren="Үгүй"
-                  />
+                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                </Form.Item>
             </div>
             <div className="w-full md:w-1/2 px-1">
@@ -76,11 +68,7 @@ function PurchaseInformation() {
                      span: 12
                   }}
                >
-                  <Switch
-                     className="bg-sky-700"
-                     checkedChildren="Тийм"
-                     unCheckedChildren="Үгүй"
-                  />
+                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                </Form.Item>
             </div>
          </div>

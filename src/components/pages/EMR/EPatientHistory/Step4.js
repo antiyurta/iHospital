@@ -75,11 +75,7 @@ export default function Step4() {
             <div className="md:w-1/5 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Ажлын цаг"
-                        name={['lifeCondition', 'workCondition', 'clock']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Ажлын цаг" name={['lifeCondition', 'workCondition', 'clock']} className="mb-0">
                         <Input size="small" />
                      </Form.Item>
                   </div>

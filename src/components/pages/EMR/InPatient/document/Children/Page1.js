@@ -20,36 +20,21 @@ function Page1() {
                            <div className="w-1/2">
                               <p>
                                  [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['patient', 'height']}
-                                 >
+                                 <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'height']}>
                                     <Input className="amaraInput w-10" />
                                  </Form.Item>
                                  ]
                               </p>
                               <p>
                                  [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['patient', 'weight']}
-                                 >
+                                 <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'weight']}>
                                     <Input className="amaraInput w-10" />
                                  </Form.Item>
                                  ]
                               </p>
                               <p>
                                  [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['patient', 'index']}
-                                 >
+                                 <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'index']}>
                                     <Input className="amaraInput w-10" />
                                  </Form.Item>
                                  ]
@@ -96,12 +81,7 @@ function Page1() {
                   <tr>
                      <th colSpan={2}>
                         <p>Хэвтэх үеийн зовиур:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'inPatientPain']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'inPatientPain']}>
                            <TextArea className="amaraInputTextArea w-full" />
                         </Form.Item>
                      </th>
@@ -109,29 +89,16 @@ function Page1() {
                   <tr>
                      <th colSpan={2}>
                         <p>Өвчний түүх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'painStory']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'painStory']}>
                            <TextArea className="amaraInputTextArea w-full" />
                         </Form.Item>
-                        <p>
-                           Хэвтэхээс өмнө хийгдсэн эмчилгээ /гэрээр хийсэн
-                           эмчилгээ/:
-                        </p>
+                        <p>Хэвтэхээс өмнө хийгдсэн эмчилгээ /гэрээр хийсэн эмчилгээ/:</p>
                      </th>
                   </tr>
                   <tr>
                      <th colSpan={2}>
                         <p>Амьдралын түүх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'lifeStory']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'lifeStory']}>
                            <TextArea className="amaraInputTextArea w-full" />
                         </Form.Item>
                      </th>
@@ -143,12 +110,7 @@ function Page1() {
                   <tr className="border-t-0">
                      <th className="w-64">
                         <p>Ахуйн нөхцөл:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'locate']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'locate']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'APARTMENT'}>
                                  Орон сууцанд
@@ -162,24 +124,14 @@ function Page1() {
                         <p>
                            <span className="font-bold">Ам бүл</span>
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['anemis', 'familyCondition']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'familyCondition']}>
                                  <Input className="amaraInput w-10" />
                               </Form.Item>
                            </span>
                            <span>хэнтэйгээ амьдардаг</span>
                         </p>
                         <p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['anemis', 'familyConditionOthers']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'familyConditionOthers']}>
                               <Input className="amaraInput w-full" />
                            </Form.Item>
                         </p>
@@ -189,12 +141,7 @@ function Page1() {
                      <th colSpan={2}>
                         <p>Урьд өвчилсөн өвчин, эмгэгийн байдал:</p>
                         <p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['anemis', 'beforoProblems']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'beforoProblems']}>
                               <Input className="amaraInput w-full" />
                            </Form.Item>
                         </p>
@@ -207,22 +154,12 @@ function Page1() {
                   <tr>
                      <th>
                         <p>Халдварт:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['anemis', 'contagious']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'contagious']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'measles'}>
                                  Улаан бурхан{' '}
                                  <span>
-                                    <Form.Item
-                                       shouldUpdate
-                                       className="mb-0"
-                                       noStyle
-                                       name={['anemis', 'isMeasles']}
-                                    >
+                                    <Form.Item shouldUpdate className="mb-0" noStyle name={['anemis', 'isMeasles']}>
                                        <Input className="amaraInput w-10" />
                                     </Form.Item>
                                  </span>

@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-   Form,
-   Select,
-   Button,
-   Slider,
-   Card,
-   Collapse,
-   DatePicker,
-   Row,
-   Col,
-   TimePicker
-} from 'antd';
+import { Form, Select, Button, Slider, Card, Collapse, DatePicker, Row, Col, TimePicker } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import mn from 'antd/es/calendar/locale/mn_MN';
@@ -136,12 +125,8 @@ function Index({ type }) {
          headers: {},
          params: {
             type: type,
-            startDate: moment(firstDayOfMonth)
-               .utcOffset('+0800')
-               .format('YYYY-MM-DD'),
-            endDate: moment(lastDayOfMonth)
-               .utcOffset('+0800')
-               .format('YYYY-MM-DD')
+            startDate: moment(firstDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD'),
+            endDate: moment(lastDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD')
          }
       };
       const response = await Get('schedule', token, conf);
@@ -158,9 +143,7 @@ function Index({ type }) {
    };
 
    const getData = (value, data) => {
-      return data.filter((item) =>
-         item.workDate.includes(moment(value).format('YYYY-MM-DD'))
-      );
+      return data.filter((item) => item.workDate.includes(moment(value).format('YYYY-MM-DD')));
    };
 
    const changeMonth = (value) => {
@@ -168,14 +151,8 @@ function Index({ type }) {
       const dayd = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
       console.log(moment(dayd).format('YYYY-MM-DD HH:mm'));
       setNewScheduleDay(dayd);
-      const firstDayOfMonth = getFirstDayOfMonth(
-         date.getFullYear(),
-         date.getMonth()
-      );
-      const lastDayOfMonth = getLastDayOfMonth(
-         date.getFullYear(),
-         date.getMonth()
-      );
+      const firstDayOfMonth = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
+      const lastDayOfMonth = getLastDayOfMonth(date.getFullYear(), date.getMonth());
       getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
    };
 
@@ -185,21 +162,12 @@ function Index({ type }) {
          .then(async (value) => {
             var arr = { ...value };
             if (Object.keys(arr).length > 0) {
-               arr.workDate = moment(date)
-                  .utcOffset('+0800')
-                  .format('YYYY-MM-DD HH:mm');
+               arr.workDate = moment(date).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
                arr.startTime = moment(value.startTime).format('HH:mm');
                arr.endTime = moment(value.endTime).format('HH:mm');
                arr.type = type;
-               if (
-                  new Date(arr.workDate).getDate() <
-                  new Date(newScheduleDay).getDate()
-               ) {
-                  openNofi(
-                     'error',
-                     'Цаг оруулах',
-                     'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй'
-                  );
+               if (new Date(arr.workDate).getDate() < new Date(newScheduleDay).getDate()) {
+                  openNofi('error', 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                } else if (
                   moment().isAfter(
                      moment(arr.workDate).set({
@@ -208,23 +176,14 @@ function Index({ type }) {
                      })
                   )
                ) {
-                  openNofi(
-                     'error',
-                     'Цаг оруулах',
-                     'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй'
-                  );
+                  openNofi('error', 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                } else {
                   const conf = {
                      headers: {},
                      params: {}
                   };
                   if (editMode) {
-                     const response = await Patch(
-                        'schedule/' + id,
-                        token,
-                        conf,
-                        arr
-                     );
+                     const response = await Patch('schedule/' + id, token, conf, arr);
                      if (response === 200) {
                         setEditMode(false);
                         getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
@@ -243,11 +202,7 @@ function Index({ type }) {
          })
          .catch((err) => {
             console.log(err);
-            openNofi(
-               'warning',
-               'Цаг оруулах',
-               'Цаг оруулах хэсгийг бүрэн бөглөх'
-            );
+            openNofi('warning', 'Цаг оруулах', 'Цаг оруулах хэсгийг бүрэн бөглөх');
          });
    };
 
@@ -285,11 +240,7 @@ function Index({ type }) {
    return (
       <div className="flex flex-wrap">
          <div className="w-full md:w-full lg:w-2/5 p-1">
-            <Card
-               bordered={false}
-               title={'Цаг оруулах'}
-               className="criclebox tablespace mb-24"
-            >
+            <Card bordered={false} title={'Цаг оруулах'} className="criclebox tablespace mb-24">
                <Form layout="vertical" form={form} className="p-3">
                   <Row md={[15, 15]}>
                      {type === 3 && (
@@ -397,9 +348,7 @@ function Index({ type }) {
                      </Col>
                      <Col span={24} className="p-1">
                         <Form.Item
-                           label={
-                              type === 2 ? 'Сувилагч сонгох:' : 'Эмч сонгох:'
-                           }
+                           label={type === 2 ? 'Сувилагч сонгох:' : 'Эмч сонгох:'}
                            name="doctorId"
                            rules={[
                               {
@@ -433,10 +382,7 @@ function Index({ type }) {
                            <Select>
                               {inspectionTimes.map((inspectionTime, index) => {
                                  return (
-                                    <Option
-                                       key={index}
-                                       value={inspectionTime.id}
-                                    >
+                                    <Option key={index} value={inspectionTime.id}>
                                        {inspectionTime.inspectionTime}
                                     </Option>
                                  );
@@ -467,18 +413,13 @@ function Index({ type }) {
                         </Form.Item>
                      </Col>
                      <Col span={24} className="p-1">
-                        <Form.Item
-                           label="Бүртгэлийн ажилтны бүртгэх хувь:"
-                           name="percent"
-                        >
+                        <Form.Item label="Бүртгэлийн ажилтны бүртгэх хувь:" name="percent">
                            <Slider marks={Marks} />
                         </Form.Item>
                      </Col>
                      {editMode && (
                         <Col span={24} className="p-1">
-                           <Button onClick={() => setSchedule(editWorkDate)}>
-                              ЗАсах
-                           </Button>
+                           <Button onClick={() => setSchedule(editWorkDate)}>ЗАсах</Button>
                         </Col>
                      )}
                   </Row>
@@ -489,11 +430,7 @@ function Index({ type }) {
             <Card bordered={false} className="criclebox tablespace mb-24">
                <div className="flex flex-wrap">
                   <div className="w-full m-2">
-                     <DatePicker
-                        locale={mn}
-                        onChange={changeMonth}
-                        picker="month"
-                     />
+                     <DatePicker locale={mn} onChange={changeMonth} picker="month" />
                   </div>
                   <div className="w-full">
                      <Collapse accordion collapsible="header" className="m-2">
@@ -503,57 +440,30 @@ function Index({ type }) {
                                  key={index}
                                  header={moment(day.title).format('YYYY-MM-DD')}
                                  extra={
-                                    <Button
-                                       className="btn-add"
-                                       onClick={() => setSchedule(day.title)}
-                                    >
+                                    <Button className="btn-add" onClick={() => setSchedule(day.title)}>
                                        Нэмэх
                                     </Button>
                                  }
                               >
                                  <div className="table-responsive" id="style-8">
-                                    <Table
-                                       className="ant-border-space"
-                                       style={{ width: '100%' }}
-                                    >
+                                    <Table className="ant-border-space" style={{ width: '100%' }}>
                                        <thead className="ant-table-thead bg-slate-200">
                                           <tr>
-                                             <th className="font-bold text-sm align-middle">
-                                                Эхлэх цаг
-                                             </th>
-                                             <th className="font-bold text-sm align-middle">
-                                                Дуусах цаг
-                                             </th>
-                                             <th className="font-bold text-sm align-middle">
-                                                Тасаг
-                                             </th>
-                                             <th className="font-bold text-sm align-middle">
-                                                Эмч
-                                             </th>
-                                             <th className="font-bold text-sm align-middle">
-                                                Өрөө
-                                             </th>
-                                             <th className="font-bold text-sm align-middle">
-                                                Бүртгэсэн
-                                             </th>
-                                             <th className="font-bold text-sm align-middle">
-                                                Үйлдэл
-                                             </th>
+                                             <th className="font-bold text-sm align-middle">Эхлэх цаг</th>
+                                             <th className="font-bold text-sm align-middle">Дуусах цаг</th>
+                                             <th className="font-bold text-sm align-middle">Тасаг</th>
+                                             <th className="font-bold text-sm align-middle">Эмч</th>
+                                             <th className="font-bold text-sm align-middle">Өрөө</th>
+                                             <th className="font-bold text-sm align-middle">Бүртгэсэн</th>
+                                             <th className="font-bold text-sm align-middle">Үйлдэл</th>
                                           </tr>
                                        </thead>
                                        <tbody className="ant-table-tbody p-0">
                                           {day.schedule?.map((item, index) => {
                                              return (
-                                                <tr
-                                                   key={index}
-                                                   className="ant-table-row ant-table-row-level-0"
-                                                >
-                                                   <td className="ant-table-row-cell-break-word">
-                                                      {item?.startTime}
-                                                   </td>
-                                                   <td className="ant-table-row-cell-break-word">
-                                                      {item?.endTime}
-                                                   </td>
+                                                <tr key={index} className="ant-table-row ant-table-row-level-0">
+                                                   <td className="ant-table-row-cell-break-word">{item?.startTime}</td>
+                                                   <td className="ant-table-row-cell-break-word">{item?.endTime}</td>
                                                    <td className="ant-table-row-cell-break-word">
                                                       {item?.structure?.name}
                                                    </td>
@@ -563,18 +473,14 @@ function Index({ type }) {
                                                    <td className="ant-table-row-cell-break-word">
                                                       {item?.room?.roomNumber}
                                                    </td>
-                                                   <td className="ant-table-row-cell-break-word">
-                                                      {item?.authorId}
-                                                   </td>
+                                                   <td className="ant-table-row-cell-break-word">{item?.authorId}</td>
                                                    <td>
                                                       <EditOutlined
                                                          style={{
                                                             color: 'blue',
                                                             fontSize: '18px'
                                                          }}
-                                                         onClick={() =>
-                                                            editSchedule(item)
-                                                         }
+                                                         onClick={() => editSchedule(item)}
                                                       />
                                                    </td>
                                                 </tr>

@@ -39,30 +39,22 @@ function EbarimtPrint(props) {
          <div ref={printRef} style={{ width: '80mm' }}>
             <div>
                <div className="flow-root">
-                  <p className="float-right font-normal whitespace-pre-wrap">
-                     UNIVERSAL MED HOSPITAL
-                  </p>
+                  <p className="float-right font-normal whitespace-pre-wrap">UNIVERSAL MED HOSPITAL</p>
                </div>
                <div>
                   <p className="text-center pt-2">ТӨЛБӨРИЙН БАРИМТ</p>
                   <p>Картын №:{props?.props?.patient?.cardNumber}</p>
                </div>
                <div className="flow-root">
-                  <p className="float-left">
-                     Овог:{props?.props?.patient?.lastName}
-                  </p>
-                  <p className="float-right">
-                     Нэр:{props?.props?.patient?.firstName}
-                  </p>
+                  <p className="float-left">Овог:{props?.props?.patient?.lastName}</p>
+                  <p className="float-right">Нэр:{props?.props?.patient?.firstName}</p>
                </div>
                <p style={{ fontSize: 17, textAlign: 'center' }}>Жагсаалт</p>
                {props?.props?.invoices?.map((invoice, index) => {
                   return (
                      <div key={index} className="flex flex-wrap">
                         <div className="basis-1/2">
-                           <p style={{ fontSize: 12, fontWeight: 'bold' }}>
-                              {invoice.name}
-                           </p>
+                           <p style={{ fontSize: 12, fontWeight: 'bold' }}>{invoice.name}</p>
                            <p
                               dangerouslySetInnerHTML={{
                                  __html: invoice.description
@@ -70,41 +62,25 @@ function EbarimtPrint(props) {
                            ></p>
                         </div>
                         <div className="basis-1/2 text-center">
-                           <p
-                              className="float-right"
-                              style={{ fontSize: 13, fontWeight: 'bold' }}
-                           >
+                           <p className="float-right" style={{ fontSize: 13, fontWeight: 'bold' }}>
                               {numberToCurrency(invoice.amount)}
                            </p>
                         </div>
                      </div>
                   );
                })}
-               <p
-                  style={{ fontSize: 14, fontWeight: 'bold' }}
-                  className="text-end"
-               >
+               <p style={{ fontSize: 14, fontWeight: 'bold' }} className="text-end">
                   {/* Нийт үнэ: {numberToCurrency(total)} */}
                   Нийт үнэ: {numberToCurrency(props?.props?.totalAmount)}
                </p>
-               <p
-                  style={{ fontSize: 14, fontWeight: 'bold' }}
-                  className="text-end"
-               >
+               <p style={{ fontSize: 14, fontWeight: 'bold' }} className="text-end">
                   Төлөх үнэ: {numberToCurrency(props?.props?.paidAmount)}
                </p>
-               <p
-                  style={{ fontSize: 14, fontWeight: 'bold' }}
-                  className="text-end"
-               >
+               <p style={{ fontSize: 14, fontWeight: 'bold' }} className="text-end">
                   Даатгалаас: {numberToCurrency(props?.props?.insuranceAmount)}
                </p>
-               <p style={{ fontSize: 14, fontWeight: 'bold' }}>
-                  Cугалааны дугаар: {props?.props?.lottery}
-               </p>
-               <p style={{ fontSize: 14, fontWeight: 'bold' }}>
-                  ДДТД:{props?.props?.billId}
-               </p>
+               <p style={{ fontSize: 14, fontWeight: 'bold' }}>Cугалааны дугаар: {props?.props?.lottery}</p>
+               <p style={{ fontSize: 14, fontWeight: 'bold' }}>ДДТД:{props?.props?.billId}</p>
                <div
                   style={{
                      height: 'auto',
@@ -121,25 +97,17 @@ function EbarimtPrint(props) {
                </div>
                <p>
                   Захиалсан цаг:
-                  {moment(props?.props?.createdAt).format(
-                     'YYYY-MM-DD HH:mm:ss'
-                  )}{' '}
+                  {moment(props?.props?.createdAt).format('YYYY-MM-DD HH:mm:ss')}{' '}
                </p>
                <p>Ажилтан: {props?.props?.createdEmployeeName} </p>
             </div>
          </div>
          {props?.isBackPayment ? (
-            <Button
-               className="w-full bg-red-600 text-white font-bold"
-               onClick={() => handleBack(props?.props?.id)}
-            >
+            <Button className="w-full bg-red-600 text-white font-bold" onClick={() => handleBack(props?.props?.id)}>
                Буцаалт
             </Button>
          ) : (
-            <Button
-               className="w-full bg-green-500 text-white font-bold"
-               onClick={handlePrint}
-            >
+            <Button className="w-full bg-green-500 text-white font-bold" onClick={handlePrint}>
                Хэвлэх
             </Button>
          )}

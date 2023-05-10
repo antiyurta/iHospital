@@ -13,11 +13,7 @@ export default function Step3() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Архи хэрэглэдэг эсэх"
-                        name={['lifeStyle', 'alcohol', 'isUse']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Архи хэрэглэдэг эсэх" name={['lifeStyle', 'alcohol', 'isUse']} className="mb-0">
                         <Radio.Group>
                            <Radio value={true}>Тийм</Radio>
                            <Radio value={false}>Үгүй</Radio>
@@ -29,11 +25,7 @@ export default function Step3() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Хэр удаан(Cар)"
-                        name={['lifeStyle', 'alcohol', 'howLong']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Хэр удаан(Cар)" name={['lifeStyle', 'alcohol', 'howLong']} className="mb-0">
                         <Input size="small" />
                      </Form.Item>
                   </div>
@@ -42,11 +34,7 @@ export default function Step3() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Ямар архи"
-                        name={['lifeStyle', 'alcohol', 'whatAlc']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Ямар архи" name={['lifeStyle', 'alcohol', 'whatAlc']} className="mb-0">
                         <Input size="small" />
                      </Form.Item>
                   </div>
@@ -73,11 +61,7 @@ export default function Step3() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Тамхи хэрэглэдэг эсэх"
-                        name={['lifeStyle', 'cigar', 'isUse']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Тамхи хэрэглэдэг эсэх" name={['lifeStyle', 'cigar', 'isUse']} className="mb-0">
                         <Radio.Group>
                            <Radio value={true}>Тийм</Radio>
                            <Radio value={false}>Үгүй</Radio>
@@ -158,11 +142,7 @@ export default function Step3() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Ямар хоолтон"
-                        name={['lifeStyle', 'food', 'whatFoodie']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Ямар хоолтон" name={['lifeStyle', 'food', 'whatFoodie']} className="mb-0">
                         <Radio.Group>
                            <Radio value="0">Ердийн</Radio>
                            <Radio value="1">Цагаан</Radio>

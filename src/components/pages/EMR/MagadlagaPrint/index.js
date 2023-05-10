@@ -82,23 +82,15 @@ function Index({ data }) {
                   <img style={{ width: '50%' }} src={logo} alt="logo" />
                </div>
                <div className="basis-1/2">
-                  <p className="text-center">
-                     Эрүүл мэндын сайдын 2019 оны 12 дугаар сарын 30-ны
-                  </p>
-                  <p className="text-center">
-                     өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </p>
-                  <p className="text-center font-bold">
-                     Эрүүл мэндийн бүртгэлийн маягт AM-8
-                  </p>
+                  <p className="text-center">Эрүүл мэндын сайдын 2019 оны 12 дугаар сарын 30-ны</p>
+                  <p className="text-center">өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
+                  <p className="text-center font-bold">Эрүүл мэндийн бүртгэлийн маягт AM-8</p>
                </div>
             </div>
             <p className="text-center font-bold" style={{ fontSize: '18px' }}>
                ЭМНЭЛГИЙН МАГАДЛАГАА
             </p>
-            <Table
-               style={{ float: 'right', maxWidth: 250, textAlign: 'center' }}
-            >
+            <Table style={{ float: 'right', maxWidth: 250, textAlign: 'center' }}>
                <tbody>
                   <tr>
                      <td style={{ border: '0px', padding: 0 }}>РД</td>
@@ -210,22 +202,14 @@ function Index({ data }) {
                <p style={{ fontSize: '14px' }}>{`Хүйс:(зур)`}</p>
                <p
                   style={{ fontSize: '14px' }}
-                  className={
-                     patientInfo?.genderType === 'MAN'
-                        ? 'underline pr-1'
-                        : 'pr-1'
-                  }
+                  className={patientInfo?.genderType === 'MAN' ? 'underline pr-1' : 'pr-1'}
                >
                   эрэгтэй
                </p>
                <p style={{ fontSize: '14px' }}>,</p>
                <p
                   style={{ fontSize: '14px' }}
-                  className={
-                     patientInfo?.genderType === 'WOMEN'
-                        ? 'underline pr-1'
-                        : 'pr-1'
-                  }
+                  className={patientInfo?.genderType === 'WOMEN' ? 'underline pr-1' : 'pr-1'}
                >
                   эмэгтэй
                </p>
@@ -236,17 +220,14 @@ function Index({ data }) {
                <p style={{ fontSize: '14px' }} className="underline pr-1">
                   {patientInfo?.age}
                </p>
-               <p style={{ fontSize: '14px' }}>
-                  4. Өвчний түүх (ИЭМД)-ийн дугаар
-               </p>
+               <p style={{ fontSize: '14px' }}>4. Өвчний түүх (ИЭМД)-ийн дугаар</p>
                <p style={{ fontSize: '14px' }} className="underline pr-1">
                   <Input />
                </p>
             </div>
             <div>
                <p style={{ fontSize: '14px' }}>
-                  5. Тогтмол
-                  хаяг______________________________________________________________
+                  5. Тогтмол хаяг______________________________________________________________
                </p>
                <p style={{ fontSize: '14px' }}>
                   _______________________________________________________________________________
@@ -254,8 +235,7 @@ function Index({ data }) {
             </div>
             <div>
                <p style={{ fontSize: '14px' }}>
-                  6. Ажлын газар, албан
-                  тушаал______________________________________________
+                  6. Ажлын газар, албан тушаал______________________________________________
                </p>
                <p style={{ fontSize: '14px' }}>
                   _______________________________________________________________________________
@@ -263,8 +243,7 @@ function Index({ data }) {
             </div>
             <div>
                <p style={{ fontSize: '14px' }}>
-                  7.
-                  Мэргэжил_________________________________________________________________
+                  7. Мэргэжил_________________________________________________________________
                </p>
                <p style={{ fontSize: '14px' }}>
                   _______________________________________________________________________________
@@ -273,61 +252,33 @@ function Index({ data }) {
             <div className="inline-flex">
                <p style={{ fontSize: '14px' }}>8.</p>
                <p style={{ fontSize: '14px' }}>(зур)</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={ob ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(0)}
-               >
+               <a style={{ fontSize: '14px' }} className={ob ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(0)}>
                   өвчтэй байсан
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={oa ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(1)}
-               >
+               <a style={{ fontSize: '14px' }} className={oa ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(1)}>
                   өвчтөн асрамжилсан
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={hh ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(2)}
-               >
+               <a style={{ fontSize: '14px' }} className={hh ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(2)}>
                   хөл хоригдсон
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={eu ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(3)}
-               >
+               <a style={{ fontSize: '14px' }} className={eu ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(3)}>
                   эмчид үзүүлсэн
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={sh ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(4)}
-               >
+               <a style={{ fontSize: '14px' }} className={sh ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(4)}>
                   шилжилгээ
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={ae ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(5)}
-               >
+               <a style={{ fontSize: '14px' }} className={ae ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(5)}>
                   ариутгал эмчилгээ
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
             </div>
             <div className="inline-flex align-middle">
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={pz ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => ddd(6)}
-               >
+               <a style={{ fontSize: '14px' }} className={pz ? 'underline pr-1' : 'pr-1'} onClick={() => ddd(6)}>
                   протез
                </a>
                <p style={{ fontSize: '14px' }}>хийлгэсэн</p>
@@ -347,19 +298,11 @@ function Index({ data }) {
             <br />
             <div className="inline-flex">
                <p style={{ fontSize: '14px' }}>хүртэл (зур)</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={work ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => dddd(0)}
-               >
+               <a style={{ fontSize: '14px' }} className={work ? 'underline pr-1' : 'pr-1'} onClick={() => dddd(0)}>
                   ажлаас
                </a>
                <p style={{ fontSize: '14px' }}>,</p>
-               <a
-                  style={{ fontSize: '14px' }}
-                  className={school ? 'underline pr-1' : 'pr-1'}
-                  onClick={() => dddd(1)}
-               >
+               <a style={{ fontSize: '14px' }} className={school ? 'underline pr-1' : 'pr-1'} onClick={() => dddd(1)}>
                   хичээлээс
                </a>
                <p style={{ fontSize: '14px' }}>{`)`}</p>
@@ -368,8 +311,7 @@ function Index({ data }) {
             <br />
             <div>
                <p style={{ fontSize: '14px' }}>
-                  9. Асрамжинд байсан хүний эцэг /эх/-ийн нэр, хэн
-                  болох____________________________
+                  9. Асрамжинд байсан хүний эцэг /эх/-ийн нэр, хэн болох____________________________
                </p>
                <p style={{ fontSize: '14px' }}>
                   _______________________________________________________________________________
@@ -377,9 +319,7 @@ function Index({ data }) {
             </div>
             <div className="inline-flex">
                <p style={{ fontSize: '14px' }}>10. Үндсэн онош</p>
-               {data['diagnose'] && (
-                  <RenderNotesDiagnose data={JSON.parse(data['diagnose'])} />
-               )}
+               {data['diagnose'] && <RenderNotesDiagnose data={JSON.parse(data['diagnose'])} />}
             </div>
             <br />
             <div className="flex flex-wrap">
@@ -401,12 +341,7 @@ function Index({ data }) {
                <div className="basis-1/2">
                   <p>Ерөнхий эмч____________________________________</p>
                   <br />
-                  <p>
-                     Эмчлэгч эмч{' '}
-                     {data?.employees?.lastName?.slice(0, 1) +
-                        '.' +
-                        data?.employees?.firstName}
-                  </p>
+                  <p>Эмчлэгч эмч {data?.employees?.lastName?.slice(0, 1) + '.' + data?.employees?.firstName}</p>
                </div>
             </div>
             <p className="font-bold" style={{ fontSize: '16px' }}>
@@ -414,12 +349,9 @@ function Index({ data }) {
             </p>
             <div>
                <p style={{ fontSize: '14px' }}>
-                  1. _______ оны _______ сарын _______ өдрөөс _______ оны
-                  _______ сарын _______ өдөр хүртэл нийт
+                  1. _______ оны _______ сарын _______ өдрөөс _______ оны _______ сарын _______ өдөр хүртэл нийт
                </p>
-               <p style={{ fontSize: '14px' }}>
-                  _____________________хоногоор сунгав
-               </p>
+               <p style={{ fontSize: '14px' }}>_____________________хоногоор сунгав</p>
             </div>
             <div className="flex flex-wrap">
                <div className="basis-1/2 text-center">
@@ -431,12 +363,9 @@ function Index({ data }) {
             </div>
             <div>
                <p style={{ fontSize: '14px' }}>
-                  2. _______ оны _______ сарын _______ өдрөөс _______ оны
-                  _______ сарын _______ өдөр хүртэл нийт
+                  2. _______ оны _______ сарын _______ өдрөөс _______ оны _______ сарын _______ өдөр хүртэл нийт
                </p>
-               <p style={{ fontSize: '14px' }}>
-                  _____________________хоногоор сунгав
-               </p>
+               <p style={{ fontSize: '14px' }}>_____________________хоногоор сунгав</p>
             </div>
             <div className="flex flex-wrap">
                <div className="basis-1/2 text-center">
@@ -448,12 +377,9 @@ function Index({ data }) {
             </div>
             <div>
                <p style={{ fontSize: '14px' }}>
-                  3. _______ оны _______ сарын _______ өдрөөс _______ оны
-                  _______ сарын _______ өдөр хүртэл нийт
+                  3. _______ оны _______ сарын _______ өдрөөс _______ оны _______ сарын _______ өдөр хүртэл нийт
                </p>
-               <p style={{ fontSize: '14px' }}>
-                  _____________________хоногоор сунгав
-               </p>
+               <p style={{ fontSize: '14px' }}>_____________________хоногоор сунгав</p>
             </div>
             <div className="flex flex-wrap">
                <div className="basis-1/2 text-center">

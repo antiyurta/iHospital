@@ -29,20 +29,12 @@ function AM1B() {
                      alignItems: 'flex-end'
                   }}
                >
-                  <span style={{ fontSize: 12 }}>
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-                  </span>
-                  <span style={{ fontSize: 12 }}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-1Б
-                  </span>
+                  <span style={{ fontSize: 12 }}>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн</span>
+                  <span style={{ fontSize: 12 }}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-1Б</span>
                </div>
                <div style={{ textAlign: 'center' }}>
-                  <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                     ЭМЧИЙН ҮЗЛЭГИЙН БҮРТГЭЛ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 16 }}>ЭМЧИЙН ҮЗЛЭГИЙН БҮРТГЭЛ</span>
                </div>
                <div
                   style={{

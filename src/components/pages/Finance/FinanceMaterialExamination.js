@@ -68,12 +68,7 @@ function FinanceMaterialExamination() {
       data.serviceType = 0;
       data.serviceId = selectedEx;
       data.materialId = parseInt(selectedMaterial);
-      const response = await Post(
-         `service/service-material`,
-         token,
-         config,
-         data
-      );
+      const response = await Post(`service/service-material`, token, config, data);
       if (response === 201) {
          getExamniationMaterial();
          handleCancel();
@@ -83,23 +78,14 @@ function FinanceMaterialExamination() {
       data.serviceType = 0;
       data.serviceId = selectedEx;
       data.materialId = parseInt(selectedMaterial);
-      const response = await Patch(
-         `service/service-material/${selectedExMaterial.id}`,
-         token,
-         config,
-         data
-      );
+      const response = await Patch(`service/service-material/${selectedExMaterial.id}`, token, config, data);
       if (response === 200) {
          getExamniationMaterial();
          handleCancel();
       }
    };
    const deleteItem = async (id) => {
-      const response = await Delete(
-         `service/service-material/${parseInt(id)}`,
-         token,
-         config
-      );
+      const response = await Delete(`service/service-material/${parseInt(id)}`, token, config);
       if (response === 200) {
          getExamniationMaterial();
       }
@@ -111,11 +97,7 @@ function FinanceMaterialExamination() {
          className="header-solid max-h-max rounded-md"
          extra={
             <>
-               <Button
-                  className="mx-1"
-                  type="primary"
-                  onClick={() => showModal('', 'add')}
-               >
+               <Button className="mx-1" type="primary" onClick={() => showModal('', 'add')}>
                   Нэмэх
                </Button>
             </>
@@ -123,11 +105,7 @@ function FinanceMaterialExamination() {
       >
          <div>
             <div className="table-responsive" id="style-8">
-               <Table
-                  bordered
-                  className="ant-border-space"
-                  style={{ width: '100%' }}
-               >
+               <Table bordered className="ant-border-space" style={{ width: '100%' }}>
                   <thead className="ant-table-thead bg-slate-200">
                      <tr>
                         <th>Шинжилгээ</th>
@@ -198,13 +176,9 @@ function FinanceMaterialExamination() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {examinations?.map((el, index) => {
@@ -233,13 +207,9 @@ function FinanceMaterialExamination() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {materials?.map((el, index) => {

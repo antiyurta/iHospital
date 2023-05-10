@@ -98,10 +98,7 @@ function Page3() {
                   </tr>
                   <tr>
                      <td colSpan={3}>
-                        <p>
-                           Бусад(PCR, молекул генетик цитогенетик, урсгал
-                           цитометр):
-                        </p>
+                        <p>Бусад(PCR, молекул генетик цитогенетик, урсгал цитометр):</p>
                         <p>:</p>
                         <p>:</p>
                      </td>
@@ -163,9 +160,7 @@ function Page3() {
                               <p className="font-normal">Гарын үсэг:</p>
                            </div>
                            <div className="basis-1/3">
-                              <p className="font-normal">
-                                 он 2012 сар 17 өдөр 22
-                              </p>
+                              <p className="font-normal">он 2012 сар 17 өдөр 22</p>
                            </div>
                         </div>
                      </th>

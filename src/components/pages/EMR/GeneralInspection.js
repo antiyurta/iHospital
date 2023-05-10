@@ -28,12 +28,7 @@ export default function GeneralInspection({ patientId, inspection }) {
          .then(async (values) => {
             values['patientId'] = patientId;
             values['appointmentId'] = location?.state?.appointmentId;
-            const response = await Post(
-               'emr/general-inspection',
-               token,
-               config,
-               values
-            );
+            const response = await Post('emr/general-inspection', token, config, values);
             if (response === 201) {
                getGeneralInspection();
             }
@@ -113,19 +108,13 @@ export default function GeneralInspection({ patientId, inspection }) {
                               className="mb-0"
                            >
                               <Radio.Group className="align-middle">
-                                 <Radio
-                                    value="REASONABLE"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="REASONABLE" className="pl-1 ml-0">
                                     Саруул
                                  </Radio>
                                  <Radio value="FADED" className="pl-1 ml-0">
                                     Бүдгэрсэн
                                  </Radio>
-                                 <Radio
-                                    value="UNREASONABLE"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="UNREASONABLE" className="pl-1 ml-0">
                                     Ухаангүй
                                  </Radio>
                               </Radio.Group>
@@ -161,11 +150,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </div>
                </div>
             </Panel>
-            <Panel
-               header="Амьсгалын эрхтэн тогтолцоо"
-               key="2"
-               forceRender={true}
-            >
+            <Panel header="Амьсгалын эрхтэн тогтолцоо" key="2" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/2 sm:w-full p-1">
                      <div className="rounded-md bg-gray-100 w-full inline-block m-1">
@@ -210,10 +195,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                                  <Radio value="IMPORTANT" className="pl-1 ml-0">
                                     Хэржигнүүртэй
                                  </Radio>
-                                 <Radio
-                                    value="SHORT_BREATH"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="SHORT_BREATH" className="pl-1 ml-0">
                                     Амьсгал сулавтар
                                  </Radio>
                               </Radio.Group>
@@ -223,11 +205,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                   </div>
                </div>
             </Panel>
-            <Panel
-               header="Цусны эргэлтийн тогтолцоо"
-               key="3"
-               forceRender={true}
-            >
+            <Panel header="Цусны эргэлтийн тогтолцоо" key="3" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/3 sm:w-1/2 p-1">
                      <div className="rounded-md bg-gray-100 w-full inline-block m-1">
@@ -390,10 +368,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                                  <Radio value="DRY" className="pl-1 ml-0">
                                     Хуурай
                                  </Radio>
-                                 <Radio
-                                    value="NO_COLORFUL"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="NO_COLORFUL" className="pl-1 ml-0">
                                     Өнгөргүй
                                  </Radio>
                                  <Radio value="COLORFUL" className="pl-1 ml-0">
@@ -422,10 +397,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                                  <Radio value="PALPATION" className="pl-1 ml-0">
                                     Өнгөц тэмтрэлтээр
                                  </Radio>
-                                 <Radio
-                                    value="DEEP_PALPATION"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="DEEP_PALPATION" className="pl-1 ml-0">
                                     Гүн тэмтрэлтээр
                                  </Radio>
                                  <Radio value="HURFUL" className="pl-1 ml-0">
@@ -434,16 +406,10 @@ export default function GeneralInspection({ patientId, inspection }) {
                                  <Radio value="NORMAL" className="pl-1 ml-0">
                                     Ердийн
                                  </Radio>
-                                 <Radio
-                                    value="MILD_PLEURAL"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="MILD_PLEURAL" className="pl-1 ml-0">
                                     Зөөлөн гялтан цочрол үгүй
                                  </Radio>
-                                 <Radio
-                                    value="SYMTOMS_SHOCK"
-                                    className="pl-1 ml-0"
-                                 >
+                                 <Radio value="SYMTOMS_SHOCK" className="pl-1 ml-0">
                                     Гялтан цочролтын шинж илэрсэн
                                  </Radio>
                               </Radio.Group>
@@ -521,11 +487,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                               ]}
                               className="mb-0"
                            >
-                              <TextArea
-                                 rows={2}
-                                 style={{ padding: 5 }}
-                                 placeholder="Бусад"
-                              />
+                              <TextArea rows={2} style={{ padding: 5 }} placeholder="Бусад" />
                            </Form.Item>
                         </div>
                      </div>
@@ -544,11 +506,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                               ]}
                               className="mb-0"
                            >
-                              <TextArea
-                                 rows={2}
-                                 style={{ padding: 5 }}
-                                 placeholder="Сэтгэцийн байдал"
-                              />
+                              <TextArea rows={2} style={{ padding: 5 }} placeholder="Сэтгэцийн байдал" />
                            </Form.Item>
                         </div>
                      </div>
@@ -562,11 +520,7 @@ export default function GeneralInspection({ patientId, inspection }) {
             }}
          >
             <Row className="mt-2">
-               <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={() => saveGeneralInspection()}
-               >
+               <Button type="primary" htmlType="submit" onClick={() => saveGeneralInspection()}>
                   Ерөнхий үзлэг хадгалах
                </Button>
             </Row>

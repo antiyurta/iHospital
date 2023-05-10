@@ -68,24 +68,14 @@ function AM22J() {
                      >
                         Эмнэлгийн нэр: ____________________
                      </span>
-                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                        АМ-22Ж
-                     </span>
+                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-22Ж</span>
                   </div>
                </div>
-               <div
-                  style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}
-               >
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     ЦЭРИЙГ МИКРОСКОПООР ШИНЖЛЭХ
-                  </span>
+               <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>ЦЭРИЙГ МИКРОСКОПООР ШИНЖЛЭХ</span>
                </div>
-               <span style={{ fontSize: 12 }}>
-                  Эцэг \эх\ийн нэр _________________________
-               </span>
-               <div style={{ fontSize: 12 }}>
-                  Нэр _____________________________
-               </div>
+               <span style={{ fontSize: 12 }}>Эцэг \эх\ийн нэр _________________________</span>
+               <div style={{ fontSize: 12 }}>Нэр _____________________________</div>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex' }}>
                      <span style={{ marginRight: 5 }}>РД </span>
@@ -99,23 +89,15 @@ function AM22J() {
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
-                     <span style={{ marginLeft: 10 }}>
-                        Нас__________Хүйс: /зур/ эр, эм
-                     </span>
+                     <span style={{ marginLeft: 10 }}>Нас__________Хүйс: /зур/ эр, эм</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>
-                  _____ он ____ сар _____ өдөр ____ цаг ______ минут
-               </div>
+               <div style={styles.rowStyle}>_____ он ____ сар _____ өдөр ____ цаг ______ минут</div>
                <div style={{ ...styles.rowStyle, ...{ marginTop: 20 } }}>
                   Шинж байдал ______________________________
                </div>
-               <div style={styles.rowStyle}>
-                  Төлөв байдал _____________________________
-               </div>
-               <div style={styles.rowStyle}>
-                  Хольц _______________ үелэл ______________
-               </div>
+               <div style={styles.rowStyle}>Төлөв байдал _____________________________</div>
+               <div style={styles.rowStyle}>Хольц _______________ үелэл ______________</div>
                <div style={styles.rowStyle}>Микроскопд: ( харах талбай )</div>
                <div style={styles.rowStyle}>Эсийн элемент</div>
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
@@ -130,9 +112,7 @@ function AM22J() {
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
                   Бортгон хучуур эс __________________________
                </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
-                  Макрофог _______________________________
-               </div>
+               <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>Макрофог _______________________________</div>
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
                   Хавдрын эс ______________________________
                </div>
@@ -162,9 +142,7 @@ function AM22J() {
                      ...{ marginTop: 60 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Лаборантын нэр ____________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Лаборантын нэр ____________________</span>
                </div>
                <div
                   style={{
@@ -172,9 +150,7 @@ function AM22J() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Эмчийн нэр _________________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Эмчийн нэр _________________________</span>
                </div>
             </div>
          </div>

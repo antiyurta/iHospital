@@ -157,9 +157,7 @@ function PrintIndex({ data }) {
                         {employees.map((employee, index) => {
                            return (
                               <Option key={index} value={employee.userId}>
-                                 {employee.lastName.substring(0, 1) +
-                                    '.' +
-                                    employee.firstName}
+                                 {employee.lastName.substring(0, 1) + '.' + employee.firstName}
                               </Option>
                            );
                         })}
@@ -171,21 +169,12 @@ function PrintIndex({ data }) {
          <Button
             type="primary"
             className="w-full"
-            onClick={() =>
-               form
-                  .validateFields()
-                  .then((values) =>
-                     filter(values.date, values.date, values.employeeId)
-                  )
-            }
+            onClick={() => form.validateFields().then((values) => filter(values.date, values.date, values.employeeId))}
          >
             Шүүх
          </Button>
          <div ref={printRef}>
-            <p
-               className="text-center py-10"
-               style={{ fontSize: '20px', fontWeight: 'bold' }}
-            >
+            <p className="text-center py-10" style={{ fontSize: '20px', fontWeight: 'bold' }}>
                ӨДРИЙН ОРЛОГО({moment(today).format('YYYY-MM-DD')})
             </p>
             <div className="printBody">
@@ -199,38 +188,20 @@ function PrintIndex({ data }) {
                   pagination={false}
                />
             </div>
-            <p
-               className="text-center py-1"
-               style={{ fontSize: '15px', fontWeight: 'bold' }}
-            >
+            <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                Хэвлэх огноо: {moment().format('YYYY-MM-DD HH:mm')}
             </p>
-            <p
-               className="text-center py-1"
-               style={{ fontSize: '15px', fontWeight: 'bold' }}
-            >
+            <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                Бэлнээр: {numberToCurrency(totalAmount)}
             </p>
-            <p
-               className="text-center py-1"
-               style={{ fontSize: '15px', fontWeight: 'bold' }}
-            >
+            <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                Нийт мөнгөн дүн: {numberToCurrency(totalAmount)}
             </p>
-            <p
-               className="text-center py-1"
-               style={{ fontSize: '12px', fontWeight: 'bold' }}
-            >
-               Тайлан гаргасан:{' '}
-               {employee?.lastName?.substring(0, 1) + '.' + employee?.firstName}{' '}
-               /.............../
+            <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
+               Тайлан гаргасан: {employee?.lastName?.substring(0, 1) + '.' + employee?.firstName} /.............../
             </p>
-            <p
-               className="text-center py-1"
-               style={{ fontSize: '12px', fontWeight: 'bold' }}
-            >
-               Хэвлэсэн: {userLastName?.substring(0, 1) + '.' + userFirstName}{' '}
-               /.............../
+            <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
+               Хэвлэсэн: {userLastName?.substring(0, 1) + '.' + userFirstName} /.............../
             </p>
          </div>
          <Button type="primary" onClick={handlePrint}>

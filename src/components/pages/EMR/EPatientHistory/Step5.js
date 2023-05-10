@@ -14,11 +14,7 @@ export default function Step5() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Ямар нэг зүйлд харшилдаг уу"
-                        name={['allergy', 'isAllergy']}
-                        className="mb-0"
-                     >
+                     <Form.Item label="Ямар нэг зүйлд харшилдаг уу" name={['allergy', 'isAllergy']} className="mb-0">
                         <Radio.Group>
                            <Radio value={true}>Тийм</Radio>
                            <Radio value={false}>Үгүй</Radio>
@@ -30,16 +26,8 @@ export default function Step5() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Хоол хүнс"
-                        name={['allergy', 'food']}
-                        className="mb-0"
-                     >
-                        <TextArea
-                           rows={2}
-                           style={{ padding: 2 }}
-                           placeholder="Хүнс"
-                        />
+                     <Form.Item label="Хоол хүнс" name={['allergy', 'food']} className="mb-0">
+                        <TextArea rows={2} style={{ padding: 2 }} placeholder="Хүнс" />
                      </Form.Item>
                   </div>
                </div>
@@ -47,16 +35,8 @@ export default function Step5() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Эмийн бодис"
-                        name={['allergy', 'medicine']}
-                        className="mb-0"
-                     >
-                        <TextArea
-                           rows={2}
-                           style={{ padding: 2 }}
-                           placeholder="Эм"
-                        />
+                     <Form.Item label="Эмийн бодис" name={['allergy', 'medicine']} className="mb-0">
+                        <TextArea rows={2} style={{ padding: 2 }} placeholder="Эм" />
                      </Form.Item>
                   </div>
                </div>
@@ -64,16 +44,8 @@ export default function Step5() {
             <div className="md:w-1/4 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label="Бусад"
-                        name={['allergy', 'other']}
-                        className="mb-0"
-                     >
-                        <TextArea
-                           rows={2}
-                           style={{ padding: 2 }}
-                           placeholder="Бусад бодис"
-                        />
+                     <Form.Item label="Бусад" name={['allergy', 'other']} className="mb-0">
+                        <TextArea rows={2} style={{ padding: 2 }} placeholder="Бусад бодис" />
                      </Form.Item>
                   </div>
                </div>

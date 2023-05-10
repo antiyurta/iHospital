@@ -7,17 +7,7 @@ import {
    DeleteOutlined,
    ReloadOutlined
 } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Form,
-   Modal,
-   Upload,
-   Select,
-   InputNumber,
-   Table,
-   DatePicker
-} from 'antd';
+import { Button, Card, Form, Modal, Upload, Select, InputNumber, Table, DatePicker } from 'antd';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -145,12 +135,7 @@ function IndexBefore({ type }) {
       }
    };
    const onFinish = async (values) => {
-      const response = await Patch(
-         'service/xrayRequest/' + id,
-         token,
-         config,
-         values
-      );
+      const response = await Patch('service/xrayRequest/' + id, token, config, values);
       if (response === 200) {
          setXrayModal(false);
          getXrayRequest(1, 10, start, end);
@@ -202,12 +187,7 @@ function IndexBefore({ type }) {
       setUsedMaterials(rows);
    };
    const saveUsedMaterials = async () => {
-      const response = await Post(
-         `finance/create-expenses`,
-         token,
-         config,
-         usedMaterials
-      );
+      const response = await Post(`finance/create-expenses`, token, config, usedMaterials);
       if (response === 201) {
          setIsModalOpen(false);
          setUsedMaterials([{}]);
@@ -270,10 +250,7 @@ function IndexBefore({ type }) {
       {
          title: 'Орох цаг',
          render: (_, row) => {
-            return getTypeInfo(
-               row.deviceSlots?.startTime?.substr(0, 5),
-               row.deviceSlots?.endTime?.substr(0, 5)
-            );
+            return getTypeInfo(row.deviceSlots?.startTime?.substr(0, 5), row.deviceSlots?.endTime?.substr(0, 5));
          }
       },
       {
@@ -345,13 +322,7 @@ function IndexBefore({ type }) {
             ) : (
                <Button
                   type="primary"
-                  onClick={() =>
-                     newModal(
-                        row.id,
-                        row?.isPayment || row?.isInsurance,
-                        row?.usageType
-                     )
-                  }
+                  onClick={() => newModal(row.id, row?.isPayment || row?.isInsurance, row?.usageType)}
                >
                   Зураг оруулах
                </Button>
@@ -374,9 +345,7 @@ function IndexBefore({ type }) {
          <div className="flex flex-wrap">
             <div className="w-full">
                <Card
-                  title={
-                     type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'
-                  }
+                  title={type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'}
                   bordered={false}
                   className="header-solid max-h-max rounded-md"
                >
@@ -406,20 +375,14 @@ function IndexBefore({ type }) {
                               className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                               role="alert"
                            >
-                              <span className="font-medium mx-1">
-                                 Урьдчилсан захиалга
-                              </span>
+                              <span className="font-medium mx-1">Урьдчилсан захиалга</span>
                            </div>
                            {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
                                         <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
                                     </div> */}
                         </div>
                         <div className="float-right">
-                           <Button
-                              title="Сэргээх"
-                              type="primary"
-                              onClick={() => getXrayRequest(1, 10, start, end)}
-                           >
+                           <Button title="Сэргээх" type="primary" onClick={() => getXrayRequest(1, 10, start, end)}>
                               <ReloadOutlined
                               // spin={!spinner}
                               />
@@ -443,8 +406,7 @@ function IndexBefore({ type }) {
                                  pageSize: 10,
                                  total: meta.itemCount,
                                  current: meta.page,
-                                 onChange: (page, pageSize) =>
-                                    getXrayRequest(page, pageSize, start, end)
+                                 onChange: (page, pageSize) => getXrayRequest(page, pageSize, start, end)
                               }}
                            />
                         </div>
@@ -490,10 +452,7 @@ function IndexBefore({ type }) {
             <div className="container">
                <div className="row clearfix">
                   <div className="col-md-12 column">
-                     <table
-                        className="table table-bordered table-hover"
-                        id="tab_logic"
-                     >
+                     <table className="table table-bordered table-hover" id="tab_logic">
                         <thead>
                            <tr>
                               <th className="text-center"> # </th>
@@ -509,17 +468,10 @@ function IndexBefore({ type }) {
                                  <td className="text-center">
                                     <Select
                                        allowClear
-                                       value={
-                                          usedMaterials[idx].materialId ||
-                                          undefined
-                                       }
+                                       value={usedMaterials[idx].materialId || undefined}
                                        onChange={(e) => {
                                           // setSelectedMaterial(e);
-                                          handleChangeMaterial(
-                                             idx,
-                                             e,
-                                             'material'
-                                          );
+                                          handleChangeMaterial(idx, e, 'material');
                                        }}
                                        showSearch
                                        style={{
@@ -528,23 +480,14 @@ function IndexBefore({ type }) {
                                        size="small"
                                        placeholder="Сонгох"
                                        optionFilterProp="children"
-                                       filterOption={(input, option) =>
-                                          option.children.includes(input)
-                                       }
+                                       filterOption={(input, option) => option.children.includes(input)}
                                        filterSort={(optionA, optionB) =>
-                                          optionA.children
-                                             .toLowerCase()
-                                             .localeCompare(
-                                                optionB.children.toLowerCase()
-                                             )
+                                          optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                        }
                                     >
                                        {xRayMaterialList?.map((el, index) => {
                                           return (
-                                             <Option
-                                                value={el.materialId}
-                                                key={index}
-                                             >
+                                             <Option value={el.materialId} key={index}>
                                                 {el.materialName}
                                              </Option>
                                           );
@@ -557,13 +500,7 @@ function IndexBefore({ type }) {
                                           width: 200
                                        }}
                                        value={usedMaterials[idx].count}
-                                       onChange={(e) =>
-                                          handleChangeMaterial(
-                                             idx,
-                                             e,
-                                             'quantity'
-                                          )
-                                       }
+                                       onChange={(e) => handleChangeMaterial(idx, e, 'quantity')}
                                        className="width-200"
                                     />
                                  </td>

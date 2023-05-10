@@ -1,15 +1,4 @@
-import {
-   Button,
-   Card,
-   ConfigProvider,
-   Empty,
-   Form,
-   Input,
-   Modal,
-   Select,
-   Table,
-   Tag
-} from 'antd';
+import { Button, Card, ConfigProvider, Empty, Form, Input, Modal, Select, Table, Tag } from 'antd';
 import roomType from './roomType.json';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -36,8 +25,7 @@ function PatientListBedd() {
    const [selectedDepartment, setSelectedDepartment] = useState(Number);
    const [rooms, setRooms] = useState([]);
    const [selectedRoom, setSelectedRoom] = useState(Number);
-   const [selectedInpatientRequest, setSelectedInpatientRequest] =
-      useState(Number);
+   const [selectedInpatientRequest, setSelectedInpatientRequest] = useState(Number);
    const [patientInBedLoading, setPatientInBedLoading] = useState(false);
    //
    const [pValue, setPvalue] = useState('');
@@ -82,9 +70,7 @@ function PatientListBedd() {
       setRooms(response.data);
    };
    //
-   const filteredRooms = rooms?.filter(
-      (room) => room.structureId === selectedDepartment
-   );
+   const filteredRooms = rooms?.filter((room) => room.structureId === selectedDepartment);
    const filteredBed = rooms?.find((room) => room.id === selectedRoom)?.beds;
    //
    const openModal = (process, state, patient, rowId) => {
@@ -107,19 +93,10 @@ function PatientListBedd() {
          isOut: false,
          process: 0
       };
-      const response = await Patch(
-         `service/inpatient-request/bed/${selectedInpatientRequest}`,
-         token,
-         conf,
-         data
-      );
+      const response = await Patch(`service/inpatient-request/bed/${selectedInpatientRequest}`, token, conf, data);
       if (response === 200) {
          setIsOpenBedModal(false);
-         getInpatientRequests(
-            inpatientRequsetsMeta.page,
-            inpatientRequsetsMeta.limit,
-            checkedKey
-         );
+         getInpatientRequests(inpatientRequsetsMeta.page, inpatientRequsetsMeta.limit, checkedKey);
       }
       setPatientInBedLoading(false);
    };
@@ -139,12 +116,7 @@ function PatientListBedd() {
          closable: true,
          content: <div>Та эмнэлгээс гаргахдаа итгэлтэй байна уу</div>,
          async onOk() {
-            await Patch(
-               `service/inpatient-request/bed/${rowId}`,
-               token,
-               conf,
-               data
-            );
+            await Patch(`service/inpatient-request/bed/${rowId}`, token, conf, data);
          }
       });
    };
@@ -154,9 +126,7 @@ function PatientListBedd() {
             <Search
                placeholder={`хайх`}
                allowClear
-               onSearch={(e) =>
-                  getInpatientRequests(1, 20, checkedKey, e, dataIndex)
-               }
+               onSearch={(e) => getInpatientRequests(1, 20, checkedKey, e, dataIndex)}
                enterButton={'Хайх'}
             />
          </div>
@@ -167,10 +137,7 @@ function PatientListBedd() {
       {
          title: '№',
          render: (_, _record, index) => {
-            return (
-               inpatientRequsetsMeta.page * inpatientRequsetsMeta.limit -
-               (inpatientRequsetsMeta.limit - index - 1)
-            );
+            return inpatientRequsetsMeta.page * inpatientRequsetsMeta.limit - (inpatientRequsetsMeta.limit - index - 1);
          }
       },
       {
@@ -190,9 +157,7 @@ function PatientListBedd() {
                      if (item.value === record.process) {
                         return (
                            <img
-                              src={require(`../../../assets/bed/${
-                                 orderType[item.value].img
-                              }`)}
+                              src={require(`../../../assets/bed/${orderType[item.value].img}`)}
                               width="20"
                               className="inline-block"
                               key={index}
@@ -298,19 +263,13 @@ function PatientListBedd() {
          render: (patient, row) => {
             if (row?.process === 0) {
                return (
-                  <Button
-                     type="primary"
-                     onClick={() => openModal(0, true, patient, row.id)}
-                  >
+                  <Button type="primary" onClick={() => openModal(0, true, patient, row.id)}>
                      Хэвтүүлэх
                   </Button>
                );
             } else if (row?.process === 2) {
                return (
-                  <Button
-                     type="primary"
-                     onClick={() => setPatientOutBed(row?.bedId, row?.id)}
-                  >
+                  <Button type="primary" onClick={() => setPatientOutBed(row?.bedId, row?.id)}>
                      Гаргах
                   </Button>
                );
@@ -352,10 +311,7 @@ function PatientListBedd() {
                         className="text-white m-1"
                      >
                         <div className="flex">
-                           <img
-                              src={require(`../../../assets/bed/${tag.img}`)}
-                              width="20"
-                           />
+                           <img src={require(`../../../assets/bed/${tag.img}`)} width="20" />
                            {tag.label}
                         </div>
                      </CheckableTag>
@@ -364,11 +320,7 @@ function PatientListBedd() {
             </div>
          </div>
          <div className="w-full pt-2">
-            <Card
-               title="Өвчтөний мэдээлэл"
-               bordered={false}
-               className="header-solid max-h-max rounded-md mb-2"
-            >
+            <Card title="Өвчтөний мэдээлэл" bordered={false} className="header-solid max-h-max rounded-md mb-2">
                <Search
                   placeholder="Өвчтний нэр, регистр дугаар, Тасаг"
                   allowClear
@@ -403,19 +355,12 @@ function PatientListBedd() {
                         size: 'small',
                         current: inpatientRequsetsMeta.page,
                         total: inpatientRequsetsMeta.itemCount,
-                        showTotal: (total, range) =>
-                           `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                         pageSize: inpatientRequsetsMeta.limit,
                         showSizeChanger: true,
                         pageSizeOptions: ['5', '10', '20', '50'],
                         showQuickJumper: true,
-                        onChange: (page, pageSize) =>
-                           getInpatientRequests(
-                              page,
-                              pageSize,
-                              checkedKey,
-                              pValue
-                           )
+                        onChange: (page, pageSize) => getInpatientRequests(page, pageSize, checkedKey, pValue)
                      }}
                   />
                </ConfigProvider>
@@ -431,15 +376,8 @@ function PatientListBedd() {
             }}
             footer={null}
          >
-            <PatientInformation
-               OCS={false}
-               handlesearch={false}
-               patient={selectedPatient}
-            />
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md mt-2"
-            >
+            <PatientInformation OCS={false} handlesearch={false} patient={selectedPatient} />
+            <Card bordered={false} className="header-solid max-h-max rounded-md mt-2">
                <Form form={form} onFinish={setPatientInBed}>
                   <Form.Item
                      label="Тасаг"
@@ -461,15 +399,9 @@ function PatientListBedd() {
                         }}
                         placeholder="Сонгох"
                         optionFilterProp="children"
-                        filterOption={(input, option) =>
-                           option.children
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                        }
+                        filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                         filterSort={(optionA, optionB) =>
-                           optionA.children
-                              .toLowerCase()
-                              .localeCompare(optionB.children.toLowerCase())
+                           optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                         }
                      >
                         {departments?.map((department, index) => {
@@ -491,18 +423,13 @@ function PatientListBedd() {
                         }
                      ]}
                   >
-                     <Select
-                        onSelect={(room) => setSelectedRoom(room)}
-                        value={null}
-                     >
+                     <Select onSelect={(room) => setSelectedRoom(room)} value={null}>
                         {rooms?.map((room, index) => {
                            return (
                               <Option key={index} value={room.id}>
-                                 {`${room.roomNumber} -> ${numberToCurrency(
-                                    room.price
-                                 )} -> ${checkGenderType(room.genderType)} -> ${
-                                    roomType[room.roomType]?.label
-                                 }`}
+                                 {`${room.roomNumber} -> ${numberToCurrency(room.price)} -> ${checkGenderType(
+                                    room.genderType
+                                 )} -> ${roomType[room.roomType]?.label}`}
                               </Option>
                            );
                         })}
@@ -531,12 +458,7 @@ function PatientListBedd() {
                      </Select>
                   </Form.Item>
                   <Form.Item>
-                     <Button
-                        style={{ width: '100%' }}
-                        loading={patientInBedLoading}
-                        type="primary"
-                        htmlType="submit"
-                     >
+                     <Button style={{ width: '100%' }} loading={patientInBedLoading} type="primary" htmlType="submit">
                         Хэвтүүлэх
                      </Button>
                   </Form.Item>

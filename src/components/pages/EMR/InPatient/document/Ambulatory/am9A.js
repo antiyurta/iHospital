@@ -37,19 +37,11 @@ function am9A() {
                >
                   Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
                </span>
-               <span style={styles.generalText}>
-                  A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-               </span>
-               <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                  Эрүүл мэндийн бүртгэлийн маягт АМ-9А
-               </span>
+               <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+               <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-9А</span>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 10, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  Энгийн эмийн жорын маягт
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 10, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 14 }}>Энгийн эмийн жорын маягт</span>
             </div>
             <div
                style={{
@@ -73,9 +65,7 @@ function am9A() {
                            marginBottom: 15
                         }}
                      >
-                        <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                           Энгийн эмийн жор
-                        </span>
+                        <span style={{ fontWeight: 'bold', fontSize: 14 }}>Энгийн эмийн жор</span>
                      </div>
                      <div style={{ textAlign: 'right', marginTop: 10 }}>
                         <span
@@ -87,21 +77,13 @@ function am9A() {
                            ..... оны ....сарын ....
                         </span>
                      </div>
-                     <span style={{ fontSize: 12 }}>
-                        Өвчтөний овог, нэр: ____________________
-                     </span>
+                     <span style={{ fontSize: 12 }}>Өвчтөний овог, нэр: ____________________</span>
                      <br />
-                     <span style={{ fontSize: 12 }}>
-                        Нас:_____ Хүйс:______ Онош:____________
-                     </span>
+                     <span style={{ fontSize: 12 }}>Нас:_____ Хүйс:______ Онош:____________</span>
                      <br />
-                     <span style={{ fontSize: 12 }}>
-                        ____________________________________________
-                     </span>
+                     <span style={{ fontSize: 12 }}>____________________________________________</span>
                      <br />
-                     <span style={{ fontSize: 12 }}>
-                        Регистрийн №________________________________
-                     </span>
+                     <span style={{ fontSize: 12 }}>Регистрийн №________________________________</span>
                      <br />
                      <span style={styles.blockContentLg}>Rp:</span>
                      <br />
@@ -124,13 +106,9 @@ function am9A() {
                      </div>
                   </div>
                   <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <span style={{ fontSize: 12 }}>
-                        Жор бичсэн эмчийн нэр, утас, тэмдэг:
-                     </span>
+                     <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг:</span>
                      <br />
-                     <span style={{ fontSize: 12 }}>
-                        Эмнэлгийн нэр: _______________________
-                     </span>
+                     <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: _______________________</span>
                      <br />
                      <br />
                   </div>
@@ -229,24 +207,18 @@ function am9A() {
                      }}
                   >
                      <span style={{ fontSize: 12, paddingTop: 80 }}>
-                        Энгийн эмийн жорын маягтад 3-аас илүүгүй эмийг бичих ба
-                        энэхүү жор нь бичигдсэн өдрөөс хойш 7 хүртэлх хоногийн
-                        хугацаанд хүчинтэй.
+                        Энгийн эмийн жорын маягтад 3-аас илүүгүй эмийг бичих ба энэхүү жор нь бичигдсэн өдрөөс хойш 7
+                        хүртэлх хоногийн хугацаанд хүчинтэй.
                      </span>
                      <span style={{ fontSize: 12, paddingTop: 40 }}>
-                        Жорыг стандартын дагуу бүрэн бичээгүй, эмийн нэр, тун
-                        хэмжээг засварласан, эмчийн тэмдэггүй тохиолдолд
-                        хүчингүйд тооцно
+                        Жорыг стандартын дагуу бүрэн бичээгүй, эмийн нэр, тун хэмжээг засварласан, эмчийн тэмдэггүй
+                        тохиолдолд хүчингүйд тооцно
                      </span>
                      <span style={{ fontSize: 12, paddingTop: 30 }}>
                         Жорыг иргэдээс хүлээн авсан жорын бүртгэлд бүртгэнэ.
                      </span>
-                     <span style={{ fontSize: 12 }}>
-                        Жор баригч доорх мэдээллийг бүрэн хөтөлж, эмийг олгоно
-                     </span>
-                     <span style={{ fontSize: 12, paddingTop: 180 }}>
-                        Гарын үсэг, огноо:
-                     </span>
+                     <span style={{ fontSize: 12 }}>Жор баригч доорх мэдээллийг бүрэн хөтөлж, эмийг олгоно</span>
+                     <span style={{ fontSize: 12, paddingTop: 180 }}>Гарын үсэг, огноо:</span>
                   </div>
                   <table>
                      <thead>
@@ -327,10 +299,9 @@ function am9A() {
                            paddingBottom: 50
                         }}
                      >
-                        Энэхүү хэсгийг жор баригч эмчийн бичсэн жорын дагуу
-                        олгох эмийг тэмдэглэж, тасархай зураасын дагуу таслан,
-                        эмийн хамт иргэнд олгоно. Эмчилгээний явцад гаж нөлөө
-                        илэрвэл жор бичсэн эмчдээ яаралтай хандана уу
+                        Энэхүү хэсгийг жор баригч эмчийн бичсэн жорын дагуу олгох эмийг тэмдэглэж, тасархай зураасын
+                        дагуу таслан, эмийн хамт иргэнд олгоно. Эмчилгээний явцад гаж нөлөө илэрвэл жор бичсэн эмчдээ
+                        яаралтай хандана уу
                      </span>
                   </div>
                   <div
@@ -346,8 +317,8 @@ function am9A() {
             </div>
             <span style={{ fontSize: 12 }}>
                <span style={{ fontWeight: 'bold', fontSize: 12 }}>АНХААР:</span>
-               Энгийн эмийн жорын маягтыг “Эмийн жорын маягт, жор бичилт” MNS
-               5376:2016 стандартад заасан загвар, хэмжээтэй хэвлэнэ.
+               Энгийн эмийн жорын маягтыг “Эмийн жорын маягт, жор бичилт” MNS 5376:2016 стандартад заасан загвар,
+               хэмжээтэй хэвлэнэ.
             </span>
          </div>
       </div>

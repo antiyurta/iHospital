@@ -15,8 +15,7 @@ function C537M1(props) {
                         textAlign: 'center'
                      }}
                   >
-                     ТӨВЛӨРСӨН АРИУТГАЛЫН ТАСАГ /НЭГЖ/-Т БАГАЖ, МАТЕРИАЛЫГ
-                     ХҮЛЭЭН АВСАН БҮРТГЭЛИЙН ХУУДАС
+                     ТӨВЛӨРСӨН АРИУТГАЛЫН ТАСАГ /НЭГЖ/-Т БАГАЖ, МАТЕРИАЛЫГ ХҮЛЭЭН АВСАН БҮРТГЭЛИЙН ХУУДАС
                   </p>
                </div>
                <div
@@ -28,9 +27,7 @@ function C537M1(props) {
                </div>
             </div>
             <div className="w-full">
-               <p style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  Эмнэлэг, Тасгийн нэр:
-               </p>
+               <p style={{ fontWeight: 'bold', fontSize: 14 }}>Эмнэлэг, Тасгийн нэр:</p>
             </div>
             <div
                className="w-full"

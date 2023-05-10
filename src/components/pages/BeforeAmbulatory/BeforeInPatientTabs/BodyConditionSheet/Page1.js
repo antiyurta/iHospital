@@ -21,29 +21,19 @@ function Page1({ patientData, form }) {
             <div className="flow-root py-1">
                <div className="float-left inline-flex">
                   <p style={{ fontSize: 10 }}>Эмчлүүлэгчийн овог, нэр:</p>
-                  <p style={{ fontSize: 10 }}>
-                     {patientData?.lastName.substring(0, 1) +
-                        '.' +
-                        patientData?.firstName}
-                  </p>
+                  <p style={{ fontSize: 10 }}>{patientData?.lastName.substring(0, 1) + '.' + patientData?.firstName}</p>
                </div>
                <div className="float-right inline-flex">
                   <p style={{ fontSize: 10 }}>Нас:</p>
-                  <p style={{ fontSize: 10 }}>
-                     {getAge(patientData?.registerNumber)}
-                  </p>
+                  <p style={{ fontSize: 10 }}>{getAge(patientData?.registerNumber)}</p>
                   <p style={{ fontSize: 10 }} className="pl-1">
                      Хүйс:
                   </p>
-                  <p style={{ fontSize: 10 }}>
-                     {patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
-                  </p>
+                  <p style={{ fontSize: 10 }}>{patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}</p>
                   <p style={{ fontSize: 10 }} className="pl-1">
                      Тасаг:
                   </p>
-                  <p style={{ fontSize: 10 }}>
-                     {location?.state?.departmentName}
-                  </p>
+                  <p style={{ fontSize: 10 }}>{location?.state?.departmentName}</p>
                   <p style={{ fontSize: 10 }} className="pl-1">
                      Өрөө:
                   </p>
@@ -101,8 +91,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Жигд' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.breathing ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.breathing === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -110,11 +99,7 @@ function Page1({ patientData, form }) {
                            </td>
                         );
                      })}
-                     <td
-                        rowSpan={21}
-                        className="text-start"
-                        style={{ width: 115 }}
-                     >
+                     <td rowSpan={21} className="text-start" style={{ width: 115 }}>
                         <p>#1. Амьсгалах хэв маягийн өөрчлөлт</p>
                         <p>#2. Хийн солилцоо алдагдсан</p>
                         <p>#3. Амьсгалын замын цэвэршилт алдагдсан</p>
@@ -124,10 +109,7 @@ function Page1({ patientData, form }) {
                         <p>#8. Захын мэдрэлийн үйл ажиллагаа алдагдах эрсдэл</p>
                         <p>#9. Нойр хулжих</p>
                         <p>#10. Нойргүйдэл</p>
-                        <p>
-                           #11. Хөдөлгөөн муудсан (ор, биеийн, шилжих,
-                           тэргэнцэр)
-                        </p>
+                        <p>#11. Хөдөлгөөн муудсан (ор, биеийн, шилжих, тэргэнцэр)</p>
                         <p>#12. Тамиргүйдэх</p>
                      </td>
                   </tr>
@@ -141,8 +123,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Өнгөц' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.breathing ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.breathing === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -158,8 +139,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Гүн' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.breathing ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.breathing === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -173,11 +153,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.respiratory?.breathing ===
-                              'Тоо олширсон' ? (
+                              {item.respiratory?.breathing === 'Тоо олширсон' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.breathing ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.breathing === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -193,8 +171,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.breathing === 'Тоо цөөрсөн' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.breathing ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.breathing === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -408,11 +385,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.respiratory?.capillary ===
-                              '2 секундээс бага' ? (
+                              {item.respiratory?.capillary === '2 секундээс бага' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.capillary ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.capillary === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -426,11 +401,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.respiratory?.capillary ===
-                              '2 секундээс удаан' ? (
+                              {item.respiratory?.capillary === '2 секундээс удаан' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.capillary ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.capillary === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -447,8 +420,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.respiratory?.heartPoint === 'Жигд' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.heartPoint ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.heartPoint === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -462,11 +434,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.respiratory?.heartPoint ===
-                              'Хэм алдагдсан' ? (
+                              {item.respiratory?.heartPoint === 'Хэм алдагдсан' ? (
                                  <CheckOutlined />
-                              ) : item.respiratory?.heartPoint ===
-                                'Хамаарахгүй' ? (
+                              ) : item.respiratory?.heartPoint === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -501,21 +471,11 @@ function Page1({ patientData, form }) {
                            </td>
                         );
                      })}
-                     <td
-                        rowSpan={16}
-                        className="text-start"
-                        style={{ width: 115 }}
-                     >
+                     <td rowSpan={16} className="text-start" style={{ width: 115 }}>
                         <div className="ff">
                            <p>#13. Амны салст бүрхүүл гэмтсэн</p>
-                           <p>
-                              #14. Хоол тэжээлийн тэнцвэр алдагдсан: Бие
-                              махбодид шаардлагатай хэмжээнээс их
-                           </p>
-                           <p>
-                              #15. Хоол тэжээлийн тэнцвэр алдагдсан: Бие
-                              махбодид шаардлагатай хэмжээнээс бага
-                           </p>
+                           <p>#14. Хоол тэжээлийн тэнцвэр алдагдсан: Бие махбодид шаардлагатай хэмжээнээс их</p>
+                           <p>#15. Хоол тэжээлийн тэнцвэр алдагдсан: Бие махбодид шаардлагатай хэмжээнээс бага</p>
                            <p>#16. Залгих чадварын алдагдал</p>
                            <p>#17. Бөглөрөх эрсдэл</p>
                            <p>#18. Бөөлжис цутгах</p>
@@ -524,10 +484,7 @@ function Page1({ patientData, form }) {
                            <p>#21. Өтгөн хаталт</p>
                            <p>#22. Суулгалт</p>
                            <p>#23. Агаарын солилцооны алдагдал</p>
-                           <p>
-                              #24. Цусан дахь сахарын хэмжээ тогтворгүйжих
-                              эрсдэл
-                           </p>
+                           <p>#24. Цусан дахь сахарын хэмжээ тогтворгүйжих эрсдэл</p>
                         </div>
                      </td>
                   </tr>
@@ -569,11 +526,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.indigestion?.sitiology ===
-                              'Хоол хориогүй' ? (
+                              {item.indigestion?.sitiology === 'Хоол хориогүй' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.sitiology ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.sitiology === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -587,11 +542,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.indigestion?.sitiology ===
-                              'Хоол хориотой' ? (
+                              {item.indigestion?.sitiology === 'Хоол хориотой' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.sitiology ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.sitiology === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -608,8 +561,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Хэвийн' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.appetite ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.appetite === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -625,8 +577,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Өөрчлөлттэй' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.appetite ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.appetite === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -642,8 +593,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Огиулалттай' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.appetite ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.appetite === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -659,8 +609,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.appetite === 'Бөөлжүүлнэ' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.appetite ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.appetite === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -677,8 +626,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.stomach === 'Хэвийн' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.stomach ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.stomach === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -694,8 +642,7 @@ function Page1({ patientData, form }) {
                            <td key={index}>
                               {item.indigestion?.stomach === 'Цэрдийсэн' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.stomach ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.stomach === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -709,11 +656,9 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.indigestion?.stomach ===
-                              'Хонхойж татагдсан' ? (
+                              {item.indigestion?.stomach === 'Хонхойж татагдсан' ? (
                                  <CheckOutlined />
-                              ) : item.indigestion?.stomach ===
-                                'Хамаарахгүй' ? (
+                              ) : item.indigestion?.stomach === 'Хамаарахгүй' ? (
                                  '/'
                               ) : (
                                  <CloseOutlined />
@@ -776,8 +721,7 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.indigestion?.grease ===
-                              'Өнгө өөрчлөгдсөн' ? (
+                              {item.indigestion?.grease === 'Өнгө өөрчлөгдсөн' ? (
                                  <CheckOutlined />
                               ) : item.indigestion?.grease === 'Хамаарахгүй' ? (
                                  '/'
@@ -815,11 +759,7 @@ function Page1({ patientData, form }) {
                            </td>
                         );
                      })}
-                     <td
-                        rowSpan={11}
-                        className="text-start"
-                        style={{ width: 115 }}
-                     >
+                     <td rowSpan={11} className="text-start" style={{ width: 115 }}>
                         <p>#25. Шээс алдалт</p>
                         <p>#26. Шээс хаагдсан</p>
                         <p>#27. Шээс ялгаруулалт саатсан</p>
@@ -1013,11 +953,7 @@ function Page1({ patientData, form }) {
                            </td>
                         );
                      })}
-                     <td
-                        rowSpan={20}
-                        className="text-start"
-                        style={{ width: 115 }}
-                     >
+                     <td rowSpan={20} className="text-start" style={{ width: 115 }}>
                         <p>#28. Цус алдах эрсдэл</p>
                         <p>#29. Хялдварын эрсдэл</p>
                         <p>#30. Арьсны бүрэн бүтэн байдал алдагдал</p>
@@ -1367,11 +1303,7 @@ function Page1({ patientData, form }) {
                            </td>
                         );
                      })}
-                     <td
-                        rowSpan={21}
-                        className="text-start"
-                        style={{ width: 115 }}
-                     >
+                     <td rowSpan={21} className="text-start" style={{ width: 115 }}>
                         <div className="ff">
                            <p>#35. Будилуу болох (цочмог, архаг)</p>
                            <p>#36. Ой санамж муудсан</p>
@@ -1392,8 +1324,7 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.mind?.mindStatus ===
-                              'Сэтгэл хөөрлийн байдалтай' ? (
+                              {item.mind?.mindStatus === 'Сэтгэл хөөрлийн байдалтай' ? (
                                  <CheckOutlined />
                               ) : item.mind?.mindStatus === 'Хамаарахгүй' ? (
                                  '/'
@@ -1409,8 +1340,7 @@ function Page1({ patientData, form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.mind?.mindStatus ===
-                              'Сэтгэл түгшсэн байдалтай' ? (
+                              {item.mind?.mindStatus === 'Сэтгэл түгшсэн байдалтай' ? (
                                  <CheckOutlined />
                               ) : item.mind?.mindStatus === 'Хамаарахгүй' ? (
                                  '/'

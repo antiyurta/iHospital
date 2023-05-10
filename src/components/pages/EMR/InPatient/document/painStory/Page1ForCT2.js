@@ -10,21 +10,12 @@ function Page1ForCT2() {
             <div className="flex flex-wrap">
                <div className="basis-1/2"></div>
                <div className="basis-1/2">
-                  <p className="text-end">
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны
-                  </p>
-                  <p className="text-end">
-                     өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </p>
-                  <p className="text-end font-bold">
-                     Эрүүл мэндын бүртгэлийн маягт CT-2
-                  </p>
+                  <p className="text-end">Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>
+                  <p className="text-end">өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
+                  <p className="text-end font-bold">Эрүүл мэндын бүртгэлийн маягт CT-2</p>
                </div>
             </div>
-            <p
-               className="text-center py-4"
-               style={{ fontSize: '15px', fontWeight: 'bold' }}
-            >
+            <p className="text-center py-4" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                ӨВЧНИЙ ТҮҮХ /хүүхдийн/
             </p>
             <Table bordered className="story mb-0">
@@ -35,12 +26,7 @@ function Page1ForCT2() {
                      </th>
                      <th>РД</th>
                      <th>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'registerNumber']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'registerNumber']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </th>
@@ -82,12 +68,7 @@ function Page1ForCT2() {
                      <th colSpan={2}>
                         Тасгийн нэр:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'departmentName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'departmentName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -97,12 +78,7 @@ function Page1ForCT2() {
                      <th>
                         Эцэг /эх/-ийн нэр:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'lastName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'lastName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -110,12 +86,7 @@ function Page1ForCT2() {
                      <th colSpan={2}>
                         Өөрийн нэр:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'firstName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'firstName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -147,12 +118,7 @@ function Page1ForCT2() {
                         <p>
                            Нас:
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'age']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'age']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -160,12 +126,7 @@ function Page1ForCT2() {
                      </th>
                      <th>
                         <p>Хүйс:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'genderType']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'genderType']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'MAN'}>
                                  Эрэгтэй
@@ -176,12 +137,7 @@ function Page1ForCT2() {
                         <p>
                            <span>
                               Жин &nbsp; [
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'weight']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'weight']}>
                                  <Input disabled={true} className="w-9" />
                               </Form.Item>
                               ]
@@ -190,12 +146,7 @@ function Page1ForCT2() {
                         <p>
                            <span>
                               Өндөр &nbsp; [
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'height']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'height']}>
                                  <Input disabled={true} className="w-9" />
                               </Form.Item>
                               ]
@@ -204,21 +155,14 @@ function Page1ForCT2() {
                      </th>
                      <th>
                         <p className="font-bold">Эцгийн боловсрол:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'fatherEducationType']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'fatherEducationType']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={0}>
                                  Боловсролгүй
                               </Checkbox>
                               <Checkbox value={1}>Бага</Checkbox>
                               <Checkbox value={2}>Бүрэн дунд</Checkbox>
-                              <Checkbox value={3}>
-                                 Мэргэжлийн болон техникийн
-                              </Checkbox>
+                              <Checkbox value={3}>Мэргэжлийн болон техникийн</Checkbox>
                               <Checkbox className="w-full" value={4}>
                                  Дипломын
                               </Checkbox>
@@ -236,21 +180,14 @@ function Page1ForCT2() {
                      </th>
                      <th>
                         <p className="font-bold">Эхийн боловсрол:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'motherEducationType']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'motherEducationType']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={0}>
                                  Боловсролгүй
                               </Checkbox>
                               <Checkbox value={1}>Бага</Checkbox>
                               <Checkbox value={2}>Бүрэн дунд</Checkbox>
-                              <Checkbox value={3}>
-                                 Мэргэжлийн болон техникийн
-                              </Checkbox>
+                              <Checkbox value={3}>Мэргэжлийн болон техникийн</Checkbox>
                               <Checkbox className="w-full" value={4}>
                                  Дипломын
                               </Checkbox>
@@ -277,12 +214,7 @@ function Page1ForCT2() {
                         <p>
                            Аймаг/Хот:{' '}
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'address', 'aimag']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'aimag']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -290,12 +222,7 @@ function Page1ForCT2() {
                         <p>
                            Сум/дүүрэг:{' '}
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'address', 'soum']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'soum']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -314,22 +241,12 @@ function Page1ForCT2() {
                         </p>
                         <p>
                            Гудамж/Байшин:{' '}
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'address', 'building']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'building']}>
                               <Input disabled={true} />
                            </Form.Item>
                            <span>&nbsp;</span>
                            Тоот:{' '}
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'address', 'address']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'address']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </p>
@@ -343,12 +260,7 @@ function Page1ForCT2() {
                                  shouldUpdate
                                  className="mb-0"
                                  noStyle
-                                 name={[
-                                    'patient',
-                                    'contacts',
-                                    0,
-                                    'contactPhoneNo'
-                                 ]}
+                                 name={['patient', 'contacts', 0, 'contactPhoneNo']}
                               >
                                  <Input disabled={true} className="w-20" />
                               </Form.Item>
@@ -361,12 +273,7 @@ function Page1ForCT2() {
                                  shouldUpdate
                                  className="mb-0"
                                  noStyle
-                                 name={[
-                                    'patient',
-                                    'contacts',
-                                    1,
-                                    'contactPhoneNo'
-                                 ]}
+                                 name={['patient', 'contacts', 1, 'contactPhoneNo']}
                               >
                                  <Input disabled={true} className="w-20" />
                               </Form.Item>
@@ -379,12 +286,7 @@ function Page1ForCT2() {
                                  shouldUpdate
                                  className="mb-0"
                                  noStyle
-                                 name={[
-                                    'patient',
-                                    'contacts',
-                                    2,
-                                    'contactPhoneNo'
-                                 ]}
+                                 name={['patient', 'contacts', 2, 'contactPhoneNo']}
                               >
                                  <Input disabled={true} className="w-20" />
                               </Form.Item>
@@ -392,12 +294,7 @@ function Page1ForCT2() {
                         </p>
                      </th>
                      <th className="w-48">
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'childrenStatus']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'childrenStatus']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Сургууль
@@ -417,22 +314,12 @@ function Page1ForCT2() {
                            </Checkbox.Group>
                         </Form.Item>
                         <p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'childrenStatus2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'childrenStatus2']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </p>
                         <p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'childrenStatus3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'childrenStatus3']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </p>
@@ -461,12 +348,7 @@ function Page1ForCT2() {
                      <th>3</th>
                      <th rowSpan={4} className="w-40">
                         <p>Төлбөрийн хэлбэр:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'paymentStatus']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'paymentStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Төр хариуцсан
@@ -483,12 +365,7 @@ function Page1ForCT2() {
                      </th>
                      <th rowSpan={4} className="w-48">
                         <p>Доод шатлалаас илгээсэн эсэх</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'underStage']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'underStage']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Тийм
@@ -522,12 +399,7 @@ function Page1ForCT2() {
                      <th>Цаг</th>
                      <th rowSpan={5} className="w-20">
                         <p>Хэвтэлт:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'type']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'type']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Анх
@@ -538,12 +410,7 @@ function Page1ForCT2() {
                      </th>
                      <th rowSpan={5} className="w-32">
                         <p>Харшлын анамнез:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'anemis']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'anemis']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Эмийн бодис
@@ -574,12 +441,7 @@ function Page1ForCT2() {
                   <tr className="border-t-0">
                      <th style={{ width: 185 }}>
                         <p>Өвчний төгсгөл:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'endOfPain']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'endOfPain']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={0}>
                                  Эдгэрсэн
@@ -592,12 +454,7 @@ function Page1ForCT2() {
                      </th>
                      <th colSpan={2}>
                         <p>Эмнэлгээс:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'fromHospital']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'fromHospital']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Гарсан
@@ -672,12 +529,7 @@ function Page1ForCT2() {
                      <th colSpan={2}>
                         <span>
                            Эмчлэгч эмчийн нэр, гарын үсэг:
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'doctor']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'doctor']}>
                               <Input />
                            </Form.Item>
                         </span>
@@ -685,12 +537,7 @@ function Page1ForCT2() {
                      <th colSpan={4}>
                         <span>
                            Хянасан эмчийн нэр, гарын үсэг{' '}
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'doctors']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'doctors']}>
                               <Checkbox.Group className="inline">
                                  <Checkbox className="test" value={0}>
                                     Эмчилгээ эрхэлсэн орлогч

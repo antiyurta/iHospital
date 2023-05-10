@@ -35,15 +35,7 @@ import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 const { RangePicker } = DatePicker;
 
-ChartJS.register(
-   CategoryScale,
-   LinearScale,
-   PointElement,
-   LineElement,
-   Title,
-   Tooltip,
-   Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 const { Option } = Select;
 function BST({ PatientId, ListId }) {
    const today = new Date();
@@ -59,11 +51,7 @@ function BST({ PatientId, ListId }) {
    const [end, setEnd] = useState('');
    const checkNumber = (event) => {
       var charCode = event.charCode;
-      if (
-         charCode > 31 &&
-         (charCode < 48 || charCode > 57) &&
-         charCode !== 46
-      ) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
          event.preventDefault();
       } else {
          return true;
@@ -135,9 +123,7 @@ function BST({ PatientId, ListId }) {
       {
          title: 'Сувилагч',
          render: (_, row) => {
-            return (
-               row.createdLastName.substring(0, 1) + '.' + row.createdFirstName
-            );
+            return row.createdLastName.substring(0, 1) + '.' + row.createdFirstName;
          }
       }
    ];
@@ -162,9 +148,7 @@ function BST({ PatientId, ListId }) {
          var demoLineLabels = [];
          var demoBSTDatas = [];
          response.data.map((data) => {
-            demoLineLabels.push(
-               moment(data.createdAt).format('YYYY-MM-DD HH:mm')
-            );
+            demoLineLabels.push(moment(data.createdAt).format('YYYY-MM-DD HH:mm'));
             demoBSTDatas.push(data.sugarAmount);
          });
          setLineLabels(demoLineLabels);
@@ -230,11 +214,7 @@ function BST({ PatientId, ListId }) {
                               </Button>
                            </div>
                            <div className="float-right">
-                              <Button
-                                 title="Сэргээх"
-                                 type="primary"
-                                 onClick={() => getBSTDatas(1, 10, start, end)}
-                              >
+                              <Button title="Сэргээх" type="primary" onClick={() => getBSTDatas(1, 10, start, end)}>
                                  <ReloadOutlined spin={spinner} />
                               </Button>
                            </div>
@@ -253,8 +233,7 @@ function BST({ PatientId, ListId }) {
                            pageSize: 20,
                            total: meta.itemCount,
                            current: meta.page,
-                           onChange: (page, pageSize) =>
-                              getBSTDatas(page, pageSize, start, end)
+                           onChange: (page, pageSize) => getBSTDatas(page, pageSize, start, end)
                         }}
                      />
                   </div>
@@ -274,25 +253,13 @@ function BST({ PatientId, ListId }) {
                width={'11cm'}
             >
                <Form form={form} layout="vertical">
-                  <Form.Item
-                     label="Сахарын хэмжээ"
-                     name="sugarAmount"
-                     rules={[{ required: true, message: 'Заавал' }]}
-                  >
+                  <Form.Item label="Сахарын хэмжээ" name="sugarAmount" rules={[{ required: true, message: 'Заавал' }]}>
                      <InputNumber onKeyPress={checkNumber} />
                   </Form.Item>
-                  <Form.Item
-                     label="Нэгж"
-                     name="measurement"
-                     rules={[{ required: true, message: 'Заавал' }]}
-                  >
+                  <Form.Item label="Нэгж" name="measurement" rules={[{ required: true, message: 'Заавал' }]}>
                      <Input />
                   </Form.Item>
-                  <Form.Item
-                     label="Хэзээ/хоолны"
-                     name="whereCook"
-                     rules={[{ required: true, message: 'Заавал' }]}
-                  >
+                  <Form.Item label="Хэзээ/хоолны" name="whereCook" rules={[{ required: true, message: 'Заавал' }]}>
                      <Select>
                         <Option value={0}>Өлөн үед</Option>
                         <Option value={1}>Хоолны өмнө</Option>

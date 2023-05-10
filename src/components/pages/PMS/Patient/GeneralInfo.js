@@ -1,13 +1,5 @@
 import { LoadingOutlined, UserOutlined } from '@ant-design/icons';
-import {
-   DatePicker,
-   Form,
-   Input,
-   Select,
-   Statistic,
-   Typography,
-   Upload
-} from 'antd';
+import { DatePicker, Form, Input, Select, Statistic, Typography, Upload } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -24,8 +16,7 @@ function GeneralInfo({ form, gbase }) {
    const { Title } = Typography;
    const { Option } = Select;
    const beforeUpload = (file) => {
-      const isJpgOrPng =
-         file.type === 'image/jpeg' || file.type === 'image/png';
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJpgOrPng) {
          message.error('JPEG or PNG');
       }
@@ -144,11 +135,7 @@ function GeneralInfo({ form, gbase }) {
                />
                <div className="flex flex-wrap">
                   <div className="basis-1/2">
-                     <Statistic
-                        title="Нас"
-                        value={form.getFieldValue('age')}
-                        className="antiStatis"
-                     />
+                     <Statistic title="Нас" value={form.getFieldValue('age')} className="antiStatis" />
                   </div>
                   <div className="basis-1/2">
                      <Statistic
@@ -232,11 +219,7 @@ function GeneralInfo({ form, gbase }) {
                   // defaultValue={43}
                   showSearch
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                     (option?.children ?? '')
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                  }
+                  filterOption={(input, option) => (option?.children ?? '').toLowerCase().includes(input.toLowerCase())}
                >
                   {/* Монголын ID === 43 */}
                   {citizens.map((citizen, index) => {
@@ -263,14 +246,11 @@ function GeneralInfo({ form, gbase }) {
                   },
                   {
                      validator: async (_, registerNumber) => {
-                        console.log(typeof registerNumber);
                         if (registerNumber === undefined) {
                            return Promise.reject(new Error(''));
                         } else {
                            if (registerNumber.length < 10) {
-                              return Promise.reject(
-                                 new Error('Хамгийн багадаа 10 үсэг')
-                              );
+                              return Promise.reject(new Error('Хамгийн багадаа 10 үсэг'));
                            }
                         }
                      }

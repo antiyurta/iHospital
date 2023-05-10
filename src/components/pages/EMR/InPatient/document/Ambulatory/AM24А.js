@@ -45,20 +45,12 @@ function AM24А() {
                      alignItems: 'flex-end'
                   }}
                >
-                  <span style={{ fontSize: 12 }}>
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-                  </span>
-                  <span style={{ fontSize: 12 }}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-24А
-                  </span>
+                  <span style={{ fontSize: 12 }}>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн</span>
+                  <span style={{ fontSize: 12 }}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-24А</span>
                </div>
                <div style={{ textAlign: 'center' }}>
-                  <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                     ҮЙЛ ОНОШИЙН ШИНЖИЛГЭЭНИЙ БҮРТГЭЛ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 16 }}>ҮЙЛ ОНОШИЙН ШИНЖИЛГЭЭНИЙ БҮРТГЭЛ</span>
                </div>
                <div
                   style={{
@@ -88,16 +80,10 @@ function AM24А() {
             <Table bordered className="document">
                <tbody>
                   <tr>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         №
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         Сар, өдөр
                      </td>
                      <td

@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { EditOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-   Button,
-   Checkbox,
-   Collapse,
-   Divider,
-   Form,
-   Input,
-   Modal,
-   Popconfirm,
-   Table
-} from 'antd';
+import { Button, Checkbox, Collapse, Divider, Form, Input, Modal, Popconfirm, Table } from 'antd';
 
 import EditableFormItem from './EditableFormItem';
 import { ReturnDetails } from '../Document/Index';
@@ -48,11 +38,7 @@ function EditableTable(props) {
       const documents = form.getFieldValue('documents');
       setOldDocuments(documents);
    };
-   const getDocumentOptions = async (
-      documentValue,
-      employeePositionIds,
-      structureId
-   ) => {
+   const getDocumentOptions = async (documentValue, employeePositionIds, structureId) => {
       const conf = {
          headers: {},
          params: {
@@ -102,23 +88,13 @@ function EditableTable(props) {
          params: {}
       };
       if (editModePosition) {
-         const response = await Patch(
-            'organization/document-option/update/custom',
-            token,
-            conf,
-            data
-         );
+         const response = await Patch('organization/document-option/update/custom', token, conf, data);
          if (response === 200) {
             confForm.resetFields();
             setIsOpenConfModal(false);
          }
       } else {
-         const response = await Post(
-            'organization/document-option/custom-all',
-            token,
-            conf,
-            data
-         );
+         const response = await Post('organization/document-option/custom-all', token, conf, data);
          if (response === 201) {
             confForm.resetFields();
             setIsOpenConfModal(false);
@@ -227,11 +203,7 @@ function EditableTable(props) {
             onCancel={() => setIsOpenModal(false)}
             footer={false}
          >
-            <ReturnDetails
-               type={1}
-               oldDocuments={oldDocuments}
-               handleClick={handleClick}
-            />
+            <ReturnDetails type={1} oldDocuments={oldDocuments} handleClick={handleClick} />
          </Modal>
          <Modal
             title="sdads"
@@ -250,27 +222,20 @@ function EditableTable(props) {
                         <Panel key={index} header={getPositionInfo(id)}>
                            <Form.Item name={id}>
                               <Checkbox.Group className="w-full">
-                                 {documentForm?.documentForm?.map(
-                                    (form, index) => {
-                                       return (
-                                          <div key={index}>
-                                             <Divider>{form.label}</Divider>
-                                             {form.options?.map(
-                                                (option, idx) => {
-                                                   return (
-                                                      <Checkbox
-                                                         key={idx}
-                                                         value={option.keyWord}
-                                                      >
-                                                         {option.value}
-                                                      </Checkbox>
-                                                   );
-                                                }
-                                             )}
-                                          </div>
-                                       );
-                                    }
-                                 )}
+                                 {documentForm?.documentForm?.map((form, index) => {
+                                    return (
+                                       <div key={index}>
+                                          <Divider>{form.label}</Divider>
+                                          {form.options?.map((option, idx) => {
+                                             return (
+                                                <Checkbox key={idx} value={option.keyWord}>
+                                                   {option.value}
+                                                </Checkbox>
+                                             );
+                                          })}
+                                       </div>
+                                    );
+                                 })}
                               </Checkbox.Group>
                            </Form.Item>
                         </Panel>

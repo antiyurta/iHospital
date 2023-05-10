@@ -39,16 +39,10 @@ function Index({ data }) {
       if (response.data.length > 0) {
          setStoryId(response.data[0].id);
          setTestData(response.data[0]);
-         const createdAt = moment(response.data[0]?.createdAt).format(
-            'YYYY-MM-DD'
-         );
-         response.data[0].doctorInspection = JSON.parse(
-            response.data[0].doctorInspection
-         );
+         const createdAt = moment(response.data[0]?.createdAt).format('YYYY-MM-DD');
+         response.data[0].doctorInspection = JSON.parse(response.data[0].doctorInspection);
          response.data[0]['createdAt'] = createdAt;
-         const birthDate = moment(response.data[0]['patient'].birthDate).format(
-            'Төрсөн YYYY он MM сар DD өдөр'
-         );
+         const birthDate = moment(response.data[0]['patient'].birthDate).format('Төрсөн YYYY он MM сар DD өдөр');
          if (birthDate.length != 12) {
             response.data[0]['patient'].birthDate = birthDate.toString();
          }
@@ -63,12 +57,7 @@ function Index({ data }) {
       };
       values['doctorInspection'] = JSON.stringify(values['doctorInspection']);
       values['templateId'] = 1;
-      const response = await DefaultPatch(
-         'inpatient/story/' + storyId,
-         token,
-         conf,
-         values
-      );
+      const response = await DefaultPatch('inpatient/story/' + storyId, token, conf, values);
       console.log(response);
       // form.setFieldsValue(response);
    };

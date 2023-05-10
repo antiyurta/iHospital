@@ -1,14 +1,5 @@
 import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   ConfigProvider,
-   Empty,
-   Form,
-   Input,
-   Space,
-   Table
-} from 'antd';
+import { Button, Card, ConfigProvider, Empty, Form, Input, Space, Table } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../features/authReducer';
@@ -63,24 +54,14 @@ function UTable2({ title, url, column, action }) {
       return <div>asdsad</div>;
    };
    const getColumnSearchProps = (dataIndex) => ({
-      filterDropdown: ({
-         setSelectedKeys,
-         selectedKeys,
-         confirm,
-         clearFilters,
-         close
-      }) => (
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
          <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
             <Input
                ref={searchInput}
                placeholder={`Хайх`}
                value={selectedKeys[0]}
-               onChange={(e) =>
-                  setSelectedKeys(e.target.value ? [e.target.value] : [])
-               }
-               onPressEnter={() =>
-                  handleSearch(selectedKeys, confirm, dataIndex)
-               }
+               onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+               onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
                style={{
                   marginBottom: 8,
                   display: 'block'
@@ -178,15 +159,13 @@ function UTable2({ title, url, column, action }) {
                   size: 'small',
                   current: meta.page,
                   total: meta.itemCount,
-                  showTotal: (total, range) =>
-                     `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                  showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                   pageSize: meta.limit,
                   total: meta.itemCount,
                   current: meta.page,
                   pageSizeOptions: ['5', '10', '20', '50'],
                   showQuickJumper: true,
-                  onChange: (page, pageSize) =>
-                     getData(page, pageSize, pValue, pIndex)
+                  onChange: (page, pageSize) => getData(page, pageSize, pValue, pIndex)
                }}
             />
          </ConfigProvider>

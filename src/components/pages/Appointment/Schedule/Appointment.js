@@ -10,30 +10,24 @@ import {
    Form,
    Modal,
    Select,
-   Space
+   Space,
+   Steps,
+   Switch
 } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-   selectCurrentInsurance,
-   selectCurrentToken
-} from '../../../../features/authReducer';
-import {
-   DefualtGet,
-   Get,
-   openNofi,
-   Patch,
-   Post,
-   ScrollRef
-} from '../../../comman';
+import { selectCurrentInsurance, selectCurrentToken } from '../../../../features/authReducer';
+import { DefaultPost, DefualtGet, Get, openNofi, Patch, Post, ScrollRef } from '../../../comman';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { ClockCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import axios from 'axios';
 const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
+const { Step } = Steps;
 function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
    const [today] = useState(moment(new Date()));
    const token = useSelector(selectCurrentToken);
@@ -59,6 +53,8 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
    const [isUrgent, setIsUrgent] = useState(false);
    const [isConfirmLoading, setIsConfirmLoading] = useState(false);
    //
+   const [isLoadingCheckPatientInsurance, setIsLoadingCheckPatientInsurance] = useState(false);
+   const [stateInsurance, setStateInsurance] = useState(Boolean);
    const [insuranceService, setInsuranceService] = useState([]);
    const [selectedInsuranceId, setSelectedInsuranceId] = useState(Number);
    //
@@ -75,7 +71,6 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             setAppointmentModal(true);
          }
       } else {
-         console.log('2');
          setQwe(desc);
          setIsUrgent(true);
          if (selectedPatient.length === 0) {
@@ -109,7 +104,6 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
          config.params.findOneDate = date;
          config.params.type = type;
          const response = await Get('schedule', token, config);
-         //   console.log("RES ==========>", response);
          setSchedules(response.data);
       }
    };
@@ -143,12 +137,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       setIsConfirmLoading(true);
       if (type === 2 || type === 3) {
          data.type = invoiceData.type;
-         const response = await Patch(
-            'service-request/' + invoiceData.invoiceId,
-            token,
-            config,
-            data
-         );
+         const response = await Patch('service-request/' + invoiceData.invoiceId, token, config, data);
          if (response === 200) {
             setAppointmentModal(false);
             handleClick(true, invoiceData.invoiceId);
@@ -158,6 +147,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
          data.type = 3;
          data.status = 1;
          data.hicsServiceId = selectedInsuranceId;
+         data.isInsurance = stateInsurance;
          data.appointmentWorkDate = filterForm.getFieldValue('date');
          config.params = {};
          const response = await Post('appointment', token, config, data);
@@ -201,13 +191,41 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             usageType: 'OUT'
          }
       };
-      const response = await DefualtGet(
-         'insurance/hics-service-group',
-         token,
-         conf
-      );
-      // console.log(response)
+      const response = await DefualtGet('insurance/hics-service-group', token, conf);
       setInsuranceService(response.data);
+   };
+   const checkPatientInsurance = async () => {
+      setIsLoadingCheckPatientInsurance(true);
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      const data = {
+         regNo: selectedPatient.registerNumber,
+         isChild: selectedPatient.isChild,
+         fingerPrint: 'sadasd'
+      };
+      await axios
+         .post(process.env.REACT_APP_DEV_URL + 'health-insurance/citizen-info', data, {
+            headers: {
+               'X-API-KEY': process.env.REACT_APP_API_KEY,
+               Authorization: `Bearer ${token}`
+            }
+         })
+         .then((res) => {
+            console.log(res);
+            if (!res.data?.isChance) {
+               openNofi('warning', 'Анхааруулга', 'Үйлчүүлэгч даатгалгүй байна');
+            } else {
+               openNofi('success', 'Амжилттай', 'Үйлчүүлэгч даатгалтай байна');
+            }
+            setStateInsurance(res.data?.isChance);
+            setIsLoadingCheckPatientInsurance(false);
+         })
+         .catch((err) => {
+            console.log(err);
+            setIsLoadingCheckPatientInsurance(false);
+         });
    };
    useEffect(() => {
       ScrollRef(scrollRef);
@@ -222,66 +240,106 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
    return (
       <>
          <Modal
+            title="Цаг захиалах"
             open={appointmentModal}
             onOk={() => {
                isUrgent ? urgentRequest() : getdd();
             }}
             onCancel={() => {
                setAppointmentModal(false);
+               setStateInsurance(false);
             }}
             confirmLoading={isConfirmLoading}
             cancelText="Болих"
             okText="Хадгалах"
+            width={'40%'}
          >
-            <Descriptions title="Цаг захиалах" layout="vertical">
-               <Descriptions.Item label="Кабинет">
-                  {qwe.structure}
-               </Descriptions.Item>
-               <Descriptions.Item label="Эмч">
-                  {qwe.doctor?.firstName}
-               </Descriptions.Item>
-               <Descriptions.Item label="Үйлчүүлэгч">
-                  {selectedPatient.lastName + ' ' + selectedPatient.firstName}
-               </Descriptions.Item>
-               <Descriptions.Item label="Цаг">
-                  <div className="inline-flex flex-row items-center">
-                     <span>{qwe.time?.start?.substr(0, 5)}</span>
-                     <ClockCircleOutlined className="mx-1.5" />
-                     <span>{qwe.time?.end?.substr(0, 5)}</span>
+            <div className="flex flex-col gap-3">
+               <div className="rounded-md bg-gray-100 w-full inline-block">
+                  <div className="p-3">
+                     <Descriptions layout="vertical">
+                        <Descriptions.Item label="Кабинет">{qwe.structure}</Descriptions.Item>
+                        <Descriptions.Item label="Эмч">{qwe.doctor?.firstName}</Descriptions.Item>
+                        <Descriptions.Item label="Үйлчүүлэгч">
+                           {selectedPatient.lastName + ' ' + selectedPatient.firstName}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Цаг">
+                           <div className="inline-flex flex-row items-center">
+                              <span>{qwe.time?.start?.substr(0, 5)}</span>
+                              <ClockCircleOutlined className="mx-1.5" />
+                              <span>{qwe.time?.end?.substr(0, 5)}</span>
+                           </div>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Өрөөнийн дугаар">{qwe.roomNumber}</Descriptions.Item>
+                     </Descriptions>
                   </div>
-               </Descriptions.Item>
-               <Descriptions.Item label="Өрөөнийн дугаар">
-                  {qwe.roomNumber}
-               </Descriptions.Item>
-            </Descriptions>
-            {isInsurance && (
-               <>
-                  <label>Даатгалын үйлчилгээний төрөл</label>
-                  <Select
-                     style={{
-                        width: '100%'
-                     }}
-                     onChange={(e) => setSelectedInsuranceId(e)}
-                  >
-                     {insuranceService?.map((group, index) => {
-                        return (
-                           <OptGroup key={index} label={group.name}>
-                              {group?.hicsServices?.map((service, idx) => {
-                                 return (
-                                    <Option
-                                       key={`${index - idx}`}
-                                       value={service.id}
-                                    >
-                                       {service.name}
-                                    </Option>
-                                 );
-                              })}
-                           </OptGroup>
-                        );
-                     })}
-                  </Select>
-               </>
-            )}
+               </div>
+               <div className="rounded-md bg-gray-100 w-full inline-block">
+                  <div className="p-3">
+                     <div className="flow-root">
+                        <div className="float-left">
+                           <p
+                              style={{
+                                 fontWeight: 600
+                              }}
+                           >
+                              Үйлчүүлэгч даатгалтай эсэх
+                           </p>
+                        </div>
+                        <div className="float-right">
+                           <Switch
+                              className="bg-[#2d8cff]"
+                              checkedChildren="Тийм"
+                              unCheckedChildren="Үгүй"
+                              defaultChecked={false}
+                              checked={stateInsurance}
+                              onChange={(e) => setStateInsurance(e)}
+                           />
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               {stateInsurance && (
+                  <div className="rounded-md bg-gray-100 w-full inline-block">
+                     <div className="p-3">
+                        <Form onFinish={checkPatientInsurance}>
+                           <Form.Item>
+                              <Button loading={isLoadingCheckPatientInsurance} type="primary" htmlType="submit">
+                                 Шалгах
+                              </Button>
+                           </Form.Item>
+                        </Form>
+                     </div>
+                  </div>
+               )}
+               {isInsurance && stateInsurance && (
+                  <div className="rounded-md bg-gray-100 w-full inline-block">
+                     <div className="p-3">
+                        <label>Даатгалын үйлчилгээний төрөл</label>
+                        <Select
+                           style={{
+                              width: '100%'
+                           }}
+                           onChange={(e) => setSelectedInsuranceId(e)}
+                        >
+                           {insuranceService?.map((group, index) => {
+                              return (
+                                 <OptGroup key={index} label={group.name}>
+                                    {group?.hicsServices?.map((service, idx) => {
+                                       return (
+                                          <Option key={`${index - idx}`} value={service.id}>
+                                             {service.name}
+                                          </Option>
+                                       );
+                                    })}
+                                 </OptGroup>
+                              );
+                           })}
+                        </Select>
+                     </div>
+                  </div>
+               )}
+            </div>
          </Modal>
          <Card
             bordered={false}
@@ -319,27 +377,15 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                                  );
                               })
                               .catch((err) => {
-                                 openNofi(
-                                    'warning',
-                                    'Алдаа',
-                                    'Яаралтай үед тасаг эмч сонгох'
-                                 );
+                                 openNofi('warning', 'Алдаа', 'Яаралтай үед тасаг эмч сонгох');
                               });
                         }}
                      >
                         Яаралтай
                      </Button>
                   )}
-                  <Alert
-                     className="h-6"
-                     message={`Өнөөдөр: ${today?.format('YYYY-MM-DD')}`}
-                     type="success"
-                  />
-                  <Form
-                     form={filterForm}
-                     layout="inline"
-                     style={{ height: '30px' }}
-                  >
+                  <Alert className="h-6" message={`Өнөөдөр: ${today?.format('YYYY-MM-DD')}`} type="success" />
+                  <Form form={filterForm} layout="inline" style={{ height: '30px' }}>
                      <Form.Item
                         label="Тасаг"
                         name="structureId"
@@ -350,12 +396,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                            }
                         ]}
                      >
-                        <Select
-                           allowClear
-                           className="w-52"
-                           onChange={getDoctor}
-                           placeholder="Тасаг сонгох"
-                        >
+                        <Select allowClear className="w-52" onChange={getDoctor} placeholder="Тасаг сонгох">
                            {structures.map((structure, index) => {
                               return (
                                  <Option key={index} value={structure.id}>
@@ -375,12 +416,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                            }
                         ]}
                      >
-                        <Select
-                           allowClear
-                           className="w-52"
-                           onChange={selectDoctor}
-                           placeholder="Эмч сонгох"
-                        >
+                        <Select allowClear className="w-52" onChange={selectDoctor} placeholder="Эмч сонгох">
                            {doctors.map((doctor, index) => {
                               return (
                                  <Option key={index} value={doctor.id}>
@@ -391,17 +427,9 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                         </Select>
                      </Form.Item>
                      <Form.Item label="Өдөр" name="date">
-                        <DatePicker
-                           onChange={changeDate}
-                           locale={mn}
-                           format={'YYYY/MM/DD'}
-                        />
+                        <DatePicker onChange={changeDate} locale={mn} format={'YYYY/MM/DD'} />
                      </Form.Item>
-                     <Button
-                        type="primary"
-                        icon={<SearchOutlined />}
-                        onClick={() => onFinish()}
-                     >
+                     <Button type="primary" icon={<SearchOutlined />} onClick={() => onFinish()}>
                         Шүүх
                      </Button>
                   </Form>
@@ -414,28 +442,19 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                      {schedules?.map((schedule) => {
                         return (
                            <Panel
+                              forceRender={true}
                               key={schedule.id}
                               header={
                                  <div>
                                     <b>Өрөө:</b> {schedule.room?.roomNumber}
-                                    <b className="ml-2">Тасаг:</b>{' '}
-                                    {schedule.structure?.name}
-                                    <b className="ml-2">Кабинет:</b>{' '}
-                                    {schedule.cabinet?.name}
-                                    <b className="ml-2">Эмч:</b>{' '}
-                                    {schedule.doctor?.firstName}
+                                    <b className="ml-2">Тасаг:</b> {schedule.structure?.name}
+                                    <b className="ml-2">Кабинет:</b> {schedule.cabinet?.name}
+                                    <b className="ml-2">Эмч:</b> {schedule.doctor?.firstName}
                                  </div>
                               }
                            >
-                              <div
-                                 className="table-responsive"
-                                 id="style-8"
-                                 ref={scrollRef}
-                              >
-                                 <Table
-                                    className="ant-border-space"
-                                    style={{ width: '100%' }}
-                                 >
+                              <div className="table-responsive" id="style-8" ref={scrollRef}>
+                                 <Table className="ant-border-space" style={{ width: '100%' }}>
                                     <thead className="ant-table-thead">
                                        <tr>
                                           <th>Цаг</th>
@@ -456,56 +475,32 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                                              <tr key={idx}>
                                                 <td>
                                                    <div className="inline-flex flex-row items-center">
-                                                      <span>
-                                                         {slot.startTime?.substr(
-                                                            0,
-                                                            5
-                                                         )}
-                                                      </span>
+                                                      <span>{slot.startTime?.substr(0, 5)}</span>
                                                       <ClockCircleOutlined className="mx-1.5" />
-                                                      <span>
-                                                         {slot.endTime?.substr(
-                                                            0,
-                                                            5
-                                                         )}
-                                                      </span>
+                                                      <span>{slot.endTime?.substr(0, 5)}</span>
                                                    </div>
                                                 </td>
                                                 {slot.isActive ? (
-                                                   <td
-                                                      colSpan={9}
-                                                      className="text-center"
-                                                   >
+                                                   <td colSpan={9} className="text-center">
                                                       <Button
                                                          className="bg-green-500 text-white"
                                                          onClick={() =>
                                                             orderAppointment(
                                                                true,
                                                                {
-                                                                  roomNumber:
-                                                                     schedule
-                                                                        .room
-                                                                        .roomNumber,
-                                                                  structure:
-                                                                     schedule
-                                                                        .structure
-                                                                        .name,
-                                                                  doctor:
-                                                                     schedule.doctor,
+                                                                  roomNumber: schedule.room.roomNumber,
+                                                                  structure: schedule.structure.name,
+                                                                  doctor: schedule.doctor,
                                                                   time: {
                                                                      start: slot.startTime,
                                                                      end: slot.endTime
                                                                   }
                                                                },
                                                                {
-                                                                  slotId:
-                                                                     slot.id,
-                                                                  patientId:
-                                                                     selectedPatient.id,
-                                                                  doctorId:
-                                                                     schedule.doctorId,
-                                                                  cabinetId:
-                                                                     schedule.cabinetId
+                                                                  slotId: slot.id,
+                                                                  patientId: selectedPatient.id,
+                                                                  doctorId: schedule.doctorId,
+                                                                  cabinetId: schedule.cabinetId
                                                                }
                                                             )
                                                          }
@@ -515,38 +510,13 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                                                    </td>
                                                 ) : (
                                                    <>
-                                                      <td className="text-center">
-                                                         {
-                                                            slot.patient
-                                                               ?.lastName
-                                                         }
-                                                      </td>
-                                                      <td className="text-center">
-                                                         {
-                                                            slot.patient
-                                                               ?.firstName
-                                                         }
-                                                      </td>
-                                                      <td className="text-center">
-                                                         {slot.patient?.age}
-                                                      </td>
-                                                      <td className="text-center">
-                                                         {
-                                                            slot.patient
-                                                               ?.registerNumber
-                                                         }
-                                                      </td>
+                                                      <td className="text-center">{slot.patient?.lastName}</td>
+                                                      <td className="text-center">{slot.patient?.firstName}</td>
+                                                      <td className="text-center">{slot.patient?.age}</td>
+                                                      <td className="text-center">{slot.patient?.registerNumber}</td>
                                                       <td className="text-center"></td>
-                                                      <td className="text-center">
-                                                         {slot.patient?.phoneNo}
-                                                      </td>
-                                                      <td>
-                                                         {moment(
-                                                            slot.updatedAt
-                                                         ).format(
-                                                            'YYYY-MM-DD HH:mm'
-                                                         )}
-                                                      </td>
+                                                      <td className="text-center">{slot.patient?.phoneNo}</td>
+                                                      <td>{moment(slot.updatedAt).format('YYYY-MM-DD HH:mm')}</td>
                                                       <td></td>
                                                       <td></td>
                                                    </>

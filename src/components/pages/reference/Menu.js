@@ -2,17 +2,7 @@ import { Delete, Get, Patch, Post } from '../../comman';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import {
-   Button,
-   Card,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Pagination,
-   Select,
-   Switch
-} from 'antd';
+import { Button, Card, Form, Input, InputNumber, Modal, Pagination, Select, Switch } from 'antd';
 import { Table } from 'react-bootstrap';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
@@ -60,12 +50,7 @@ function Menu() {
 
    const onFinish = async (value) => {
       if (editMode) {
-         const response = await Patch(
-            'reference/menu/' + id,
-            token,
-            config,
-            value
-         );
+         const response = await Patch('reference/menu/' + id, token, config, value);
          if (response === 200) {
             setIsOpenModal(false);
             getMenus();
@@ -113,10 +98,7 @@ function Menu() {
             className="header-solid max-h-max rounded-md"
             title="MENUS"
             extra={
-               <Button
-                  onClick={showModal}
-                  className="bg-sky-700 rounded-md text-white"
-               >
+               <Button onClick={showModal} className="bg-sky-700 rounded-md text-white">
                   Нэмэх
                </Button>
             }
@@ -136,19 +118,10 @@ function Menu() {
                   <tbody className="ant-table-tbody p-0">
                      {menus.map((menu, index) => {
                         return (
-                           <tr
-                              key={index}
-                              className="ant-table-row ant-table-row-level-0"
-                           >
-                              <td className="ant-table-row-cell-break-word">
-                                 {menu.title}
-                              </td>
-                              <td className="ant-table-row-cell-break-word">
-                                 {menu.name}
-                              </td>
-                              <td className="ant-table-row-cell-break-word">
-                                 {menu.isSubMenu ? 'TIIM' : 'UGU'}
-                              </td>
+                           <tr key={index} className="ant-table-row ant-table-row-level-0">
+                              <td className="ant-table-row-cell-break-word">{menu.title}</td>
+                              <td className="ant-table-row-cell-break-word">{menu.name}</td>
+                              <td className="ant-table-row-cell-break-word">{menu.isSubMenu ? 'TIIM' : 'UGU'}</td>
                               <td className="ant-table-row-cell-break-word w-6">
                                  <a
                                     dangerouslySetInnerHTML={{
@@ -181,12 +154,7 @@ function Menu() {
                </Table>
             </div>
             <div>
-               <Pagination
-                  className="pagination"
-                  pageSize={10}
-                  total={meta.itemCount}
-                  onChange={getMenus}
-               />
+               <Pagination className="pagination" pageSize={10} total={meta.itemCount} onChange={getMenus} />
             </div>
          </Card>
          <Modal
