@@ -1,12 +1,4 @@
-import {
-   Button,
-   Checkbox,
-   Collapse,
-   DatePicker,
-   Divider,
-   Form,
-   Input
-} from 'antd';
+import { Button, Checkbox, Collapse, DatePicker, Divider, Form, Input } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React, { useEffect } from 'react';
@@ -30,12 +22,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
       };
       //   values['doctorInspection'] = JSON.stringify(values['doctorInspection']);
       //   values['templateId'] = 1;
-      const response = await DefaultPatch(
-         'inpatient/story/' + id,
-         token,
-         conf,
-         values
-      );
+      const response = await DefaultPatch('inpatient/story/' + id, token, conf, values);
       // form.setFieldValue('patient', response.patient);
    };
    const onFinishFailed = (errors) => {
@@ -48,11 +35,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Регистр дугаар:"
-                           name={['patient', 'registerNumber']}
-                        >
+                        <Form.Item className="mb-0" label="Регистр дугаар:" name={['patient', 'registerNumber']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -61,11 +44,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Нийгмийн даатгалын дугаар:"
-                           name={['patient', 'ndd']}
-                        >
+                        <Form.Item className="mb-0" label="Нийгмийн даатгалын дугаар:" name={['patient', 'ndd']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -74,11 +53,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Тасгийн нэр:"
-                           name={['patient', 'departmentName']}
-                        >
+                        <Form.Item className="mb-0" label="Тасгийн нэр:" name={['patient', 'departmentName']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -87,11 +62,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Эцэг /эх/-ийн нэр:"
-                           name={['patient', 'lastName']}
-                        >
+                        <Form.Item className="mb-0" label="Эцэг /эх/-ийн нэр:" name={['patient', 'lastName']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -100,11 +71,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Өөрийн нэр:"
-                           name={['patient', 'firstName']}
-                        >
+                        <Form.Item className="mb-0" label="Өөрийн нэр:" name={['patient', 'firstName']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -113,11 +80,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Төрсөн он сар өдөр:"
-                           name={['patient', 'birthDate']}
-                        >
+                        <Form.Item className="mb-0" label="Төрсөн он сар өдөр:" name={['patient', 'birthDate']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -126,11 +89,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Нас:"
-                           name={['patient', 'age']}
-                        >
+                        <Form.Item className="mb-0" label="Нас:" name={['patient', 'age']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -139,11 +98,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Хүйс:"
-                           name={['patient', 'genderType']}
-                        >
+                        <Form.Item className="mb-0" label="Хүйс:" name={['patient', 'genderType']}>
                            <Checkbox.Group disabled={true}>
                               <Checkbox className="ml-2" value={'MAN'}>
                                  Эрэгтэй
@@ -157,21 +112,13 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Гэрлэлтийн байдал"
-                           name={['patient', 'marriageStatus']}
-                        >
+                        <Form.Item className="mb-0" label="Гэрлэлтийн байдал" name={['patient', 'marriageStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Огт гэрлээгүй
                               </Checkbox>
-                              <Checkbox value={1}>
-                                 Батлуулсан гэр бүлтэй
-                              </Checkbox>
-                              <Checkbox value={2}>
-                                 Батлуулаагүй гэр бүлтэй
-                              </Checkbox>
+                              <Checkbox value={1}>Батлуулсан гэр бүлтэй</Checkbox>
+                              <Checkbox value={2}>Батлуулаагүй гэр бүлтэй</Checkbox>
                               <Checkbox value={3}>Тусгаарласан</Checkbox>
                               <Checkbox className="w-full" value={4}>
                                  Цуцалсан
@@ -187,20 +134,14 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Боловсролын байдал"
-                           name={['patient', 'educationType']}
-                        >
+                        <Form.Item className="mb-0" label="Боловсролын байдал" name={['patient', 'educationType']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Боловсролгүй
                               </Checkbox>
                               <Checkbox value={1}>Бага</Checkbox>
                               <Checkbox value={2}>Бүрэн дунд</Checkbox>
-                              <Checkbox value={3}>
-                                 Мэргэжлийн болон техникийн
-                              </Checkbox>
+                              <Checkbox value={3}>Мэргэжлийн болон техникийн</Checkbox>
                               <Checkbox className="w-full" value={4}>
                                  Дипломын
                               </Checkbox>
@@ -221,11 +162,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Аймаг/хот:"
-                           name={['patient', 'address', 'aimag']}
-                        >
+                        <Form.Item className="mb-0" label="Аймаг/хот:" name={['patient', 'address', 'aimag']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -234,11 +171,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Сум/дүүрэг:"
-                           name={['patient', 'address', 'soum']}
-                        >
+                        <Form.Item className="mb-0" label="Сум/дүүрэг:" name={['patient', 'address', 'soum']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -247,11 +180,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Баг/хороо:"
-                           name={['patient', 'address', 'committee']}
-                        >
+                        <Form.Item className="mb-0" label="Баг/хороо:" name={['patient', 'address', 'committee']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -260,11 +189,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Гудамж/Байшин:"
-                           name={['patient', 'address', 'building']}
-                        >
+                        <Form.Item className="mb-0" label="Гудамж/Байшин:" name={['patient', 'address', 'building']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -273,11 +198,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Тоот:"
-                           name={['patient', 'address', 'address']}
-                        >
+                        <Form.Item className="mb-0" label="Тоот:" name={['patient', 'address', 'address']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -299,11 +220,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Мэргэжил:"
-                           name={['patient', 'jobPosition']}
-                        >
+                        <Form.Item className="mb-0" label="Мэргэжил:" name={['patient', 'jobPosition']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </div>
@@ -312,11 +229,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Цусны бүлэг"
-                           name={['patient', 'bloodType']}
-                        >
+                        <Form.Item className="mb-0" label="Цусны бүлэг" name={['patient', 'bloodType']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -340,11 +253,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Өөрийн утас:"
-                           name={['patient', 'phoneNo']}
-                        >
+                        <Form.Item className="mb-0" label="Өөрийн утас:" name={['patient', 'phoneNo']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -366,11 +275,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Төлбөрийн төрөл:"
-                           name={['patient', 'paymentStatus']}
-                        >
+                        <Form.Item className="mb-0" label="Төлбөрийн төрөл:" name={['patient', 'paymentStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Төр хариуцсан
@@ -407,11 +312,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Харшлын анамнез:"
-                           name={['patient', 'anemis']}
-                        >
+                        <Form.Item className="mb-0" label="Харшлын анамнез:" name={['patient', 'anemis']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Эмийн бодис
@@ -430,20 +331,11 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                         <>
                            {diagnoses.map((diagnose, index) => {
                               return (
-                                 <Form.Item
-                                    shouldUpdate
-                                    noStyle
-                                    key={index}
-                                    className="mb-0"
-                                 >
+                                 <Form.Item shouldUpdate noStyle key={index} className="mb-0">
                                     {() => {
                                        return (
                                           <span>
-                                             {form.getFieldValue([
-                                                'diagnoses',
-                                                diagnose.name,
-                                                'name'
-                                             ])}
+                                             {form.getFieldValue(['diagnoses', diagnose.name, 'name'])}
                                              &nbsp;
                                           </span>
                                        );
@@ -462,34 +354,18 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                   <Diagnose form={form} name="Дагалдах онош" formName="combo" />
                </div>
                <div className="w-full p-1 story">
-                  <Diagnose
-                     form={form}
-                     name="Хүндрэл"
-                     formName="complications"
-                  />
+                  <Diagnose form={form} name="Хүндрэл" formName="complications" />
                </div>
                <div className="w-full p-1 story">
-                  <Diagnose
-                     form={form}
-                     name="Үйлдлийн онош (Мэс засал, мэс ажилбар)"
-                     formName="operational"
-                  />
+                  <Diagnose form={form} name="Үйлдлийн онош (Мэс засал, мэс ажилбар)" formName="operational" />
                </div>
                <div className="w-full p-1 story">
-                  <Diagnose
-                     form={form}
-                     name="Уламжлалтын онош"
-                     formName="treatmentD"
-                  />
+                  <Diagnose form={form} name="Уламжлалтын онош" formName="treatmentD" />
                </div>
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Өвчний төгсгөл:"
-                           name={['patient', 'endOfPain']}
-                        >
+                        <Form.Item className="mb-0" label="Өвчний төгсгөл:" name={['patient', 'endOfPain']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Эдгэрсэн
@@ -505,10 +381,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Эмнэлгээс:"
-                           name={['patient', 'fromHospital']}
-                        >
+                        <Form.Item label="Эмнэлгээс:" name={['patient', 'fromHospital']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Гарсан
@@ -525,10 +398,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Эмчлэгч эмчийн нэр, гарын үсэг:"
-                           name={['patient', 'doctor']}
-                        >
+                        <Form.Item label="Эмчлэгч эмчийн нэр, гарын үсэг:" name={['patient', 'doctor']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -537,18 +407,13 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Хянасан эмчийн нэр, гарын үсэг:"
-                           name={['patient', 'doctors']}
-                        >
+                        <Form.Item label="Хянасан эмчийн нэр, гарын үсэг:" name={['patient', 'doctors']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={0}>
                                  Эмчилгээ эрхэлсэн орлогч
                               </Checkbox>
                               <Checkbox value={1}>тасгийн эрхлэгч</Checkbox>
-                              <Checkbox value={2}>
-                                 эмчилгээний чанарын менежер
-                              </Checkbox>
+                              <Checkbox value={2}>эмчилгээний чанарын менежер</Checkbox>
                               <Checkbox value={3}>бусад</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
@@ -577,10 +442,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="ХЧТА-ын хоног:"
-                           name={['patient', 'hchtaDay']}
-                        >
+                        <Form.Item label="ХЧТА-ын хоног:" name={['patient', 'hchtaDay']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -589,10 +451,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Өндөр (см):"
-                           name={['patient', 'height']}
-                        >
+                        <Form.Item label="Өндөр (см):" name={['patient', 'height']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -601,10 +460,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Жин (кг):"
-                           name={['patient', 'weight']}
-                        >
+                        <Form.Item label="Жин (кг):" name={['patient', 'weight']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -613,10 +469,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Биеийн жингийн индекс (кг/м2):"
-                           name={['patient', 'index']}
-                        >
+                        <Form.Item label="Биеийн жингийн индекс (кг/м2):" name={['patient', 'index']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -625,10 +478,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Систолын даралт:"
-                           name={['patient', 'highPressureRight']}
-                        >
+                        <Form.Item label="Систолын даралт:" name={['patient', 'highPressureRight']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -637,10 +487,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Диастолын даралт:"
-                           name={['patient', 'lowPressureRight']}
-                        >
+                        <Form.Item label="Диастолын даралт:" name={['patient', 'lowPressureRight']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -653,11 +500,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-full p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Хэвтэх үеийн зовиур:"
-                           name={['anemis', 'inPatientPain']}
-                        >
+                        <Form.Item className="mb-0" label="Хэвтэх үеийн зовиур:" name={['anemis', 'inPatientPain']}>
                            <TextArea rows={5} className="w-full" />
                         </Form.Item>
                      </div>
@@ -666,11 +509,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-full p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Өвчний түүх:"
-                           name={['anemis', 'painStory']}
-                        >
+                        <Form.Item className="mb-0" label="Өвчний түүх:" name={['anemis', 'painStory']}>
                            <TextArea rows={5} className="w-full" />
                         </Form.Item>
                      </div>
@@ -679,11 +518,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-full p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Амьдралын түүх:"
-                           name={['anemis', 'lifeStory']}
-                        >
+                        <Form.Item className="mb-0" label="Амьдралын түүх:" name={['anemis', 'lifeStory']}>
                            <TextArea rows={5} className="w-full" />
                         </Form.Item>
                      </div>
@@ -692,11 +527,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Ахуйн нөхцөл:"
-                           name={['anemis', 'locate']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Ахуйн нөхцөл:" name={['anemis', 'locate']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'APARTMENT'}>
                                  Орон сууцанд
@@ -711,11 +542,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Ажил хөдөлмөрийн нөхцөл:"
-                           name={['anemis', 'workCondition']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Ажил хөдөлмөрийн нөхцөл:" name={['anemis', 'workCondition']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'NORMAL'}>
                                  Ердийн
@@ -730,36 +557,20 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                </div>
             </div>
          </Panel>
-         <Panel
-            header="Урьд өвчилсөн өвчин, эмгэгийн байдал"
-            key="3"
-            forceRender={true}
-         >
+         <Panel header="Урьд өвчилсөн өвчин, эмгэгийн байдал" key="3" forceRender={true}>
             <div className="flex flex-wrap">
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Халдварт:"
-                           name={['anemis', 'contagious']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Халдварт:" name={['anemis', 'contagious']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'measles'}>
                                  Улаан бурхан
                               </Checkbox>
-                              <Checkbox value={'varicella'}>
-                                 Салхин цэцэг
-                              </Checkbox>
-                              <Checkbox value={'avirus'}>
-                                 Вирус хепатит A
-                              </Checkbox>
-                              <Checkbox value={'bvirus'}>
-                                 Вирус хепатит B
-                              </Checkbox>
-                              <Checkbox value={'cvirus'}>
-                                 Вирус хепатит C
-                              </Checkbox>
+                              <Checkbox value={'varicella'}>Салхин цэцэг</Checkbox>
+                              <Checkbox value={'avirus'}>Вирус хепатит A</Checkbox>
+                              <Checkbox value={'bvirus'}>Вирус хепатит B</Checkbox>
+                              <Checkbox value={'cvirus'}>Вирус хепатит C</Checkbox>
                               <Checkbox value={'tuberculosis'}>Сүрьеэ</Checkbox>
                               <Checkbox value={'other'}>Бусад</Checkbox>
                            </Checkbox.Group>
@@ -770,11 +581,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Мэс ажилбар хийсэн эсэх:"
-                           name={['anemis', 'isSurgery']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Мэс ажилбар хийсэн эсэх:" name={['anemis', 'isSurgery']} className="mb-0">
                            <TextArea rows={5} />
                         </Form.Item>
                      </div>
@@ -796,18 +603,12 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Харшлын анамнез:"
-                           name={['anemis', 'allergy']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Харшлын анамнез:" name={['anemis', 'allergy']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'Хоол хүнс'}>
                                  Хоол хүнс
                               </Checkbox>
-                              <Checkbox value={'varicella'}>
-                                 Эмийн бодис
-                              </Checkbox>
+                              <Checkbox value={'varicella'}>Эмийн бодис</Checkbox>
                               <Checkbox value={'Бусад'}>Бусад</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
@@ -831,11 +632,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Хооллолтын байдал:"
-                           name={['anemis', 'whatFoodie']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Хооллолтын байдал:" name={['anemis', 'whatFoodie']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={'0'}>
                                  Ердийн
@@ -850,11 +647,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Архи хэрэглэдэг эсэх:"
-                           name={['anemis', 'isAlcoholUse']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Архи хэрэглэдэг эсэх:" name={['anemis', 'isAlcoholUse']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={true}>
                                  Тийм
@@ -868,11 +661,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Тамхи татдаг эсэх:"
-                           name={['anemis', 'isCigarUse']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Тамхи татдаг эсэх:" name={['anemis', 'isCigarUse']} className="mb-0">
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={true}>
                                  Тийм
@@ -886,11 +675,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Хэдэн наснаас эхэлж татсан:"
-                           name={['anemis', 'fromAge']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Хэдэн наснаас эхэлж татсан:" name={['anemis', 'fromAge']} className="mb-0">
                            <Input />
                         </Form.Item>
                      </div>
@@ -899,11 +684,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/4 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           label="Хэдэн жил татаж байгаа:"
-                           name={['anemis', 'usedYear']}
-                           className="mb-0"
-                        >
+                        <Form.Item label="Хэдэн жил татаж байгаа:" name={['anemis', 'usedYear']} className="mb-0">
                            <Input />
                         </Form.Item>
                      </div>
@@ -916,11 +697,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Биеийн ерөнхий байдал:"
-                           name={['general', 'bodyCondition']}
-                        >
+                        <Form.Item className="mb-0" label="Биеийн ерөнхий байдал:" name={['general', 'bodyCondition']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'easy'}>
                                  Хөнгөн
@@ -937,11 +714,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Ухаан санаа:"
-                           name={['general', 'mindStatus']}
-                        >
+                        <Form.Item className="mb-0" label="Ухаан санаа:" name={['general', 'mindStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Саруул
@@ -959,11 +732,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Орчиндоо:"
-                           name={['general', 'area']}
-                        >
+                        <Form.Item className="mb-0" label="Орчиндоо:" name={['general', 'area']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Харьцаатай
@@ -978,11 +747,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Байрлал:"
-                           name={['general', 'position']}
-                        >
+                        <Form.Item className="mb-0" label="Байрлал:" name={['general', 'position']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'active'}>
                                  Идэвхтэй
@@ -1006,11 +771,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="а. Арьс салсын өнгө:"
-                           name={['general', 'skincolor']}
-                        >
+                        <Form.Item className="mb-0" label="а. Арьс салсын өнгө:" name={['general', 'skincolor']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Хэвийн
@@ -1024,11 +785,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="б. Арьсны уян чанар:"
-                           name={['general', 'skinElasticity']}
-                        >
+                        <Form.Item className="mb-0" label="б. Арьсны уян чанар:" name={['general', 'skinElasticity']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Хэвийн
@@ -1043,11 +800,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="в.Арьсны чийглэг байдал:"
-                           name={['general', 'skinMoisture']}
-                        >
+                        <Form.Item className="mb-0" label="в.Арьсны чийглэг байдал:" name={['general', 'skinMoisture']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'increased'}>
                                  Хэвийн ихэссэн
@@ -1061,11 +814,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="г.Арьсан дээрх тууралт:"
-                           name={['general', 'skinRash']}
-                        >
+                        <Form.Item className="mb-0" label="г.Арьсан дээрх тууралт:" name={['general', 'skinRash']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'noRash'}>
                                  Тууралтгүй
@@ -1079,11 +828,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Хаван:"
-                           name={['general', 'edema']}
-                        >
+                        <Form.Item className="mb-0" label="Хаван:" name={['general', 'edema']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'noEdema'}>
                                  Хавангүй
@@ -1097,11 +842,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="а. Ерөнхий б. Хэсгийн:"
-                           name={['general', 'skinArea']}
-                        >
+                        <Form.Item className="mb-0" label="а. Ерөнхий б. Хэсгийн:" name={['general', 'skinArea']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'face'}>
                                  Нүүрэнд
@@ -1126,12 +867,8 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                               <Checkbox className="ml-2" value={'normal'}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox value={'hard'}>
-                                 Харахад томорсон
-                              </Checkbox>
-                              <Checkbox value={'harder'}>
-                                 Тэмтрэлтээр томорсон
-                              </Checkbox>
+                              <Checkbox value={'hard'}>Харахад томорсон</Checkbox>
+                              <Checkbox value={'harder'}>Тэмтрэлтээр томорсон</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </div>
@@ -1140,11 +877,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="б. Байрлал"
-                           name={['general', 'b.position']}
-                        >
+                        <Form.Item className="mb-0" label="б. Байрлал" name={['general', 'b.position']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'neck'}>
                                  Хүзүүний
@@ -1160,18 +893,12 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="в. Эмзэглэл"
-                           name={['general', 'injury']}
-                        >
+                        <Form.Item className="mb-0" label="в. Эмзэглэл" name={['general', 'injury']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'injury'}>
                                  Эмзэглэлтэй
                               </Checkbox>
-                              <Checkbox value={'uninjury'}>
-                                 Эмзэглэлгүй
-                              </Checkbox>
+                              <Checkbox value={'uninjury'}>Эмзэглэлгүй</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </div>
@@ -1180,18 +907,12 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Үе мөчний хэлбэр:"
-                           name={['general', 'bodyShape']}
-                        >
+                        <Form.Item className="mb-0" label="Үе мөчний хэлбэр:" name={['general', 'bodyShape']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox value={'unNormal'}>
-                                 Өөрчлөгдсөн
-                              </Checkbox>
+                              <Checkbox value={'unNormal'}>Өөрчлөгдсөн</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </div>
@@ -1200,19 +921,13 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Үений хөдөлгөөн:"
-                           name={['general', 'bodyMove']}
-                        >
+                        <Form.Item className="mb-0" label="Үений хөдөлгөөн:" name={['general', 'bodyMove']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'active'}>
                                  Идэвхтэй
                               </Checkbox>
                               <Checkbox value={'inactive'}>Идэвхгүй</Checkbox>
-                              <Checkbox value={'limited'}>
-                                 Хязгаарлагдмал
-                              </Checkbox>
+                              <Checkbox value={'limited'}>Хязгаарлагдмал</Checkbox>
                            </Checkbox.Group>
                         </Form.Item>
                      </div>
@@ -1225,11 +940,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Биеийн ерөнхий байдал:"
-                           name={['general', 'bodyCondition']}
-                        >
+                        <Form.Item className="mb-0" label="Биеийн ерөнхий байдал:" name={['general', 'bodyCondition']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'middle'}>
                                  Дунд
@@ -1245,11 +956,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Ухаан санаа:"
-                           name={['general', 'mindStatus']}
-                        >
+                        <Form.Item className="mb-0" label="Ухаан санаа:" name={['general', 'mindStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Саруул
@@ -1264,11 +971,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Арьс салст"
-                           name={['general', 'skincolor']}
-                        >
+                        <Form.Item className="mb-0" label="Арьс салст" name={['general', 'skincolor']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'normal'}>
                                  Хэвийн
@@ -1302,11 +1005,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Амьсгал 1 минутанд:"
-                           name={['general', 'breathOneMinute']}
-                        >
+                        <Form.Item className="mb-0" label="Амьсгал 1 минутанд:" name={['general', 'breathOneMinute']}>
                            <Input />
                         </Form.Item>
                      </div>
@@ -1315,11 +1014,7 @@ function StoryGeneral({ id, patient, diagnoses, anemis, general }) {
                <div className="w-1/5 p-1">
                   <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                      <div className="p-1">
-                        <Form.Item
-                           className="mb-0"
-                           label="Чагналтаар:"
-                           name={['general', 'hear']}
-                        >
+                        <Form.Item className="mb-0" label="Чагналтаар:" name={['general', 'hear']}>
                            <Checkbox.Group>
                               <Checkbox className="ml-2" value={0}>
                                  Уушги цулцангийн

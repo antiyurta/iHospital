@@ -11,21 +11,12 @@ function Page1({ form }) {
             <div className="flex flex-wrap">
                <div className="basis-1/2"></div>
                <div className="basis-1/2">
-                  <p className="text-end">
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны
-                  </p>
-                  <p className="text-end">
-                     өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </p>
-                  <p className="text-end font-bold">
-                     Эрүүл мэндын бүртгэлийн маягт CT-1
-                  </p>
+                  <p className="text-end">Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>
+                  <p className="text-end">өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
+                  <p className="text-end font-bold">Эрүүл мэндын бүртгэлийн маягт CT-1</p>
                </div>
             </div>
-            <p
-               className="text-center py-4"
-               style={{ fontSize: '15px', fontWeight: 'bold' }}
-            >
+            <p className="text-center py-4" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                ӨВЧНИЙ ТҮҮХ №
             </p>
             <Table bordered className="story mb-0">
@@ -36,12 +27,7 @@ function Page1({ form }) {
                      </th>
                      <th>РД</th>
                      <th>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'registerNumber']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'registerNumber']}>
                            <Input disabled={true} />
                         </Form.Item>
                      </th>
@@ -79,12 +65,7 @@ function Page1({ form }) {
                      <th colSpan={2}>
                         Тасгийн нэр:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'departmentName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'departmentName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -94,12 +75,7 @@ function Page1({ form }) {
                      <th>
                         Эцэг /эх/-ийн нэр:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'lastName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'lastName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -107,12 +83,7 @@ function Page1({ form }) {
                      <th colSpan={2}>
                         Өөрийн нэр:
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'firstName']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'firstName']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </span>
@@ -144,12 +115,7 @@ function Page1({ form }) {
                         <p>
                            Нас:{' '}
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'age']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'age']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -157,10 +123,7 @@ function Page1({ form }) {
                      </th>
                      <th>
                         <p>Хүйс:</p>
-                        <Form.Item
-                           className="mb-0"
-                           name={['patient', 'genderType']}
-                        >
+                        <Form.Item className="mb-0" name={['patient', 'genderType']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={'MAN'}>
                                  Эрэгтэй
@@ -171,20 +134,13 @@ function Page1({ form }) {
                      </th>
                      <th className="w-44">
                         <p>Гэрлэлтийн байдал</p>
-                        <Form.Item
-                           className="mb-0"
-                           name={['patient', 'marriageStatus']}
-                        >
+                        <Form.Item className="mb-0" name={['patient', 'marriageStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Огт гэрлээгүй
                               </Checkbox>
-                              <Checkbox value={1}>
-                                 Батлуулсан гэр бүлтэй
-                              </Checkbox>
-                              <Checkbox value={2}>
-                                 Батлуулаагүй гэр бүлтэй
-                              </Checkbox>
+                              <Checkbox value={1}>Батлуулсан гэр бүлтэй</Checkbox>
+                              <Checkbox value={2}>Батлуулаагүй гэр бүлтэй</Checkbox>
                               <Checkbox value={3}>Тусгаарласан</Checkbox>
                               <Checkbox className="w-full" value={4}>
                                  Цуцалсан
@@ -197,28 +153,20 @@ function Page1({ form }) {
                      </th>
                      <th className="w-52">
                         <p>Боловсролын байда dddл:</p>
-                        <Form.Item
-                           className="mb-0"
-                           name={['patient', 'educationType']}
-                        >
+                        <Form.Item className="mb-0" name={['patient', 'educationType']}>
                            <Radio.Group>
                               <Radio value="apple"> Apple </Radio>
                               <Radio value="pear"> Pear </Radio>
                            </Radio.Group>
                         </Form.Item>
-                        <Form.Item
-                           className="mb-0"
-                           name={['patient', 'educationType']}
-                        >
+                        <Form.Item className="mb-0" name={['patient', 'educationType']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Боловсролгүй
                               </Checkbox>
                               <Checkbox value={1}>Бага</Checkbox>
                               <Checkbox value={2}>Бүрэн дунд</Checkbox>
-                              <Checkbox value={3}>
-                                 Мэргэжлийн болон техникийн
-                              </Checkbox>
+                              <Checkbox value={3}>Мэргэжлийн болон техникийн</Checkbox>
                               <Checkbox className="w-full" value={4}>
                                  Дипломын
                               </Checkbox>
@@ -245,12 +193,7 @@ function Page1({ form }) {
                         <p>
                            Аймаг/Хот:{' '}
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'address', 'aimag']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'aimag']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -258,12 +201,7 @@ function Page1({ form }) {
                         <p>
                            Сум/дүүрэг:{' '}
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'address', 'soum']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'soum']}>
                                  <Input disabled={true} />
                               </Form.Item>
                            </span>
@@ -282,55 +220,30 @@ function Page1({ form }) {
                         </p>
                         <p>
                            Гудамж/Байшин:{' '}
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'address', 'building']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'building']}>
                               <Input disabled={true} />
                            </Form.Item>
                            <span>&nbsp;</span>
                            Тоот:{' '}
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'address', 'address']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'address', 'address']}>
                               <Input disabled={true} />
                            </Form.Item>
                         </p>
                      </th>
                      <th>
                         <p>Ажлын газар, албан тушаал:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'organization']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'organization']}>
                            <Input disabled={true} className="ml-1" />
                         </Form.Item>
                         <p>Мэргэжил:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'jobPosition']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'jobPosition']}>
                            <Input disabled={true} className="ml-1" />
                         </Form.Item>
                      </th>
                      <th>
                         <p>
                            Цусны бүлэг:
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'bloodType']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'bloodType']}>
                               <Input className="w-9 text-center" />
                            </Form.Item>
                         </p>
@@ -338,12 +251,7 @@ function Page1({ form }) {
                         <p>хүний нэр гарын</p>
                         <p>
                            үсэг:
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'bloodTypeVerifyBy']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'bloodTypeVerifyBy']}>
                               <Input className="w-16" />
                            </Form.Item>
                         </p>
@@ -359,12 +267,7 @@ function Page1({ form }) {
                         <p>
                            Өөрийн утас:{' '}
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['patient', 'phoneNo']}
-                              >
+                              <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'phoneNo']}>
                                  <Input disabled={true} className="ml-1" />
                               </Form.Item>
                            </span>
@@ -375,12 +278,7 @@ function Page1({ form }) {
                               shouldUpdate
                               className="mb-0"
                               noStyle
-                              name={[
-                                 'patient',
-                                 'contacts',
-                                 0,
-                                 'contactPhoneNo'
-                              ]}
+                              name={['patient', 'contacts', 0, 'contactPhoneNo']}
                            >
                               <Input disabled={true} className="ml-1" />
                            </Form.Item>
@@ -388,12 +286,7 @@ function Page1({ form }) {
                      </th>
                      <th className="w-40">
                         <p>Төлбөрийн төрөл:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'paymentStatus']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'paymentStatus']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Төр хариуцсан
@@ -409,12 +302,7 @@ function Page1({ form }) {
                      <th>
                         <p className="w-28">Доод шатлалаас</p>
                         <p>илгээсэн эсэх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'underStage']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'underStage']}>
                            <Radio.Group className="ml-0">
                               <Radio value={0}>Тийм</Radio>
                               <Radio value={1}>Үгүй</Radio>
@@ -423,12 +311,7 @@ function Page1({ form }) {
                      </th>
                      <th className="w-36">
                         <p>Харшлын анамнез:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'anemis']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'anemis']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Эмийн бодис
@@ -446,23 +329,18 @@ function Page1({ form }) {
                            <Form.List name="diagnoses">
                               {(diagnoses) => (
                                  <>
-                                    {diagnoses.map(
-                                       ({ key, name, ...restField }) => (
-                                          <Form.Item
-                                             key={key}
-                                             {...restField}
-                                             name={[name, 'name']}
-                                             shouldUpdate
-                                             className="mb-0"
-                                             noStyle
-                                          >
-                                             <Input
-                                                disabled={true}
-                                                className="w-10"
-                                             />
-                                          </Form.Item>
-                                       )
-                                    )}
+                                    {diagnoses.map(({ key, name, ...restField }) => (
+                                       <Form.Item
+                                          key={key}
+                                          {...restField}
+                                          name={[name, 'name']}
+                                          shouldUpdate
+                                          className="mb-0"
+                                          noStyle
+                                       >
+                                          <Input disabled={true} className="w-10" />
+                                       </Form.Item>
+                                    ))}
                                  </>
                               )}
                            </Form.List>
@@ -477,28 +355,12 @@ function Page1({ form }) {
                               {(diagnoses) => (
                                  <>
                                     {diagnoses.map((diagnose, index) => (
-                                       <Form.Item
-                                          key={index}
-                                          shouldUpdate
-                                          noStyle
-                                          className="mb-0"
-                                       >
+                                       <Form.Item key={index} shouldUpdate noStyle className="mb-0">
                                           {() => {
                                              return (
                                                 <span>
-                                                   {form.getFieldValue([
-                                                      'patient',
-                                                      'main',
-                                                      diagnose.name,
-                                                      'nameMn'
-                                                   ])}
-                                                   -
-                                                   {form.getFieldValue([
-                                                      'patient',
-                                                      'main',
-                                                      diagnose.name,
-                                                      'code'
-                                                   ])}
+                                                   {form.getFieldValue(['patient', 'main', diagnose.name, 'nameMn'])}-
+                                                   {form.getFieldValue(['patient', 'main', diagnose.name, 'code'])}
                                                    &nbsp;
                                                 </span>
                                              );
@@ -520,10 +382,7 @@ function Page1({ form }) {
                               name={['patient', 'mainDate']}
                               getValueProps={(i) => ({ value: moment(i) })}
                            >
-                              <DatePicker
-                                 disabled={true}
-                                 format={'YYYY он MM сар DD өдөр'}
-                              />
+                              <DatePicker disabled={true} format={'YYYY он MM сар DD өдөр'} />
                            </Form.Item>
                         </p>
                      </th>
@@ -536,28 +395,12 @@ function Page1({ form }) {
                               {(diagnoses) => (
                                  <>
                                     {diagnoses.map((diagnose, index) => (
-                                       <Form.Item
-                                          key={index}
-                                          shouldUpdate
-                                          noStyle
-                                          className="mb-0"
-                                       >
+                                       <Form.Item key={index} shouldUpdate noStyle className="mb-0">
                                           {() => {
                                              return (
                                                 <span>
-                                                   {form.getFieldValue([
-                                                      'patient',
-                                                      'combo',
-                                                      diagnose.name,
-                                                      'nameMn'
-                                                   ])}
-                                                   -
-                                                   {form.getFieldValue([
-                                                      'patient',
-                                                      'combo',
-                                                      diagnose.name,
-                                                      'code'
-                                                   ])}
+                                                   {form.getFieldValue(['patient', 'combo', diagnose.name, 'nameMn'])}-
+                                                   {form.getFieldValue(['patient', 'combo', diagnose.name, 'code'])}
                                                    &nbsp;
                                                 </span>
                                              );
@@ -579,12 +422,7 @@ function Page1({ form }) {
                               {(diagnoses) => (
                                  <>
                                     {diagnoses.map((diagnose, index) => (
-                                       <Form.Item
-                                          key={index}
-                                          shouldUpdate
-                                          noStyle
-                                          className="mb-0"
-                                       >
+                                       <Form.Item key={index} shouldUpdate noStyle className="mb-0">
                                           {() => {
                                              return (
                                                 <span>
@@ -622,12 +460,7 @@ function Page1({ form }) {
                               {(diagnoses) => (
                                  <>
                                     {diagnoses.map((diagnose, index) => (
-                                       <Form.Item
-                                          key={index}
-                                          shouldUpdate
-                                          noStyle
-                                          className="mb-0"
-                                       >
+                                       <Form.Item key={index} shouldUpdate noStyle className="mb-0">
                                           {() => {
                                              return (
                                                 <span>
@@ -665,10 +498,7 @@ function Page1({ form }) {
                               name={['patient', 'operationalDate']}
                               getValueProps={(i) => ({ value: moment(i) })}
                            >
-                              <DatePicker
-                                 disabled={true}
-                                 format={'YYYY он MM сар DD өдөр'}
-                              />
+                              <DatePicker disabled={true} format={'YYYY он MM сар DD өдөр'} />
                            </Form.Item>
                         </p>
                      </th>
@@ -681,12 +511,7 @@ function Page1({ form }) {
                               {(diagnoses) => (
                                  <>
                                     {diagnoses.map((diagnose, index) => (
-                                       <Form.Item
-                                          key={index}
-                                          shouldUpdate
-                                          noStyle
-                                          className="mb-0"
-                                       >
+                                       <Form.Item key={index} shouldUpdate noStyle className="mb-0">
                                           {() => {
                                              return (
                                                 <span>
@@ -719,12 +544,7 @@ function Page1({ form }) {
                   <tr>
                      <th>
                         <p>Өвчний төгсгөл:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'endOfPain']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'endOfPain']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Эдгэрсэн
@@ -739,12 +559,7 @@ function Page1({ form }) {
                      </th>
                      <th>
                         <p>Эмнэлгээс:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['patient', 'fromHospital']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'fromHospital']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Гарсан
@@ -770,12 +585,7 @@ function Page1({ form }) {
                      <th colSpan={2}>
                         <span>
                            Эмчлэгч эмчийн нэр, гарын үсэг:
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'doctor']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'doctor']}>
                               <Input />
                            </Form.Item>
                         </span>
@@ -783,12 +593,7 @@ function Page1({ form }) {
                      <th colSpan={3}>
                         <span>
                            Хянасан эмчийн нэр, гарын үсэг{' '}
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['patient', 'doctors']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'doctors']}>
                               <Checkbox.Group className="inline">
                                  <Checkbox className="test" value={0}>
                                     Эмчилгээ эрхэлсэн орлогч
@@ -838,16 +643,8 @@ function Page1({ form }) {
                <p className="ml-4">
                   ХЧТА-ын
                   <span>
-                     <Form.Item
-                        shouldUpdate
-                        className="mb-0"
-                        noStyle
-                        name={['patient', 'hchtaDay']}
-                     >
-                        <Input
-                           disabled={true}
-                           style={{ width: 25, textAlign: 'center' }}
-                        />
+                     <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'hchtaDay']}>
+                        <Input disabled={true} style={{ width: 25, textAlign: 'center' }} />
                      </Form.Item>
                   </span>
                   хоног
@@ -866,36 +663,21 @@ function Page1({ form }) {
                            <div className="w-1/2">
                               <p>
                                  [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['patient', 'height']}
-                                 >
+                                 <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'height']}>
                                     <Input className="amaraInput w-10" />
                                  </Form.Item>
                                  ]
                               </p>
                               <p>
                                  [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['patient', 'weight']}
-                                 >
+                                 <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'weight']}>
                                     <Input className="amaraInput w-10" />
                                  </Form.Item>
                                  ]
                               </p>
                               <p>
                                  [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['patient', 'index']}
-                                 >
+                                 <Form.Item shouldUpdate className="mb-0" noStyle name={['patient', 'index']}>
                                     <Input className="amaraInput w-10" />
                                  </Form.Item>
                                  ]

@@ -1,16 +1,4 @@
-import {
-   Button,
-   Input,
-   InputNumber,
-   Modal,
-   Collapse,
-   Col,
-   Row,
-   Radio,
-   Divider,
-   TimePicker,
-   Spin
-} from 'antd';
+import { Button, Input, InputNumber, Modal, Collapse, Col, Row, Radio, Divider, TimePicker, Spin } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -79,12 +67,7 @@ function PainAssessment({ PatientId, ListId }) {
          ...painData,
          time: moment(painData.time).format('HH:mm')
       };
-      const response = await Post(
-         'inpatient/pain-assesment',
-         token,
-         conf,
-         data
-      );
+      const response = await Post('inpatient/pain-assesment', token, conf, data);
       // console.log("res", response);
       if (response === 201) {
          setPainData({
@@ -151,16 +134,10 @@ function PainAssessment({ PatientId, ListId }) {
          <div className="flex flex-wrap">
             <div className="w-full p-1">
                <div className="float-left">
-                  <Button onClick={() => setIsOpenNoteModal(true)}>
-                     Хуудас бөглөх
-                  </Button>
+                  <Button onClick={() => setIsOpenNoteModal(true)}>Хуудас бөглөх</Button>
                </div>
                <div className="float-right">
-                  <Button
-                     title="Сэргээх"
-                     type="primary"
-                     onClick={() => getPainAssessment()}
-                  >
+                  <Button title="Сэргээх" type="primary" onClick={() => getPainAssessment()}>
                      <ReloadOutlined />
                   </Button>
                </div>
@@ -189,49 +166,28 @@ function PainAssessment({ PatientId, ListId }) {
                                        >
                                           <div style={{ marginRight: 10 }}>
                                              <b>Тасаг: </b>
-                                             <span>
-                                                {
-                                                   el?.inpatientRequests
-                                                      ?.structure?.name
-                                                }
-                                             </span>
+                                             <span>{el?.inpatientRequests?.structure?.name}</span>
                                           </div>
                                           <div>
                                              <b>Сувилагч: </b>
                                              <span>
                                                 {el?.patient
-                                                   ? `${el?.patient?.lastName?.substr(
-                                                        0,
-                                                        1
-                                                     )}. ${
-                                                        el?.patient?.firstName
-                                                     }`
+                                                   ? `${el?.patient?.lastName?.substr(0, 1)}. ${el?.patient?.firstName}`
                                                    : null}
                                              </span>
                                           </div>
                                        </div>
                                        <div style={{ marginRight: 10 }}>
-                                          <b>
-                                             {el.createdAt
-                                                ?.replace(/T/, ' ')
-                                                .replace(/\..+/, '')}
-                                          </b>
+                                          <b>{el.createdAt?.replace(/T/, ' ').replace(/\..+/, '')}</b>
                                        </div>
                                     </div>
                                  }
-                                 extra={
-                                    <Button
-                                       onClick={() => onChangeCollapse(index)}
-                                    >
-                                       Хэвлэх
-                                    </Button>
-                                 }
+                                 extra={<Button onClick={() => onChangeCollapse(index)}>Хэвлэх</Button>}
                                  key={index}
                               >
                                  <Row className="mt-2">
                                     <Col span={8}>
-                                       <b>Мэс заслын дараах хоног: </b>{' '}
-                                       {el.daysAfterSurgery}
+                                       <b>Мэс заслын дараах хоног: </b> {el.daysAfterSurgery}
                                     </Col>
                                     <Col span={8}>
                                        <b>Цаг: </b> {el.time}
@@ -254,25 +210,16 @@ function PainAssessment({ PatientId, ListId }) {
                                  </Row>
                                  <Row className="mt-2 justify-between">
                                     <Col span={11}>
-                                       <Divider
-                                          orientation="left"
-                                          plain
-                                          orientationMargin="0"
-                                       >
+                                       <Divider orientation="left" plain orientationMargin="0">
                                           Өвдөлтийн давтамж
                                        </Divider>
                                        <Row className="mt-2">
                                           <Col span={24}>
                                              <b>Босч явах үед: </b>
-                                             <span>
-                                                {el.isWhenGettingUp
-                                                   ? 'Тийм'
-                                                   : 'Үгүй'}
-                                             </span>
+                                             <span>{el.isWhenGettingUp ? 'Тийм' : 'Үгүй'}</span>
                                           </Col>
                                           <Col span={24}>
-                                             <b>Дандаа: </b>{' '}
-                                             {el.isAlways ? 'Тийм' : 'Үгүй'}
+                                             <b>Дандаа: </b> {el.isAlways ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={24}>
                                              <b>Өвдөөд унтаж чадахгүй: </b>
@@ -281,29 +228,20 @@ function PainAssessment({ PatientId, ListId }) {
                                        </Row>
                                     </Col>
                                     <Col span={11}>
-                                       <Divider
-                                          orientation="left"
-                                          plain
-                                          orientationMargin="0"
-                                       >
+                                       <Divider orientation="left" plain orientationMargin="0">
                                           Өвдөлт, үйл ажиллагааны байршлаар
                                        </Divider>
                                        <Row className="mt-2">
                                           <Col span={24}>
-                                             <b>Хооллоход: </b>{' '}
-                                             {el.isFeeding ? 'Тийм' : 'Үгүй'}
+                                             <b>Хооллоход: </b> {el.isFeeding ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={24}>
                                              <b>Ялгаруулалтын үед: </b>
-                                             {el.isDuringEmission
-                                                ? 'Тийм'
-                                                : 'Үгүй'}
+                                             {el.isDuringEmission ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={24}>
                                              <b>Сууж / босоход: </b>
-                                             {el.isWhenSittingStandingUp
-                                                ? 'Тийм'
-                                                : 'Үгүй'}
+                                             {el.isWhenSittingStandingUp ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={24}>
                                              <b>Бусад хөдөлгөөн хийхэд: </b>
@@ -327,22 +265,17 @@ function PainAssessment({ PatientId, ListId }) {
                                              {el.isColdWeight ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={4}>
-                                             <b>Зүү: </b>{' '}
-                                             {el.isNeedle ? 'Тийм' : 'Үгүй'}
+                                             <b>Зүү: </b> {el.isNeedle ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={4}>
-                                             <b>Дасгал: </b>{' '}
-                                             {el.isExercise ? 'Тийм' : 'Үгүй'}
+                                             <b>Дасгал: </b> {el.isExercise ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={4}>
-                                             <b>Массаж: </b>{' '}
-                                             {el.isMassage ? 'Тийм' : 'Үгүй'}
+                                             <b>Массаж: </b> {el.isMassage ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                           <Col span={4}>
                                              <b>Физик эмчилгээ: </b>
-                                             {el.isPhysiotherapy
-                                                ? 'Тийм'
-                                                : 'Үгүй'}
+                                             {el.isPhysiotherapy ? 'Тийм' : 'Үгүй'}
                                           </Col>
                                        </Row>
                                        <Row className="mt-2">
@@ -352,10 +285,7 @@ function PainAssessment({ PatientId, ListId }) {
                                        </Row>
                                        <Row className="mt-2">
                                           <Col span={24}>
-                                             <b>
-                                                Өвдөлт намдаах эмийн тун,
-                                                хэрэглэх зам:{' '}
-                                             </b>
+                                             <b>Өвдөлт намдаах эмийн тун, хэрэглэх зам: </b>
                                              {el.medicineAmount}
                                           </Col>
                                        </Row>
@@ -401,11 +331,7 @@ function PainAssessment({ PatientId, ListId }) {
                      <TimePicker
                         locale={mn}
                         format={TimeFormat}
-                        value={
-                           painData.time
-                              ? dayjs(painData.time, TimeFormat)
-                              : null
-                        }
+                        value={painData.time ? dayjs(painData.time, TimeFormat) : null}
                         onChange={(e) => {
                            setPainData((painData) => ({
                               ...painData,
@@ -793,10 +719,9 @@ function PainAssessment({ PatientId, ListId }) {
                <Row className="mt-2">
                   <Col span={18}>
                      <b>Эмчлүүлэгчийн овог, нэр: </b>
-                     {`${selectedPainData[0]?.patient?.lastName?.substr(
-                        0,
-                        1
-                     )}. ${selectedPainData[0]?.patient?.firstName}`}
+                     {`${selectedPainData[0]?.patient?.lastName?.substr(0, 1)}. ${
+                        selectedPainData[0]?.patient?.firstName
+                     }`}
                   </Col>
                   <Col span={6}>
                      <b>Өвчний түүх №</b> 111111
@@ -808,9 +733,7 @@ function PainAssessment({ PatientId, ListId }) {
                   </Col>
                   <Col span={6}>
                      <b>Хүйс: </b>
-                     {selectedPainData[0]?.patient?.genderType === 'MAN'
-                        ? 'Эрэгтэй'
-                        : 'Эмэгтэй'}
+                     {selectedPainData[0]?.patient?.genderType === 'MAN' ? 'Эрэгтэй' : 'Эмэгтэй'}
                   </Col>
                   <Col span={6}>
                      <b>Тасаг: </b>
@@ -837,62 +760,46 @@ function PainAssessment({ PatientId, ListId }) {
                            Сар/Өдөр
                         </td>
                         <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.createdAt
-                              ?.replace(/T/, ' ')
-                              .replace(/\..+/, '')}
+                           {selectedPainData[0]?.createdAt?.replace(/T/, ' ').replace(/\..+/, '')}
                         </td>
                      </tr>
                      <tr>
                         <td colSpan="2" className="border border-slate-600 p-1">
                            Мэс заслын дараах хоног
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.daysAfterSurgery}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.daysAfterSurgery}</td>
                      </tr>
                      <tr>
                         <td colSpan="2" className="border border-slate-600 p-1">
                            Цаг
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.time}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.time}</td>
                      </tr>
                      <tr>
                         <td colSpan="2" className="border border-slate-600 p-1">
                            Өвдөлтийн хүч
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.painPower}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.painPower}</td>
                      </tr>
                      <tr>
                         <td colSpan="2" className="border border-slate-600 p-1">
                            Өвдөлтийн байршил
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.locationPain}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.locationPain}</td>
                      </tr>
                      <tr>
                         <td colSpan="2" className="border border-slate-600 p-1">
                            Ямар өвдөлт байгаа вэ?
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.whatPain}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.whatPain}</td>
                      </tr>
                      <tr>
                         <td rowSpan="3" className="border border-slate-600 p-1">
                            Өвдөлтийн давтамж
                         </td>
+                        <td className="border border-slate-600 p-1">Босч явах үед</td>
                         <td className="border border-slate-600 p-1">
-                           Босч явах үед
-                        </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.isWhenGettingUp
-                              ? 'Тийм'
-                              : 'Үгүй'}
+                           {selectedPainData[0]?.isWhenGettingUp ? 'Тийм' : 'Үгүй'}
                         </td>
                      </tr>
                      <tr>
@@ -902,9 +809,7 @@ function PainAssessment({ PatientId, ListId }) {
                         </td>
                      </tr>
                      <tr>
-                        <td className="border border-slate-600 p-1">
-                           Өвдөөд унтаж чадахгүй
-                        </td>
+                        <td className="border border-slate-600 p-1">Өвдөөд унтаж чадахгүй</td>
                         <td className="border border-slate-600 p-1">
                            {selectedPainData[0]?.isSleepPain ? 'Тийм' : 'Үгүй'}
                         </td>
@@ -913,56 +818,38 @@ function PainAssessment({ PatientId, ListId }) {
                         <td rowSpan="4" className="border border-slate-600 p-1">
                            Өвдөлт, үйл ажиллагааны байршлаар
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           Хооллоход
-                        </td>
+                        <td className="border border-slate-600 p-1">Хооллоход</td>
                         <td className="border border-slate-600 p-1">
                            {selectedPainData[0]?.isFeeding ? 'Тийм' : 'Үгүй'}
                         </td>
                      </tr>
                      <tr>
+                        <td className="border border-slate-600 p-1">Ялгаруулалтын үед</td>
                         <td className="border border-slate-600 p-1">
-                           Ялгаруулалтын үед
-                        </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.isDuringEmission
-                              ? 'Тийм'
-                              : 'Үгүй'}
+                           {selectedPainData[0]?.isDuringEmission ? 'Тийм' : 'Үгүй'}
                         </td>
                      </tr>
                      <tr>
+                        <td className="border border-slate-600 p-1">Сууж / босоход</td>
                         <td className="border border-slate-600 p-1">
-                           Сууж / босоход
-                        </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.isWhenSittingStandingUp
-                              ? 'Тийм'
-                              : 'Үгүй'}
+                           {selectedPainData[0]?.isWhenSittingStandingUp ? 'Тийм' : 'Үгүй'}
                         </td>
                      </tr>
                      <tr>
-                        <td className="border border-slate-600 p-1">
-                           Бусад хөдөлгөөн хийхэд
-                        </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.movement}
-                        </td>
+                        <td className="border border-slate-600 p-1">Бусад хөдөлгөөн хийхэд</td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.movement}</td>
                      </tr>
                      <tr>
                         <td rowSpan="7" className="border border-slate-600 p-1">
                            Эмийн бус аргууд
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           Халуун жин
-                        </td>
+                        <td className="border border-slate-600 p-1">Халуун жин</td>
                         <td className="border border-slate-600 p-1">
                            {selectedPainData[0]?.isHotWeight ? 'Тийм' : 'Үгүй'}
                         </td>
                      </tr>
                      <tr>
-                        <td className="border border-slate-600 p-1">
-                           Хүйтэн жин
-                        </td>
+                        <td className="border border-slate-600 p-1">Хүйтэн жин</td>
                         <td className="border border-slate-600 p-1">
                            {selectedPainData[0]?.isColdWeight ? 'Тийм' : 'Үгүй'}
                         </td>
@@ -986,28 +873,20 @@ function PainAssessment({ PatientId, ListId }) {
                         </td>
                      </tr>
                      <tr>
+                        <td className="border border-slate-600 p-1">Физик эмчилгээ</td>
                         <td className="border border-slate-600 p-1">
-                           Физик эмчилгээ
-                        </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.isPhysiotherapy
-                              ? 'Тийм'
-                              : 'Үгүй'}
+                           {selectedPainData[0]?.isPhysiotherapy ? 'Тийм' : 'Үгүй'}
                         </td>
                      </tr>
                      <tr>
                         <td className="border border-slate-600 p-1">Бусад</td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.other}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.other}</td>
                      </tr>
                      <tr>
                         <td colSpan="2" className="border border-slate-600 p-1">
                            Өвдөлт намдаах эмийн тун, хэрэглэх зам
                         </td>
-                        <td className="border border-slate-600 p-1">
-                           {selectedPainData[0]?.medicineAmount}
-                        </td>
+                        <td className="border border-slate-600 p-1">{selectedPainData[0]?.medicineAmount}</td>
                      </tr>
                   </tbody>
                </table>

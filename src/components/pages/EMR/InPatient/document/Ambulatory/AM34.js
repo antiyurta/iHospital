@@ -82,12 +82,8 @@ function AM34() {
                         textAlign: 'right'
                      }}
                   >
-                     <span style={styles.generalText}>
-                        A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                     </span>
-                     <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                        Эрүүл мэндийн бүртгэлийн маягт АМ-34
-                     </span>
+                     <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                     <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-34</span>
                   </div>
                </div>
 
@@ -103,11 +99,8 @@ function AM34() {
                   </span>
                </div>
                <div style={styles.rowStyle}>
-                  Эцэг /эх/-ийн
-                  нэр:______________________________________________ Нас: ______
-                  <span style={{ marginLeft: 50 }}>
-                     Хүйс: Эрэгтэй, Эмэгтэй /зур
-                  </span>
+                  Эцэг /эх/-ийн нэр:______________________________________________ Нас: ______
+                  <span style={{ marginLeft: 50 }}>Хүйс: Эрэгтэй, Эмэгтэй /зур</span>
                </div>
                <div style={styles.rowStyle}>
                   Гэрийн хаяг:
@@ -134,36 +127,24 @@ function AM34() {
                   X-Ray/:____________________________________________________________________________________________
                </div>
                <div style={styles.rowStyle}>
-                  Үндсэн онош (ICD-10):
-                  __________________________________________
-                  <span style={{ marginLeft: 50 }}>
-                     РТ/онош (ICF): ___________________________________________
-                  </span>
+                  Үндсэн онош (ICD-10): __________________________________________
+                  <span style={{ marginLeft: 50 }}>РТ/онош (ICF): ___________________________________________</span>
                </div>
                <div style={styles.rowStyle}>
                   Өвчин эхэлсэн:__________он________сар_____өдөр
-                  <span style={{ marginLeft: 100 }}>
-                     Эмнэлэгт хэвтсэн: ________он ______сар____өдөр
-                  </span>
+                  <span style={{ marginLeft: 100 }}>Эмнэлэгт хэвтсэн: ________он ______сар____өдөр</span>
                </div>
                <div style={styles.rowStyle}>
                   Үнэлгээ хийсэн: ________он _______сар ______өдөр
-                  <span style={{ marginLeft: 100 }}>
-                     ХЗЭ дууссан: __________он_______сар______өдөр
-                  </span>
+                  <span style={{ marginLeft: 100 }}>ХЗЭ дууссан: __________он_______сар______өдөр</span>
                </div>
-               <div style={styles.rowStyle}>
-                  Эмнэлгээс гарсан: ............он............сар..........өдөр
-               </div>
+               <div style={styles.rowStyle}>Эмнэлгээс гарсан: ............он............сар..........өдөр</div>
                <div style={styles.centerBoldUnderline}>
-                  /Өвдөлтийн үнэлгээ-ЭӨ/ ______________________________________
-                  /Өвдөлтийн үнэлгээ-ЭД/
+                  /Өвдөлтийн үнэлгээ-ЭӨ/ ______________________________________ /Өвдөлтийн үнэлгээ-ЭД/
                </div>
                <div style={styles.centerBold}>
                   0 1 2 3 4 5 6 7 8 9 10
-                  <span style={{ marginLeft: 200 }}>
-                     0 1 2 3 4 5 6 7 8 9 10
-                  </span>
+                  <span style={{ marginLeft: 200 }}>0 1 2 3 4 5 6 7 8 9 10</span>
                </div>
                <div style={styles.flexContainer}>
                   <div>
@@ -188,24 +169,16 @@ function AM34() {
                   </div>
                   <img src={am34} width={250} alt="34" />
                </div>
-               <div style={styles.leftBold}>
-                  Өдөр тутмын үйл ажиллагааны чадвар /Modified Barthel Index/
-               </div>
+               <div style={styles.leftBold}>Өдөр тутмын үйл ажиллагааны чадвар /Modified Barthel Index/</div>
                <Table bordered className="document" style={{ marginTop: 10 }}>
                   <tbody>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 200 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 200 } }}></td>
                         <td style={styles.centerText}>Гүйцэтгэж чадахгүй</td>
 
                         <td style={styles.centerText}>Нилээд тусламжтай</td>
-                        <td style={styles.centerText}>
-                           Дунд зэргийн тусламжтай
-                        </td>
-                        <td style={styles.centerText}>
-                           Бага зэргийн тусламжтай
-                        </td>
+                        <td style={styles.centerText}>Дунд зэргийн тусламжтай</td>
+                        <td style={styles.centerText}>Бага зэргийн тусламжтай</td>
                         <td style={styles.centerText}>Бүрэн бие даасан</td>
                      </tr>
                      <tr>
@@ -257,9 +230,7 @@ function AM34() {
                         <td style={styles.centerText}>10</td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>
-                           Шээх үйл ажиллагааг хянах
-                        </td>
+                        <td style={styles.leftText}>Шээх үйл ажиллагааг хянах</td>
                         <td style={styles.centerText}>0</td>
                         <td style={styles.centerText}>2</td>
                         <td style={styles.centerText}>5</td>
@@ -267,9 +238,7 @@ function AM34() {
                         <td style={styles.centerText}>10</td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>
-                           Баах үйл ажиллагааг хянах
-                        </td>
+                        <td style={styles.leftText}>Баах үйл ажиллагааг хянах</td>
                         <td style={styles.centerText}>0</td>
                         <td style={styles.centerText}>2</td>
                         <td style={styles.centerText}>5</td>
@@ -365,9 +334,7 @@ function AM34() {
          </div>
          <div className="page">
             <div className="subpage">
-               <div style={styles.leftBold}>
-                  Үений далайц, булчингийн хүчний хэмжилт
-               </div>
+               <div style={styles.leftBold}>Үений далайц, булчингийн хүчний хэмжилт</div>
                <Table bordered className="document" style={{ marginTop: 10 }}>
                   <tbody>
                      <tr>
@@ -377,20 +344,11 @@ function AM34() {
                         <td colSpan={2} style={styles.centerText}>
                            Үений далайц
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 100 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 100 } }}>
                            Үе холбоос
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 140 } }}
-                        ></td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 100 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 140 } }}></td>
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 100 } }}>
                            Далайц
                         </td>
                         <td colSpan={2} style={styles.centerText}>
@@ -409,611 +367,275 @@ function AM34() {
                         </td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td rowSpan={6} style={styles.centerText}>
                            Мөрний үе
                         </td>
                         <td style={styles.leftText}>Нугалах</td>
                         <td style={styles.centerText}>0-180</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Тэнийлгэх</td>
                         <td style={styles.centerText}>0-60</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Холдуулах</td>
                         <td style={styles.centerText}>0-180</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Ойртуулах</td>
                         <td style={styles.centerText}>0-45</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Гадагш эргүүлэх</td>
                         <td style={styles.centerText}>0-90</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Дотогш эргүүлэх</td>
                         <td style={styles.centerText}>0-90</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td rowSpan={2} style={styles.centerText}>
                            Тохойн үе
                         </td>
                         <td style={styles.leftText}>Нугалах</td>
                         <td style={styles.centerText}>0-150</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Тэнийлгэх</td>
                         <td style={styles.centerText}>0-10</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td rowSpan={2} style={styles.centerText}>
                            Шуу
                         </td>
                         <td style={styles.leftText}>Алга доош харуулах</td>
                         <td style={styles.centerText}>0-80-90</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Алга дээш харуулах</td>
                         <td style={styles.centerText}>0-80-90</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td rowSpan={2} style={styles.centerText}>
                            Бугуйн үе
                         </td>
                         <td style={styles.leftText}>Нугалах</td>
                         <td style={styles.centerText}>0-80</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Тэнийлгэх</td>
                         <td style={styles.centerText}>0-70</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td rowSpan={6} style={styles.centerText}>
                            Түнхний үе
                         </td>
                         <td style={styles.leftText}>Нугалах</td>
                         <td style={styles.centerText}>0-120</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Тэнийлгэх</td>
                         <td style={styles.centerText}>0-30</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Холдуулах</td>
                         <td style={styles.centerText}>0-45</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Ойртуулах</td>
                         <td style={styles.centerText}>0-30</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Гадагш эргүүлэх</td>
                         <td style={styles.centerText}>0-45</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Дотогш эргүүлэх</td>
                         <td style={styles.centerText}>0-35</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td rowSpan={2} style={styles.centerText}>
                            Өвдөгний үе
                         </td>
                         <td style={styles.leftText}>Нугалах</td>
                         <td style={styles.centerText}>0-135</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.leftText}>Тэнийлгэх</td>
                         <td style={styles.centerText}>0</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           &nbsp;
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>&nbsp;</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.centerText}>Шагайн үе</td>
                         <td style={styles.leftText}>Ээтийлгэх</td>
                         <td style={styles.centerText}>0-20</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                      </tr>
                   </tbody>
                </Table>
@@ -1037,9 +659,7 @@ function AM34() {
                <div style={styles.leftText}>
                   ____________________________________________________________________________________________________________________________________________
                </div>
-               <div style={styles.rowStyle}>
-                  Урт хугацааны дараа хүрэх үр дүнгийн зорилго, хугацаа:
-               </div>
+               <div style={styles.rowStyle}>Урт хугацааны дараа хүрэх үр дүнгийн зорилго, хугацаа:</div>
                <div style={styles.leftText}>
                   ____________________________________________________________________________________________________________________________________________
                </div>
@@ -1049,9 +669,7 @@ function AM34() {
                <div style={styles.leftText}>
                   ____________________________________________________________________________________________________________________________________________
                </div>
-               <div style={styles.rowStyle}>
-                  Хөдөлмөр засал эмчилгээний төлөвлөгөө:
-               </div>
+               <div style={styles.rowStyle}>Хөдөлмөр засал эмчилгээний төлөвлөгөө:</div>
                <div style={styles.leftText}>
                   ____________________________________________________________________________________________________________________________________________
                </div>
@@ -1071,9 +689,7 @@ function AM34() {
                <div style={styles.leftText}>
                   ____________________________________________________________________________________________________________________________________________
                </div>
-               <div style={{ ...styles.centerText, ...{ marginTop: 30 } }}>
-                  20 ..... оны .... сарын ...... өдөр
-               </div>
+               <div style={{ ...styles.centerText, ...{ marginTop: 30 } }}>20 ..... оны .... сарын ...... өдөр</div>
             </div>
          </div>
       </>

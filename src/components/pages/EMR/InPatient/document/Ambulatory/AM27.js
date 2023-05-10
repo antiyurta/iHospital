@@ -38,15 +38,9 @@ function AM27() {
                      alignItems: 'flex-end'
                   }}
                >
-                  <span style={{ fontSize: 12 }}>
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-                  </span>
-                  <span style={{ fontSize: 12 }}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-27
-                  </span>
+                  <span style={{ fontSize: 12 }}>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн</span>
+                  <span style={{ fontSize: 12 }}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-27</span>
                </div>
                <div
                   style={{
@@ -57,18 +51,13 @@ function AM27() {
                   <span>Эмнэлгийн нэр: </span>
                </div>
                <div style={{ textAlign: 'center', marginBottom: 20 }}>
-                  <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                     НАСТНЫ ЭРҮҮЛ МЭНДИЙН БҮРТГЭЛ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 16 }}>НАСТНЫ ЭРҮҮЛ МЭНДИЙН БҮРТГЭЛ</span>
                </div>
             </div>
             <Table bordered className="document">
                <tbody>
                   <tr>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         №
                      </td>
                      <td
@@ -171,9 +160,7 @@ function AM27() {
                      <td style={textStyle.verticalText}>Бага зэрэг буурсан</td>
                      <td style={textStyle.verticalText}>Их буурсан</td>
                      <td style={textStyle.verticalText}>Хэвийн</td>
-                     <td style={textStyle.verticalText}>
-                        Дутал үүсэх эрсдэлтэй
-                     </td>
+                     <td style={textStyle.verticalText}>Дутал үүсэх эрсдэлтэй</td>
                      <td style={textStyle.verticalText}>Дуталтай</td>
                      <td style={textStyle.verticalText}>Тураалтай</td>
                      <td style={textStyle.verticalText}>Хэвийн</td>

@@ -12,10 +12,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
          {data?.map((element, index) => {
             if (element.type === 'checkbox') {
                return (
-                  <div
-                     key={index}
-                     className="rounded-md bg-gray-100 w-max inline-block m-1"
-                  >
+                  <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
                      <div className="inline-flex p-1">
                         <Form.Item
                            label={element.value}
@@ -26,11 +23,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                            <Checkbox.Group className="align-middle grid">
                               {element.options?.map((el, index) => {
                                  return (
-                                    <Checkbox
-                                       className="pl-1 ml-0"
-                                       value={el.label}
-                                       key={index}
-                                    >
+                                    <Checkbox className="pl-1 ml-0" value={el.label} key={index}>
                                        {el.label}
                                     </Checkbox>
                                  );
@@ -42,10 +35,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'radio') {
                return (
-                  <div
-                     key={index}
-                     className="rounded-md bg-gray-100 w-max inline-block m-1"
-                  >
+                  <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
                      <div className="inline-flex p-1">
                         <Form.Item
                            label={element.value}
@@ -56,11 +46,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                            <Radio.Group className="align-middle grid">
                               {element.options?.map((el, index) => {
                                  return (
-                                    <Radio
-                                       className="pl-1 ml-0"
-                                       value={el.label}
-                                       key={index}
-                                    >
+                                    <Radio className="pl-1 ml-0" value={el.label} key={index}>
                                        {el.label}
                                     </Radio>
                                  );
@@ -72,10 +58,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'dropdown') {
                return (
-                  <div
-                     key={index}
-                     className="rounded-md bg-gray-100 w-1/2 inline-block m-1"
-                  >
+                  <div key={index} className="rounded-md bg-gray-100 w-1/2 inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            label={element.value}
@@ -102,10 +85,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'input') {
                return (
-                  <div
-                     key={index}
-                     className="rounded-md bg-gray-100 w-max inline-block m-1"
-                  >
+                  <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
                      <div className="inline-flex p-1">
                         <Form.Item
                            label={element.value}

@@ -85,35 +85,20 @@ function DURCriteria() {
                   {(fields, { add, remove }) => (
                      <>
                         {fields.map(({ key, name, ...restField }) => (
-                           <div
-                              key={key}
-                              className="rounded-md m-2"
-                              style={{ backgroundColor: '#fafafa' }}
-                           >
+                           <div key={key} className="rounded-md m-2" style={{ backgroundColor: '#fafafa' }}>
                               <div className="p-2">
-                                 <Form.Item
-                                    {...restField}
-                                    label="Эмийн нэр"
-                                    name={[name, 'medicineDurId']}
-                                 >
+                                 <Form.Item {...restField} label="Эмийн нэр" name={[name, 'medicineDurId']}>
                                     <Select>
                                        {medicines.map((item, index) => {
                                           return (
-                                             <Option
-                                                key={index}
-                                                value={item.id}
-                                             >
+                                             <Option key={index} value={item.id}>
                                                 {item.name}
                                              </Option>
                                           );
                                        })}
                                     </Select>
                                  </Form.Item>
-                                 <Form.Item
-                                    {...restField}
-                                    label="Анхааруулах мессиж"
-                                    name={[name, 'message']}
-                                 >
+                                 <Form.Item {...restField} label="Анхааруулах мессиж" name={[name, 'message']}>
                                     <TextArea />
                                  </Form.Item>
                                  <DeleteOutlined
@@ -124,12 +109,7 @@ function DURCriteria() {
                            </div>
                         ))}
                         <Form.Item>
-                           <Button
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                           >
+                           <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                               Add field
                            </Button>
                         </Form.Item>

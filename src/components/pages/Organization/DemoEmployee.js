@@ -1,21 +1,5 @@
-import {
-   CheckOutlined,
-   CloseOutlined,
-   EditOutlined,
-   EyeOutlined
-} from '@ant-design/icons';
-import {
-   Form,
-   Button,
-   Card,
-   Descriptions,
-   Input,
-   Modal,
-   Switch,
-   Select,
-   DatePicker,
-   Pagination
-} from 'antd';
+import { CheckOutlined, CloseOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { Form, Button, Card, Descriptions, Input, Modal, Switch, Select, DatePicker, Pagination } from 'antd';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
@@ -174,23 +158,13 @@ function DemoEmployee() {
       form.validateFields().then(async (values) => {
          console.log(values);
          if (editMode) {
-            const response = await Patch(
-               'organization/employee/' + id,
-               token,
-               config,
-               values
-            );
+            const response = await Patch('organization/employee/' + id, token, config, values);
             if (response === 200) {
                getEmployee(1);
                setIsOpenCreateModal(false);
             }
          } else {
-            const response = await Post(
-               'organization/employee',
-               token,
-               config,
-               values
-            );
+            const response = await Post('organization/employee', token, config, values);
             if (response === 201) {
                getEmployee(1);
                setIsOpenCreateModal(false);
@@ -223,62 +197,31 @@ function DemoEmployee() {
                   className="header-solid max-h-max rounded-md"
                   title={'Ажилтан'}
                   extra={
-                     <Button
-                        onClick={showModal}
-                        className="bg-sky-700 rounded-md text-white"
-                     >
+                     <Button onClick={showModal} className="bg-sky-700 rounded-md text-white">
                         Нэмэх
                      </Button>
                   }
                >
-                  <div
-                     className="table-responsive"
-                     id="style-8"
-                     ref={scrollRef}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive" id="style-8" ref={scrollRef}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th
-                                 rowSpan={2}
-                                 className="font-bold text-sm align-middle"
-                              >
+                              <th rowSpan={2} className="font-bold text-sm align-middle">
                                  №
                               </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Овог
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Регистр №
-                              </th>
-                              <th
-                                 rowSpan={2}
-                                 className="font-bold text-sm align-middle"
-                              >
+                              <th className="font-bold text-sm align-middle">Овог</th>
+                              <th className="font-bold text-sm align-middle">Нэр</th>
+                              <th className="font-bold text-sm align-middle">Регистр №</th>
+                              <th rowSpan={2} className="font-bold text-sm align-middle">
                                  Ажилж байгаа эсэх
                               </th>
-                              <th
-                                 rowSpan={2}
-                                 className="font-bold text-sm align-middle"
-                              >
+                              <th rowSpan={2} className="font-bold text-sm align-middle">
                                  Гэрийн хаяг
                               </th>
-                              <th
-                                 className="w-3 font-bold text-sm align-middle"
-                                 rowSpan={2}
-                              >
+                              <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
                                  Үйлдэл
                               </th>
-                              <th
-                                 className="w-3 font-bold text-sm align-middle"
-                                 rowSpan={2}
-                              >
+                              <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
                                  Санхүү
                               </th>
                            </tr>
@@ -303,9 +246,7 @@ function DemoEmployee() {
                                  <Search
                                     placeholder={'Хайх'}
                                     allowClear
-                                    onSearch={(e) =>
-                                       onSearch(e, 'registerNumber')
-                                    }
+                                    onSearch={(e) => onSearch(e, 'registerNumber')}
                                     enterButton={'Хайх'}
                                  />
                               </td>
@@ -317,18 +258,11 @@ function DemoEmployee() {
                                  return (
                                     <tr key={index}>
                                        <td className="ant-table-row-cell-break-word">
-                                          {meta.page * meta.limit -
-                                             (meta.limit - index - 1)}
+                                          {meta.page * meta.limit - (meta.limit - index - 1)}
                                        </td>
-                                       <td className="ant-table-row-cell-break-word">
-                                          {employee.lastName}
-                                       </td>
-                                       <td className="ant-table-row-cell-break-word">
-                                          {employee.firstName}
-                                       </td>
-                                       <td className="ant-table-row-cell-break-word">
-                                          {employee.registerNumber}
-                                       </td>
+                                       <td className="ant-table-row-cell-break-word">{employee.lastName}</td>
+                                       <td className="ant-table-row-cell-break-word">{employee.firstName}</td>
+                                       <td className="ant-table-row-cell-break-word">{employee.registerNumber}</td>
                                        <td className="ant-table-row-cell-break-word">
                                           {employee.isWorking ? (
                                              <CheckOutlined className="text-green-600" />
@@ -336,15 +270,11 @@ function DemoEmployee() {
                                              <CloseOutlined className="text-red-600" />
                                           )}
                                        </td>
-                                       <td className="ant-table-row-cell-break-word">
-                                          {employee.homeAddress}
-                                       </td>
+                                       <td className="ant-table-row-cell-break-word">{employee.homeAddress}</td>
                                        <td>
                                           <Button
                                              type="link"
-                                             onClick={() =>
-                                                viewModal(employee.id)
-                                             }
+                                             onClick={() => viewModal(employee.id)}
                                              title="Харах"
                                              style={{ paddingRight: 5 }}
                                           >
@@ -352,9 +282,7 @@ function DemoEmployee() {
                                           </Button>
                                           <Button
                                              type="link"
-                                             onClick={() =>
-                                                editModal(employee.id)
-                                             }
+                                             onClick={() => editModal(employee.id)}
                                              title="Засах"
                                              style={{
                                                 paddingRight: 5,
@@ -369,9 +297,7 @@ function DemoEmployee() {
                                              <CheckOutlined className="text-green-600" />
                                           ) : (
                                              <Button
-                                                onClick={() =>
-                                                   connectFinance(employee)
-                                                }
+                                                onClick={() => connectFinance(employee)}
                                                 type="text"
                                                 className="text-sky-500 font-semibold"
                                              >
@@ -392,10 +318,7 @@ function DemoEmployee() {
                                        textAlign: 'center'
                                     }}
                                  >
-                                    <Spinner
-                                       animation="grow"
-                                       style={{ color: '#1890ff' }}
-                                    />
+                                    <Spinner animation="grow" style={{ color: '#1890ff' }} />
                                  </td>
                               </tr>
                            )}
@@ -403,12 +326,7 @@ function DemoEmployee() {
                      </Table>
                   </div>
                   <div>
-                     <Pagination
-                        className="pagination"
-                        pageSize={10}
-                        total={meta.itemCount}
-                        onChange={getEmployee}
-                     />
+                     <Pagination className="pagination" pageSize={10} total={meta.itemCount} onChange={getEmployee} />
                   </div>
                </Card>
             </div>
@@ -422,36 +340,16 @@ function DemoEmployee() {
          >
             <div className="pt-4">
                <Descriptions bordered>
-                  <Descriptions.Item label="Овог">
-                     {viewEmployee.lastName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Нэр">
-                     {viewEmployee.firstName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Регистр №">
-                     {viewEmployee.registerNumber}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Тасаг">
-                     {viewEmployee.dep?.name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Албан тушаал">
-                     {viewEmployee.app?.name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Овог">
-                     {viewEmployee.lastName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Овог">
-                     {viewEmployee.lastName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Овог">
-                     {viewEmployee.lastName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Овог">
-                     {viewEmployee.lastName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Овог">
-                     {viewEmployee.lastName}
-                  </Descriptions.Item>
+                  <Descriptions.Item label="Овог">{viewEmployee.lastName}</Descriptions.Item>
+                  <Descriptions.Item label="Нэр">{viewEmployee.firstName}</Descriptions.Item>
+                  <Descriptions.Item label="Регистр №">{viewEmployee.registerNumber}</Descriptions.Item>
+                  <Descriptions.Item label="Тасаг">{viewEmployee.dep?.name}</Descriptions.Item>
+                  <Descriptions.Item label="Албан тушаал">{viewEmployee.app?.name}</Descriptions.Item>
+                  <Descriptions.Item label="Овог">{viewEmployee.lastName}</Descriptions.Item>
+                  <Descriptions.Item label="Овог">{viewEmployee.lastName}</Descriptions.Item>
+                  <Descriptions.Item label="Овог">{viewEmployee.lastName}</Descriptions.Item>
+                  <Descriptions.Item label="Овог">{viewEmployee.lastName}</Descriptions.Item>
+                  <Descriptions.Item label="Овог">{viewEmployee.lastName}</Descriptions.Item>
                </Descriptions>
             </div>
          </Modal>
@@ -535,16 +433,8 @@ function DemoEmployee() {
                      </Form.Item>
                   </div>
                   <div className="md:w-1/4 sm:w-1/3 p-1">
-                     <Form.Item
-                        label="Aжиллаж байгаа эсэх"
-                        name="isWorking"
-                        valuePropName="checked"
-                     >
-                        <Switch
-                           className="bg-sky-700"
-                           checkedChildren="Тийм"
-                           unCheckedChildren="Үгүй"
-                        />
+                     <Form.Item label="Aжиллаж байгаа эсэх" name="isWorking" valuePropName="checked">
+                        <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                      </Form.Item>
                   </div>
                   <div className="md:w-1/4 sm:w-1/3 p-1">
@@ -635,28 +525,20 @@ function DemoEmployee() {
                         ]}
                      >
                         <Select mode="multiple">
-                           {Object.entries(positions)?.map(
-                              ([key, value], index) => {
-                                 return (
-                                    <OptGroup
-                                       key={index}
-                                       label={getByIdStructureName(key)}
-                                    >
-                                       {value?.length != undefined &&
-                                          value?.map((option, idx) => {
-                                             return (
-                                                <Option
-                                                   key={`${index}-${idx}`}
-                                                   value={option.id}
-                                                >
-                                                   {option.name}
-                                                </Option>
-                                             );
-                                          })}
-                                    </OptGroup>
-                                 );
-                              }
-                           )}
+                           {Object.entries(positions)?.map(([key, value], index) => {
+                              return (
+                                 <OptGroup key={index} label={getByIdStructureName(key)}>
+                                    {value?.length != undefined &&
+                                       value?.map((option, idx) => {
+                                          return (
+                                             <Option key={`${index}-${idx}`} value={option.id}>
+                                                {option.name}
+                                             </Option>
+                                          );
+                                       })}
+                                 </OptGroup>
+                              );
+                           })}
                         </Select>
                      </Form.Item>
                   </div>
@@ -719,10 +601,7 @@ function DemoEmployee() {
                      </Form.Item>
                   </div>
                   <div className="w-1/2 p-1">
-                     <Form.Item
-                        label="Ажлаас гарсан огноо"
-                        name="dateOutEmployment"
-                     >
+                     <Form.Item label="Ажлаас гарсан огноо" name="dateOutEmployment">
                         <DatePicker locale={mnMN} />
                      </Form.Item>
                   </div>

@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-   Button,
-   Card,
-   ConfigProvider,
-   Empty,
-   Form,
-   Modal,
-   Popconfirm,
-   Select,
-   Table
-} from 'antd';
+import { Button, Card, ConfigProvider, Empty, Form, Modal, Popconfirm, Select, Table } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Delete, Get, Patch, Post } from '../../comman';
 import { useSelector } from 'react-redux';
@@ -97,9 +87,7 @@ function DocForRoleList() {
       return (
          <ul className="list-decimal list-inside text-start">
             {positionIds?.map((positionId, index) => {
-               const name = clonedPositions?.find(
-                  (e) => e.id === parseInt(positionId)
-               )?.name;
+               const name = clonedPositions?.find((e) => e.id === parseInt(positionId))?.name;
                return <li key={index}>{name}</li>;
             })}
          </ul>
@@ -111,23 +99,13 @@ function DocForRoleList() {
          params: {}
       };
       if (editMode) {
-         const response = await Patch(
-            'organization/document-role/' + selectedId,
-            token,
-            conf,
-            values
-         );
+         const response = await Patch('organization/document-role/' + selectedId, token, conf, values);
          if (response === 200) {
             form.resetFields();
             setIsOpenEditModal(false);
          }
       } else {
-         const response = await Post(
-            'organization/document-role',
-            token,
-            conf,
-            values
-         );
+         const response = await Post('organization/document-role', token, conf, values);
          if (response === 201) {
             form.resetFields();
             setIsOpenEditModal(false);
@@ -223,11 +201,7 @@ function DocForRoleList() {
                      gap: 6
                   }}
                >
-                  <Button
-                     onClick={() => openModal(true, row)}
-                     icon={<EditOutlined />}
-                     shape="circle"
-                  />
+                  <Button onClick={() => openModal(true, row)} icon={<EditOutlined />} shape="circle" />
                   <Popconfirm
                      title="Та устгахдаа итгэлтэй байна уу?"
                      okText="Тийм"
@@ -286,14 +260,12 @@ function DocForRoleList() {
                         size: 'small',
                         current: meta.page,
                         total: meta.itemCount,
-                        showTotal: (total, range) =>
-                           `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                         pageSize: meta.limit,
                         showSizeChanger: true,
                         pageSizeOptions: ['5', '10', '20', '50'],
                         showQuickJumper: true,
-                        onChange: (page, pageSize) =>
-                           getList(page, pageSize, pValue, pIndex)
+                        onChange: (page, pageSize) => getList(page, pageSize, pValue, pIndex)
                      }}
                   />
                </ConfigProvider>
@@ -327,9 +299,7 @@ function DocForRoleList() {
                      allowClear
                      optionFilterProp="children"
                      filterOption={(input, option) =>
-                        (option?.children ?? '')
-                           .toLowerCase()
-                           .includes(input?.toLowerCase())
+                        (option?.children ?? '').toLowerCase().includes(input?.toLowerCase())
                      }
                      onSelect={(e) => selectDepartment(e)}
                   >
@@ -416,13 +386,7 @@ function DocForRoleList() {
                </Form.Item>
                <Form.List name="documents">
                   {(documents, { add, remove }) => (
-                     <EditableTable
-                        form={form}
-                        documents={documents}
-                        positions={positions}
-                        add={add}
-                        remove={remove}
-                     />
+                     <EditableTable form={form} documents={documents} positions={positions} add={add} remove={remove} />
                   )}
                </Form.List>
             </Form>

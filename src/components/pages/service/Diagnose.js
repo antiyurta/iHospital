@@ -74,34 +74,18 @@ function Diagnose({ handleClick, types }) {
             <Form.List name="diagnose">
                {(fields, { add, remove }) => (
                   <>
-                     <div
-                        className="table-responsive pb-4"
-                        id="style-8"
-                        style={{ maxHeight: '420px' }}
-                     >
-                        <Table
-                           className="ant-border-space"
-                           style={{ width: '100%' }}
-                        >
+                     <div className="table-responsive pb-4" id="style-8" style={{ maxHeight: '420px' }}>
+                        <Table className="ant-border-space" style={{ width: '100%' }}>
                            <thead className="ant-table-thead bg-slate-200">
                               <tr>
-                                 <th className="font-bold text-sm align-middle">
-                                    Код
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Монгол нэр
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Төрөл
-                                 </th>
+                                 <th className="font-bold text-sm align-middle">Код</th>
+                                 <th className="font-bold text-sm align-middle">Монгол нэр</th>
+                                 <th className="font-bold text-sm align-middle">Төрөл</th>
                               </tr>
                            </thead>
                            <tbody>
                               {fields?.map(({ key, name }) => (
-                                 <tr
-                                    key={key}
-                                    className="ant-table-row ant-table-row-level-0"
-                                 >
+                                 <tr key={key} className="ant-table-row ant-table-row-level-0">
                                     <td style={{ width: 80, maxWidth: 80 }}>
                                        <Form.Item name={[name, 'code']}>
                                           <TextArea disabled />
@@ -122,17 +106,11 @@ function Diagnose({ handleClick, types }) {
                                              }
                                           ]}
                                        >
-                                          <Select
-                                             style={{ width: '100%' }}
-                                             options={DiagnoseTypes}
-                                          />
+                                          <Select style={{ width: '100%' }} options={DiagnoseTypes} />
                                        </Form.Item>
                                     </td>
                                     <td>
-                                       <MinusCircleOutlined
-                                          style={{ color: 'red' }}
-                                          onClick={() => remove(name)}
-                                       />
+                                       <MinusCircleOutlined style={{ color: 'red' }} onClick={() => remove(name)} />
                                     </td>
                                  </tr>
                               ))}
@@ -156,41 +134,23 @@ function Diagnose({ handleClick, types }) {
             >
                <div className="flex flex-wrap">
                   <div className="w-2/3">
-                     <div
-                        className="table-responsive px-4 pb-4"
-                        id="style-8"
-                        style={{ maxHeight: '500px' }}
-                     >
-                        <Table
-                           className="ant-border-space"
-                           style={{ width: '100%' }}
-                        >
+                     <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                        <Table className="ant-border-space" style={{ width: '100%' }}>
                            <thead className="ant-table-thead bg-slate-200">
                               <tr>
-                                 <th
-                                    className="font-bold text-sm align-middle"
-                                    style={{ minWidth: 230 }}
-                                 >
+                                 <th className="font-bold text-sm align-middle" style={{ minWidth: 230 }}>
                                     Код
                                  </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Монгол нэр
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Англи нэр
-                                 </th>
-                                 <th className="font-bold text-sm align-middle">
-                                    Орос нэр
-                                 </th>
+                                 <th className="font-bold text-sm align-middle">Монгол нэр</th>
+                                 <th className="font-bold text-sm align-middle">Англи нэр</th>
+                                 <th className="font-bold text-sm align-middle">Орос нэр</th>
                               </tr>
                               <tr>
                                  <th>
                                     <Search
                                        placeholder={'Хайх'}
                                        allowClear
-                                       onSearch={(e) =>
-                                          getDiagnoses(1, 10, e, 'code')
-                                       }
+                                       onSearch={(e) => getDiagnoses(1, 10, e, 'code')}
                                        enterButton={'Хайх'}
                                     />
                                  </th>
@@ -198,9 +158,7 @@ function Diagnose({ handleClick, types }) {
                                     <Search
                                        placeholder={'Хайх'}
                                        allowClear
-                                       onSearch={(e) =>
-                                          getDiagnoses(1, 10, e, 'nameMn')
-                                       }
+                                       onSearch={(e) => getDiagnoses(1, 10, e, 'nameMn')}
                                        enterButton={'Хайх'}
                                     />
                                  </th>
@@ -208,9 +166,7 @@ function Diagnose({ handleClick, types }) {
                                     <Search
                                        placeholder={'Хайх'}
                                        allowClear
-                                       onSearch={(e) =>
-                                          getDiagnoses(1, 10, e, 'nameEn')
-                                       }
+                                       onSearch={(e) => getDiagnoses(1, 10, e, 'nameEn')}
                                        enterButton={'Хайх'}
                                     />
                                  </th>
@@ -218,9 +174,7 @@ function Diagnose({ handleClick, types }) {
                                     <Search
                                        placeholder={'Хайх'}
                                        allowClear
-                                       onSearch={(e) =>
-                                          getDiagnoses(1, 10, e, 'nameRu')
-                                       }
+                                       onSearch={(e) => getDiagnoses(1, 10, e, 'nameRu')}
                                        enterButton={'Хайх'}
                                     />
                                  </th>
@@ -234,28 +188,16 @@ function Diagnose({ handleClick, types }) {
                                        key={index}
                                        className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                     >
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ width: 50, maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ width: 50, maxWidth: 50 }}>
                                           {item.code}
                                        </td>
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                           {item.nameMn}
                                        </td>
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                           {item.nameEn}
                                        </td>
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                           {item.nameRu}
                                        </td>
                                     </tr>
@@ -270,22 +212,13 @@ function Diagnose({ handleClick, types }) {
                            className="pagination"
                            pageSize={10}
                            total={meta.itemCount}
-                           onChange={(page, pageSize) =>
-                              getDiagnoses(page, pageSize, paramValue, param)
-                           }
+                           onChange={(page, pageSize) => getDiagnoses(page, pageSize, paramValue, param)}
                         />
                      </div>
                   </div>
                   <div className="w-1/3">
-                     <div
-                        className="table-responsive px-4 pb-4"
-                        id="style-8"
-                        style={{ maxHeight: '500px' }}
-                     >
-                        <Table
-                           className="ant-border-space"
-                           style={{ width: '100%' }}
-                        >
+                     <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                        <Table className="ant-border-space" style={{ width: '100%' }}>
                            <thead className="ant-table-thead bg-slate-200">
                               <tr>
                                  <th>Код</th>
@@ -300,22 +233,13 @@ function Diagnose({ handleClick, types }) {
                                        key={index}
                                        className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                     >
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ width: 50, maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ width: 50, maxWidth: 50 }}>
                                           {item.code}
                                        </td>
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                           {item.nameMn}
                                        </td>
-                                       <td
-                                          onDoubleClick={() => remove(index)}
-                                          className="hover:cursor-pointer"
-                                       >
+                                       <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
                                           <CloseOutlined
                                              style={{
                                                 color: 'red',

@@ -39,16 +39,10 @@ function AM29B() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-29Б
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-29Б</span>
                </div>
             </div>
             <div style={{ ...styles.generalText, ...{ display: 'flex' } }}>
@@ -61,12 +55,8 @@ function AM29B() {
                <div style={styles.rowCells}></div>
                <div style={styles.rowCells}></div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  БАРИА ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 16 }}>БАРИА ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
             <div
                style={{
@@ -108,15 +98,11 @@ function AM29B() {
             </div>
             <div style={styles.rowStyle}>
                1. Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>
-                  Нэр _______________________________
-               </span>
+               <span style={{ marginLeft: 50 }}>Нэр _______________________________</span>
             </div>
             <div style={styles.rowStyle}>
                2. Нас ______
-               <span style={{ marginLeft: 50 }}>
-                  Хүйс: /зур/ эрэгтэй, эмэгтэй
-               </span>
+               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
             </div>
 
             <div style={styles.rowStyle}>
@@ -133,19 +119,13 @@ function AM29B() {
                   }}
                >
                   <span style={styles.generalText}>Бүтэн биеийн бариа :</span>
-                  <span style={styles.generalText}>
-                     1. Бүтэн биеийн зөөлөн бариа
-                  </span>
+                  <span style={styles.generalText}>1. Бүтэн биеийн зөөлөн бариа</span>
                   <span style={styles.generalText}>2. Халуун тосон бариа</span>
                   <span style={styles.generalText}>3. Сүүн бариа</span>
                   <span style={styles.generalText}>4. Шөлөн бариа</span>
                   <span style={styles.generalText}>5. Арвайн бариа</span>
-                  <span style={styles.generalText}>
-                     6. Бусад бариа ....................
-                  </span>
-                  <span style={styles.generalText}>
-                     ....................................................
-                  </span>
+                  <span style={styles.generalText}>6. Бусад бариа ....................</span>
+                  <span style={styles.generalText}>....................................................</span>
                </div>
                <div
                   style={{
@@ -155,31 +135,20 @@ function AM29B() {
                   }}
                >
                   <span style={styles.generalText}>Хэсэгчилсэн бариа:</span>
-                  <span style={styles.generalText}>
-                     1. Толгой, хүзүү, нуруу
-                  </span>
+                  <span style={styles.generalText}>1. Толгой, хүзүү, нуруу</span>
                   <span style={styles.generalText}>2. Нүүрний хэсэг</span>
-                  <span style={styles.generalText}>
-                     3. Гарын /мөр, бугалга, шуу, тохой, сарвууны хэсэг/
-                  </span>
-                  <span style={styles.generalText}>
-                     4. Сээр бүсэлхий ууц нуруу
-                  </span>
-                  <span style={styles.generalText}>
-                     5. Хөлийн /түнх, гуя, өвдөг, шилбэ, тавхайн хэсэг/
-                  </span>
+                  <span style={styles.generalText}>3. Гарын /мөр, бугалга, шуу, тохой, сарвууны хэсэг/</span>
+                  <span style={styles.generalText}>4. Сээр бүсэлхий ууц нуруу</span>
+                  <span style={styles.generalText}>5. Хөлийн /түнх, гуя, өвдөг, шилбэ, тавхайн хэсэг/</span>
                   <span style={styles.generalText}>6. 4 тольтын бариа</span>
                   <span style={styles.generalText}>7. Даран бариа</span>
                   <span style={styles.generalText}>8. Бусад бариа</span>
                </div>
             </div>
             <div style={styles.rowStyle}>
-               5. Анхаарах
-               зүйл:________________________________________________________________________________________
+               5. Анхаарах зүйл:________________________________________________________________________________________
             </div>
-            <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
-               Эмчийн нэр: __________________________
-            </div>
+            <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>Эмчийн нэр: __________________________</div>
             <div style={styles.rowStyle}>
                ...................................................................................................................................................................................................................................................................................
             </div>
@@ -223,9 +192,7 @@ function AM29B() {
                      >
                         Барианы төрөл
                      </td>
-                     <td
-                        style={{ width: 80, textAlign: 'center', fontSize: 12 }}
-                     >
+                     <td style={{ width: 80, textAlign: 'center', fontSize: 12 }}>
                         <span>Хийгдсэн хугацаа</span>
                      </td>
                      <td

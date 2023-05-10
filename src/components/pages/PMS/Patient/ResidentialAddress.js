@@ -58,11 +58,7 @@ function ResidentialAddress({ form }) {
                   onChange={filterTowns}
                   showSearch
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                     (option?.children ?? '')
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                  }
+                  filterOption={(input, option) => (option?.children ?? '').toLowerCase().includes(input.toLowerCase())}
                >
                   {provices.map((provice, index) => {
                      return (
@@ -85,11 +81,7 @@ function ResidentialAddress({ form }) {
                <Select
                   showSearch
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                     (option?.children ?? '')
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                  }
+                  filterOption={(input, option) => (option?.children ?? '').toLowerCase().includes(input.toLowerCase())}
                >
                   {towns?.map((town, index) => {
                      return (

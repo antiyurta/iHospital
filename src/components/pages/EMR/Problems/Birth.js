@@ -18,11 +18,7 @@ export default function Birth(props) {
          {props.data?.hasOwnProperty('whatBorn') ? (
             <div className="flex">
                <p className="font-semibold mr-2">Яаж төрсөн: </p>
-               <p className="">
-                  {props.data['whatBorn']
-                     ? 'Кесар хагалгаагаар'
-                     : 'Төрөх замаар'}
-               </p>
+               <p className="">{props.data['whatBorn'] ? 'Кесар хагалгаагаар' : 'Төрөх замаар'}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('stateTime') ? (
@@ -44,19 +40,13 @@ export default function Birth(props) {
          {props.data?.hasOwnProperty('whatBorn') ? (
             <div className="flex">
                <p className="font-semibold mr-2">Бага насны өсөлт, бойжилт: </p>
-               <p className="">
-                  {props.data['whatBorn'] === 'NORMAL'
-                     ? 'Хэвийн'
-                     : 'Хэвийн бус'}
-               </p>
+               <p className="">{props.data['whatBorn'] === 'NORMAL' ? 'Хэвийн' : 'Хэвийн бус'}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('isKindergarden') ? (
             <div className="flex">
                <p className="font-semibold mr-2">Цэцэрлэгт явсан эсэх: </p>
-               <p className="">
-                  {props.data['isKindergarden'] ? 'Тийм' : 'Үгүй'}
-               </p>
+               <p className="">{props.data['isKindergarden'] ? 'Тийм' : 'Үгүй'}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('isSchool') ? (
@@ -67,12 +57,8 @@ export default function Birth(props) {
          ) : null}
          {props.data?.hasOwnProperty('isVaccination') ? (
             <div className="flex">
-               <p className="font-semibold mr-2">
-                  Товлолын дагуу вакцинууддаа хамрагдсан эсэх:
-               </p>
-               <p className="">
-                  {props.data['isVaccination'] ? 'Тийм' : 'Үгүй'}
-               </p>
+               <p className="font-semibold mr-2">Товлолын дагуу вакцинууддаа хамрагдсан эсэх:</p>
+               <p className="">{props.data['isVaccination'] ? 'Тийм' : 'Үгүй'}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('painChildhood') ? (

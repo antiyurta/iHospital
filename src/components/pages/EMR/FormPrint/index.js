@@ -5,36 +5,21 @@ import { useReactToPrint } from 'react-to-print';
 import logo from '../../../../assets/logo/universal.png';
 import moment from 'moment';
 import DiagnoseTypes from '../../service/DiagnoseTypes.json';
-export default function Index({
-   patientInfo,
-   inspectionNote,
-   diagnoses,
-   services,
-   employee
-}) {
+export default function Index({ patientInfo, inspectionNote, diagnoses, services, employee }) {
    const printRef = useRef();
    const handlePrint = useReactToPrint({
       content: () => printRef.current
    });
    const diagnoseTypeInfo = (diagnoseTypeId) => {
-      const filteredData = DiagnoseTypes.filter(
-         (e) => e.value === diagnoseTypeId
-      );
+      const filteredData = DiagnoseTypes.filter((e) => e.value === diagnoseTypeId);
       return filteredData[0]?.label;
    };
    const RenderHTMLDiagnose = (diagnoses) => {
       return diagnoses?.map((diagnose, index) => {
          return (
             <div key={index} className="flex">
-               <p className="font-semibold mx-2">
-                  {diagnoseTypeInfo(diagnose.diagnoseType)}:{' '}
-               </p>
-               <p>
-                  {'[' +
-                     diagnose.diagnose?.code +
-                     ']' +
-                     diagnose.diagnose?.nameMn}
-               </p>
+               <p className="font-semibold mx-2">{diagnoseTypeInfo(diagnose.diagnoseType)}: </p>
+               <p>{'[' + diagnose.diagnose?.code + ']' + diagnose.diagnose?.nameMn}</p>
             </div>
          );
       });
@@ -78,11 +63,7 @@ export default function Index({
                   >
                      Магадлага
                   </Button>
-                  <Button
-                     className="ml-2 p-1"
-                     icon={<PrinterOutlined />}
-                     onClick={() => handlePrint()}
-                  >
+                  <Button className="ml-2 p-1" icon={<PrinterOutlined />} onClick={() => handlePrint()}>
                      Маягт хэвлэх
                   </Button>
                   <Button className="ml-2 p-1" icon={<MedicineBoxOutlined />}>
@@ -97,21 +78,12 @@ export default function Index({
                      <img style={{ width: '50%' }} src={logo} />
                   </div>
                   <div className="basis-1/2">
-                     <p className="text-center">
-                        Эрүүл мэндийн сайдын 2019 оны 12 сарын 30-ны
-                     </p>
-                     <p className="text-center">
-                        өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                     </p>
-                     <p className="text-center font-bold">
-                        Эрүүл мэндын бүртгэлийн маягт CT-1
-                     </p>
+                     <p className="text-center">Эрүүл мэндийн сайдын 2019 оны 12 сарын 30-ны</p>
+                     <p className="text-center">өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
+                     <p className="text-center font-bold">Эрүүл мэндын бүртгэлийн маягт CT-1</p>
                   </div>
                </div>
-               <p
-                  className="text-center py-8"
-                  style={{ fontSize: '25px', fontWeight: 'bold' }}
-               >
+               <p className="text-center py-8" style={{ fontSize: '25px', fontWeight: 'bold' }}>
                   {inspectionNote?.structures?.name}
                </p>
                <div className="flex flex-row">
@@ -151,27 +123,19 @@ export default function Index({
                <Divider orientation="left" className="text-sm my-2">
                   Зовиурь
                </Divider>
-               {inspectionNote && (
-                  <RenderHTML data={JSON.parse(inspectionNote?.pain)} />
-               )}
+               {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.pain)} />}
                <Divider orientation="left" className="text-sm my-2">
                   Бодит үзлэг
                </Divider>
-               {inspectionNote && (
-                  <RenderHTML data={JSON.parse(inspectionNote?.inspection)} />
-               )}
+               {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.inspection)} />}
                <Divider orientation="left" className="text-sm my-2">
                   Асуумж
                </Divider>
-               {inspectionNote && (
-                  <RenderHTML data={JSON.parse(inspectionNote?.question)} />
-               )}
+               {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.question)} />}
                <Divider orientation="left" className="text-sm my-2">
                   Төлөвлөгөө
                </Divider>
-               {inspectionNote && (
-                  <RenderHTML data={JSON.parse(inspectionNote?.plan)} />
-               )}
+               {inspectionNote && <RenderHTML data={JSON.parse(inspectionNote?.plan)} />}
                <Divider orientation="left" className="text-sm my-2">
                   Онош
                </Divider>
@@ -183,19 +147,13 @@ export default function Index({
                <div className="text-right">
                   <div className="inline-flex">
                      <p className="font-semibold mr-2">Үзлэг хийсэн эмч:</p>
-                     <p>
-                        {employee?.lastName?.substring(0, 1) +
-                           '. ' +
-                           employee?.firstName}
-                     </p>
+                     <p>{employee?.lastName?.substring(0, 1) + '. ' + employee?.firstName}</p>
                   </div>
                </div>
                <div className="text-right">
                   <div className="inline-flex">
                      <p className="font-semibold mr-2">Үзлэг хийсэн огноо:</p>
-                     <p>
-                        {moment(inspectionNote?.createdAt).format('YYYY-MM-DD')}
-                     </p>
+                     <p>{moment(inspectionNote?.createdAt).format('YYYY-MM-DD')}</p>
                   </div>
                </div>
                <div className="text-right">

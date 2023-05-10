@@ -2,17 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DefualtGet, Get, Patch, Post } from '../../../../comman';
 import { selectCurrentToken } from '../../../../../features/authReducer';
 import { useSelector } from 'react-redux';
-import {
-   Button,
-   Card,
-   Divider,
-   Form,
-   Input,
-   List,
-   Modal,
-   Radio,
-   Select
-} from 'antd';
+import { Button, Card, Divider, Form, Input, List, Modal, Radio, Select } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
 function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
@@ -55,11 +45,7 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
             icdCode: icdCode
          }
       };
-      const response = await DefualtGet(
-         'health-insurance/hics-cost-by-field',
-         token,
-         conf
-      );
+      const response = await DefualtGet('health-insurance/hics-cost-by-field', token, conf);
       if (response?.result?.length > 0) {
          setHicsCostByFields(response?.result);
       } else {
@@ -86,8 +72,7 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
       //   }
    };
    useEffect(() => {
-      const icdCode = diagnoses.find((e) => e.diagnoseId === selectedDiagnoseId)
-         ?.diagnose?.code;
+      const icdCode = diagnoses.find((e) => e.diagnoseId === selectedDiagnoseId)?.diagnose?.code;
       console.log(icdCode);
       if (icdCode != undefined) {
          form.setFieldValue('hicsCost', null);
@@ -121,11 +106,7 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
             }
          >
             <Form form={form} layout="vertical">
-               <Form.Item
-                  label="Гарах үеийн биеийн байдал:"
-                  name="outBodyCondition"
-                  initialValue={1}
-               >
+               <Form.Item label="Гарах үеийн биеийн байдал:" name="outBodyCondition" initialValue={1}>
                   <Radio.Group>
                      <Radio value={1}>Хөнгөн</Radio>
                      <Radio value={2}>Дунд</Radio>
@@ -151,10 +132,7 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
                   <Select>
                      {hicsCostByFields?.map((field, index) => {
                         return (
-                           <Option
-                              value={`[${field.drgCode}, ${field.groupId}]`}
-                              key={index}
-                           >
+                           <Option value={`[${field.drgCode}, ${field.groupId}]`} key={index}>
                               {field.drgName}
                               {/* {`${diagnose.diagnose?.code} -> ${diagnose.diagnose?.nameMn}`} */}
                            </Option>

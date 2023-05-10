@@ -53,10 +53,7 @@ function MiddleTable({ typeId }) {
                   {text.map((item, index) => {
                      return (
                         <li key={index} className="text-start">
-                           {item.material?.m_name +
-                              '/' +
-                              item.tcount +
-                              item.material?.xn}
+                           {item.material?.m_name + '/' + item.tcount + item.material?.xn}
                         </li>
                      );
                   })}
@@ -72,11 +69,7 @@ function MiddleTable({ typeId }) {
       <Card bordered={false} className="header-solid max-h-max rounded-md">
          <div className="flow-root p-2">
             <div className="float-right">
-               <Button
-                  title="Сэргээх"
-                  type="primary"
-                  onClick={() => getActing(1, 20, typeId)}
-               >
+               <Button title="Сэргээх" type="primary" onClick={() => getActing(1, 20, typeId)}>
                   <ReloadOutlined spin={spinner} />
                </Button>
             </div>

@@ -1,16 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Divider,
-   Drawer,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Popconfirm,
-   Select
-} from 'antd';
+import { Button, Card, Divider, Drawer, Form, Input, InputNumber, Modal, Popconfirm, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -74,9 +63,7 @@ function PatientForm() {
          <div className="basis-1/5">
             <Button
                onClick={() => {
-                  builderForm
-                     .validateFields()
-                     .then((values) => setBigData(values.formItems));
+                  builderForm.validateFields().then((values) => setBigData(values.formItems));
                }}
             >
                Харах
@@ -91,41 +78,25 @@ function PatientForm() {
                                  <Card>
                                     <div className="flex flex-wrap">
                                        <div className="basis-1/2">
-                                          <Form.Item
-                                             label="Төрөл"
-                                             name={[name, 'type']}
-                                          >
+                                          <Form.Item label="Төрөл" name={[name, 'type']}>
                                              <Select>
-                                                <Option value={true}>
-                                                   Толгой
-                                                </Option>
-                                                <Option value={false}>
-                                                   Бие
-                                                </Option>
+                                                <Option value={true}>Толгой</Option>
+                                                <Option value={false}>Бие</Option>
                                              </Select>
                                           </Form.Item>
                                        </div>
                                        <div className="basis-1/2">
-                                          <Form.Item
-                                             label="Нэр"
-                                             name={[name, 'label']}
-                                          >
+                                          <Form.Item label="Нэр" name={[name, 'label']}>
                                              <Input />
                                           </Form.Item>
                                        </div>
                                        <div className="basis-1/2">
-                                          <Form.Item
-                                             label="Мөр"
-                                             name={[name, 'col']}
-                                          >
+                                          <Form.Item label="Мөр" name={[name, 'col']}>
                                              <InputNumber />
                                           </Form.Item>
                                        </div>
                                        <div className="basis-1/2">
-                                          <Form.Item
-                                             label="Багана"
-                                             name={[name, 'row']}
-                                          >
+                                          <Form.Item label="Багана" name={[name, 'row']}>
                                              <InputNumber />
                                           </Form.Item>
                                        </div>
@@ -156,18 +127,12 @@ function PatientForm() {
          </div>
          <div className="basis-4/5">
             <Button onClick={() => setLayout(!layout)}>Эргүүлэх</Button>
-            <div
-               className={layout ? 'page-landscape' : 'page'}
-               style={{ margin: 'auto' }}
-            >
+            <div className={layout ? 'page-landscape' : 'page'} style={{ margin: 'auto' }}>
                <Table bordered className="ant-border-space">
                   <tbody className="ant-table-tbody p-0">
                      {bigData?.map((data, index) => {
                         return (
-                           <tr
-                              key={index}
-                              className="ant-table-row ant-table-row-level-0"
-                           >
+                           <tr key={index} className="ant-table-row ant-table-row-level-0">
                               {data.type ? (
                                  <th colSpan={data.col} rowSpan={data.row}>
                                     {data.label}

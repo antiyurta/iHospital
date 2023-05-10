@@ -1,10 +1,16 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт
 import React from 'react';
-import { Tabs } from 'antd';
+import { Button, Tabs } from 'antd';
 import Ambulatory from './Lists/Ambulatory';
 import PatientList from './Lists/PatientList';
 import PreOrder from './Lists/PreOrder';
+import { SnippetsOutlined } from '@ant-design/icons';
 export default function BeforeAmbulatoryList() {
+   const documents = (
+      <Button type="primary" icon={<SnippetsOutlined />}>
+         Маягт
+      </Button>
+   );
    const items = [
       {
          label: 'Амбулатори',
@@ -22,5 +28,5 @@ export default function BeforeAmbulatoryList() {
          children: <PatientList />
       }
    ];
-   return <Tabs type="card" items={items} />;
+   return <Tabs type="card" tabBarExtraContent={documents} items={items} />;
 }

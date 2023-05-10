@@ -1,22 +1,5 @@
-import {
-   DeleteOutlined,
-   EditOutlined,
-   PlusCircleOutlined,
-   PlusOutlined,
-   RightOutlined
-} from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Empty,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Select,
-   Space,
-   Table
-} from 'antd';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Card, Empty, Form, Input, InputNumber, Modal, Select, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -78,12 +61,7 @@ function ExaminationParams() {
          params: {}
       };
       if (editMode) {
-         const response = await Patch(
-            'service/parameter/' + editId,
-            token,
-            conf,
-            values
-         );
+         const response = await Patch('service/parameter/' + editId, token, conf, values);
          if (response === 200) {
             setEditMode(false);
             setIsOpenModalPara(false);
@@ -134,12 +112,7 @@ function ExaminationParams() {
             return (
                <>
                   <Button
-                     icon={
-                        <PlusCircleOutlined
-                           title="Үзүүлэлт нэмэх"
-                           style={{ color: 'green' }}
-                        />
-                     }
+                     icon={<PlusCircleOutlined title="Үзүүлэлт нэмэх" style={{ color: 'green' }} />}
                      style={{ borderColor: 'green' }}
                      className="mr-1"
                      onClick={() => {
@@ -150,12 +123,7 @@ function ExaminationParams() {
                      }}
                   />
                   <Button
-                     icon={
-                        <RightOutlined
-                           title="Дэлгэрэнгүй"
-                           style={{ color: 'blue' }}
-                        />
-                     }
+                     icon={<RightOutlined title="Дэлгэрэнгүй" style={{ color: 'blue' }} />}
                      style={{ borderColor: 'blue' }}
                      className="ml-1"
                      onClick={() => getParams(text)}
@@ -183,43 +151,27 @@ function ExaminationParams() {
          }
       },
       {
-         title: (
-            <span className="whitespace-normal">Ердийн лавлах хэмжээ Их</span>
-         ),
+         title: <span className="whitespace-normal">Ердийн лавлах хэмжээ Их</span>,
          dataIndex: 'high'
       },
       {
-         title: (
-            <span className="whitespace-normal">Ердийн лавлах хэмжээ Бага</span>
-         ),
+         title: <span className="whitespace-normal">Ердийн лавлах хэмжээ Бага</span>,
          dataIndex: 'low'
       },
       {
-         title: (
-            <span className="whitespace-normal">Эрэгтэй лавлах хэмжээ Их</span>
-         ),
+         title: <span className="whitespace-normal">Эрэгтэй лавлах хэмжээ Их</span>,
          dataIndex: 'manHigh'
       },
       {
-         title: (
-            <span className="whitespace-normal">
-               Эрэгтэй лавлах хэмжээ Бага
-            </span>
-         ),
+         title: <span className="whitespace-normal">Эрэгтэй лавлах хэмжээ Бага</span>,
          dataIndex: 'manLow'
       },
       {
-         title: (
-            <span className="whitespace-normal">Эмэгтэй лавлах хэмжээ Их</span>
-         ),
+         title: <span className="whitespace-normal">Эмэгтэй лавлах хэмжээ Их</span>,
          dataIndex: 'womenHigh'
       },
       {
-         title: (
-            <span className="whitespace-normal">
-               Эмэгтэй лавлах хэмжээ Бага
-            </span>
-         ),
+         title: <span className="whitespace-normal">Эмэгтэй лавлах хэмжээ Бага</span>,
          dataIndex: 'womenLow'
       },
       {
@@ -271,11 +223,7 @@ function ExaminationParams() {
       <div>
          <div className="flex flex-wrap">
             <div className="w-1/3 p-1">
-               <Card
-                  bordered={false}
-                  className="header-solid max-h-max rounded-md"
-                  title="Шинжилгээ жагсаалт"
-               >
+               <Card bordered={false} className="header-solid max-h-max rounded-md" title="Шинжилгээ жагсаалт">
                   <Search
                      placeholder="Нэрээр хайх"
                      allowClear
@@ -432,26 +380,17 @@ function ExaminationParams() {
                      </Form.Item>
                   </div>
                   <div className="w-1/2 pl-1">
-                     <Form.Item
-                        label="Эрэгтэй лавлах хэмжээ Бага"
-                        name="manLow"
-                     >
+                     <Form.Item label="Эрэгтэй лавлах хэмжээ Бага" name="manLow">
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
                   </div>
                   <div className="w-1/2 pr-1">
-                     <Form.Item
-                        label="Эмэгтэй лавлах хэмжээ их"
-                        name="womenHigh"
-                     >
+                     <Form.Item label="Эмэгтэй лавлах хэмжээ их" name="womenHigh">
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
                   </div>
                   <div className="w-1/2 pl-1">
-                     <Form.Item
-                        label="Эмэгтэй лавлах хэмжээ Бага"
-                        name="womenLow"
-                     >
+                     <Form.Item label="Эмэгтэй лавлах хэмжээ Бага" name="womenLow">
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
                   </div>

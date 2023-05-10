@@ -8,12 +8,8 @@ function Other() {
             <thead>
                <tr>
                   <th className="w-21">Үзлэг хийсэн өдөр, цаг минут</th>
-                  <th className="text-center align-middle">
-                     ҮЗЛЭГИЙН ТЭМДЭГЛЭЛ
-                  </th>
-                  <th className="w-36 text-center align-middle">
-                     ЭМЧИЛГЭЭ, ХООЛ, СУВИЛГААНЫ ЗААЛТ
-                  </th>
+                  <th className="text-center align-middle">ҮЗЛЭГИЙН ТЭМДЭГЛЭЛ</th>
+                  <th className="w-36 text-center align-middle">ЭМЧИЛГЭЭ, ХООЛ, СУВИЛГААНЫ ЗААЛТ</th>
                </tr>
             </thead>
          </Table>

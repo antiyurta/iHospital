@@ -1,25 +1,6 @@
 import React from 'react';
-import {
-   MinusOutlined,
-   PlusOutlined,
-   PrinterOutlined,
-   ReloadOutlined
-} from '@ant-design/icons';
-import {
-   Button,
-   Cascader,
-   Form,
-   Input,
-   Modal,
-   Radio,
-   Select,
-   Row,
-   Card,
-   Col,
-   Spin,
-   Segmented,
-   Tabs
-} from 'antd';
+import { MinusOutlined, PlusOutlined, PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Cascader, Form, Input, Modal, Radio, Select, Row, Card, Col, Spin, Segmented, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { Table } from 'react-bootstrap';
@@ -166,14 +147,8 @@ function Index({ type, PatientData, ListId }) {
          patientId: PatientData.id,
          replacingTube: values.replacingTube,
          arm: values.arm[0],
-         statusArm:
-            values.arm[0] === '0' || values.arm[0] === '1'
-               ? values.arm[1]
-               : null,
-         statusFoot:
-            values.arm[0] === '2' || values.arm[0] === '3'
-               ? values.arm[1]
-               : null,
+         statusArm: values.arm[0] === '0' || values.arm[0] === '1' ? values.arm[1] : null,
+         statusFoot: values.arm[0] === '2' || values.arm[0] === '3' ? values.arm[1] : null,
          isFever: values.isFever,
          isSystole: values.isSystole,
          isPulse: values.isPulse,
@@ -249,20 +224,12 @@ function Index({ type, PatientData, ListId }) {
                      >
                         Бичих
                      </Button>
-                     <Button
-                        className="ml-2"
-                        icon={<PrinterOutlined />}
-                        onClick={handlePrint}
-                        loading={printLoading}
-                     >
+                     <Button className="ml-2" icon={<PrinterOutlined />} onClick={handlePrint} loading={printLoading}>
                         Хэвлэх
                      </Button>
                   </div>
                   <div className="float-right">
-                     <Select
-                        onChange={(e) => setPageInSize(e)}
-                        placeholder="Хуудасанд хэдээр харуулах"
-                     >
+                     <Select onChange={(e) => setPageInSize(e)} placeholder="Хуудасанд хэдээр харуулах">
                         <Option value={1}>1</Option>
                         <Option value={2}>2</Option>
                         <Option value={3}>3</Option>
@@ -274,12 +241,7 @@ function Index({ type, PatientData, ListId }) {
                         <Option value={9}>9</Option>
                         <Option value={10}>10</Option>
                      </Select>
-                     <Button
-                        className="ml-2"
-                        title="Сэргээх"
-                        type="primary"
-                        onClick={() => getVascularTube()}
-                     >
+                     <Button className="ml-2" title="Сэргээх" type="primary" onClick={() => getVascularTube()}>
                         <ReloadOutlined />
                      </Button>
                   </div>
@@ -294,76 +256,44 @@ function Index({ type, PatientData, ListId }) {
                               <div className="subpage-landscape">
                                  <div className="flow-root">
                                     <div className="float-right">
-                                       <p style={{ fontSize: 10 }}>
-                                          Эрүүл мэндийн сайдын 2019 оны 11 сарын
-                                          29-ны
-                                       </p>
-                                       <p style={{ fontSize: 10 }}>
-                                          өдрийн А539 дугаар тушаалын 3-р
-                                          хавсралт
-                                       </p>
+                                       <p style={{ fontSize: 10 }}>Эрүүл мэндийн сайдын 2019 оны 11 сарын 29-ны</p>
+                                       <p style={{ fontSize: 10 }}>өдрийн А539 дугаар тушаалын 3-р хавсралт</p>
                                     </div>
                                  </div>
-                                 <p
-                                    className="font-bold text-center"
-                                    style={{ fontSize: 12 }}
-                                 >
+                                 <p className="font-bold text-center" style={{ fontSize: 12 }}>
                                     Судасны гуурстай холбоотой тандалт
                                  </p>
                                  <div className="flex flex-wrap py-1 text-center">
                                     <div className="basis-1/5">
-                                       <p style={{ fontSize: 10 }}>
-                                          Эмнэлэг: UNIVERSAL MED
-                                       </p>
+                                       <p style={{ fontSize: 10 }}>Эмнэлэг: UNIVERSAL MED</p>
                                     </div>
                                     <div className="basis-1/5">
-                                       <p style={{ fontSize: 10 }}>
-                                          Тасаг: ДОТОР
-                                       </p>
+                                       <p style={{ fontSize: 10 }}>Тасаг: ДОТОР</p>
                                     </div>
                                     <div className="basis-2/5">
                                        <p style={{ fontSize: 10 }}>
                                           Үйлчлүүлэгчийн овог нэр:{' '}
-                                          {PatientData?.lastName.substring(
-                                             0,
-                                             1
-                                          ) +
-                                             '.' +
-                                             PatientData?.firstName}
+                                          {PatientData?.lastName.substring(0, 1) + '.' + PatientData?.firstName}
                                        </p>
                                     </div>
                                     <div className="basis-1/5">
                                        <p style={{ fontSize: 10 }}>
-                                          Нас:{' '}
-                                          {getAge(PatientData?.registerNumber)}{' '}
-                                          Хүйс:
-                                          {PatientData?.genderType === 'MAN'
-                                             ? 'Эр'
-                                             : 'Эм'}
+                                          Нас: {getAge(PatientData?.registerNumber)} Хүйс:
+                                          {PatientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
                                        </p>
                                     </div>
                                     <div className="basis-1/5">
-                                       <p style={{ fontSize: 10 }}>
-                                          Регистрийн дугаар:{' '}
-                                          {PatientData?.registerNumber}
-                                       </p>
+                                       <p style={{ fontSize: 10 }}>Регистрийн дугаар: {PatientData?.registerNumber}</p>
                                     </div>
                                     <div className="basis-1/5">
-                                       <p style={{ fontSize: 10 }}>
-                                          Үндсэн онош:
-                                       </p>
+                                       <p style={{ fontSize: 10 }}>Үндсэн онош:</p>
                                     </div>
                                     <div className="basis-2/5">
-                                       <p style={{ fontSize: 10 }}>
-                                          Эмнэлэг хэвтсэн огноо: 2022-01-01
-                                       </p>
+                                       <p style={{ fontSize: 10 }}>Эмнэлэг хэвтсэн огноо: 2022-01-01</p>
                                     </div>
                                     <div className="basis-1/5">
                                        <p style={{ fontSize: 10 }}>
-                                          Судасны гуурс төрөл:{' '}
-                                          {type === 0
-                                             ? 'Уян зүү'
-                                             : 'Төвийн веннийн гуурс'}
+                                          Судасны гуурс төрөл: {type === 0 ? 'Уян зүү' : 'Төвийн веннийн гуурс'}
                                        </p>
                                     </div>
                                  </div>
@@ -403,9 +333,7 @@ function Index({ type, PatientData, ListId }) {
                                           >
                                              Хэд дахь уян зүү
                                           </th>
-                                          <th rowSpan={3}>
-                                             Гуурс тависан талбай
-                                          </th>
+                                          <th rowSpan={3}>Гуурс тависан талбай</th>
                                           <th
                                              rowSpan={3}
                                              className="rotate-180"
@@ -417,10 +345,7 @@ function Index({ type, PatientData, ListId }) {
                                           >
                                              Гуурс сольсон шалтгаан
                                           </th>
-                                          <th colSpan={11}>
-                                             Судасны гуурсны халдварын шинж
-                                             тэмдэгээр тандах хуудас
-                                          </th>
+                                          <th colSpan={11}>Судасны гуурсны халдварын шинж тэмдэгээр тандах хуудас</th>
                                           <th colSpan={4}>Авсан арга хэмжээ</th>
                                           <td
                                              rowSpan={3}
@@ -619,149 +544,53 @@ function Index({ type, PatientData, ListId }) {
                                        {element?.map((data, index) => {
                                           return (
                                              <tr key={index}>
-                                                <th>
-                                                   {moment(
-                                                      data.createdAt
-                                                   ).format('MM/DD')}
-                                                </th>
-                                                <th>
-                                                   {moment(
-                                                      data.createdAt
-                                                   ).format('HH:mm')}
-                                                </th>
+                                                <th>{moment(data.createdAt).format('MM/DD')}</th>
+                                                <th>{moment(data.createdAt).format('HH:mm')}</th>
                                                 <th>{idx * 7 + index + 1}</th>
                                                 <th>
-                                                   {tubeAreaOptions?.map(
-                                                      (obj) => {
-                                                         if (
-                                                            obj.value ===
-                                                            data.arm
-                                                         ) {
-                                                            return (
-                                                               <>
-                                                                  {obj.label}
-                                                                  <br />
-                                                               </>
-                                                            );
-                                                         }
+                                                   {tubeAreaOptions?.map((obj) => {
+                                                      if (obj.value === data.arm) {
+                                                         return (
+                                                            <>
+                                                               {obj.label}
+                                                               <br />
+                                                            </>
+                                                         );
                                                       }
-                                                   )}
-                                                   {data.arm === 0 ||
-                                                   data.arm === 1
-                                                      ? tubeChild?.map(
-                                                           (obj) => {
-                                                              if (
-                                                                 obj.value ===
-                                                                 data.arm
-                                                              ) {
-                                                                 return obj.label;
-                                                              }
+                                                   })}
+                                                   {data.arm === 0 || data.arm === 1
+                                                      ? tubeChild?.map((obj) => {
+                                                           if (obj.value === data.arm) {
+                                                              return obj.label;
                                                            }
-                                                        )
+                                                        })
                                                       : null}
-                                                   {data.arm === 2 ||
-                                                   data.arm === 3
-                                                      ? tubeChildFoot?.map(
-                                                           (obj) => {
-                                                              if (
-                                                                 obj.value ===
-                                                                 data.arm
-                                                              ) {
-                                                                 return obj.label;
-                                                              }
+                                                   {data.arm === 2 || data.arm === 3
+                                                      ? tubeChildFoot?.map((obj) => {
+                                                           if (obj.value === data.arm) {
+                                                              return obj.label;
                                                            }
-                                                        )
+                                                        })
                                                       : null}
                                                 </th>
                                                 <th>
-                                                   {tubeChangeReasonOptions?.map(
-                                                      (obj) => {
-                                                         if (
-                                                            obj.value ===
-                                                            data.replacingTube
-                                                         ) {
-                                                            return obj.content;
-                                                         }
+                                                   {tubeChangeReasonOptions?.map((obj) => {
+                                                      if (obj.value === data.replacingTube) {
+                                                         return obj.content;
                                                       }
-                                                   )}
+                                                   })}
                                                 </th>
-                                                <th>
-                                                   {data.isFever ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isSystole ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isPulse ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isUrine ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isSkin ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isFood ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isRed ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isSick ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isInflamed ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isBumpy ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
-                                                <th>
-                                                   {data.isPuss ? (
-                                                      <PlusOutlined />
-                                                   ) : (
-                                                      <MinusOutlined />
-                                                   )}
-                                                </th>
+                                                <th>{data.isFever ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isSystole ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isPulse ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isUrine ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isSkin ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isFood ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isRed ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isSick ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isInflamed ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isBumpy ? <PlusOutlined /> : <MinusOutlined />}</th>
+                                                <th>{data.isPuss ? <PlusOutlined /> : <MinusOutlined />}</th>
                                                 <th>
                                                    {data.tsach ? (
                                                       <>
@@ -781,9 +610,7 @@ function Index({ type, PatientData, ListId }) {
                                                          display: 'inline-block'
                                                       }}
                                                    >
-                                                      {data.detected1
-                                                         ? data.detected1
-                                                         : 'Илрээгүй'}
+                                                      {data.detected1 ? data.detected1 : 'Илрээгүй'}
                                                    </span>
                                                 </th>
                                                 <th>
@@ -805,9 +632,7 @@ function Index({ type, PatientData, ListId }) {
                                                          display: 'inline-block'
                                                       }}
                                                    >
-                                                      {data.detected2
-                                                         ? data.detected2
-                                                         : 'Илрээгүй'}
+                                                      {data.detected2 ? data.detected2 : 'Илрээгүй'}
                                                    </span>
                                                 </th>
                                                 <th>
@@ -829,19 +654,12 @@ function Index({ type, PatientData, ListId }) {
                                                          display: 'inline-block'
                                                       }}
                                                    >
-                                                      {data.detected3
-                                                         ? data.detected3
-                                                         : 'Илрээгүй'}
+                                                      {data.detected3 ? data.detected3 : 'Илрээгүй'}
                                                    </span>
                                                 </th>
                                                 <th>{data.measuresTaken}</th>
                                                 <th>
-                                                   {data.createdLastName?.substring(
-                                                      0,
-                                                      1
-                                                   ) +
-                                                      '.' +
-                                                      data.createdFirstName}
+                                                   {data.createdLastName?.substring(0, 1) + '.' + data.createdFirstName}
                                                 </th>
                                                 <th>{data.scopingName}</th>
                                              </tr>
@@ -850,22 +668,14 @@ function Index({ type, PatientData, ListId }) {
                                     </thead>
                                  </Table>
                                  <div style={{ display: 'grid' }}>
+                                    <span>Тандалтын хуудасыг хөтлөх заавар:</span>
+                                    <span>1. Хэвтсэн өдрөөс гарах өдөр хүртэл өдөрт 2 ээлж хөтлөнө.</span>
                                     <span>
-                                       Тандалтын хуудасыг хөтлөх заавар:
+                                       2. Шинж тэмдэг илэрсэн /+/, илрээгүй /-/, гуурс тавьсан бол /Т/, сольсон /С/,
+                                       авсан /А/, өвдөлттэй /Ө/, гарсан /Г/, бөгөлсөн /Б/ гэж үсгээр товчилж бичнэ.
                                     </span>
                                     <span>
-                                       1. Хэвтсэн өдрөөс гарах өдөр хүртэл өдөрт
-                                       2 ээлж хөтлөнө.
-                                    </span>
-                                    <span>
-                                       2. Шинж тэмдэг илэрсэн /+/, илрээгүй /-/,
-                                       гуурс тавьсан бол /Т/, сольсон /С/, авсан
-                                       /А/, өвдөлттэй /Ө/, гарсан /Г/, бөгөлсөн
-                                       /Б/ гэж үсгээр товчилж бичнэ.
-                                    </span>
-                                    <span>
-                                       3. Шинжилгээ авсан бол /+/, аваагүй /-/,
-                                       эмгэг төрөгч илэрсэн бол нэрийг нь,
+                                       3. Шинжилгээ авсан бол /+/, аваагүй /-/, эмгэг төрөгч илэрсэн бол нэрийг нь,
                                        илрээгүй бол илрээгүй гэж бичнэ.
                                     </span>
                                  </div>
@@ -882,9 +692,7 @@ function Index({ type, PatientData, ListId }) {
             width={'800px'}
             open={isOpen}
             onCancel={() => setIsOpen(false)}
-            onOk={() =>
-               form.validateFields().then((values) => onFinish(values))
-            }
+            onOk={() => form.validateFields().then((values) => onFinish(values))}
             cancelText="Болих"
             okText="Хадгалах"
          >
@@ -1037,10 +845,7 @@ function Index({ type, PatientData, ListId }) {
                </Row>
                <Row justify="space-between" align="middle">
                   <Col span={24}>
-                     <b>
-                        Гуурсны үзүүрээс нян судлалын шинжилгээ авсан эсэх,
-                        илэрсэн үүсгэгч
-                     </b>
+                     <b>Гуурсны үзүүрээс нян судлалын шинжилгээ авсан эсэх, илэрсэн үүсгэгч</b>
                   </Col>
                </Row>
                <Row className="mt-2">
@@ -1060,10 +865,7 @@ function Index({ type, PatientData, ListId }) {
                </Row>
                <Row justify="space-between" align="middle">
                   <Col span={24}>
-                     <b>
-                        Үрэвслийн шингэн идээнээс нян судлалын шинжилгээ авсан
-                        эсэх, илэрсэн үүсгэгч
-                     </b>
+                     <b>Үрэвслийн шингэн идээнээс нян судлалын шинжилгээ авсан эсэх, илэрсэн үүсгэгч</b>
                   </Col>
                </Row>
                <Row className="mt-2">
@@ -1101,10 +903,7 @@ function Index({ type, PatientData, ListId }) {
                <Row className="mt-2">
                   <Col span={24}>
                      <Form.Item label="" name="scopingName" className="mb-2">
-                        <Input
-                           className=""
-                           placeholder="Овог нэр бичнэ Жишээ: А.Болд"
-                        />
+                        <Input className="" placeholder="Овог нэр бичнэ Жишээ: А.Болд" />
                      </Form.Item>
                   </Col>
                </Row>

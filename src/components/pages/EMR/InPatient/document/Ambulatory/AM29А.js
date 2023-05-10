@@ -39,16 +39,10 @@ function AM29A() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-29А
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-29А</span>
                </div>
             </div>
             <div style={{ ...styles.generalText, ...{ display: 'flex' } }}>
@@ -61,12 +55,8 @@ function AM29A() {
                <div style={styles.rowCells}></div>
                <div style={styles.rowCells}></div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  ДЭВТЭЭЛГЭ ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 16 }}>ДЭВТЭЭЛГЭ ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div
@@ -100,21 +90,15 @@ function AM29A() {
             </div>
             <div style={styles.rowStyle}>
                1. Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>
-                  Нэр _______________________________
-               </span>
+               <span style={{ marginLeft: 50 }}>Нэр _______________________________</span>
             </div>
             <div style={styles.rowStyle}>
                2. Нас ______
-               <span style={{ marginLeft: 50 }}>
-                  Хүйс: /зур/ эрэгтэй, эмэгтэй
-               </span>
+               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
             </div>
             <div style={styles.rowStyle}>
                3. Эмчилгээ эхэлсэн _____ он ___ сар ___ өдөр,
-               <span style={{ marginLeft: 20 }}>
-                  Эмчилгээ дууссан он сар өдөр _____ он ___ сар ___ өдөр
-               </span>
+               <span style={{ marginLeft: 20 }}>Эмчилгээ дууссан он сар өдөр _____ он ___ сар ___ өдөр</span>
             </div>
 
             <div style={styles.rowStyle}>
@@ -122,9 +106,7 @@ function AM29A() {
                ___________________________________________________________________________________________________
             </div>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-               <div style={styles.generalText}>
-                  5. Эмчилгээний төрөл ________________
-               </div>
+               <div style={styles.generalText}>5. Эмчилгээний төрөл ________________</div>
                <div
                   style={{
                      display: 'flex',
@@ -151,17 +133,11 @@ function AM29A() {
                   }}
                >
                   <span style={styles.generalText}>6. Ороолт:</span>
-                  <span style={styles.generalText}>
-                     Эмийн бодис: ______________
-                  </span>
-                  <span style={styles.generalText}>
-                     Бэлчир орон: ______________
-                  </span>
+                  <span style={styles.generalText}>Эмийн бодис: ______________</span>
+                  <span style={styles.generalText}>Бэлчир орон: ______________</span>
                </div>
             </div>
-            <div style={styles.rowStyle}>
-               Эмчилгээ хийсэн эмчийн нэр: ___________________________
-            </div>
+            <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ___________________________</div>
             <div style={styles.rowStyle}>
                ...................................................................................................................................................................................................................................................................................
             </div>
@@ -205,9 +181,7 @@ function AM29A() {
                      >
                         Дэвтээлгийн төрөл
                      </td>
-                     <td
-                        style={{ width: 80, textAlign: 'center', fontSize: 12 }}
-                     >
+                     <td style={{ width: 80, textAlign: 'center', fontSize: 12 }}>
                         <span>Хийгдсэн хугацаа</span>
                      </td>
                      <td

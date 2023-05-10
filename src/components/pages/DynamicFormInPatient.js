@@ -22,26 +22,18 @@ function DynamicFormInPatient({ data, forkey, unikey }) {
                            return (
                               <div
                                  className={form.style && `${form.style}`}
-                                 style={
-                                    form.style && { border: '1px solid black' }
-                                 }
+                                 style={form.style && { border: '1px solid black' }}
                               >
                                  <Form.Item
                                     key={index}
                                     label={
                                        form.label && (
                                           <div className="text-start pl-2">
-                                             <p className="font-bold">
-                                                {form.label}
-                                             </p>
+                                             <p className="font-bold">{form.label}</p>
                                           </div>
                                        )
                                     }
-                                    name={[
-                                       unikey,
-                                       forkey.toString(),
-                                       form.label
-                                    ]}
+                                    name={[unikey, forkey.toString(), form.label]}
                                     rules={[{ required: false, message: '' }]}
                                     className="mb-0"
                                     labelCol={{ span: form.labelCol }}
@@ -51,14 +43,8 @@ function DynamicFormInPatient({ data, forkey, unikey }) {
                                        <Radio.Group>
                                           {form.options?.map((el, index) => {
                                              return (
-                                                <div
-                                                   key={index}
-                                                   className={`${el.style}`}
-                                                >
-                                                   <Radio
-                                                      className="pl-1 ml-0"
-                                                      value={el.key}
-                                                   >
+                                                <div key={index} className={`${el.style}`}>
+                                                   <Radio className="pl-1 ml-0" value={el.key}>
                                                       {el.label}
                                                    </Radio>
                                                 </div>
@@ -86,10 +72,7 @@ function DynamicFormInPatient({ data, forkey, unikey }) {
                                        }
                                     }
                                  >
-                                    <div
-                                       key={index}
-                                       className="text-start pl-2"
-                                    >
+                                    <div key={index} className="text-start pl-2">
                                        <p className="font-bold">{form.label}</p>
                                     </div>
                                  </div>
@@ -102,9 +85,7 @@ function DynamicFormInPatient({ data, forkey, unikey }) {
                                  label={
                                     form.label && (
                                        <div className="text-start pl-2">
-                                          <p className="font-bold">
-                                             {form.label}
-                                          </p>
+                                          <p className="font-bold">{form.label}</p>
                                        </div>
                                     )
                                  }

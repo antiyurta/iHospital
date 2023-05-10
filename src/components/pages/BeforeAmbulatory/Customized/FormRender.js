@@ -11,11 +11,7 @@ function FormRender({ form, formOptionIds }) {
             return (
                <div className="rounded-md bg-gray-100 w-max inline-block m-1">
                   <div className="inline-flex p-1">
-                     <Form.Item
-                        label={data.value}
-                        name={data.keyWord}
-                        className="mb-0"
-                     >
+                     <Form.Item label={data.value} name={data.keyWord} className="mb-0">
                         <Input />
                      </Form.Item>
                   </div>
@@ -25,11 +21,7 @@ function FormRender({ form, formOptionIds }) {
             return (
                <div className="rounded-md bg-gray-100 w-max inline-block m-1">
                   <div className="inline-flex p-1">
-                     <Form.Item
-                        label={data.value}
-                        name={data.keyWord}
-                        className="mb-0"
-                     >
+                     <Form.Item label={data.value} name={data.keyWord} className="mb-0">
                         <Checkbox.Group>
                            {data?.options?.map((option, index) => {
                               return (
@@ -54,13 +46,15 @@ function FormRender({ form, formOptionIds }) {
                   <Divider orientation="left" className="text-sm my-2">
                      {form.label}
                   </Divider>
-                  {formOptionIds?.map((optionId, indx) => {
-                     return (
-                        <div key={indx}>
-                           <Render form={form.options} optionId={optionId} />
-                        </div>
-                     );
-                  })}
+                  <div className="flex flex-col gap-3">
+                     {formOptionIds?.map((optionId, indx) => {
+                        return (
+                           <div key={indx}>
+                              <Render form={form.options} optionId={optionId} />
+                           </div>
+                        );
+                     })}
+                  </div>
                </div>
             );
          })}

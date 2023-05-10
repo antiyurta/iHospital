@@ -33,48 +33,26 @@ export default function NurseNote({ PatientId }) {
       <table className="w-full">
          <tbody>
             <tr className="">
-               <th className="font-medium text-xs text-black text-center py-3.5">
-                  Огноо/цаг/
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Систол
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Диастол
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Жин
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Өндөр
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Халуун
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Амьсгал
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  SpO'2
-               </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Пульс
-               </th>
+               <th className="font-medium text-xs text-black text-center py-3.5">Огноо/цаг/</th>
+               <th className="font-medium text-xs text-black text-center border-x">Систол</th>
+               <th className="font-medium text-xs text-black text-center border-x">Диастол</th>
+               <th className="font-medium text-xs text-black text-center border-x">Жин</th>
+               <th className="font-medium text-xs text-black text-center border-x">Өндөр</th>
+               <th className="font-medium text-xs text-black text-center border-x">Халуун</th>
+               <th className="font-medium text-xs text-black text-center border-x">Амьсгал</th>
+               <th className="font-medium text-xs text-black text-center border-x">SpO'2</th>
+               <th className="font-medium text-xs text-black text-center border-x">Пульс</th>
                <th className="font-medium text-xs text-black text-center border-x">
                   <div className="whitespace-normal">Ухаан санаа</div>
                </th>
-               <th className="font-medium text-xs text-black text-center border-x">
-                  Сувилагч
-               </th>
+               <th className="font-medium text-xs text-black text-center border-x">Сувилагч</th>
             </tr>
             {data &&
                data.map((element, index) => (
                   <tr key={index} className="">
                      <td className="text-center ">
                         <p className="p-1 h-7 text-xs border rounded-md text-black">
-                           {element.createdAt
-                              ?.replace(/T/, ' ')
-                              .replace(/\..+/, '')}
+                           {element.createdAt?.replace(/T/, ' ').replace(/\..+/, '')}
                         </p>
                      </td>
                      <td className="text-center ">
@@ -125,8 +103,7 @@ export default function NurseNote({ PatientId }) {
                         <p
                            className="p-1 h-7 text-xs border rounded-md text-black"
                            style={{
-                              backgroundColor:
-                                 element.colorRespiratoryews ?? '#fff'
+                              backgroundColor: element.colorRespiratoryews ?? '#fff'
                            }}
                         >
                            {element.respiratoryRate}
@@ -163,9 +140,7 @@ export default function NurseNote({ PatientId }) {
                         </p>
                      </td>
                      <td className="text-center">
-                        <p className="p-1 h-7 text-xs border rounded-md text-black">
-                           {element.user?.email}
-                        </p>
+                        <p className="p-1 h-7 text-xs border rounded-md text-black">{element.user?.email}</p>
                      </td>
                   </tr>
                ))}

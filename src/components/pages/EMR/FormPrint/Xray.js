@@ -87,10 +87,7 @@ function Xray({ printData, printSize }) {
                      </div>
                   </div>
                </div>
-               <p
-                  className="text-center py-10"
-                  style={{ fontSize: '25px', fontWeight: 'bold' }}
-               >
+               <p className="text-center py-10" style={{ fontSize: '25px', fontWeight: 'bold' }}>
                   {printData?.xrays?.name}
                </p>
                {printData?.inspectionNotes?.map((note, index) => {
@@ -102,10 +99,7 @@ function Xray({ printData, printSize }) {
                      </div>
                   );
                })}
-               <p
-                  className="text-center"
-                  style={{ fontSize: '15px', fontWeight: 'bold' }}
-               >
+               <p className="text-center" style={{ fontSize: '15px', fontWeight: 'bold' }}>
                   Дүгнэлт бичсэн эмч: {printData.employees?.firstName}
                </p>
             </div>

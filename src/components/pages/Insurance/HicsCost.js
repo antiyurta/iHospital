@@ -3,16 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { DefualtGet, Get, Patch, Post, numberToCurrency } from '../../comman';
 import UTable from '../../UTable';
-import {
-   Button,
-   Card,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Select,
-   Table
-} from 'antd';
+import { Button, Card, Form, Input, InputNumber, Modal, Select, Table } from 'antd';
 import Support from './Support';
 import { EditFilled } from '@ant-design/icons';
 const { Option } = Select;
@@ -60,11 +51,7 @@ function HicsCost() {
             endCode: 'A99'
          }
       };
-      const response = await Get(
-         'reference/diagnose/between/code',
-         token,
-         conf
-      );
+      const response = await Get('reference/diagnose/between/code', token, conf);
       console.log(response);
    };
    //
@@ -77,11 +64,7 @@ function HicsCost() {
       setDrgCode(response.data);
    };
    const getInsuranceHicsServiceGroup = async () => {
-      const response = await DefualtGet(
-         'insurance/hics-service-group',
-         token,
-         conf
-      );
+      const response = await DefualtGet('insurance/hics-service-group', token, conf);
       setIhsg(response.data);
    };
    const getICD9 = async () => {
@@ -201,9 +184,7 @@ function HicsCost() {
       var newData = [];
       var oldData = form.getFieldValue('icd10Codes');
       if (oldData) {
-         const dups = codes.filter((code) =>
-            oldData?.some((e) => code.endsWith(e))
-         );
+         const dups = codes.filter((code) => oldData?.some((e) => code.endsWith(e)));
          dups?.map((dup) => {
             oldData?.splice(
                oldData?.findIndex((e) => e === dup),
@@ -222,12 +203,7 @@ function HicsCost() {
             headers: {},
             params: {}
          };
-         const response = await Patch(
-            'hics-cost/' + selectedRowId,
-            token,
-            conf,
-            values
-         );
+         const response = await Patch('hics-cost/' + selectedRowId, token, conf, values);
          console.log(response);
       } else {
          const conf = {
@@ -283,11 +259,7 @@ function HicsCost() {
                showSearch
                placeholder="Тусгай үйлчилгээний төрөл"
                optionFilterProp="children"
-               filterOption={(input, option) =>
-                  (option?.label ?? '')
-                     .toLowerCase()
-                     .includes(input.toLowerCase())
-               }
+               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
                onChange={filterGroupHicsCosts}
                options={ihsg.map((item) => ({
                   label: item.name,
@@ -305,8 +277,7 @@ function HicsCost() {
                   size: 'small',
                   current: meta.page,
                   total: meta.itemCount,
-                  showTotal: (total, range) =>
-                     `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                  showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                   pageSize: meta.limit,
                   showSizeChanger: true,
                   pageSizeOptions: ['5', '10', '20', '50'],
@@ -319,28 +290,21 @@ function HicsCost() {
             title={editMode ? 'Засах' : 'Нэмэх'}
             open={isOpenModal}
             onCancel={() => setIsOpenModal(false)}
-            onOk={() =>
-               form.validateFields().then((values) => onFinish(values))
-            }
+            onOk={() => form.validateFields().then((values) => onFinish(values))}
             confirmLoading={isLoading}
             width={'80%'}
          >
             <Form form={form} layout="vertical">
                <div className="flex flex-wrap">
                   <div className="basis-1/2 p-1">
-                     <Form.Item
-                        label="Тусгай үйлчилгээний төрөл"
-                        name="groupId"
-                     >
+                     <Form.Item label="Тусгай үйлчилгээний төрөл" name="groupId">
                         <Select
                            allowClear
                            showSearch
                            placeholder="Сонгох"
                            optionFilterProp="children"
                            filterOption={(input, option) =>
-                              (option?.children ?? '')
-                                 .toLowerCase()
-                                 .includes(input?.toLowerCase())
+                              (option?.children ?? '').toLowerCase().includes(input?.toLowerCase())
                            }
                         >
                            {ihsg?.map((item, index) => {
@@ -361,9 +325,7 @@ function HicsCost() {
                            placeholder="Сонгох"
                            optionFilterProp="children"
                            filterOption={(input, option) =>
-                              (option?.value ?? '')
-                                 .toLowerCase()
-                                 .includes(input?.toLowerCase())
+                              (option?.value ?? '').toLowerCase().includes(input?.toLowerCase())
                            }
                         >
                            {drgCode?.map((item, index) => {
@@ -413,9 +375,7 @@ function HicsCost() {
                            placeholder="Сонгох"
                            optionFilterProp="children"
                            filterOption={(input, option) =>
-                              (option?.children ?? '')
-                                 .toLowerCase()
-                                 .includes(input?.toLowerCase())
+                              (option?.children ?? '').toLowerCase().includes(input?.toLowerCase())
                            }
                         >
                            {drgType?.map((item, index) => {

@@ -25,11 +25,7 @@ function NursingStats() {
             <EarlyWarning
                PatientId={state?.patientId}
                UsageType={'IN'}
-               ListId={
-                  state?.usageType === 'OUT'
-                     ? state?.appointmentId
-                     : state?.inpatientRequestId
-               }
+               ListId={state?.usageType === 'OUT' ? state?.appointmentId : state?.inpatientRequestId}
                isDoctor={true}
             />
          )

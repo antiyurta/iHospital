@@ -44,11 +44,7 @@ export function ReturnById({ type, id, isOpen }) {
          </Suspense>
       );
    } else if (id === 3) {
-      return (
-         <Suspense fallback={'<div>Loading</div>'}>
-            {type ? <C537M1 /> : <FC537M1 isOpen={isOpen} />}
-         </Suspense>
-      );
+      return <Suspense fallback={'<div>Loading</div>'}>{type ? <C537M1 /> : <FC537M1 isOpen={isOpen} />}</Suspense>;
    }
 }
 
@@ -119,10 +115,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   </div>
                   {filteredOptions?.map((option, index) => {
                      return (
-                        <Button
-                           key={index}
-                           onClick={() => setDocumentId(option.value)}
-                        >
+                        <Button key={index} onClick={() => setDocumentId(option.value)}>
                            {option.label}
                         </Button>
                      );
@@ -138,10 +131,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
       return (
          <div className="grid grid-cols-2 gap-6">
             <div className="grid gap-6">
-               <Input
-                  onChange={(e) => setSearchValueSelect(e.target.value)}
-                  placeholder="Хайх"
-               />
+               <Input onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
                <Table
                   rowKey={'value'}
                   bordered
@@ -221,10 +211,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   dataSource={selectedOptions}
                   pagination={false}
                />
-               <Button
-                  type="primary"
-                  onClick={() => handleClick(selectedOptions)}
-               >
+               <Button type="primary" onClick={() => handleClick(selectedOptions)}>
                   Хадгалах
                </Button>
             </div>

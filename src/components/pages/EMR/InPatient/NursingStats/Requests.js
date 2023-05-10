@@ -68,8 +68,7 @@ function Requests() {
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
             //Оноор бүлэглэх
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
             return r;
          }, Object.create(null));
@@ -154,31 +153,19 @@ function Requests() {
                {Object.entries(data).map(([key, value], index) => {
                   return (
                      <Panel header={`${key} Он`} key={index}>
-                        <Collapse
-                           collapsible="header"
-                           accordion
-                           onChange={test}
-                        >
+                        <Collapse collapsible="header" accordion onChange={test}>
                            {value?.map((item, index) => {
                               return (
                                  <Panel
                                     header={
                                        <div className="row-auto text-white">
-                                          <span className="font-bold">
-                                             {item.structure?.name}
-                                          </span>
+                                          <span className="font-bold">{item.structure?.name}</span>
                                           <span>&nbsp;</span>
                                           <span>{item.employee?.lastName}</span>
                                           <span>&nbsp;</span>
-                                          <span>
-                                             {item.employee?.firstName}
-                                          </span>
+                                          <span>{item.employee?.firstName}</span>
                                           <span>&nbsp;</span>
-                                          <span>
-                                             {moment(item.createdAt).format(
-                                                'YYYY-MM-DD HH:mm'
-                                             )}
-                                          </span>
+                                          <span>{moment(item.createdAt).format('YYYY-MM-DD HH:mm')}</span>
                                        </div>
                                     }
                                     key={value[index].id}

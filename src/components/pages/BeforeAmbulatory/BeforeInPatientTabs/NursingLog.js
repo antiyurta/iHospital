@@ -120,9 +120,7 @@ function NursingLog() {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <CheckCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Хэрэгжүүлсэн
                   </span>
                </div>
@@ -131,9 +129,7 @@ function NursingLog() {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <WarningOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <WarningOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Цуцалсан
                   </span>
                </div>
@@ -142,9 +138,7 @@ function NursingLog() {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <CloseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CloseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Зогсоосон
                   </span>
                </div>
@@ -153,19 +147,13 @@ function NursingLog() {
                   role="alert"
                >
                   <span className="font-medium mx-2">
-                     <PauseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <PauseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Татгалзсан
                   </span>
                </div>
             </div>
             <div className="float-right">
-               <Button
-                  title="Сэргээх"
-                  type="primary"
-                  onClick={() => getLogList()}
-               >
+               <Button title="Сэргээх" type="primary" onClick={() => getLogList()}>
                   <ReloadOutlined spin={spinner} />
                </Button>
             </div>

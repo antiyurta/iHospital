@@ -10,10 +10,7 @@ function Contact({ form }) {
             {(fields, { add, remove }) => (
                <>
                   {fields.map(({ key, name, ...restField }) => (
-                     <div
-                        key={key}
-                        className="rounded-md bg-gray-100 w-full inline-block m-1"
-                     >
+                     <div key={key} className="rounded-md bg-gray-100 w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               {...restField}
@@ -47,11 +44,7 @@ function Contact({ form }) {
                                           return Promise.reject(new Error(''));
                                        } else {
                                           if (registerNumber.length < 10) {
-                                             return Promise.reject(
-                                                new Error(
-                                                   'Хамгийн багадаа 10 үсэг'
-                                                )
-                                             );
+                                             return Promise.reject(new Error('Хамгийн багадаа 10 үсэг'));
                                           }
                                        }
                                     }
@@ -114,13 +107,7 @@ function Contact({ form }) {
                               </Select>
                            </Form.Item>
                            <Form.Item className="mb-0">
-                              <Button
-                                 type="primary"
-                                 danger
-                                 ghost
-                                 className="w-full"
-                                 onClick={() => remove(name)}
-                              >
+                              <Button type="primary" danger ghost className="w-full" onClick={() => remove(name)}>
                                  Хасах
                               </Button>
                            </Form.Item>
@@ -128,11 +115,7 @@ function Contact({ form }) {
                      </div>
                   ))}
                   <Form.Item>
-                     <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        icon={<PlusOutlined />}
-                     >
+                     <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />}>
                         Нэмэх
                      </Button>
                   </Form.Item>

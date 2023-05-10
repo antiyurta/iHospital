@@ -1,16 +1,4 @@
-import {
-   Badge,
-   Button,
-   Card,
-   Form,
-   Input,
-   message,
-   Modal,
-   Select,
-   Space,
-   Switch,
-   Upload
-} from 'antd';
+import { Badge, Button, Card, Form, Input, message, Modal, Select, Space, Switch, Upload } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -133,9 +121,7 @@ function EquipmentList() {
       return fileURL;
    };
    const filteredEquipment = equipments.filter((equipment) => {
-      return equipment.equipmentNameEn
-         .toLowerCase()
-         .includes(searchField.toLowerCase());
+      return equipment.equipmentNameEn.toLowerCase().includes(searchField.toLowerCase());
    });
    const getBase64 = (img, callback) => {
       const reader = new FileReader();
@@ -143,8 +129,7 @@ function EquipmentList() {
       reader.readAsDataURL(img);
    };
    const beforeUpload = (file) => {
-      const isJpgOrPng =
-         file.type === 'image/jpeg' || file.type === 'image/png';
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJpgOrPng) {
          message.error('JPEG эсвэл PNG');
       }
@@ -192,11 +177,7 @@ function EquipmentList() {
          <div className="flex flex-wrap">
             <div className="w-full md:w-1/2">
                <div className="mx-3">
-                  <Input
-                     placeholder="Нэрээр хайх"
-                     allowClear
-                     onChange={(e) => setSearchField(e.target.value)}
-                  />
+                  <Input placeholder="Нэрээр хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
                </div>
             </div>
             <div className="w-full md:w-1/2">
@@ -210,10 +191,7 @@ function EquipmentList() {
          <div className="flex flex-wrap">
             {filteredEquipment?.map((equipment, index) => {
                return (
-                  <div
-                     key={index}
-                     className="w-full md:w-1/2 lg:w-4/12 xl:w-3/12 p-4"
-                  >
+                  <div key={index} className="w-full md:w-1/2 lg:w-4/12 xl:w-3/12 p-4">
                      <Badge.Ribbon
                         text={equipment.isActive ? 'Идэвхтэй' : 'Идэвхгүй'}
                         color={equipment.isActive ? 'green' : 'red'}
@@ -231,28 +209,16 @@ function EquipmentList() {
                               />
                            }
                            actions={[
-                              <SettingOutlined
-                                 key="setting"
-                                 onClick={() => setIsOpenReference(true)}
-                              />,
-                              <EditOutlined
-                                 onClick={() => editModal(equipment)}
-                                 key="edit"
-                              />
+                              <SettingOutlined key="setting" onClick={() => setIsOpenReference(true)} />,
+                              <EditOutlined onClick={() => editModal(equipment)} key="edit" />
                            ]}
                         >
                            <Meta
                               title={
                                  <>
-                                    <div className="block">
-                                       {equipment.equipmentNameMn}
-                                    </div>
-                                    <div className="block">
-                                       {equipment.equipmentNameEn}
-                                    </div>
-                                    <div className="block">
-                                       {equipment.serialNumber}
-                                    </div>
+                                    <div className="block">{equipment.equipmentNameMn}</div>
+                                    <div className="block">{equipment.equipmentNameEn}</div>
+                                    <div className="block">{equipment.serialNumber}</div>
                                  </>
                               }
                               description={
@@ -263,13 +229,7 @@ function EquipmentList() {
                                     </div>
                                     <div className="block">
                                        <label>Сорьц төрөл:</label>
-                                       {
-                                          specimenOptions.find(
-                                             (element) =>
-                                                element.value ===
-                                                equipment.specimen
-                                          ).label
-                                       }
+                                       {specimenOptions.find((element) => element.value === equipment.specimen).label}
                                     </div>
                                  </>
                               }
@@ -288,23 +248,13 @@ function EquipmentList() {
                form.validateFields().then(async (values) => {
                   values['photoId'] = photoId;
                   if (editMode) {
-                     const response = await Patch(
-                        'equipment/' + id,
-                        token,
-                        config,
-                        values
-                     );
+                     const response = await Patch('equipment/' + id, token, config, values);
                      if (response === 200) {
                         setIsOpenModal(false);
                         getEquipments();
                      }
                   } else {
-                     const response = await Post(
-                        'equipment',
-                        token,
-                        config,
-                        values
-                     );
+                     const response = await Post('equipment', token, config, values);
                      if (response === 201) {
                         setIsOpenModal(false);
                         getEquipments();
@@ -384,55 +334,30 @@ function EquipmentList() {
                </div>
                <div className="flex flex-wrap">
                   <div className="basis-1/2 p-1">
-                     <Form.Item
-                        label="Сорьц төрөл"
-                        name="specimen"
-                        rules={basisRule}
-                     >
+                     <Form.Item label="Сорьц төрөл" name="specimen" rules={basisRule}>
                         <Select options={specimenOptions} />
                      </Form.Item>
                   </div>
                   <div className="basis-1/2 p-1">
-                     <Form.Item
-                        label="Төхөөрөмжийн төрөл"
-                        name="type"
-                        rules={basisRule}
-                     >
+                     <Form.Item label="Төхөөрөмжийн төрөл" name="type" rules={basisRule}>
                         <Select options={types} />
                      </Form.Item>
                   </div>
                   <div className="basis-1/2 p-1">
-                     <Form.Item
-                        label="Идэвхтэй эсэх"
-                        name="isActive"
-                        rules={basisRule}
-                        valuePropName="checked"
-                     >
-                        <Switch
-                           className="bg-sky-700"
-                           checkedChildren="Тийм"
-                           unCheckedChildren="Үгүй"
-                        />
+                     <Form.Item label="Идэвхтэй эсэх" name="isActive" rules={basisRule} valuePropName="checked">
+                        <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                      </Form.Item>
                   </div>
                </div>
             </Form>
          </Modal>
-         <Modal
-            title="Лавлах нэгжүүд"
-            open={isOpenReference}
-            onCancel={() => setIsOpenReference(false)}
-         >
+         <Modal title="Лавлах нэгжүүд" open={isOpenReference} onCancel={() => setIsOpenReference(false)}>
             <Form form={referenceForm}>
                <Form.List name="reference">
                   {(fields, { add, remove }) => (
                      <>
                         {fields.map(({ key, name, ...restField }) => (
-                           <Space
-                              key={key}
-                              style={{ display: 'flex' }}
-                              align="baseline"
-                           >
+                           <Space key={key} style={{ display: 'flex' }} align="baseline">
                               <Form.Item
                                  {...restField}
                                  label="Нэр"
@@ -447,22 +372,14 @@ function EquipmentList() {
                                  <Input />
                               </Form.Item>
                               <Form.Item>
-                                 <Button
-                                    onClick={() => remove(name)}
-                                    icon={<MinusCircleOutlined />}
-                                 >
+                                 <Button onClick={() => remove(name)} icon={<MinusCircleOutlined />}>
                                     Add field
                                  </Button>
                               </Form.Item>
                            </Space>
                         ))}
                         <Form.Item>
-                           <Button
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                           >
+                           <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                               Нэмэх
                            </Button>
                         </Form.Item>

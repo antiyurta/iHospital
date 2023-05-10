@@ -310,11 +310,7 @@ input[type='number'] {
    display: flex !important;
 }
 
-.ant-segmented-sm
-   > .ant-segmented-group
-   > .ant-segmented-item
-   > .ant-segmented-item-label
-   > .ant-segmented-item-icon {
+.ant-segmented-sm > .ant-segmented-group > .ant-segmented-item > .ant-segmented-item-label > .ant-segmented-item-icon {
    line-height: 18px !important;
    display: inline !important;
 }
@@ -368,13 +364,7 @@ input::-webkit-inner-spin-button {
    background-color: #2d8cff !important;
 }
 
-.ant-table.ant-table-bordered
-   > .ant-table-container
-   > .ant-table-content
-   > table
-   > tbody
-   > tr
-   > td {
+.ant-table.ant-table-bordered > .ant-table-container > .ant-table-content > table > tbody > tr > td {
    white-space: pre-wrap !important;
 }
 

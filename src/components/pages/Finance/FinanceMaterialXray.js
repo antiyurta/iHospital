@@ -69,12 +69,7 @@ function FinanceMaterialXray() {
       data.serviceType = 1;
       data.serviceId = selectedXray;
       data.materialId = parseInt(selectedMaterial);
-      const response = await Post(
-         `service/service-material`,
-         token,
-         config,
-         data
-      );
+      const response = await Post(`service/service-material`, token, config, data);
       if (response === 201) {
          getXrayMaterial();
          handleCancel();
@@ -84,23 +79,14 @@ function FinanceMaterialXray() {
       data.serviceType = 1;
       data.serviceId = selectedXray;
       data.materialId = parseInt(selectedMaterial);
-      const response = await Patch(
-         `service/service-material/${selectedXrayMaterial.id}`,
-         token,
-         config,
-         data
-      );
+      const response = await Patch(`service/service-material/${selectedXrayMaterial.id}`, token, config, data);
       if (response === 200) {
          getXrayMaterial();
          handleCancel();
       }
    };
    const deleteItem = async (id) => {
-      const response = await Delete(
-         `service/service-material/${parseInt(id)}`,
-         token,
-         config
-      );
+      const response = await Delete(`service/service-material/${parseInt(id)}`, token, config);
       console.log('RES', response);
       if (response === 200) {
          getXrayMaterial();
@@ -113,11 +99,7 @@ function FinanceMaterialXray() {
          className="header-solid max-h-max rounded-md"
          extra={
             <>
-               <Button
-                  className="mx-1"
-                  type="primary"
-                  onClick={() => showModal('', 'add')}
-               >
+               <Button className="mx-1" type="primary" onClick={() => showModal('', 'add')}>
                   Нэмэх
                </Button>
             </>
@@ -125,11 +107,7 @@ function FinanceMaterialXray() {
       >
          <div>
             <div className="table-responsive" id="style-8">
-               <Table
-                  bordered
-                  className="ant-border-space"
-                  style={{ width: '100%' }}
-               >
+               <Table bordered className="ant-border-space" style={{ width: '100%' }}>
                   <thead className="ant-table-thead bg-slate-200">
                      <tr>
                         <th>Оношилгоо</th>
@@ -200,13 +178,9 @@ function FinanceMaterialXray() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {xrays?.map((el, index) => {
@@ -235,13 +209,9 @@ function FinanceMaterialXray() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {materials?.map((el, index) => {

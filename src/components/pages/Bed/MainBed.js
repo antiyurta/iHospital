@@ -134,10 +134,7 @@ const MainBed = () => {
       const response = await Get('organization/structure', token, config);
       if (response.data.length != 0) {
          response.data.map((el, index) => {
-            setStructures((structures) => [
-               ...structures,
-               { label: el.name, key: el.id }
-            ]);
+            setStructures((structures) => [...structures, { label: el.name, key: el.id }]);
          });
       }
    };
@@ -145,11 +142,7 @@ const MainBed = () => {
    const getStructureById = async (structure_id) => {
       config.params.startDate = null;
       config.params.endDate = null;
-      const response = await Get(
-         `organization/structure/${structure_id}`,
-         token,
-         config
-      );
+      const response = await Get(`organization/structure/${structure_id}`, token, config);
       // console.log("response getStructureById", response);
       if (response != '') {
          setSelectedStructureData(response);

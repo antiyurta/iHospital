@@ -59,9 +59,7 @@ function Page3() {
                   <Table bordered className="document">
                      <thead>
                         <tr>
-                           <th className="text-center bg-gray-300">
-                              Нугас, нуруу
-                           </th>
+                           <th className="text-center bg-gray-300">Нугас, нуруу</th>
                         </tr>
                         <tr>
                            <td>

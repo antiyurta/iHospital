@@ -5,12 +5,12 @@ import InspectionHistory from './InspectionHistory';
 import PaymentHistory from './PaymentHistory';
 import InsuranceHistory from './InsuranceHistory';
 import { OrderedListOutlined } from '@ant-design/icons';
-function Index({ PatientId }) {
+function Index({ PatientId, RegisterNumber }) {
    const [filter, setFilter] = useState(Number);
    // return <Tabs type="card" items={supportMenu} />
    const items = [
       {
-         children: <InsuranceHistory patientId={PatientId} />
+         children: <InsuranceHistory registerNumber={RegisterNumber} />
       },
       {
          children: <PaymentHistory patientId={PatientId} />

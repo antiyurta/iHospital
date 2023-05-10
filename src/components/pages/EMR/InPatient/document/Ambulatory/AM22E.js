@@ -68,24 +68,14 @@ function AM22E() {
                      >
                         Эмнэлгийн нэр: ____________________
                      </span>
-                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                        АМ-22Е
-                     </span>
+                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-22Е</span>
                   </div>
                </div>
-               <div
-                  style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}
-               >
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     ХОНОГИЙН ШЭЭСЭНД УУРАГ ТОДОРХОЙЛОХ
-                  </span>
+               <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>ХОНОГИЙН ШЭЭСЭНД УУРАГ ТОДОРХОЙЛОХ</span>
                </div>
-               <span style={{ fontSize: 12 }}>
-                  Эцэг \эх\ийн нэр _________________________
-               </span>
-               <div style={{ fontSize: 12 }}>
-                  Нэр _____________________________
-               </div>
+               <span style={{ fontSize: 12 }}>Эцэг \эх\ийн нэр _________________________</span>
+               <div style={{ fontSize: 12 }}>Нэр _____________________________</div>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex' }}>
                      <span style={{ marginRight: 5 }}>РД </span>
@@ -99,35 +89,21 @@ function AM22E() {
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
-                     <span style={{ marginLeft: 10 }}>
-                        Нас__________Хүйс: /зур/ эр, эм
-                     </span>
+                     <span style={{ marginLeft: 10 }}>Нас__________Хүйс: /зур/ эр, эм</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>
-                  _____ он ____ сар _____ өдөр ____ цаг ______ минут
-               </div>
+               <div style={styles.rowStyle}>_____ он ____ сар _____ өдөр ____ цаг ______ минут</div>
                <Table bordered className="document" style={{ marginTop: 20 }}>
                   <tbody>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '40%' } }}
-                        >
-                           Хоногийн шээсний хэмжээ, мл
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Хоног
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '40%' } }}>Хоногийн шээсний хэмжээ, мл</td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Хоног</td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -141,9 +117,7 @@ function AM22E() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Лаборантын нэр ____________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Лаборантын нэр ____________________</span>
                </div>
                <div
                   style={{
@@ -151,23 +125,13 @@ function AM22E() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Эмчийн нэр _________________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Эмчийн нэр _________________________</span>
                </div>
-               <div
-                  style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}
-               >
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     ШИНЖИЛГЭЭ №
-                  </span>
+               <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>ШИНЖИЛГЭЭ №</span>
                </div>
-               <span style={{ fontSize: 12 }}>
-                  Эцэг \эх\ийн нэр _________________________
-               </span>
-               <div style={{ fontSize: 12 }}>
-                  Нэр _____________________________
-               </div>
+               <span style={{ fontSize: 12 }}>Эцэг \эх\ийн нэр _________________________</span>
+               <div style={{ fontSize: 12 }}>Нэр _____________________________</div>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex' }}>
                      <span style={{ marginRight: 5 }}>РД </span>
@@ -181,42 +145,24 @@ function AM22E() {
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
-                     <span style={{ marginLeft: 10 }}>
-                        Нас__________Хүйс: /зур/ эр, эм
-                     </span>
+                     <span style={{ marginLeft: 10 }}>Нас__________Хүйс: /зур/ эр, эм</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>
-                  _____ он ____ сар _____ өдөр ____ цаг ______ минут
-               </div>
+               <div style={styles.rowStyle}>_____ он ____ сар _____ өдөр ____ цаг ______ минут</div>
 
                <Table bordered className="document" style={{ marginTop: 20 }}>
                   <tbody>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '40%' } }}
-                        >
-                           Шинжлэгдэхүүн
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Лавлах
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '40%' } }}>Шинжлэгдэхүүн</td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Лавлах</td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Хариу
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Хариу</td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -225,9 +171,7 @@ function AM22E() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -236,9 +180,7 @@ function AM22E() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -247,9 +189,7 @@ function AM22E() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -258,9 +198,7 @@ function AM22E() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -269,9 +207,7 @@ function AM22E() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -280,9 +216,7 @@ function AM22E() {
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ height: 20 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ height: 20 } }}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
@@ -298,9 +232,7 @@ function AM22E() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Лаборантын нэр ____________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Лаборантын нэр ____________________</span>
                </div>
             </div>
          </div>

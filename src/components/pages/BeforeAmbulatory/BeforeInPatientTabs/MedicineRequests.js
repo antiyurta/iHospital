@@ -37,12 +37,7 @@ function MedicineRequests({ PatientId, ListId }) {
       } else {
          data['state'] = 'refused';
       }
-      const response = await Patch(
-         'medicine-plan/' + requestId,
-         token,
-         conf,
-         data
-      );
+      const response = await Patch('medicine-plan/' + requestId, token, conf, data);
       if (response === 200) {
          getMedicineRequests(1, 15, start, end);
       }
@@ -55,9 +50,7 @@ function MedicineRequests({ PatientId, ListId }) {
                key: 1,
                label: (
                   <p className="bg-[#5cb85c] text-white p-1">
-                     <CheckCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Хэрэгжүүлсэн
                   </p>
                )
@@ -66,9 +59,7 @@ function MedicineRequests({ PatientId, ListId }) {
                key: 2,
                label: (
                   <p className="bg-[#f0ad4e] text-white p-1">
-                     <WarningOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <WarningOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Цуцалсан
                   </p>
                )
@@ -77,9 +68,7 @@ function MedicineRequests({ PatientId, ListId }) {
                key: 3,
                label: (
                   <p className="bg-[#dd4b39] text-white p-1">
-                     <CloseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CloseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Зогсоосон
                   </p>
                )
@@ -88,9 +77,7 @@ function MedicineRequests({ PatientId, ListId }) {
                key: 4,
                label: (
                   <p className="bg-[#5bc0de] text-white p-1">
-                     <PauseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <PauseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Татгалзсан
                   </p>
                )
@@ -208,9 +195,7 @@ function MedicineRequests({ PatientId, ListId }) {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <EditOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <EditOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Төлөв сонгох
                   </span>
                </div>
@@ -219,9 +204,7 @@ function MedicineRequests({ PatientId, ListId }) {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <CheckCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Хэрэгжүүлсэн
                   </span>
                </div>
@@ -230,9 +213,7 @@ function MedicineRequests({ PatientId, ListId }) {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <WarningOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <WarningOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Цуцалсан
                   </span>
                </div>
@@ -241,9 +222,7 @@ function MedicineRequests({ PatientId, ListId }) {
                   role="alert"
                >
                   <span className="font-medium mx-1">
-                     <CloseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <CloseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Зогсоосон
                   </span>
                </div>
@@ -252,19 +231,13 @@ function MedicineRequests({ PatientId, ListId }) {
                   role="alert"
                >
                   <span className="font-medium mx-2">
-                     <PauseCircleOutlined
-                        style={{ marginTop: '-2px', marginRight: 4 }}
-                     />
+                     <PauseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
                      Татгалзсан
                   </span>
                </div>
             </div>
             <div className="float-right">
-               <Button
-                  title="Сэргээх"
-                  type="primary"
-                  onClick={() => getMedicineRequests(1, 20, start, end)}
-               >
+               <Button title="Сэргээх" type="primary" onClick={() => getMedicineRequests(1, 20, start, end)}>
                   <ReloadOutlined spin={spinner} />
                </Button>
             </div>
@@ -286,8 +259,7 @@ function MedicineRequests({ PatientId, ListId }) {
                   pageSize: 20,
                   total: meta.itemCount,
                   current: meta.page,
-                  onChange: (page, pageSize) =>
-                     getMedicineRequests(page, pageSize, start, end)
+                  onChange: (page, pageSize) => getMedicineRequests(page, pageSize, start, end)
                }}
             />
          </div>

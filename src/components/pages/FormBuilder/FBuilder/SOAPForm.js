@@ -1,16 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Collapse,
-   Divider,
-   Form,
-   Input,
-   message,
-   Modal,
-   Popconfirm,
-   Select
-} from 'antd';
+import { Button, Card, Collapse, Divider, Form, Input, message, Modal, Popconfirm, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
@@ -52,10 +41,7 @@ function SOAPForm({ docType }) {
       newForm['name'] = form.name;
       newForm['title'] = form.title;
       newForm['formId'] = form.formId;
-      if (
-         form.formItem.conclusion.length > 0 &&
-         form.formItem.advice.length > 0
-      ) {
+      if (form.formItem.conclusion.length > 0 && form.formItem.advice.length > 0) {
          newForm['conclusion'] = form.formItem.conclusion;
          newForm['advice'] = form.formItem.advice;
          setType(1);
@@ -86,9 +72,7 @@ function SOAPForm({ docType }) {
       });
       setCabinets(response.data);
    };
-   const filteredCabinets = cabinets.filter(
-      (cabinet) => cabinet.parentId === cabinetFilterValue
-   );
+   const filteredCabinets = cabinets.filter((cabinet) => cabinet.parentId === cabinetFilterValue);
    //
    const typeSelectData = [
       {
@@ -199,20 +183,15 @@ function SOAPForm({ docType }) {
       }
 
       if (editMode) {
-         const response = await Patch(
-            'emr/inspection-form/' + id,
-            token,
-            config,
-            {
-               structureId: values.structureId,
-               cabinetId: values.cabinetId,
-               formId: values.formId,
-               usageType: docType,
-               name: values.name,
-               title: values.title,
-               formItems: data
-            }
-         );
+         const response = await Patch('emr/inspection-form/' + id, token, config, {
+            structureId: values.structureId,
+            cabinetId: values.cabinetId,
+            formId: values.formId,
+            usageType: docType,
+            name: values.name,
+            title: values.title,
+            formItems: data
+         });
          if (response === 200) {
             setIsSOAPModal(false);
             getSOAPForms();
@@ -236,13 +215,7 @@ function SOAPForm({ docType }) {
    const HandleChangeTest = (panelName, optionName, name) => {
       console.log(panelName, optionName, name);
       const formData = SOAPForm.getFieldsValue();
-      const type = SOAPForm.getFieldValue([
-         panelName,
-         optionName,
-         'options',
-         name,
-         'type'
-      ]);
+      const type = SOAPForm.getFieldValue([panelName, optionName, 'options', name, 'type']);
       console.log(type);
       if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
          formData[panelName][optionName].options[name] = {
@@ -297,28 +270,16 @@ function SOAPForm({ docType }) {
             <div className="flex flex-wrap">
                <div className="w-full md:w-1/2">
                   <div className="mx-3">
-                     <Input
-                        placeholder="Хайх"
-                        allowClear
-                        onChange={(e) => setSearchField(e.target.value)}
-                     />
+                     <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
                   </div>
                </div>
                <div className="w-full md:w-1/2">
                   <div className="mx-3">
-                     <Button
-                        type="primary"
-                        htmlType="submit"
-                        onClick={() => showModal(0)}
-                     >
+                     <Button type="primary" htmlType="submit" onClick={() => showModal(0)}>
                         Нэмэх
                      </Button>
                      {docType === 'OUT' && (
-                        <Button
-                           className="ml-2"
-                           htmlType="submit"
-                           onClick={() => showModal(1)}
-                        >
+                        <Button className="ml-2" htmlType="submit" onClick={() => showModal(1)}>
                            EXO Нэмэх
                         </Button>
                      )}
@@ -386,36 +347,23 @@ function SOAPForm({ docType }) {
             width="70%"
          >
             <Form form={SOAPForm}>
-               <div
-                  className="rounded-md"
-                  style={{ backgroundColor: '#fafafa' }}
-               >
+               <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
                   <div className="p-2">
                      <div className="flex flex-wrap">
                         {docType === 'OUT' ? (
                            <>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="Тасаг"
-                                    name="structureId"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="Тасаг" name="structureId" rules={basisRule}>
                                     <Select
                                        notFoundContent="Дата байхгүй"
                                        onChange={(e) => {
                                           setCabinetFilterValue(e);
-                                          SOAPForm.setFieldValue(
-                                             'cabinetId',
-                                             null
-                                          );
+                                          SOAPForm.setFieldValue('cabinetId', null);
                                        }}
                                     >
                                        {structures.map((structure, index) => {
                                           return (
-                                             <Option
-                                                key={index}
-                                                value={structure.id}
-                                             >
+                                             <Option key={index} value={structure.id}>
                                                 {structure.name}
                                              </Option>
                                           );
@@ -424,42 +372,25 @@ function SOAPForm({ docType }) {
                                  </Form.Item>
                               </div>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="Кабинэт"
-                                    name="cabinetId"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="Кабинэт" name="cabinetId" rules={basisRule}>
                                     <Select>
-                                       {filteredCabinets.map(
-                                          (cabinet, index) => {
-                                             return (
-                                                <Option
-                                                   key={index}
-                                                   value={cabinet.id}
-                                                >
-                                                   {cabinet.name}
-                                                </Option>
-                                             );
-                                          }
-                                       )}
+                                       {filteredCabinets.map((cabinet, index) => {
+                                          return (
+                                             <Option key={index} value={cabinet.id}>
+                                                {cabinet.name}
+                                             </Option>
+                                          );
+                                       })}
                                     </Select>
                                  </Form.Item>
                               </div>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="SOAP нэр"
-                                    name="name"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="SOAP нэр" name="name" rules={basisRule}>
                                     <Input />
                                  </Form.Item>
                               </div>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="SOAP толгой"
-                                    name="title"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="SOAP толгой" name="title" rules={basisRule}>
                                     <TextArea />
                                  </Form.Item>
                               </div>
@@ -467,27 +398,17 @@ function SOAPForm({ docType }) {
                         ) : (
                            <>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="Тасаг"
-                                    name="structureId"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="Тасаг" name="structureId" rules={basisRule}>
                                     <Select
                                        notFoundContent="Дата байхгүй"
                                        onChange={(e) => {
                                           setCabinetFilterValue(e);
-                                          SOAPForm.setFieldValue(
-                                             'cabinetId',
-                                             null
-                                          );
+                                          SOAPForm.setFieldValue('cabinetId', null);
                                        }}
                                     >
                                        {structures.map((structure, index) => {
                                           return (
-                                             <Option
-                                                key={index}
-                                                value={structure.id}
-                                             >
+                                             <Option key={index} value={structure.id}>
                                                 {structure.name}
                                              </Option>
                                           );
@@ -496,30 +417,16 @@ function SOAPForm({ docType }) {
                                  </Form.Item>
                               </div>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="SOAP нэр"
-                                    name="name"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="SOAP нэр" name="name" rules={basisRule}>
                                     <Input />
                                  </Form.Item>
                               </div>
                               <div className="w-full md:w-1/2 p-1">
-                                 <Form.Item
-                                    label="Хэлбэр"
-                                    name="formId"
-                                    rules={basisRule}
-                                 >
+                                 <Form.Item label="Хэлбэр" name="formId" rules={basisRule}>
                                     <Select>
-                                       <Option value={1}>
-                                          Дотрын эмчийн үзлэг
-                                       </Option>
-                                       <Option value={2}>
-                                          Хүүхдийн эмчийн үзлэг
-                                       </Option>
-                                       <Option value={3}>
-                                          Мэдрэлийн эмчийн үзлэг
-                                       </Option>
+                                       <Option value={1}>Дотрын эмчийн үзлэг</Option>
+                                       <Option value={2}>Хүүхдийн эмчийн үзлэг</Option>
+                                       <Option value={3}>Мэдрэлийн эмчийн үзлэг</Option>
                                     </Select>
                                  </Form.Item>
                               </div>
@@ -535,34 +442,18 @@ function SOAPForm({ docType }) {
                         {type === 0 &&
                            panels.map((panel, index) => {
                               return (
-                                 <Panel
-                                    key={index}
-                                    header={panel.name}
-                                    forceRender={true}
-                                 >
+                                 <Panel key={index} header={panel.name} forceRender={true}>
                                     {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
-                                    <Index2
-                                       options={options}
-                                       namePanel={panel.key}
-                                       handleChange={HandleChangeTest}
-                                    />
+                                    <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                                  </Panel>
                               );
                            })}
                         {type === 1 &&
                            panelsExo.map((panel, index) => {
                               return (
-                                 <Panel
-                                    key={index}
-                                    header={panel.name}
-                                    forceRender={true}
-                                 >
+                                 <Panel key={index} header={panel.name} forceRender={true}>
                                     {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
-                                    <Index2
-                                       options={options}
-                                       namePanel={panel.key}
-                                       handleChange={HandleChangeTest}
-                                    />
+                                    <Index2 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                                  </Panel>
                               );
                            })}
@@ -571,17 +462,9 @@ function SOAPForm({ docType }) {
                      <>
                         {panels.map((panel, index) => {
                            return (
-                              <Panel
-                                 key={index}
-                                 header={panel.name}
-                                 forceRender={true}
-                              >
+                              <Panel key={index} header={panel.name} forceRender={true}>
                                  {/* <Index options={options} namePanel={panel.key} handleChange={HandleChange} /> */}
-                                 <Index3
-                                    options={options}
-                                    namePanel={panel.key}
-                                    handleChange={HandleChangeTest}
-                                 />
+                                 <Index3 options={options} namePanel={panel.key} handleChange={HandleChangeTest} />
                               </Panel>
                            );
                         })}

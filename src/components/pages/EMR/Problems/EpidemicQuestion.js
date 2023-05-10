@@ -5,9 +5,7 @@ export default function EpidemicQuestion(props) {
       <div>
          {props.data?.hasOwnProperty('isTravel') ? (
             <div className="flex">
-               <p className="font-semibold mr-2">
-                  Сүүлийн 3-6 сарын дотор гадны улсад зорчсон уу:
-               </p>
+               <p className="font-semibold mr-2">Сүүлийн 3-6 сарын дотор гадны улсад зорчсон уу:</p>
                <p className="">{props.data['isTravel'] ? 'Тийм' : 'Үгүй'}</p>
             </div>
          ) : null}
@@ -19,9 +17,7 @@ export default function EpidemicQuestion(props) {
          ) : null}
          {props.data?.hasOwnProperty('isUseBlood') ? (
             <div className="flex">
-               <p className="font-semibold mr-2">
-                  Сүүлийн 3-6 сарын дотор цус цусан бүтээгдэхүүн сэлбүүлсэн үү:
-               </p>
+               <p className="font-semibold mr-2">Сүүлийн 3-6 сарын дотор цус цусан бүтээгдэхүүн сэлбүүлсэн үү:</p>
                <p className="">{props.data['isUseBlood'] ? 'Тийм' : 'Үгүй'}</p>
             </div>
          ) : null}

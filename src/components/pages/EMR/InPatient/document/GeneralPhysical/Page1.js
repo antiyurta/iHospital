@@ -19,12 +19,8 @@ function Page1() {
                   </tr>
                   <tr>
                      <td colSpan={3}>
-                        <p className="font-bold text-center">
-                           ЭРҮҮ НҮҮРНИЙ МЭС ЗАСЛЫН ЭМЧИЙН ҮЗЛЭГ
-                        </p>
-                        <p className="font-bold text-center">
-                           ХЭСЭГ ГАЗРЫН ҮЗЛЭГ (St.localis)
-                        </p>
+                        <p className="font-bold text-center">ЭРҮҮ НҮҮРНИЙ МЭС ЗАСЛЫН ЭМЧИЙН ҮЗЛЭГ</p>
+                        <p className="font-bold text-center">ХЭСЭГ ГАЗРЫН ҮЗЛЭГ (St.localis)</p>
                      </td>
                   </tr>
                   <tr>
@@ -42,21 +38,12 @@ function Page1() {
                   <tr>
                      <td>
                         <p>Хамрын амьсгал:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Чөлөөтэй
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={'Томорсон (зүүн, баруун)'}>
                                  Саадтай /баруун, зүүн, 2 талд адил /
                               </Checkbox>
                            </Checkbox.Group>
@@ -64,21 +51,12 @@ function Page1() {
                      </td>
                      <td>
                         <p>Гадна хамрын хэлбэр:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Зөв
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={'Томорсон (зүүн, баруун)'}>
                                  Зөв бус
                               </Checkbox>
                            </Checkbox.Group>
@@ -86,21 +64,12 @@ function Page1() {
                      </td>
                      <td>
                         <p>Тэмтрэхэд:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Эмзэглэлгүй
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={'Томорсон (зүүн, баруун)'}>
                                  Эмзэглэлтэй
                               </Checkbox>
                            </Checkbox.Group>
@@ -110,21 +79,12 @@ function Page1() {
                   <tr>
                      <td>
                         <p>Хамрын үүдэвч:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Хэвийн
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={'Томорсон (зүүн, баруун)'}>
                                  Хэвийн бус
                               </Checkbox>
                            </Checkbox.Group>
@@ -132,21 +92,12 @@ function Page1() {
                      </td>
                      <td>
                         <p>Ерөнхий хөндий:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Чөлөөтэй
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={'Томорсон (зүүн, баруун)'}>
                                  Саадтай
                               </Checkbox>
                            </Checkbox.Group>
@@ -154,21 +105,12 @@ function Page1() {
                      </td>
                      <td>
                         <p>Хамрын таславч:</p>
-                        <Form.Item
-                           name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']}
-                           className="mb-0"
-                        >
+                        <Form.Item name={['Цусны эргэлтийн тогтолцоо', 'Тогшилтоор']} className="mb-0">
                            <Checkbox.Group className="ddd ml-0">
-                              <Checkbox
-                                 className="ml-2 w-full"
-                                 value={'Хэвийн'}
-                              >
+                              <Checkbox className="ml-2 w-full" value={'Хэвийн'}>
                                  Муруйлтгүй
                               </Checkbox>
-                              <Checkbox
-                                 className="w-full"
-                                 value={'Томорсон (зүүн, баруун)'}
-                              >
+                              <Checkbox className="w-full" value={'Томорсон (зүүн, баруун)'}>
                                  Муруйсан
                               </Checkbox>
                            </Checkbox.Group>

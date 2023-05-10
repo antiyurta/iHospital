@@ -1,24 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import {
-   Tabs,
-   Row,
-   Button,
-   Form,
-   Divider,
-   Select,
-   Modal,
-   Result,
-   Spin,
-   Input
-} from 'antd';
+import { Tabs, Row, Button, Form, Divider, Select, Modal, Result, Spin, Input } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-   DelNote,
-   selectCurrentNote,
-   selectCurrentToken,
-   selectCurrentUserId
-} from '../../../../features/authReducer';
+import { DelNote, selectCurrentNote, selectCurrentToken, selectCurrentUserId } from '../../../../features/authReducer';
 import DynamicFormInspection from '../../DynamicFormInspection';
 import HistoryTab from './HistoryTab';
 import { Get, Patch, Post } from '../../../comman';
@@ -64,9 +48,7 @@ function MainPatientHistory({
       return <HistoryTab patientId={patientId} inspection={inspection} />;
    }, []);
    const Tab2Content = useCallback(() => {
-      return (
-         <GeneralInspection patientId={patientId} inspection={inspection} />
-      );
+      return <GeneralInspection patientId={patientId} inspection={inspection} />;
    }, []);
    const DynamicTabContent = useCallback((props) => {
       return (
@@ -108,10 +90,7 @@ function MainPatientHistory({
                         </div>
                         {'pain' in props.data && props.data.pain.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Зовиур
                               </Divider>
                               {props.data['pain'].map((pain, index) => {
@@ -119,9 +98,7 @@ function MainPatientHistory({
                                     <div key={index}>
                                        {inspection === 1 && (
                                           <div>
-                                             <p className="mt-2 font-semibold">
-                                                {pain.label}
-                                             </p>
+                                             <p className="mt-2 font-semibold">{pain.label}</p>
                                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
                                        )}
@@ -137,49 +114,35 @@ function MainPatientHistory({
                               })}
                            </>
                         ) : null}
-                        {'inspection' in props.data &&
-                        props.data.inspection.length > 0 ? (
+                        {'inspection' in props.data && props.data.inspection.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Бодит үзлэг
                               </Divider>
-                              {props.data['inspection'].map(
-                                 (inspection, index) => {
-                                    return (
-                                       <div key={index}>
-                                          {inspection === 1 && (
-                                             <div>
-                                                <p className="mt-2 font-semibold">
-                                                   {inspection.label}
-                                                </p>
-                                                <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                             </div>
-                                          )}
+                              {props.data['inspection'].map((inspection, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
                                           <div>
-                                             <DynamicFormInspection
-                                                data={inspection.options}
-                                                forkey={inspection.label}
-                                                unikey={
-                                                   inspection.inspectionType
-                                                }
-                                             />
+                                             <p className="mt-2 font-semibold">{inspection.label}</p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={inspection.options}
+                                             forkey={inspection.label}
+                                             unikey={inspection.inspectionType}
+                                          />
                                        </div>
-                                    );
-                                 }
-                              )}
+                                    </div>
+                                 );
+                              })}
                            </>
                         ) : null}
-                        {'question' in props.data &&
-                        props.data.question.length > 0 ? (
+                        {'question' in props.data && props.data.question.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Асуумж
                               </Divider>
                               {props.data['question'].map((question, index) => {
@@ -187,9 +150,7 @@ function MainPatientHistory({
                                     <div key={index}>
                                        {inspection === 1 && (
                                           <div>
-                                             <p className="mt-2 font-semibold">
-                                                {question.label}
-                                             </p>
+                                             <p className="mt-2 font-semibold">{question.label}</p>
                                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
                                        )}
@@ -207,10 +168,7 @@ function MainPatientHistory({
                         ) : null}
                         {'plan' in props.data && props.data.plan.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Төлөвлөгөө
                               </Divider>
                               {props.data['plan'].map((plan, index) => {
@@ -218,9 +176,7 @@ function MainPatientHistory({
                                     <div key={index}>
                                        {inspection === 1 && (
                                           <div>
-                                             <p className="mt-2 font-semibold">
-                                                {plan.label}
-                                             </p>
+                                             <p className="mt-2 font-semibold">{plan.label}</p>
                                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
                                        )}
@@ -236,49 +192,35 @@ function MainPatientHistory({
                               })}
                            </>
                         ) : null}
-                        {'conclusion' in props.data &&
-                        props.data.conclusion.length > 0 ? (
+                        {'conclusion' in props.data && props.data.conclusion.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Дүгнэлт
                               </Divider>
-                              {props.data['conclusion'].map(
-                                 (conclusion, index) => {
-                                    return (
-                                       <div key={index}>
-                                          {inspection === 1 && (
-                                             <div>
-                                                <p className="mt-2 font-semibold">
-                                                   {conclusion.label}
-                                                </p>
-                                                <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                             </div>
-                                          )}
+                              {props.data['conclusion'].map((conclusion, index) => {
+                                 return (
+                                    <div key={index}>
+                                       {inspection === 1 && (
                                           <div>
-                                             <DynamicFormInspection
-                                                data={conclusion.options}
-                                                forkey={conclusion.label}
-                                                unikey={
-                                                   conclusion.inspectionType
-                                                }
-                                             />
+                                             <p className="mt-2 font-semibold">{conclusion.label}</p>
+                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
+                                       )}
+                                       <div>
+                                          <DynamicFormInspection
+                                             data={conclusion.options}
+                                             forkey={conclusion.label}
+                                             unikey={conclusion.inspectionType}
+                                          />
                                        </div>
-                                    );
-                                 }
-                              )}
+                                    </div>
+                                 );
+                              })}
                            </>
                         ) : null}
-                        {'advice' in props.data &&
-                        props.data.advice.length > 0 ? (
+                        {'advice' in props.data && props.data.advice.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Зөвлөгөө
                               </Divider>
                               {props.data['advice'].map((advice, index) => {
@@ -286,9 +228,7 @@ function MainPatientHistory({
                                     <div key={index}>
                                        {inspection === 1 && (
                                           <div>
-                                             <p className="mt-2 font-semibold">
-                                                {advice.label}
-                                             </p>
+                                             <p className="mt-2 font-semibold">{advice.label}</p>
                                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
                                        )}
@@ -304,20 +244,12 @@ function MainPatientHistory({
                               })}
                            </>
                         ) : null}
-                        {props.data &&
-                        Inspection != 11 &&
-                        UsageType === 'OUT' ? (
+                        {props.data && Inspection != 11 && UsageType === 'OUT' ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Онош
                               </Divider>
-                              <Diagnose
-                                 handleClick={DiagnoseHandleClick}
-                                 type={0}
-                              />
+                              <Diagnose handleClick={DiagnoseHandleClick} type={0} />
                            </>
                         ) : null}
                      </>
@@ -325,10 +257,7 @@ function MainPatientHistory({
                      <>
                         {'pain' in props.data && props.data.pain.length > 0 ? (
                            <>
-                              <Divider
-                                 orientation="left"
-                                 className="text-sm my-2"
-                              >
+                              <Divider orientation="left" className="text-sm my-2">
                                  Зовиур
                               </Divider>
                               {props.data['pain'].map((pain, index) => {
@@ -336,9 +265,7 @@ function MainPatientHistory({
                                     <div key={index}>
                                        {inspection === 1 && (
                                           <div>
-                                             <p className="mt-2 font-semibold">
-                                                {pain.label}
-                                             </p>
+                                             <p className="mt-2 font-semibold">{pain.label}</p>
                                              <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
                                           </div>
                                        )}
@@ -630,12 +557,7 @@ function MainPatientHistory({
       <>
          {UsageType === 'OUT' && (
             <Spin spinning={loading} tip="Уншиж байна ...">
-               <Tabs
-                  type="card"
-                  destroyInactiveTabPane
-                  defaultActiveKey={activeKey}
-                  items={items}
-               />
+               <Tabs type="card" destroyInactiveTabPane defaultActiveKey={activeKey} items={items} />
             </Spin>
          )}
          {UsageType === 'IN' && (
@@ -645,29 +567,17 @@ function MainPatientHistory({
                insuranceServiceId={insuranceServiceId}
             />
          )}
-         <Modal
-            open={confirmModal}
-            onCancel={() => setConfirmModal(false)}
-            footer={null}
-         >
+         <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>
             <Result
                status="success"
                title="EMR амжилттай хадгалагдлаа та OT руу шилжих үү"
                // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
                extra={
                   <>
-                     <Button
-                        type="primary"
-                        key="console"
-                        onClick={() =>
-                           handleClick({ target: { value: 'OCS' } })
-                        }
-                     >
+                     <Button type="primary" key="console" onClick={() => handleClick({ target: { value: 'OCS' } })}>
                         Тийм
                      </Button>
-                     <Button onClick={() => setConfirmModal(false)}>
-                        Үгүй
-                     </Button>
+                     <Button onClick={() => setConfirmModal(false)}>Үгүй</Button>
                   </>
                }
             />

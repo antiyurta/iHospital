@@ -44,16 +44,10 @@ function AM28А() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-28А
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-28А</span>
                </div>
             </div>
             <div style={{ display: 'flex' }}>
@@ -68,12 +62,8 @@ function AM28А() {
                   <div style={styles.rowCells}></div>
                </div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  ЗҮҮ ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 16 }}>ЗҮҮ ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div>Өрөөний №</div>
@@ -107,24 +97,16 @@ function AM28А() {
             </div>
             <div style={styles.rowStyle}>
                1. Эцэг /эх/-ийн нэр __________________________
-               <span style={{ marginLeft: 50 }}>
-                  Нэр __________________________
-               </span>
+               <span style={{ marginLeft: 50 }}>Нэр __________________________</span>
             </div>
             <div style={styles.rowStyle}>
                2. Нас ______
-               <span style={{ marginLeft: 50 }}>
-                  Хүйс: /зур/ эрэгтэй, эмэгтэй
-               </span>
+               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
             </div>
-            <div style={styles.rowStyle}>
-               3. Үндсэн онош: ________________________________________
-            </div>
+            <div style={styles.rowStyle}>3. Үндсэн онош: ________________________________________</div>
             <div style={styles.rowStyle}>
                4. Эмчилгээний зарчим____________________________________
-               <span style={{ marginLeft: 50 }}>
-                  5. Зүү эмчилгээний төрөл:/зур/
-               </span>
+               <span style={{ marginLeft: 50 }}>5. Зүү эмчилгээний төрөл:/зур/</span>
             </div>
             <div style={styles.rowStyle}>
                ______________________________________________________________
@@ -136,9 +118,7 @@ function AM28А() {
             </div>
             <div style={styles.rowStyle}>
                ______________________________________________________________
-               <span style={{ marginLeft: 50 }}>
-                  Усан зүү _______________ Эмийн бодис
-               </span>
+               <span style={{ marginLeft: 50 }}>Усан зүү _______________ Эмийн бодис</span>
             </div>
             <div style={styles.rowStyle}>
                ______________________________________________________________
@@ -155,31 +135,19 @@ function AM28А() {
             <div style={styles.rowStyle}>
                ____________________________________________________________________________________________________________________________________
             </div>
-            <div style={styles.rowStyle}>
-               Эмчилгээ хийсэн эмчийн нэр: ________________________________
-            </div>
-            <div style={styles.rowStyle}>
-               Зүү эмчилгээ хийлгэхийг зөвшөөрсөн гарын үсэг:
-            </div>
+            <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ________________________________</div>
+            <div style={styles.rowStyle}>Зүү эмчилгээ хийлгэхийг зөвшөөрсөн гарын үсэг:</div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
-               <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  Маягтын ар тал
-               </span>
+               <span style={{ fontWeight: 'bold', fontSize: 14 }}>Маягтын ар тал</span>
                <br />
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>Б тал</span>
             </div>
             <Table bordered className="document" style={{ marginTop: 10 }}>
                <tbody>
                   <tr>
-                     <td style={{ ...styles.centerText, ...{ width: 40 } }}>
-                        №
-                     </td>
-                     <td style={{ ...styles.centerText, ...{ width: 70 } }}>
-                        Он сар өдөр
-                     </td>
-                     <td style={{ ...styles.centerText, ...{ width: 70 } }}>
-                        Зүү засал
-                     </td>
+                     <td style={{ ...styles.centerText, ...{ width: 40 } }}>№</td>
+                     <td style={{ ...styles.centerText, ...{ width: 70 } }}>Он сар өдөр</td>
+                     <td style={{ ...styles.centerText, ...{ width: 70 } }}>Зүү засал</td>
                      <td style={styles.centerText}>Хавсран хийгдэх эмчилгээ</td>
                      <td style={styles.centerText}>Засал хийсэн эмчийн нэр</td>
                   </tr>

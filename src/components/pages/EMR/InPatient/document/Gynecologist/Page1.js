@@ -11,9 +11,7 @@ function Page1() {
             <Table bordered className="document">
                <thead>
                   <tr className="border-t-0">
-                     <th className="text-center">
-                        ЭХ БАРИХ, ЭМЭГТЭЙЧҮҮДИЙН ҮЗЛЭГ
-                     </th>
+                     <th className="text-center">ЭХ БАРИХ, ЭМЭГТЭЙЧҮҮДИЙН ҮЗЛЭГ</th>
                   </tr>
                   <tr>
                      <td>
@@ -37,10 +35,7 @@ function Page1() {
                               <p>Цэвэршсэн: /зур/ тийм, үгүй Хэдэн онд_____</p>
                            </div>
                            <div className="basis-full">
-                              <p>
-                                 Жирэмслэлтийн тоо _ үүнээс төрсөн _ зулбасан _
-                                 үр хүндүүлсэн _ _
-                              </p>
+                              <p>Жирэмслэлтийн тоо _ үүнээс төрсөн _ зулбасан _ үр хүндүүлсэн _ _</p>
                            </div>
                            <div className="basis-full">
                               <p>Эх барих, эмэгтэйчүүдийн тусгайлсан үзлэг:</p>

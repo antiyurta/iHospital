@@ -50,9 +50,7 @@ function DashboardBed(props) {
                >
                   <div style={{ width: '70%' }}>
                      <p>Сул орны тоо</p>
-                     <p style={styles.total}>
-                        Нийт: {emptyBeds !== '' && emptyBeds.length}
-                     </p>
+                     <p style={styles.total}>Нийт: {emptyBeds !== '' && emptyBeds.length}</p>
                   </div>
                   <div>
                      <UserAddOutlined style={styles.iconStyle} />
@@ -72,9 +70,7 @@ function DashboardBed(props) {
                >
                   <div style={{ width: '70%' }}>
                      <p>Засвартай өрөө</p>
-                     <p style={styles.total}>
-                        Нийт: {repairBeds !== '' && repairBeds.length}
-                     </p>
+                     <p style={styles.total}>Нийт: {repairBeds !== '' && repairBeds.length}</p>
                   </div>
                   <div>
                      <UserAddOutlined style={styles.iconStyle} />
@@ -94,9 +90,7 @@ function DashboardBed(props) {
                >
                   <div style={{ width: '70%' }}>
                      <p>Дүүрсэн өрөө</p>
-                     <p style={styles.total}>
-                        Нийт: {usedBeds !== '' && usedBeds.length}
-                     </p>
+                     <p style={styles.total}>Нийт: {usedBeds !== '' && usedBeds.length}</p>
                   </div>
                   <div>
                      <UserAddOutlined style={styles.iconStyle} />

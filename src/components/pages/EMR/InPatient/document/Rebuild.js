@@ -39,11 +39,7 @@ function Rebuild({ data }) {
                            </Form.Item>
                            <Form.Item
                               label={<p>Залгих чадвар бэрхшээлтэй эсэх</p>}
-                              name={[
-                                 'Ерөнхий',
-                                 'Залгих чадвар бэрхшээлтэй эсэх',
-                                 0
-                              ]}
+                              name={['Ерөнхий', 'Залгих чадвар бэрхшээлтэй эсэх', 0]}
                               className="mb-0"
                            >
                               <Radio.Group>
@@ -55,17 +51,8 @@ function Rebuild({ data }) {
                               (Хэрвээ тийм бол хэл засалч бөглөнө)
                            </p>
                            <Form.Item
-                              label={
-                                 <p>
-                                    Танин мэдэхүйн үйл ажиллагаа өөрчлөлттэй
-                                    эсэх
-                                 </p>
-                              }
-                              name={[
-                                 'Ерөнхий',
-                                 'Танин мэдэхүйн үйл ажиллагаа өөрчлөлтэй эсэх',
-                                 0
-                              ]}
+                              label={<p>Танин мэдэхүйн үйл ажиллагаа өөрчлөлттэй эсэх</p>}
+                              name={['Ерөнхий', 'Танин мэдэхүйн үйл ажиллагаа өөрчлөлтэй эсэх', 0]}
                               className="mb-0"
                            >
                               <Radio.Group>
@@ -91,10 +78,7 @@ function Rebuild({ data }) {
                      </tr>
                      <tr>
                         <td colSpan={2}>
-                           <Form.Item
-                              name={['Ерөнхий', 'Биеийн ерөнхий байдал', 0]}
-                              className="mb-0"
-                           >
+                           <Form.Item name={['Ерөнхий', 'Биеийн ерөнхий байдал', 0]} className="mb-0">
                               <Radio.Group>
                                  <Radio value={'Дунд'}>Дунд</Radio>
                                  <Radio value={'Хүндэвтэр'}>Хүндэвтэр</Radio>
@@ -104,10 +88,7 @@ function Rebuild({ data }) {
                            </Form.Item>
                         </td>
                         <td colSpan={1}>
-                           <Form.Item
-                              name={['Ерөнхий', 'Ухаан санаа', 0]}
-                              className="mb-0"
-                           >
+                           <Form.Item name={['Ерөнхий', 'Ухаан санаа', 0]} className="mb-0">
                               <Radio.Group>
                                  <Radio value={'Саруул'}>Саруул</Radio>
                                  <Radio value={'Бүдгэрсэн'}>Бүдгэрсэн</Radio>
@@ -116,25 +97,15 @@ function Rebuild({ data }) {
                            </Form.Item>
                         </td>
                         <td colSpan={2}>
-                           <Form.Item
-                              name={['Ерөнхий', 'Арьс салст', 'Арьс салст', 0]}
-                              className="mb-0"
-                           >
+                           <Form.Item name={['Ерөнхий', 'Арьс салст', 'Арьс салст', 0]} className="mb-0">
                               <Radio.Group>
                                  <Radio value={'Хэвийн'}>Хэвийн</Radio>
-                                 <Radio value={'Хэвийн бус'}>
-                                    Хэвийн бус____
-                                 </Radio>
+                                 <Radio value={'Хэвийн бус'}>Хэвийн бус____</Radio>
                               </Radio.Group>
                            </Form.Item>
                            <Form.Item
                               label={<p>Холголт цооролт</p>}
-                              name={[
-                                 'Ерөнхий',
-                                 'Арьс салст',
-                                 'Холголт цооролт',
-                                 0
-                              ]}
+                              name={['Ерөнхий', 'Арьс салст', 'Холголт цооролт', 0]}
                               className="mb-0"
                            >
                               <Radio.Group>
@@ -175,11 +146,7 @@ function Rebuild({ data }) {
                         <td>
                            <Form.Item
                               label={<p>Амьсгал 1 минутанд</p>}
-                              name={[
-                                 'Амьсгалын эрхтэн тогтолцоо',
-                                 'Амьсгал 1 минутанд',
-                                 0
-                              ]}
+                              name={['Амьсгалын эрхтэн тогтолцоо', 'Амьсгал 1 минутанд', 0]}
                               className="mb-0"
                            >
                               <Input />
@@ -192,11 +159,7 @@ function Rebuild({ data }) {
                                     <p>оролцож байгаа эсэх:</p>
                                  </div>
                               }
-                              name={[
-                                 'Амьсгалын эрхтэн тогтолцоо',
-                                 'Амьсгалд туслах булчин',
-                                 0
-                              ]}
+                              name={['Амьсгалын эрхтэн тогтолцоо', 'Амьсгалд туслах булчин', 0]}
                               className="mb-0"
                               labelCol={{ span: 24 }}
                               wrapperCol={{ span: 24 }}
@@ -208,11 +171,7 @@ function Rebuild({ data }) {
                            </Form.Item>
                            <Form.Item
                               label={<p>Цээжний хэлбэр:</p>}
-                              name={[
-                                 'Амьсгалын эрхтэн тогтолцоо',
-                                 'Цээжний хэлбэр',
-                                 0
-                              ]}
+                              name={['Амьсгалын эрхтэн тогтолцоо', 'Цээжний хэлбэр', 0]}
                               className="mb-0"
                               labelCol={{ span: 24 }}
                               wrapperCol={{ span: 24 }}
@@ -224,11 +183,7 @@ function Rebuild({ data }) {
                            </Form.Item>
                            <Form.Item
                               label={<p>Амьсгалын хэлбэр:</p>}
-                              name={[
-                                 'Амьсгалын эрхтэн тогтолцоо',
-                                 'Амьсгалын хэлбэр',
-                                 0
-                              ]}
+                              name={['Амьсгалын эрхтэн тогтолцоо', 'Амьсгалын хэлбэр', 0]}
                               className="mb-0"
                               labelCol={{ span: 24 }}
                               wrapperCol={{ span: 24 }}
@@ -242,16 +197,8 @@ function Rebuild({ data }) {
                         </td>
                         <td colSpan={2}>
                            <Form.Item
-                              label={
-                                 <p>
-                                    Цээжний 2 тал амьсгалд жигд оролцох байдал:
-                                 </p>
-                              }
-                              name={[
-                                 'Амьсгалын эрхтэн тогтолцоо',
-                                 'Цээжний 2 тал амьсгалд жигд оролцох байдал',
-                                 0
-                              ]}
+                              label={<p>Цээжний 2 тал амьсгалд жигд оролцох байдал:</p>}
+                              name={['Амьсгалын эрхтэн тогтолцоо', 'Цээжний 2 тал амьсгалд жигд оролцох байдал', 0]}
                               className="mb-0"
                               labelCol={{ span: 24 }}
                               wrapperCol={{ span: 24 }}
@@ -263,32 +210,20 @@ function Rebuild({ data }) {
                            </Form.Item>
                            <Form.Item
                               label={<p>Чагналтаар:</p>}
-                              name={[
-                                 'Амьсгалын эрхтэн тогтолцоо',
-                                 'Чагналтаар',
-                                 0
-                              ]}
+                              name={['Амьсгалын эрхтэн тогтолцоо', 'Чагналтаар', 0]}
                               className="mb-0"
                               labelCol={{ span: 24 }}
                            >
                               <Radio.Group>
                                  <Space direction="vertical">
                                     <Radio value={'Цээжний'}>Цулцангийн</Radio>
-                                    <Radio value={'Гуурсан хоолойн'}>
-                                       Гуурсан хоолойн
-                                    </Radio>
+                                    <Radio value={'Гуурсан хоолойн'}>Гуурсан хоолойн</Radio>
                                     <Radio value={'Ширүүн'}>Ширүүн</Radio>
-                                    <Radio value={'Хэржигнүүргүй'}>
-                                       Хэржигнүүргүй
-                                    </Radio>
+                                    <Radio value={'Хэржигнүүргүй'}>Хэржигнүүргүй</Radio>
                                  </Space>
                                  <Space direction="vertical">
-                                    <Radio value={'Хэржигнүүртэй'}>
-                                       Хэржигнүүртэй_____________
-                                    </Radio>
-                                    <Radio value={'Амьсгал сулавтар'}>
-                                       Амьсгал сулавтар
-                                    </Radio>
+                                    <Radio value={'Хэржигнүүртэй'}>Хэржигнүүртэй_____________</Radio>
+                                    <Radio value={'Амьсгал сулавтар'}>Амьсгал сулавтар</Radio>
                                  </Space>
                               </Radio.Group>
                            </Form.Item>

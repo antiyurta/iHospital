@@ -1,13 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons';
-import {
-   Button,
-   DatePicker,
-   Divider,
-   Form,
-   Input,
-   Modal,
-   Pagination
-} from 'antd';
+import { Button, DatePicker, Divider, Form, Input, Modal, Pagination } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
@@ -69,14 +61,8 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
    const handleClick = () => {
       if (multiple) {
          selectedDiagnoses?.map((diagnose, idx) => {
-            form.setFieldValue(
-               ['diagnose', index, idx, formCode],
-               diagnose.code
-            );
-            form.setFieldValue(
-               ['diagnose', index, idx, formName],
-               diagnose.nameMn
-            );
+            form.setFieldValue(['diagnose', index, idx, formCode], diagnose.code);
+            form.setFieldValue(['diagnose', index, idx, formName], diagnose.nameMn);
          });
       } else {
          // form.setFieldValue({
@@ -111,28 +97,12 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                   <>
                      {fields.map((field, idx) => {
                         return (
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              key={idx}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle key={idx}>
                               {() => {
                                  return (
                                     <span>
-                                       {form.getFieldValue([
-                                          'diagnose',
-                                          index,
-                                          idx,
-                                          `${formCode}`
-                                       ])}
-                                       -
-                                       {form.getFieldValue([
-                                          'diagnose',
-                                          index,
-                                          field.name,
-                                          formName
-                                       ])}
+                                       {form.getFieldValue(['diagnose', index, idx, `${formCode}`])}-
+                                       {form.getFieldValue(['diagnose', index, field.name, formName])}
                                        &nbsp;,
                                     </span>
                                  );
@@ -179,41 +149,23 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
          >
             <div className="flex flex-wrap">
                <div className="w-2/3">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th
-                                 className="font-bold text-sm align-middle"
-                                 style={{ minWidth: 230 }}
-                              >
+                              <th className="font-bold text-sm align-middle" style={{ minWidth: 230 }}>
                                  Код
                               </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Монгол нэр
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Англи нэр
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Орос нэр
-                              </th>
+                              <th className="font-bold text-sm align-middle">Монгол нэр</th>
+                              <th className="font-bold text-sm align-middle">Англи нэр</th>
+                              <th className="font-bold text-sm align-middle">Орос нэр</th>
                            </tr>
                            <tr>
                               <th>
                                  <Search
                                     placeholder={'Хайх'}
                                     allowClear
-                                    onSearch={(e) =>
-                                       getDiagnoses(1, 10, e, 'code')
-                                    }
+                                    onSearch={(e) => getDiagnoses(1, 10, e, 'code')}
                                     enterButton={'Хайх'}
                                  />
                               </th>
@@ -221,9 +173,7 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                                  <Search
                                     placeholder={'Хайх'}
                                     allowClear
-                                    onSearch={(e) =>
-                                       getDiagnoses(1, 10, e, 'nameMn')
-                                    }
+                                    onSearch={(e) => getDiagnoses(1, 10, e, 'nameMn')}
                                     enterButton={'Хайх'}
                                  />
                               </th>
@@ -231,9 +181,7 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                                  <Search
                                     placeholder={'Хайх'}
                                     allowClear
-                                    onSearch={(e) =>
-                                       getDiagnoses(1, 10, e, 'nameEn')
-                                    }
+                                    onSearch={(e) => getDiagnoses(1, 10, e, 'nameEn')}
                                     enterButton={'Хайх'}
                                  />
                               </th>
@@ -241,9 +189,7 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                                  <Search
                                     placeholder={'Хайх'}
                                     allowClear
-                                    onSearch={(e) =>
-                                       getDiagnoses(1, 10, e, 'nameRu')
-                                    }
+                                    onSearch={(e) => getDiagnoses(1, 10, e, 'nameRu')}
                                     enterButton={'Хайх'}
                                  />
                               </th>
@@ -257,28 +203,16 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                                     key={index}
                                     className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                  >
-                                    <td
-                                       className="whitespace-pre-line"
-                                       style={{ width: 50, maxWidth: 50 }}
-                                    >
+                                    <td className="whitespace-pre-line" style={{ width: 50, maxWidth: 50 }}>
                                        {item.code}
                                     </td>
-                                    <td
-                                       className="whitespace-pre-line"
-                                       style={{ maxWidth: 50 }}
-                                    >
+                                    <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                        {item.nameMn}
                                     </td>
-                                    <td
-                                       className="whitespace-pre-line"
-                                       style={{ maxWidth: 50 }}
-                                    >
+                                    <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                        {item.nameEn}
                                     </td>
-                                    <td
-                                       className="whitespace-pre-line"
-                                       style={{ maxWidth: 50 }}
-                                    >
+                                    <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                        {item.nameRu}
                                     </td>
                                  </tr>
@@ -293,22 +227,13 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                         className="pagination"
                         pageSize={10}
                         total={meta.itemCount}
-                        onChange={(page, pageSize) =>
-                           getDiagnoses(page, pageSize, paramValue, param)
-                        }
+                        onChange={(page, pageSize) => getDiagnoses(page, pageSize, paramValue, param)}
                      />
                   </div>
                </div>
                <div className="w-1/3">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
                               <th>Код</th>
@@ -324,22 +249,13 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                                        key={index}
                                        className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                     >
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ width: 50, maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ width: 50, maxWidth: 50 }}>
                                           {item.code}
                                        </td>
-                                       <td
-                                          className="whitespace-pre-line"
-                                          style={{ maxWidth: 50 }}
-                                       >
+                                       <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                           {item.nameMn}
                                        </td>
-                                       <td
-                                          onDoubleClick={() => remove(index)}
-                                          className="hover:cursor-pointer"
-                                       >
+                                       <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
                                           <CloseOutlined
                                              style={{
                                                 color: 'red',
@@ -352,22 +268,13 @@ function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
                               })
                            ) : (
                               <tr className="ant-table-row ant-table-row-level-0 hover:cursor-pointer">
-                                 <td
-                                    className="whitespace-pre-line"
-                                    style={{ width: 50, maxWidth: 50 }}
-                                 >
+                                 <td className="whitespace-pre-line" style={{ width: 50, maxWidth: 50 }}>
                                     {selectedDiagnose?.code}
                                  </td>
-                                 <td
-                                    className="whitespace-pre-line"
-                                    style={{ maxWidth: 50 }}
-                                 >
+                                 <td className="whitespace-pre-line" style={{ maxWidth: 50 }}>
                                     {selectedDiagnose?.nameMn}
                                  </td>
-                                 <td
-                                    onDoubleClick={() => remove()}
-                                    className="hover:cursor-pointer"
-                                 >
+                                 <td onDoubleClick={() => remove()} className="hover:cursor-pointer">
                                     <CloseOutlined
                                        style={{
                                           color: 'red',

@@ -37,11 +37,7 @@ class NewEmr extends React.Component {
          headers: {},
          params: {}
       };
-      const response = await Get(
-         'pms/patient/' + this.props.IncomeEMRData.patientId,
-         this.props.token,
-         conf
-      );
+      const response = await Get('pms/patient/' + this.props.IncomeEMRData.patientId, this.props.token, conf);
       this.setState({ selectedPatient: response });
    }
    async getInspectionNotes() {
@@ -54,8 +50,7 @@ class NewEmr extends React.Component {
       const response = await Get('appointment', this.props.token, conf);
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
             return r;
          }, Object.create(null));
@@ -73,33 +68,24 @@ class NewEmr extends React.Component {
          headers: {},
          params: {}
       };
-      Object.entries(this.state.appointments).map(
-         async ([_key, value], _index) => {
-            var problems = [];
-            await Promise.all(
-               value.map(async (item) => {
-                  const response = await Get(
-                     'appointment/show/' + item.id,
-                     this.props.token,
-                     conf
-                  );
-                  if (response?.patientDiagnosis?.length > 0) {
-                     problems.push({
-                        id: item.id,
-                        doctor:
-                           response.employee?.lastName.substring(0, 1) +
-                           '.' +
-                           response.employee?.firstName,
-                        diagnose: response.patientDiagnosis,
-                        inspectionDate: response.createdAt
-                     });
-                  }
-               })
-            );
-            this.setState({ problems: problems });
-            this.setState({ problemsLoading: false });
-         }
-      );
+      Object.entries(this.state.appointments).map(async ([_key, value], _index) => {
+         var problems = [];
+         await Promise.all(
+            value.map(async (item) => {
+               const response = await Get('appointment/show/' + item.id, this.props.token, conf);
+               if (response?.patientDiagnosis?.length > 0) {
+                  problems.push({
+                     id: item.id,
+                     doctor: response.employee?.lastName.substring(0, 1) + '.' + response.employee?.firstName,
+                     diagnose: response.patientDiagnosis,
+                     inspectionDate: response.createdAt
+                  });
+               }
+            })
+         );
+         this.setState({ problems: problems });
+         this.setState({ problemsLoading: false });
+      });
    }
    handleTypeChange = ({ target: { value } }) => {
       this.setState({
@@ -110,8 +96,7 @@ class NewEmr extends React.Component {
       if (value?.length > 0 || value) {
          const data = {};
          if (this.props.IncomeEMRData.usageType === 'IN') {
-            data['inpatientRequestId'] =
-               this.props.IncomeEMRData.inpatientRequestId;
+            data['inpatientRequestId'] = this.props.IncomeEMRData.inpatientRequestId;
          } else {
             data['appointmentId'] = this.props.IncomeEMRData.appointmentId;
          }
@@ -126,12 +111,7 @@ class NewEmr extends React.Component {
                patientId: this.state.selectedPatient.id
             }
          };
-         const response = await Post(
-            'service-request',
-            this.props.token,
-            conf,
-            data
-         );
+         const response = await Post('service-request', this.props.token, conf, data);
          if (response === 201) {
             const conf = {
                headers: {},
@@ -139,11 +119,7 @@ class NewEmr extends React.Component {
                   patientId: this.state.selectedPatient.id
                }
             };
-            const response = await Get(
-               'payment/invoice',
-               this.props.token,
-               conf
-            );
+            const response = await Get('payment/invoice', this.props.token, conf);
             this.setState({
                payments: response.data
             });
@@ -179,19 +155,16 @@ class NewEmr extends React.Component {
                            banner
                            message={
                               <Marquee pauseOnHover gradient={false}>
-                                 Эмчийн үзлэг хийсэн бол заавал онош тавигдана.
-                                 Оношийг засварлах боломжгүйг анхаарна уу! EMR,
-                                 OTS дуусгаад ҮЗЛЭГ ДУУСГАХ товчийг дарна уу.
-                                 Таны үзлэг баталгаажиж байгаа болно.
+                                 Эмчийн үзлэг хийсэн бол заавал онош тавигдана. Оношийг засварлах боломжгүйг анхаарна
+                                 уу! EMR, OTS дуусгаад ҮЗЛЭГ ДУУСГАХ товчийг дарна уу. Таны үзлэг баталгаажиж байгаа
+                                 болно.
                               </Marquee>
                            }
                         />
                      </div>
                      <div className="w-full p-1">
                         <EmrSupports
-                           appointmentId={
-                              this.props.IncomeEMRData.appointmentId
-                           }
+                           appointmentId={this.props.IncomeEMRData.appointmentId}
                            usageType={this.props.IncomeEMRData.usageType}
                            patient={this.state.selectedPatient}
                            patientId={this.props.IncomeEMRData.patientId}
@@ -200,29 +173,16 @@ class NewEmr extends React.Component {
                   </>
                )}
 
-               <div
-                  className={
-                     this.state.type === 'EMR'
-                        ? 'w-full md:w-full xl:w-1/2'
-                        : 'w-full md:w-full xl:w-full'
-                  }
-               >
+               <div className={this.state.type === 'EMR' ? 'w-full md:w-full xl:w-1/2' : 'w-full md:w-full xl:w-full'}>
                   <div className="flex flex-wrap">
-                     <div
-                        className={
-                           this.state.type === 'EMR'
-                              ? 'w-full md:w-full p-1'
-                              : 'w-full md:w-3/5 p-1'
-                        }
-                     >
+                     <div className={this.state.type === 'EMR' ? 'w-full md:w-full p-1' : 'w-full md:w-3/5 p-1'}>
                         <div className="pb-1">
                            <PatientInformation
                               patient={this.state.selectedPatient}
                               handlesearch={false}
                               handleTypeChange={this.handleTypeChange}
                               OCS={
-                                 this.props.IncomeEMRData.appointmentId ||
-                                 this.props.IncomeEMRData.inpatientRequestId
+                                 this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
                                     ? true
                                     : false
                               }
@@ -233,11 +193,7 @@ class NewEmr extends React.Component {
                         <div className="pt-1">
                            <Card
                               bordered={false}
-                              title={
-                                 <h6 className="font-semibold m-0">
-                                    Гол асуудлууд
-                                 </h6>
-                              }
+                              title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
                               className="header-solid rounded-md"
                               style={{ height: '100%' }}
                               bodyStyle={{
@@ -249,10 +205,7 @@ class NewEmr extends React.Component {
                                  maxHeight: 150
                               }}
                            >
-                              <div
-                                 className="scroll"
-                                 style={{ maxHeight: 150 }}
-                              >
+                              <div className="scroll" style={{ maxHeight: 150 }}>
                                  <Table
                                     rowKey={'id'}
                                     bordered
@@ -289,9 +242,7 @@ class NewEmr extends React.Component {
                                           title: 'Огноо',
                                           dataIndex: 'inspectionDate',
                                           render: (text) => {
-                                             return moment(text).format(
-                                                'YYYY-MM-DD'
-                                             );
+                                             return moment(text).format('YYYY-MM-DD');
                                           }
                                        }
                                     ]}
@@ -302,13 +253,7 @@ class NewEmr extends React.Component {
                            </Card>
                         </div>
                      </div>
-                     <div
-                        className={
-                           this.state.type === 'EMR'
-                              ? 'w-full p-1'
-                              : 'w-full md:w-2/5 p-1'
-                        }
-                     >
+                     <div className={this.state.type === 'EMR' ? 'w-full p-1' : 'w-full md:w-2/5 p-1'}>
                         <Card
                            bordered={false}
                            title={
@@ -341,28 +286,18 @@ class NewEmr extends React.Component {
                                  patientId={this.props.IncomeEMRData.patientId}
                               />
                            ) : (
-                              <MainInPatient
-                                 patientId={this.props.IncomeEMRData.patientId}
-                              />
+                              <MainInPatient patientId={this.props.IncomeEMRData.patientId} />
                            )}
                         </Card>
                      </div>
                   </div>
                </div>
-               <div
-                  className={
-                     this.state.type === 'OCS'
-                        ? 'w-full'
-                        : 'w-full md:w-full xl:w-1/2'
-                  }
-               >
+               <div className={this.state.type === 'OCS' ? 'w-full' : 'w-full md:w-full xl:w-1/2'}>
                   <div className="p-1">
                      {this.state.type === 'EMR' ? (
                         <Card
                            bordered={false}
-                           title={
-                              <h6 className="font-semibold m-0">Явцын үзлэг</h6>
-                           }
+                           title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
                            className="header-solid max-h-max rounded-md scroll"
                            bodyStyle={{
                               paddingTop: 0,
@@ -375,15 +310,8 @@ class NewEmr extends React.Component {
                            extra={
                               <>
                                  <Select
-                                    defaultValue={
-                                       this.props.IncomeEMRData.inspection
-                                    }
-                                    disabled={
-                                       this.props.IncomeEMRData.inspection ===
-                                       11
-                                          ? true
-                                          : false
-                                    }
+                                    defaultValue={this.props.IncomeEMRData.inspection}
+                                    disabled={this.props.IncomeEMRData.inspection === 11 ? true : false}
                                     style={{ width: 200 }}
                                  >
                                     <Option value={1} disabled={true}>
@@ -392,9 +320,7 @@ class NewEmr extends React.Component {
                                     <Option value={2} disabled={true}>
                                        Давтан
                                     </Option>
-                                    <Option value={3}>
-                                       Урьдчилан сэргийлэх
-                                    </Option>
+                                    <Option value={3}>Урьдчилан сэргийлэх</Option>
                                     <Option value={4}>Гэрийн эргэлт</Option>
                                     <Option value={5}>Идэвхтэй хяналт</Option>
                                     <Option value={6}>Дуудлагаар</Option>
@@ -409,33 +335,21 @@ class NewEmr extends React.Component {
                            }
                         >
                            <MainPatientHistory
-                              AppointmentId={
-                                 this.props.IncomeEMRData.appointmentId
-                              }
-                              XrayRequestId={
-                                 this.props.IncomeEMRData.xrayRequestId
-                              }
-                              InpatientRequestId={
-                                 this.props.IncomeEMRData.inpatientRequestId
-                              }
+                              AppointmentId={this.props.IncomeEMRData.appointmentId}
+                              XrayRequestId={this.props.IncomeEMRData.xrayRequestId}
+                              InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
                               PatientId={this.props.IncomeEMRData.patientId}
                               CabinetId={this.props.IncomeEMRData.cabinetId}
                               Inspection={this.props.IncomeEMRData.inspection}
                               UsageType={this.props.IncomeEMRData.usageType}
-                              insuranceServiceId={
-                                 this.props.IncomeEMRData.insuranceServiceId
-                              }
+                              insuranceServiceId={this.props.IncomeEMRData.insuranceServiceId}
                               handleClick={this.handleTypeChange}
                            />
                         </Card>
                      ) : (
                         <Card
                            bordered={false}
-                           title={
-                              <h6 className="font-semibold m-0">
-                                 Шинэ захиалга
-                              </h6>
-                           }
+                           title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
                            className="header-solid max-h-max rounded-md"
                            bodyStyle={{
                               paddingTop: 0,

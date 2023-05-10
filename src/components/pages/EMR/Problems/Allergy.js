@@ -5,9 +5,7 @@ export default function Allergy(props) {
       <div>
          {props.data?.hasOwnProperty('isAllergy') ? (
             <div className="flex">
-               <p className="font-semibold mr-2">
-                  Ямар нэг зүйлд харшилдаг уу:{' '}
-               </p>
+               <p className="font-semibold mr-2">Ямар нэг зүйлд харшилдаг уу: </p>
                <p className="">{props.data['isAllergy'] ? 'Тийм' : 'Үгүй'}</p>
             </div>
          ) : null}

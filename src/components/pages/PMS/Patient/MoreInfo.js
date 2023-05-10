@@ -21,9 +21,7 @@ function MoreInfo({ form }) {
             <Form.Item
                label="Нийгмийн байдал:"
                name="socialStatusType"
-               rules={[
-                  { required: true, message: 'Нийгмийн байдал оруулна уу' }
-               ]}
+               rules={[{ required: true, message: 'Нийгмийн байдал оруулна уу' }]}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >

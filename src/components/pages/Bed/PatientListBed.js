@@ -1,13 +1,4 @@
-import {
-   Col,
-   Row,
-   Button,
-   Tag,
-   Modal,
-   Input,
-   Select,
-   notification
-} from 'antd';
+import { Col, Row, Button, Tag, Modal, Input, Select, notification } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -47,10 +38,7 @@ function PatientListBed() {
       // console.log("response", response);
       if (response.data.length != 0) {
          response.data.map((el, index) => {
-            setDepartment((department) => [
-               ...department,
-               { label: el.name, value: el.id }
-            ]);
+            setDepartment((department) => [...department, { label: el.name, value: el.id }]);
          });
       }
    };
@@ -191,11 +179,7 @@ function PatientListBed() {
          input: 'input',
          staticData: (type) => {
             return (
-               <img
-                  src={require(`../../../assets/bed/${orderType[type].img}`)}
-                  width="20"
-                  className="inline-block"
-               />
+               <img src={require(`../../../assets/bed/${orderType[type].img}`)} width="20" className="inline-block" />
             );
          },
          col: 24
@@ -258,18 +242,13 @@ function PatientListBed() {
       // console.log("response InformationBed", response);
       if (response.data.length != 0) {
          response.data.map((el, index) => {
-            setRoomsOfDef((roomsOfDef) => [
-               ...roomsOfDef,
-               { label: el.roomNumber, value: el.id, beds: el.beds }
-            ]);
+            setRoomsOfDef((roomsOfDef) => [...roomsOfDef, { label: el.roomNumber, value: el.id, beds: el.beds }]);
          });
       }
    };
 
    const handleChangeTag = (tag, checked) => {
-      const nextSelectedTags = checked
-         ? [...selectedTags, tag]
-         : selectedTags.filter((t) => t !== tag);
+      const nextSelectedTags = checked ? [...selectedTags, tag] : selectedTags.filter((t) => t !== tag);
       setSelectedTags(nextSelectedTags);
    };
 
@@ -290,12 +269,7 @@ function PatientListBed() {
       data.isOut = true;
       data.process = 2;
       data.bedId = selectedActionData.bedId;
-      const response = await Patch(
-         `service/inpatient-request/bed/${selectedActionData.id}`,
-         token,
-         config,
-         data
-      );
+      const response = await Patch(`service/inpatient-request/bed/${selectedActionData.id}`, token, config, data);
       if (response === 200) {
          setTestParam(!testParam);
          setActionType('');
@@ -354,10 +328,7 @@ function PatientListBed() {
                el.beds.map((el, bedIndex) => {
                   if (el.status === 3) {
                      //Зөвхөн сул ор харуулах
-                     setBeds((beds) => [
-                        ...beds,
-                        { label: el.bedNumber, value: el.id }
-                     ]);
+                     setBeds((beds) => [...beds, { label: el.bedNumber, value: el.id }]);
                   }
                });
             }
@@ -368,23 +339,14 @@ function PatientListBed() {
          <PatientListBedd />
          <Row>
             <Col span={6}>
-               <Search
-                  placeholder=""
-                  allowClear
-                  enterButton="Хайх"
-                  size="large"
-                  onSearch={(e) => setSearchValue(e)}
-               />
+               <Search placeholder="" allowClear enterButton="Хайх" size="large" onSearch={(e) => setSearchValue(e)} />
             </Col>
          </Row>
          <Row className="mt-4">
             <Col span={2} className="contents">
                {orderType.map((tag) => {
                   return (
-                     <div
-                        key={tag.value}
-                        className="border-blue-400 rounded-sm border mr-2 mb-2"
-                     >
+                     <div key={tag.value} className="border-blue-400 rounded-sm border mr-2 mb-2">
                         <CheckableTag
                            checked={selectedTags.includes(tag.value)}
                            onChange={(checked) => {
@@ -403,10 +365,7 @@ function PatientListBed() {
                                  alignItems: 'center'
                               }}
                            >
-                              <img
-                                 src={require(`../../../assets/bed/${tag.img}`)}
-                                 width="20"
-                              />
+                              <img src={require(`../../../assets/bed/${tag.img}`)} width="20" />
                            </div>
                            {tag.label}
                         </CheckableTag>
@@ -436,12 +395,7 @@ function PatientListBed() {
                />
             </Col>
          </Row>
-         <Modal
-            title="Өвчтөн хуваарилах"
-            open={isModalOpen}
-            onCancel={handleCancel}
-            footer={false}
-         >
+         <Modal title="Өвчтөн хуваарилах" open={isModalOpen} onCancel={handleCancel} footer={false}>
             <div>
                <div className="text-right">
                   <Row>

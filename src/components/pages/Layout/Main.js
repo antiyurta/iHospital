@@ -17,12 +17,7 @@ import {
    selectCurrentUserId
 } from '../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-   PoweroffOutlined,
-   UserOutlined,
-   RightOutlined,
-   LeftOutlined
-} from '@ant-design/icons';
+import { PoweroffOutlined, UserOutlined, RightOutlined, LeftOutlined } from '@ant-design/icons';
 import logo from '../../../assets/logo/iHospital.png';
 import { Get, Post } from '../../comman';
 import Fallback from './Fallback';
@@ -90,12 +85,7 @@ const Main = () => {
             userId: UserId
          }
       };
-      const response = await Get(
-         'organization/permission/role/user',
-         token,
-         conf
-      );
-      console.log(response);
+      const response = await Get('organization/permission/role/user', token, conf);
       if (response?.length > 0) {
          var menus = [];
          response?.map((menu, indx) => {
@@ -128,10 +118,7 @@ const Main = () => {
                menus.push({
                   key: indx,
                   icon: (
-                     <p
-                        style={{ width: 20, marginBottom: 0 }}
-                        dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
-                     ></p>
+                     <p style={{ width: 20, marginBottom: 0 }} dangerouslySetInnerHTML={{ __html: menu.menu.icon }}></p>
                   ),
                   label: menu.menu.title,
                   children: children
@@ -140,10 +127,7 @@ const Main = () => {
                var menu = {
                   key: menu.id,
                   icon: (
-                     <p
-                        style={{ width: 20, marginBottom: 0 }}
-                        dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
-                     ></p>
+                     <p style={{ width: 20, marginBottom: 0 }} dangerouslySetInnerHTML={{ __html: menu.menu.icon }}></p>
                   ),
                   label: (
                      <Link
@@ -167,18 +151,13 @@ const Main = () => {
    };
    useEffect(() => {
       getMenus();
-      console.log('-----<');
-   }, []);
+   }, [UserId, RoleId]);
    return (
       <>
          <Layout>
             <Header className="bg-transparent mx-5 p-0 h-20">
                <div className="float-left">
-                  <img
-                     className="w-48 bg-transparent float-left"
-                     src={logo}
-                     alt="logo"
-                  />
+                  <img className="w-48 bg-transparent float-left" src={logo} alt="logo" />
                </div>
                <div className="float-right">
                   <Dropdown
@@ -188,11 +167,7 @@ const Main = () => {
                         pointAtCenter: true
                      }}
                   >
-                     <Button
-                        type="link"
-                        className="ant-dropdown-link"
-                        onClick={(e) => e.preventDefault()}
-                     >
+                     <Button type="link" className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
                         <img className="h-12 w-12" src={male} alt="avatar" />
                      </Button>
                   </Dropdown>
@@ -200,13 +175,10 @@ const Main = () => {
             </Header>
             <Layout className="ant-layout">
                <Sider
-                  trigger={React.createElement(
-                     collapsed ? RightOutlined : LeftOutlined,
-                     {
-                        className: 'trigger',
-                        onClick: () => setCollapsed(!collapsed)
-                     }
-                  )}
+                  trigger={React.createElement(collapsed ? RightOutlined : LeftOutlined, {
+                     className: 'trigger',
+                     onClick: () => setCollapsed(!collapsed)
+                  })}
                   collapsible
                   collapsed={collapsed}
                   theme="light"
@@ -223,21 +195,14 @@ const Main = () => {
                   <div className="body">
                      <div className="tabled">
                         <Fragment>
-                           <Suspense fallback={<Fallback />}>
-                              {<Outlet />}
-                           </Suspense>
+                           <Suspense fallback={<Fallback />}>{<Outlet />}</Suspense>
                         </Fragment>
                      </div>
                   </div>
                </Content>
             </Layout>
          </Layout>
-         <Drawer
-            open={isChatModal}
-            placement="right"
-            onClose={() => setIsChatModal(false)}
-            bodyStyle={{ padding: 0 }}
-         >
+         <Drawer open={isChatModal} placement="right" onClose={() => setIsChatModal(false)} bodyStyle={{ padding: 0 }}>
             <iframe src="http://localhost:3001" width="100%" height="100%" />
          </Drawer>
       </>

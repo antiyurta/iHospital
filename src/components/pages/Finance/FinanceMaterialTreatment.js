@@ -15,8 +15,7 @@ function FinanceMaterialTreatment() {
    const [treatmentList, setTreatmentList] = useState([]);
    const [treatments, setTreatments] = useState([]);
    const [materials, setMaterials] = useState([]);
-   const [selectedTreatmentMaterial, setSelectedTreatmentMaterial] =
-      useState('');
+   const [selectedTreatmentMaterial, setSelectedTreatmentMaterial] = useState('');
    const [selectedTreatment, setSelectedTreatment] = useState('');
    const [selectedMaterial, setSelectedMaterial] = useState('');
    const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,12 +68,7 @@ function FinanceMaterialTreatment() {
       data.serviceType = 2;
       data.serviceId = selectedTreatment;
       data.materialId = parseInt(selectedMaterial);
-      const response = await Post(
-         `service/service-material`,
-         token,
-         config,
-         data
-      );
+      const response = await Post(`service/service-material`, token, config, data);
       if (response === 201) {
          getTreatmentMaterial();
          handleCancel();
@@ -84,23 +78,14 @@ function FinanceMaterialTreatment() {
       data.serviceType = 2;
       data.serviceId = selectedTreatment;
       data.materialId = parseInt(selectedMaterial);
-      const response = await Patch(
-         `service/service-material/${selectedTreatmentMaterial.id}`,
-         token,
-         config,
-         data
-      );
+      const response = await Patch(`service/service-material/${selectedTreatmentMaterial.id}`, token, config, data);
       if (response === 200) {
          getTreatmentMaterial();
          handleCancel();
       }
    };
    const deleteItem = async (id) => {
-      const response = await Delete(
-         `service/service-material/${parseInt(id)}`,
-         token,
-         config
-      );
+      const response = await Delete(`service/service-material/${parseInt(id)}`, token, config);
       if (response === 200) {
          getTreatmentMaterial();
       }
@@ -112,11 +97,7 @@ function FinanceMaterialTreatment() {
          className="header-solid max-h-max rounded-md"
          extra={
             <>
-               <Button
-                  className="mx-1"
-                  type="primary"
-                  onClick={() => showModal('', 'add')}
-               >
+               <Button className="mx-1" type="primary" onClick={() => showModal('', 'add')}>
                   Нэмэх
                </Button>
             </>
@@ -124,11 +105,7 @@ function FinanceMaterialTreatment() {
       >
          <div>
             <div className="table-responsive" id="style-8">
-               <Table
-                  bordered
-                  className="ant-border-space"
-                  style={{ width: '100%' }}
-               >
+               <Table bordered className="ant-border-space" style={{ width: '100%' }}>
                   <thead className="ant-table-thead bg-slate-200">
                      <tr>
                         <th>Эмчилгээ</th>
@@ -199,13 +176,9 @@ function FinanceMaterialTreatment() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {treatments?.map((el, index) => {
@@ -234,13 +207,9 @@ function FinanceMaterialTreatment() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {materials?.map((el, index) => {

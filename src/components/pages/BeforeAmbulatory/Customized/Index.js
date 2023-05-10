@@ -3,10 +3,7 @@ import { Button, Form, Modal, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { Get } from '../../../comman';
 import { useSelector } from 'react-redux';
-import {
-   selectCurrentAppId,
-   selectCurrentToken
-} from '../../../../features/authReducer';
+import { selectCurrentAppId, selectCurrentToken } from '../../../../features/authReducer';
 import FormRender from './FormRender';
 import { PrinterOutlined } from '@ant-design/icons';
 function Index({ usageType, documentValue, structureId }) {
@@ -16,8 +13,7 @@ function Index({ usageType, documentValue, structureId }) {
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
    const [selectedOptionId, setSelectedOptionId] = useState(Number);
-   const [isOpenSelectPositionModal, setIsOpenSelectPositionModal] =
-      useState(false);
+   const [isOpenSelectPositionModal, setIsOpenSelectPositionModal] = useState(false);
    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
    const getDocumentForm = async () => {
       const conf = {
@@ -64,10 +60,7 @@ function Index({ usageType, documentValue, structureId }) {
                      gap: '6px'
                   }}
                >
-                  <Button
-                     type="primary"
-                     onClick={() => setIsOpenSelectPositionModal(true)}
-                  >
+                  <Button type="primary" onClick={() => setIsOpenSelectPositionModal(true)}>
                      Бөглөх
                   </Button>
                   <Button icon={<PrinterOutlined />}>Хэвлэх</Button>
@@ -86,26 +79,16 @@ function Index({ usageType, documentValue, structureId }) {
                   : { width: '100%' }
             }
          >
-            <ReturnById
-               type={usageType === 'OUT' ? true : false}
-               id={documentValue}
-            />
+            <ReturnById type={usageType === 'OUT' ? true : false} id={documentValue} />
          </div>
          <Modal
             title="Маягт бөглөх"
             open={isOpenFormModal}
             onCancel={() => setIsOpenFormModal(false)}
-            onOk={() =>
-               form.validateFields().then((values) => console.log(values))
-            }
+            onOk={() => form.validateFields().then((values) => console.log(values))}
          >
             <Form form={form} layout="vertical">
-               <FormRender
-                  form={documentForm}
-                  formOptionIds={
-                     documentOptions[selectedOptionId]?.formOptionIds
-                  }
-               />
+               <FormRender form={documentForm} formOptionIds={documentOptions[selectedOptionId]?.formOptionIds} />
             </Form>
          </Modal>
          <Modal

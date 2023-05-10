@@ -6,15 +6,7 @@ import {
    ReloadOutlined,
    StarOutlined
 } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   DatePicker,
-   Empty,
-   message,
-   Popconfirm,
-   Table
-} from 'antd';
+import { Button, Card, DatePicker, Empty, message, Popconfirm, Table } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
@@ -95,14 +87,9 @@ function BeforeTreatmentRequest() {
             headers: {},
             params: {}
          };
-         const response = await Patch(
-            'service/treatmentRequest/' + id,
-            token,
-            conf,
-            {
-               doneCount: count + 1
-            }
-         );
+         const response = await Patch('service/treatmentRequest/' + id, token, conf, {
+            doneCount: count + 1
+         });
          if (response === 200) {
             getTreatmentRequest(1, 10, start, end);
          }
@@ -133,10 +120,7 @@ function BeforeTreatmentRequest() {
       {
          title: 'Орох цаг',
          render: (_, row) => {
-            return getTypeInfo(
-               row.treatmentSlots?.startTime?.substr(0, 5),
-               row.treatmentSlots?.endTime?.substr(0, 5)
-            );
+            return getTypeInfo(row.treatmentSlots?.startTime?.substr(0, 5), row.treatmentSlots?.endTime?.substr(0, 5));
          }
       },
       {
@@ -203,14 +187,7 @@ function BeforeTreatmentRequest() {
                return (
                   <Popconfirm
                      title="Эмчилгээ хийсэн эсэх"
-                     onConfirm={() =>
-                        sumDoneCount(
-                           row.id,
-                           row.doneCount,
-                           row.isPayment,
-                           row.usageType
-                        )
-                     }
+                     onConfirm={() => sumDoneCount(row.id, row.doneCount, row.isPayment, row.usageType)}
                      onCancel={() => message.error('Цуцалсан')}
                      okText="Тийм"
                      cancelText="Үгүй"
@@ -228,11 +205,7 @@ function BeforeTreatmentRequest() {
    return (
       <div className="flex flex-wrap">
          <div className="w-full">
-            <Card
-               title={'Эмийн бус эмчилгээ жагсаалт'}
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-            >
+            <Card title={'Эмийн бус эмчилгээ жагсаалт'} bordered={false} className="header-solid max-h-max rounded-md">
                <div className="flex flex-wrap">
                   <div className="basis-1/3">
                      <RangePicker
@@ -259,22 +232,14 @@ function BeforeTreatmentRequest() {
                            className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                            role="alert"
                         >
-                           <span className="font-medium mx-1">
-                              Урьдчилсан захиалга
-                           </span>
+                           <span className="font-medium mx-1">Урьдчилсан захиалга</span>
                         </div>
                         {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
                                         <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
                                     </div> */}
                      </div>
                      <div className="float-right">
-                        <Button
-                           title="Сэргээх"
-                           type="primary"
-                           onClick={() =>
-                              getTreatmentRequest(1, 10, start, end)
-                           }
-                        >
+                        <Button title="Сэргээх" type="primary" onClick={() => getTreatmentRequest(1, 10, start, end)}>
                            <ReloadOutlined // spin={!spinner}
                            />
                         </Button>
@@ -296,8 +261,7 @@ function BeforeTreatmentRequest() {
                            pageSize: 10,
                            total: meta.itemCount,
                            current: meta.page,
-                           onChange: (page, pageSize) =>
-                              getTreatmentRequest(page, pageSize, start, end)
+                           onChange: (page, pageSize) => getTreatmentRequest(page, pageSize, start, end)
                         }}
                      />
                   </div>
