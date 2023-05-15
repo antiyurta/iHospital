@@ -94,7 +94,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
    }, [oldDocuments]);
    if (type === 0) {
       return (
-         <div className="flex flex-wrap">
+         <div className="flex flex-row gap-3">
             <div className="sm:w-full md:w-1/12 lg:w-1/12">
                <div
                   style={{
@@ -115,15 +115,28 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   </div>
                   {filteredOptions?.map((option, index) => {
                      return (
-                        <Button key={index} onClick={() => setDocumentId(option.value)}>
+                        <button
+                           style={{
+                              border: '1px solid black'
+                           }}
+                           key={index}
+                           onClick={() => setDocumentId(option.value)}
+                        >
                            {option.label}
-                        </Button>
+                        </button>
                      );
                   })}
                </div>
             </div>
             <div className="sm:w-full md:w-11/12 lg:w-11/12">
-               <ReturnById type={true} id={documentId} />
+               <div
+                  style={{
+                     transform: 'scale(0.7)',
+                     transformOrigin: 'top center'
+                  }}
+               >
+                  <ReturnById type={true} id={documentId} />
+               </div>
             </div>
          </div>
       );
