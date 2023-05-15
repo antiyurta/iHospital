@@ -29,58 +29,57 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
          description: values.description
       };
       var diagnoseData = [];
-      console.log(values, data);
-      // values.diagnose?.map((diagnose) => {
-      //    diagnoseData.push({
-      //       patientId: incomeData.patientId,
-      //       type: 0,
-      //       usageType: incomeData.usageType,
-      //       diagnoseId: diagnose.id,
-      //       diagnoseType: diagnose.diagnoseType,
-      //       inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.appointmentId : null,
-      //       appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
-      //    });
-      // });
-      // if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-      //    data['xrayRequestId'] = incomeData.xrayRequestId;
-      //    data['conclusion'] = JSON.stringify(values['conclusion']);
-      //    data['advice'] = JSON.stringify(values['advice']);
-      // } else {
-      //    data['pain'] = JSON.stringify(values['pain']);
-      //    data['question'] = JSON.stringify(values['question']);
-      //    data['inspection'] = JSON.stringify(values['inspection']);
-      //    data['plan'] = JSON.stringify(values['plan']);
-      // }
-      // if (incomeData.usageType === 'IN') {
-      //    data['inpatientRequestId'] = incomeData.appointmentId;
-      // } else if (incomeData.usageType === 'OUT') {
-      //    data['appointmentId'] = incomeData.appointmentId;
-      // }
-      // data['formId'] = key;
-      // data['diagnoses'] = diagnoseData;
-      // await jwtInterceopter
-      //    .post('emr/inspectionNote', data)
-      //    .then((response) => {
-      //       if (response.status === 201) {
-      //          openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
-      //          if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-      //             jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
-      //                xrayProcess: 2
-      //             });
-      //          } else {
-      //             handleClick({ target: { value: 'OCS' } });
-      //          }
-      //       }
-      //       console.log(response);
-      //    })
-      //    .catch((error) => {
-      //       if (error.response.status === 409) {
-      //          openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
-      //       }
-      //    })
-      //    .finally(() => {
-      //       setLoading(false);
-      //    });
+      values.diagnose?.map((diagnose) => {
+         diagnoseData.push({
+            patientId: incomeData.patientId,
+            type: diagnose.type,
+            usageType: incomeData.usageType,
+            diagnoseId: diagnose.id,
+            diagnoseType: diagnose.diagnoseType,
+            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
+            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+         });
+      });
+      if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+         data['xrayRequestId'] = incomeData.xrayRequestId;
+         data['conclusion'] = JSON.stringify(values['conclusion']);
+         data['advice'] = JSON.stringify(values['advice']);
+      } else {
+         data['pain'] = JSON.stringify(values['pain']);
+         data['question'] = JSON.stringify(values['question']);
+         data['inspection'] = JSON.stringify(values['inspection']);
+         data['plan'] = JSON.stringify(values['plan']);
+      }
+      if (incomeData.usageType === 'IN') {
+         data['inpatientRequestId'] = incomeData.appointmentId;
+      } else if (incomeData.usageType === 'OUT') {
+         data['appointmentId'] = incomeData.appointmentId;
+      }
+      data['formId'] = key;
+      data['diagnoses'] = diagnoseData;
+      await jwtInterceopter
+         .post('emr/inspectionNote', data)
+         .then((response) => {
+            if (response.status === 201) {
+               openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+               if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                  jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                     xrayProcess: 2
+                  });
+               } else {
+                  handleClick({ target: { value: 'OCS' } });
+               }
+            }
+            console.log(response);
+         })
+         .catch((error) => {
+            if (error.response.status === 409) {
+               openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
+            }
+         })
+         .finally(() => {
+            setLoading(false);
+         });
    };
 
    const onFinishFailed = (errorInfo) => {
