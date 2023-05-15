@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../features/AuthContext';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo/iHospital.svg';
 import male from '../../../assets/images/maleAvatar.svg';
 import { Button, Dropdown, Menu, Layout } from 'antd';
@@ -23,6 +23,7 @@ const { Content, Sider } = Layout;
 function MainLayout({ children }) {
    const { user, logoutt } = useContext(AuthContext);
    const dispatch = useDispatch();
+   const navigate = useNavigate();
    const UserId = useSelector(selectCurrentUserId);
    const RoleId = useSelector(selectCurrentRoleId);
    const [collapsed, setCollapsed] = useState(false);

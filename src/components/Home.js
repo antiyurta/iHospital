@@ -1,9 +1,9 @@
 import React from 'react';
-import Home2 from '../assets/images/background/Home.jpg';
+import logo from '../assets/logo/iHospital.svg';
 function Home() {
    return (
       <div>
-         <img src={Home2} />
+         <img src={logo} />
       </div>
    );
 }

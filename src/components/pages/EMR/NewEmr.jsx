@@ -12,12 +12,18 @@ import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
 import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
+import { delEmrData } from '../../../features/emrReducer';
 const { Option } = Select;
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
    const token = state.authReducer.token;
    const employeeId = state.authReducer.userId;
    return { IncomeEMRData, token, employeeId };
+};
+const dispatchReduxDatas = (dispatch) => {
+   return {
+      delEmrData: () => dispatch(delEmrData())
+   };
 };
 class NewEmr extends React.Component {
    constructor(props) {
@@ -144,7 +150,9 @@ class NewEmr extends React.Component {
    async componentDidMount() {
       await this.getByIdPatient();
       await this.getInspectionNotes();
-      await this.getInsuranceServiceIdName();
+      if (this.props.IncomeEMRData.hicsServiceId) {
+         await this.getInsuranceServiceIdName();
+      }
    }
    async componentDidUpdate(_prevProps, prevState) {
       if (prevState.appointments !== this.state.appointments) {
@@ -153,6 +161,7 @@ class NewEmr extends React.Component {
       }
    }
    async componentWillUnmount() {
+      this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -387,4 +396,4 @@ class NewEmr extends React.Component {
       );
    }
 }
-export default connect(getReduxDatas)(NewEmr);
+export default connect(getReduxDatas, dispatchReduxDatas)(NewEmr);
