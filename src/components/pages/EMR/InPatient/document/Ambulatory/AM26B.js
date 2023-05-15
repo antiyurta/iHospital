@@ -32,15 +32,9 @@ function AM26B() {
                      alignItems: 'flex-end'
                   }}
                >
-                  <span style={{ fontSize: 12 }}>
-                     Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-                  </span>
-                  <span style={{ fontSize: 12 }}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-26Б
-                  </span>
+                  <span style={{ fontSize: 12 }}>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн</span>
+                  <span style={{ fontSize: 12 }}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-26Б</span>
                </div>
                <div
                   style={{
@@ -59,10 +53,7 @@ function AM26B() {
             <Table bordered className="document">
                <tbody>
                   <tr>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         №
                      </td>
                      <td
@@ -75,71 +66,40 @@ function AM26B() {
                      >
                         Эцэг /эх/-ийн нэр, Нэр Регистрийн дугаар
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         Нас
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 40 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 40 } }}>
                         Хүйс
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 100 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 100 } }}>
                         Тогтмол хаяг
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 100 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 100 } }}>
                         Онош
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.verticalText, ...{ width: 30 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.verticalText, ...{ width: 30 } }}>
                         Хэвтсэн
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.verticalText, ...{ width: 30 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.verticalText, ...{ width: 30 } }}>
                         Гарсан
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.verticalText, ...{ width: 30 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.verticalText, ...{ width: 30 } }}>
                         Нас барсан
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.verticalText, ...{ width: 30 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.verticalText, ...{ width: 30 } }}>
                         Ор хоног
                      </td>
                      <td colSpan={2} style={textStyle.centerText}>
                         Тусламж үйлчилгээний төрөл
                      </td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 200 } }}
-                     >
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 200 } }}>
                         Тайлбар
                      </td>
                   </tr>
                   <tr>
-                     <td style={{ ...textStyle.centerText, ...{ width: 60 } }}>
-                        Үнэгүй эм олгосон
-                     </td>
-                     <td style={{ ...textStyle.centerText, ...{ width: 60 } }}>
-                        Бусад
-                     </td>
+                     <td style={{ ...textStyle.centerText, ...{ width: 60 } }}>Үнэгүй эм олгосон</td>
+                     <td style={{ ...textStyle.centerText, ...{ width: 60 } }}>Бусад</td>
                   </tr>
                   <tr style={{ height: 20 }}>
                      <td
@@ -259,22 +219,10 @@ function AM26B() {
                      <td rowSpan={2} style={textStyle.centerText}></td>
                      <td rowSpan={2} style={textStyle.centerText}></td>
                      <td rowSpan={2} style={textStyle.centerText}></td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 30 } }}
-                     ></td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 30 } }}
-                     ></td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 30 } }}
-                     ></td>
-                     <td
-                        rowSpan={2}
-                        style={{ ...textStyle.centerText, ...{ width: 30 } }}
-                     ></td>
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 30 } }}></td>
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 30 } }}></td>
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 30 } }}></td>
+                     <td rowSpan={2} style={{ ...textStyle.centerText, ...{ width: 30 } }}></td>
                      <td rowSpan={2} style={textStyle.centerText}></td>
                      <td rowSpan={2} style={textStyle.centerText}></td>
                      <td rowSpan={2} style={textStyle.centerText}></td>

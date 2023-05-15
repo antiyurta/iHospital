@@ -39,16 +39,10 @@ function AM29C() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-29В
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-29В</span>
                </div>
             </div>
             <div style={{ ...styles.generalText, ...{ display: 'flex' } }}>
@@ -61,12 +55,8 @@ function AM29C() {
                <div style={styles.rowCells}></div>
                <div style={styles.rowCells}></div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  ХАТГАХ ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 16 }}>ХАТГАХ ЗАСАЛ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
             <div
                style={{
@@ -108,24 +98,18 @@ function AM29C() {
             </div>
             <div style={styles.rowStyle}>
                1. Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>
-                  Нэр _______________________________
-               </span>
+               <span style={{ marginLeft: 50 }}>Нэр _______________________________</span>
             </div>
             <div style={styles.rowStyle}>
                2. Нас ______
-               <span style={{ marginLeft: 50 }}>
-                  Хүйс: /зур/ эрэгтэй, эмэгтэй
-               </span>
+               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
             </div>
 
             <div style={styles.rowStyle}>
                3. Үндсэн онош:
                ___________________________________________________________________________________________________
             </div>
-            <div style={styles.rowStyle}>
-               4. Эмчилгээний төрөл, талбай, байрлал: _________
-            </div>
+            <div style={styles.rowStyle}>4. Эмчилгээний төрөл, талбай, байрлал: _________</div>
             <div style={styles.rowStyle}>
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
                   Ханасан судасны нэр: __________________________
@@ -141,16 +125,13 @@ function AM29C() {
                </div>
             </div>
             <div style={styles.rowStyle}>
-               5. Эмчилгээний талаар зөвлөгөө өгсөн эсэх: _____________ тийм
-               ____________ үгүй
+               5. Эмчилгээний талаар зөвлөгөө өгсөн эсэх: _____________ тийм ____________ үгүй
             </div>
             <div style={styles.rowStyle}>
-               6. Гарсан хүндрэл:
-               __________________________________________________________________________
+               6. Гарсан хүндрэл: __________________________________________________________________________
             </div>
             <div style={styles.rowStyle}>
-               7. Авсан арга хэмжээ:
-               ______________________________________________________________________
+               7. Авсан арга хэмжээ: ______________________________________________________________________
             </div>
             <div style={styles.blankSpaces}>
                ______________________________________________________________________________________________________________________________
@@ -162,8 +143,7 @@ function AM29C() {
                Эмчилгээ хийсэн эмчийн нэр: ___________________________
             </div>
             <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
-               Хатгах засал хийхийг зөвшөөрсөн өвчтөний нэр:
-               ______________________
+               Хатгах засал хийхийг зөвшөөрсөн өвчтөний нэр: ______________________
             </div>
          </div>
       </div>

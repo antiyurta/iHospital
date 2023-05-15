@@ -93,14 +93,8 @@ function Report() {
    const filterAppointment = async (value, dateString) => {
       if (value !== null) {
          setExaminationReportList([]);
-         config.params.startDate = moment(dateString[0])
-            .hour(0)
-            .minute(0)
-            .format('YYYY-MM-DD HH:mm');
-         config.params.endDate = moment(dateString[1])
-            .hour(23)
-            .minute(59)
-            .format('YYYY-MM-DD HH:mm');
+         config.params.startDate = moment(dateString[0]).hour(0).minute(0).format('YYYY-MM-DD HH:mm');
+         config.params.endDate = moment(dateString[1]).hour(23).minute(59).format('YYYY-MM-DD HH:mm');
          const response = await Get('service/erequest/report', token, config);
          if (response.length !== 0) {
             response.map((el, index) => {

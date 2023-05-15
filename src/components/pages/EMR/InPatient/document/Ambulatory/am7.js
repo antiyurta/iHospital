@@ -43,17 +43,11 @@ function am7() {
                >
                   Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
                </span>
-               <span style={styles.generalText}>
-                  A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-               </span>
-               <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                  Эрүүл мэндийн бүртгэлийн маягт АМ-7
-               </span>
+               <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+               <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-7</span>
             </div>
             <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
-               <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  НАС БАРСАН ТУХАЙ ЭМНЭЛГИЙН ГЭРЧИЛГЭЭ
-               </span>
+               <span style={{ fontWeight: 'bold', fontSize: 14 }}>НАС БАРСАН ТУХАЙ ЭМНЭЛГИЙН ГЭРЧИЛГЭЭ</span>
             </div>
             <table className="w-100">
                <tr>
@@ -68,8 +62,7 @@ function am7() {
                </tr>
                <tr>
                   <td style={{ ...styles.generalText, ...{ width: '23%' } }}>
-                     Эцэг/эхийн
-                     нэр:..............................................
+                     Эцэг/эхийн нэр:..............................................
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '23%' } }}>
                      Нэр:...............................................
@@ -84,9 +77,7 @@ function am7() {
                         }}
                      >
                         <span style={{ marginRight: 5 }}>Хүйс</span>
-                        <div
-                           style={{ display: 'flex', flexDirection: 'column' }}
-                        >
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
                            <div style={styles.checkContainer}>
                               <div>
                                  <div style={styles.rowCells}></div>
@@ -105,67 +96,29 @@ function am7() {
                   <td style={{ ...styles.generalText, ...{ width: '23%' } }}>
                      РД:............................................
                   </td>
-                  <td style={{ ...styles.generalText, ...{ width: '8%' } }}>
-                     Нас
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '8%' } }}>Нас</td>
                </tr>
             </table>
             <table className="w-100">
                <tr>
-                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
-                     Төрсөн өдөр, сар,он
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
-                     Нас барсан огноо
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>Төрсөн өдөр, сар,он</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>Нас барсан огноо</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
                </tr>
             </table>
             <table className="w-100">
@@ -183,10 +136,7 @@ function am7() {
             </table>
             <table className="w-100">
                <tr>
-                  <td
-                     rowSpan={5}
-                     style={{ ...styles.generalText, ...{ width: 170 } }}
-                  >
+                  <td rowSpan={5} style={{ ...styles.generalText, ...{ width: 170 } }}>
                      1 Үхэлд шууд хүргэсэн өвчин ба эмгэг /а/
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: 30 } }}></td>
@@ -195,9 +145,7 @@ function am7() {
                   <td style={{ ...styles.generalText, ...{ width: 100 } }}>
                      Өвчин эхэлснээс хойш нас барах хүртэлх хугацаа
                   </td>
-                  <td style={{ ...styles.generalText, ...{ width: 80 } }}>
-                     ӨОУА-10
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: 80 } }}>ӨОУА-10</td>
                </tr>
                <tr>
                   <td rowSpan={2} style={styles.generalText}>
@@ -294,45 +242,24 @@ function am7() {
                   <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
                      Хэрэв тийм бол мэс засал хийлгэсэн огноо
                   </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>
-                     Ж
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
+                  <td style={{ ...styles.generalText, ...{ width: '2%' } }}>Ж</td>
                </tr>
                <tr style={{ height: 40 }}>
-                  <td style={styles.generalText}>
-                     Мэс заслын шалтгааныг тодруулж бичих (өвчин ба шалтгаан)
-                  </td>
+                  <td style={styles.generalText}>Мэс заслын шалтгааныг тодруулж бичих (өвчин ба шалтгаан)</td>
                   <td style={styles.generalText} colSpan={5}></td>
                   <td style={styles.generalText} colSpan={3}>
                      ҮОУА-9
                   </td>
                </tr>
                <tr>
-                  <td style={styles.generalText}>
-                     Асуумжаар дүгнэлт шинжилгээ (VA WHO 2016 standard) хийсэн
-                     эсэх ?
-                  </td>
+                  <td style={styles.generalText}>Асуумжаар дүгнэлт шинжилгээ (VA WHO 2016 standard) хийсэн эсэх ?</td>
                   <td style={styles.generalText}>
                      <div style={styles.checkContainer}>
                         <div>
@@ -359,9 +286,7 @@ function am7() {
                   </td>
                </tr>
                <tr>
-                  <td style={styles.generalText}>
-                     Хэрэв тийм бол онош баталгаажуулахад ашигласан эсэх?
-                  </td>
+                  <td style={styles.generalText}>Хэрэв тийм бол онош баталгаажуулахад ашигласан эсэх?</td>
                   <td style={styles.generalText}>
                      <div style={styles.checkContainer}>
                         <div>
@@ -460,9 +385,7 @@ function am7() {
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Шалтгаан тогтоогдоогүй байгаа
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Шалтгаан тогтоогдоогүй байгаа</span>
                      </div>
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '33%' } }}>
@@ -477,9 +400,7 @@ function am7() {
             </table>
             <table className="w-100">
                <tr>
-                  <td style={styles.generalText}>
-                     Гадны шалтгаант болон хордлогын шалтгаант бол:
-                  </td>
+                  <td style={styles.generalText}>Гадны шалтгаант болон хордлогын шалтгаант бол:</td>
                   <td style={styles.generalText}>Гэмтсэн өдөр, сар, он</td>
                   <td
                      style={{
@@ -550,8 +471,7 @@ function am7() {
             <table className="w-100">
                <tr>
                   <td style={styles.generalText}>
-                     Гадны шалтгааныг тодорхойлон бичих (Хэрэв хордлогын
-                     шалтгаант бол хордсон бодисыг бичих)
+                     Гадны шалтгааныг тодорхойлон бичих (Хэрэв хордлогын шалтгаант бол хордсон бодисыг бичих)
                   </td>
                   <td>
                      ....................................................................................................................
@@ -590,9 +510,7 @@ function am7() {
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Амьдрах зориулалттай тусгай байр
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Амьдрах зориулалттай тусгай байр</span>
                      </div>
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '35%' } }}>
@@ -602,10 +520,7 @@ function am7() {
                               <div style={styles.rowCells}></div>
                            </div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Сургууль, бусад олон нийтийн ба засаг захиргааны
-                           газрууд
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Сургууль, бусад олон нийтийн ба засаг захиргааны газрууд</span>
                      </div>
                   </td>
                </tr>
@@ -623,9 +538,7 @@ function am7() {
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Биеийн тамир, спортын талбай
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Биеийн тамир, спортын талбай</span>
                      </div>
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '30%' } }}>
@@ -633,9 +546,7 @@ function am7() {
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Худалдаа үйлчилгээний газрууд
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Худалдаа үйлчилгээний газрууд</span>
                      </div>
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '35%' } }}>
@@ -643,24 +554,17 @@ function am7() {
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Үйлдвэрлэл ба барилгын газар
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Үйлдвэрлэл ба барилгын газар</span>
                      </div>
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={3}
-                     style={{ ...styles.generalText, ...{ width: '15%' } }}
-                  >
+                  <td colSpan={3} style={{ ...styles.generalText, ...{ width: '15%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Бусад (тодорхойлж бичих):
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Бусад (тодорхойлж бичих):</span>
                      </div>
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '35%' } }}>
@@ -673,29 +577,17 @@ function am7() {
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={2}
-                     style={{ ...styles.generalText, ...{ width: '15%' } }}
-                  >
+                  <td colSpan={2} style={{ ...styles.generalText, ...{ width: '15%' } }}>
                      Эмнэлэгт нас барсан бол:
                   </td>
-                  <td
-                     colSpan={3}
-                     style={{ ...styles.generalText, ...{ width: '35%' } }}
-                  >
-                     Эмнэлгээс гадуурх нас баралт бол: Нас барахаас өмнө
-                     эмнэлэгт хэвтсэн эсэх?
+                  <td colSpan={3} style={{ ...styles.generalText, ...{ width: '35%' } }}>
+                     Эмнэлгээс гадуурх нас баралт бол: Нас барахаас өмнө эмнэлэгт хэвтсэн эсэх?
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={2}
-                     style={{ ...styles.generalText, ...{ width: '15%' } }}
-                  >
+                  <td colSpan={2} style={{ ...styles.generalText, ...{ width: '15%' } }}>
                      Ор хоног
-                     <span style={{ marginLeft: 30 }}>
-                        ......өдөр ...... цаг.......минут
-                     </span>
+                     <span style={{ marginLeft: 30 }}>......өдөр ...... цаг.......минут</span>
                   </td>
                   <td
                      colSpan={3}
@@ -719,20 +611,14 @@ function am7() {
                         </div>
                         <span style={{ marginLeft: 30 }}>
                            Хэрэв тийм бол:
-                           <span style={{ marginLeft: 30 }}>
-                              ....... өдөр...... сар ....... жил
-                           </span>
+                           <span style={{ marginLeft: 30 }}>....... өдөр...... сар ....... жил</span>
                         </span>
                      </div>
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={2}
-                     style={{ ...styles.generalText, ...{ width: '15%' } }}
-                  >
-                     Хорт хавдар, ДОХ/ХДХВ-ээр нас барсан бол оношлогдсоноос
-                     хойш амьдарсан хугацаа
+                  <td colSpan={2} style={{ ...styles.generalText, ...{ width: '15%' } }}>
+                     Хорт хавдар, ДОХ/ХДХВ-ээр нас барсан бол оношлогдсоноос хойш амьдарсан хугацаа
                   </td>
                   <td
                      colSpan={3}
@@ -741,9 +627,7 @@ function am7() {
                         ...{ width: '35%', textAlign: 'center' }
                      }}
                   >
-                     <span style={{ marginLeft: 30 }}>
-                        ....... Жил...... сар ....... хоног
-                     </span>
+                     <span style={{ marginLeft: 30 }}>....... Жил...... сар ....... хоног</span>
                   </td>
                </tr>
             </table>
@@ -756,9 +640,7 @@ function am7() {
             </table>
             <table className="w-100">
                <tr>
-                  <td style={{ ...styles.generalText, ...{ width: '40%' } }}>
-                     Ихэр эсэх?
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '40%' } }}>Ихэр эсэх?</td>
                   <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
@@ -785,9 +667,7 @@ function am7() {
                   </td>
                </tr>
                <tr>
-                  <td style={{ ...styles.generalText, ...{ width: '40%' } }}>
-                     Амьгүй төрөлт?
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '40%' } }}>Амьгүй төрөлт?</td>
                   <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
@@ -819,55 +699,28 @@ function am7() {
                   <td style={{ ...styles.generalText, ...{ width: '50%' } }}>
                      Хоног болоогүй нас баралт бол хугацааг бичих /цагаар/
                   </td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
-                     Төрөх үеийн жин (гр)
-                  </td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '10%' } }}
-                  ></td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>Төрөх үеийн жин (гр)</td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '10%' } }}></td>
                </tr>
                <tr>
-                  <td style={{ ...styles.generalText, ...{ width: '50%' } }}>
-                     Жирэмсний хугацаа /7 хоногоор/
-                  </td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     colSpan={3}
-                     style={{ ...styles.generalText, ...{ width: '20%' } }}
-                  >
+                  <td style={{ ...styles.generalText, ...{ width: '50%' } }}>Жирэмсний хугацаа /7 хоногоор/</td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td colSpan={3} style={{ ...styles.generalText, ...{ width: '20%' } }}>
                      Эхийн нас
                   </td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '4%' } }}
-                  ></td>
-                  <td
-                     style={{ ...styles.generalText, ...{ width: '10%' } }}
-                  ></td>
+                  <td style={{ ...styles.generalText, ...{ width: '4%' } }}></td>
+                  <td style={{ ...styles.generalText, ...{ width: '10%' } }}></td>
                </tr>
                <tr>
                   <td style={styles.generalText}>
-                     Перинаталь эндэгдэлд нөлөөлсөн эхийн эрүүл мэнд болон
-                     жирэмсэн ба төрөх үеийн хүндрэл /тодорхойлж бичих/
+                     Перинаталь эндэгдэлд нөлөөлсөн эхийн эрүүл мэнд болон жирэмсэн ба төрөх үеийн хүндрэл /тодорхойлж
+                     бичих/
                   </td>
                   <td colSpan={7}>
                      ..............................................................................ӨОУА-10
@@ -878,10 +731,7 @@ function am7() {
             </table>
             <table className="w-100">
                <tr>
-                  <td
-                     colSpan={5}
-                     style={{ ...styles.generalText, ...{ width: '50%' } }}
-                  >
+                  <td colSpan={5} style={{ ...styles.generalText, ...{ width: '50%' } }}>
                      Эхийн эндэгдэл мөн эсэх?
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '15%' } }}>
@@ -910,52 +760,33 @@ function am7() {
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={5}
-                     style={{ ...styles.generalText, ...{ width: '50%' } }}
-                  >
+                  <td colSpan={5} style={{ ...styles.generalText, ...{ width: '50%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Жирэмсэн ба төрөх, төрсний дараах үе
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Жирэмсэн ба төрөх, төрсний дараах үе</span>
                      </div>
                   </td>
-                  <td
-                     colSpan={3}
-                     style={{ ...styles.generalText, ...{ width: '15%' } }}
-                  >
+                  <td colSpan={3} style={{ ...styles.generalText, ...{ width: '15%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Жирэмсэн ба төрсний дараа 42 хоногийн дотор
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Жирэмсэн ба төрсний дараа 42 хоногийн дотор</span>
                      </div>
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={5}
-                     style={{ ...styles.generalText, ...{ width: '50%' } }}
-                  >
+                  <td colSpan={5} style={{ ...styles.generalText, ...{ width: '50%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
                            <div style={styles.rowCells}></div>
                         </div>
-                        <span style={{ marginLeft: 5 }}>
-                           Жирэмслэлт, төрөлтийн дараа 42 хоногоос 1 жилийн
-                           дотор
-                        </span>
+                        <span style={{ marginLeft: 5 }}>Жирэмслэлт, төрөлтийн дараа 42 хоногоос 1 жилийн дотор</span>
                      </div>
                   </td>
-                  <td
-                     colSpan={3}
-                     style={{ ...styles.generalText, ...{ width: '15%' } }}
-                  >
+                  <td colSpan={3} style={{ ...styles.generalText, ...{ width: '15%' } }}>
                      <div style={styles.checkContainer}>
                         <div>
                            <div style={styles.rowCells}></div>
@@ -965,10 +796,7 @@ function am7() {
                   </td>
                </tr>
                <tr>
-                  <td
-                     colSpan={5}
-                     style={{ ...styles.generalText, ...{ width: '50%' } }}
-                  >
+                  <td colSpan={5} style={{ ...styles.generalText, ...{ width: '50%' } }}>
                      Жирэмслэлт нь нас баралтын шалтгаан болсон эсэх?
                   </td>
                   <td style={{ ...styles.generalText, ...{ width: '15%' } }}>
@@ -999,31 +827,18 @@ function am7() {
             </table>
             <table className="w-100">
                <tr>
-                  <td style={{ ...styles.generalText, ...{ width: '60%' } }}>
-                     Гэрчилгээ олгосон огноо
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '10%' } }}>
-                     Ө Ө
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '10%' } }}>
-                     С С
-                  </td>
-                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>
-                     Ж Ж Ж Ж
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '60%' } }}>Гэрчилгээ олгосон огноо</td>
+                  <td style={{ ...styles.generalText, ...{ width: '10%' } }}>Ө Ө</td>
+                  <td style={{ ...styles.generalText, ...{ width: '10%' } }}>С С</td>
+                  <td style={{ ...styles.generalText, ...{ width: '20%' } }}>Ж Ж Ж Ж</td>
                </tr>
             </table>
             <table className="w-100">
                <tr>
-                  <td
-                     rowSpan={2}
-                     style={{ ...styles.generalText, ...{ width: '10%' } }}
-                  >
+                  <td rowSpan={2} style={{ ...styles.generalText, ...{ width: '10%' } }}>
                      Тамга
                   </td>
-                  <td style={{ ...styles.generalText, ...{ width: '30%' } }}>
-                     Эмчлэгч эмч, өрхийн эмч, бусад /зур/
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '30%' } }}>Эмчлэгч эмч, өрхийн эмч, бусад /зур/</td>
                   <td style={{ ...styles.generalText, ...{ width: '30%' } }}>
                      Нэр: ...................................
                   </td>
@@ -1032,9 +847,7 @@ function am7() {
                   </td>
                </tr>
                <tr>
-                  <td style={{ ...styles.generalText, ...{ width: '30%' } }}>
-                     Гэрчилгээ олгосон эмч:
-                  </td>
+                  <td style={{ ...styles.generalText, ...{ width: '30%' } }}>Гэрчилгээ олгосон эмч:</td>
                   <td style={{ ...styles.generalText, ...{ width: '30%' } }}>
                      Нэр: ...................................
                   </td>

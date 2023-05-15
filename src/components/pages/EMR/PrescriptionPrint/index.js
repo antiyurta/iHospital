@@ -62,41 +62,30 @@ export default function Index(props) {
                            </div>
                            <div className="basis-1/2">
                               <p className="text-right">
-                                 ЭМСайдын 2013 оны 11 сарын 450 тоот тушаалаар
-                                 батлав. Эрүүл мэндын бүртгэлийн маягт АМ-15
+                                 ЭМСайдын 2013 оны 11 сарын 450 тоот тушаалаар батлав. Эрүүл мэндын бүртгэлийн маягт
+                                 АМ-15
                               </p>
                            </div>
                         </div>
-                        <p
-                           className="text-center py-10"
-                           style={{ fontSize: '25px', fontWeight: 'bold' }}
-                        >
+                        <p className="text-center py-10" style={{ fontSize: '25px', fontWeight: 'bold' }}>
                            {props.props.structures.name}
                         </p>
                         <div className="flex flex-row">
                            <div className="basis-1/2">
                               <div className="flex">
-                                 <p className="font-semibold mr-2">
-                                    Эцэг эхийн нэр:
-                                 </p>
+                                 <p className="font-semibold mr-2">Эцэг эхийн нэр:</p>
                                  <p className="pr-3">{patientInfo.lastName}</p>
                               </div>
                               <div className="flex">
                                  <p className="font-semibold mr-2">РД:</p>
-                                 <p className="pr-3">
-                                    {patientInfo.registerNumber}
-                                 </p>
+                                 <p className="pr-3">{patientInfo.registerNumber}</p>
                               </div>
                               <div className="flex">
                                  <p className="font-semibold mr-2">Хүйс:</p>
-                                 <p className="pr-3">
-                                    {patientInfo.genderType}
-                                 </p>
+                                 <p className="pr-3">{patientInfo.genderType}</p>
                               </div>
                               <div className="flex">
-                                 <p className="font-semibold mr-2">
-                                    Тогтмол хаяг:
-                                 </p>
+                                 <p className="font-semibold mr-2">Тогтмол хаяг:</p>
                                  <p className="pr-3">{patientInfo.address}</p>
                               </div>
                            </div>
@@ -133,14 +122,9 @@ export default function Index(props) {
                         <RenderHTML data={JSON.parse(props.props.plan)} />
                         <div className="text-right">
                            <div className="inline-flex">
-                              <p className="font-semibold mr-2">
-                                 Үзлэг хийсэн эмч:
-                              </p>
+                              <p className="font-semibold mr-2">Үзлэг хийсэн эмч:</p>
                               <p>
-                                 {props.props.employees.lastName.substring(
-                                    0,
-                                    1
-                                 ) +
+                                 {props.props.employees.lastName.substring(0, 1) +
                                     '. ' +
                                     props.props.employees.firstName}
                               </p>

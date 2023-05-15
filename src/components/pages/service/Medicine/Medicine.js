@@ -1,10 +1,4 @@
-import {
-   DeleteOutlined,
-   EditOutlined,
-   MinusCircleOutlined,
-   PlusCircleOutlined,
-   PlusOutlined
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
    Button,
    Card,
@@ -88,12 +82,7 @@ function Medicine() {
    };
    const onFinish = async (values) => {
       if (editMode) {
-         const response = await Patch(
-            'service/medicine/' + id,
-            token,
-            config,
-            values
-         );
+         const response = await Patch('service/medicine/' + id, token, config, values);
          if (response === 200) {
             setIsOpenMedicineModal(false);
             getMedicines(1);
@@ -108,23 +97,13 @@ function Medicine() {
    };
    const onFinishOut = async (values) => {
       if (editMode) {
-         const response = await Patch(
-            'service/global-medicine/' + id,
-            token,
-            config,
-            values
-         );
+         const response = await Patch('service/global-medicine/' + id, token, config, values);
          if (response === 200) {
             setIsOpenOutMedicineModal(false);
             getOutMedicines(1, 20);
          }
       } else {
-         const response = await Post(
-            'service/global-medicine',
-            token,
-            config,
-            values
-         );
+         const response = await Post('service/global-medicine', token, config, values);
          if (response === 201) {
             // setIsOpenMedicineModal(false);
             // getMedicines(1);?
@@ -310,11 +289,7 @@ function Medicine() {
    ];
    const IMedicine = ({ type }) => (
       <Card bordered={false} className="header-solid max-h-max rounded-md">
-         <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => addModal(true, type)}
-         >
+         <Button type="primary" icon={<PlusOutlined />} onClick={() => addModal(true, type)}>
             Нэмэх
          </Button>
          <Table
@@ -327,8 +302,7 @@ function Medicine() {
                size: 'small',
                current: type === 0 ? meta.page : outMeta.page,
                total: type === 0 ? meta.itemCount : outMeta.itemCount,
-               showTotal: (total, range) =>
-                  `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+               showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                pageSize: type === 0 ? meta.limit : outMeta.limit,
                total: type === 0 ? meta.itemCount : outMeta.itemCount,
                showSizeChanger: true,

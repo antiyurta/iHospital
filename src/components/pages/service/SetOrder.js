@@ -1,9 +1,4 @@
-import {
-   DeleteOutlined,
-   EditOutlined,
-   MinusCircleOutlined,
-   PlusOutlined
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, Input, InputNumber, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
@@ -50,11 +45,7 @@ function SetOrder() {
    ];
    const checkNumber = (event) => {
       var charCode = event.charCode;
-      if (
-         charCode > 31 &&
-         (charCode < 48 || charCode > 57) &&
-         charCode !== 46
-      ) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
          event.preventDefault();
       } else {
          return true;
@@ -101,23 +92,13 @@ function SetOrder() {
          .validateFields()
          .then(async (value) => {
             if (editMode) {
-               const response = await Patch(
-                  'service/setorder/' + id,
-                  token,
-                  config,
-                  value
-               );
+               const response = await Patch('service/setorder/' + id, token, config, value);
                if (response === 200) {
                   getPackages();
                   setIsOpenModal(false);
                }
             } else {
-               const response = await Post(
-                  'service/setorder',
-                  token,
-                  config,
-                  value
-               );
+               const response = await Post('service/setorder', token, config, value);
                if (response === 201) {
                   getPackages();
                   setIsOpenModal(false);
@@ -146,10 +127,7 @@ function SetOrder() {
             className="header-solid max-h-max rounded-md"
             title="Болзолт жор"
             extra={
-               <Button
-                  onClick={showModal}
-                  className="bg-sky-700 rounded-md text-white"
-               >
+               <Button onClick={showModal} className="bg-sky-700 rounded-md text-white">
                   Нэмэх
                </Button>
             }
@@ -173,11 +151,7 @@ function SetOrder() {
                               <td>
                                  <ul className="list-disc">
                                     {item.services.map((service, idx) => {
-                                       return (
-                                          <li key={idx}>
-                                             {service.serviceName}
-                                          </li>
-                                       );
+                                       return <li key={idx}>{service.serviceName}</li>;
                                     })}
                                  </ul>
                               </td>
@@ -247,27 +221,15 @@ function SetOrder() {
                      <Form.List name="services">
                         {(fields, { remove }) => (
                            <>
-                              <div
-                                 className="table-responsive p-4"
-                                 id="style-8"
-                              >
-                                 <Table
-                                    className="ant-border-space"
-                                    style={{ width: '100%' }}
-                                 >
+                              <div className="table-responsive p-4" id="style-8">
+                                 <Table className="ant-border-space" style={{ width: '100%' }}>
                                     <thead className="ant-table-thead bg-slate-200">
                                        <tr>
                                           <th>Нэр</th>
                                           <th>Yнэ</th>
                                           <th>Үйлдэл</th>
                                           <th>
-                                             <Button
-                                                onClick={() =>
-                                                   setIsOpenSecondModal(true)
-                                                }
-                                             >
-                                                нэмэх
-                                             </Button>
+                                             <Button onClick={() => setIsOpenSecondModal(true)}>нэмэх</Button>
                                           </th>
                                        </tr>
                                     </thead>
@@ -275,23 +237,17 @@ function SetOrder() {
                                        {fields.map(({ key, name }) => (
                                           <tr key={key}>
                                              <td>
-                                                <Form.Item
-                                                   name={[name, 'serviceName']}
-                                                >
+                                                <Form.Item name={[name, 'serviceName']}>
                                                    <Input disabled={true} />
                                                 </Form.Item>
                                              </td>
                                              <td>
-                                                <Form.Item
-                                                   name={[name, 'servicePrice']}
-                                                >
+                                                <Form.Item name={[name, 'servicePrice']}>
                                                    <Input disabled={true} />
                                                 </Form.Item>
                                              </td>
                                              <td>
-                                                <MinusCircleOutlined
-                                                   onClick={() => remove(name)}
-                                                />
+                                                <MinusCircleOutlined onClick={() => remove(name)} />
                                              </td>
                                           </tr>
                                        ))}
@@ -305,18 +261,8 @@ function SetOrder() {
                </Row>
             </Form>
          </Modal>
-         <Modal
-            onCancel={() => setIsOpenSecondModal(false)}
-            footer={null}
-            open={isOpenSecondModal}
-            width={'70%'}
-         >
-            <Order
-               isPackage={true}
-               isDoctor={false}
-               categories={categories}
-               save={AddServices}
-            />
+         <Modal onCancel={() => setIsOpenSecondModal(false)} footer={null} open={isOpenSecondModal} width={'70%'}>
+            <Order isPackage={true} isDoctor={false} categories={categories} save={AddServices} />
          </Modal>
       </div>
    );

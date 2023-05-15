@@ -29,16 +29,8 @@ export default function Step7() {
             <div className="md:w-1/3 sm:w-full p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        label=""
-                        name={['epidemicQuestion', 'travelDesc']}
-                        className="mb-0"
-                     >
-                        <TextArea
-                           rows={3}
-                           style={{ padding: 2 }}
-                           placeholder="Ямар зорилгоор"
-                        />
+                     <Form.Item label="" name={['epidemicQuestion', 'travelDesc']} className="mb-0">
+                        <TextArea rows={3} style={{ padding: 2 }} placeholder="Ямар зорилгоор" />
                      </Form.Item>
                   </div>
                </div>

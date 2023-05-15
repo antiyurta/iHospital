@@ -3,13 +3,7 @@ import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import {
-   DefaultPost,
-   DefualtGet,
-   Get,
-   numberToCurrency,
-   openNofi
-} from '../../comman';
+import { DefaultPost, DefualtGet, Get, numberToCurrency, openNofi } from '../../comman';
 import Appointment from '../Appointment/Schedule/Appointment';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
 const { Option } = Select;
@@ -53,11 +47,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
       var time = [];
       console.log('========>', payments);
       payments?.map((payment) => {
-         if (
-            payment.type === 2 &&
-            payment.treatmentRequest?.slotId === null &&
-            payment.treatment?.isSlot
-         ) {
+         if (payment.type === 2 && payment.treatmentRequest?.slotId === null && payment.treatment?.isSlot) {
             time.push(payment);
          } else if (
             payment.type === 1 &&
@@ -123,12 +113,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             if (isCustomerNo && customerNo) {
                data['customerNo'] = customerNo;
             }
-            const response = await DefaultPost(
-               'payment/payment',
-               token,
-               config,
-               data
-            );
+            const response = await DefaultPost('payment/payment', token, config, data);
             if (response) {
                setTotalAmount(0);
                isClose(false);
@@ -148,18 +133,10 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         `ebarimt/organization/${event}`,
-         token,
-         conf
-      );
+      const response = await DefualtGet(`ebarimt/organization/${event}`, token, conf);
       console.log(response);
       if (response?.response?.found) {
-         openNofi(
-            'success',
-            'Амжиллтай',
-            `Байгууллага: ${response?.response?.name}`
-         );
+         openNofi('success', 'Амжиллтай', `Байгууллага: ${response?.response?.name}`);
          setCustomerInfo(response?.response);
       } else {
          openNofi('error', 'Алдаа', 'Байгууллага олдсонгүй');
@@ -175,11 +152,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             tAmount += item.amount;
          });
          setSelectedAmount(tAmount);
-         console.log(
-            `selectedRowKeys: ${selectedRowKeys}`,
-            'selectedRows: ',
-            selectedRows
-         );
+         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       }
    };
    // nemelterer select table
@@ -202,9 +175,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                <>
                   <div className="h-6">
                      <p className="float-left">Төлбөр авах</p>
-                     <p className="float-right font-extrabold">
-                        Нийт төлбөр: {numberToCurrency(totalAmount)}
-                     </p>
+                     <p className="float-right font-extrabold">Нийт төлбөр: {numberToCurrency(totalAmount)}</p>
                   </div>
                </>
             }
@@ -234,9 +205,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                   >
                      Хөнгөлөлтэй эсэх
                   </Checkbox>
-                  <p className="float-right font-bold">
-                     Сонгосон төлбөр: {numberToCurrency(selectedAmount)}
-                  </p>
+                  <p className="float-right font-bold">Сонгосон төлбөр: {numberToCurrency(selectedAmount)}</p>
                </div>
                <div className="w-full p-1">
                   <Checkbox
@@ -255,10 +224,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                {isDiscount && (
                   <div className="w-full p-1">
                      <label>Хөнгөлөх хувь</label>
-                     <Select
-                        style={{ width: '100%' }}
-                        onChange={(e) => setDiscountPercentRequest(e)}
-                     >
+                     <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
                         {discounts.map((discount, index) => {
                            return (
                               <Option key={index} value={discount.id}>
@@ -279,9 +245,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                            width: '100%'
                         }}
                      />
-                     {Object.keys(customerInfo).length > 0 && (
-                        <Alert message={customerInfo.name} type="success" />
-                     )}
+                     {Object.keys(customerInfo).length > 0 && <Alert message={customerInfo.name} type="success" />}
                   </div>
                )}
                <div className="w-full p-1">
@@ -301,9 +265,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                                     <ClockCircleOutlined />
                                     {element.name}
                                  </a>
-                                 <p className="float-right">
-                                    {numberToCurrency(element.amount)}
-                                 </p>
+                                 <p className="float-right">{numberToCurrency(element.amount)}</p>
                               </div>
                            );
                         })}
@@ -321,15 +283,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                                        title: 'Үйлчилгээ',
                                        render: (_, record) => {
                                           if (record.treatmentRequest?.qty) {
-                                             return (
-                                                <p>
-                                                   {record.name +
-                                                      ' ' +
-                                                      record.treatmentRequest
-                                                         ?.qty +
-                                                      'ш'}
-                                                </p>
-                                             );
+                                             return <p>{record.name + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
                                           } else {
                                              return record.name;
                                           }
@@ -416,12 +370,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                />
             </div>
          </Modal>
-         <Modal
-            open={ebarimtModal}
-            onCancel={() => setEbarimtModal(false)}
-            footer={null}
-            width="360px"
-         >
+         <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
             <EbarimtPrint props={ebarimtData} isBackPayment={false} />
          </Modal>
       </>

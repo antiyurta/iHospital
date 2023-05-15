@@ -10,11 +10,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Регистр дугаар:"
-                     name={['patient', 'registerNumber']}
-                  >
+                  <Form.Item className="mb-0" label="Регистр дугаар:" name={['patient', 'registerNumber']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -24,11 +20,7 @@ function Step1({ form, templateId }) {
             <div className="w-1/4 p-1">
                <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                   <div className="p-1">
-                     <Form.Item
-                        className="mb-0"
-                        label="Эрүүл мэндийн дугаар:"
-                        name={['patient', 'emd']}
-                     >
+                     <Form.Item className="mb-0" label="Эрүүл мэндийн дугаар:" name={['patient', 'emd']}>
                         <Input />
                      </Form.Item>
                   </div>
@@ -38,11 +30,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Нийгмийн даатгалын дугаар:"
-                     name={['patient', 'ndd']}
-                  >
+                  <Form.Item className="mb-0" label="Нийгмийн даатгалын дугаар:" name={['patient', 'ndd']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -51,11 +39,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Тасгийн нэр:"
-                     name={['patient', 'departmentName']}
-                  >
+                  <Form.Item className="mb-0" label="Тасгийн нэр:" name={['patient', 'departmentName']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -64,11 +48,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Эцэг /эх/-ийн нэр:"
-                     name={['patient', 'lastName']}
-                  >
+                  <Form.Item className="mb-0" label="Эцэг /эх/-ийн нэр:" name={['patient', 'lastName']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -77,11 +57,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Өөрийн нэр:"
-                     name={['patient', 'firstName']}
-                  >
+                  <Form.Item className="mb-0" label="Өөрийн нэр:" name={['patient', 'firstName']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -110,11 +86,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Нас:"
-                     name={['patient', 'age']}
-                  >
+                  <Form.Item className="mb-0" label="Нас:" name={['patient', 'age']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -123,11 +95,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Хүйс:"
-                     name={['patient', 'genderType']}
-                  >
+                  <Form.Item className="mb-0" label="Хүйс:" name={['patient', 'genderType']}>
                      <Radio.Group disabled={true}>
                         <Radio className="ml-2" value={'MAN'}>
                            Эрэгтэй
@@ -142,11 +110,7 @@ function Step1({ form, templateId }) {
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
                   {templateId != 2 && (
-                     <Form.Item
-                        className="mb-0"
-                        label="Гэрлэлтийн байдал"
-                        name={['patient', 'marriageStatus']}
-                     >
+                     <Form.Item className="mb-0" label="Гэрлэлтийн байдал" name={['patient', 'marriageStatus']}>
                         <Radio.Group className="ml-0">
                            <Radio value={0}>Огт гэрлээгүй</Radio>
                            <Radio value={1}>Батлуулсан гэр бүлтэй</Radio>
@@ -167,11 +131,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Боловсролын байдал"
-                     name={['patient', 'educationType']}
-                  >
+                  <Form.Item className="mb-0" label="Боловсролын байдал" name={['patient', 'educationType']}>
                      <Radio.Group className="ml-0">
                         <Radio value={0}>Боловсролгүй</Radio>
                         <Radio value={1}>Бага</Radio>
@@ -189,11 +149,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Аймаг/хот:"
-                     name={['patient', 'address', 'aimag']}
-                  >
+                  <Form.Item className="mb-0" label="Аймаг/хот:" name={['patient', 'address', 'aimag']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -202,11 +158,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Сум/дүүрэг:"
-                     name={['patient', 'address', 'soum']}
-                  >
+                  <Form.Item className="mb-0" label="Сум/дүүрэг:" name={['patient', 'address', 'soum']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -215,11 +167,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Баг/хороо:"
-                     name={['patient', 'address', 'committee']}
-                  >
+                  <Form.Item className="mb-0" label="Баг/хороо:" name={['patient', 'address', 'committee']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -228,11 +176,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Гудамж/Байшин:"
-                     name={['patient', 'address', 'building']}
-                  >
+                  <Form.Item className="mb-0" label="Гудамж/Байшин:" name={['patient', 'address', 'building']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -241,11 +185,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Тоот:"
-                     name={['patient', 'address', 'address']}
-                  >
+                  <Form.Item className="mb-0" label="Тоот:" name={['patient', 'address', 'address']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -254,11 +194,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Ажлын газар, албан тушаал:"
-                     name={['patient', 'organization']}
-                  >
+                  <Form.Item className="mb-0" label="Ажлын газар, албан тушаал:" name={['patient', 'organization']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -267,11 +203,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Мэргэжил:"
-                     name={['patient', 'jobPosition']}
-                  >
+                  <Form.Item className="mb-0" label="Мэргэжил:" name={['patient', 'jobPosition']}>
                      <Input disabled={true} />
                   </Form.Item>
                </div>
@@ -280,11 +212,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Цусны бүлэг"
-                     name={['patient', 'bloodType']}
-                  >
+                  <Form.Item className="mb-0" label="Цусны бүлэг" name={['patient', 'bloodType']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -308,11 +236,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Өөрийн утас:"
-                     name={['patient', 'phoneNo']}
-                  >
+                  <Form.Item className="mb-0" label="Өөрийн утас:" name={['patient', 'phoneNo']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -334,11 +258,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Төлбөрийн төрөл:"
-                     name={['patient', 'paymentStatus']}
-                  >
+                  <Form.Item className="mb-0" label="Төлбөрийн төрөл:" name={['patient', 'paymentStatus']}>
                      <Radio.Group className="ml-0">
                         <Radio value={0}>Төр хариуцсан</Radio>
                         <Radio value={15}>15%</Radio>
@@ -369,11 +289,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Харшлын анамнез:"
-                     name={['patient', 'anemis']}
-                  >
+                  <Form.Item className="mb-0" label="Харшлын анамнез:" name={['patient', 'anemis']}>
                      <Checkbox.Group className="ml-0">
                         <Checkbox className="ml-2" value={0}>
                            Эмийн бодис
@@ -389,11 +305,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/2 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Код"
-                     name={['diagnose', 'ambultoryDiagnoseCode']}
-                  >
+                  <Form.Item className="mb-0" label="Код" name={['diagnose', 'ambultoryDiagnoseCode']}>
                      <Input
                         disabled={true}
                         style={{
@@ -407,11 +319,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/2 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Нэр"
-                     name={['diagnose', 'ambultoryDiagnoseName']}
-                  >
+                  <Form.Item className="mb-0" label="Нэр" name={['diagnose', 'ambultoryDiagnoseName']}>
                      <Input
                         disabled={true}
                         style={{
@@ -469,11 +377,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     className="mb-0"
-                     label="Өвчний төгсгөл:"
-                     name={['patient', 'endOfPain']}
-                  >
+                  <Form.Item className="mb-0" label="Өвчний төгсгөл:" name={['patient', 'endOfPain']}>
                      <Checkbox.Group className="ml-0">
                         <Checkbox className="ml-2" value={0}>
                            Эдгэрсэн
@@ -489,10 +393,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Эмнэлгээс:"
-                     name={['patient', 'fromHospital']}
-                  >
+                  <Form.Item label="Эмнэлгээс:" name={['patient', 'fromHospital']}>
                      <Checkbox.Group className="ml-0">
                         <Checkbox className="ml-2" value={0}>
                            Гарсан
@@ -509,10 +410,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Эмчлэгч эмчийн нэр, гарын үсэг:"
-                     name={['patient', 'doctor']}
-                  >
+                  <Form.Item label="Эмчлэгч эмчийн нэр, гарын үсэг:" name={['patient', 'doctor']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -521,18 +419,13 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Хянасан эмчийн нэр, гарын үсэг:"
-                     name={['patient', 'doctors']}
-                  >
+                  <Form.Item label="Хянасан эмчийн нэр, гарын үсэг:" name={['patient', 'doctors']}>
                      <Checkbox.Group>
                         <Checkbox className="ml-2" value={0}>
                            Эмчилгээ эрхэлсэн орлогч
                         </Checkbox>
                         <Checkbox value={1}>тасгийн эрхлэгч</Checkbox>
-                        <Checkbox value={2}>
-                           эмчилгээний чанарын менежер
-                        </Checkbox>
+                        <Checkbox value={2}>эмчилгээний чанарын менежер</Checkbox>
                         <Checkbox value={3}>бусад</Checkbox>
                      </Checkbox.Group>
                   </Form.Item>
@@ -561,10 +454,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="ХЧТА-ын хоног:"
-                     name={['patient', 'hchtaDay']}
-                  >
+                  <Form.Item label="ХЧТА-ын хоног:" name={['patient', 'hchtaDay']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -591,10 +481,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Биеийн жингийн индекс (кг/м2):"
-                     name={['patient', 'index']}
-                  >
+                  <Form.Item label="Биеийн жингийн индекс (кг/м2):" name={['patient', 'index']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -603,10 +490,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Систолын даралт:"
-                     name={['patient', 'highPressureRight']}
-                  >
+                  <Form.Item label="Систолын даралт:" name={['patient', 'highPressureRight']}>
                      <Input />
                   </Form.Item>
                </div>
@@ -615,10 +499,7 @@ function Step1({ form, templateId }) {
          <div className="w-1/4 p-1">
             <div className="rounded-md bg-gray-100 w-full inline-block m-1">
                <div className="p-1">
-                  <Form.Item
-                     label="Диастолын даралт:"
-                     name={['patient', 'lowPressureRight']}
-                  >
+                  <Form.Item label="Диастолын даралт:" name={['patient', 'lowPressureRight']}>
                      <Input />
                   </Form.Item>
                </div>

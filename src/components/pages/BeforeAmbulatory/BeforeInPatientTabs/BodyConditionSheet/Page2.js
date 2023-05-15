@@ -40,20 +40,11 @@ function Page2({ form }) {
                            </td>
                         );
                      })}
-                     <td
-                        rowSpan={31}
-                        className="text-start"
-                        style={{ width: 101 }}
-                     >
+                     <td rowSpan={31} className="text-start" style={{ width: 101 }}>
                         <p>#46. ЭМБ-ын мэдлэг олгох шаардлагатай</p>
-                        <p>
-                           #47. Хувийн эрүүл мэндээ зохицуулах чадваргүй болсон
-                        </p>
+                        <p>#47. Хувийн эрүүл мэндээ зохицуулах чадваргүй болсон</p>
                         <p>#48. Мэдлэгийн дутагдал</p>
-                        <p>
-                           #49. Өөрийгөө асрах чадваргүй болсон (усанд орох,
-                           хувцаслах, хооллох,бие засах)
-                        </p>
+                        <p>#49. Өөрийгөө асрах чадваргүй болсон (усанд орох, хувцаслах, хооллох,бие засах)</p>
                         <p>#50. Алхах чадвар алдагдсан</p>
                      </td>
                   </tr>
@@ -116,8 +107,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.burgui ===
-                              'Цэвэрлэх бургуй/ тосгон' ? (
+                              {item.daily?.burgui === 'Цэвэрлэх бургуй/ тосгон' ? (
                                  <CheckOutlined />
                               ) : item.daily?.burgui === 'Хамаарахгүй' ? (
                                  '/'
@@ -200,8 +190,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.partCare ===
-                              'Халуун бигнүүр тавьсан' ? (
+                              {item.daily?.partCare === 'Халуун бигнүүр тавьсан' ? (
                                  <CheckOutlined />
                               ) : item.daily?.partCare === 'Хамаарахгүй' ? (
                                  '/'
@@ -217,8 +206,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.partCare ===
-                              'Хүйтэн бигнүүр тавьсан' ? (
+                              {item.daily?.partCare === 'Хүйтэн бигнүүр тавьсан' ? (
                                  <CheckOutlined />
                               ) : item.daily?.partCare === 'Хамаарахгүй' ? (
                                  '/'
@@ -269,8 +257,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.advice ===
-                              'Өөрт нь зөвлөгөө өгсөн' ? (
+                              {item.daily?.advice === 'Өөрт нь зөвлөгөө өгсөн' ? (
                                  <CheckOutlined />
                               ) : item.daily?.advice === 'Хамаарахгүй' ? (
                                  '/'
@@ -286,8 +273,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.advice ===
-                              'Гэр бүлд нь зөвлөгөө өгсөн' ? (
+                              {item.daily?.advice === 'Гэр бүлд нь зөвлөгөө өгсөн' ? (
                                  <CheckOutlined />
                               ) : item.daily?.advice === 'Хамаарахгүй' ? (
                                  '/'
@@ -306,8 +292,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.reHealt ===
-                              'Дасгал хөдөлгөөн хийлгэсэн' ? (
+                              {item.daily?.reHealt === 'Дасгал хөдөлгөөн хийлгэсэн' ? (
                                  <CheckOutlined />
                               ) : item.daily?.reHealt === 'Хамаарахгүй' ? (
                                  '/'
@@ -396,8 +381,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.whead === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.whead === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.whead === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.whead === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -409,8 +393,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.hair === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.hair === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.hair === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.hair === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -422,8 +405,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.beard === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.beard === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.beard === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.beard === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -435,8 +417,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.clothes === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.clothes === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.clothes === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.clothes === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -448,8 +429,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.nails === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.nails === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.nails === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.nails === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -461,8 +441,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.tooth === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.tooth === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.tooth === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.tooth === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -474,8 +453,7 @@ function Page2({ form }) {
                         return (
                            <td key={index}>
                               {item.daily?.food === 'СУ(сувилагч)' && 'СУ'}
-                              {item.daily?.food === 'Ө(эмчлүүлэгч өөрөө)' &&
-                                 'Ө'}
+                              {item.daily?.food === 'Ө(эмчлүүлэгч өөрөө)' && 'Ө'}
                               {item.daily?.food === 'СА(сахиур)' && 'СА'}
                            </td>
                         );
@@ -489,8 +467,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.security ===
-                              'Онцгой анхаарах тэмдэг' ? (
+                              {item.daily?.security === 'Онцгой анхаарах тэмдэг' ? (
                                  <CheckOutlined />
                               ) : (
                                  <CloseOutlined />
@@ -504,8 +481,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.security ===
-                              'Унаж бэртэхээс сэргийлэх' ? (
+                              {item.daily?.security === 'Унаж бэртэхээс сэргийлэх' ? (
                                  <CheckOutlined />
                               ) : (
                                  <CloseOutlined />
@@ -519,11 +495,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.security === 'Орны хашлага' ? (
-                                 <CheckOutlined />
-                              ) : (
-                                 <CloseOutlined />
-                              )}
+                              {item.daily?.security === 'Орны хашлага' ? <CheckOutlined /> : <CloseOutlined />}
                            </td>
                         );
                      })}
@@ -533,11 +505,7 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.daily?.security === 'Тэргэнцэр, таяг' ? (
-                                 <CheckOutlined />
-                              ) : (
-                                 <CloseOutlined />
-                              )}
+                              {item.daily?.security === 'Тэргэнцэр, таяг' ? <CheckOutlined /> : <CloseOutlined />}
                            </td>
                         );
                      })}
@@ -584,12 +552,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.nursing?.breathing === 'Тийм' && (
-                                 <CheckOutlined />
-                              )}
-                              {item.nursing?.breathing === 'Үгүй' && (
-                                 <CloseOutlined />
-                              )}
+                              {item.nursing?.breathing === 'Тийм' && <CheckOutlined />}
+                              {item.nursing?.breathing === 'Үгүй' && <CloseOutlined />}
                               {item.nursing?.breathing === 'Хамаарахгүй' && '/'}
                            </td>
                         );
@@ -601,12 +565,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.nursing?.food === 'Тийм' && (
-                                 <CheckOutlined />
-                              )}
-                              {item.nursing?.food === 'Үгүй' && (
-                                 <CloseOutlined />
-                              )}
+                              {item.nursing?.food === 'Тийм' && <CheckOutlined />}
+                              {item.nursing?.food === 'Үгүй' && <CloseOutlined />}
                               {item.nursing?.food === 'Хамаарахгүй' && '/'}
                            </td>
                         );
@@ -617,12 +577,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.nursing?.peeOut === 'Тийм' && (
-                                 <CheckOutlined />
-                              )}
-                              {item.nursing?.peeOut === 'Үгүй' && (
-                                 <CloseOutlined />
-                              )}
+                              {item.nursing?.peeOut === 'Тийм' && <CheckOutlined />}
+                              {item.nursing?.peeOut === 'Үгүй' && <CloseOutlined />}
                               {item.nursing?.peeOut === 'Хамаарахгүй' && '/'}
                            </td>
                         );
@@ -633,12 +589,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.nursing?.skin === 'Тийм' && (
-                                 <CheckOutlined />
-                              )}
-                              {item.nursing?.skin === 'Үгүй' && (
-                                 <CloseOutlined />
-                              )}
+                              {item.nursing?.skin === 'Тийм' && <CheckOutlined />}
+                              {item.nursing?.skin === 'Үгүй' && <CloseOutlined />}
                               {item.nursing?.skin === 'Хамаарахгүй' && '/'}
                            </td>
                         );
@@ -649,12 +601,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.nursing?.mind === 'Тийм' && (
-                                 <CheckOutlined />
-                              )}
-                              {item.nursing?.mind === 'Үгүй' && (
-                                 <CloseOutlined />
-                              )}
+                              {item.nursing?.mind === 'Тийм' && <CheckOutlined />}
+                              {item.nursing?.mind === 'Үгүй' && <CloseOutlined />}
                               {item.nursing?.mind === 'Хамаарахгүй' && '/'}
                            </td>
                         );
@@ -665,12 +613,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td key={index}>
-                              {item.nursing?.daily === 'Тийм' && (
-                                 <CheckOutlined />
-                              )}
-                              {item.nursing?.daily === 'Үгүй' && (
-                                 <CloseOutlined />
-                              )}
+                              {item.nursing?.daily === 'Тийм' && <CheckOutlined />}
+                              {item.nursing?.daily === 'Үгүй' && <CloseOutlined />}
                               {item.nursing?.daily === 'Хамаарахгүй' && '/'}
                            </td>
                         );
@@ -684,14 +628,8 @@ function Page2({ form }) {
                      {form?.map((item, index) => {
                         return (
                            <td rowSpan={2} key={index}>
-                              <p>
-                                 {moment(item.createdAt).format('MM-DD HH:mm')}
-                              </p>
-                              <p>
-                                 {item.createdLastName?.substring(0, 1) +
-                                    '.' +
-                                    item.createdFirstName}
-                              </p>
+                              <p>{moment(item.createdAt).format('MM-DD HH:mm')}</p>
+                              <p>{item.createdLastName?.substring(0, 1) + '.' + item.createdFirstName}</p>
                            </td>
                         );
                      })}
@@ -740,12 +678,11 @@ function Page2({ form }) {
                      <th>Тийм</th>
                      <td>
                         <p>
-                           Тийм* гэж үнэлсэн асуудал сувилгааны төлөвлөгөөнд
-                           оруулав. Ангилал бүрээс нэг асуудалтай бол
+                           Тийм* гэж үнэлсэн асуудал сувилгааны төлөвлөгөөнд оруулав. Ангилал бүрээс нэг асуудалтай бол
                         </p>
                         <p>
-                           тэрхүү асуудал бүрээр эмчлүүлэгчийн зовиурыг багасгах
-                           сувилгааны ажлын төлөвлөлтийг CT-3 хуудсанд
+                           тэрхүү асуудал бүрээр эмчлүүлэгчийн зовиурыг багасгах сувилгааны ажлын төлөвлөлтийг CT-3
+                           хуудсанд
                         </p>
                         <p>тэмдэглэж хэрэгжүүлж дүгнэнэ.</p>
                      </td>
@@ -755,8 +692,7 @@ function Page2({ form }) {
                      <th>Үгүй</th>
                      <td>
                         <p>
-                           Үгүй* бол сувилгааны төлөвлөгөөнд орох асуудал биш
-                           гэж үзэх тул сувилгааны төлөвлөгөөнд энэ
+                           Үгүй* бол сувилгааны төлөвлөгөөнд орох асуудал биш гэж үзэх тул сувилгааны төлөвлөгөөнд энэ
                         </p>
                         <p>чиглэлээр хийх ажил төлөвлөгдөхгүй гэж ойлгоно.</p>
                      </td>
@@ -766,8 +702,8 @@ function Page2({ form }) {
                      <th>Хамаарахгүй</th>
                      <td>
                         <p>
-                           Тухайн үнэлгээний асуулт эмчлүүлэгчид хамаарахгүй бол
-                           тэр бүлгийг бүхэлд нь (/) ташуу зураас татан
+                           Тухайн үнэлгээний асуулт эмчлүүлэгчид хамаарахгүй бол тэр бүлгийг бүхэлд нь (/) ташуу зураас
+                           татан
                         </p>
                         <p>хамаатуулахгүй орхиж болно.</p>
                      </td>
@@ -780,17 +716,15 @@ function Page2({ form }) {
                      </td>
                      <td>
                         <p>
-                           Тухайн бүлэг асуудлыг үнэлж, түүний ард буй
-                           сувилгааны асуудлаас тохирох нэг асуудлыг сонгон авч
+                           Тухайн бүлэг асуудлыг үнэлж, түүний ард буй сувилгааны асуудлаас тохирох нэг асуудлыг сонгон
+                           авч
                         </p>
                         <p>
-                           "Сувилгааны асуудал" ангилалын арын тохирох
-                           хүснэгтэнд тэмдэглэнэ. Жишээ нь: Ханиалгалт, цэртэй
-                           гэж
+                           "Сувилгааны асуудал" ангилалын арын тохирох хүснэгтэнд тэмдэглэнэ. Жишээ нь: Ханиалгалт,
+                           цэртэй гэж
                         </p>
                         <p>
-                           үнэлсэн бол "Амьсгалын замын цэвэршилт алдагдсан"
-                           гэсэн асуудлыг сонгон "#3" тэмдгийг тохирох
+                           үнэлсэн бол "Амьсгалын замын цэвэршилт алдагдсан" гэсэн асуудлыг сонгон "#3" тэмдгийг тохирох
                         </p>
                         <p>нүдэнд тавина.</p>
                      </td>
@@ -817,24 +751,21 @@ function Page2({ form }) {
                         -*-
                      </td>
                      <th colSpan={2}>
-                        Өвдөлттэй бол өвдөлт үнэлэх хуудсыг сонгомолоор авч
-                        тухайн эмчлүүлэгчид хэрэглэнэ.
+                        Өвдөлттэй бол өвдөлт үнэлэх хуудсыг сонгомолоор авч тухайн эмчлүүлэгчид хэрэглэнэ.
                      </th>
                   </tr>
                   <tr>
                      <td colSpan={2}>
                         <p>
-                           Арьсны байдал өөрчлөлттэй гэж үнэлвэл цооролтын
-                           удирдамжийг /нэрийг магадлах/ баримтлан сувилах
-                           төлөвлөгөөг
+                           Арьсны байдал өөрчлөлттэй гэж үнэлвэл цооролтын удирдамжийг /нэрийг магадлах/ баримтлан
+                           сувилах төлөвлөгөөг
                         </p>
                         <p>боловсруулна.</p>
                      </td>
                   </tr>
                   <tr>
                      <th colSpan={2}>
-                        Шингэний балансыг үнэлэх хуудсыг сонгомолоор авч тухайн
-                        эмчлүүлэгчид хэрэглэнэ.
+                        Шингэний балансыг үнэлэх хуудсыг сонгомолоор авч тухайн эмчлүүлэгчид хэрэглэнэ.
                      </th>
                   </tr>
                   <tr>

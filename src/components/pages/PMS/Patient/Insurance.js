@@ -24,12 +24,7 @@ function Insurance({ form }) {
             </Form.Item>
          </div>
          <div className="p-1">
-            <Form.Item
-               label="Даатгалын дугаар"
-               name="insuranceNo"
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
+            <Form.Item label="Даатгалын дугаар" name="insuranceNo" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                <Input />
             </Form.Item>
          </div>

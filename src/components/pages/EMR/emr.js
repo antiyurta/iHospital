@@ -5,10 +5,7 @@ import Ocs from '../OCS/Ocs';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
 import { useSelector } from 'react-redux';
-import {
-   selectCurrentToken,
-   selectCurrentUserId
-} from '../../../features/authReducer';
+import { selectCurrentToken, selectCurrentUserId } from '../../../features/authReducer';
 import PatientInformation from '../PatientInformation';
 import { Get, openNofi, Post } from '../../comman';
 import { useLocation } from 'react-router-dom';
@@ -124,8 +121,7 @@ function EMR() {
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
             //Оноор бүлэглэх
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
             getProblems(a.id);
             return r;
@@ -149,8 +145,7 @@ function EMR() {
       if (response.data.length > 0) {
          var result = response.data.reduce(function (r, a) {
             //Оноор бүлэглэх
-            r[a.createdAt.substring(0, 4)] =
-               r[a.createdAt.substring(0, 4)] || [];
+            r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
             return r;
          }, Object.create(null));
@@ -165,10 +160,7 @@ function EMR() {
       if (response.patientDiagnosis.length > 0) {
          var problem = [];
          problem.push({
-            doctorId:
-               response.employee?.lastName.substring(0, 1) +
-               '.' +
-               response.employee?.firstName,
+            doctorId: response.employee?.lastName.substring(0, 1) + '.' + response.employee?.firstName,
             diagnose: response.patientDiagnosis,
             inspectionDate: response.createdAt
          });

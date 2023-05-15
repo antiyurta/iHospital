@@ -7,16 +7,12 @@ function Page1() {
          <div className="subpage">
             <p className="text-center font-bold">ГЭМТЛИЙН ЭМЧИЙН ҮЗЛЭГ</p>
             <General />
-            <p className="text-center font-bold">
-               АНХАН ШАТНЫ ҮЗЛЭГ БОЛОН СЭХЭЭН АМЬДРУУЛАХ
-            </p>
+            <p className="text-center font-bold">АНХАН ШАТНЫ ҮЗЛЭГ БОЛОН СЭХЭЭН АМЬДРУУЛАХ</p>
             <Table bordered className="document">
                <thead>
                   <tr>
                      <th>A</th>
-                     <th className="text-center">
-                        Амьсгалын зам болон хүзүү нуруу
-                     </th>
+                     <th className="text-center">Амьсгалын зам болон хүзүү нуруу</th>
                   </tr>
                   <tr>
                      <td></td>

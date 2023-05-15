@@ -1,19 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-   Button,
-   Space,
-   Form,
-   Input,
-   Modal,
-   Card,
-   Descriptions,
-   Table,
-   Tabs,
-   Empty,
-   ConfigProvider
-} from 'antd';
+import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Tabs, Empty, ConfigProvider } from 'antd';
 import { EyeOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
-import { Delete, Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
+import { Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
 import axios from 'axios';
 import 'moment/locale/mn';
 import { useSelector } from 'react-redux';
@@ -58,6 +46,7 @@ function Patient() {
    };
    const items = [
       {
+         forceRender: true,
          label: 'Ерөнхий мэдээлэл',
          key: 1,
          children: <GeneralInfo form={form} gbase={dd} />
@@ -70,11 +59,13 @@ function Patient() {
          children: <ResidentialAddress form={form} />
       },
       {
+         forceRender: true,
          label: 'Даатгалын харьяалал',
          key: 4,
          children: <Insurance form={form} />
       },
       {
+         forceRender: true,
          label: 'Холбоо барих хүний мэдээлэл',
          key: 5,
          children: <Contact form={form} />
@@ -130,9 +121,7 @@ function Patient() {
       await axios
          .get(DEV_URL + 'pms/patient/' + id, config)
          .then((response) => {
-            response.data.response['birthDay'] = moment(
-               response.data.response['birthDay']
-            );
+            response.data.response['birthDay'] = moment(response.data.response['birthDay']);
             filterTowns(response.data.response.aimagId);
             form.setFieldsValue(response.data.response);
          })
@@ -142,21 +131,6 @@ function Patient() {
       setId(id);
       setEditMode(true);
       setIsModalVisible(true);
-   };
-   const deleteModal = (id) => {
-      Modal.error({
-         title: 'Устгах',
-         okText: 'Устгах',
-         closable: true,
-         content: <div>Устгасан дохиолдолд дахин сэргэхгүй болно</div>,
-         async onOk() {
-            await Delete('pms/patient/' + id, token, config);
-            getData(1);
-         }
-      });
-   };
-   const handleOk = () => {
-      setIsModalVisible(false);
    };
    const handleCancel = () => {
       setIsModalVisible(false);
@@ -172,21 +146,11 @@ function Patient() {
          headers: {},
          params: {}
       };
-      console.log(data);
-      if (
-         data?.contacts === undefined ||
-         data?.contacts === null ||
-         data?.contacts.length === 0
-      ) {
+      if (data?.contacts === undefined || data?.contacts === null || data?.contacts.length === 0) {
          openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
       } else {
          if (editMode) {
-            const response = await Patch(
-               'pms/patient/' + id,
-               token,
-               conf,
-               data
-            );
+            const response = await Patch('pms/patient/' + id, token, conf, data);
             if (response === 200) {
                getData(1, 20);
                setIsConfirmLoading(false);
@@ -388,12 +352,7 @@ function Patient() {
          render: (text) => {
             return (
                <Space>
-                  <Button
-                     type="link"
-                     onClick={() => viewModal(text)}
-                     title="Харах"
-                     style={{ paddingRight: 5 }}
-                  >
+                  <Button type="link" onClick={() => viewModal(text)} title="Харах" style={{ paddingRight: 5 }}>
                      <EyeOutlined />
                   </Button>
                   <Button
@@ -449,21 +408,20 @@ function Patient() {
                      size: 'small',
                      current: meta.page,
                      total: meta.itemCount,
-                     showTotal: (total, range) =>
-                        `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
                      pageSize: meta.limit,
                      showSizeChanger: true,
                      pageSizeOptions: ['5', '10', '20', '50'],
                      showQuickJumper: true,
-                     onChange: (page, pageSize) =>
-                        getData(page, pageSize, pValue, pIndex)
+                     onChange: (page, pageSize) => getData(page, pageSize, pValue, pIndex)
                   }}
                />
             </ConfigProvider>
          </Card>
          <Modal
-            title="Өвчтөн бүртгэх"
+            title={editMode ? 'Өвчтөн засах' : 'Өвчтөн бүртгэх'}
             open={isModalVisible}
+            forceRender={true}
             okText="Хадгалах"
             onOk={() => {
                form
@@ -493,39 +451,17 @@ function Patient() {
             }}
          >
             <Descriptions bordered>
-               <Descriptions.Item label="Картын дугаар">
-                  {view.cardNumber}
-               </Descriptions.Item>
-               <Descriptions.Item label="Ургийн овог">
-                  {view.familyName}
-               </Descriptions.Item>
-               <Descriptions.Item label="Овог">
-                  {view.lastName}
-               </Descriptions.Item>
-               <Descriptions.Item label="Нэр">
-                  {view.firstName}
-               </Descriptions.Item>
-               <Descriptions.Item label="Иргэншил">
-                  {view.countryId}
-               </Descriptions.Item>
-               <Descriptions.Item label="Регистр дугаар">
-                  {view.registerNumber}
-               </Descriptions.Item>
-               <Descriptions.Item label="Төрсөн огноо">
-                  {moment(view.birthDate).format('YYYY-MM-DD')}
-               </Descriptions.Item>
-               <Descriptions.Item label="Утас">
-                  {view.phoneNo}
-               </Descriptions.Item>
-               <Descriptions.Item label="Гэрийн утас">
-                  {view.homePhoneNo}
-               </Descriptions.Item>
-               <Descriptions.Item label="И-мэйл">
-                  {view.email}
-               </Descriptions.Item>
-               <Descriptions.Item label="Аймаг/Дүүрэг">
-                  {view.countries?.name}
-               </Descriptions.Item>
+               <Descriptions.Item label="Картын дугаар">{view.cardNumber}</Descriptions.Item>
+               <Descriptions.Item label="Ургийн овог">{view.familyName}</Descriptions.Item>
+               <Descriptions.Item label="Овог">{view.lastName}</Descriptions.Item>
+               <Descriptions.Item label="Нэр">{view.firstName}</Descriptions.Item>
+               <Descriptions.Item label="Иргэншил">{view.countryId}</Descriptions.Item>
+               <Descriptions.Item label="Регистр дугаар">{view.registerNumber}</Descriptions.Item>
+               <Descriptions.Item label="Төрсөн огноо">{moment(view.birthDate).format('YYYY-MM-DD')}</Descriptions.Item>
+               <Descriptions.Item label="Утас">{view.phoneNo}</Descriptions.Item>
+               <Descriptions.Item label="Гэрийн утас">{view.homePhoneNo}</Descriptions.Item>
+               <Descriptions.Item label="И-мэйл">{view.email}</Descriptions.Item>
+               <Descriptions.Item label="Аймаг/Дүүрэг">{view.countries?.name}</Descriptions.Item>
             </Descriptions>
          </Modal>
       </>

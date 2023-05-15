@@ -40,25 +40,15 @@ function AM25A() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-25А
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-25А</span>
                </div>
             </div>
             <span style={styles.generalText}>Эмнэлгийн код:</span>
-            <div
-               style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  СЭРГЭЭН ЗАСАХ ЭМЧИЛГЭЭНИЙ КАРТ
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 16 }}>СЭРГЭЭН ЗАСАХ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div>РД:</div>
@@ -66,26 +56,19 @@ function AM25A() {
             </div>
             <div style={styles.rowStyle}>
                1. Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>
-                  Нэр _______________________________
-               </span>
+               <span style={{ marginLeft: 50 }}>Нэр _______________________________</span>
             </div>
             <div style={styles.rowStyle}>
                2. Нас ______
-               <span style={{ marginLeft: 50 }}>
-                  Хүйс: /зур/ эрэгтэй, эмэгтэй
-               </span>
+               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
             </div>
             <div style={styles.rowStyle}>
                3. Эмчилгээ эхэлсэн _____ он ___ сар ___ өдөр,
-               <span style={{ marginLeft: 20 }}>
-                  Эмчилгээ дууссан он сар өдөр _____ он ___ сар ___ өдөр
-               </span>
+               <span style={{ marginLeft: 20 }}>Эмчилгээ дууссан он сар өдөр _____ он ___ сар ___ өдөр</span>
             </div>
 
             <div style={styles.rowStyle}>
-               4. Ажлын газар, албан тушаал
-               ___________________________________________________________________
+               4. Ажлын газар, албан тушаал ___________________________________________________________________
             </div>
             <div
                style={{
@@ -94,9 +77,7 @@ function AM25A() {
                }}
             >
                <div>
-                  <div>
-                     5. Үндсэн онош: ________________________________________
-                  </div>
+                  <div>5. Үндсэн онош: ________________________________________</div>
                   <div style={styles.rowStyle}>
                      6. Хэдэн удаа эмчилсэн ________
                      <span style={{ marginLeft: 50 }}>Удаа</span>
@@ -104,8 +85,7 @@ function AM25A() {
                   </div>
 
                   <div style={styles.rowStyle}>
-                     7. Мэргэжлийн эмчийн заалт
-                     _______________________________________________
+                     7. Мэргэжлийн эмчийн заалт _______________________________________________
                   </div>
                </div>
                <div style={{ display: 'flex' }}>
@@ -128,21 +108,15 @@ function AM25A() {
                      </div>
                      <div style={{ display: 'flex', marginTop: 5 }}>
                         <div style={styles.rowCells}></div>
-                        <span style={{ textAlign: 'center', marginLeft: 10 }}>
-                           Сайжирсан
-                        </span>
+                        <span style={{ textAlign: 'center', marginLeft: 10 }}>Сайжирсан</span>
                      </div>
                      <div style={{ display: 'flex', marginTop: 5 }}>
                         <div style={styles.rowCells}></div>
-                        <span style={{ textAlign: 'center', marginLeft: 10 }}>
-                           Хэвэндээ
-                        </span>
+                        <span style={{ textAlign: 'center', marginLeft: 10 }}>Хэвэндээ</span>
                      </div>
                      <div style={{ display: 'flex', marginTop: 5 }}>
                         <div style={styles.rowCells}></div>
-                        <span style={{ textAlign: 'center', marginLeft: 10 }}>
-                           Дутуу
-                        </span>
+                        <span style={{ textAlign: 'center', marginLeft: 10 }}>Дутуу</span>
                      </div>
                   </div>
                </div>
@@ -173,14 +147,10 @@ function AM25A() {
                      >
                         <span>Ямар эрхтэнд</span>
                      </td>
-                     <td
-                        style={{ width: 80, textAlign: 'center', fontSize: 12 }}
-                     >
+                     <td style={{ width: 80, textAlign: 'center', fontSize: 12 }}>
                         <span>Зай</span>
                      </td>
-                     <td
-                        style={{ width: 80, textAlign: 'center', fontSize: 12 }}
-                     >
+                     <td style={{ width: 80, textAlign: 'center', fontSize: 12 }}>
                         <span>Тун</span>
                      </td>
                      <td
@@ -313,9 +283,7 @@ function AM25A() {
                      >
                         <span>Эмчилгээний нэр</span>
                      </td>
-                     <td
-                        style={{ width: 80, textAlign: 'center', fontSize: 12 }}
-                     >
+                     <td style={{ width: 80, textAlign: 'center', fontSize: 12 }}>
                         <span>Ямар эрхтэнд</span>
                      </td>
                      <td
@@ -328,9 +296,7 @@ function AM25A() {
                      >
                         <span>Хугацаа</span>
                      </td>
-                     <td
-                        style={{ width: 80, textAlign: 'center', fontSize: 12 }}
-                     >
+                     <td style={{ width: 80, textAlign: 'center', fontSize: 12 }}>
                         <span>Тун</span>
                      </td>
                      <td

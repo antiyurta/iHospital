@@ -18,22 +18,13 @@ import {
 } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
-import {
-   Avatar,
-   Button,
-   Card,
-   Col,
-   Descriptions,
-   Form,
-   Input,
-   Modal,
-   Row
-} from 'antd';
-import { DefaultPost, Get, openNofi, Patch, Post } from './comman';
-import { KeyOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
+import { Get, openNofi, Patch } from './comman';
+import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
+import jwtInterceopter from './jwtInterceopter';
 
 function Profile() {
    const token = useSelector(selectCurrentToken);
@@ -59,41 +50,43 @@ function Profile() {
       params: {}
    };
    const getProfile = async () => {
-      const response = await Get('authentication', token, config);
-      profileForm.setFieldsValue(response);
-      if (depId === null) {
-         dispatch(setDepId(response.employee?.depIds));
-      }
-      if (appIds === null) {
-         dispatch(setAppId(response.employee?.appIds));
-      }
-      if (userId === null) {
-         dispatch(setUserId(response.employee?.id));
-      }
-      if (roleId === null) {
-         dispatch(setRoleId(response.roleId));
-      }
-      if (userLastName === null && userFirstName === null) {
-         dispatch(
-            setUserInfo({
-               firstName: response.employee?.firstName,
-               lastName: response.employee?.lastName
-            })
-         );
-      }
-      if (isInsurance === null) {
-         dispatch(setInsurrance(response.hospital?.isInsurance));
-      }
-      setUser(response);
+      await jwtInterceopter
+         .get('authentication')
+         .then((response) => {
+            profileForm.setFieldsValue(response.data.response);
+            if (depId === null) {
+               dispatch(setDepId(response.data.response.employee?.depIds));
+            }
+            if (appIds === null) {
+               dispatch(setAppId(response.data.response.employee?.appIds));
+            }
+            if (userId === null) {
+               dispatch(setUserId(response.data.response.employee?.id));
+            }
+            if (roleId === null) {
+               dispatch(setRoleId(response.data.response.roleId));
+            }
+            if (userLastName === null && userFirstName === null) {
+               dispatch(
+                  setUserInfo({
+                     firstName: response.data.response.employee?.firstName,
+                     lastName: response.data.response.employee?.lastName
+                  })
+               );
+            }
+            if (isInsurance === null) {
+               dispatch(setInsurrance(response.data.response.hospital?.isInsurance));
+            }
+            setUser(response.data.response);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {});
    };
    const onFinish = async (values) => {
       setIsLoading(true);
-      const response = await Patch(
-         'organization/employee/' + user.employee.id,
-         token,
-         config,
-         values.employee
-      );
+      const response = await Patch('organization/employee/' + user.employee.id, token, config, values.employee);
       if (response === 200) {
          profileForm.resetFields();
          getProfile();
@@ -141,10 +134,7 @@ function Profile() {
    };
    return (
       <div>
-         <div
-            className="profile-nav-bg"
-            style={{ backgroundImage: 'url(' + bg + ')' }}
-         ></div>
+         <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + bg + ')' }}></div>
          <Card
             className="card-profile-head rounded-md h-28"
             bodyStyle={{ display: 'none' }}
@@ -155,9 +145,7 @@ function Profile() {
                         <Avatar size={74} shape="square" src={profile} />
                         <div className="avatar-info">
                            <h4 className="font-semibold m-0">
-                              {user.employee?.lastName +
-                                 ' ' +
-                                 user.employee?.firstName}
+                              {user.employee?.lastName + ' ' + user.employee?.firstName}
                            </h4>
                            <p>
                               {user.role?.name} / {user.role?.description}
@@ -183,18 +171,10 @@ function Profile() {
             className="header-solid h-full card-profile-information rounded-md"
             extra={
                <>
-                  <Button
-                     className="mx-1"
-                     type="primary"
-                     onClick={() => setProfileModal(true)}
-                  >
+                  <Button className="mx-1" type="primary" icon={<UserOutlined />} onClick={() => setProfileModal(true)}>
                      Мэдээлэл солих
                   </Button>
-                  <Button
-                     className="mx-1"
-                     type="primary"
-                     onClick={() => setPasswordModal(true)}
-                  >
+                  <Button className="mx-1" type="primary" icon={<KeyOutlined />} onClick={() => setPasswordModal(true)}>
                      Нууц үг солих
                   </Button>
                </>
@@ -213,10 +193,7 @@ function Profile() {
                   {user?.employee?.homeAddress}
                </Descriptions.Item>
                <Descriptions.Item label="Эмнэлэг" span={3}>
-                  <p
-                     className="text-white p-1"
-                     style={{ background: isInsurance ? 'green' : 'red' }}
-                  >
+                  <p className="text-white p-1" style={{ background: isInsurance ? 'green' : 'red' }}>
                      {user?.hospital?.name}
                   </p>
                </Descriptions.Item>
@@ -224,6 +201,7 @@ function Profile() {
          </Card>
          <Modal
             title="Хувийн мэдээлэл засах"
+            forceRender={true}
             open={profileModal}
             onCancel={() => setProfileModal(false)}
             onOk={() => {
@@ -243,10 +221,10 @@ function Profile() {
             <Form
                form={profileForm}
                labelCol={{
-                  span: 8
+                  span: 5
                }}
                wrapperCol={{
-                  span: 16
+                  span: 19
                }}
             >
                <Form.Item

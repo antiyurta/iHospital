@@ -1,9 +1,4 @@
-import {
-   DeleteOutlined,
-   EditOutlined,
-   MinusCircleOutlined,
-   PlusOutlined
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, Input, InputNumber, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
@@ -59,11 +54,7 @@ function Packages() {
    ];
    const checkNumber = (event) => {
       var charCode = event.charCode;
-      if (
-         charCode > 31 &&
-         (charCode < 48 || charCode > 57) &&
-         charCode !== 46
-      ) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
          event.preventDefault();
       } else {
          return true;
@@ -111,23 +102,13 @@ function Packages() {
          .validateFields()
          .then(async (value) => {
             if (editMode) {
-               const response = await Patch(
-                  'service/package/' + id,
-                  token,
-                  config,
-                  value
-               );
+               const response = await Patch('service/package/' + id, token, config, value);
                if (response === 200) {
                   getPackages();
                   setIsOpenModal(false);
                }
             } else {
-               const response = await Post(
-                  'service/package',
-                  token,
-                  config,
-                  value
-               );
+               const response = await Post('service/package', token, config, value);
                if (response === 201) {
                   getPackages();
                   setIsOpenModal(false);
@@ -156,10 +137,7 @@ function Packages() {
             className="header-solid max-h-max rounded-md"
             title="Багц"
             extra={
-               <Button
-                  onClick={showModal}
-                  className="bg-sky-700 rounded-md text-white"
-               >
+               <Button onClick={showModal} className="bg-sky-700 rounded-md text-white">
                   Нэмэх
                </Button>
             }
@@ -187,11 +165,7 @@ function Packages() {
                               <td>
                                  <ul className="list-disc">
                                     {item.services.map((service, idx) => {
-                                       return (
-                                          <li key={idx}>
-                                             {service.serviceName}
-                                          </li>
-                                       );
+                                       return <li key={idx}>{service.serviceName}</li>;
                                     })}
                                  </ul>
                               </td>
@@ -263,10 +237,7 @@ function Packages() {
                            }
                         ]}
                      >
-                        <InputNumber
-                           placeholder="Үнэ"
-                           onKeyPress={checkNumber}
-                        />
+                        <InputNumber placeholder="Үнэ" onKeyPress={checkNumber} />
                      </Form.Item>
                   </Col>
                   <Col span={24}>
@@ -280,10 +251,7 @@ function Packages() {
                            }
                         ]}
                      >
-                        <InputNumber
-                           placeholder="Насны доод"
-                           onKeyPress={checkNumber}
-                        />
+                        <InputNumber placeholder="Насны доод" onKeyPress={checkNumber} />
                      </Form.Item>
                   </Col>
                   <Col span={24}>
@@ -297,34 +265,20 @@ function Packages() {
                            }
                         ]}
                      >
-                        <InputNumber
-                           placeholder="Насны дээд"
-                           onKeyPress={checkNumber}
-                        />
+                        <InputNumber placeholder="Насны дээд" onKeyPress={checkNumber} />
                      </Form.Item>
                   </Col>
                   <Col span={24}>
                      <Form.List name="services">
                         {(fields, { add, remove }) => (
                            <>
-                              <div
-                                 className="table-responsive p-4"
-                                 id="style-8"
-                              >
-                                 <Table
-                                    className="ant-border-space"
-                                    style={{ width: '100%' }}
-                                 >
+                              <div className="table-responsive p-4" id="style-8">
+                                 <Table className="ant-border-space" style={{ width: '100%' }}>
                                     <thead className="ant-table-thead bg-slate-200">
                                        <tr>
                                           <th>Нэр</th>
                                           <th>
-                                             <Button
-                                                className="btn-add"
-                                                onClick={() =>
-                                                   setIsOpenSecondModal(true)
-                                                }
-                                             >
+                                             <Button className="btn-add" onClick={() => setIsOpenSecondModal(true)}>
                                                 нэмэх
                                              </Button>
                                           </th>
@@ -333,17 +287,9 @@ function Packages() {
                                     <tbody>
                                        {fields.map(({ key, name }) => (
                                           <tr key={key}>
+                                             <td>{form.getFieldValue(['services', name, 'serviceName'])}</td>
                                              <td>
-                                                {form.getFieldValue([
-                                                   'services',
-                                                   name,
-                                                   'serviceName'
-                                                ])}
-                                             </td>
-                                             <td>
-                                                <MinusCircleOutlined
-                                                   onClick={() => remove(name)}
-                                                />
+                                                <MinusCircleOutlined onClick={() => remove(name)} />
                                              </td>
                                           </tr>
                                        ))}
@@ -364,12 +310,7 @@ function Packages() {
             open={isOpenSecondModal}
             width={'80%'}
          >
-            <Order
-               isPackage={true}
-               isDoctor={false}
-               categories={categories}
-               save={AddServices}
-            />
+            <Order isPackage={true} isDoctor={false} categories={categories} save={AddServices} />
          </Modal>
       </div>
    );

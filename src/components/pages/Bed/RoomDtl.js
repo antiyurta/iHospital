@@ -41,11 +41,7 @@ const RoomDtl = (props) => {
          </Row>
          <Row gutter={[16, 16]} className="mt-4">
             <Col span={16}>
-               <Card
-                  style={cardStyle}
-                  className="rounded-xl cursor-pointer"
-                  bodyStyle={cardBodyStyle}
-               >
+               <Card style={cardStyle} className="rounded-xl cursor-pointer" bodyStyle={cardBodyStyle}>
                   <div style={{ width: '70%' }}>
                      <p>Сул орны тоо</p>
                      <p style={total}>Нийт: 7</p>
@@ -56,11 +52,7 @@ const RoomDtl = (props) => {
                </Card>
             </Col>
             <Col span={16}></Col>
-            <Card
-               style={cardStyle}
-               className="rounded-xl cursor-pointer"
-               bodyStyle={cardBodyStyle}
-            >
+            <Card style={cardStyle} className="rounded-xl cursor-pointer" bodyStyle={cardBodyStyle}>
                <div style={{ width: '70%' }}>
                   <p>Сул орны тоо</p>
                   <p style={total}>Нийт: 7</p>

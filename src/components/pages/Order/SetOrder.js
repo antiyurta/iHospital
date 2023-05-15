@@ -44,11 +44,7 @@ function SetOrder({ handleclick }) {
    return (
       <div className="flex flex-row">
          <div className="w-full">
-            <div
-               className="table-responsive px-4 pb-4"
-               id="style-8"
-               style={{ maxHeight: '500px' }}
-            >
+            <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
                <Table className="ant-border-space" style={{ width: '100%' }}>
                   <thead className="ant-table-thead bg-slate-200">
                      <tr>

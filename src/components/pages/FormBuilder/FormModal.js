@@ -1,14 +1,4 @@
-import {
-   Button,
-   Card,
-   Col,
-   Collapse,
-   Input,
-   Modal,
-   Row,
-   Select,
-   Typography
-} from 'antd';
+import { Button, Card, Col, Collapse, Input, Modal, Row, Select, Typography } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -67,9 +57,7 @@ export default function FormModal(props) {
       axios({
          method: props.type === 'add' ? 'post' : 'patch', //Form -г засах үед
          url:
-            props.type === 'add'
-               ? `${DEV_URL}emr/inspection-form`
-               : `${DEV_URL}emr/inspection-form/${props.data?.id}`, //Form -г засах үед
+            props.type === 'add' ? `${DEV_URL}emr/inspection-form` : `${DEV_URL}emr/inspection-form/${props.data?.id}`, //Form -г засах үед
          headers: {
             Authorization: `Bearer ${token}`,
             'x-api-key': API_KEY
@@ -232,11 +220,7 @@ export default function FormModal(props) {
          onCancel={handleCancel}
          width={1000}
          footer={[
-            <Typography.Text
-               key="error"
-               color="error"
-               className="p-1 text-danger mr-1"
-            >
+            <Typography.Text key="error" color="error" className="p-1 text-danger mr-1">
                {saveError}
             </Typography.Text>,
             <Button key="cancel" onClick={handleCancel}>
@@ -244,11 +228,7 @@ export default function FormModal(props) {
             </Button>,
             ...(props.data
                ? [
-                    <Button
-                       key="delete"
-                       type="danger"
-                       onClick={() => deleteForm()}
-                    >
+                    <Button key="delete" type="danger" onClick={() => deleteForm()}>
                        Устгах
                     </Button>
                  ]
@@ -308,11 +288,7 @@ export default function FormModal(props) {
                      <Text className="font-bold mr-2">Асуумж</Text>
                   </Col>
                   <Col span={20}>
-                     <TextArea
-                        value={formTitle}
-                        rows={4}
-                        onChange={(e) => setFormTitle(e.target.value)}
-                     />
+                     <TextArea value={formTitle} rows={4} onChange={(e) => setFormTitle(e.target.value)} />
                   </Col>
                </Row>
             </Col>
@@ -320,20 +296,10 @@ export default function FormModal(props) {
          {Object.entries(props.formValue)?.map(([key, sectionValue], ident) => {
             return (
                <Collapse accordion className="mt-2" key={ident}>
-                  <Panel
-                     header={sectionValue[1]}
-                     key="1"
-                     size="small"
-                     className="p-0"
-                  >
+                  <Panel header={sectionValue[1]} key="1" size="small" className="p-0">
                      <Row>
                         <Col span={24}>
-                           <Button
-                              key="save"
-                              type="primary"
-                              onClick={() => addParam(key)}
-                              size="small"
-                           >
+                           <Button key="save" type="primary" onClick={() => addParam(key)} size="small">
                               Талбар нэмэх
                            </Button>
                         </Col>
@@ -351,10 +317,7 @@ export default function FormModal(props) {
                               >
                                  <Row className="items-center">
                                     <Col span={7}>
-                                       <Row
-                                          gutter={[8, 8]}
-                                          className="items-center"
-                                       >
+                                       <Row gutter={[8, 8]} className="items-center">
                                           <Col span={6}>
                                              <Text className="mr-2">Төрөл</Text>
                                           </Col>
@@ -364,39 +327,23 @@ export default function FormModal(props) {
                                                    width: 150
                                                 }}
                                                 value={main_element.type}
-                                                onChange={handleChangeType(
-                                                   key,
-                                                   'type',
-                                                   data_index
-                                                )}
+                                                onChange={handleChangeType(key, 'type', data_index)}
                                              >
-                                                {inputType.map(
-                                                   (input_type, index) => {
-                                                      return (
-                                                         <Option
-                                                            value={
-                                                               input_type.code
-                                                            }
-                                                            key={index}
-                                                         >
-                                                            {input_type.label}
-                                                         </Option>
-                                                      );
-                                                   }
-                                                )}
+                                                {inputType.map((input_type, index) => {
+                                                   return (
+                                                      <Option value={input_type.code} key={index}>
+                                                         {input_type.label}
+                                                      </Option>
+                                                   );
+                                                })}
                                              </Select>
                                           </Col>
                                        </Row>
                                     </Col>
                                     <Col span={7}>
-                                       <Row
-                                          gutter={[8, 8]}
-                                          className="items-center"
-                                       >
+                                       <Row gutter={[8, 8]} className="items-center">
                                           <Col span={7}>
-                                             <Text className="mr-2">
-                                                Асуулт
-                                             </Text>
+                                             <Text className="mr-2">Асуулт</Text>
                                           </Col>
                                           <Col span={16}>
                                              <Input
@@ -407,24 +354,15 @@ export default function FormModal(props) {
                                                    height: INPUT_HEIGHT
                                                 }}
                                                 value={main_element.label}
-                                                onChange={handleChangeType(
-                                                   key,
-                                                   'label',
-                                                   data_index
-                                                )}
+                                                onChange={handleChangeType(key, 'label', data_index)}
                                              />
                                           </Col>
                                        </Row>
                                     </Col>
                                     <Col span={7}>
-                                       <Row
-                                          gutter={[8, 8]}
-                                          className="items-center"
-                                       >
+                                       <Row gutter={[8, 8]} className="items-center">
                                           <Col span={6}>
-                                             <Text className="mr-2">
-                                                Түлхүүр
-                                             </Text>
+                                             <Text className="mr-2">Түлхүүр</Text>
                                           </Col>
                                           <Col span={14}>
                                              <Input
@@ -435,24 +373,15 @@ export default function FormModal(props) {
                                                    height: INPUT_HEIGHT
                                                 }}
                                                 value={main_element.key}
-                                                onChange={handleChangeType(
-                                                   key,
-                                                   'key',
-                                                   data_index
-                                                )}
+                                                onChange={handleChangeType(key, 'key', data_index)}
                                              />
                                           </Col>
                                        </Row>
                                     </Col>
                                     <Col span={3}>
-                                       <Row
-                                          gutter={[8, 8]}
-                                          className="items-center"
-                                       >
+                                       <Row gutter={[8, 8]} className="items-center">
                                           <Col span={14}>
-                                             <Text className="mr-2">
-                                                Эрэмбэ
-                                             </Text>
+                                             <Text className="mr-2">Эрэмбэ</Text>
                                           </Col>
                                           <Col span={8}>
                                              <Input
@@ -463,19 +392,13 @@ export default function FormModal(props) {
                                                    height: INPUT_HEIGHT
                                                 }}
                                                 value={main_element.order}
-                                                onChange={handleChangeType(
-                                                   key,
-                                                   'order',
-                                                   data_index
-                                                )}
+                                                onChange={handleChangeType(key, 'order', data_index)}
                                              />
                                           </Col>
                                        </Row>
                                     </Col>
                                  </Row>
-                                 {['radio', 'checkbox', 'dropdown'].includes(
-                                    sectionValue[0][data_index].type
-                                 ) ? (
+                                 {['radio', 'checkbox', 'dropdown'].includes(sectionValue[0][data_index].type) ? (
                                     <Card
                                        style={{
                                           width: '100%',
@@ -484,110 +407,65 @@ export default function FormModal(props) {
                                        key={data_index}
                                        bodyStyle={{ padding: 10 }}
                                     >
-                                       {main_element?.options?.map(
-                                          (answer, index) => {
-                                             return (
-                                                <Row
-                                                   className="mt-2 items-center"
-                                                   key={index}
+                                       {main_element?.options?.map((answer, index) => {
+                                          return (
+                                             <Row className="mt-2 items-center" key={index}>
+                                                <Col span={7}>
+                                                   <Row gutter={[8, 8]} className="items-center">
+                                                      <Col span={6}>
+                                                         <Text className="mr-2">Түлхүүр</Text>
+                                                      </Col>
+                                                      <Col span={14}>
+                                                         <Input
+                                                            size="small"
+                                                            style={{
+                                                               minHeight: INPUT_HEIGHT,
+                                                               padding: 5,
+                                                               height: INPUT_HEIGHT
+                                                            }}
+                                                            name="value"
+                                                            value={answer.value}
+                                                            onChange={updateState(key, data_index, index)}
+                                                         />
+                                                      </Col>
+                                                   </Row>
+                                                </Col>
+                                                <Col span={8}>
+                                                   <Row gutter={[8, 8]} className="items-center">
+                                                      <Col span={6}>
+                                                         <Text className="mr-2">Хариулт</Text>
+                                                      </Col>
+                                                      <Col span={14}>
+                                                         <Input
+                                                            size="small"
+                                                            style={{
+                                                               minHeight: INPUT_HEIGHT,
+                                                               padding: 5,
+                                                               height: INPUT_HEIGHT
+                                                            }}
+                                                            name="label"
+                                                            value={answer.label}
+                                                            onChange={updateState(key, data_index, index)}
+                                                         />
+                                                      </Col>
+                                                   </Row>
+                                                </Col>
+                                                <Button
+                                                   shape="circle"
+                                                   size="small"
+                                                   className="grid items-center"
+                                                   onClick={() => removeOption(key, data_index, index)}
                                                 >
-                                                   <Col span={7}>
-                                                      <Row
-                                                         gutter={[8, 8]}
-                                                         className="items-center"
-                                                      >
-                                                         <Col span={6}>
-                                                            <Text className="mr-2">
-                                                               Түлхүүр
-                                                            </Text>
-                                                         </Col>
-                                                         <Col span={14}>
-                                                            <Input
-                                                               size="small"
-                                                               style={{
-                                                                  minHeight:
-                                                                     INPUT_HEIGHT,
-                                                                  padding: 5,
-                                                                  height:
-                                                                     INPUT_HEIGHT
-                                                               }}
-                                                               name="value"
-                                                               value={
-                                                                  answer.value
-                                                               }
-                                                               onChange={updateState(
-                                                                  key,
-                                                                  data_index,
-                                                                  index
-                                                               )}
-                                                            />
-                                                         </Col>
-                                                      </Row>
-                                                   </Col>
-                                                   <Col span={8}>
-                                                      <Row
-                                                         gutter={[8, 8]}
-                                                         className="items-center"
-                                                      >
-                                                         <Col span={6}>
-                                                            <Text className="mr-2">
-                                                               Хариулт
-                                                            </Text>
-                                                         </Col>
-                                                         <Col span={14}>
-                                                            <Input
-                                                               size="small"
-                                                               style={{
-                                                                  minHeight:
-                                                                     INPUT_HEIGHT,
-                                                                  padding: 5,
-                                                                  height:
-                                                                     INPUT_HEIGHT
-                                                               }}
-                                                               name="label"
-                                                               value={
-                                                                  answer.label
-                                                               }
-                                                               onChange={updateState(
-                                                                  key,
-                                                                  data_index,
-                                                                  index
-                                                               )}
-                                                            />
-                                                         </Col>
-                                                      </Row>
-                                                   </Col>
-                                                   <Button
-                                                      shape="circle"
-                                                      size="small"
-                                                      className="grid items-center"
-                                                      onClick={() =>
-                                                         removeOption(
-                                                            key,
-                                                            data_index,
-                                                            index
-                                                         )
-                                                      }
-                                                   >
-                                                      <DeleteOutlined />
-                                                   </Button>
-                                                </Row>
-                                             );
-                                          }
-                                       )}
-                                       {[
-                                          'radio',
-                                          'checkbox',
-                                          'dropdown'
-                                       ].includes(
-                                          sectionValue[0][data_index].type
-                                       ) ? (
+                                                   <DeleteOutlined />
+                                                </Button>
+                                             </Row>
+                                          );
+                                       })}
+                                       {['radio', 'checkbox', 'dropdown'].includes(sectionValue[0][data_index].type) ? (
                                           <Button
                                              size="small"
                                              className="grid items-center mt-2"
-                                             onClick={() =>
-                                                addOption(key, data_index)
-                                             }
+                                             onClick={() => addOption(key, data_index)}
                                              type="primary"
                                           >
                                              Хариулт нэмэх

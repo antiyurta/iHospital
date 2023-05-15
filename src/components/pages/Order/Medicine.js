@@ -43,11 +43,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         'health-insurance/tablets',
-         token,
-         conf
-      );
+      const response = await DefualtGet('health-insurance/tablets', token, conf);
       setTestData(response);
    };
    const add = (medicine) => {
@@ -55,11 +51,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
       if (state) {
          openNofi('warning', 'Эм', 'эм сонгогдсон байна');
       } else if (medicine.price === 0) {
-         openNofi(
-            'warning',
-            'Эм',
-            'Энэ эм эмийн санд байхгүй тул сонгох боломжгүй'
-         );
+         openNofi('warning', 'Эм', 'Энэ эм эмийн санд байхгүй тул сонгох боломжгүй');
       } else {
          medicine.type = 8;
          setSelectedMedicines([...selectedMedicines, medicine]);
@@ -132,10 +124,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
          title: 'Үйлдэл',
          render: (_, row, rowIndex) => {
             return (
-               <p
-                  onClick={() => remove(rowIndex)}
-                  className="hover:cursor-pointer"
-               >
+               <p onClick={() => remove(rowIndex)} className="hover:cursor-pointer">
                   <CloseOutlined
                      style={{
                         color: 'red',
@@ -194,8 +183,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
                            pageSize: 10,
                            total: medicineMeta.itemCount,
                            current: medicineMeta.page,
-                           onChange: (page, pageSize) =>
-                              getMedicine(page, pageSize, pValue, pIndex)
+                           onChange: (page, pageSize) => getMedicine(page, pageSize, pValue, pIndex)
                         }}
                      />
                   </div>

@@ -63,13 +63,9 @@ function AM11() {
                      justifyContent: 'space-between'
                   }}
                >
-                  <span style={styles.generalText}>
-                     Эмнэлгийн нэр ____________________
-                  </span>
+                  <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                     <span style={styles.generalText}>
-                        A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                     </span>
+                     <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                      <span
                         style={{
                            fontWeight: 'bold',
@@ -87,9 +83,7 @@ function AM11() {
                      ...{ display: 'flex', justifyContent: 'space-between' }
                   }}
                >
-                  <span style={{ marginRight: 5 }}>
-                     Кабинетын нэр ____________________
-                  </span>
+                  <span style={{ marginRight: 5 }}>Кабинетын нэр ____________________</span>
                   <div style={{ display: 'flex' }}>
                      <span style={{ marginRight: 5 }}>РД </span>
                      <div style={styles.rowCells}></div>
@@ -111,9 +105,7 @@ function AM11() {
                      marginBottom: 100
                   }}
                >
-                  <span style={{ fontWeight: 'bold', fontSize: 32 }}>
-                     ХЯНАЛТЫН КАРТ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 32 }}>ХЯНАЛТЫН КАРТ</span>
                </div>
                <div
                   style={{
@@ -121,10 +113,7 @@ function AM11() {
                      ...{ textAlign: 'center', marginBottom: 50 }
                   }}
                >
-                  <span>
-                     Эмчийн нэр ___________________ Карт нээсэн __________ он
-                     _____ сар ____ өдөр
-                  </span>
+                  <span>Эмчийн нэр ___________________ Карт нээсэн __________ он _____ сар ____ өдөр</span>
                </div>
                <div>
                   <span
@@ -140,8 +129,7 @@ function AM11() {
                <span style={styles.generalText}>2-р тал</span>
                <div style={styles.rowStyle}>
                   <span style={{}}>
-                     1. Эцэг /эх/-ийн нэр __________________________________ Нэр
-                     _________________________________
+                     1. Эцэг /эх/-ийн нэр __________________________________ Нэр _________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
@@ -149,25 +137,18 @@ function AM11() {
                   <span style={{ marginLeft: 200 }}>3. Хүйс: (зур) эр, эм</span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{}}>
-                     4. Төрсөн ___________ он ______ сар ______ өдөр
-                  </span>
+                  <span style={{}}>4. Төрсөн ___________ он ______ сар ______ өдөр</span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={{}}>
-                     5. Тогтмол хаяг
-                     _______________________________________________________________
+                     5. Тогтмол хаяг _______________________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{ marginLeft: 100 }}>
-                     Утас: __________________
-                  </span>
+                  <span style={{ marginLeft: 100 }}>Утас: __________________</span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{}}>
-                     6. Ажлын газар: _______________________
-                  </span>
+                  <span style={{}}>6. Ажлын газар: _______________________</span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={{}}>7. Ажил мэргэжил: ____________________</span>
@@ -177,8 +158,7 @@ function AM11() {
                </div>
                <div style={styles.rowStyle}>
                   <span style={{}}>
-                     9. Хяналтанд авсан шалтгаан (Үндсэн онош) DS:
-                     ______________________________________
+                     9. Хяналтанд авсан шалтгаан (Үндсэн онош) DS: ______________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
@@ -187,21 +167,15 @@ function AM11() {
                   </span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{}}>
-                     10. Хяналтанд хасагдсан __________ он ______ сар______ өдөр
-                  </span>
+                  <span style={{}}>10. Хяналтанд хасагдсан __________ он ______ сар______ өдөр</span>
                   <span style={{ marginLeft: 50 }}>Бүлгийн зэрэг: _____</span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{}}>
-                     11. Хяналтаас хасагдсан ________ он _____ сар _____ өдөр
-                  </span>
+                  <span style={{}}>11. Хяналтаас хасагдсан ________ он _____ сар _____ өдөр</span>
                   <span style={{ marginLeft: 70 }}>Бүлгийн зэрэг: _____</span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{}}>
-                     12. Хасагдсан шалтгаан: (зур) эдгэрсэн, шилжсэн, нас барсан
-                  </span>
+                  <span style={{}}>12. Хасагдсан шалтгаан: (зур) эдгэрсэн, шилжсэн, нас барсан</span>
                </div>
             </div>
          </div>
@@ -212,46 +186,34 @@ function AM11() {
                   <span style={styles.boldTitle}>ОНОШИЙН ҮНДЭСЛЭЛ</span>
                </div>
                <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>1. Зовиур: ___________________________________________________</span>
+               </div>
+               <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     1. Зовиур:
-                     ___________________________________________________
+                     2. Өвчний түүхээс: ____________________________________________
+                  </span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>3. Асуумжаас: ________________________________________________</span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>
+                     4. Үзлэг ______________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     2. Өвчний түүхээс:
-                     ____________________________________________
+                     5. Шинжилгээ: _________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     3. Асуумжаас:
-                     ________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     4. Үзлэг
-                     ______________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     5. Шинжилгээ:
-                     _________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     6. Онош DS:
-                     _____________________________________________________________
+                     6. Онош DS: _____________________________________________________________
                   </span>
                </div>
                <div style={{ padding: 30 }}>
                   <div style={styles.rowStyle}>
-                     <span style={styles.generalText}>
-                        Хяналтын эмч: _______________________
-                     </span>
+                     <span style={styles.generalText}>Хяналтын эмч: _______________________</span>
                   </div>
                   <div style={styles.rowStyle}>
                      <span style={styles.generalText}>(Тамга)</span>
@@ -276,17 +238,12 @@ function AM11() {
                      marginBottom: 15
                   }}
                >
-                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>
-                     ХЯНАЛТЫН ҮР ДҮНГИЙН ҮЗҮҮЛЭЛТ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>ХЯНАЛТЫН ҮР ДҮНГИЙН ҮЗҮҮЛЭЛТ</span>
                </div>
                <Table bordered style={{ marginTop: 20 }} className="document">
                   <thead>
                      <tr>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.verticalText, ...{ width: 30 } }}>
                            Хяналтад ирэх он, сар, өдөр
                         </td>
                         <td
@@ -298,167 +255,56 @@ function AM11() {
                         >
                            Хяналтад ирсэн он, сар, өдөр
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.verticalText, ...{ width: 30 } }}>
                            ХЧТА-ын хувь
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.verticalText, ...{ width: 30 } }}>
                            Группэд орсон тийм (+), үгүй (-)
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.verticalText, ...{ width: 30 } }}>
                            Эрүүл мэндийн бүлгийн шилжилт
                         </td>
-                        <td
-                           colSpan={8}
-                           style={{ ...styles.centerText, ...{ width: 100 } }}
-                        >
+                        <td colSpan={8} style={{ ...styles.centerText, ...{ width: 100 } }}>
                            Нарийн мэргэжлийн эмчийн үзлэгт хамрагдсан байсан
                         </td>
-                        <td
-                           colSpan={5}
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={5} style={{ ...styles.centerText, ...{ width: 30 } }}>
                            Хийгдсэн шинжилгээ
                         </td>
-                        <td
-                           colSpan={2}
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={2} style={{ ...styles.verticalText, ...{ width: 30 } }}>
                            Эмчилгээ
                         </td>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.verticalText, ...{ width: 30 } }}>
                            Заалт
                         </td>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 30 } }}>
                            Хяналтын хөдөлгөөн
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 200 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 200 } }}>
                            Эмчийн гарын үсэг
                         </td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 20 } }}
-                        >
-                           Дотор
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Мэс засал
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Эмэгтэйчүүд
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Шүд
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Нүд
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Мэдрэл, сэтгэц
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Чих хамар, хоолой
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Бусад
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Шээс
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Биохими
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Флюрограф
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           ЭКГ
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Бусад
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Эмийн
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Эмийн бус
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Стационарт
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Сувилалд
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           ЭМ-ийн зөвлөгөө
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Эдгэрсэн
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Шилжсэн
-                        </td>
-                        <td
-                           style={{ ...styles.verticalText, ...{ width: 30 } }}
-                        >
-                           Нас барсан
-                        </td>
+                        <td style={{ ...styles.verticalText, ...{ width: 20 } }}>Дотор</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Мэс засал</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэйчүүд</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Шүд</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Нүд</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Мэдрэл, сэтгэц</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Чих хамар, хоолой</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Бусад</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Шээс</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Биохими</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Флюрограф</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>ЭКГ</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Бусад</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмийн</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмийн бус</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Стационарт</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Сувилалд</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>ЭМ-ийн зөвлөгөө</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эдгэрсэн</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Шилжсэн</td>
+                        <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Нас барсан</td>
                      </tr>
                      <tr>
                         <td style={{ height: 20, width: 20 }}></td>
@@ -942,9 +788,7 @@ function AM11() {
          </div>
          <div className="page">
             <div className="subpage">
-               <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-               >
+               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={styles.generalText}>7-р тал</span>
                   <span
                      style={{
@@ -959,46 +803,34 @@ function AM11() {
                   <span style={styles.boldTitle}>ОНОШИЙН ҮНДЭСЛЭЛ</span>
                </div>
                <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>1. Зовиур: ___________________________________________________</span>
+               </div>
+               <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     1. Зовиур:
-                     ___________________________________________________
+                     2. Өвчний түүхээс: ____________________________________________
+                  </span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>3. Асуумжаас: ________________________________________________</span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>
+                     4. Үзлэг ______________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     2. Өвчний түүхээс:
-                     ____________________________________________
+                     5. Шинжилгээ: _________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     3. Асуумжаас:
-                     ________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     4. Үзлэг
-                     ______________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     5. Шинжилгээ:
-                     _________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     6. Онош DS:
-                     _____________________________________________________________
+                     6. Онош DS: _____________________________________________________________
                   </span>
                </div>
                <div style={{ padding: 30 }}>
                   <div style={styles.rowStyle}>
-                     <span style={styles.generalText}>
-                        Хяналтын эмч: _______________________
-                     </span>
+                     <span style={styles.generalText}>Хяналтын эмч: _______________________</span>
                   </div>
                   <div style={styles.rowStyle}>
                      <span style={styles.generalText}>(Тамга)</span>
@@ -1008,9 +840,7 @@ function AM11() {
          </div>
          <div className="page">
             <div className="subpage">
-               <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-               >
+               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={styles.generalText}>8-р тал</span>
                   <span
                      style={{
@@ -1025,46 +855,34 @@ function AM11() {
                   <span style={styles.boldTitle}>ОНОШИЙН ҮНДЭСЛЭЛ</span>
                </div>
                <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>1. Зовиур: ___________________________________________________</span>
+               </div>
+               <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     1. Зовиур:
-                     ___________________________________________________
+                     2. Өвчний түүхээс: ____________________________________________
+                  </span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>3. Асуумжаас: ________________________________________________</span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={styles.generalText}>
+                     4. Үзлэг ______________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     2. Өвчний түүхээс:
-                     ____________________________________________
+                     5. Шинжилгээ: _________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={styles.generalText}>
-                     3. Асуумжаас:
-                     ________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     4. Үзлэг
-                     ______________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     5. Шинжилгээ:
-                     _________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={styles.generalText}>
-                     6. Онош DS:
-                     _____________________________________________________________
+                     6. Онош DS: _____________________________________________________________
                   </span>
                </div>
                <div style={{ padding: 30 }}>
                   <div style={styles.rowStyle}>
-                     <span style={styles.generalText}>
-                        Хяналтын эмч: _______________________
-                     </span>
+                     <span style={styles.generalText}>Хяналтын эмч: _______________________</span>
                   </div>
                   <div style={styles.rowStyle}>
                      <span style={styles.generalText}>(Тамга)</span>
@@ -1085,9 +903,7 @@ function AM11() {
          </div>
          <div className="page">
             <div className="subpage">
-               <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-               >
+               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={styles.generalText}></span>
                   <span
                      style={{
@@ -1099,104 +915,54 @@ function AM11() {
                   </span>
                </div>
                <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
-                  <span style={styles.boldTitle}>
-                     Настны эрүүл мэндийн төлөвлөгөө
-                  </span>
+                  <span style={styles.boldTitle}>Настны эрүүл мэндийн төлөвлөгөө</span>
                </div>
                <Table bordered className="document" style={{ marginTop: 20 }}>
                   <tbody>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        >
-                           Үзүүлэлтүүд
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        >
-                           Төлөвлөгөө
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        >
-                           Хугацаа
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}>Үзүүлэлтүүд</td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}>Төлөвлөгөө</td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}>Хугацаа</td>
                      </tr>
                      <tr>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 30 } }}>
                            Биеийн эрүүл мэнд
                         </td>
                      </tr>
                      <tr style={{ height: 80 }}>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
                      </tr>
                      <tr>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 30 } }}>
                            Сэтгэц, танин мэдэхүй
                         </td>
                      </tr>
                      <tr style={{ height: 80 }}>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
                      </tr>
                      <tr>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 30 } }}>
                            Үйл ажиллагаа
                         </td>
                      </tr>
                      <tr style={{ height: 80 }}>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
                      </tr>
                      <tr>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 30 } }}>
                            Нийгмийн оролцоо
                         </td>
                      </tr>
                      <tr style={{ height: 80 }}>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '33%' } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '33%' } }}></td>
                      </tr>
                   </tbody>
                </Table>
@@ -1221,18 +987,10 @@ function AM11() {
                         Хавсралт 2
                      </span>
                   </div>
-                  <div
-                     style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}
-                  >
-                     <span style={styles.boldTitle}>
-                        Настны үйл ажиллагааны хяналтын үнэлгээ
-                     </span>
+                  <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
+                     <span style={styles.boldTitle}>Настны үйл ажиллагааны хяналтын үнэлгээ</span>
                   </div>
-                  <Table
-                     bordered
-                     style={{ marginTop: 20 }}
-                     className="document"
-                  >
+                  <Table bordered style={{ marginTop: 20 }} className="document">
                      <thead>
                         <tr>
                            <td
@@ -1683,9 +1441,7 @@ function AM11() {
                >
                   <span style={styles.generalText}></span>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                     <span style={styles.generalText}>
-                        A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                     </span>
+                     <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                      <span
                         style={{
                            fontWeight: 'bold',
@@ -1698,9 +1454,7 @@ function AM11() {
                   </div>
                </div>
 
-               <span style={styles.generalText}>
-                  ЭМБ-ын нэр ____________________
-               </span>
+               <span style={styles.generalText}>ЭМБ-ын нэр ____________________</span>
                <div
                   style={{
                      textAlign: 'center',
@@ -1708,23 +1462,17 @@ function AM11() {
                      marginBottom: 20
                   }}
                >
-                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>
-                     АРТЕРИЙН ГИПЕРТЕНЗИЙН ХЯНАЛТ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>АРТЕРИЙН ГИПЕРТЕНЗИЙН ХЯНАЛТ</span>
                </div>
                <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
                   1. Эцэг/эх/-ийн нэр ________________________
-                  <span
-                     style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                  >
+                  <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>
                      Нэр: _____________________________
                   </span>
                </span>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex', padding: 10 }}>
-                     <span style={{ marginRight: 5 }}>
-                        2. Регистрийн дугаар:{' '}
-                     </span>
+                     <span style={{ marginRight: 5 }}>2. Регистрийн дугаар: </span>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
@@ -1735,19 +1483,13 @@ function AM11() {
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
-                     <span
-                        style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                     >
-                        3. Хүйс: Эрэгтэй, Эмэгтэй
-                     </span>
+                     <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>3. Хүйс: Эрэгтэй, Эмэгтэй</span>
                   </div>
                </div>
                <div style={{ display: 'flex', padding: 10 }}>
                   <span style={styles.generalText}>
                      4. Утасны дугаар: ______________
-                     <span
-                        style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                     >
+                     <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>
                         5. Анх хяналтад орсон огноо__________________________
                      </span>
                   </span>
@@ -1755,22 +1497,14 @@ function AM11() {
                <Table bordered className="document">
                   <thead>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>
-                           Үзлэгийн огноо
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Артерийн даралтын хэмжилт (мм МУБ)
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>
-                           Эмийн нэр, тун
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>Үзлэгийн огноо</td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Артерийн даралтын хэмжилт (мм МУБ)</td>
+                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>Эмийн нэр, тун</td>
                         <td style={{ ...styles.centerText, ...{ width: 90 } }}>
                            Эмээ эмчийн зааврын дагуу уусан эсэх (тийм-1, үгүй-2)
                         </td>
 
-                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>
-                           Дараагийн үзлэгийн огноо
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>Дараагийн үзлэгийн огноо</td>
                      </tr>
                      <tr style={{ height: 30 }}>
                         <td></td>
@@ -1819,22 +1553,14 @@ function AM11() {
                <Table bordered style={{ marginTop: 60 }} className="document">
                   <thead>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>
-                           Үзлэгийн огноо
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Артерийн даралтын хэмжилт (мм МУБ)
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>
-                           Эмийн нэр, тун
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>Үзлэгийн огноо</td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Артерийн даралтын хэмжилт (мм МУБ)</td>
+                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>Эмийн нэр, тун</td>
                         <td style={{ ...styles.centerText, ...{ width: 90 } }}>
                            Эмээ эмчийн зааврын дагуу уусан эсэх (тийм-1, үгүй-2)
                         </td>
 
-                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>
-                           Дараагийн үзлэгийн огноо
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>Дараагийн үзлэгийн огноо</td>
                      </tr>
                      <tr style={{ height: 30 }}>
                         <td></td>
@@ -1936,9 +1662,7 @@ function AM11() {
                >
                   <span style={styles.generalText}></span>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                     <span style={styles.generalText}>
-                        A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                     </span>
+                     <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                      <span
                         style={{
                            fontWeight: 'bold',
@@ -1951,9 +1675,7 @@ function AM11() {
                   </div>
                </div>
 
-               <span style={styles.generalText}>
-                  ЭМБ-ын нэр ____________________
-               </span>
+               <span style={styles.generalText}>ЭМБ-ын нэр ____________________</span>
                <div
                   style={{
                      textAlign: 'center',
@@ -1961,17 +1683,11 @@ function AM11() {
                      marginBottom: 20
                   }}
                >
-                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>
-                     ЧИХРИЙН ШИЖИНГИЙН ХЯНАЛТЫН КАРТ
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>ЧИХРИЙН ШИЖИНГИЙН ХЯНАЛТЫН КАРТ</span>
                </div>
                <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
                   Овог, Нэр: _________________________________________
-                  <span
-                     style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                  >
-                     Нас, Хүйс: ___________
-                  </span>
+                  <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>Нас, Хүйс: ___________</span>
                </span>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex', padding: 10 }}>
@@ -1991,9 +1707,7 @@ function AM11() {
                <div style={{ display: 'flex', padding: 10 }}>
                   <span style={styles.generalText}>
                      Утасны дугаар: ______________
-                     <span
-                        style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                     >
+                     <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>
                         Анх хяналтад орсон огноо__________________________
                      </span>
                   </span>
@@ -2001,22 +1715,14 @@ function AM11() {
                <Table bordered className="document">
                   <thead>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>
-                           Үзлэгийн огноо
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Артерийн даралтын хэмжилт (мм МУБ)
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>
-                           Эмийн нэр, тун
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>Үзлэгийн огноо</td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Артерийн даралтын хэмжилт (мм МУБ)</td>
+                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>Эмийн нэр, тун</td>
                         <td style={{ ...styles.centerText, ...{ width: 90 } }}>
                            Эмээ эмчийн зааврын дагуу уусан эсэх (тийм-1, үгүй-2)
                         </td>
 
-                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>
-                           Дараагийн үзлэгийн огноо
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>Дараагийн үзлэгийн огноо</td>
                      </tr>
                      <tr style={{ height: 30 }}>
                         <td></td>
@@ -2065,22 +1771,14 @@ function AM11() {
                <Table bordered style={{ marginTop: 60 }} className="document">
                   <thead>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>
-                           Үзлэгийн огноо
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Артерийн даралтын хэмжилт (мм МУБ)
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>
-                           Эмийн нэр, тун
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>Үзлэгийн огноо</td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Артерийн даралтын хэмжилт (мм МУБ)</td>
+                        <td style={{ ...styles.centerText, ...{ width: 350 } }}>Эмийн нэр, тун</td>
                         <td style={{ ...styles.centerText, ...{ width: 90 } }}>
                            Эмээ эмчийн зааврын дагуу уусан эсэх (тийм-1, үгүй-2)
                         </td>
 
-                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>
-                           Дараагийн үзлэгийн огноо
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>Дараагийн үзлэгийн огноо</td>
                      </tr>
                      <tr style={{ height: 30 }}>
                         <td></td>
@@ -2167,25 +1865,19 @@ function AM11() {
             <div className="subpage">
                <span style={styles.generalText}>9-р тал</span>
                <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
-                  <span style={styles.boldTitle}>
-                     Хяналтын үечилсэн дүгнэлт
+                  <span style={styles.boldTitle}>Хяналтын үечилсэн дүгнэлт</span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={{ ...styles.generalText, ...{ padding: 10 } }}>_________ он ______ сар ______ өдөр</span>
+               </div>
+               <div style={styles.rowStyle}>
+                  <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
+                     Зовиур: ________________________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
                   <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
-                     _________ он ______ сар ______ өдөр
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
-                     Зовиур:
-                     ________________________________________________________________
-                  </span>
-               </div>
-               <div style={styles.rowStyle}>
-                  <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
-                     Бодит үзлэгээр илэрсэн өөрчлөлт
-                     __________________________________
+                     Бодит үзлэгээр илэрсэн өөрчлөлт __________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
@@ -2195,8 +1887,7 @@ function AM11() {
                </div>
                <div style={styles.rowStyle}>
                   <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
-                     Шинжилгээний өөрчлөлтүүд:
-                     ______________________________________
+                     Шинжилгээний өөрчлөлтүүд: ______________________________________
                   </span>
                </div>
                <div
@@ -2210,14 +1901,10 @@ function AM11() {
                   }}
                >
                   <span style={styles.generalText}>Хяналтын үр дүн:</span>
-                  <span style={styles.generalText}>
-                     Биеийн байдал: хэвэндээ, сайжирсан, дордсон, сэдэрсэн
-                  </span>
+                  <span style={styles.generalText}>Биеийн байдал: хэвэндээ, сайжирсан, дордсон, сэдэрсэн</span>
                </div>
                <div style={styles.rowStyle}>
-                  <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
-                     Бүлгийн шилжилтийн байдал: (зур)
-                  </span>
+                  <span style={{ ...styles.generalText, ...{ padding: 10 } }}>Бүлгийн шилжилтийн байдал: (зур)</span>
                   <span
                      style={{
                         ...styles.generalText,
@@ -2229,8 +1916,7 @@ function AM11() {
                </div>
                <div style={styles.rowStyle}>
                   <span style={{ ...styles.boldTitle, ...{ padding: 10 } }}>
-                     ДҮГНЭЛТ:
-                     _______________________________________________________
+                     ДҮГНЭЛТ: _______________________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
@@ -2240,8 +1926,7 @@ function AM11() {
                </div>
                <div style={styles.rowStyle}>
                   <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
-                     Цаашид хэрэгжүүлэх арга хэмжээ, заалт:
-                     __________________________________________
+                     Цаашид хэрэгжүүлэх арга хэмжээ, заалт: __________________________________________
                   </span>
                </div>
                <div style={styles.rowStyle}>
@@ -2282,16 +1967,8 @@ function AM11() {
                         >
                            Он сар өдөр
                         </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '50%' } }}
-                        >
-                           Эмчийн тэмдэглэл
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '40%' } }}
-                        >
-                           Эмчилгээний заалт
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '50%' } }}>Эмчийн тэмдэглэл</td>
+                        <td style={{ ...styles.centerText, ...{ width: '40%' } }}>Эмчилгээний заалт</td>
                      </tr>
                      <tr style={{ height: 450 }}>
                         <td></td>
@@ -2321,9 +1998,7 @@ function AM11() {
                >
                   <span style={styles.generalText}></span>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                     <span style={styles.generalText}>
-                        A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                     </span>
+                     <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                      <span
                         style={{
                            fontWeight: 'bold',
@@ -2336,29 +2011,17 @@ function AM11() {
                   </div>
                </div>
 
-               <span style={styles.generalText}>
-                  ЭМБ-ын нэр ____________________
-               </span>
-               <div
-                  style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}
-               >
-                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>
-                     НҮДНИЙ ЭМЧИЙН ХЯНАЛТ
-                  </span>
+               <span style={styles.generalText}>ЭМБ-ын нэр ____________________</span>
+               <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
+                  <span style={{ fontWeight: 'bold', fontSize: 18 }}>НҮДНИЙ ЭМЧИЙН ХЯНАЛТ</span>
                </div>
                <span style={{ ...styles.generalText, ...{ padding: 10 } }}>
                   1. Эцэг/эх/-ийн нэр: _________________________________________
-                  <span
-                     style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                  >
-                     Нэр: ___________
-                  </span>
+                  <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>Нэр: ___________</span>
                </span>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex', padding: 10 }}>
-                     <span style={{ marginRight: 5 }}>
-                        2. Регистрийн дугаар:{' '}
-                     </span>
+                     <span style={{ marginRight: 5 }}>2. Регистрийн дугаар: </span>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
@@ -2374,19 +2037,13 @@ function AM11() {
                <div style={{ display: 'flex', padding: 10 }}>
                   <span style={styles.generalText}>
                      3. Хүйс (зур):{' '}
-                     <span
-                        style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                     >
-                        Эрэгтэй, Эмэгтэй
-                     </span>
+                     <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>Эрэгтэй, Эмэгтэй</span>
                   </span>
                </div>
                <div style={{ display: 'flex', padding: 10 }}>
                   <span style={styles.generalText}>
                      4. Утасны дугаар: ______________
-                     <span
-                        style={{ ...styles.generalText, ...{ marginLeft: 30 } }}
-                     >
+                     <span style={{ ...styles.generalText, ...{ marginLeft: 30 } }}>
                         5. Анх хяналтад орсон огноо__________________________
                      </span>
                   </span>
@@ -2394,46 +2051,26 @@ function AM11() {
                <Table bordered className="document">
                   <thead>
                      <tr>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 40 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 40 } }}>
                            Д/Д
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 80 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 80 } }}>
                            Үзлэгийн Он/сар/өдөр
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 80 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 80 } }}>
                            Харааны чадал
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 80 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 80 } }}>
                            Нүдний даралт
                         </td>
 
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 200 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 200 } }}>
                            Үзлэгт гарсан өөрчлөлт
                         </td>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 90 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 90 } }}>
                            Эмчилгээний үр дүн
                         </td>
-                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>
-                           Сайжирсан эсэх /Тийм/, /Үгүй/
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>Сайжирсан эсэх /Тийм/, /Үгүй/</td>
                      </tr>
                      <tr>
                         <td
@@ -2562,9 +2199,7 @@ function AM11() {
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
                      </tr>
                      <tr>
-                        <td style={{ height: 20, width: 20, padding: 0 }}>
-                           10
-                        </td>
+                        <td style={{ height: 20, width: 20, padding: 0 }}>10</td>
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
@@ -2579,46 +2214,26 @@ function AM11() {
                <Table bordered className="document" style={{ marginTop: 40 }}>
                   <thead>
                      <tr>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 40 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 40 } }}>
                            Д/Д
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 80 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 80 } }}>
                            Үзлэгийн Он/сар/өдөр
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 80 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 80 } }}>
                            Харааны чадал
                         </td>
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 80 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 80 } }}>
                            Нүдний даралт
                         </td>
 
-                        <td
-                           rowSpan={2}
-                           style={{ ...styles.centerText, ...{ width: 200 } }}
-                        >
+                        <td rowSpan={2} style={{ ...styles.centerText, ...{ width: 200 } }}>
                            Үзлэгт гарсан өөрчлөлт
                         </td>
-                        <td
-                           colSpan={3}
-                           style={{ ...styles.centerText, ...{ width: 90 } }}
-                        >
+                        <td colSpan={3} style={{ ...styles.centerText, ...{ width: 90 } }}>
                            Эмчилгээний үр дүн
                         </td>
-                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>
-                           Сайжирсан эсэх /Тийм/, /Үгүй/
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 90 } }}>Сайжирсан эсэх /Тийм/, /Үгүй/</td>
                      </tr>
                      <tr>
                         <td
@@ -2747,9 +2362,7 @@ function AM11() {
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
                      </tr>
                      <tr>
-                        <td style={{ height: 20, width: 20, padding: 0 }}>
-                           10
-                        </td>
+                        <td style={{ height: 20, width: 20, padding: 0 }}>10</td>
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>
                         <td style={{ height: 20, width: 20, padding: 0 }}></td>

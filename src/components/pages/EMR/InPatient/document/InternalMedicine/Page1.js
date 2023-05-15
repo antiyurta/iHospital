@@ -22,12 +22,7 @@ function Page1() {
                      <th>
                         <p>Хамрын амьсгал</p>
                         <p>чөлөөтэй эсэх:</p>
-                        <Form.Item
-                           name={['doctorInspection', 'ct1IM1.1.1']}
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                        >
+                        <Form.Item name={['doctorInspection', 'ct1IM1.1.1']} shouldUpdate className="mb-0" noStyle>
                            <Checkbox.Group className="checkboxx ml-0">
                               <Checkbox className="checkboxx ml-2" value={0}>
                                  Тийм
@@ -36,12 +31,7 @@ function Page1() {
                            </Checkbox.Group>
                         </Form.Item>
                         <p>Хөхрөлт байгаа эсэх:</p>
-                        <Form.Item
-                           name={['doctorInspection', 'ct1IM1.1.2']}
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                        >
+                        <Form.Item name={['doctorInspection', 'ct1IM1.1.2']} shouldUpdate className="mb-0" noStyle>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Тийм
@@ -50,12 +40,7 @@ function Page1() {
                            </Checkbox.Group>
                         </Form.Item>
                         <p>Тийм бол:</p>
-                        <Form.Item
-                           name={['doctorInspection', 'ct1IM1.1.3']}
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                        >
+                        <Form.Item name={['doctorInspection', 'ct1IM1.1.3']} shouldUpdate className="mb-0" noStyle>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Төвийн
@@ -67,12 +52,7 @@ function Page1() {
                      <th>
                         <p>Амьсгалд туслах булчингууд оролцож</p>
                         <p>байгаа эсэх:</p>
-                        <Form.Item
-                           name={['doctorInspection', 'ct1IM1.1.4']}
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                        >
+                        <Form.Item name={['doctorInspection', 'ct1IM1.1.4']} shouldUpdate className="mb-0" noStyle>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Тийм
@@ -83,25 +63,12 @@ function Page1() {
                         <p>Амьсгалын тоо 1:</p>
                         <p>
                            минутанд
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM1.1.5']}
-                           >
-                              <Input
-                                 className="amaraInput w-10"
-                                 style={{ textAlign: 'center' }}
-                              />
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.5']}>
+                              <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
                            </Form.Item>{' '}
                            удаа:
                         </p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.1.6']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.6']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Хэм жигд
@@ -112,12 +79,7 @@ function Page1() {
                      </th>
                      <th>
                         <p>Цээжний хэлбэр:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.1.7']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.7']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Зөв
@@ -126,12 +88,7 @@ function Page1() {
                            </Checkbox.Group>
                         </Form.Item>
                         <p>Амьсгалын хэлбэр:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.1.8']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.8']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Цээжний
@@ -147,12 +104,7 @@ function Page1() {
                         <p>Цээжний 2 талд</p>
                         <p>амьсгал жигд оролцох</p>
                         <p>байдал:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.1.9']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.9']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Жигд(баруун/зүүн)
@@ -169,12 +121,7 @@ function Page1() {
                   <tr>
                      <th>
                         <p>Эмзэглэлтэй эсэх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.2.1']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.1']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Эмзэглэлгүй
@@ -184,23 +131,13 @@ function Page1() {
                         </Form.Item>
                         <p>
                            [
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM1.2.2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.2']}>
                               <Input className="w-32" />
                            </Form.Item>
                            ]
                         </p>
                         <p>Уян чанар:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.2.3']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.3']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Хэвийн
@@ -211,12 +148,7 @@ function Page1() {
                      </th>
                      <th>
                         <p>Дууны доргион:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.2.4']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.4']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Хэвийн Суларсан
@@ -228,12 +160,7 @@ function Page1() {
                      </th>
                      <th>
                         <p>Тогшилтын дуу:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.3.1']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.3.1']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  2 талд ижил
@@ -244,12 +171,7 @@ function Page1() {
                      </th>
                      <th>
                         <p>Хэсэгт тогшилтын дуу:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.3.2']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.3.2']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Бүдгэрсэн
@@ -266,12 +188,7 @@ function Page1() {
                   <tr>
                      <th colSpan={2}>
                         <p>Амьсгал 2 талд:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.4.1']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.1']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Ижил
@@ -281,23 +198,13 @@ function Page1() {
                         </Form.Item>
                         <span>
                            (
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM1.4.2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.2']}>
                               <Input className="amaraInput w-12" />
                            </Form.Item>
                            хэсэгт )
                         </span>
                         <p>Эмгэг амьсгалтай:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.4.3']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.3']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Тийм
@@ -338,12 +245,7 @@ function Page1() {
                      </th>
                      <th colSpan={2}>
                         <p>Нэмэлт шуугиантай эсэх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.4.5']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.5']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Тийм
@@ -388,12 +290,7 @@ function Page1() {
                            </span>
                         </p>
                         <p>Бронхофони</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM1.4.8']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.8']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Хэвийн
@@ -429,12 +326,7 @@ function Page1() {
                   </tr>
                   <tr>
                      <th>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.1.1']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.1.1']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Зохисгүй хооллолт
@@ -451,12 +343,7 @@ function Page1() {
                         </Form.Item>
                      </th>
                      <th className="w-20">
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.1.2']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.1.2']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Архины зохисгүй хэрэглээ
@@ -536,16 +423,10 @@ function Page1() {
                                           <Checkbox className="test" value={0}>
                                              хүчтэй
                                           </Checkbox>
-                                          <Checkbox
-                                             className="ml-0 test"
-                                             value={1}
-                                          >
+                                          <Checkbox className="ml-0 test" value={1}>
                                              дунд
                                           </Checkbox>
-                                          <Checkbox
-                                             className="ml-0 test"
-                                             value={2}
-                                          >
+                                          <Checkbox className="ml-0 test" value={2}>
                                              сул
                                           </Checkbox>
                                        </Checkbox.Group>
@@ -584,12 +465,7 @@ function Page1() {
                   <tr>
                      <th className="w-72">
                         <p>Зүрхний оройн түлхэлт Байрлал:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.3.1']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.1']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Хэвийн
@@ -599,12 +475,7 @@ function Page1() {
                         </Form.Item>
                         <div className="inline-flex">
                            <p>Хүч:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.3.2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.2']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-2" value={0}>
                                     Дунд зэрэг
@@ -617,12 +488,7 @@ function Page1() {
                         <p>Шууны артерийн лугшилт</p>
                         <div className="inline-flex">
                            <p>Хэмнэл:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.3.3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.3']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-2" value={0}>
                                     Жигд
@@ -635,23 +501,13 @@ function Page1() {
                      <th>
                         <p>
                            Давтамж:
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.3.4']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.4']}>
                               <Input className="amaraInput w-28" />
                            </Form.Item>
                            /мин/
                         </p>
                         <p>Хүчдэл:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.3.5']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.5']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Дунд зэрэг
@@ -662,12 +518,7 @@ function Page1() {
                         </Form.Item>
                         <div className="inline-flex">
                            <p>Дүүрэлт:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.3.6']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.6']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-2" value={0}>
                                     Дунд зэрэг
@@ -677,12 +528,7 @@ function Page1() {
                            </Form.Item>
                         </div>
                         <p>2 талд ижил эсэх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.3.7']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.7']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Ижил
@@ -693,12 +539,7 @@ function Page1() {
                      </th>
                      <th>
                         <p>Зүрхний (харьцангүй) хил хязгаар:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.4.1']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.4.1']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2 w-full" value={0}>
                                  Хэвийн
@@ -744,12 +585,7 @@ function Page1() {
                         <p>Зүрхний авиа:</p>
                         <div className="inline-flex">
                            <p>Хэмнэл:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.1']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.1']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-2" value={0}>
                                     Жигд
@@ -760,76 +596,45 @@ function Page1() {
                         </div>
                         <p>
                            Давтамж:
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.2']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.2']}>
                               <Input className="amaraInput w-28" />
                            </Form.Item>
                            /мин
                         </p>
                         <div className="inline-flex">
                            <p>I авиа:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.3']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-3" value={0}>
                                     Тод
                                  </Checkbox>
-                                 <Checkbox value={1}>
-                                    Бүдгэвтэр(I,IV цэгт)
-                                 </Checkbox>
+                                 <Checkbox value={1}>Бүдгэвтэр(I,IV цэгт)</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
                         <div>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.3']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.3']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-14" value={2}>
                                     Бүдэг(I,V)
                                  </Checkbox>
-                                 <Checkbox value={3}>
-                                    Чангарсан(I,IV цэгт)
-                                 </Checkbox>
+                                 <Checkbox value={3}>Чангарсан(I,IV цэгт)</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
                         <div className="inline-flex">
                            <p>II авиа:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.4']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.4']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-2" value={0}>
                                     Тод
                                  </Checkbox>
-                                 <Checkbox value={1}>
-                                    Бүдэг(II, III,V цэгт)
-                                 </Checkbox>
+                                 <Checkbox value={1}>Бүдэг(II, III,V цэгт)</Checkbox>
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
                         <div>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.4']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.4']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-14" value={2}>
                                     Өргөгдсөн(II,III цэгт)
@@ -839,12 +644,7 @@ function Page1() {
                         </div>
                         <div className="inline-flex">
                            <p>III авиа:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.5']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.5']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-1" value={0}>
                                     Сонсогдоно
@@ -855,12 +655,7 @@ function Page1() {
                         </div>
                      </th>
                      <th className="w-1/2">
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.5.5']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.5']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={2}>
                                  Шуугиангүй
@@ -958,12 +753,7 @@ function Page1() {
                               цэгт)
                            </span>
                         </p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.5.9']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.9']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Үл дамжина
@@ -972,23 +762,13 @@ function Page1() {
                            </Checkbox.Group>
                         </Form.Item>
                         <span>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.10']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.10']}>
                               <Input className="amaraInput w-28" />
                            </Form.Item>
                         </span>
                         <div className="inline-flex">
                            <p>Хүч:</p>
-                           <Form.Item
-                              shouldUpdate
-                              className="mb-0"
-                              noStyle
-                              name={['doctorInspection', 'ct1IM2.5.11']}
-                           >
+                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.11']}>
                               <Checkbox.Group className="ml-0">
                                  <Checkbox className="ml-2" value={0}>
                                     Сул
@@ -999,12 +779,7 @@ function Page1() {
                            </Form.Item>
                         </div>
                         <p>Перикардын шүргэлцэх чимээ бий эсэх:</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['doctorInspection', 'ct1IM2.5.12']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.12']}>
                            <Checkbox.Group className="ml-0">
                               <Checkbox className="ml-2" value={0}>
                                  Тийм

@@ -10,14 +10,7 @@ function Calender() {
    return (
       <>
          <ConfigProvider locale={mnMN}>
-            <Card
-               title={
-                  <DatePicker
-                     onChange={(e) => getListByWeek(e)}
-                     picker="week"
-                  />
-               }
-            ></Card>
+            <Card title={<DatePicker onChange={(e) => getListByWeek(e)} picker="week" />}></Card>
          </ConfigProvider>
       </>
    );

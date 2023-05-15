@@ -17,11 +17,7 @@ function Support({ result }) {
             endCode: values.endCode
          }
       };
-      const response = await Get(
-         'reference/diagnose/between/code',
-         token,
-         conf
-      );
+      const response = await Get('reference/diagnose/between/code', token, conf);
       result(response);
       setIsloading(false);
    };
@@ -55,9 +51,7 @@ function Support({ result }) {
             <Button
                type="primary"
                loading={loading}
-               onClick={() =>
-                  codesForm.validateFields().then((values) => onFinish(values))
-               }
+               onClick={() => codesForm.validateFields().then((values) => onFinish(values))}
             >
                Татах
             </Button>

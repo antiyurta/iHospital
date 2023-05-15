@@ -7,20 +7,7 @@ import {
    ReloadOutlined,
    SearchOutlined
 } from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   DatePicker,
-   Divider,
-   Empty,
-   Form,
-   Input,
-   Modal,
-   Segmented,
-   Space,
-   Table,
-   Tag
-} from 'antd';
+import { Button, Card, DatePicker, Divider, Empty, Form, Input, Modal, Segmented, Space, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React, { useRef, useState, useEffect } from 'react';
@@ -30,6 +17,7 @@ import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { DefaultPatch, Get, Patch } from '../../../comman';
 import examinationProcess from '../examinationProcess.json';
+import MonitorCriteria from '../../Insurance/MonitorCriteria';
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -46,8 +34,7 @@ function Index() {
    const [requestListMeta, setRequestListMeta] = useState({});
    const [requestListLoading, setRequestListLoading] = useState(false);
    const [requestDetailList, setRequestDetailList] = useState([]);
-   const [requestDetailListLoading, setRequestDetailListLoading] =
-      useState(false);
+   const [requestDetailListLoading, setRequestDetailListLoading] = useState(false);
    const [measurements, setMeasurements] = useState([]);
    const [Dstart, setStart] = useState('');
    const [Dend, setEnd] = useState('');
@@ -66,12 +53,7 @@ function Index() {
          headers: {},
          params: {}
       };
-      const response = await Patch(
-         'service/examinationRequestDetail/' + callback.id,
-         token,
-         conf,
-         values
-      );
+      const response = await Patch('service/examinationRequestDetail/' + callback.id, token, conf, values);
       if (response) {
          setIsOpenCallBack(false);
          await getErequestDtl(selectedRequest);
@@ -86,22 +68,15 @@ function Index() {
             examinationProcess: 3
          }
       };
-      const response = await Get(
-         'service/examinationRequestDetail',
-         token,
-         conf
-      );
+      const response = await Get('service/examinationRequestDetail', token, conf);
       setSelectedResult(response.data);
    };
    // columns
    const requestListColumn = [
       {
          title: '№',
-         render: (_, record, index) => {
-            return (
-               requestListMeta.page * requestListMeta.limit -
-               (requestListMeta.limit - index - 1)
-            );
+         render: (_, _record, index) => {
+            return requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1);
          }
       },
       {
@@ -124,19 +99,22 @@ function Index() {
          }
       },
       {
+         title: 'Хяналт',
+         width: 60,
+         render: (_text, row) => {
+            return <MonitorCriteria props={{ serviceId: row.erequests_id, serviceType: 0 }} />;
+         }
+      },
+      {
          title: 'Төлөв',
          render: (_, row) => {
             if (row.erequests_isCito) {
                return (
-                  <p className="bg-[#dd4b39] text-white">
-                     {row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}
-                  </p>
+                  <p className="bg-[#dd4b39] text-white">{row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>
                );
             } else {
                return (
-                  <p className="bg-[#5cb85c] text-white">
-                     {row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}
-                  </p>
+                  <p className="bg-[#5cb85c] text-white">{row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>
                );
             }
          }
@@ -146,10 +124,7 @@ function Index() {
       {
          title: '№',
          render: (_, record, index) => {
-            return (
-               requestListMeta.page * requestListMeta.limit -
-               (requestListMeta.limit - index - 1)
-            );
+            return requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1);
          }
       },
       {
@@ -176,15 +151,11 @@ function Index() {
          render: (_, row) => {
             if (row.erequests_isCito) {
                return (
-                  <p className="bg-[#dd4b39] text-white">
-                     {row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}
-                  </p>
+                  <p className="bg-[#dd4b39] text-white">{row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>
                );
             } else {
                return (
-                  <p className="bg-[#5cb85c] text-white">
-                     {row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}
-                  </p>
+                  <p className="bg-[#5cb85c] text-white">{row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>
                );
             }
          }
@@ -276,9 +247,7 @@ function Index() {
             limit: pageSize,
             examinationProcess: process,
             firstName: values?.firstName ? values?.firstName : null,
-            registerNumber: values?.registerNumber
-               ? values.registerNumber
-               : null
+            registerNumber: values?.registerNumber ? values.registerNumber : null
          }
       };
       if (start != null && end != null) {
@@ -307,11 +276,7 @@ function Index() {
          }
       };
       setSelectedRequest(row);
-      const response = await Get(
-         'service/examinationRequestDetail',
-         token,
-         conf
-      );
+      const response = await Get('service/examinationRequestDetail', token, conf);
       setSelectedRowKeys([]);
       setBarCodeState(false);
       setRequestDetailList(response.data);
@@ -352,14 +317,9 @@ function Index() {
          Promise.all(
             selectedRequestDtl?.map(async (dtl) => {
                if (dtl.examinationProcess === 0) {
-                  await DefaultPatch(
-                     'service/examinationRequestDetail/' + dtl.id,
-                     token,
-                     conf,
-                     {
-                        examinationProcess: 1
-                     }
-                  );
+                  await DefaultPatch('service/examinationRequestDetail/' + dtl.id, token, conf, {
+                     examinationProcess: 1
+                  });
                }
             })
          ).then(() => {
@@ -380,14 +340,9 @@ function Index() {
       };
       Promise.all(
          selectedRequestDtl.map(async (dtl) => {
-            await DefaultPatch(
-               'service/examinationRequestDetail/' + dtl.id,
-               token,
-               conf,
-               {
-                  examinationProcess: dtl.examinationProcess + 1
-               }
-            );
+            await DefaultPatch('service/examinationRequestDetail/' + dtl.id, token, conf, {
+               examinationProcess: dtl.examinationProcess + 1
+            });
          })
       )
          .then(async () => {
@@ -464,14 +419,7 @@ function Index() {
                      >
                         <Form
                            onFinish={(e) =>
-                              getErequest(
-                                 1,
-                                 10,
-                                 e.date ? e.date[0] : null,
-                                 e.date ? e.date[1] : null,
-                                 e,
-                                 statusFilter
-                              )
+                              getErequest(1, 10, e.date ? e.date[0] : null, e.date ? e.date[1] : null, e, statusFilter)
                            }
                            form={searchForm}
                            layout="vertical"
@@ -479,17 +427,11 @@ function Index() {
                            <div className="flex flex-wrap">
                               <div className="md:w-1/3 xl:w-1/4 p-1">
                                  <Form.Item label="Өдөрөөр:" name="date">
-                                    <RangePicker
-                                       format="YYYY-MM-DD"
-                                       locale={mnMN}
-                                    />
+                                    <RangePicker format="YYYY-MM-DD" locale={mnMN} />
                                  </Form.Item>
                               </div>
                               <div className="md:w-1/3 xl:w-1/4 p-1">
-                                 <Form.Item
-                                    label="Регистрийн дугаар:"
-                                    name="registerNumber"
-                                 >
+                                 <Form.Item label="Регистрийн дугаар:" name="registerNumber">
                                     <Input />
                                  </Form.Item>
                               </div>
@@ -500,11 +442,7 @@ function Index() {
                               </div>
                               <div className="md:w-2/12 xl:w-1/12">
                                  <Form.Item>
-                                    <Button
-                                       type="primary"
-                                       icon={<SearchOutlined />}
-                                       htmlType="submit"
-                                    >
+                                    <Button type="primary" icon={<SearchOutlined />} htmlType="submit">
                                        Хайх
                                     </Button>
                                  </Form.Item>
@@ -550,11 +488,7 @@ function Index() {
                         bordered
                         rowClassName="hover:cursor-pointer"
                         locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                        columns={
-                           statusFilter != 3
-                              ? requestListColumn
-                              : requestListColumn2
-                        }
+                        columns={statusFilter != 3 ? requestListColumn : requestListColumn2}
                         dataSource={requestList}
                         onRow={(row) => {
                            return {
@@ -568,8 +502,7 @@ function Index() {
                            pageSize: 10,
                            total: requestListMeta.itemCount,
                            current: requestListMeta.page,
-                           onChange: (page, pageSize) =>
-                              getErequest(page, pageSize, Dstart, Dend)
+                           onChange: (page, pageSize) => getErequest(page, pageSize, Dstart, Dend)
                         }}
                      />
                   </div>
@@ -618,18 +551,13 @@ function Index() {
                                     <Button
                                        icon={<ArrowRightOutlined />}
                                        className="ml-2"
-                                       onClick={() =>
-                                          changeExaminationProcess()
-                                       }
+                                       onClick={() => changeExaminationProcess()}
                                     >
                                        Шилжүүлэх
                                     </Button>
                                  )}
                                  {statusFilter === 4 && (
-                                    <Button
-                                       icon={<PrinterOutlined />}
-                                       className="ml-2"
-                                    >
+                                    <Button icon={<PrinterOutlined />} className="ml-2">
                                        Хариу хэвлэх
                                     </Button>
                                  )}
@@ -662,11 +590,7 @@ function Index() {
             title="Буцаалт"
             open={isOpenCallBack}
             onCancel={() => setIsOpenCallBack(false)}
-            onOk={() =>
-               callbackForm
-                  .validateFields()
-                  .then((values) => onFinishCallback(values))
-            }
+            onOk={() => callbackForm.validateFields().then((values) => onFinishCallback(values))}
             okText="Буцаах"
             cancelText="Болих"
          >
@@ -680,9 +604,7 @@ function Index() {
             title="Хариу оруулах хэсэг"
             open={isOpenResult}
             onCancel={() => setIsOpenResult(false)}
-            onOk={() =>
-               resultForm.validateFields().then((values) => console.log(values))
-            }
+            onOk={() => resultForm.validateFields().then((values) => console.log(values))}
             cancelText="Болих"
             okText="Хадгалах"
          >
@@ -713,21 +635,14 @@ function Index() {
                                           title: 'Хэмжих нэгж',
                                           dataIndex: 'measurementId',
                                           render: (text) => {
-                                             return measurements.find(
-                                                (e) => e.id === text
-                                             ).name;
+                                             return measurements.find((e) => e.id === text).name;
                                           }
                                        },
                                        {
                                           title: 'Хариу',
                                           render: (_, row) => {
                                              return (
-                                                <Form.Item
-                                                   name={[
-                                                      row.parameterName,
-                                                      'result'
-                                                   ]}
-                                                >
+                                                <Form.Item name={[row.parameterName, 'result']}>
                                                    <Input />
                                                 </Form.Item>
                                              );

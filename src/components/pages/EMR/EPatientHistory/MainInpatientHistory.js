@@ -1,15 +1,4 @@
-import {
-   Button,
-   Collapse,
-   Dropdown,
-   Form,
-   Input,
-   Menu,
-   Modal,
-   Spin,
-   Tabs,
-   Tag
-} from 'antd';
+import { Button, Collapse, Dropdown, Form, Input, Menu, Modal, Spin, Tabs, Tag } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
@@ -25,11 +14,7 @@ import Epicrisis from './MainInpatient/Epicrisis';
 //
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
-function MainInpatientHistory({
-   patientId,
-   inpatientRequestId,
-   insuranceServiceId
-}) {
+function MainInpatientHistory({ patientId, inpatientRequestId, insuranceServiceId }) {
    const token = useSelector(selectCurrentToken);
    const [checkedKey, setCheckedKey] = useState(0);
    const [doctorDailyForm] = Form.useForm();
@@ -40,12 +25,7 @@ function MainInpatientHistory({
       {
          key: '1',
          label: 'Эмчлүүлэгчийн аннамез',
-         children: (
-            <Anamnesis
-               PatientId={patientId}
-               InpatientRequestId={inpatientRequestId}
-            />
-         )
+         children: <Anamnesis PatientId={patientId} InpatientRequestId={inpatientRequestId} />
       },
       { key: '2', label: 'Ерөнхий үзлэг', children: <div>Ерөнхий үзлэг</div> },
       {
@@ -61,12 +41,7 @@ function MainInpatientHistory({
       {
          key: '5',
          label: 'КЛИНИКИЙН ОНОШИЙН ҮНДЭСЛЭЛ',
-         children: (
-            <ClinicalDiagnoeMain
-               PatientId={patientId}
-               InpatientRequestId={inpatientRequestId}
-            />
-         )
+         children: <ClinicalDiagnoeMain PatientId={patientId} InpatientRequestId={inpatientRequestId} />
       },
       {
          key: '6',
@@ -112,11 +87,7 @@ function MainInpatientHistory({
    const DoctorDaily = () => {
       return (
          <div>
-            <Form
-               onFinish={onFinishDaily}
-               form={doctorDailyForm}
-               layout="vertical"
-            >
+            <Form onFinish={onFinishDaily} form={doctorDailyForm} layout="vertical">
                <Form.Item label="Үзлэгийн тэмдэглэл" name="description">
                   <TextArea rows={20} placeholder="Үзлэгийн тэмдэглэл" />
                </Form.Item>
@@ -132,15 +103,11 @@ function MainInpatientHistory({
    // const items = [
    //    { label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }
    // ];
-   const [items, setItems] = useState([
-      { label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }
-   ]);
+   const [items, setItems] = useState([{ label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }]);
    const handleMenuClick = (e) => {
       getStory();
       if (e.key == 1) {
-         setItems([
-            { label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }
-         ]);
+         setItems([{ label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }]);
       } else if (e.key == 2) {
          setItems([
             {
@@ -215,11 +182,7 @@ function MainInpatientHistory({
          <div>
             <Tabs type="card" items={testItems} />
          </div>
-         <Modal
-            title="Маягт сонгох"
-            open={isOpenDocumentModal}
-            onCancel={() => setIsOpenDocumentModal(false)}
-         >
+         <Modal title="Маягт сонгох" open={isOpenDocumentModal} onCancel={() => setIsOpenDocumentModal(false)}>
             <Index
                handleClick={documentHandleClick}
                structureId={location?.state?.dapartmentId}

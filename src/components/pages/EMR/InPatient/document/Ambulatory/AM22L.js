@@ -66,26 +66,16 @@ function AM22L() {
                            ...{ float: 'left' }
                         }}
                      ></span>
-                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                        Эрүүл мэндийн бүртгэлийн маягт АМ-22Л
-                     </span>
+                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-22Л</span>
                   </div>
                </div>
                <div style={{ textAlign: 'center', marginTop: 5 }}>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     Шинжилгээний хариуны маягт
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>Шинжилгээний хариуны маягт</span>
                </div>
                <div style={{ textAlign: 'center', marginBottom: 5 }}>
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     ХДХВ-ийн халдвар илрүүлэх шинжилгээний дүн
-                  </span>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>ХДХВ-ийн халдвар илрүүлэх шинжилгээний дүн</span>
                </div>
-               <Table
-                  bordered
-                  className="document"
-                  style={{ marginTop: 20, marginBottom: 0 }}
-               >
+               <Table bordered className="document" style={{ marginTop: 20, marginBottom: 0 }}>
                   <tbody>
                      <tr>
                         <td
@@ -99,51 +89,29 @@ function AM22L() {
                         </td>
                      </tr>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '10%' } }}
-                        >
-                           Зорилго
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '10%' } }}>Зорилго</td>
                         <td colSpan={6} style={styles.centerText}>
                            ХДХВ ½-н халдвар илрүүлэх
                         </td>
                      </tr>
                      <tr>
                         <td style={styles.centerText}>Төрөл</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        ></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Хурдавчилсан
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        ></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Наалдуулах
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        ></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           ФХЭБУ
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Хурдавчилсан</td>
+                        <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Наалдуулах</td>
+                        <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>ФХЭБУ</td>
                      </tr>
                   </tbody>
                </Table>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Аргачлал
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 200 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Аргачлал</td>
+                        <td style={{ ...styles.centerText, ...{ width: 200 } }}></td>
                         <td style={styles.centerText}>Үйлдвэрлэгчийн заавар</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 150 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 150 } }}></td>
                      </tr>
                      <tr>
                         <td
@@ -161,13 +129,9 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Овог
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Овог</td>
                         <td style={styles.centerText}></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Нэр
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Нэр</td>
                         <td style={styles.centerText}></td>
                      </tr>
                   </tbody>
@@ -175,23 +139,13 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Регистр
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 150 } }}
-                        ></td>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           нас
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Регистр</td>
+                        <td style={{ ...styles.centerText, ...{ width: 150 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>нас</td>
                         <td style={styles.centerText}></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           эрэгтэй
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>эрэгтэй</td>
                         <td style={styles.centerText}></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           эмэгтэй
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>эмэгтэй</td>
                         <td style={styles.centerText}></td>
                      </tr>
                   </tbody>
@@ -199,23 +153,13 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Шинжилгээ өгөлт
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           анх
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 50 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Шинжилгээ өгөлт</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>анх</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}></td>
                         <td style={styles.centerText}>давтан</td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 100 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}></td>
                         <td style={styles.centerText}>Жирэмсэн эсэх</td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           үгүй
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>үгүй</td>
                         <td style={styles.centerText}>тийм</td>
                      </tr>
                   </tbody>
@@ -223,13 +167,9 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Тасаг
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Тасаг</td>
                         <td style={styles.centerText}></td>
-                        <td style={{ ...styles.centerText, ...{ width: 300 } }}>
-                           Өвчний түүхийн дугаар
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 300 } }}>Өвчний түүхийн дугаар</td>
                         <td style={styles.centerText}></td>
                      </tr>
                   </tbody>
@@ -237,13 +177,9 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 150 } }}>
-                           Үзлэгийн төрөл/код
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 150 } }}>Үзлэгийн төрөл/код</td>
                         <td style={styles.centerText}></td>
-                        <td style={{ ...styles.centerText, ...{ width: 150 } }}>
-                           Хүн амын бүлэг/код
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 150 } }}>Хүн амын бүлэг/код</td>
                         <td style={styles.centerText}></td>
                      </tr>
                      <tr>
@@ -262,13 +198,9 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Илгээгч байгууллага
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Илгээгч байгууллага</td>
                         <td style={styles.centerText}></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Хүлээн авсан
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Хүлээн авсан</td>
                         <td style={styles.centerText}></td>
                      </tr>
                   </tbody>
@@ -276,59 +208,33 @@ function AM22L() {
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           Төрөл
-                        </td>
-                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>
-                           Цус
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        ></td>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Ийлдэс
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: 30 } }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>Төрөл</td>
+                        <td style={{ ...styles.centerText, ...{ width: 50 } }}>Цус</td>
+                        <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Ийлдэс</td>
+                        <td style={{ ...styles.centerText, ...{ width: 30 } }}></td>
                      </tr>
                   </tbody>
                </Table>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.leftText, ...{ width: '20%' } }}>
-                           Дугаар
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        ></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Хэмжээ
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        ></td>
+                        <td style={{ ...styles.leftText, ...{ width: '20%' } }}>Дугаар</td>
+                        <td style={{ ...styles.centerText, ...{ width: '30%' } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Хэмжээ</td>
+                        <td style={{ ...styles.centerText, ...{ width: '30%' } }}></td>
                      </tr>
                   </tbody>
                </Table>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>
-                           Сорьц авсан огноо
-                        </td>
-                        <td style={styles.centerText}>
-                           20... он...сар ...өдөр
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: 100 } }}>Сорьц авсан огноо</td>
+                        <td style={styles.centerText}>20... он...сар ...өдөр</td>
                         <td style={{ ...styles.centerText, ...{ width: 150 } }}>
                            Лабораторид сорьц хүлээн авсан огноо
                         </td>
-                        <td style={styles.centerText}>
-                           20... он...сар ...өдөр
-                        </td>
+                        <td style={styles.centerText}>20... он...сар ...өдөр</td>
                      </tr>
                   </tbody>
                </Table>
@@ -345,31 +251,11 @@ function AM22L() {
                <Table bordered className="document">
                   <tbody>
                      <tr>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '5%' } }}
-                        >
-                           №
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Шинжилгээний төрөл
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Лавлах хэмжээ
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '20%' } }}
-                        >
-                           Үр дүн
-                        </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '15%' } }}
-                        >
-                           Тайлбар
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '5%' } }}>№</td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Шинжилгээний төрөл</td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Лавлах хэмжээ</td>
+                        <td style={{ ...styles.centerText, ...{ width: '20%' } }}>Үр дүн</td>
+                        <td style={{ ...styles.centerText, ...{ width: '15%' } }}>Тайлбар</td>
                      </tr>
                      <tr>
                         <td style={styles.centerText}>1.</td>
@@ -385,8 +271,8 @@ function AM22L() {
                      ...{ marginTop: 50 }
                   }}
                >
-                  Шинжилгээ эхэлсэн огноо:...................................
-                  Дууссан огноо: ................................
+                  Шинжилгээ эхэлсэн огноо:................................... Дууссан огноо:
+                  ................................
                </div>
                <div
                   style={{
@@ -394,8 +280,8 @@ function AM22L() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  Шинжилгээ хийсэн: Лаборант ..............................
-                  Шинжээч эмч: .................................
+                  Шинжилгээ хийсэн: Лаборант .............................. Шинжээч эмч:
+                  .................................
                </div>
                <div
                   style={{

@@ -24,13 +24,7 @@ import { useLocation } from 'react-router-dom';
 import EarlyWarningPrint from './EarlyWarningPrint';
 //
 
-export default function EarlyWarning({
-   PatientId,
-   UsageType,
-   ListId,
-   patientData,
-   isDoctor
-}) {
+export default function EarlyWarning({ PatientId, UsageType, ListId, patientData, isDoctor }) {
    const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
@@ -186,9 +180,7 @@ export default function EarlyWarning({
             var demoLowPressureRight = [];
             var demoTempData = [];
             response.data.map((data) => {
-               demoLineLabels.push(
-                  moment(data.createdAt).format('YYYY-MM-DD HH:mm')
-               );
+               demoLineLabels.push(moment(data.createdAt).format('YYYY-MM-DD HH:mm'));
                demoBreathData.push(data.respiratoryRate);
                demoSpo2Data.push(data.spO2);
                demoPulseData.push(data.pulse);
@@ -211,22 +203,12 @@ export default function EarlyWarning({
             var demoHighPressureRight = [];
             var demoLowPressureRight = [];
             var demoTempData = [];
-            for (
-               let index = response.data.length - 7;
-               index < response.data.length;
-               index++
-            ) {
-               demoLineLabels.push(
-                  moment(response.data[index].createdAt).format(
-                     'YYYY-MM-DD HH:mm'
-                  )
-               );
+            for (let index = response.data.length - 7; index < response.data.length; index++) {
+               demoLineLabels.push(moment(response.data[index].createdAt).format('YYYY-MM-DD HH:mm'));
                demoBreathData.push(response.data[index].respiratoryRate);
                demoSpo2Data.push(response.data[index].spO2);
                demoPulseData.push(response.data[index].pulse);
-               demoHighPressureRight.push(
-                  response.data[index].highPressureRight
-               );
+               demoHighPressureRight.push(response.data[index].highPressureRight);
                demoLowPressureRight.push(response.data[index].lowPressureRight);
                demoTempData.push(response.data[index].temp);
             }
@@ -262,12 +244,7 @@ export default function EarlyWarning({
          formValues.inpatientRequestId = ListId;
       }
       // const response = await Post('assesment', token, config, formValues);
-      const response = await DefaultPost(
-         'assesment',
-         token,
-         config,
-         formValues
-      );
+      const response = await DefaultPost('assesment', token, config, formValues);
       resetFormFields();
       getAssesment('save');
       if (UsageType === 'IN') {
@@ -281,15 +258,7 @@ export default function EarlyWarning({
       content: () => vsPrintRef.current
    });
    //
-   ChartJS.register(
-      CategoryScale,
-      LinearScale,
-      PointElement,
-      LineElement,
-      Title,
-      Tooltip,
-      Legend
-   );
+   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
    const vsOptions = {
       responsive: true,
       plugins: {
@@ -395,12 +364,7 @@ export default function EarlyWarning({
          <div className="flex flex-wrap">
             <div className="w-full md:w-full xl:w-1/2">
                <div className="p-4">
-                  <Button
-                     className="ml-2"
-                     icon={<PrinterOutlined />}
-                     onClick={handlePrint}
-                     loading={printLoading}
-                  >
+                  <Button className="ml-2" icon={<PrinterOutlined />} onClick={handlePrint} loading={printLoading}>
                      Хэвлэх
                   </Button>
                   <Line options={vsOptions} data={LineGraphVS} />
@@ -410,24 +374,12 @@ export default function EarlyWarning({
                            <div className="subpage">
                               <div className="flow-root">
                                  <div className="float-right">
-                                    <p>
-                                       Эрүүл мэндийн сайдын 2019 оны 12 дугаар
-                                       сарын 30-ны
-                                    </p>
-                                    <p>
-                                       өдрийн A/611 дүгээр тушаалын
-                                       арваннэгдүгээр хавсралт
-                                    </p>
-                                    <p className="font-bold">
-                                       Эрүүд мэндийн бүртгэлийн маягт CT-1,2
-                                       Хавсралт 2
-                                    </p>
+                                    <p>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>
+                                    <p>өдрийн A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
+                                    <p className="font-bold">Эрүүд мэндийн бүртгэлийн маягт CT-1,2 Хавсралт 2</p>
                                  </div>
                               </div>
-                              <p
-                                 className="font-bold text-center"
-                                 style={{ fontSize: 16 }}
-                              >
+                              <p className="font-bold text-center" style={{ fontSize: 16 }}>
                                  ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС
                               </p>
                               <div className="flow-root py-1">
@@ -446,9 +398,7 @@ export default function EarlyWarning({
                                           fontWeight: 'bold'
                                        }}
                                     >
-                                       {patientData?.lastName.substring(0, 1) +
-                                          '.' +
-                                          patientData?.firstName}
+                                       {patientData?.lastName.substring(0, 1) + '.' + patientData?.firstName}
                                     </p>
                                  </div>
                                  <div className="float-right inline-flex">
@@ -483,9 +433,7 @@ export default function EarlyWarning({
                                           fontWeight: 'bold'
                                        }}
                                     >
-                                       {patientData?.genderType === 'MAN'
-                                          ? 'Эр'
-                                          : 'Эм'}
+                                       {patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
                                     </p>
                                     <p
                                        style={{
@@ -547,38 +495,19 @@ export default function EarlyWarning({
             {!isDoctor && (
                <div className="w-full md:w-full xl:w-1/2">
                   <div className="table-responsive p-4" id="style-8">
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
                               <th className="font-medium text-x">Систол</th>
-                              <th className="font-medium text-x border-x">
-                                 Диастол
-                              </th>
-                              <th className="font-medium text-x border-x">
-                                 Жин
-                              </th>
-                              <th className="font-medium text-x border-x">
-                                 Өндөр
-                              </th>
-                              <th className="font-medium text-x border-x">
-                                 Халуун
-                              </th>
-                              <th className="font-medium text-x border-x">
-                                 Амьсгал
-                              </th>
-                              <th className="font-medium text-x border-x">
-                                 SpO'2
-                              </th>
-                              <th className="font-medium text-x border-x">
-                                 Пульс
-                              </th>
+                              <th className="font-medium text-x border-x">Диастол</th>
+                              <th className="font-medium text-x border-x">Жин</th>
+                              <th className="font-medium text-x border-x">Өндөр</th>
+                              <th className="font-medium text-x border-x">Халуун</th>
+                              <th className="font-medium text-x border-x">Амьсгал</th>
+                              <th className="font-medium text-x border-x">SpO'2</th>
+                              <th className="font-medium text-x border-x">Пульс</th>
                               <th className="font-medium text-x">
-                                 <div className="whitespace-normal">
-                                    Ухаан санаа
-                                 </div>
+                                 <div className="whitespace-normal">Ухаан санаа</div>
                               </th>
                            </tr>
                         </thead>
@@ -588,9 +517,7 @@ export default function EarlyWarning({
                                  <tr key={index}>
                                     <td className="text-center px-0">
                                        <Input
-                                          value={
-                                             element.highPressureRight || ''
-                                          }
+                                          value={element.highPressureRight || ''}
                                           className="p-1 h-7 rounded-md text-center"
                                           name="highPressureRight"
                                           disabled
@@ -769,35 +696,19 @@ export default function EarlyWarning({
                   <Table className="ant-border-space" style={{ width: '100%' }}>
                      <thead className="ant-table-thead bg-slate-200">
                         <tr>
-                           <th className="font-medium text-xs text-black text-center">
-                              Огноо/цаг/
-                           </th>
+                           <th className="font-medium text-xs text-black text-center">Огноо/цаг/</th>
+                           <th className="font-medium text-xs text-black text-center border-x">Систол</th>
+                           <th className="font-medium text-xs text-black text-center border-x">Халуун</th>
+                           <th className="font-medium text-xs text-black text-center border-x">Амьсгал</th>
+                           <th className="font-medium text-xs text-black text-center border-x">SpO'2</th>
+                           <th className="font-medium text-xs text-black text-center border-x">Пульс</th>
                            <th className="font-medium text-xs text-black text-center border-x">
-                              Систол
-                           </th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              Халуун
-                           </th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              Амьсгал
-                           </th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              SpO'2
-                           </th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              Пульс
-                           </th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              <div className="whitespace-normal">
-                                 Ухаан санаа
-                              </div>
+                              <div className="whitespace-normal">Ухаан санаа</div>
                            </th>
                            <th className="font-medium text-xs text-black text-center border-x">
                               <div className="whitespace-normal">Нийт</div>
                            </th>
-                           <th className="font-medium text-xs text-black text-center">
-                              Сувилагч
-                           </th>
+                           <th className="font-medium text-xs text-black text-center">Сувилагч</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -806,17 +717,14 @@ export default function EarlyWarning({
                               <tr key={index} className="">
                                  <td className="text-center ">
                                     <p className="border rounded-md p-1 h-7">
-                                       {moment(element.createdAt).format(
-                                          'YYYY-MM-DD HH:mm'
-                                       )}
+                                       {moment(element.createdAt).format('YYYY-MM-DD HH:mm')}
                                     </p>
                                  </td>
                                  <td className="text-center ">
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorSystolews ?? '#fff'
+                                          backgroundColor: element.colorSystolews ?? '#fff'
                                        }}
                                     >
                                        {element.systolEWS}
@@ -826,8 +734,7 @@ export default function EarlyWarning({
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorTempews ?? '#fff'
+                                          backgroundColor: element.colorTempews ?? '#fff'
                                        }}
                                     >
                                        {element.temEWS}
@@ -837,9 +744,7 @@ export default function EarlyWarning({
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorRespiratoryews ??
-                                             '#fff'
+                                          backgroundColor: element.colorRespiratoryews ?? '#fff'
                                        }}
                                     >
                                        {element.respiratoryEWS}
@@ -849,8 +754,7 @@ export default function EarlyWarning({
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorSpoews ?? '#fff'
+                                          backgroundColor: element.colorSpoews ?? '#fff'
                                        }}
                                     >
                                        {element.spoEWS}
@@ -860,8 +764,7 @@ export default function EarlyWarning({
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorPulsews ?? '#fff'
+                                          backgroundColor: element.colorPulsews ?? '#fff'
                                        }}
                                     >
                                        {element.pulsEWS}
@@ -871,8 +774,7 @@ export default function EarlyWarning({
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorMindews ?? '#fff'
+                                          backgroundColor: element.colorMindews ?? '#fff'
                                        }}
                                     >
                                        {element.mindEWS}
@@ -882,18 +784,14 @@ export default function EarlyWarning({
                                     <p
                                        className="border rounded-md p-1 h-7"
                                        style={{
-                                          backgroundColor:
-                                             element.colorTotal ?? '#fff'
+                                          backgroundColor: element.colorTotal ?? '#fff'
                                        }}
                                     >
                                        {element.totalEWS}
                                     </p>
                                  </td>
                                  <td className="text-center">
-                                    <p>{`${element.createdLastName?.substr(
-                                       0,
-                                       1
-                                    )}. ${element.createdFirstName}`}</p>
+                                    <p>{`${element.createdLastName?.substr(0, 1)}. ${element.createdFirstName}`}</p>
                                  </td>
                               </tr>
                            ))}

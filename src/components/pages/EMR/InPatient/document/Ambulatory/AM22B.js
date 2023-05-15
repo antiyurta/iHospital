@@ -77,24 +77,14 @@ function AM22B() {
                      >
                         Эмнэлгийн нэр: ____________________
                      </span>
-                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                        АМ-22Б
-                     </span>
+                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-22Б</span>
                   </div>
                </div>
-               <div
-                  style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}
-               >
-                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>
-                     ЛАБОРАТОРИЙН ШИНЖИЛГЭЭНИЙ ХУУДСУУД
-                  </span>
+               <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
+                  <span style={{ fontWeight: 'bold', fontSize: 12 }}>ЛАБОРАТОРИЙН ШИНЖИЛГЭЭНИЙ ХУУДСУУД</span>
                </div>
-               <span style={{ fontSize: 12 }}>
-                  Эцэг \эх\ийн нэр _________________________
-               </span>
-               <div style={{ fontSize: 12 }}>
-                  Нэр _____________________________
-               </div>
+               <span style={{ fontSize: 12 }}>Эцэг \эх\ийн нэр _________________________</span>
+               <div style={{ fontSize: 12 }}>Нэр _____________________________</div>
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex' }}>
                      <span style={{ marginRight: 5 }}>РД </span>
@@ -108,37 +98,22 @@ function AM22B() {
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
                      <div style={styles.rowCells}></div>
-                     <span style={{ marginLeft: 10 }}>
-                        Нас__________Хүйс: /зур/ эр, эм
-                     </span>
+                     <span style={{ marginLeft: 10 }}>Нас__________Хүйс: /зур/ эр, эм</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>
-                  _____ он ____ сар _____ өдөр ____ цаг ______ минут
-               </div>
+               <div style={styles.rowStyle}>_____ он ____ сар _____ өдөр ____ цаг ______ минут</div>
                <Table bordered className="document" style={{ marginTop: 20 }}>
                   <tbody>
                      <tr>
-                        <td
-                           colSpan={2}
-                           style={{ ...styles.centerText, ...{ width: '30%' } }}
-                        >
+                        <td colSpan={2} style={{ ...styles.centerText, ...{ width: '30%' } }}>
                            Шинжилэгдэхүүн
                         </td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '15%' } }}
-                        >
-                           Лавлах
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '15%' } }}>Лавлах</td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
-                        <td
-                           style={{ ...styles.centerText, ...{ width: '25%' } }}
-                        >
-                           Хариу
-                        </td>
+                        <td style={{ ...styles.centerText, ...{ width: '25%' } }}>Хариу</td>
                      </tr>
                      <tr>
                         <td colSpan={2} style={styles.leftText}>
@@ -407,9 +382,7 @@ function AM22B() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Лаборантын нэр ____________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Лаборантын нэр ____________________</span>
                </div>
                <div
                   style={{
@@ -417,9 +390,7 @@ function AM22B() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  <span style={{ marginLeft: 30 }}>
-                     Эмчийн нэр _________________________
-                  </span>
+                  <span style={{ marginLeft: 30 }}>Эмчийн нэр _________________________</span>
                </div>
             </div>
          </div>

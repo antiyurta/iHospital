@@ -25,8 +25,7 @@ export default function ProgressNotes({ Appointments }) {
    const [employee, setEmployee] = useState({});
    const [printPrescription, setPrintPrescription] = useState([]);
    const [printMagadlaga, setPrintMagadlaga] = useState({});
-   const [isOpenModalPrescription, setIsOpenModalPrescription] =
-      useState(false);
+   const [isOpenModalPrescription, setIsOpenModalPrescription] = useState(false);
    const [isOpenModalMagadlaga, setIsOpenModalMagadlaga] = useState(false);
    const onChange = async (id) => {
       setSpinner(true);
@@ -65,26 +64,15 @@ export default function ProgressNotes({ Appointments }) {
             {Object.entries(Appointments).map(([key, value], index) => {
                return (
                   <Panel header={`${key} Он`} key={index}>
-                     <Collapse
-                        Collapse
-                        collapsible="header"
-                        onChange={onChange}
-                        accordion
-                     >
+                     <Collapse Collapse collapsible="header" onChange={onChange} accordion>
                         {value.map((el, index) => {
                            return (
                               <Panel
                                  header={
                                     <div className="row-auto">
-                                       <span className="font-bold">
-                                          {el.cabinet?.name}
-                                       </span>
+                                       <span className="font-bold">{el.cabinet?.name}</span>
                                        <span>&nbsp;</span>
-                                       <span>
-                                          {moment(el.createdAt).format(
-                                             'YYYY-MM-DD HH:mm'
-                                          )}
-                                       </span>
+                                       <span>{moment(el.createdAt).format('YYYY-MM-DD HH:mm')}</span>
                                     </div>
                                  }
                                  key={value[index].id}

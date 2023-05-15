@@ -42,11 +42,9 @@ function Treatment({ isOpen, isClose, handleclick }) {
    const getTypeById = async (id) => {
       config.params.type = null;
       config.params.treatmentTypeId = id;
-      await axios
-         .get(DEV_URL + 'service/treatment', config)
-         .then((response) => {
-            setTreatment(response.data.response.data);
-         });
+      await axios.get(DEV_URL + 'service/treatment', config).then((response) => {
+         setTreatment(response.data.response.data);
+      });
    };
 
    const configure = (value) => {
@@ -104,24 +102,12 @@ function Treatment({ isOpen, isClose, handleclick }) {
                   })}
                </div>
                <div className="basis-2/5">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
-                              <th
-                                 rowSpan={2}
-                                 className="font-bold text-sm align-middle"
-                              >
+                              <th className="font-bold text-sm align-middle">Нэр</th>
+                              <th rowSpan={2} className="font-bold text-sm align-middle">
                                  Үнэ
                               </th>
                            </tr>
@@ -130,9 +116,7 @@ function Treatment({ isOpen, isClose, handleclick }) {
                                  <Input
                                     placeholder="Хайх"
                                     allowClear
-                                    onChange={(e) =>
-                                       setSearchField(e.target.value)
-                                    }
+                                    onChange={(e) => setSearchField(e.target.value)}
                                  />
                               </th>
                            </tr>
@@ -146,13 +130,7 @@ function Treatment({ isOpen, isClose, handleclick }) {
                                     className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                  >
                                     <td>{item.name}</td>
-                                    <td>
-                                       {numberToCurrency(
-                                          usageType === 'IN'
-                                             ? item.inpatientPrice
-                                             : item.price
-                                       )}
-                                    </td>
+                                    <td>{numberToCurrency(usageType === 'IN' ? item.inpatientPrice : item.price)}</td>
                                  </tr>
                               );
                            })}
@@ -161,45 +139,22 @@ function Treatment({ isOpen, isClose, handleclick }) {
                   </div>
                </div>
                <div className="basis-2/5">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Үнэ
-                              </th>
+                              <th className="font-bold text-sm align-middle">Нэр</th>
+                              <th className="font-bold text-sm align-middle">Үнэ</th>
                               <th></th>
                            </tr>
                         </thead>
                         <tbody className="ant-table-tbody p-0">
                            {selectedTreatments.map((item, index) => {
                               return (
-                                 <tr
-                                    key={index}
-                                    className="ant-table-row ant-table-row-level-0"
-                                 >
+                                 <tr key={index} className="ant-table-row ant-table-row-level-0">
                                     <td>{item.name}</td>
-                                    <td>
-                                       {numberToCurrency(
-                                          usageType === 'IN'
-                                             ? item.inpatientPrice
-                                             : item.price
-                                       )}
-                                    </td>
-                                    <td
-                                       onDoubleClick={() => remove(index)}
-                                       className="hover:cursor-pointer"
-                                    >
+                                    <td>{numberToCurrency(usageType === 'IN' ? item.inpatientPrice : item.price)}</td>
+                                    <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
                                        <CloseOutlined
                                           style={{
                                              color: 'red',

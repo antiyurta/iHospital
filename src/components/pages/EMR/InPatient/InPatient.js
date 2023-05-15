@@ -32,9 +32,7 @@ function InPatient({ inpatientRequests }) {
    const ConvertData = (row) => {
       var string = '';
       if (row?.bodyCondition != null) {
-         string += `Биеийн ерөнхий байдал:${
-            bodyCondition[`${row.bodyCondition}`]
-         }, `;
+         string += `Биеийн ерөнхий байдал:${bodyCondition[`${row.bodyCondition}`]}, `;
       }
       if (row?.mind != null) {
          string += `Ухаан санаа:${mind[`${row.mind}`]}, `;
@@ -46,9 +44,7 @@ function InPatient({ inpatientRequests }) {
          string += `Амьсгал 1 минутанд: ${row.respiratoryOneMinute}, `;
       }
       if (row?.respiratoryListen != null) {
-         string += `Чагналтаар: ${
-            respiratoryListen[`${row.respiratoryListen}`]
-         }, `;
+         string += `Чагналтаар: ${respiratoryListen[`${row.respiratoryListen}`]}, `;
       }
       if (row?.pulseOneMinute != null) {
          string += `Судасны цохилт 1 минутанд: ${row.pulseOneMinute}, `;
@@ -57,14 +53,10 @@ function InPatient({ inpatientRequests }) {
          string += `Хүчдэл дүүрэлт: ${row.volt}, `;
       }
       if (row?.heartTapping != null) {
-         string += `Тогшилтоор /Зүрхний хил/: ${
-            heartTapping[`${row.heartTapping}`]
-         }, `;
+         string += `Тогшилтоор /Зүрхний хил/: ${heartTapping[`${row.heartTapping}`]}, `;
       }
       if (row?.heartSound != null) {
-         string += `Чагналтаар /Зүрхний авиа/: ${
-            heartSound[`${row.heartSound}`]
-         }`;
+         string += `Чагналтаар /Зүрхний авиа/: ${heartSound[`${row.heartSound}`]}`;
       }
       if (row?.heartBPRight != null) {
          string += `АД баруун талд: ${row.heartBPRight}`;

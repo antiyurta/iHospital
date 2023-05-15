@@ -89,9 +89,7 @@ function BedPlan() {
    ];
 
    const handleChangeTag = (tag, checked) => {
-      const nextSelectedTags = checked
-         ? [...selectedTags, tag]
-         : selectedTags.filter((t) => t !== tag);
+      const nextSelectedTags = checked ? [...selectedTags, tag] : selectedTags.filter((t) => t !== tag);
       setSelectedTags(nextSelectedTags);
    };
 
@@ -107,9 +105,7 @@ function BedPlan() {
                {
                   key: index,
                   cardNumber: el.patient?.cardNumber,
-                  name: `${el.patient?.lastName?.substr(0, 1)}. ${
-                     el.patient?.firstName
-                  }`,
+                  name: `${el.patient?.lastName?.substr(0, 1)}. ${el.patient?.firstName}`,
                   gender: el.patient?.genderType === 'MAN' ? 'Эр' : 'Эм',
                   registerNumber: el.patient?.registerNumber,
                   startDate: el.startDate?.substr(0, 10),
@@ -144,9 +140,7 @@ function BedPlan() {
                {
                   key: index,
                   cardNumber: el.patient?.cardNumber,
-                  name: `${el.patient?.lastName?.substr(0, 1)}. ${
-                     el.patient?.firstName
-                  }`,
+                  name: `${el.patient?.lastName?.substr(0, 1)}. ${el.patient?.firstName}`,
                   gender: el.patient?.genderType === 'MAN' ? 'Эр' : 'Эм',
                   registerNumber: el.patient?.registerNumber,
                   room: el.rooms?.roomNumber,
@@ -204,10 +198,7 @@ function BedPlan() {
                         .filter((obj) => obj.value === 0 || obj.value === 1)
                         .map((tag) => {
                            return (
-                              <div
-                                 key={tag.value}
-                                 className="border-blue-400 rounded-sm border mr-2 mb-2"
-                              >
+                              <div key={tag.value} className="border-blue-400 rounded-sm border mr-2 mb-2">
                                  <CheckableTag
                                     checked={selectedTags.includes(tag.value)}
                                     onChange={(checked) => {
@@ -226,10 +217,7 @@ function BedPlan() {
                                           alignItems: 'center'
                                        }}
                                     >
-                                       <img
-                                          src={require(`../../../assets/bed/${tag.img}`)}
-                                          width="20"
-                                       />
+                                       <img src={require(`../../../assets/bed/${tag.img}`)} width="20" />
                                     </div>
                                     {tag.label}
                                  </CheckableTag>
@@ -243,8 +231,7 @@ function BedPlan() {
                   columns={columns}
                   dataSource={patientReqList?.filter(
                      (obj) =>
-                        (obj.cardNumber &&
-                           obj.cardNumber.includes(searchValue)) ||
+                        (obj.cardNumber && obj.cardNumber.includes(searchValue)) ||
                         obj.name?.toLowerCase()?.includes(searchValue) ||
                         obj.registerNumber?.toLowerCase()?.includes(searchValue)
                   )}
@@ -278,18 +265,10 @@ function BedPlan() {
                <Row className="mt-4">
                   <Col span={2} className="contents">
                      {orderType
-                        .filter(
-                           (obj) =>
-                              obj.value === 2 ||
-                              obj.value === 3 ||
-                              obj.value === 4
-                        )
+                        .filter((obj) => obj.value === 2 || obj.value === 3 || obj.value === 4)
                         .map((tag) => {
                            return (
-                              <div
-                                 key={tag.value}
-                                 className="border-blue-400 rounded-sm border mr-2 mb-2"
-                              >
+                              <div key={tag.value} className="border-blue-400 rounded-sm border mr-2 mb-2">
                                  <CheckableTag
                                     checked={selectedTags.includes(tag.value)}
                                     onChange={(checked) => {
@@ -308,10 +287,7 @@ function BedPlan() {
                                           alignItems: 'center'
                                        }}
                                     >
-                                       <img
-                                          src={require(`../../../assets/bed/${tag.img}`)}
-                                          width="20"
-                                       />
+                                       <img src={require(`../../../assets/bed/${tag.img}`)} width="20" />
                                     </div>
                                     {tag.label}
                                  </CheckableTag>
@@ -325,8 +301,7 @@ function BedPlan() {
                   columns={columnsOrdered}
                   dataSource={patientOrderedList?.filter(
                      (obj) =>
-                        (obj.cardNumber &&
-                           obj.cardNumber.includes(searchValueOrdered)) ||
+                        (obj.cardNumber && obj.cardNumber.includes(searchValueOrdered)) ||
                         obj.name.includes(searchValueOrdered) ||
                         obj.registerNumber.includes(searchValueOrdered)
                   )}

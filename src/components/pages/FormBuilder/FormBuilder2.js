@@ -1,22 +1,5 @@
-import {
-   DeleteOutlined,
-   MinusCircleOutlined,
-   PlusCircleOutlined,
-   PlusOutlined
-} from '@ant-design/icons';
-import {
-   Button,
-   Card,
-   Checkbox,
-   Collapse,
-   Drawer,
-   Form,
-   Input,
-   Modal,
-   Radio,
-   Select,
-   Space
-} from 'antd';
+import { DeleteOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Checkbox, Collapse, Drawer, Form, Input, Modal, Radio, Select, Space } from 'antd';
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -129,26 +112,15 @@ function FormBuilder2() {
                <div className="flex flex-wrap text-center">
                   {bigData.pain?.map((data, index) => {
                      return (
-                        <div
-                           key={index}
-                           className={`${data.style}`}
-                           style={{ border: '1px solid black' }}
-                        >
+                        <div key={index} className={`${data.style}`} style={{ border: '1px solid black' }}>
                            {data.type === 'radio' && (
                               <div className="text-start pl-2">
-                                 <p className="font-bold contents">
-                                    {data.label}
-                                 </p>
+                                 <p className="font-bold contents">{data.label}</p>
                                  <Radio.Group>
                                     {data.options.map((option, idx) => {
                                        return (
-                                          <div
-                                             key={idx}
-                                             className={`${option.style}`}
-                                          >
-                                             <Radio value={option.key}>
-                                                {option.value}
-                                             </Radio>
+                                          <div key={idx} className={`${option.style}`}>
+                                             <Radio value={option.key}>{option.value}</Radio>
                                           </div>
                                        );
                                     })}
@@ -195,10 +167,7 @@ function FormBuilder2() {
                         {(fields, { add, remove }) => (
                            <>
                               {fields.map(({ key, name, ...restField }) => (
-                                 <div
-                                    key={key}
-                                    className="rounded-md bg-gray-100 m-2"
-                                 >
+                                 <div key={key} className="rounded-md bg-gray-100 m-2">
                                     <div className="p-2">
                                        <div className="flex flex-wrap">
                                           <div className="basis-3/12 p-1">
@@ -210,9 +179,7 @@ function FormBuilder2() {
                                              >
                                                 <Select
                                                    options={inputTypes}
-                                                   onChange={() =>
-                                                      painHandleChange(name)
-                                                   }
+                                                   onChange={() => painHandleChange(name)}
                                                 ></Select>
                                              </Form.Item>
                                           </div>
@@ -243,9 +210,7 @@ function FormBuilder2() {
                                                 label="Style"
                                                 name={[name, 'style']}
                                              >
-                                                <Select
-                                                   options={styleOptions}
-                                                ></Select>
+                                                <Select options={styleOptions}></Select>
                                              </Form.Item>
                                           </div>
                                           <div className="basis-1/12 p-1 text-center">
@@ -261,108 +226,79 @@ function FormBuilder2() {
                                        <Form.List name={[name, 'options']}>
                                           {(optionFields, { add, remove }) => (
                                              <>
-                                                {optionFields.map(
-                                                   (optionField) => (
-                                                      <div
-                                                         style={{
-                                                            display: result()
-                                                               ? ''
-                                                               : 'none'
-                                                         }}
-                                                         className="rounded-md bg-white m-2"
-                                                         key={optionField.key}
-                                                      >
-                                                         <div className="p-2">
-                                                            <Form.Item
-                                                               noStyle
-                                                               shouldUpdate
-                                                            >
-                                                               {() => {
-                                                                  return (
-                                                                     <div className="flex flex-wrap">
-                                                                        <div className="basis-4/12 p-1">
-                                                                           <Form.Item
-                                                                              {...optionField}
-                                                                              label="Түлхүүр"
-                                                                              name={[
-                                                                                 optionField.name,
-                                                                                 'key'
-                                                                              ]}
-                                                                              style={{
-                                                                                 marginBottom: 0
-                                                                              }}
-                                                                           >
-                                                                              <Input />
-                                                                           </Form.Item>
-                                                                        </div>
-                                                                        <div className="basis-4/12 p-1">
-                                                                           <Form.Item
-                                                                              {...optionField}
-                                                                              label="Асуулт"
-                                                                              name={[
-                                                                                 optionField.name,
-                                                                                 'value'
-                                                                              ]}
-                                                                              style={{
-                                                                                 marginBottom: 0
-                                                                              }}
-                                                                           >
-                                                                              <Input />
-                                                                           </Form.Item>
-                                                                        </div>
-                                                                        <div className="basis-3/12 p-1">
-                                                                           <Form.Item
-                                                                              {...optionField}
-                                                                              label="Style"
-                                                                              name={[
-                                                                                 optionField.name,
-                                                                                 'style'
-                                                                              ]}
-                                                                              style={{
-                                                                                 marginBottom: 0
-                                                                              }}
-                                                                           >
-                                                                              <Select
-                                                                                 options={
-                                                                                    styleOptionsSub
-                                                                                 }
-                                                                              ></Select>
-                                                                           </Form.Item>
-                                                                        </div>
-                                                                        <div className="basis-1/12 p-1 text-center">
-                                                                           <PlusCircleOutlined
-                                                                              style={{
-                                                                                 color: 'green',
-                                                                                 fontSize:
-                                                                                    '18px',
-                                                                                 paddingRight:
-                                                                                    '6px'
-                                                                              }}
-                                                                              onClick={() =>
-                                                                                 add()
-                                                                              }
-                                                                           />
-                                                                           <DeleteOutlined
-                                                                              style={{
-                                                                                 color: 'red',
-                                                                                 fontSize:
-                                                                                    '18px'
-                                                                              }}
-                                                                              onClick={() =>
-                                                                                 remove(
-                                                                                    name
-                                                                                 )
-                                                                              }
-                                                                           />
-                                                                        </div>
+                                                {optionFields.map((optionField) => (
+                                                   <div
+                                                      style={{
+                                                         display: result() ? '' : 'none'
+                                                      }}
+                                                      className="rounded-md bg-white m-2"
+                                                      key={optionField.key}
+                                                   >
+                                                      <div className="p-2">
+                                                         <Form.Item noStyle shouldUpdate>
+                                                            {() => {
+                                                               return (
+                                                                  <div className="flex flex-wrap">
+                                                                     <div className="basis-4/12 p-1">
+                                                                        <Form.Item
+                                                                           {...optionField}
+                                                                           label="Түлхүүр"
+                                                                           name={[optionField.name, 'key']}
+                                                                           style={{
+                                                                              marginBottom: 0
+                                                                           }}
+                                                                        >
+                                                                           <Input />
+                                                                        </Form.Item>
                                                                      </div>
-                                                                  );
-                                                               }}
-                                                            </Form.Item>
-                                                         </div>
+                                                                     <div className="basis-4/12 p-1">
+                                                                        <Form.Item
+                                                                           {...optionField}
+                                                                           label="Асуулт"
+                                                                           name={[optionField.name, 'value']}
+                                                                           style={{
+                                                                              marginBottom: 0
+                                                                           }}
+                                                                        >
+                                                                           <Input />
+                                                                        </Form.Item>
+                                                                     </div>
+                                                                     <div className="basis-3/12 p-1">
+                                                                        <Form.Item
+                                                                           {...optionField}
+                                                                           label="Style"
+                                                                           name={[optionField.name, 'style']}
+                                                                           style={{
+                                                                              marginBottom: 0
+                                                                           }}
+                                                                        >
+                                                                           <Select options={styleOptionsSub}></Select>
+                                                                        </Form.Item>
+                                                                     </div>
+                                                                     <div className="basis-1/12 p-1 text-center">
+                                                                        <PlusCircleOutlined
+                                                                           style={{
+                                                                              color: 'green',
+                                                                              fontSize: '18px',
+                                                                              paddingRight: '6px'
+                                                                           }}
+                                                                           onClick={() => add()}
+                                                                        />
+                                                                        <DeleteOutlined
+                                                                           style={{
+                                                                              color: 'red',
+                                                                              fontSize: '18px'
+                                                                           }}
+                                                                           onClick={() => remove(name)}
+                                                                        />
+                                                                     </div>
+                                                                  </div>
+                                                               );
+                                                            }}
+                                                         </Form.Item>
                                                       </div>
-                                                   )
-                                                )}
+                                                   </div>
+                                                ))}
                                              </>
                                           )}
                                        </Form.List>
@@ -370,12 +306,7 @@ function FormBuilder2() {
                                  </div>
                               ))}
                               <Form.Item>
-                                 <Button
-                                    type="dashed"
-                                    onClick={() => add()}
-                                    block
-                                    icon={<PlusOutlined />}
-                                 >
+                                 <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                     Add field
                                  </Button>
                               </Form.Item>

@@ -1,13 +1,4 @@
-import {
-   Button,
-   Checkbox,
-   Divider,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Radio
-} from 'antd';
+import { Button, Checkbox, Divider, Form, Input, InputNumber, Modal, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
@@ -25,11 +16,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
          headers: {},
          params: {}
       };
-      const response = await Get(
-         'service/inpatient-request/show/' + InpatientRequestId,
-         token,
-         conf
-      );
+      const response = await Get('service/inpatient-request/show/' + InpatientRequestId, token, conf);
       setAnamnesis(response.anamnes);
       setAnamnesisLoading(false);
    };
@@ -47,12 +34,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
       values['patientId'] = PatientId;
       values['inpatientRequestId'] = InpatientRequestId;
       if (Object(anamnesis).length != 0) {
-         const response = await Patch(
-            'inpatient/anamnes/' + anamnesis.id,
-            token,
-            conf,
-            values
-         );
+         const response = await Patch('inpatient/anamnes/' + anamnesis.id, token, conf, values);
       } else {
          const response = await Post('inpatient/anamnes', token, conf, values);
          console.log(response);
@@ -66,11 +48,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
          <div>
             <div className="flow-root">
                <div className="float-right">
-                  <Button
-                     type="primary"
-                     loading={anamnesLoading}
-                     onClick={() => openModal()}
-                  >
+                  <Button type="primary" loading={anamnesLoading} onClick={() => openModal()}>
                      {Object(anamnesis).length != 0 ? 'Засах' : 'Нэмэх'}
                   </Button>
                </div>
@@ -92,10 +70,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
             <Form form={form} layout="vertical">
                <div className="flex flex-wrap">
                   <div className="w-1/3 p-1">
-                     <Form.Item
-                        label="Хэвтэх үеийн зовиур:"
-                        name="inPatientPain"
-                     >
+                     <Form.Item label="Хэвтэх үеийн зовиур:" name="inPatientPain">
                         <TextArea rows={10} />
                      </Form.Item>
                   </div>
@@ -119,10 +94,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Ажил хөдөлмөрийн нөхцөл:"
-                        name="workCondition"
-                     >
+                     <Form.Item label="Ажил хөдөлмөрийн нөхцөл:" name="workCondition">
                         <Radio.Group>
                            <Radio value={'NORMAL'}>Ердийн</Radio>
                            <Radio value={'HARD'}>Хүнд</Radio>
@@ -152,10 +124,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Осол гэмтэл, хордлого,шалтгаан:"
-                        name="accidents"
-                     >
+                     <Form.Item label="Осол гэмтэл, хордлого,шалтгаан:" name="accidents">
                         <TextArea />
                      </Form.Item>
                   </div>
@@ -171,10 +140,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Удамшлын анамнез:"
-                        name="geneticPainDesc"
-                     >
+                     <Form.Item label="Удамшлын анамнез:" name="geneticPainDesc">
                         <TextArea />
                      </Form.Item>
                   </div>
@@ -188,10 +154,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Архи хэрэглэдэг эсэх:"
-                        name="isAlcoholUse"
-                     >
+                     <Form.Item label="Архи хэрэглэдэг эсэх:" name="isAlcoholUse">
                         <Radio.Group>
                            <Radio value={true}>Тийм</Radio>
                            <Radio value={false}>Үгүй</Radio>
@@ -199,10 +162,7 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Тамхи татдаг эсэх:"
-                        name={['cigar', 'isUse']}
-                     >
+                     <Form.Item label="Тамхи татдаг эсэх:" name={['cigar', 'isUse']}>
                         <Radio.Group>
                            <Radio value={true}>Тийм</Radio>
                            <Radio value={false}>Үгүй</Radio>
@@ -210,18 +170,12 @@ function Anamnesis({ PatientId, InpatientRequestId }) {
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Хэдэн наснаас эхэлж татсан:"
-                        name={['cigar', 'fromAge']}
-                     >
+                     <Form.Item label="Хэдэн наснаас эхэлж татсан:" name={['cigar', 'fromAge']}>
                         <Input />
                      </Form.Item>
                   </div>
                   <div className="w-2/12 p-1">
-                     <Form.Item
-                        label="Хэдэн наснаас эхэлж татсан:"
-                        name={['cigar', 'usedYear']}
-                     >
+                     <Form.Item label="Хэдэн наснаас эхэлж татсан:" name={['cigar', 'usedYear']}>
                         <InputNumber />
                      </Form.Item>
                   </div>

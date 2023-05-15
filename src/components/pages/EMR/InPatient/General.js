@@ -48,14 +48,4 @@ const audition = {
    NORMAL: 'Хэвийн',
    DECREASED: 'Буурсан'
 };
-export {
-   bodyCondition,
-   mind,
-   skin,
-   respiratoryListen,
-   heartTapping,
-   heartSound,
-   tongue,
-   abdomen,
-   audition
-};
+export { bodyCondition, mind, skin, respiratoryListen, heartTapping, heartSound, tongue, abdomen, audition };

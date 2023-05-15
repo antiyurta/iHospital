@@ -120,12 +120,7 @@ function Hospital() {
          headers: {},
          params: {}
       };
-      const response = await Patch(
-         'organization/hospital/' + selectedRow.id,
-         token,
-         conf,
-         values
-      );
+      const response = await Patch('organization/hospital/' + selectedRow.id, token, conf, values);
       if (response === 200) {
          setIsOpenHospital(false);
          setIsOpenInsurance(false);
@@ -135,14 +130,8 @@ function Hospital() {
    const insuranceFunction = async (row) => {
       if (row) {
          setIsOpenInsurance(true);
-         insuranceForm.setFieldValue(
-            'insuranceUsername',
-            row.insuranceUsername
-         );
-         insuranceForm.setFieldValue(
-            'insurancePassword',
-            row.insurancePassword
-         );
+         insuranceForm.setFieldValue('insuranceUsername', row.insuranceUsername);
+         insuranceForm.setFieldValue('insurancePassword', row.insurancePassword);
          setSelectedRow(row);
       }
    };
@@ -154,11 +143,7 @@ function Hospital() {
             hospitalId: hospitalId
          }
       };
-      const response = await DefualtGet(
-         'health-insurance/hics-exam',
-         token,
-         conf
-      );
+      const response = await DefualtGet('health-insurance/hics-exam', token, conf);
       console.log(response);
    };
    useEffect(() => {
@@ -200,10 +185,7 @@ function Hospital() {
             cancelText="Болих"
          >
             <Form form={form} layout="vertical">
-               <Form.Item
-                  name="financeOrganizationId"
-                  label="Байгууллага сонгох"
-               >
+               <Form.Item name="financeOrganizationId" label="Байгууллага сонгох">
                   <Select
                      allowClear
                      showSearch
@@ -214,13 +196,9 @@ function Hospital() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {financeClients?.map((el, index) => {
@@ -242,13 +220,9 @@ function Hospital() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {financeAccounts?.map((el, index) => {
@@ -270,13 +244,9 @@ function Hospital() {
                      size="small"
                      placeholder="Сонгох"
                      optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        option.children.includes(input)
-                     }
+                     filterOption={(input, option) => option.children.includes(input)}
                      filterSort={(optionA, optionB) =>
-                        optionA.children
-                           .toLowerCase()
-                           .localeCompare(optionB.children.toLowerCase())
+                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                      }
                   >
                      {financeAccounts?.map((el, index) => {
@@ -296,11 +266,7 @@ function Hospital() {
                setIsOpenInsurance(false);
                insuranceForm.resetFields();
             }}
-            onOk={() =>
-               insuranceForm
-                  .validateFields()
-                  .then((values) => updateHospital(values))
-            }
+            onOk={() => insuranceForm.validateFields().then((values) => updateHospital(values))}
             okText="Хадагалах"
             cancelText="Болих"
          >

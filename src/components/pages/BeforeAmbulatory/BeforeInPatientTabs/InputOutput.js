@@ -60,11 +60,7 @@ function InputOutput({ PatientId, ListId, PatientData }) {
    };
    const checkNumber = (event) => {
       var charCode = event.charCode;
-      if (
-         charCode > 31 &&
-         (charCode < 48 || charCode > 57) &&
-         charCode !== 46
-      ) {
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
          event.preventDefault();
       } else {
          return true;
@@ -121,12 +117,7 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                >
                   Хуудас бөглөх
                </Button>
-               <Button
-                  className="ml-2"
-                  icon={<PrinterOutlined />}
-                  onClick={handlePrint}
-                  loading={printLoading}
-               >
+               <Button className="ml-2" icon={<PrinterOutlined />} onClick={handlePrint} loading={printLoading}>
                   Хэвлэх
                </Button>
             </div>
@@ -141,27 +132,17 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                            <div className="flow-root">
                               <p className="float-right">СМ-3 хавсралт 13</p>
                            </div>
-                           <p className="font-bold text-center">
-                              ШИНГЭНИЙ БАЛАНС ХЯНАХ ХУУДАС
-                           </p>
+                           <p className="font-bold text-center">ШИНГЭНИЙ БАЛАНС ХЯНАХ ХУУДАС</p>
                            <div className="flow-root">
                               <div className="float-left inline-flex">
                                  <p>Эмчлүүлэгчийн овог, нэр:</p>
-                                 <p>
-                                    {PatientData?.lastName.substring(0, 1) +
-                                       '.' +
-                                       PatientData?.firstName}
-                                 </p>
+                                 <p>{PatientData?.lastName.substring(0, 1) + '.' + PatientData?.firstName}</p>
                               </div>
                               <div className="float-right inline-flex">
                                  <p>Нас:</p>
                                  <p>{getAge(PatientData?.registerNumber)}</p>
                                  <p className="pl-1">Хүйс:</p>
-                                 <p>
-                                    {PatientData?.genderType === 'MAN'
-                                       ? 'Эр'
-                                       : 'Эм'}
-                                 </p>
+                                 <p>{PatientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}</p>
                                  <p className="pl-1">Тасаг:</p>
                                  <p>{location?.state?.departmentName}</p>
                                  <p className="pl-1">Өрөө:</p>
@@ -174,12 +155,8 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                                     <th rowSpan={2} className="align-middle">
                                        Огноо
                                     </th>
-                                    <th colSpan={5}>
-                                       Биед орсон шингэн /ml хэмжих нэгж/
-                                    </th>
-                                    <th colSpan={5}>
-                                       Биеэс гарсан шингэн /ml хэмжих нэгж/
-                                    </th>
+                                    <th colSpan={5}>Биед орсон шингэн /ml хэмжих нэгж/</th>
+                                    <th colSpan={5}>Биеэс гарсан шингэн /ml хэмжих нэгж/</th>
                                  </tr>
                                  <tr>
                                     <th>Хэрхэн</th>
@@ -213,81 +190,39 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                                           {t.inputs.map((item, index) => {
                                              return (
                                                 <tr key={index}>
-                                                   <th className="text-center">
-                                                      {item.how}
-                                                   </th>
+                                                   <th className="text-center">{item.how}</th>
+                                                   <td className="text-center">{item.morning}</td>
+                                                   <td className="text-center">{item.afternoon}</td>
+                                                   <td className="text-center">{item.evening}</td>
                                                    <td className="text-center">
-                                                      {item.morning}
+                                                      {item.morning + item.afternoon + item.evening}
                                                    </td>
+                                                   <th className="text-center">{t.outputs[index].how}</th>
+                                                   <td className="text-center">{t.outputs[index].morning}</td>
+                                                   <td className="text-center">{t.outputs[index].afternoon}</td>
+                                                   <td className="text-center">{t.outputs[index].evening}</td>
                                                    <td className="text-center">
-                                                      {item.afternoon}
-                                                   </td>
-                                                   <td className="text-center">
-                                                      {item.evening}
-                                                   </td>
-                                                   <td className="text-center">
-                                                      {item.morning +
-                                                         item.afternoon +
-                                                         item.evening}
-                                                   </td>
-                                                   <th className="text-center">
-                                                      {t.outputs[index].how}
-                                                   </th>
-                                                   <td className="text-center">
-                                                      {t.outputs[index].morning}
-                                                   </td>
-                                                   <td className="text-center">
-                                                      {
-                                                         t.outputs[index]
-                                                            .afternoon
-                                                      }
-                                                   </td>
-                                                   <td className="text-center">
-                                                      {t.outputs[index].evening}
-                                                   </td>
-                                                   <td className="text-center">
-                                                      {t.outputs[index]
-                                                         .morning +
-                                                         t.outputs[index]
-                                                            .afternoon +
-                                                         t.outputs[index]
-                                                            .evening}
+                                                      {t.outputs[index].morning +
+                                                         t.outputs[index].afternoon +
+                                                         t.outputs[index].evening}
                                                    </td>
                                                 </tr>
                                              );
                                           })}
                                           <tr className="bg-gray-50">
-                                             <th className="text-center">
-                                                Нийт хэмжээ
-                                             </th>
-                                             <th className="text-center">
-                                                {t.iMorningTotal}
-                                             </th>
-                                             <th className="text-center">
-                                                {t.iAfternoonTotal}
-                                             </th>
-                                             <th className="text-center">
-                                                {t.iEveningTotal}
-                                             </th>
+                                             <th className="text-center">Нийт хэмжээ</th>
+                                             <th className="text-center">{t.iMorningTotal}</th>
+                                             <th className="text-center">{t.iAfternoonTotal}</th>
+                                             <th className="text-center">{t.iEveningTotal}</th>
                                              <th className="text-center"></th>
-                                             <th className="text-center">
-                                                Нийт хэмжээ
-                                             </th>
-                                             <th className="text-center">
-                                                {t.oMorningTotal}
-                                             </th>
-                                             <th className="text-center">
-                                                {t.oAfternoonTotal}
-                                             </th>
-                                             <th className="text-center">
-                                                {t.oEveningTotal}
-                                             </th>
+                                             <th className="text-center">Нийт хэмжээ</th>
+                                             <th className="text-center">{t.oMorningTotal}</th>
+                                             <th className="text-center">{t.oAfternoonTotal}</th>
+                                             <th className="text-center">{t.oEveningTotal}</th>
                                              <th className="text-center"></th>
                                           </tr>
                                           <tr>
-                                             <th colSpan={2}>
-                                                Сувилагчийн гарын үсэг
-                                             </th>
+                                             <th colSpan={2}>Сувилагчийн гарын үсэг</th>
                                              <th></th>
                                              <th></th>
                                              <th></th>
@@ -304,8 +239,7 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                               </>
                            </Table>
                            <p>
-                              *Сувилагч энэ хүснэгтийг өөрөө хөтлөх буюу,
-                              эмчлүүлэгчийн ар гэрийхэнд хэрхэн хөтлөх тухай
+                              *Сувилагч энэ хүснэгтийг өөрөө хөтлөх буюу, эмчлүүлэгчийн ар гэрийхэнд хэрхэн хөтлөх тухай
                               мэдлэг олгож, хөтлөх аргыг зааварчилна.
                            </p>
                         </div>
@@ -337,85 +271,45 @@ function InputOutput({ PatientId, ListId, PatientData }) {
                </Form.Item>
                {status === 0 ? (
                   <>
-                     <Form.Item
-                        label="Хэзээ"
-                        name="statusIo"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Хэзээ" name="statusIo" rules={[{ required: true, message: 'Заавал' }]}>
                         <Select>
                            <Option value={0}>Өглөө</Option>
                            <Option value={1}>Өдөр</Option>
                            <Option value={2}>Орой</Option>
                         </Select>
                      </Form.Item>
-                     <Form.Item
-                        label="Амаар"
-                        name="orally"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Амаар" name="orally" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
-                     <Form.Item
-                        label="Гуурсаар"
-                        name="inTube"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Гуурсаар" name="inTube" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
-                     <Form.Item
-                        label="Судсаар"
-                        name="vein"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Судсаар" name="vein" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
-                     <Form.Item
-                        label="Бусад"
-                        name="other"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Бусад" name="other" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
                   </>
                ) : (
                   <>
-                     <Form.Item
-                        label="Төрөл"
-                        name="statusIo"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Төрөл" name="statusIo" rules={[{ required: true, message: 'Заавал' }]}>
                         <Select>
                            <Option value={0}>Өглөө</Option>
                            <Option value={1}>Өдөр</Option>
                            <Option value={2}>Орой</Option>
                         </Select>
                      </Form.Item>
-                     <Form.Item
-                        label="Шээсээр"
-                        name="urine"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Шээсээр" name="urine" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
-                     <Form.Item
-                        label="Өтгөнөөр"
-                        name="poo"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Өтгөнөөр" name="poo" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
-                     <Form.Item
-                        label="Гуурсаар"
-                        name="outTube"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Гуурсаар" name="outTube" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
-                     <Form.Item
-                        label="Бусад /бөөлжүүлэх/"
-                        name="vomit"
-                        rules={[{ required: true, message: 'Заавал' }]}
-                     >
+                     <Form.Item label="Бусад /бөөлжүүлэх/" name="vomit" rules={[{ required: true, message: 'Заавал' }]}>
                         <InputNumber onKeyPress={checkNumber} />
                      </Form.Item>
                   </>

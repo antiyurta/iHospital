@@ -51,20 +51,11 @@ function DoctorInspection({ isOpen, isClose, handleclick }) {
          >
             <div className="flex flex-row">
                <div className="basis-1/2">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
+                              <th className="font-bold text-sm align-middle">Нэр</th>
                            </tr>
                         </thead>
                         <tbody className="ant-table-tbody p-0">
@@ -75,9 +66,7 @@ function DoctorInspection({ isOpen, isClose, handleclick }) {
                                     key={index}
                                     className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                  >
-                                    <td className="whitespace-pre-line">
-                                       {item.name}
-                                    </td>
+                                    <td className="whitespace-pre-line">{item.name}</td>
                                  </tr>
                               );
                            })}
@@ -86,37 +75,20 @@ function DoctorInspection({ isOpen, isClose, handleclick }) {
                   </div>
                </div>
                <div className="basis-1/2">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
+                              <th className="font-bold text-sm align-middle">Нэр</th>
                               <th></th>
                            </tr>
                         </thead>
                         <tbody className="ant-table-tbody p-0">
                            {selectedInspections.map((item, index) => {
                               return (
-                                 <tr
-                                    key={index}
-                                    className="ant-table-row ant-table-row-level-0"
-                                 >
-                                    <td className="whitespace-pre-line">
-                                       {item.name}
-                                    </td>
-                                    <td
-                                       onDoubleClick={() => remove(index)}
-                                       className="hover:cursor-pointer"
-                                    >
+                                 <tr key={index} className="ant-table-row ant-table-row-level-0">
+                                    <td className="whitespace-pre-line">{item.name}</td>
+                                    <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
                                        <CloseOutlined
                                           style={{
                                              color: 'red',

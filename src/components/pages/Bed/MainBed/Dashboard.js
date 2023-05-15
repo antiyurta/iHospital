@@ -7,28 +7,10 @@ import { ReloadOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Table } from 'react-bootstrap';
 import { Bar, Pie, getElementAtEvent } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {
-   Chart as ChartJS,
-   CategoryScale,
-   LinearScale,
-   BarElement,
-   ArcElement,
-   Tooltip,
-   Legend,
-   Title
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 const { Search } = Input;
 function Dashboard() {
-   ChartJS.register(
-      ChartDataLabels,
-      ArcElement,
-      Tooltip,
-      CategoryScale,
-      LinearScale,
-      BarElement,
-      Title,
-      Legend
-   );
+   ChartJS.register(ChartDataLabels, ArcElement, Tooltip, CategoryScale, LinearScale, BarElement, Title, Legend);
    const PieRef = useRef();
    const token = useSelector(selectCurrentToken);
    const [structures, setStructures] = useState([]);
@@ -96,9 +78,7 @@ function Dashboard() {
                >
                   <div style={{ width: '70%' }}>
                      <p>Сул орны тоо</p>
-                     <p style={styles.total}>
-                        Нийт: {emptyBeds !== '' && emptyBeds.length}
-                     </p>
+                     <p style={styles.total}>Нийт: {emptyBeds !== '' && emptyBeds.length}</p>
                   </div>
                   <div>
                      <UserAddOutlined style={styles.iconStyle} />
@@ -118,9 +98,7 @@ function Dashboard() {
                >
                   <div style={{ width: '70%' }}>
                      <p>Засвартай өрөө</p>
-                     <p style={styles.total}>
-                        Нийт: {repairBeds !== '' && repairBeds.length}
-                     </p>
+                     <p style={styles.total}>Нийт: {repairBeds !== '' && repairBeds.length}</p>
                   </div>
                   <div>
                      <UserAddOutlined style={styles.iconStyle} />
@@ -140,9 +118,7 @@ function Dashboard() {
                >
                   <div style={{ width: '70%' }}>
                      <p>Дүүрсэн өрөө</p>
-                     <p style={styles.total}>
-                        Нийт: {usedBeds !== '' && usedBeds.length}
-                     </p>
+                     <p style={styles.total}>Нийт: {usedBeds !== '' && usedBeds.length}</p>
                   </div>
                   <div>
                      <UserAddOutlined style={styles.iconStyle} />

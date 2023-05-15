@@ -39,16 +39,10 @@ function AM24Б() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>
-                  Эмнэлгийн нэр ____________________
-               </span>
+               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={styles.generalText}>
-                     A/611 дүгээр тушаалын арваннэгдүгээр хавсралт
-                  </span>
-                  <span style={{ fontWeight: 'bold', fontSize: 14 }}>
-                     Эрүүл мэндийн бүртгэлийн маягт АМ-24Б
-                  </span>
+                  <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
+                  <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-24Б</span>
                </div>
             </div>
             <div style={{ display: 'flex' }}>
@@ -62,37 +56,27 @@ function AM24Б() {
                   <div style={styles.rowCells}></div>
                </div>
             </div>
-            <div
-               style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}
-            >
-               <span style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  ХЭВЛИЙН ХӨНДИЙН ЭРХТНҮҮДИЙН ХЭТ АВИАН ОНОШИЛГОО
-               </span>
+            <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
+               <span style={{ fontWeight: 'bold', fontSize: 16 }}>ХЭВЛИЙН ХӨНДИЙН ЭРХТНҮҮДИЙН ХЭТ АВИАН ОНОШИЛГОО</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 550 } }}>
                <div>......он.....сар....өдөр</div>
             </div>
             <div style={styles.rowStyle}>
                Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>
-                  Нас ______Хүйс: /зур/ эр, эм
-               </span>
+               <span style={{ marginLeft: 50 }}>Нас ______Хүйс: /зур/ эр, эм</span>
             </div>
             <div style={styles.rowStyle}>
                Нэр _______________________________
                <span style={{ marginLeft: 50 }}></span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Элэг:</span> Хэмжээ
-               _________________
-               <span style={{ fontWeight: 'bold' }}> Гадаргуу:</span> тэгш, тэгш
-               бус
-               <span style={{ fontWeight: 'bold' }}> Бүтэц:</span> _________
-               жигд, жигд бус
+               <span style={{ fontWeight: 'bold' }}>Элэг:</span> Хэмжээ _________________
+               <span style={{ fontWeight: 'bold' }}> Гадаргуу:</span> тэгш, тэгш бус
+               <span style={{ fontWeight: 'bold' }}> Бүтэц:</span> _________ жигд, жигд бус
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Эхо ойлт:</span> ________
-               хэвийн, ихэссэн, багассан,
+               <span style={{ fontWeight: 'bold' }}>Эхо ойлт:</span> ________ хэвийн, ихэссэн, багассан,
                <span style={{ fontWeight: 'bold' }}> Үүдэн венийн голч:</span>
                ___________
             </div>
@@ -115,11 +99,8 @@ function AM24Б() {
                хэвийн, зузаарсан, нимгэрсэн ________
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>
-                  Агууламж, голомтот өөрчлөлт:
-               </span>
-               цөс, хэвийн, цөс өтгөрсөн, тунадастай, чулуутай, ургацагтай
-               ___________
+               <span style={{ fontWeight: 'bold' }}>Агууламж, голомтот өөрчлөлт:</span>
+               цөс, хэвийн, цөс өтгөрсөн, тунадастай, чулуутай, ургацагтай ___________
             </div>
             <div style={styles.rowStyle}>
                Цөсний ерөнхий цорго: өргөсөөгүй, өргөссөн голч__________, Бусад
@@ -145,37 +126,29 @@ function AM24Б() {
                ____________________________________________________________________________________________________________________________________
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}> Дэлүү:</span> Хэмжээ
-               __________________________________
+               <span style={{ fontWeight: 'bold' }}> Дэлүү:</span> Хэмжээ __________________________________
                <span style={{ fontWeight: 'bold' }}> ДИ/дэлүүний индекс:</span>
                ____________________________
                <span style={{ fontWeight: 'bold' }}> Бусад:</span>
                ________________________
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Бөөр:</span> Баруун-байрлал:
-               хэвийн, хэвийн бус,
+               <span style={{ fontWeight: 'bold' }}>Бөөр:</span> Баруун-байрлал: хэвийн, хэвийн бус,
                <span style={{ fontWeight: 'bold' }}> Хэмжээ:</span>
                _________________________________
-               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span> тэгш, тэгш
-               бус __________________
+               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span> тэгш, тэгш бус __________________
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>АТ:</span> өргөсөөгүй,
-               өргөссөн, сийрэгжсэн,
-               <span style={{ fontWeight: 'bold' }}> Голомтот:</span>{' '}
-               өөрчлөлтгүй, өөрчлөлттэй
+               <span style={{ fontWeight: 'bold' }}>АТ:</span> өргөсөөгүй, өргөссөн, сийрэгжсэн,
+               <span style={{ fontWeight: 'bold' }}> Голомтот:</span> өөрчлөлтгүй, өөрчлөлттэй
                __________________________________________________
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Зүүн-байрлал:</span> хэвийн,
-               хэвийн бус, сийрэгжсэн,
+               <span style={{ fontWeight: 'bold' }}>Зүүн-байрлал:</span> хэвийн, хэвийн бус, сийрэгжсэн,
                <span style={{ fontWeight: 'bold' }}> Хэмжээ:</span>
                _________________
-               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span> тэгш, тэгш
-               бус,
-               <span style={{ fontWeight: 'bold' }}> АТ:</span> өргөсөөгүй,
-               өргөссөн, сийрэгжсэн
+               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span> тэгш, тэгш бус,
+               <span style={{ fontWeight: 'bold' }}> АТ:</span> өргөсөөгүй, өргөссөн, сийрэгжсэн
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Голомтот:</span>
@@ -187,8 +160,7 @@ function AM24Б() {
                <span style={{ fontWeight: 'bold' }}>Давсаг: </span>
                Хана: _________________________________,
                <span style={{ fontWeight: 'bold' }}> Голомтот: </span>
-               өөрчлөлтгүй, өөрчлөлттэй
-               _______________________________________________
+               өөрчлөлтгүй, өөрчлөлттэй _______________________________________________
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Хэвлийн хөндийд:</span>

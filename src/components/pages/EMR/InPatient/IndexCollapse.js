@@ -7,14 +7,7 @@ import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get } from '../../../comman';
 import FullScreenLoader from '../../../FullScreenLoader';
 const { Panel } = Collapse;
-function IndexCollapse({
-   hookKey,
-   hookParamName,
-   url,
-   data,
-   column,
-   setDataType
-}) {
+function IndexCollapse({ hookKey, hookParamName, url, data, column, setDataType }) {
    const token = useSelector(selectCurrentToken);
    const [panelData, setPanelData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
@@ -56,29 +49,19 @@ function IndexCollapse({
             {Object.entries(data).map(([key, value], index) => {
                return (
                   <Panel header={`${key} Он`} key={index}>
-                     <Collapse
-                        collapsible="header"
-                        accordion
-                        onChange={onChange}
-                     >
+                     <Collapse collapsible="header" accordion onChange={onChange}>
                         {value?.map((item, index) => {
                            return (
                               <Panel
                                  header={
                                     <div className="row-auto">
-                                       <span className="font-bold">
-                                          {item.structure?.name}
-                                       </span>
+                                       <span className="font-bold">{item.structure?.name}</span>
                                        <span>&nbsp;</span>
                                        <span>{item.employee?.lastName}</span>
                                        <span>&nbsp;</span>
                                        <span>{item.employee?.firstName}</span>
                                        <span>&nbsp;</span>
-                                       <span>
-                                          {moment(item.createdAt).format(
-                                             'YYYY-MM-DD HH:mm'
-                                          )}
-                                       </span>
+                                       <span>{moment(item.createdAt).format('YYYY-MM-DD HH:mm')}</span>
                                     </div>
                                  }
                                  key={value[index][`${hookKey}`]}
@@ -91,9 +74,7 @@ function IndexCollapse({
                                           rowKey={'id'}
                                           bordered
                                           locale={{
-                                             emptyText: (
-                                                <Empty description={'Хоосон'} />
-                                             )
+                                             emptyText: <Empty description={'Хоосон'} />
                                           }}
                                           columns={column}
                                           dataSource={panelData}

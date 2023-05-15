@@ -38,11 +38,7 @@ function DepBalance() {
          headers: {},
          params: {}
       };
-      const response = await DefualtGet(
-         'finance/department-material/' + e,
-         token,
-         conf
-      );
+      const response = await DefualtGet('finance/department-material/' + e, token, conf);
       setList(response);
       setLoading(false);
    };
@@ -50,11 +46,7 @@ function DepBalance() {
       getDepartments();
    }, []);
    return (
-      <Card
-         title={'Тасагын үлдэгдэл'}
-         bordered={false}
-         className="header-solid max-h-max rounded-md"
-      >
+      <Card title={'Тасагын үлдэгдэл'} bordered={false} className="header-solid max-h-max rounded-md">
          <div className="flex flex-wrap">
             <div className="w-full p-1">
                <Select

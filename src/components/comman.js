@@ -11,6 +11,7 @@ export function localMn() {
 export function localMnC() {
    return mnMnn;
 }
+
 export async function Get(url, token, config) {
    config.headers['Authorization'] = `Bearer ${token}`;
    config.headers['x-api-key'] = API_KEY;
@@ -28,12 +29,9 @@ export async function Get(url, token, config) {
             if (error.response.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
             } else if (
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.status === 409) ||
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.name === 'HttpException') ||
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.statusCode === 400)
+               (error?.response?.status === 400 && error?.response?.data?.status === 409) ||
+               (error?.response?.status === 400 && error?.response?.data?.name === 'HttpException') ||
+               (error?.response?.status === 400 && error?.response?.data?.statusCode === 400)
             ) {
                const err = error.response?.data?.message;
                if (typeof err === 'object') {
@@ -71,12 +69,9 @@ export async function DefualtGet(url, token, config) {
             if (error.response.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
             } else if (
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.status === 409) ||
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.name === 'HttpException') ||
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.statusCode === 400)
+               (error?.response?.status === 400 && error?.response?.data?.status === 409) ||
+               (error?.response?.status === 400 && error?.response?.data?.name === 'HttpException') ||
+               (error?.response?.status === 400 && error?.response?.data?.statusCode === 400)
             ) {
                const err = error.response?.data?.message;
                if (typeof err === 'object') {
@@ -116,12 +111,9 @@ export async function Post(url, token, config, data) {
          .catch((error) => {
             console.log(error);
             if (
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.status === 409) ||
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.name === 'HttpException') ||
-               (error?.response?.status === 400 &&
-                  error?.response?.data?.statusCode === 400)
+               (error?.response?.status === 400 && error?.response?.data?.status === 409) ||
+               (error?.response?.status === 400 && error?.response?.data?.name === 'HttpException') ||
+               (error?.response?.status === 400 && error?.response?.data?.statusCode === 400)
             ) {
                const err = error.response?.data?.message;
                if (typeof err === 'object') {
@@ -184,10 +176,7 @@ export async function Patch(url, token, config, data) {
          .catch((error) => {
             console.log(error);
             if (error.response.status === 400) {
-               const message = error.response?.data?.message?.replaceAll(
-                  'HttpException:',
-                  ''
-               );
+               const message = error.response?.data?.message?.replaceAll('HttpException:', '');
                openNofi('error', 'Алдаа', message);
             } else {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');

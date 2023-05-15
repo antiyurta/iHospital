@@ -20,12 +20,7 @@ function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
                   <tr style={{ height: mainHeight }}>
                      <td colSpan={3}>
                         <p className="font-bold">Үндсэн онош</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicDiagnoses', 'main']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicDiagnoses', 'main']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -39,12 +34,7 @@ function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
                   <tr style={{ height: comboHeight }}>
                      <td colSpan={3}>
                         <p className="font-bold">Дагалдах онош</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicDiagnoses', 'combo']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicDiagnoses', 'combo']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -58,12 +48,7 @@ function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
                   <tr style={{ height: complicationsHeight }}>
                      <td colSpan={3}>
                         <p className="font-bold">Хүндрэл</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicDiagnoses', 'complications']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicDiagnoses', 'complications']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -78,12 +63,7 @@ function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
                      <td>
                         <p className="font-bold">Ялган оношлох эмгэгүүд</p>
                         <p className="font-bold">ба хам шинжүүд</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicDiagnoses', 'syndromes']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicDiagnoses', 'syndromes']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -96,12 +76,7 @@ function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
                      <td>
                         <p className="font-bold">Хийгдэх</p>
                         <p className="font-bold">шинжилгээ</p>
-                        <Form.Item
-                           shouldUpdate
-                           className="mb-0"
-                           noStyle
-                           name={['clinicDiagnoses', 'examination']}
-                        >
+                        <Form.Item shouldUpdate className="mb-0" noStyle name={['clinicDiagnoses', 'examination']}>
                            <TextArea
                               className="amaraInputTextArea"
                               style={{
@@ -139,9 +114,7 @@ function Index({ mainHeight, comboHeight, complicationsHeight, subHeight }) {
                               <p className="font-normal">Гарын үсэг:</p>
                            </div>
                            <div className="basis-1/3">
-                              <p className="font-normal">
-                                 он 2012 сар 17 өдөр 22
-                              </p>
+                              <p className="font-normal">он 2012 сар 17 өдөр 22</p>
                            </div>
                         </div>
                      </th>

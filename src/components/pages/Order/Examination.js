@@ -78,24 +78,12 @@ function Examination({ isOpen, isClose, handleclick }) {
                   })}
                </div>
                <div className="basis-2/5">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
-                              <th
-                                 rowSpan={2}
-                                 className="font-bold text-sm align-middle"
-                              >
+                              <th className="font-bold text-sm align-middle">Нэр</th>
+                              <th rowSpan={2} className="font-bold text-sm align-middle">
                                  Үнэ
                               </th>
                            </tr>
@@ -104,9 +92,7 @@ function Examination({ isOpen, isClose, handleclick }) {
                                  <Input
                                     placeholder="Хайх"
                                     allowClear
-                                    onChange={(e) =>
-                                       setSearchField(e.target.value)
-                                    }
+                                    onChange={(e) => setSearchField(e.target.value)}
                                  />
                               </th>
                            </tr>
@@ -119,9 +105,7 @@ function Examination({ isOpen, isClose, handleclick }) {
                                     key={index}
                                     className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
                                  >
-                                    <td className="whitespace-pre-line">
-                                       {item.name}
-                                    </td>
+                                    <td className="whitespace-pre-line">{item.name}</td>
                                     <td>{item.price}₮</td>
                                  </tr>
                               );
@@ -131,41 +115,22 @@ function Examination({ isOpen, isClose, handleclick }) {
                   </div>
                </div>
                <div className="basis-2/5">
-                  <div
-                     className="table-responsive px-4 pb-4"
-                     id="style-8"
-                     style={{ maxHeight: '500px' }}
-                  >
-                     <Table
-                        className="ant-border-space"
-                        style={{ width: '100%' }}
-                     >
+                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
+                     <Table className="ant-border-space" style={{ width: '100%' }}>
                         <thead className="ant-table-thead bg-slate-200">
                            <tr>
-                              <th className="font-bold text-sm align-middle">
-                                 Нэр
-                              </th>
-                              <th className="font-bold text-sm align-middle">
-                                 Үнэ
-                              </th>
+                              <th className="font-bold text-sm align-middle">Нэр</th>
+                              <th className="font-bold text-sm align-middle">Үнэ</th>
                               <th></th>
                            </tr>
                         </thead>
                         <tbody className="ant-table-tbody p-0">
                            {selectedExaminations.map((item, index) => {
                               return (
-                                 <tr
-                                    key={index}
-                                    className="ant-table-row ant-table-row-level-0"
-                                 >
-                                    <td className="whitespace-pre-line">
-                                       {item.name}
-                                    </td>
+                                 <tr key={index} className="ant-table-row ant-table-row-level-0">
+                                    <td className="whitespace-pre-line">{item.name}</td>
                                     <td>{item.price}₮</td>
-                                    <td
-                                       onDoubleClick={() => remove(index)}
-                                       className="hover:cursor-pointer"
-                                    >
+                                    <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
                                        <CloseOutlined
                                           style={{
                                              color: 'red',

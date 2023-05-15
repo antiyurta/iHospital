@@ -2,10 +2,7 @@ import { Form, InputNumber, Modal, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { DefualtGet, Get } from '../../comman';
 import { useSelector } from 'react-redux';
-import {
-   selectCurrentInsurance,
-   selectCurrentToken
-} from '../../../features/authReducer';
+import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
 const { Option, OptGroup } = Select;
 
 function InpatientRequest({ isOpen, isClose, handleClick }) {
@@ -61,11 +58,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
             usageType: 'IN'
          }
       };
-      const response = await DefualtGet(
-         'insurance/hics-service-group',
-         token,
-         conf
-      );
+      const response = await DefualtGet('insurance/hics-service-group', token, conf);
       setInsurranceServices(response.data);
    };
    useEffect(() => {
@@ -89,11 +82,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                });
             }}
          >
-            <Form
-               form={InpatientRequestForm}
-               wrapperCol={{ span: 15 }}
-               labelCol={{ span: 9 }}
-            >
+            <Form form={InpatientRequestForm} wrapperCol={{ span: 15 }} labelCol={{ span: 9 }}>
                <div className="flex flex-wrap">
                   <div className="w-full">
                      <Form.Item
@@ -106,11 +95,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                            }
                         ]}
                      >
-                        <Select
-                           allowClear
-                           onChange={getDoctor}
-                           placeholder="Тасаг сонгох"
-                        >
+                        <Select allowClear onChange={getDoctor} placeholder="Тасаг сонгох">
                            {structures.map((structure, index) => {
                               return (
                                  <Option key={index} value={structure.id}>
@@ -130,11 +115,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                            }
                         ]}
                      >
-                        <Select
-                           allowClear
-                           onChange={selectDoctor}
-                           placeholder="Эмч сонгох"
-                        >
+                        <Select allowClear onChange={selectDoctor} placeholder="Эмч сонгох">
                            {doctors.map((doctor, index) => {
                               return (
                                  <Option key={index} value={doctor.id}>
@@ -211,18 +192,13 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                               {insuranceServices?.map((service, index) => {
                                  return (
                                     <OptGroup key={index} label={service.name}>
-                                       {service?.hicsServices?.map(
-                                          (item, idx) => {
-                                             return (
-                                                <Option
-                                                   key={`${index - idx}`}
-                                                   value={item.id}
-                                                >
-                                                   {item.name}
-                                                </Option>
-                                             );
-                                          }
-                                       )}
+                                       {service?.hicsServices?.map((item, idx) => {
+                                          return (
+                                             <Option key={`${index - idx}`} value={item.id}>
+                                                {item.name}
+                                             </Option>
+                                          );
+                                       })}
                                     </OptGroup>
                                  );
                               })}
