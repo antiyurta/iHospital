@@ -144,7 +144,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             getSlots();
          }
       } else {
-         if (!selectedInsuranceId) {
+         if (!selectedInsuranceId && stateInsurance) {
             openNofi('error', 'Алдаа', 'Даатгалын үйлчилгээний төрөл сонгох заавал');
          } else {
             data.type = 3;

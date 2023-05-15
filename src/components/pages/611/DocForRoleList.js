@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import EditableTable from './Support/EditableTable';
 import mnMN from 'antd/es/locale/mn_MN';
+import { ReturnAll, ReturnDetails } from './Document/Index';
 const { Option } = Select;
 
 function DocForRoleList() {
@@ -229,7 +230,13 @@ function DocForRoleList() {
    }, []);
    return (
       <div>
-         <div>
+         <div
+            style={{
+               display: 'flex',
+               flexDirection: 'column',
+               gap: 12
+            }}
+         >
             <Card
                bordered={false}
                className="header-solid max-h-max rounded-md"
@@ -269,6 +276,9 @@ function DocForRoleList() {
                      }}
                   />
                </ConfigProvider>
+            </Card>
+            <Card bordered={false} className="header-solid max-h-max rounded-md" title="Маягтын Жагсаалт">
+               <ReturnDetails type={0} />
             </Card>
          </div>
          <Modal
