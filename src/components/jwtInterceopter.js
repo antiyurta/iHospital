@@ -7,8 +7,10 @@ const jwtInterceopter = axios.create({});
 jwtInterceopter.interceptors.request.use((config) => {
    let tokens = JSON.parse(localStorage.getItem('tokens'));
    config.url = DEV_URL + config.url;
-   config.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
-   config.headers.common['x-api-key'] = API_KEY;
+   if (tokens) {
+      config.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
+      config.headers.common['x-api-key'] = API_KEY;
+   }
    return config;
 });
 
@@ -17,7 +19,7 @@ jwtInterceopter.interceptors.response.use(
       return response;
    },
    async (error) => {
-      console.log(error);
+      console.log('==>', error);
       if (error.response.status === 401) {
          let tokens = JSON.parse(localStorage.getItem('tokens'));
          const payload = {

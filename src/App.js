@@ -6,8 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 import { Fragment } from 'react';
 import { Suspense } from 'react';
 import FullScreenLoader from './components/FullScreenLoader';
+import { AuthContextProvider } from './features/AuthContext';
 const Login = React.lazy(() => import('./components/Login'));
-const Main = React.lazy(() => import('./components/pages/Layout/Main'));
 const Hospital = React.lazy(() => import('./components/pages/Organization/Hospital'));
 const Structure = React.lazy(() => import('./components/pages/Organization/Structure'));
 //
@@ -26,7 +26,6 @@ const Degree = React.lazy(() => import('./components/pages/reference/Degree'));
 //
 const Home = React.lazy(() => import('./components/Home'));
 const Profile = React.lazy(() => import('./components/Profile'));
-const PrivateRoute = React.lazy(() => import('./features/PrivateRoute'));
 //service start
 const Examination = React.lazy(() => import('./components/pages/service/Examination'));
 const ExaminationParams = React.lazy(() => import('./components/pages/service/ExaminationParams'));
@@ -92,359 +91,101 @@ const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRol
 
 const Privacy = React.lazy(() => import('./privacy/Index'));
 //
-
+const InsuranceDocterList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
+//
+import ProtectedRoute from './features/ProtectedRoute';
+import Layout from './components/pages/Layout/MainLayout';
 function App() {
    return (
       <div className="App">
-         <Fragment>
-            <Suspense fallback={<FullScreenLoader full={true} />}>
-               <Routes>
-                  <Route path="/" element={<Login />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route element={<Main />}>
-                     <Route path="*" element={<NotFound />} />
-                     <Route path="/docforlist" element={<DocForRoleList />} />
-                     <Route
-                        path="/home"
-                        element={
-                           <PrivateRoute>
-                              <Home />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route path="/documents" element={<DocumentUpload />} />
-                     <Route path="/hicsCost" element={<HicsCost />} />
-                     <Route path="/hicsList" element={<HicsLists />} />
-                     <Route path="/notPermission" element={<NotPermission />} />
-                     <Route path="/profile" element={<Profile />} />
-                     <Route
-                        path="/acting"
-                        element={
-                           <PrivateRoute>
-                              <Acting />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/depBalance"
-                        element={
-                           <PrivateRoute>
-                              <DepBalance />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/schedule"
-                        element={
-                           <PrivateRoute>
-                              <Schedule />
-                           </PrivateRoute>
-                        }
-                     />
-                     {/* <Route path="/deviceSchedule" element={<PrivateRoute><DeviceSchedule /></PrivateRoute>} /> */}
-                     <Route path="/deviceSchedule" element={<DeviceSchedule />} />
-                     {/* lab start */}
-                     <Route path="/equipments" element={<EquipmentList />} />
-                     {/* lab end */}
-                     {/* finance start */}
-                     <Route path="/finance" element={<Finance />} />
-                     <Route path="/financeMaterialExamination" element={<FinanceMaterialExamination />} />
-                     <Route path="/financeMaterialXray" element={<FinanceMaterialXray />} />
-                     <Route path="/financeMaterialTreatment" element={<FinanceMaterialTreatment />} />
-                     <Route path="/financeMaterialSurgery" element={<FinanceMaterialSurgery />} />
-                     <Route path="/demoForm2" element={<DemoForm2 />} />
-                     <Route path="/builder" element={<Builder />} />
-                     <Route path="/role" element={<Role />} />
-                     <Route path="/permission" element={<Permission />} />
-                     <Route path="/discount" element={<Discount />} />
-                     {/* finance end */}
-                     {/* <PrivateRoute></PrivateRoute> */}
-                     <Route path="/menu" element={<Menu />} />
-                     <Route
-                        path="/emr"
-                        element={
-                           <PrivateRoute>
-                              <EMR />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route path="/packages" element={<Packages />} />
-                     <Route path="/SetOrders" element={<SetOrder />} />
-                     <Route path="/device" element={<DeviceAppointment />} />
-                     <Route
-                        path="/beforeEkgList"
-                        element={
-                           <PrivateRoute>
-                              <BeforeEkgRequest />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/dailyIncome"
-                        element={
-                           <PrivateRoute>
-                              <DailyIncome />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/settings"
-                        element={
-                           <PrivateRoute>
-                              <Settings />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/hospital"
-                        element={
-                           <PrivateRoute>
-                              <Hospital />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/structure"
-                        element={
-                           <PrivateRoute>
-                              <Structure />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/position"
-                        element={
-                           <PrivateRoute>
-                              <Position />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/employee"
-                        element={
-                           <PrivateRoute>
-                              <DemoEmployee />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/Floor"
-                        element={
-                           <PrivateRoute>
-                              <Floor />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/Block"
-                        element={
-                           <PrivateRoute>
-                              <Block />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/Room"
-                        element={
-                           <PrivateRoute>
-                              <Room />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/Bed"
-                        element={
-                           <PrivateRoute>
-                              <Bed />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route>
-                        <Route
-                           path="/payment"
-                           element={
-                              <PrivateRoute>
-                                 <PaymentCloud />
-                              </PrivateRoute>
-                           }
-                        />
-                     </Route>
-                     <Route>
-                        <Route
-                           path="/doctorAppointment"
-                           element={
-                              <PrivateRoute>
-                                 <DoctorAppointment />
-                              </PrivateRoute>
-                           }
-                        />
-                     </Route>
-                     <Route>
-                        <Route
-                           path="/patient"
-                           element={
-                              <PrivateRoute>
-                                 <Patient />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route
-                           path="/country"
-                           element={
-                              <PrivateRoute>
-                                 <Country />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route
-                           path="/degree"
-                           element={
-                              <PrivateRoute>
-                                 <Degree />
-                              </PrivateRoute>
-                           }
-                        />
-                     </Route>
-                     <Route>
-                        <Route
-                           path="/examination"
-                           element={
-                              <PrivateRoute>
-                                 <Examination />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route path="/examinationParams" element={<ExaminationParams />} />
-                        <Route
-                           path="/xray"
-                           element={
-                              <PrivateRoute>
-                                 <Xray />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route path="/diagnoses" element={<Diagnoses />} />
-                        <Route
-                           path="/treatment"
-                           element={
-                              <PrivateRoute>
-                                 <Treatment />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route
-                           path="/surgury"
-                           element={
-                              <PrivateRoute>
-                                 <Surgury />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route
-                           path="/medicine"
-                           element={
-                              <PrivateRoute>
-                                 <Medicine />
-                              </PrivateRoute>
-                           }
-                        />
-                        <Route
-                           path="/medicineSupport"
-                           element={
-                              <PrivateRoute>
-                                 <MedicineSupport />
-                              </PrivateRoute>
-                           }
-                        />
-                     </Route>
-                     <Route
-                        path="/ambulatoryList"
-                        element={
-                           <PrivateRoute>
-                              <BeforeAmbulatoryList />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/treatmentList"
-                        element={
-                           <PrivateRoute>
-                              <TreatmentRequest />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/xrayList"
-                        element={
-                           <PrivateRoute>
-                              <XrayRequest />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/exoList"
-                        element={
-                           <PrivateRoute>
-                              <ExoRequest />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/enrAmbulatoryList"
-                        element={
-                           <PrivateRoute>
-                              <BeforeAmbulatoryListEnr />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/beforeXrayList"
-                        element={
-                           <PrivateRoute>
-                              <BeforeXrayRequest />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/ambulatoryDetail"
-                        element={
-                           <PrivateRoute>
-                              <BeforeAmbulatoryDetail />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/formBuilder"
-                        element={
-                           <PrivateRoute>
-                              <FormIndex />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route
-                        path="/formBuilder2"
-                        element={
-                           <PrivateRoute>
-                              <PatientForm />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route path="/bed_management/*" element={<MainBed />} />
-                     <Route path="/roomDtl" element={<RoomtDtl />} />
-                     <Route
-                        path="/request_analys"
-                        element={
-                           <PrivateRoute>
-                              <RequestAnalys />
-                           </PrivateRoute>
-                        }
-                     />
-                     <Route path="/dashboard" element={<Dashboard />} />
-                     <Route path="/report" element={<Report />} />
-                  </Route>
-               </Routes>
-            </Suspense>
-         </Fragment>
+         <AuthContextProvider>
+            <Layout>
+               <Fragment>
+                  <Suspense fallback={<FullScreenLoader full={true} />}>
+                     <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/privacy" element={<Privacy />} />
+                        <Route element={<ProtectedRoute />}>
+                           <Route path="*" element={<NotFound />} />
+                           <Route path="/insuranceDoctor" element={<InsuranceDocterList />} />
+                           <Route path="/docforlist" element={<DocForRoleList />} />
+                           <Route path="/home" element={<Home />} />
+                           <Route path="/documents" element={<DocumentUpload />} />
+                           <Route path="/hicsCost" element={<HicsCost />} />
+                           <Route path="/hicsList" element={<HicsLists />} />
+                           <Route path="/notPermission" element={<NotPermission />} />
+                           <Route path="/profile" element={<Profile />} />
+                           <Route path="/acting" element={<Acting />} />
+                           <Route path="/depBalance" element={<DepBalance />} />
+                           <Route path="/schedule" element={<Schedule />} />
+                           {/* <Route path="/deviceSchedule" element={<PrivateRoute><DeviceSchedule /></PrivateRoute>} /> */}
+                           <Route path="/deviceSchedule" element={<DeviceSchedule />} />
+                           {/* lab start */}
+                           <Route path="/equipments" element={<EquipmentList />} />
+                           {/* lab end */}
+                           {/* finance start */}
+                           <Route path="/finance" element={<Finance />} />
+                           <Route path="/financeMaterialExamination" element={<FinanceMaterialExamination />} />
+                           <Route path="/financeMaterialXray" element={<FinanceMaterialXray />} />
+                           <Route path="/financeMaterialTreatment" element={<FinanceMaterialTreatment />} />
+                           <Route path="/financeMaterialSurgery" element={<FinanceMaterialSurgery />} />
+                           <Route path="/demoForm2" element={<DemoForm2 />} />
+                           <Route path="/builder" element={<Builder />} />
+                           <Route path="/role" element={<Role />} />
+                           <Route path="/permission" element={<Permission />} />
+                           <Route path="/discount" element={<Discount />} />
+                           {/* finance end */}
+                           {/* <PrivateRoute></PrivateRoute> */}
+                           <Route path="/menu" element={<Menu />} />
+                           <Route path="/emr" element={<EMR />} />
+                           <Route path="/packages" element={<Packages />} />
+                           <Route path="/SetOrders" element={<SetOrder />} />
+                           <Route path="/device" element={<DeviceAppointment />} />
+                           <Route path="/beforeEkgList" element={<BeforeEkgRequest />} />
+                           <Route path="/dailyIncome" element={<DailyIncome />} />
+                           <Route path="/settings" element={<Settings />} />
+                           <Route path="/hospital" element={<Hospital />} />
+                           <Route path="/structure" element={<Structure />} />
+                           <Route path="/position" element={<Position />} />
+                           <Route path="/employee" element={<DemoEmployee />} />
+                           <Route path="/Floor" element={<Floor />} />
+                           <Route path="/Block" element={<Block />} />
+                           <Route path="/Room" element={<Room />} />
+                           <Route path="/Bed" element={<Bed />} />
+                           <Route path="/payment" element={<PaymentCloud />} />
+                           <Route path="/doctorAppointment" element={<DoctorAppointment />} />
+                           <Route path="/patient" element={<Patient />} />
+                           <Route path="/country" element={<Country />} />
+                           <Route path="/degree" element={<Degree />} />
+                           <Route path="/examination" element={<Examination />} />
+                           <Route path="/examinationParams" element={<ExaminationParams />} />
+                           <Route path="/xray" element={<Xray />} />
+                           <Route path="/diagnoses" element={<Diagnoses />} />
+                           <Route path="/treatment" element={<Treatment />} />
+                           <Route path="/surgury" element={<Surgury />} />
+                           <Route path="/medicine" element={<Medicine />} />
+                           <Route path="/medicineSupport" element={<MedicineSupport />} />
+                           <Route path="/ambulatoryList" element={<BeforeAmbulatoryList />} />
+                           <Route path="/treatmentList" element={<TreatmentRequest />} />
+                           <Route path="/xrayList" element={<XrayRequest />} />
+                           <Route path="/exoList" element={<ExoRequest />} />
+                           <Route path="/enrAmbulatoryList" element={<BeforeAmbulatoryListEnr />} />
+                           <Route path="/beforeXrayList" element={<BeforeXrayRequest />} />
+                           <Route path="/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
+                           <Route path="/formBuilder" element={<FormIndex />} />
+                           <Route path="/formBuilder2" element={<PatientForm />} />
+                           <Route path="/bed_management/*" element={<MainBed />} />
+                           <Route path="/roomDtl" element={<RoomtDtl />} />
+                           <Route path="/request_analys" element={<RequestAnalys />} />
+                           <Route path="/dashboard" element={<Dashboard />} />
+                           <Route path="/report" element={<Report />} />
+                        </Route>
+                     </Routes>
+                  </Suspense>
+               </Fragment>
+            </Layout>
+         </AuthContextProvider>
       </div>
    );
 }

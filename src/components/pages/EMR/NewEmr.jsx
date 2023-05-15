@@ -11,6 +11,7 @@ import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
 import Schedule from '../OCS/Schedule';
+import jwtInterceopter from '../../jwtInterceopter';
 const { Option } = Select;
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -29,7 +30,8 @@ class NewEmr extends React.Component {
          appointments: [],
          isUsageType: this.props.IncomeEMRData.usageType,
          isOpen: false,
-         payments: []
+         payments: [],
+         hiscServiceName: ''
       };
    }
    async getByIdPatient() {
@@ -39,6 +41,14 @@ class NewEmr extends React.Component {
       };
       const response = await Get('pms/patient/' + this.props.IncomeEMRData.patientId, this.props.token, conf);
       this.setState({ selectedPatient: response });
+   }
+   async getInsuranceServiceIdName() {
+      await jwtInterceopter
+         .get('insurance/hics-service/' + this.props.IncomeEMRData.hicsServiceId)
+         .then((response) => {
+            this.setState({ hiscServiceName: response.data?.name });
+         })
+         .catch((error) => console.log(error));
    }
    async getInspectionNotes() {
       const conf = {
@@ -134,6 +144,7 @@ class NewEmr extends React.Component {
    async componentDidMount() {
       await this.getByIdPatient();
       await this.getInspectionNotes();
+      await this.getInsuranceServiceIdName();
    }
    async componentDidUpdate(_prevProps, prevState) {
       if (prevState.appointments !== this.state.appointments) {
@@ -147,113 +158,116 @@ class NewEmr extends React.Component {
    render() {
       return (
          <>
-            <div className="flex flex-wrap">
+            <p style={{ fontWeight: 700 }}>{this.state.hiscServiceName}</p>
+            <div className="flex flex-col gap-3">
                {this.props.IncomeEMRData.usageType === 'OUT' && (
-                  <>
-                     <div className="w-full p-1">
-                        <Alert
-                           banner
-                           message={
-                              <Marquee pauseOnHover gradient={false}>
-                                 Эмчийн үзлэг хийсэн бол заавал онош тавигдана. Оношийг засварлах боломжгүйг анхаарна
-                                 уу! EMR, OTS дуусгаад ҮЗЛЭГ ДУУСГАХ товчийг дарна уу. Таны үзлэг баталгаажиж байгаа
-                                 болно.
-                              </Marquee>
-                           }
-                        />
-                     </div>
-                     <div className="w-full p-1">
-                        <EmrSupports
-                           appointmentId={this.props.IncomeEMRData.appointmentId}
-                           usageType={this.props.IncomeEMRData.usageType}
-                           patient={this.state.selectedPatient}
-                           patientId={this.props.IncomeEMRData.patientId}
-                        />
-                     </div>
-                  </>
+                  <div className="flex flex-col gap-3">
+                     <Alert
+                        banner
+                        message={
+                           <Marquee pauseOnHover gradient={false}>
+                              Эмчийн үзлэг хийсэн бол заавал онош тавигдана. Оношийг засварлах боломжгүйг анхаарна уу!
+                              EMR, OTS дуусгаад ҮЗЛЭГ ДУУСГАХ товчийг дарна уу. Таны үзлэг баталгаажиж байгаа болно.
+                           </Marquee>
+                        }
+                     />
+                     <EmrSupports
+                        appointmentId={this.props.IncomeEMRData.appointmentId}
+                        usageType={this.props.IncomeEMRData.usageType}
+                        patient={this.state.selectedPatient}
+                        patientId={this.props.IncomeEMRData.patientId}
+                     />
+                  </div>
                )}
-
-               <div className={this.state.type === 'EMR' ? 'w-full md:w-full xl:w-1/2' : 'w-full md:w-full xl:w-full'}>
-                  <div className="flex flex-wrap">
-                     <div className={this.state.type === 'EMR' ? 'w-full md:w-full p-1' : 'w-full md:w-3/5 p-1'}>
-                        <div className="pb-1">
-                           <PatientInformation
-                              patient={this.state.selectedPatient}
-                              handlesearch={false}
-                              handleTypeChange={this.handleTypeChange}
-                              OCS={
-                                 this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
-                                    ? true
-                                    : false
-                              }
-                              type={this.state.type}
-                              deparmentId={this.props.IncomeEMRData.deparmentId}
-                           />
-                        </div>
-                        <div className="pt-1">
-                           <Card
-                              bordered={false}
-                              title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
-                              className="header-solid rounded-md"
-                              style={{ height: '100%' }}
-                              bodyStyle={{
-                                 paddingTop: 0,
-                                 paddingLeft: 10,
-                                 paddingRight: 10,
-                                 paddingBottom: 10,
-                                 minHeight: 150,
-                                 maxHeight: 150
-                              }}
-                           >
-                              <div className="scroll" style={{ maxHeight: 150 }}>
-                                 <Table
-                                    rowKey={'id'}
-                                    bordered
-                                    loading={this.state.problemsLoading}
-                                    columns={[
-                                       {
-                                          title: 'Эмч',
-                                          dataIndex: 'doctor'
-                                       },
-                                       {
-                                          title: 'Онош',
-                                          dataIndex: 'diagnose',
-                                          render: (text) => {
+               <div
+                  className={
+                     this.state.type === 'EMR' ? 'grid sm:grid-cols-1 xl:grid-cols-2 gap-3' : 'flex flex-col gap-3'
+                  }
+               >
+                  <div
+                     className={
+                        this.state.type === 'EMR'
+                           ? 'grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-3'
+                           : 'grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3'
+                     }
+                  >
+                     <PatientInformation
+                        patient={this.state.selectedPatient}
+                        handlesearch={false}
+                        handleTypeChange={this.handleTypeChange}
+                        OCS={
+                           this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
+                              ? true
+                              : false
+                        }
+                        type={this.state.type}
+                        deparmentId={this.props.IncomeEMRData.deparmentId}
+                     />
+                     <Card
+                        bordered={false}
+                        title={<h6 className="font-semibold m-0">Гол асуудлууд</h6>}
+                        className="header-solid rounded-md"
+                        bodyStyle={{
+                           paddingTop: 0,
+                           paddingLeft: 10,
+                           paddingRight: 10,
+                           paddingBottom: 10
+                        }}
+                     >
+                        <Table
+                           rowKey={'id'}
+                           bordered
+                           loading={this.state.problemsLoading}
+                           scroll={{
+                              y: 150
+                           }}
+                           columns={[
+                              {
+                                 title: 'Эмч',
+                                 dataIndex: 'doctor'
+                              },
+                              {
+                                 title: 'Онош',
+                                 dataIndex: 'diagnose',
+                                 render: (text) => {
+                                    return (
+                                       <ul
+                                          className="list-disc list-inside"
+                                          style={{
+                                             paddingLeft: '4px',
+                                             textAlign: 'start',
+                                             whiteSpace: 'normal'
+                                          }}
+                                       >
+                                          {text.map((item, index) => {
                                              return (
-                                                <ul
-                                                   className="list-disc list-inside"
-                                                   style={{
-                                                      paddingLeft: '4px',
-                                                      textAlign: 'start'
-                                                   }}
-                                                >
-                                                   {text.map((item, index) => {
-                                                      return (
-                                                         <li key={index}>
-                                                            {`${item.diagnose.code} -> ${item.diagnose.nameMn}`}
-                                                         </li>
-                                                      );
-                                                   })}
-                                                </ul>
+                                                <li key={index}>
+                                                   {`${item.diagnose.code} -> ${item.diagnose.nameMn}`}
+                                                </li>
                                              );
-                                          }
-                                       },
-                                       {
-                                          title: 'Огноо',
-                                          dataIndex: 'inspectionDate',
-                                          render: (text) => {
-                                             return moment(text).format('YYYY-MM-DD');
-                                          }
-                                       }
-                                    ]}
-                                    dataSource={this.state.problems}
-                                    pagination={false}
-                                 />
-                              </div>
-                           </Card>
-                        </div>
-                     </div>
-                     <div className={this.state.type === 'EMR' ? 'w-full p-1' : 'w-full md:w-2/5 p-1'}>
+                                          })}
+                                       </ul>
+                                    );
+                                 }
+                              },
+                              {
+                                 title: 'Огноо',
+                                 dataIndex: 'inspectionDate',
+                                 width: 80,
+                                 render: (text) => {
+                                    return moment(text).format('YYYY-MM-DD');
+                                 }
+                              }
+                           ]}
+                           dataSource={this.state.problems}
+                           pagination={false}
+                        />
+                     </Card>
+                     <div
+                        className={
+                           this.state.type === 'EMR' ? 'lg:col-span-2 xl:col-span-1' : 'lg:col-span-2 xl:col-span-2'
+                        }
+                     >
                         <Card
                            bordered={false}
                            title={
@@ -291,79 +305,75 @@ class NewEmr extends React.Component {
                         </Card>
                      </div>
                   </div>
-               </div>
-               <div className={this.state.type === 'OCS' ? 'w-full' : 'w-full md:w-full xl:w-1/2'}>
-                  <div className="p-1">
-                     {this.state.type === 'EMR' ? (
-                        <Card
-                           bordered={false}
-                           title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
-                           className="header-solid max-h-max rounded-md scroll"
-                           bodyStyle={{
-                              paddingTop: 0,
-                              paddingLeft: 10,
-                              paddingRight: 10,
-                              paddingBottom: 10,
-                              minHeight: 724,
-                              maxHeight: 724
-                           }}
-                           extra={
-                              <>
-                                 <Select
-                                    defaultValue={this.props.IncomeEMRData.inspection}
-                                    disabled={this.props.IncomeEMRData.inspection === 11 ? true : false}
-                                    style={{ width: 200 }}
-                                 >
-                                    <Option value={1} disabled={true}>
-                                       Анхан
-                                    </Option>
-                                    <Option value={2} disabled={true}>
-                                       Давтан
-                                    </Option>
-                                    <Option value={3}>Урьдчилан сэргийлэх</Option>
-                                    <Option value={4}>Гэрийн эргэлт</Option>
-                                    <Option value={5}>Идэвхтэй хяналт</Option>
-                                    <Option value={6}>Дуудлагаар</Option>
-                                    <Option value={11} disabled={true}>
-                                       xray
-                                    </Option>
-                                    <Option value={12} disabled={true}>
-                                       exo
-                                    </Option>
-                                 </Select>
-                              </>
-                           }
-                        >
-                           <MainPatientHistory
-                              AppointmentId={this.props.IncomeEMRData.appointmentId}
-                              XrayRequestId={this.props.IncomeEMRData.xrayRequestId}
-                              InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
-                              PatientId={this.props.IncomeEMRData.patientId}
-                              CabinetId={this.props.IncomeEMRData.cabinetId}
-                              Inspection={this.props.IncomeEMRData.inspection}
-                              UsageType={this.props.IncomeEMRData.usageType}
-                              insuranceServiceId={this.props.IncomeEMRData.insuranceServiceId}
-                              handleClick={this.handleTypeChange}
-                           />
-                        </Card>
-                     ) : (
-                        <Card
-                           bordered={false}
-                           title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
-                           className="header-solid max-h-max rounded-md"
-                           bodyStyle={{
-                              paddingTop: 0,
-                              paddingBottom: 16
-                           }}
-                        >
-                           <Ocs
-                              selectedPatient={this.state.selectedPatient}
-                              UsageType={this.props.IncomeEMRData.usageType}
-                              handleClick={this.saveOrder}
-                           />
-                        </Card>
-                     )}
-                  </div>
+                  {this.state.type === 'EMR' ? (
+                     <Card
+                        bordered={false}
+                        title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
+                        className="header-solid max-h-max rounded-md scroll"
+                        bodyStyle={{
+                           paddingTop: 0,
+                           paddingLeft: 10,
+                           paddingRight: 10,
+                           paddingBottom: 10
+                        }}
+                        extra={
+                           <>
+                              <Select
+                                 defaultValue={this.props.IncomeEMRData.inspection}
+                                 disabled={this.props.IncomeEMRData.inspection === 11 ? true : false}
+                                 style={{ width: 200 }}
+                              >
+                                 <Option value={1} disabled={true}>
+                                    Анхан
+                                 </Option>
+                                 <Option value={2} disabled={true}>
+                                    Давтан
+                                 </Option>
+                                 <Option value={3}>Урьдчилан сэргийлэх</Option>
+                                 <Option value={4}>Гэрийн эргэлт</Option>
+                                 <Option value={5}>Идэвхтэй хяналт</Option>
+                                 <Option value={6}>Дуудлагаар</Option>
+                                 <Option value={11} disabled={true}>
+                                    xray
+                                 </Option>
+                                 <Option value={12} disabled={true}>
+                                    exo
+                                 </Option>
+                              </Select>
+                           </>
+                        }
+                     >
+                        <MainPatientHistory
+                           AppointmentId={this.props.IncomeEMRData.appointmentId}
+                           XrayRequestId={this.props.IncomeEMRData.xrayRequestId}
+                           InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
+                           PatientId={this.props.IncomeEMRData.patientId}
+                           CabinetId={this.props.IncomeEMRData.cabinetId}
+                           Inspection={this.props.IncomeEMRData.inspection}
+                           UsageType={this.props.IncomeEMRData.usageType}
+                           hicsServiceId={this.props.IncomeEMRData.hicsServiceId}
+                           handleClick={this.handleTypeChange}
+                        />
+                     </Card>
+                  ) : (
+                     <Card
+                        bordered={false}
+                        title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
+                        className="header-solid max-h-max rounded-md"
+                        bodyStyle={{
+                           paddingTop: 0,
+                           paddingLeft: 10,
+                           paddingRight: 10,
+                           paddingBottom: 10
+                        }}
+                     >
+                        <Ocs
+                           selectedPatient={this.state.selectedPatient}
+                           UsageType={this.props.IncomeEMRData.usageType}
+                           handleClick={this.saveOrder}
+                        />
+                     </Card>
+                  )}
                </div>
             </div>
             <Schedule

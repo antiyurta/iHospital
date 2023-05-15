@@ -144,17 +144,21 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             getSlots();
          }
       } else {
-         data.type = 3;
-         data.status = 1;
-         data.hicsServiceId = selectedInsuranceId;
-         data.isInsurance = stateInsurance;
-         data.appointmentWorkDate = filterForm.getFieldValue('date');
-         config.params = {};
-         const response = await Post('appointment', token, config, data);
-         if (response === 201) {
-            setAppointmentModal(false);
-            changeDate(date);
-            getSlots();
+         if (!selectedInsuranceId) {
+            openNofi('error', 'Алдаа', 'Даатгалын үйлчилгээний төрөл сонгох заавал');
+         } else {
+            data.type = 3;
+            data.status = 1;
+            data.hicsServiceId = selectedInsuranceId;
+            data.isInsurance = stateInsurance;
+            data.appointmentWorkDate = filterForm.getFieldValue('date');
+            config.params = {};
+            const response = await Post('appointment', token, config, data);
+            if (response === 201) {
+               setAppointmentModal(false);
+               changeDate(date);
+               getSlots();
+            }
          }
       }
       setIsConfirmLoading(false);
@@ -315,7 +319,14 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                {isInsurance && stateInsurance && (
                   <div className="rounded-md bg-gray-100 w-full inline-block">
                      <div className="p-3">
-                        <label>Даатгалын үйлчилгээний төрөл</label>
+                        <p
+                           className="py-3"
+                           style={{
+                              fontWeight: 600
+                           }}
+                        >
+                           Даатгалын үйлчилгээний төрөл
+                        </p>
                         <Select
                            style={{
                               width: '100%'
@@ -327,7 +338,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                                  <OptGroup key={index} label={group.name}>
                                     {group?.hicsServices?.map((service, idx) => {
                                        return (
-                                          <Option key={`${index - idx}`} value={service.id}>
+                                          <Option key={`${index}-${idx}`} value={service.id}>
                                              {service.name}
                                           </Option>
                                        );
@@ -345,10 +356,18 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             bordered={false}
             title={<h6 className="font-semibold m-0">Цаг захиалга</h6>}
             className="header-solid max-h-max rounded-md"
-            bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
+            bodyStyle={{
+               paddingTop: 0,
+               paddingLeft: 10,
+               paddingRight: 10,
+               paddingBottom: 10,
+               display: 'flex',
+               flexDirection: 'column',
+               gap: '12px'
+            }}
             loading={cardLoading}
             extra={
-               <Space align="start">
+               <div className="flex flex-row gap-3">
                   {type != 2 && type != 3 && (
                      <Button
                         className="bg-red-500"
@@ -385,57 +404,68 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                      </Button>
                   )}
                   <Alert className="h-6" message={`Өнөөдөр: ${today?.format('YYYY-MM-DD')}`} type="success" />
-                  <Form form={filterForm} layout="inline" style={{ height: '30px' }}>
-                     <Form.Item
-                        label="Тасаг"
-                        name="structureId"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Заавал'
-                           }
-                        ]}
-                     >
-                        <Select allowClear className="w-52" onChange={getDoctor} placeholder="Тасаг сонгох">
-                           {structures.map((structure, index) => {
-                              return (
-                                 <Option key={index} value={structure.id}>
-                                    {structure.name}
-                                 </Option>
-                              );
-                           })}
-                        </Select>
-                     </Form.Item>
-                     <Form.Item
-                        label="Эмч"
-                        name="doctorId"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Заавал'
-                           }
-                        ]}
-                     >
-                        <Select allowClear className="w-52" onChange={selectDoctor} placeholder="Эмч сонгох">
-                           {doctors.map((doctor, index) => {
-                              return (
-                                 <Option key={index} value={doctor.id}>
-                                    {doctor.firstName}
-                                 </Option>
-                              );
-                           })}
-                        </Select>
-                     </Form.Item>
-                     <Form.Item label="Өдөр" name="date">
-                        <DatePicker onChange={changeDate} locale={mn} format={'YYYY/MM/DD'} />
-                     </Form.Item>
-                     <Button type="primary" icon={<SearchOutlined />} onClick={() => onFinish()}>
-                        Шүүх
-                     </Button>
-                  </Form>
-               </Space>
+               </div>
             }
          >
+            <Form form={filterForm}>
+               <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                  <Form.Item
+                     label="Тасаг"
+                     name="structureId"
+                     className="mb-0"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Заавал'
+                        }
+                     ]}
+                  >
+                     <Select allowClear className="w-full" onChange={getDoctor} placeholder="Тасаг сонгох">
+                        {structures.map((structure, index) => {
+                           return (
+                              <Option key={index} value={structure.id}>
+                                 {structure.name}
+                              </Option>
+                           );
+                        })}
+                     </Select>
+                  </Form.Item>
+                  <Form.Item
+                     label="Эмч"
+                     name="doctorId"
+                     className="mb-0"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Заавал'
+                        }
+                     ]}
+                  >
+                     <Select allowClear className="w-full" onChange={selectDoctor} placeholder="Эмч сонгох">
+                        {doctors.map((doctor, index) => {
+                           return (
+                              <Option key={index} value={doctor.id}>
+                                 {doctor.firstName}
+                              </Option>
+                           );
+                        })}
+                     </Select>
+                  </Form.Item>
+                  <Form.Item className="mb-0" label="Өдөр" name="date">
+                     <DatePicker style={{ minHeight: 32 }} onChange={changeDate} locale={mn} format={'YYYY/MM/DD'} />
+                  </Form.Item>
+                  <Button
+                     style={{
+                        minHeight: 32
+                     }}
+                     type="primary"
+                     icon={<SearchOutlined />}
+                     onClick={() => onFinish()}
+                  >
+                     Шүүх
+                  </Button>
+               </div>
+            </Form>
             <div className="mt-2">
                {schedules.length > 0 ? (
                   <Collapse onChange={onChangePanel} accordion>

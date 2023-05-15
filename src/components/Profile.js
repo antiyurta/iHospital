@@ -24,6 +24,7 @@ import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
+import jwtInterceopter from './jwtInterceopter';
 
 function Profile() {
    const token = useSelector(selectCurrentToken);
@@ -49,32 +50,39 @@ function Profile() {
       params: {}
    };
    const getProfile = async () => {
-      const response = await Get('authentication', token, config);
-      profileForm.setFieldsValue(response);
-      if (depId === null) {
-         dispatch(setDepId(response.employee?.depIds));
-      }
-      if (appIds === null) {
-         dispatch(setAppId(response.employee?.appIds));
-      }
-      if (userId === null) {
-         dispatch(setUserId(response.employee?.id));
-      }
-      if (roleId === null) {
-         dispatch(setRoleId(response.roleId));
-      }
-      if (userLastName === null && userFirstName === null) {
-         dispatch(
-            setUserInfo({
-               firstName: response.employee?.firstName,
-               lastName: response.employee?.lastName
-            })
-         );
-      }
-      if (isInsurance === null) {
-         dispatch(setInsurrance(response.hospital?.isInsurance));
-      }
-      setUser(response);
+      await jwtInterceopter
+         .get('authentication')
+         .then((response) => {
+            profileForm.setFieldsValue(response.data.response);
+            if (depId === null) {
+               dispatch(setDepId(response.data.response.employee?.depIds));
+            }
+            if (appIds === null) {
+               dispatch(setAppId(response.data.response.employee?.appIds));
+            }
+            if (userId === null) {
+               dispatch(setUserId(response.data.response.employee?.id));
+            }
+            if (roleId === null) {
+               dispatch(setRoleId(response.data.response.roleId));
+            }
+            if (userLastName === null && userFirstName === null) {
+               dispatch(
+                  setUserInfo({
+                     firstName: response.data.response.employee?.firstName,
+                     lastName: response.data.response.employee?.lastName
+                  })
+               );
+            }
+            if (isInsurance === null) {
+               dispatch(setInsurrance(response.data.response.hospital?.isInsurance));
+            }
+            setUser(response.data.response);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {});
    };
    const onFinish = async (values) => {
       setIsLoading(true);

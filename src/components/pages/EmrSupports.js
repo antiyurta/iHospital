@@ -262,7 +262,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                   </Button>
                </div>
             </div>
-            {isInsurance && (
+            {/* {isInsurance && (
                <div className="flow-root">
                   <div className="float-left">
                      <Button.Group>
@@ -280,7 +280,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      </Button.Group>
                   </div>
                </div>
-            )}
+            )} */}
             {/* <Button onClick={() => setIsOpenDocumentModal(true)}>
                Өвчний түүх
             </Button> */}
