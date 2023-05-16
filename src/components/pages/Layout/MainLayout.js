@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../features/AuthContext';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo/iHospital.svg';
 import male from '../../../assets/images/maleAvatar.svg';
 import { Button, Dropdown, Menu, Layout } from 'antd';
@@ -20,7 +20,7 @@ import {
 import jwtInterceopter from '../../jwtInterceopter';
 import { logout } from '../../../features/authReducer';
 const { Content, Sider } = Layout;
-function MainLayout({ children }) {
+function MainLayout() {
    const { user, logoutt } = useContext(AuthContext);
    const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -206,7 +206,9 @@ function MainLayout({ children }) {
                )}
                <Content className="bg-[#F3F4F6]">
                   <div className="body">
-                     <div className="tabled">{children}</div>
+                     <div className="tabled">
+                        <Outlet />
+                     </div>
                   </div>
                </Content>
             </Layout>

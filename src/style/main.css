@@ -1082,15 +1082,15 @@ span.blue {
 
 /* Track */
 ::-webkit-scrollbar-track {
-   border: 2px solid white;
-   background-color: #f5f5f5;
+   background-color: #f3f4f6;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-   background-color: #1890ff;
+   border-radius: 6px;
+   background-color: #2d8cff;
+   border: 3px solid #2d8cff;
 }
-
 .py-1 {
    padding-top: 0.25rem !important;
    padding-bottom: 0.25rem !important;

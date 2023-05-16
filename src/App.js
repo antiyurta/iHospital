@@ -93,19 +93,21 @@ const Privacy = React.lazy(() => import('./privacy/Index'));
 //
 const InsuranceDocterList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
 //
-import ProtectedRoute from './features/ProtectedRoute';
-import Layout from './components/pages/Layout/MainLayout';
+// import ProtectedRoute from './features/ProtectedRoute';
+const ProtectedRoute = React.lazy(() => import('./features/ProtectedRoute'));
+// import Layout from './components/pages/Layout/MainLayout';
+const Layout = React.lazy(() => import('./components/pages/Layout/MainLayout'));
 function App() {
    return (
       <div className="App">
          <AuthContextProvider>
-            <Layout>
-               <Fragment>
-                  <Suspense fallback={<FullScreenLoader full={true} />}>
-                     <Routes>
-                        <Route path="/" element={<Home />} />
+            <Fragment>
+               <Suspense fallback={<FullScreenLoader full={true} />}>
+                  <Routes>
+                     <Route path="/privacy" element={<Privacy />} />
+                     <Route path="/" element={<Layout />}>
+                        <Route index element={<Home />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/privacy" element={<Privacy />} />
                         <Route element={<ProtectedRoute />}>
                            <Route path="*" element={<NotFound />} />
                            <Route path="/insuranceDoctor" element={<InsuranceDocterList />} />
@@ -181,10 +183,10 @@ function App() {
                            <Route path="/dashboard" element={<Dashboard />} />
                            <Route path="/report" element={<Report />} />
                         </Route>
-                     </Routes>
-                  </Suspense>
-               </Fragment>
-            </Layout>
+                     </Route>
+                  </Routes>
+               </Suspense>
+            </Fragment>
          </AuthContextProvider>
       </div>
    );

@@ -195,7 +195,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                               icon={<SaveOutlined />}
                               shape={'circle'}
                               type={'primary'}
-                              style={{ marginRight: 8 }}
+                              style={{ marginBottom: 8 }}
                               onClick={onSave}
                            />
                            <Button icon={<CloseOutlined />} shape={'circle'} onClick={() => onCancel(index)} />
@@ -205,9 +205,10 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                      return (
                         <React.Fragment>
                            <Button
+                              title="Засах"
                               icon={<EditOutlined />}
                               shape={'circle'}
-                              style={{ marginRight: 8 }}
+                              style={{ marginBottom: 8 }}
                               disabled={editingIndex !== undefined}
                               onClick={() => setEditingIndex(index)}
                            />
