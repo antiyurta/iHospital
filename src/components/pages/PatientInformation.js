@@ -190,10 +190,16 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      <Search placeholder="Регистр/Нэрээр хайх" onSearch={onSearch} enterButton="Хайх" />
                   </div>
                )}
-               <div className="w-full flex flex-row gap-3">
-                  <img className="h-24" src={male} alt="patient" />
-                  <div>
-                     <Descriptions column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}>
+               <div className="w-full">
+                  <div
+                     style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: 12
+                     }}
+                  >
+                     <img className="w-24" src={male} alt="patient" />
+                     <Descriptions column={{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 2, xs: 1 }}>
                         <Descriptions.Item label="Овог">{patient?.lastName}</Descriptions.Item>
                         <Descriptions.Item label="Нэр">{patient?.firstName}</Descriptions.Item>
                         <Descriptions.Item label="Хүйс">{getGender(patient?.registerNumber)}</Descriptions.Item>
@@ -213,33 +219,66 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      </Descriptions>
                   </div>
                </div>
-               {OCS && (
-                  <div className="w-full flex flex-row gap-3">
-                     <div>
-                        <Radio.Group
-                           size="small"
-                           onChange={handleTypeChangePatient}
-                           value={type}
-                           optionType="button"
-                           buttonStyle="solid"
-                        >
-                           <Radio.Button value="OCS">OTS</Radio.Button>
-                           <Radio.Button value="EMR">EMR</Radio.Button>
-                        </Radio.Group>
-                     </div>
-                     <Button className="h-6" type="primary" onClick={() => setIsOpenHistory(true)}>
-                        Өвчний түүх
-                     </Button>
-                     <Button
-                        type="primary"
-                        onClick={() => getDocuments()}
-                        loading={isLoadingGetDocuments}
-                        icon={<SnippetsOutlined />}
+               <div className="w-full">
+                  {OCS && (
+                     <div
+                        style={{
+                           display: 'flex',
+                           flexDirection: 'row',
+                           gap: 12
+                        }}
                      >
-                        Маягт
-                     </Button>
-                  </div>
-               )}
+                        <div
+                           style={{
+                              minWidth: 96,
+                              textAlign: 'center'
+                           }}
+                        >
+                           <Radio.Group
+                              size="small"
+                              onChange={handleTypeChangePatient}
+                              value={type}
+                              optionType="button"
+                              buttonStyle="solid"
+                           >
+                              <Radio.Button
+                                 style={{
+                                    height: 28
+                                 }}
+                                 value="OCS"
+                              >
+                                 OTS
+                              </Radio.Button>
+                              <Radio.Button
+                                 style={{
+                                    height: 28
+                                 }}
+                                 value="EMR"
+                              >
+                                 EMR
+                              </Radio.Button>
+                           </Radio.Group>
+                        </div>
+                        <div className="w-full">
+                           {OCS && (
+                              <div className="w-full justify-end flex flex-row gap-3">
+                                 <Button className="h-6" type="primary" onClick={() => setIsOpenHistory(true)}>
+                                    Өвчний түүх
+                                 </Button>
+                                 <Button
+                                    type="primary"
+                                    onClick={() => getDocuments()}
+                                    loading={isLoadingGetDocuments}
+                                    icon={<SnippetsOutlined />}
+                                 >
+                                    Маягт
+                                 </Button>
+                              </div>
+                           )}
+                        </div>
+                     </div>
+                  )}
+               </div>
             </div>
          </Card>
          <Modal title="Маягт жагсаалт" open={isOpenAM} onCancel={() => setIsOpenAM(false)} width={'70%'} footer={null}>

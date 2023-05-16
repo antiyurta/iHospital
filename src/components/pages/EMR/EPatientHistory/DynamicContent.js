@@ -13,8 +13,6 @@ const { Column } = Table;
 const { Option } = Select;
 function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, hicsServiceId }) {
    const [form] = Form.useForm();
-   const token = useSelector(selectCurrentToken);
-   const dispatch = useDispatch();
    const [loading, setLoading] = useState(false);
    const DiagnoseHandleClick = (diagnoses) => {
       form.setFieldValue('diagnose', diagnoses);
@@ -28,18 +26,20 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
          usageType: incomeData.usageType,
          description: values.description
       };
-      var diagnoseData = [];
-      values.diagnose?.map((diagnose) => {
-         diagnoseData.push({
-            patientId: incomeData.patientId,
-            type: diagnose.type,
-            usageType: incomeData.usageType,
-            diagnoseId: diagnose.id,
-            diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
-            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+      if (editForOUT) {
+         var diagnoseData = [];
+         values.diagnose?.map((diagnose) => {
+            diagnoseData.push({
+               patientId: incomeData.patientId,
+               type: diagnose.type,
+               usageType: incomeData.usageType,
+               diagnoseId: diagnose.id,
+               diagnoseType: diagnose.diagnoseType,
+               inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
+               appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+            });
          });
-      });
+      }
       if (incomeData.inspection === 11 || incomeData.inspection === 12) {
          data['xrayRequestId'] = incomeData.xrayRequestId;
          data['conclusion'] = JSON.stringify(values['conclusion']);

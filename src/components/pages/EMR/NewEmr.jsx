@@ -167,7 +167,6 @@ class NewEmr extends React.Component {
    render() {
       return (
          <>
-            <p style={{ fontWeight: 700 }}>{this.state.hiscServiceName}</p>
             <div className="flex flex-col gap-3">
                {this.props.IncomeEMRData.usageType === 'OUT' && (
                   <div className="flex flex-col gap-3">
@@ -181,6 +180,7 @@ class NewEmr extends React.Component {
                         }
                      />
                      <EmrSupports
+                        hiscServiceName={this.state.hiscServiceName}
                         appointmentId={this.props.IncomeEMRData.appointmentId}
                         usageType={this.props.IncomeEMRData.usageType}
                         patient={this.state.selectedPatient}
@@ -323,7 +323,9 @@ class NewEmr extends React.Component {
                            paddingTop: 0,
                            paddingLeft: 10,
                            paddingRight: 10,
-                           paddingBottom: 10
+                           paddingBottom: 10,
+                           maxHeight: 780,
+                           overflow: 'auto'
                         }}
                         extra={
                            <>

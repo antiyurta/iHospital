@@ -1,37 +1,12 @@
 import React, { useContext } from 'react';
-import { Layout, Button, Row, Col, Typography, Form, Input } from 'antd';
-import { StepBackwardOutlined } from '@ant-design/icons';
-// import Logo from '../assets/logo/logo.png';
-import Logo from '../assets/logo/iHospital.png';
-// import signinbg from '../assets/logo/demo4.png';
+import { Button, Row, Col, Typography, Form, Input } from 'antd';
 import signinbg from '../assets/images/background/front.svg';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { login, logout, DelAppId, DelDepId, DelUserId, DelUserInfo, DelInsurrance } from '../features/authReducer';
-import { openNofi } from './comman';
+import { logout, DelAppId, DelDepId, DelUserId, DelUserInfo, DelInsurrance } from '../features/authReducer';
 import { useEffect, useState } from 'react';
 import AuthContext from '../features/AuthContext';
 const { Title } = Typography;
-const { Header, Footer, Content } = Layout;
-const MenuNav = [
-   {
-      key: '1',
-      icon: <StepBackwardOutlined />,
-      label: 'Холбоо барих'
-   },
-   {
-      key: '2',
-      icon: <StepBackwardOutlined />,
-      label: 'Дэлгэрэнгүй'
-   },
-   {
-      key: '3',
-      icon: <StepBackwardOutlined />,
-      label: 'Мэдээлэл'
-   }
-];
-
 function Login() {
    const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -41,30 +16,7 @@ function Login() {
       setLoginLoading(true);
       const res = await loginn(values);
       setLoginLoading(res);
-      // axios
-      //    .post(process.env.REACT_APP_DEV_URL + 'authentication/login', values, {
-      //       headers: { 'X-API-KEY': process.env.REACT_APP_API_KEY }
-      //    })
-      //    .then((response) => {
-      //       if (response.status === 200) {
-      //          dispatch(login(response.data.response.accessToken));
-      //          localStorage.setItem('tokens', JSON.stringify(response.data.response));
-      //          navigate('/profile');
-      //       }
-      //    })
-      //    .catch((err) => {
-      //       console.log(err);
-      //       if (err.code === 'ERR_NETWORK') {
-      //          openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
-      //       } else if (err.response.status == 400) {
-      //          openNofi('warning', 'Нэвтрэх', 'Нэвтрэх нэр эсвэл нууц үг буруу');
-      //       }
-      //    })
-      //    .finally(() => {
-      //       setLoginLoading(false);
-      //    });
    };
-
    const onFinishFailed = (errorInfo) => {
       console.log('Failed:', errorInfo);
    };
