@@ -9,7 +9,7 @@ import {
    PlusOutlined,
    ReloadOutlined
 } from '@ant-design/icons';
-import { Button, Card, ConfigProvider, DatePicker, Empty, Form, Input, Modal, Table, Tag, Typography } from 'antd';
+import { Button, Card, ConfigProvider, DatePicker, Empty, Form, Input, Modal, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
@@ -20,6 +20,7 @@ import { setEmrData } from '../../../../../features/emrReducer';
 import { Get, localMn, localMnC, openNofi, Patch, ScrollRef } from '../../../../comman';
 import orderType from './orderType.json';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
+import MonitorCriteria from '../../../Insurance/MonitorCriteria';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -54,7 +55,6 @@ function Index({ type, isDoctor }) {
    //
    const [selectedRowCabinetId, setSelectRowCabinetId] = useState(Number);
    const [selectedTags, setSelectedTags] = useState(0);
-   //
    const getAppointment = async (page, pageSize, start, end, process) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -106,7 +106,7 @@ function Index({ type, isDoctor }) {
             const data = {
                patientId: row.patientId,
                inspection: inspectionType === undefined ? 1 : inspectionType,
-               insuranceServiceId: row.insuranceServiceId
+               hicsServiceId: row.hicsServiceId
             };
             if (row.startDate === null) {
                const conf = {
@@ -427,14 +427,10 @@ function Index({ type, isDoctor }) {
          }
       },
       {
-         title: 'Онош',
-         dataIndex: 'patientDiagnosis',
-         render: (text) => {
-            var dDiagnose = '';
-            text?.map((diagnose) => {
-               dDiagnose += `${diagnose.diagnose?.code},`;
-            });
-            return dDiagnose;
+         title: 'Хяналт',
+         width: 60,
+         render: (_text, row) => {
+            return <MonitorCriteria props={{ serviceId: row.id, serviceType: 5 }} />;
          }
       },
       {

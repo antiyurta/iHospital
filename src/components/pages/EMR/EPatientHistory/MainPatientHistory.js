@@ -1,16 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Tabs, Row, Button, Form, Divider, Select, Modal, Result, Spin, Input } from 'antd';
+import { Tabs, Button, Form, Modal, Result, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
-import { useDispatch, useSelector } from 'react-redux';
-import { DelNote, selectCurrentNote, selectCurrentToken, selectCurrentUserId } from '../../../../features/authReducer';
-import DynamicFormInspection from '../../DynamicFormInspection';
+import { useSelector } from 'react-redux';
+import { selectCurrentNote, selectCurrentUserId } from '../../../../features/authReducer';
 import HistoryTab from './HistoryTab';
-import { Get, Patch, Post } from '../../../comman';
-import Diagnose from '../../service/Diagnose';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
-const { Option } = Select;
-const { TextArea } = Input;
+import jwtInterceopter from '../../../jwtInterceopter';
 function MainPatientHistory({
    AppointmentId,
    XrayRequestId,
@@ -19,13 +15,10 @@ function MainPatientHistory({
    CabinetId,
    Inspection,
    UsageType,
-   insuranceServiceId,
+   hicsServiceId,
    handleClick
 }) {
    const [form] = Form.useForm();
-   const [tabs, setTabs] = useState([]);
-   const [validStep, setValidStep] = useState(false);
-   const token = useSelector(selectCurrentToken);
    const editNote = useSelector(selectCurrentNote);
    const userId = useSelector(selectCurrentUserId);
    const config = {
@@ -35,15 +28,9 @@ function MainPatientHistory({
    const patientId = PatientId;
    const inspection = Inspection;
    const cabinetId = CabinetId;
-   const appointmentId = AppointmentId;
-   const xrayRequestId = XrayRequestId;
    const [activeKey, setActiveKey] = useState('item-history');
    const [confirmModal, setConfirmModal] = useState(false);
    const [loading, setLoading] = useState(false);
-   const dispatch = useDispatch();
-   const DiagnoseHandleClick = (diagnoses) => {
-      form.setFieldValue('diagnose', diagnoses);
-   };
    const Tab1Content = useCallback(() => {
       return <HistoryTab patientId={patientId} inspection={inspection} />;
    }, []);
@@ -64,307 +51,10 @@ function MainPatientHistory({
                inspection: Inspection
             }}
             handleClick={handleClick}
+            hicsServiceId={hicsServiceId}
          />
       );
-      return (
-         <Spin spinning={loading}>
-            <Form
-               name="basic"
-               // initialValues={{ remember: true }}
-               onFinish={(e) => saveDynamicTab(e, props.formKey)}
-               onFinishFailed={onFinishFailed}
-               // autoComplete="off"
-               labelAlign="left"
-               scrollToFirstError
-               className="overflow-auto"
-               layout={UsageType === 'OUT' ? '' : 'vertical'}
-               form={form}
-            >
-               <>
-                  {UsageType === 'OUT' ? (
-                     <>
-                        <div className="hidden">
-                           <Form.Item name="description">
-                              <TextArea disabled={true} />
-                           </Form.Item>
-                        </div>
-                        {'pain' in props.data && props.data.pain.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Зовиур
-                              </Divider>
-                              {props.data['pain'].map((pain, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{pain.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={pain.options}
-                                             forkey={pain.label}
-                                             unikey={pain.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {'inspection' in props.data && props.data.inspection.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Бодит үзлэг
-                              </Divider>
-                              {props.data['inspection'].map((inspection, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{inspection.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={inspection.options}
-                                             forkey={inspection.label}
-                                             unikey={inspection.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {'question' in props.data && props.data.question.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Асуумж
-                              </Divider>
-                              {props.data['question'].map((question, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{question.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={question.options}
-                                             forkey={question.label}
-                                             unikey={question.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {'plan' in props.data && props.data.plan.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Төлөвлөгөө
-                              </Divider>
-                              {props.data['plan'].map((plan, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{plan.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={plan.options}
-                                             forkey={plan.label}
-                                             unikey={plan.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {'conclusion' in props.data && props.data.conclusion.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Дүгнэлт
-                              </Divider>
-                              {props.data['conclusion'].map((conclusion, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{conclusion.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={conclusion.options}
-                                             forkey={conclusion.label}
-                                             unikey={conclusion.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {'advice' in props.data && props.data.advice.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Зөвлөгөө
-                              </Divider>
-                              {props.data['advice'].map((advice, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{advice.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={advice.options}
-                                             forkey={advice.label}
-                                             unikey={advice.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {props.data && Inspection != 11 && UsageType === 'OUT' ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Онош
-                              </Divider>
-                              <Diagnose handleClick={DiagnoseHandleClick} type={0} />
-                           </>
-                        ) : null}
-                     </>
-                  ) : (
-                     <>
-                        {'pain' in props.data && props.data.pain.length > 0 ? (
-                           <>
-                              <Divider orientation="left" className="text-sm my-2">
-                                 Зовиур
-                              </Divider>
-                              {props.data['pain'].map((pain, index) => {
-                                 return (
-                                    <div key={index}>
-                                       {inspection === 1 && (
-                                          <div>
-                                             <p className="mt-2 font-semibold">{pain.label}</p>
-                                             <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                          </div>
-                                       )}
-                                       <div>
-                                          <DynamicFormInspection
-                                             data={pain.options}
-                                             forkey={pain.label}
-                                             unikey={pain.inspectionType}
-                                          />
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </>
-                        ) : null}
-                        {/* {<Index id={props.formKey} data={props.data} />} */}
-                     </>
-                  )}
-               </>
-               <Form.Item
-                  wrapperCol={{
-                     span: 16
-                  }}
-               >
-                  <Row className="mt-2">
-                     <Button
-                        type="primary"
-                        htmlType="submit"
-                        // onClick={() => validStep && saveDynamicTab()}
-                        loading={loading}
-                     >
-                        EMR хадгалах
-                     </Button>
-                  </Row>
-               </Form.Item>
-            </Form>
-         </Spin>
-      );
    }, []);
-
-   const saveDynamicTab = async (values, key) => {
-      setLoading(true);
-      const data = {
-         cabinetId: cabinetId,
-         patientId: patientId,
-         doctorId: userId,
-         usageType: UsageType,
-         description: values.description
-      };
-      var diagnoseData = [];
-      values.diagnose?.map((diagnose) => {
-         diagnoseData.push({
-            patientId: patientId,
-            type: 0,
-            usageType: UsageType,
-            diagnoseId: diagnose.id,
-            diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId: UsageType === 'IN' ? appointmentId : null,
-            appointmentId: UsageType === 'OUT' ? appointmentId : null
-         });
-      });
-      console.log(values);
-      if (inspection === 11 || inspection === 12) {
-         data['xrayRequestId'] = xrayRequestId;
-         data['conclusion'] = JSON.stringify(values['conclusion']);
-         data['advice'] = JSON.stringify(values['advice']);
-      } else {
-         data['pain'] = JSON.stringify(values['pain']);
-         data['question'] = JSON.stringify(values['question']);
-         data['inspection'] = JSON.stringify(values['inspection']);
-         data['plan'] = JSON.stringify(values['plan']);
-      }
-      if (UsageType === 'IN') {
-         data['inpatientRequestId'] = appointmentId;
-      } else if (UsageType === 'OUT') {
-         data['appointmentId'] = appointmentId;
-      }
-      data['formId'] = key;
-      data['diagnoses'] = diagnoseData;
-      const response = await Post('emr/inspectionNote', token, config, data);
-      if (response === 201) {
-         setActiveKey('');
-         dispatch(DelNote());
-         if (inspection === 11 || inspection === 12) {
-            Patch('service/xrayRequest/' + XrayRequestId, token, config, {
-               xrayProcess: 2
-            });
-         } else {
-            // setConfirmModal(true);
-            handleClick({ target: { value: 'OCS' } });
-         }
-      }
-      setLoading(false);
-   };
-
-   const onFinishFailed = (errorInfo) => {
-      console.log('Failed:', errorInfo);
-      setValidStep(false);
-   };
    const [items, setItems] = useState([
       {
          label: 'Амьдралын түүх',
@@ -378,49 +68,68 @@ function MainPatientHistory({
       }
    ]);
    const getExoInspectionTabs = async () => {
+      setLoading(true);
       config.params.cabinetId = cabinetId;
-      const response = await Get('emr/inspection-form', token, config);
-      if (response.data.length > 0) {
-         response?.data?.map((el) => {
-            setItems([
-               {
-                  label: 'Дүгнэлт',
-                  key: `item-exo`,
-                  children: <DynamicTabContent data={el.formItem} />
-               }
-            ]);
+      await jwtInterceopter
+         .get('emr/inspection-form', {
+            params: {
+               cabinetId: cabinetId
+            }
+         })
+         .then((response) => {
+            response.data.response.data?.map((el) => {
+               setItems([
+                  {
+                     label: 'Дүгнэлт',
+                     key: `item-exo`,
+                     children: <DynamicTabContent data={el.formItem} />
+                  }
+               ]);
+            });
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setLoading(false);
          });
-      }
-      config.params.cabinetId = null;
    };
    const getInspectionTabs = async () => {
+      setLoading(true);
       //Тухайн эмчид харагдах TAB ууд
-      if (UsageType === 'IN') {
-         config.params.structureId = cabinetId;
-      } else {
-         config.params.cabinetId = cabinetId;
-      }
-      config.params.usageType = UsageType;
-      const response = await Get('emr/inspection-form', token, config);
-      if (response.data.length > 0) {
-         response?.data?.map((el) => {
-            setItems((items) => [
-               ...items,
-               {
-                  label: el.name,
-                  key: `item-${el.id}`,
-                  children: (
-                     <DynamicTabContent
-                        data={el.formItem}
-                        formKey={el.formId != null ? el.formId : el.id}
-                        formName={el.name}
-                     />
-                  )
-               }
-            ]);
+      const conf = {
+         params: {
+            usageType: UsageType,
+            structureId: UsageType === 'IN' ? cabinetId : null,
+            cabinetId: UsageType === 'OUT' ? cabinetId : null
+         }
+      };
+      await jwtInterceopter
+         .get('emr/inspection-form', conf)
+         .then((response) => {
+            response.data.response.data?.map((el) => {
+               setItems((items) => [
+                  ...items,
+                  {
+                     label: el.name,
+                     key: `item-${el.id}`,
+                     children: (
+                        <DynamicTabContent
+                           data={el.formItem}
+                           formKey={el.formId != null ? el.formId : el.id}
+                           formName={el.name}
+                        />
+                     )
+                  }
+               ]);
+            });
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setLoading(false);
          });
-      }
-      config.params.cabinetId = null;
    };
    const defualtForm = {
       pain: [
@@ -529,7 +238,6 @@ function MainPatientHistory({
          } else if (inspection === 12) {
             getExoInspectionTabs();
          }
-      } else {
       }
    }, [UsageType]);
    const configure = () => {
@@ -564,7 +272,7 @@ function MainPatientHistory({
             <MainInpatientHistory
                patientId={PatientId}
                inpatientRequestId={InpatientRequestId}
-               insuranceServiceId={insuranceServiceId}
+               hicsServiceId={hicsServiceId}
             />
          )}
          <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>

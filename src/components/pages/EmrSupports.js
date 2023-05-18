@@ -15,7 +15,7 @@ import Diagnose from './service/Diagnose';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function EmrSupports({ appointmentId, usageType, patient, patientId }) {
+function EmrSupports({ hiscServiceName, appointmentId, usageType, patient, patientId }) {
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    let location = useLocation();
@@ -245,6 +245,9 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
             }}
          >
             <div className="flow-root">
+               <div className="float-left">
+                  <p style={{ fontWeight: 700, fontSize: 18 }}>{hiscServiceName}</p>
+               </div>
                <div className="float-right">
                   <Button
                      danger
@@ -262,7 +265,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                   </Button>
                </div>
             </div>
-            {isInsurance && (
+            {/* {isInsurance && (
                <div className="flow-root">
                   <div className="float-left">
                      <Button.Group>
@@ -280,7 +283,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      </Button.Group>
                   </div>
                </div>
-            )}
+            )} */}
             {/* <Button onClick={() => setIsOpenDocumentModal(true)}>
                Өвчний түүх
             </Button> */}

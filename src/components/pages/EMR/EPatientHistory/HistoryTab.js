@@ -46,43 +46,39 @@ export default function HistoryTab({ patientId, inspection }) {
 
    return (
       <Form form={historyForm} autoComplete="off" labelAlign="left" scrollToFirstError layout="vertical">
-         <Collapse accordion defaultActiveKey={['1']}>
-            <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
-               <Step1 />
-            </Panel>
-            <Panel header="Өвчний түүх" key="2">
-               <Step2 />
-            </Panel>
-            <Panel header="Амьдралын хэв маяг" key="3">
-               <Step3 />
-            </Panel>
-            <Panel header="Амьдралын нөхцөл" key="14">
-               <Step4 />
-            </Panel>
-            <Panel header="Харшил" key="5">
-               <Step5 />
-            </Panel>
-            <Panel header="Эмийн хэрэглээ" key="6">
-               <Step6 />
-            </Panel>
-            <Panel header="Тархвар зүйн асуумж" key="7">
-               <Step7 />
-            </Panel>
-            <Panel header="Удамшлын асуумж" key="8">
-               <Step8 />
-            </Panel>
-         </Collapse>
-         <Row className="mt-2">
-            <Form.Item
-               wrapperCol={{
-                  span: 16
-               }}
-            >
+         <div className="flex flex-col gap-3">
+            <Collapse accordion defaultActiveKey={['1']}>
+               <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
+                  <Step1 />
+               </Panel>
+               <Panel header="Өвчний түүх" key="2">
+                  <Step2 />
+               </Panel>
+               <Panel header="Амьдралын хэв маяг" key="3">
+                  <Step3 />
+               </Panel>
+               <Panel header="Амьдралын нөхцөл" key="14">
+                  <Step4 />
+               </Panel>
+               <Panel header="Харшил" key="5">
+                  <Step5 />
+               </Panel>
+               <Panel header="Эмийн хэрэглээ" key="6">
+                  <Step6 />
+               </Panel>
+               <Panel header="Тархвар зүйн асуумж" key="7">
+                  <Step7 />
+               </Panel>
+               <Panel header="Удамшлын асуумж" key="8">
+                  <Step8 />
+               </Panel>
+            </Collapse>
+            <Form.Item>
                <Button type="primary" htmlType="submit" onClick={() => saveHistory()}>
                   Амьдралын түүх xадгалах
                </Button>
             </Form.Item>
-         </Row>
+         </div>
       </Form>
    );
 }

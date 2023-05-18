@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Input, Row, Spin } from 'antd';
+import { Button, Divider, Form, Input, Row, Select, Spin, Table } from 'antd';
 import DynamicFormInspection from '../../DynamicFormInspection';
 import Diagnose from '../../service/Diagnose';
-import { DelNote, selectCurrentToken } from '../../../../features/authReducer';
+import { selectCurrentToken } from '../../../../features/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { Patch, Post } from '../../../comman';
+import EditableFormItem from '../../611/Support/EditableFormItem';
+import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
+import jwtInterceopter from '../../../jwtInterceopter';
+import { openNofi } from '../../../comman';
 const { TextArea } = Input;
-function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true }) {
+const { Column } = Table;
+const { Option } = Select;
+function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, hicsServiceId }) {
    const [form] = Form.useForm();
-   const token = useSelector(selectCurrentToken);
-   const dispatch = useDispatch();
    const [loading, setLoading] = useState(false);
    const DiagnoseHandleClick = (diagnoses) => {
       form.setFieldValue('diagnose', diagnoses);
@@ -23,18 +26,20 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
          usageType: incomeData.usageType,
          description: values.description
       };
-      var diagnoseData = [];
-      values.diagnose?.map((diagnose) => {
-         diagnoseData.push({
-            patientId: incomeData.patientId,
-            type: 0,
-            usageType: incomeData.usageType,
-            diagnoseId: diagnose.id,
-            diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.appointmentId : null,
-            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+      if (editForOUT) {
+         var diagnoseData = [];
+         values.diagnose?.map((diagnose) => {
+            diagnoseData.push({
+               patientId: incomeData.patientId,
+               type: diagnose.type,
+               usageType: incomeData.usageType,
+               diagnoseId: diagnose.id,
+               diagnoseType: diagnose.diagnoseType,
+               inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
+               appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+            });
          });
-      });
+      }
       if (incomeData.inspection === 11 || incomeData.inspection === 12) {
          data['xrayRequestId'] = incomeData.xrayRequestId;
          data['conclusion'] = JSON.stringify(values['conclusion']);
@@ -52,21 +57,29 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
       }
       data['formId'] = key;
       data['diagnoses'] = diagnoseData;
-      const config = {
-         headers: {},
-         params: {}
-      };
-      const response = await Post('emr/inspectionNote', token, config, data);
-      if (response === 201) {
-         if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-            Patch('service/xrayRequest/' + incomeData.xrayRequestId, token, config, {
-               xrayProcess: 2
-            });
-         } else {
-            handleClick({ target: { value: 'OCS' } });
-         }
-      }
-      setLoading(false);
+      await jwtInterceopter
+         .post('emr/inspectionNote', data)
+         .then((response) => {
+            if (response.status === 201) {
+               openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+               if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                  jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                     xrayProcess: 2
+                  });
+               } else {
+                  handleClick({ target: { value: 'OCS' } });
+               }
+            }
+            console.log(response);
+         })
+         .catch((error) => {
+            if (error.response.status === 409) {
+               openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
+            }
+         })
+         .finally(() => {
+            setLoading(false);
+         });
    };
 
    const onFinishFailed = (errorInfo) => {
@@ -265,7 +278,55 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
                            <Divider orientation="left" className="text-sm my-2">
                               Онош
                            </Divider>
-                           <Diagnose handleClick={DiagnoseHandleClick} types={[0, 1, 2]} />
+                           <Diagnose
+                              handleClick={DiagnoseHandleClick}
+                              types={[0, 1, 2]}
+                              hicsServiceId={hicsServiceId}
+                           />
+                           <Form.List name="diagnose">
+                              {(diagnose) => (
+                                 <Table bordered dataSource={diagnose} pagination={false}>
+                                    <Column
+                                       dataIndex={'code'}
+                                       title="Код"
+                                       render={(_value, _row, index) => {
+                                          return (
+                                             <EditableFormItem name={[index, 'code']}>
+                                                <Input />
+                                             </EditableFormItem>
+                                          );
+                                       }}
+                                    />
+                                    <Column
+                                       dataIndex={'nameMn'}
+                                       title="Код"
+                                       render={(_value, _row, index) => {
+                                          return (
+                                             <EditableFormItem name={[index, 'nameMn']}>
+                                                <Input />
+                                             </EditableFormItem>
+                                          );
+                                       }}
+                                    />
+                                    <Column
+                                       dataIndex={'diagnoseType'}
+                                       title="Оношийн төрөл"
+                                       render={(_value, _row, index) => {
+                                          return (
+                                             <EditableFormItemSelect name={[index, 'diagnoseType']}>
+                                                <Select style={{ width: '100%' }}>
+                                                   <Option value={0}>Үндсэн</Option>
+                                                   <Option value={1}>Урьдчилсан</Option>
+                                                   <Option value={2}>Хавсрах онош</Option>
+                                                   <Option value={3}>Дагалдах</Option>
+                                                </Select>
+                                             </EditableFormItemSelect>
+                                          );
+                                       }}
+                                    />
+                                 </Table>
+                              )}
+                           </Form.List>
                         </>
                      ) : null}
                   </>

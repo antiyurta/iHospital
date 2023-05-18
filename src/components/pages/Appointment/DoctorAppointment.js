@@ -96,68 +96,60 @@ function DoctorAppointment() {
       ScrollRef(scrollRef);
    }, []);
    return (
-      <div>
-         <div className="flex flex-wrap">
-            <div className="w-full md:w-4/12 p-1">
-               <PatientInformation patient={selectedPatient} handlesearch={onSearchSchedule} />
-            </div>
-            <div className="w-full md:w-4/12 p-1">
-               <Card
-                  bordered={false}
-                  title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
-                  className="header-solid max-h-max rounded-md"
-                  bodyStyle={{
-                     paddingTop: 0,
-                     paddingLeft: 10,
-                     paddingRight: 10,
-                     paddingBottom: 10,
-                     minHeight: 150,
-                     maxHeight: 150
+      <div className="flex flex-col gap-3">
+         <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+            <PatientInformation patient={selectedPatient} handlesearch={onSearchSchedule} />
+            <Card
+               bordered={false}
+               title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
+               className="header-solid max-h-max rounded-md"
+               bodyStyle={{
+                  paddingTop: 0,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  paddingBottom: 10
+               }}
+               extra={
+                  <>
+                     <Pagination
+                        simple
+                        current={notPatientsMeta.page}
+                        pageSize={notPatientsMeta.limit}
+                        total={notPatientsMeta.itemCount}
+                        onChange={(page, pageSize) => onSearchSchedule(page, pageSize, notPatientsValue)}
+                     />
+                  </>
+               }
+            >
+               <Table
+                  rowKey={'id'}
+                  loading={{
+                     spinning: notPatientsListLoading,
+                     tip: 'Уншиж байна...'
                   }}
-                  extra={
-                     <>
-                        <Pagination
-                           simple
-                           current={notPatientsMeta.page}
-                           pageSize={notPatientsMeta.limit}
-                           total={notPatientsMeta.itemCount}
-                           onChange={(page, pageSize) => onSearchSchedule(page, pageSize, notPatientsValue)}
-                        />
-                     </>
-                  }
-               >
-                  <Table
-                     rowKey={'id'}
-                     loading={{
-                        spinning: notPatientsListLoading,
-                        tip: 'Уншиж байна...'
-                     }}
-                     scroll={{
-                        y: 100
-                     }}
-                     bordered
-                     onRow={(row) => {
-                        return {
-                           onClick: () => {
-                              getPatientById(row.id);
-                           }
-                        };
-                     }}
-                     rowClassName="hover:cursor-pointer"
-                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                     columns={notPatientsListColumn}
-                     dataSource={notPatientsList}
-                     pagination={false}
-                  />
-               </Card>
-            </div>
-            <div className="w-full md:w-4/12 p-1">
+                  scroll={{
+                     y: 150
+                  }}
+                  bordered
+                  onRow={(row) => {
+                     return {
+                        onClick: () => {
+                           getPatientById(row.id);
+                        }
+                     };
+                  }}
+                  rowClassName="hover:cursor-pointer"
+                  locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                  columns={notPatientsListColumn}
+                  dataSource={notPatientsList}
+                  pagination={false}
+               />
+            </Card>
+            <div className="lg:col-span-2 xl:col-span-1">
                <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
             </div>
          </div>
-         <div className="px-1">
-            <Appointment selectedPatient={selectedPatient} type={1} />
-         </div>
+         <Appointment selectedPatient={selectedPatient} type={1} />
       </div>
    );
 }

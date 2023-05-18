@@ -17,6 +17,7 @@ import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { DefaultPatch, Get, Patch } from '../../../comman';
 import examinationProcess from '../examinationProcess.json';
+import MonitorCriteria from '../../Insurance/MonitorCriteria';
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -74,7 +75,7 @@ function Index() {
    const requestListColumn = [
       {
          title: '№',
-         render: (_, record, index) => {
+         render: (_, _record, index) => {
             return requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1);
          }
       },
@@ -95,6 +96,13 @@ function Index() {
          dataIndex: 'erequests_requestDate',
          render: (text) => {
             return moment(text).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'Хяналт',
+         width: 60,
+         render: (_text, row) => {
+            return <MonitorCriteria props={{ serviceId: row.erequests_id, serviceType: 0 }} />;
          }
       },
       {

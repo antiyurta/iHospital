@@ -1,14 +1,19 @@
 import axios from 'axios';
+import { openNofi } from './comman';
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 const jwtInterceopter = axios.create({});
+
+jwtInterceopter.defaults.baseURL = DEV_URL;
+
 jwtInterceopter.interceptors.request.use((config) => {
    let tokens = JSON.parse(localStorage.getItem('tokens'));
-   config.url = DEV_URL + config.url;
-   config.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
-   config.headers.common['x-api-key'] = API_KEY;
+   if (tokens) {
+      config.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
+      config.headers.common['x-api-key'] = API_KEY;
+   }
    return config;
 });
 
@@ -17,21 +22,33 @@ jwtInterceopter.interceptors.response.use(
       return response;
    },
    async (error) => {
-      console.log(error);
-      if (error.response.status === 401) {
-         let tokens = JSON.parse(localStorage.getItem('tokens'));
-         const payload = {
-            access_token: tokens.accessToken,
-            refresh_token: tokens.refreshToken
-         };
-         let apiResponse = await axios.post(DEV_URL + 'auth/refreshtoken', payload);
-         console.log(apiResponse);
-         error.config.headers['Authorization'] = `Bearer ${apiResponse.accessToken}`;
-         error.config.headers['x-api-key'] = API_KEY;
-         return axios(error.config);
-      } else {
-         return Promise.reject(error);
+      const originalConfig = error.config;
+      if (originalConfig.url !== '/login' && error.response) {
+         if (error.response.status === 401 && !originalConfig._retry) {
+            originalConfig._retry = true;
+            try {
+               let tokens = JSON.parse(localStorage.getItem('tokens'));
+               const response = await axios.get(DEV_URL + 'authentication/refresh', {
+                  headers: {
+                     Authorization: `Bearer ${tokens.accessToken}`,
+                     'refresh-token': `${tokens.refreshToken}`,
+                     'x-api-key': API_KEY
+                  }
+               });
+               console.log(response);
+               localStorage.setItem('tokens', JSON.stringify(response.data.response));
+               error.config.headers['Authorization'] = `bearer ${response.data.response.accessToken}`;
+               error.config.headers['x-api-key'] = API_KEY;
+               return axios(error.config);
+            } catch (_error) {
+               openNofi('info', 'Анхааруулга', 'Системд нэвтрэх хугацаа дууссан байна.');
+               localStorage.removeItem('tokens');
+               window.location.href = '/login';
+               return Promise.reject(_error);
+            }
+         }
       }
+      return Promise.reject(error);
    }
 );
 

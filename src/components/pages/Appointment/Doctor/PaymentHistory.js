@@ -67,7 +67,7 @@ function PaymentHistory({ patientId }) {
                tip: 'Уншиж байна...'
             }}
             scroll={{
-               y: 100
+               y: 150
             }}
             locale={{ emptyText: <Empty description={'Хоосон'} /> }}
             columns={columns}

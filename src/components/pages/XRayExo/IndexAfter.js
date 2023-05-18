@@ -16,6 +16,7 @@ import { Get, openNofi, Patch, ScrollRef } from '../../comman';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { setEmrData } from '../../../features/emrReducer';
+import MonitorCriteria from '../Insurance/MonitorCriteria';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 const { RangePicker } = DatePicker;
@@ -264,6 +265,13 @@ function IndexAfter({ type, params }) {
       {
          title: 'Эмч',
          dataIndex: ['employees', 'firstName']
+      },
+      {
+         title: 'Хяналт',
+         width: 60,
+         render: (_text, row) => {
+            return <MonitorCriteria props={{ serviceId: row.id, serviceType: 1 }} />;
+         }
       },
       {
          title: 'Даатгал',

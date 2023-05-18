@@ -13,6 +13,7 @@ const { Panel } = Collapse;
 
 function EditableTable(props) {
    const { documents, form, positions, add, remove } = props;
+   console.log(documents);
    const token = useSelector(selectCurrentToken);
    const [confForm] = Form.useForm();
    const [editModePosition, setEditModePosition] = useState(false);

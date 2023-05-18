@@ -172,65 +172,34 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
             title={<h6 className="font-semibold m-0">Өвчтөний мэдээлэл</h6>}
             className="header-solid max-h-max rounded-md"
             bodyStyle={{
-               paddingTop: 10,
+               paddingTop: 0,
                paddingLeft: 10,
                paddingRight: 10,
-               paddingBottom: 10,
-               minHeight: 150,
-               maxHeight: 150
+               paddingBottom: 10
             }}
-            extra={
-               handlesearch ? (
-                  <Search placeholder="Регистр/Нэрээр хайх" onSearch={onSearch} enterButton="Хайх" />
-               ) : (
-                  <div>
-                     <Button.Group>
-                        <Button onClick={() => setIsOpenHistory(true)}>Өвчний түүх</Button>
-                        <Button
-                           // onClick={() => setIsOpenAM(true)}
-                           onClick={() => getDocuments()}
-                           className="ml-2"
-                           loading={isLoadingGetDocuments}
-                           icon={<SnippetsOutlined />}
-                        >
-                           Маягт
-                        </Button>
-                     </Button.Group>
-                  </div>
-               )
-            }
          >
-            <div className="flex flex-row">
-               <div className="basis-1/4 p-1">
-                  <div
-                     className="container h-24 min-h-24 bg-contain bg-no-repeat bg-center"
-                     style={{ backgroundImage: 'url(' + male + ')' }}
-                  ></div>
+            <div
+               style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
+               }}
+            >
+               {handlesearch && (
+                  <div className="w-full">
+                     <Search placeholder="Регистр/Нэрээр хайх" onSearch={onSearch} enterButton="Хайх" />
+                  </div>
+               )}
+               <div className="w-full">
                   <div
                      style={{
                         display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
+                        flexDirection: 'row',
+                        gap: 12
                      }}
                   >
-                     {OCS && (
-                        <Radio.Group
-                           size="small"
-                           onChange={handleTypeChangePatient}
-                           value={type}
-                           optionType="button"
-                           buttonStyle="solid"
-                           className="small-radio-button mt-2"
-                        >
-                           <Radio.Button value="OCS">OTS</Radio.Button>
-                           <Radio.Button value="EMR">EMR</Radio.Button>
-                        </Radio.Group>
-                     )}
-                  </div>
-               </div>
-               <div className="basis-3/4 p-1">
-                  <div className="container">
-                     <Descriptions column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}>
+                     <img className="w-24" src={male} alt="patient" />
+                     <Descriptions column={{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 2, xs: 1 }}>
                         <Descriptions.Item label="Овог">{patient?.lastName}</Descriptions.Item>
                         <Descriptions.Item label="Нэр">{patient?.firstName}</Descriptions.Item>
                         <Descriptions.Item label="Хүйс">{getGender(patient?.registerNumber)}</Descriptions.Item>
@@ -249,6 +218,66 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         </Descriptions.Item>
                      </Descriptions>
                   </div>
+               </div>
+               <div className="w-full">
+                  {OCS && (
+                     <div
+                        style={{
+                           display: 'flex',
+                           flexDirection: 'row',
+                           gap: 12
+                        }}
+                     >
+                        <div
+                           style={{
+                              minWidth: 96,
+                              textAlign: 'center'
+                           }}
+                        >
+                           <Radio.Group
+                              size="small"
+                              onChange={handleTypeChangePatient}
+                              value={type}
+                              optionType="button"
+                              buttonStyle="solid"
+                           >
+                              <Radio.Button
+                                 style={{
+                                    height: 28
+                                 }}
+                                 value="OCS"
+                              >
+                                 OTS
+                              </Radio.Button>
+                              <Radio.Button
+                                 style={{
+                                    height: 28
+                                 }}
+                                 value="EMR"
+                              >
+                                 EMR
+                              </Radio.Button>
+                           </Radio.Group>
+                        </div>
+                        <div className="w-full">
+                           {OCS && (
+                              <div className="w-full justify-end flex flex-row gap-3">
+                                 <Button className="h-6" type="primary" onClick={() => setIsOpenHistory(true)}>
+                                    Өвчний түүх
+                                 </Button>
+                                 <Button
+                                    type="primary"
+                                    onClick={() => getDocuments()}
+                                    loading={isLoadingGetDocuments}
+                                    icon={<SnippetsOutlined />}
+                                 >
+                                    Маягт
+                                 </Button>
+                              </div>
+                           )}
+                        </div>
+                     </div>
+                  )}
                </div>
             </div>
          </Card>
