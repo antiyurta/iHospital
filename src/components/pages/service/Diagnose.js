@@ -9,19 +9,17 @@ import {
 import { Button, ConfigProvider, Form, Input, Modal, Pagination, Popconfirm, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 // import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, localMn, openNofi } from '../../comman';
-import DiagnoseTypes from './DiagnoseTypes.json';
+import { localMn, openNofi } from '../../comman';
 import jwtInterceopter from '../../jwtInterceopter';
 import EditableFormItem from '../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
 const { Search } = Input;
 const { TextArea } = Input;
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 const { Column } = Table;
-function Diagnose({ handleClick, types, hicsServiceId }) {
+function Diagnose({ handleClick, types, appointmentHasInsurance }) {
    const [diagnosesForm] = Form.useForm();
+   const [hicsServiceIdForm] = Form.useForm();
    const [diagnoses, setDiagnoses] = useState([]);
    const [hicsCost, setHicsCost] = useState([]);
    const [editMode, setEditMode] = useState(false);
@@ -31,6 +29,8 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
    const [param, setParam] = useState('');
    const [paramValue, setParamValue] = useState('');
    //
+   const [insuranceService, setInsuranceService] = useState([]);
+   const [hicsServiceId, setHicsServiceId] = useState(null);
    //
    const [isOpenDiagnoseModal, setIsOpenDiagnoseModal] = useState(false);
    const [editingIndex, setEditingIndex] = useState(undefined);
@@ -107,9 +107,19 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
             console.log(error.errorFields);
          });
    };
-   useEffect(() => {
-      getDiagnoses(1, 10, paramValue, param);
-   }, []);
+   const getInsuranceService = async () => {
+      await jwtInterceopter
+         .get('insurance/hics-service-group', {
+            params: {
+               usageType: 'OUT'
+            }
+         })
+         .then((response) => {
+            console.log(response);
+            setInsuranceService(response.data.data);
+         });
+   };
+
    const getHicsCost = async (value, index) => {
       setHicsCost([]);
       const diagnoeses = diagnosesForm.getFieldValue('diagnoses');
@@ -119,6 +129,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
          openNofi('error', 'Алдаа', 'Үндсэн онош сонгогдсон байна');
          diagnosesForm.resetFields([['diagnoses', index, 'diagnoseType']]);
       } else {
+         console.log(hicsServiceId, value);
          if (hicsServiceId && value === 0) {
             const conf = {
                params: {
@@ -134,11 +145,12 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                })
                .catch((error) => {
                   setHicsCost([]);
-                  openNofi('error', 'Алдаа', error.response.data.message);
+                  openNofi('error', 'Алдаа', error.response.data.message?.replaceAll('HttpException:', ''));
                });
          }
       }
    };
+
    const EditableTable = (props) => {
       const { diagnoses, remove } = props;
       return (
@@ -237,6 +249,14 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
       );
    };
    //
+   useEffect(() => {
+      getDiagnoses(1, 10, paramValue, param);
+   }, []);
+   useEffect(() => {
+      if (appointmentHasInsurance) {
+         getInsuranceService();
+      }
+   }, [appointmentHasInsurance]);
    return (
       <>
          <div>
@@ -245,6 +265,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                onClick={() => {
                   setIsOpenDiagnoseModal(true);
                   diagnosesForm.resetFields();
+                  hicsServiceIdForm.resetFields();
                }}
             >
                Онош сонгох
@@ -257,7 +278,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                }}
                onOk={() => {
                   diagnosesForm.validateFields().then((value) => {
-                     handleClick(value.diagnoses);
+                     handleClick(value.diagnoses, hicsServiceIdForm.getFieldsValue());
                      setIsOpenDiagnoseModal(false);
                   });
                }}
@@ -363,11 +384,23 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                                                       />
                                                    }
                                                    onClick={() => {
-                                                      diagnosesForm
+                                                      hicsServiceIdForm
                                                          .validateFields()
-                                                         .then(() => add(row))
-                                                         .catch((err) => {
-                                                            console.log(err);
+                                                         .then(() => {
+                                                            diagnosesForm
+                                                               .validateFields()
+                                                               .then(() => add(row))
+                                                               .catch((err) => {
+                                                                  console.log(err);
+                                                               });
+                                                         })
+                                                         .catch((error) => {
+                                                            console.log(error);
+                                                            openNofi(
+                                                               'warning',
+                                                               'Анхааруулга',
+                                                               'Үйлчилгээний төрөл сонгох'
+                                                            );
                                                          });
                                                    }}
                                                 />
@@ -393,7 +426,54 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                            </div>
                         </div>
                      </div>
-                     <div>
+                     <div className="flex flex-col gap-3">
+                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                           <div className="p-3">
+                              <p
+                                 className="pb-3"
+                                 style={{
+                                    fontWeight: '600'
+                                 }}
+                              >
+                                 Үйлчилгээний төрөл
+                              </p>
+                              {appointmentHasInsurance && (
+                                 <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                                    <div className="p-1">
+                                       <Form form={hicsServiceIdForm}>
+                                          <Form.Item
+                                             name="hicsServiceId"
+                                             rules={[{ required: true, message: 'Заавал' }]}
+                                             style={{
+                                                width: '100%'
+                                             }}
+                                             className="mb-0"
+                                          >
+                                             <Select
+                                                placeholder="Үйлчилгээний төрөл сонгох"
+                                                onChange={(e) => setHicsServiceId(e)}
+                                             >
+                                                {insuranceService?.map((group, index) => {
+                                                   return (
+                                                      <OptGroup key={index} label={group.name}>
+                                                         {group?.hicsServices?.map((service, idx) => {
+                                                            return (
+                                                               <Option key={`${index}-${idx}`} value={service.id}>
+                                                                  {service.name}
+                                                               </Option>
+                                                            );
+                                                         })}
+                                                      </OptGroup>
+                                                   );
+                                                })}
+                                             </Select>
+                                          </Form.Item>
+                                       </Form>
+                                    </div>
+                                 </div>
+                              )}
+                           </div>
+                        </div>
                         <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                            <div className="p-3">
                               <p

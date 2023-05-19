@@ -5,8 +5,6 @@ import male from '../../assets/images/maleAvatar.svg';
 import { selectCurrentAppId, selectCurrentToken } from '../../features/authReducer';
 import { Get, openNofi } from '../comman';
 import { SnippetsOutlined } from '@ant-design/icons';
-import AMIndex from './EMR/InPatient/document/Ambulatory/Index';
-import { ReturnById, ReturnDetails } from './611/Document/Index';
 
 import Customized from './BeforeAmbulatory/Customized/Index';
 import jwtInterceopter from '../jwtInterceopter';

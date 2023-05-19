@@ -106,7 +106,7 @@ function Index({ type, isDoctor }) {
             const data = {
                patientId: row.patientId,
                inspection: inspectionType === undefined ? 1 : inspectionType,
-               hicsServiceId: row.hicsServiceId
+               isInsurance: row.isInsurance
             };
             if (row.startDate === null) {
                const conf = {

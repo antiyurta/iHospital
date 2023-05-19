@@ -15,7 +15,7 @@ function MainPatientHistory({
    CabinetId,
    Inspection,
    UsageType,
-   hicsServiceId,
+   AppointmentHasInsurance,
    handleClick
 }) {
    const [form] = Form.useForm();
@@ -51,7 +51,7 @@ function MainPatientHistory({
                inspection: Inspection
             }}
             handleClick={handleClick}
-            hicsServiceId={hicsServiceId}
+            appointmentHasInsurance={AppointmentHasInsurance}
          />
       );
    }, []);
@@ -227,7 +227,6 @@ function MainPatientHistory({
       ]);
    };
    useEffect(() => {
-      console.log(UsageType, inspection);
       if (UsageType === 'OUT') {
          if (inspection === 1) {
             getInspectionTabs();
