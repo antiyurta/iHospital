@@ -1,19 +1,12 @@
-import { Card, Button, Modal, Select, Pagination, Table, Result, Spin } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost, Get, openNofi, Post, ScrollRef } from '../../comman';
+import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider } from 'antd';
+import React, { useState } from 'react';
+import { localMn, openNofi } from '../../comman';
 import PatientInformation from '../PatientInformation';
 import Order from '../Order/Order';
 import Schedule from '../OCS/Schedule';
-import moment from 'moment';
-import FullScreenLoader from '../../FullScreenLoader';
-
-const { Option } = Select;
+import jwtInterceopter from '../../jwtInterceopter';
 
 function Ambulatory() {
-   const token = useSelector(selectCurrentToken);
-   const [cardLoading, setCardLoading] = useState(false);
    const [orderModal, setOrderModal] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
    // owchton haih ued
@@ -22,8 +15,6 @@ function Ambulatory() {
    // tolbor awah darah ued
    const [isLoadingGetPayInfo, setIsLoadingGetPayInfo] = useState(false);
    // tolbor awah darah ued
-
-   const [isConfirmLoading, setIsConfirmLoading] = useState(false);
    const [patientsList, setPatientsList] = useState([]);
    const [notPatientsList, setNotPatientsList] = useState([]);
    const [notPatientsMeta, setNotPatientsMeta] = useState({
@@ -31,66 +22,79 @@ function Ambulatory() {
       limit: 10
    });
    const [notPatientsValue, setNotPatientsValue] = useState('');
-   //
    const [payments, setPayments] = useState([]);
-
-   //
    const [selectedPatient, setSelectedPatient] = useState([]);
-   const scrollRef = useRef();
-   const config = {
-      headers: {},
-      params: {}
-   };
-   const onSearch = async (page, pageSize, value) => {
+   const onSearch = async (_page, _pageSize, value) => {
       setIsLoadingFilter(true);
-      const conf = {
-         headers: {},
-         params: {
-            filter: value
-         }
-      };
-      const response = await Get('payment/patient', token, conf);
-      setPatientsList(response);
-      setIsLoadingFilter(false);
+      await jwtInterceopter
+         .get('payment/patient', {
+            params: {
+               filter: value
+            }
+         })
+         .then((response) => {
+            setPatientsList(response.data.response);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoadingFilter(false);
+         });
    };
    const onSearchPayment = async (page, pageSize, value) => {
       setNotPatientLoading(true);
       if (value != undefined) {
          setNotPatientsValue(value);
       }
-      const conf = {
-         headers: {},
-         params: {
-            filter: value,
-            page: page,
-            limit: pageSize
-         }
-      };
-      const response = await Get('pms/patient', token, conf);
-      setNotPatientsMeta(response.meta);
-      setNotPatientsList(response.data);
-      setNotPatientLoading(false);
+      await jwtInterceopter
+         .get('pms/patient', {
+            params: {
+               filter: value,
+               page: page,
+               limit: pageSize
+            }
+         })
+         .then((response) => {
+            setNotPatientsList(response.data.response.data);
+            setNotPatientsMeta(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setNotPatientLoading(false);
+         });
    };
    const getPayment = async (id) => {
       setIsLoadingGetPayInfo(true);
-      setIsOpen(true);
-      const conf = {
-         headers: {},
-         params: {
-            patientId: id
-         }
-      };
-      const response = await Get('payment/invoice', token, conf);
-      getPatient(id);
-      setPayments(response.data);
-      setIsLoadingGetPayInfo(false);
+      await jwtInterceopter
+         .get('payment/invoice', {
+            params: {
+               patientId: id
+            }
+         })
+         .then((response) => {
+            getPatient(id);
+            setPayments(response.data.response.data);
+            setIsOpen(true);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(setIsLoadingGetPayInfo(false));
    };
    const getPatient = async (id) => {
-      const patient = await Get('pms/patient/' + id, token, config);
-      setSelectedPatient(patient);
+      await jwtInterceopter
+         .get('pms/patient/' + id)
+         .then((response) => {
+            setSelectedPatient(response.data.response);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    const saveOrder = async (value) => {
-      // console.log(value);
       if (selectedPatient && selectedPatient.length === 0) {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       } else if (value.length > 0) {
@@ -100,16 +104,23 @@ function Ambulatory() {
                stateIsCito = true;
             }
          });
-         const response = await Post('service-request', token, config, {
-            patientId: selectedPatient.id,
-            requestDate: new Date(),
-            isCito: stateIsCito ? true : false,
-            usageType: 'OUT',
-            services: value
-         });
-         if (response === 201) {
-            setOrderModal(false);
-         }
+         await jwtInterceopter
+            .post('service-request', {
+               patientId: selectedPatient.id,
+               requestDate: new Date(),
+               isCito: stateIsCito ? true : false,
+               usageType: 'OUT',
+               services: value
+            })
+            .then((response) => {
+               if (response.status === 201) {
+                  setOrderModal(false);
+                  openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
+               }
+            })
+            .catch((error) => {
+               console.log(error);
+            });
       } else {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       }
@@ -125,10 +136,6 @@ function Ambulatory() {
    //       Get('ebarimt/sendData', token, config);
    //    }
    // };
-
-   useEffect(() => {
-      ScrollRef(scrollRef);
-   }, []);
    const [notPatientLoading, setNotPatientLoading] = useState(false);
    const categories = [
       {
@@ -165,7 +172,8 @@ function Ambulatory() {
    const notPatientColumn = [
       {
          title: 'Картын №',
-         dataIndex: 'cardNumber'
+         dataIndex: 'cardNumber',
+         width: 70
       },
       {
          title: 'Овог',
@@ -202,85 +210,82 @@ function Ambulatory() {
          dataIndex: 'id',
          render: (text) => {
             return (
-               <Button type="primary" onClick={() => getPayment(text)}>
+               <Button loading={isLoadingGetPayInfo} type="primary" onClick={() => getPayment(text)}>
                   Төлбөр авах
                </Button>
             );
          }
       }
    ];
-   if (isLoadingGetPayInfo) {
-      return <FullScreenLoader />;
-   }
    return (
-      <div>
-         <div className="flex flex-wrap">
-            <div className="w-full md:w-full xl:w-1/2 p-1">
-               <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
-            </div>
-            <div className="w-full md:w-full xl:w-1/2 p-1">
-               <Card
-                  bordered={false}
-                  title={<h6 className="font-semibold m-0">Туслах цэс</h6>}
-                  className="header-solid max-h-max rounded-md"
-                  loading={cardLoading}
-                  bodyStyle={{
-                     paddingTop: 10,
-                     paddingLeft: 10,
-                     paddingRight: 10,
-                     paddingBottom: 10,
-                     minHeight: 150,
-                     maxHeight: 150
-                  }}
-               >
-                  <div className="flex flex-wrap">
-                     <div className="w-full md:w-1/3 xl:1/3">
-                        <Button className="bg-[#2d8cff]" type="primary" onClick={() => setOrderModal(true)}>
-                           Оношилгоо шинжилгээ захиалах
-                        </Button>
-                     </div>
-                  </div>
-               </Card>
-            </div>
-            <div className="w-full p-1">
-               <Card bordered={false} className="header-solid max-h-max rounded-md" loading={cardLoading}>
-                  <Table
-                     rowKey={'id'}
-                     bordered
-                     locale={{
-                        emptyText: <Result title="Мэдээлэл байхгүй байна" />
-                     }}
-                     loading={isLoadingFilter}
-                     columns={columns}
-                     dataSource={patientsList}
-                     pagination={{
-                        simple: true,
-                        pageSize: 15
-                     }}
-                  />
-               </Card>
-            </div>
+      <div className="flex flex-col gap-3">
+         <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
+            <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
+            <Card
+               bordered={false}
+               title={<h6 className="font-semibold m-0">Туслах цэс</h6>}
+               className="header-solid max-h-max rounded-md"
+               bodyStyle={{
+                  paddingTop: 0,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  paddingBottom: 10
+               }}
+            >
+               <div className="grid sm:grid-cols-1 xl:grid-cols-2 gap-3">
+                  <Button className="bg-[#4a7fc1]" type="primary" onClick={() => setOrderModal(true)}>
+                     Оношилгоо шинжилгээ захиалах
+                  </Button>
+               </div>
+            </Card>
          </div>
+         <Card
+            bordered={false}
+            className="header-solid max-h-max rounded-md"
+            bodyStyle={{
+               paddingTop: 10,
+               paddingLeft: 10,
+               paddingRight: 10,
+               paddingBottom: 10
+            }}
+         >
+            <ConfigProvider locale={localMn()}>
+               <Table
+                  rowKey={'id'}
+                  bordered
+                  locale={{
+                     emptyText: <Result title="Мэдээлэл байхгүй байна" />
+                  }}
+                  loading={isLoadingFilter}
+                  columns={columns}
+                  dataSource={patientsList}
+                  pagination={{
+                     position: ['topCenter', 'bottomCenter'],
+                     size: 'small',
+                     total: patientsList?.length,
+                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                     pageSize: 10
+                  }}
+               />
+            </ConfigProvider>
+         </Card>
          <Modal
             title={'Оношилгоо шинжилгээ захиалах'}
             open={orderModal}
             maskClosable={true}
             onCancel={() => setOrderModal(false)}
             footer={null}
-            confirmLoading={isConfirmLoading}
             width="90%"
             cancelText="Болих"
             okText="Хадгалах"
-            className="bg-slat-50"
             bodyStyle={{
-               backgroundColor: '#f8fafc'
+               backgroundColor: '#F3F4F6',
+               padding: 10
             }}
          >
-            <div className="flex flex-wrap">
-               <div className="w-full md:w-1/2 p-1">
+            <div className="flex flex-col gap-3">
+               <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
                   <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
-               </div>
-               <div className="w-full md:w-1/2 p-1">
                   <Card
                      bordered={false}
                      title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
@@ -289,9 +294,7 @@ function Ambulatory() {
                         paddingTop: 0,
                         paddingLeft: 10,
                         paddingRight: 10,
-                        paddingBottom: 10,
-                        minHeight: 150,
-                        maxHeight: 150
+                        paddingBottom: 10
                      }}
                      extra={
                         <>
@@ -311,7 +314,7 @@ function Ambulatory() {
                         rowClassName="hover:cursor-pointer"
                         onRow={(row, rowIndex) => {
                            return {
-                              onDoubleClick: () => {
+                              onClick: () => {
                                  setSelectedPatient(row);
                               }
                            };
@@ -320,15 +323,13 @@ function Ambulatory() {
                         columns={notPatientColumn}
                         dataSource={notPatientsList}
                         pagination={false}
-                        scroll={{ y: 100 }}
+                        scroll={{ y: 120 }}
                      />
                   </Card>
                </div>
-            </div>
-            <div className="p-1">
                <Card
                   bordered={false}
-                  title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
+                  title={<h6 className="font-semibold m-0">Үйлчилгээний Жагсаалт</h6>}
                   className="header-solid max-h-max rounded-md"
                   bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
                >

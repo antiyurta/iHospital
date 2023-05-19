@@ -9,7 +9,7 @@ function FormRender({ form, formOptionIds }) {
       if (data) {
          if (data.type === 'input') {
             return (
-               <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
                   <div className="inline-flex p-1">
                      <Form.Item label={data.value} name={data.keyWord} className="mb-0">
                         <Input />
@@ -19,7 +19,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'checkbox') {
             return (
-               <div className="rounded-md bg-gray-100 w-max inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
                   <div className="inline-flex p-1">
                      <Form.Item label={data.value} name={data.keyWord} className="mb-0">
                         <Checkbox.Group>

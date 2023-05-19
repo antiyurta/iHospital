@@ -3,9 +3,17 @@ import AuthContext from '../../../features/AuthContext';
 import { Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo/iHospital.svg';
+import collapsedLogo from '../../../assets/logo/iHospitalCollapsed.svg';
 import male from '../../../assets/images/maleAvatar.svg';
 import { Button, Dropdown, Menu, Layout } from 'antd';
-import { LeftOutlined, PoweroffOutlined, RightOutlined, UserOutlined } from '@ant-design/icons';
+import {
+   LeftOutlined,
+   MenuFoldOutlined,
+   MenuUnfoldOutlined,
+   PoweroffOutlined,
+   RightOutlined,
+   UserOutlined
+} from '@ant-design/icons';
 import Sidenav from './Sidenav';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -144,67 +152,106 @@ function MainLayout({ children }) {
                height: '100vh'
             }}
          >
-            <Navbar className="h-16 px-3 py-0" bg="white">
-               <Navbar.Brand>
-                  <Nav.Link as={Link} to="/">
-                     <img className="h-[54px]" src={logo} alt="logo" />
-                  </Nav.Link>
-               </Navbar.Brand>
-               <Navbar.Toggle />
-               <Navbar.Collapse className="justify-content-end">
-                  <Navbar.Text>
-                     {!user ? (
-                        <Button type="primary">
-                           <Nav.Link as={Link} to="/login">
-                              Нэвтрэх
-                           </Nav.Link>
-                        </Button>
-                     ) : (
-                        <Dropdown
-                           overlay={menu}
-                           trigger={['click']}
-                           arrow={{
-                              pointAtCenter: true
-                           }}
-                        >
-                           <Button type="link" className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                              <img className="h-12 w-12" src={male} alt="avatar" />
-                           </Button>
-                        </Dropdown>
-                     )}
-                  </Navbar.Text>
-               </Navbar.Collapse>
-            </Navbar>
+            {user && (
+               <Sider
+                  trigger={null}
+                  collapsible
+                  collapsed={collapsed}
+                  theme="light"
+                  style={{
+                     paddingBottom: 0,
+                     maxWidth: 250,
+                     width: 250,
+                     minWidth: 250,
+                     boxShadow: '1px 0px 0px #ccc',
+                     zIndex: 2
+                  }}
+               >
+                  <div
+                     style={{
+                        position: 'sticky',
+                        zIndex: 3,
+                        height: 64,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        boxShadow: '0px 1px 1px #ccc'
+                     }}
+                  >
+                     <img
+                        className={collapsed ? 'h-[48px]' : 'h-[64px]'}
+                        src={collapsed ? collapsedLogo : logo}
+                        alt="logo"
+                     />
+                  </div>
+                  <Sidenav menus={menus} />
+               </Sider>
+            )}
+
             <Layout className="ant-layout">
-               {user && (
-                  <Sider
-                     trigger={React.createElement(collapsed ? RightOutlined : LeftOutlined, {
+               <Navbar
+                  className="h-16 px-3 py-0"
+                  bg="white"
+                  style={{
+                     boxShadow: '0px 1px 1px #ccc',
+                     zIndex: 1
+                  }}
+               >
+                  {user &&
+                     React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                         className: 'trigger',
                         style: {
-                           border: '1px solid #2D8CFF',
-                           padding: '5px',
-                           borderRadius: '50%',
-                           color: '#2D8CFF'
+                           fontSize: 20,
+                           color: '#4a7fc1'
                         },
                         onClick: () => setCollapsed(!collapsed)
                      })}
-                     collapsible
-                     collapsed={collapsed}
-                     theme="light"
-                     style={{
-                        overflow: 'auto',
-                        marginBottom: 48,
-                        paddingBottom: 0,
-                        maxWidth: 250,
-                        width: 250,
-                        minWidth: 250
-                     }}
-                     className="bg-white scroll"
-                  >
-                     <Sidenav menus={menus} />
-                  </Sider>
-               )}
-               <Content className="bg-[#F3F4F6]">
+                  {!user && (
+                     <Navbar.Brand>
+                        <Nav.Link as={Link} to="/">
+                           <img className="h-[54px]" src={logo} alt="logo" />
+                        </Nav.Link>
+                     </Navbar.Brand>
+                  )}
+                  <Navbar.Toggle />
+                  <Navbar.Collapse className="justify-content-end">
+                     <Navbar.Text className="h-16">
+                        {!user ? (
+                           <Button
+                              style={{
+                                 margin: '10px 0px',
+                                 fontWeight: 600
+                              }}
+                              type="primary"
+                           >
+                              <Nav.Link as={Link} to="/login">
+                                 Нэвтрэх
+                              </Nav.Link>
+                           </Button>
+                        ) : (
+                           <Dropdown
+                              overlay={menu}
+                              trigger={['click']}
+                              arrow={{
+                                 pointAtCenter: true
+                              }}
+                           >
+                              <Button
+                                 type="link"
+                                 style={{
+                                    paddingTop: 0
+                                 }}
+                                 className="ant-dropdown-link"
+                                 onClick={(e) => e.preventDefault()}
+                              >
+                                 <img className="h-12 w-12" src={male} alt="avatar" />
+                              </Button>
+                           </Dropdown>
+                        )}
+                     </Navbar.Text>
+                  </Navbar.Collapse>
+               </Navbar>
+               <Content className="bg-[#F7F8FA] overflow-auto">
                   <div className="body">
                      <div className="tabled">{children}</div>
                   </div>

@@ -152,7 +152,6 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             tAmount += item.amount;
          });
          setSelectedAmount(tAmount);
-         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       }
    };
    // nemelterer select table
@@ -182,7 +181,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             confirmLoading={paymentConfirmLoading}
             closable={false}
             open={paymentModal}
-            width={'50%'}
+            width={'80%'}
             onOk={() => {
                !isOCS ? PaymentRequest() : setPaymentModal(false);
             }}
@@ -193,163 +192,138 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <div className="flex flex-wrap">
-               <div className="w-full p-1">
-                  <Checkbox
-                     onChange={(e) => {
-                        setIsDiscount(e.target.checked);
-                        if (!e.target.checked) {
-                           setDiscountPercentRequest(null);
-                        }
-                     }}
-                  >
-                     Хөнгөлөлтэй эсэх
-                  </Checkbox>
-                  <p className="float-right font-bold">Сонгосон төлбөр: {numberToCurrency(selectedAmount)}</p>
-               </div>
-               <div className="w-full p-1">
-                  <Checkbox
-                     checked={isCustomerNo}
-                     onChange={(e) => {
-                        setIsCustomerNo(e.target.checked);
-                        if (!e.target.checked) {
-                           setCustomerNo(null);
-                           setCustomerInfo({});
-                        }
-                     }}
-                  >
-                     Байгууллагаар бол:
-                  </Checkbox>
-               </div>
-               {isDiscount && (
-                  <div className="w-full p-1">
-                     <label>Хөнгөлөх хувь</label>
-                     <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
-                        {discounts.map((discount, index) => {
-                           return (
-                              <Option key={index} value={discount.id}>
-                                 {discount.name}
-                              </Option>
-                           );
-                        })}
-                     </Select>
-                  </div>
-               )}
-               {isCustomerNo && (
-                  <div className="w-full p-1">
-                     <p>Байгууллагын дугаар оруулах:</p>
-                     <Search
-                        onSearch={onSearchCustomer}
-                        placeholder="Байгууллагын РД"
-                        style={{
-                           width: '100%'
-                        }}
-                     />
-                     {Object.keys(customerInfo).length > 0 && <Alert message={customerInfo.name} type="success" />}
-                  </div>
-               )}
-               <div className="w-full p-1">
-                  <Divider>Захиалсан</Divider>
-                  <div className="flex flex-row">
-                     <div className={isOCS ? 'w-full' : 'basis-1/2'}>
-                        {timeRequirePayments.map((element, index) => {
-                           return (
-                              <div key={index} className="flow-root">
-                                 <a
-                                    onClick={() => {
-                                       onClick(element);
-                                    }}
-                                    className="float-left"
-                                    style={{ color: 'green' }}
-                                 >
-                                    <ClockCircleOutlined />
-                                    {element.name}
-                                 </a>
-                                 <p className="float-right">{numberToCurrency(element.amount)}</p>
+            <div className="flex flex-col gap-3">
+               <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flex flex-col gap-3">
+                           <Checkbox
+                              onChange={(e) => {
+                                 setIsDiscount(e.target.checked);
+                                 if (!e.target.checked) {
+                                    setDiscountPercentRequest(null);
+                                 }
+                              }}
+                           >
+                              Хөнгөлөлтэй эсэх
+                           </Checkbox>
+                           {isDiscount && (
+                              <div className="w-full p-1">
+                                 <label>Хөнгөлөх хувь</label>
+                                 <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
+                                    {discounts.map((discount, index) => {
+                                       return (
+                                          <Option key={index} value={discount.id}>
+                                             {discount.name}
+                                          </Option>
+                                       );
+                                    })}
+                                 </Select>
                               </div>
-                           );
-                        })}
+                           )}
+                        </div>
                      </div>
-                     <Divider style={{ height: 'auto' }} type="vertical" />
-                     {!isOCS && (
-                        <div className="basis-1/2">
-                           <div className="w-full">
-                              <Table
-                                 rowKey={'id'}
-                                 bordered
-                                 rowSelection={rowSelection}
-                                 columns={[
-                                    {
-                                       title: 'Үйлчилгээ',
-                                       render: (_, record) => {
-                                          if (record.treatmentRequest?.qty) {
-                                             return <p>{record.name + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
-                                          } else {
-                                             return record.name;
-                                          }
-                                       }
-                                       // dataIndex: 'name'
-                                    },
-                                    {
-                                       title: 'Иргэн төлөх',
-                                       dataIndex: 'amount',
-                                       render: (text) => {
-                                          return numberToCurrency(text);
-                                       }
-                                    },
-                                    {
-                                       title: 'Даатгалаас төлөх',
-                                       dataIndex: 'hicsAmount',
-                                       render: (text) => {
-                                          return numberToCurrency(text);
+                  </div>
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flex flex-col gap-3">
+                           <Checkbox
+                              checked={isCustomerNo}
+                              onChange={(e) => {
+                                 setIsCustomerNo(e.target.checked);
+                                 if (!e.target.checked) {
+                                    setCustomerNo(null);
+                                    setCustomerInfo({});
+                                 }
+                              }}
+                           >
+                              Байгууллагаар бол:
+                           </Checkbox>
+                           {isCustomerNo && (
+                              <div className="w-full p-1">
+                                 <p>Байгууллагын дугаар оруулах</p>
+                                 <Search
+                                    onSearch={onSearchCustomer}
+                                    placeholder="Байгууллагын РД"
+                                    style={{
+                                       width: '100%'
+                                    }}
+                                 />
+                                 {Object.keys(customerInfo).length > 0 && (
+                                    <Alert message={customerInfo.name} type="success" />
+                                 )}
+                              </div>
+                           )}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <Divider className="m-0">Захиалсан</Divider>
+               <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flex flex-col gap-3">
+                           <p className="font-bold">Цаг захиалах шаардлагатай</p>
+                           {timeRequirePayments.map((element, index) => {
+                              return (
+                                 <div key={index} className="flow-root">
+                                    <a
+                                       onClick={() => {
+                                          onClick(element);
+                                       }}
+                                       className="float-left"
+                                       style={{ color: 'green' }}
+                                    >
+                                       <ClockCircleOutlined />
+                                       {element.name}
+                                    </a>
+                                    <p className="float-right">{numberToCurrency(element.amount)}</p>
+                                 </div>
+                              );
+                           })}
+                        </div>
+                     </div>
+                  </div>
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flex flex-col gap-3">
+                           <p className="float-right font-bold">Сонгосон төлбөр: {numberToCurrency(selectedAmount)}</p>
+                           <Table
+                              rowKey={'id'}
+                              bordered
+                              rowSelection={rowSelection}
+                              columns={[
+                                 {
+                                    title: 'Үйлчилгээ',
+                                    render: (_, record) => {
+                                       if (record.treatmentRequest?.qty) {
+                                          return <p>{record.name + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
+                                       } else {
+                                          return record.name;
                                        }
                                     }
-                                 ]}
-                                 dataSource={noTimeRequirePayments}
-                                 pagination={false}
-                              />
-                           </div>
-                           {/* <Checkbox.Group className="w-full" onChange={check}>
-                              {noTimeRequirePayments?.map((element, index) => {
-                                 return (
-                                    <div key={index} className="flex flex-wrap">
-                                       <div className="basis-2/4">
-                                          <Checkbox
-                                             className="pl-1 ml-0 w-full"
-                                             onChange={(e) => dd(element, e)}
-                                             value={element.id}
-                                          >
-                                             {element.treatmentRequest?.qty ? (
-                                                <p>
-                                                   {element.name +
-                                                      ' ' +
-                                                      element.treatmentRequest
-                                                         ?.qty +
-                                                      'ш'}
-                                                </p>
-                                             ) : (
-                                                <p>{element.name}</p>
-                                             )}
-                                          </Checkbox>
-                                       </div>
-                                       <div className="basis-1/4">
-                                          <p className="float-right">
-                                             {numberToCurrency(element.amount)}
-                                          </p>
-                                       </div>
-                                       <div className="basis-1/4">
-                                          <p className="float-right">
-                                             {numberToCurrency(
-                                                element.hicsAmount
-                                             )}
-                                          </p>
-                                       </div>
-                                    </div>
-                                 );
-                              })}
-                           </Checkbox.Group> */}
+                                    // dataIndex: 'name'
+                                 },
+                                 {
+                                    title: 'Иргэн төлөх',
+                                    dataIndex: 'amount',
+                                    render: (text) => {
+                                       return numberToCurrency(text);
+                                    }
+                                 },
+                                 {
+                                    title: 'Даатгалаас төлөх',
+                                    dataIndex: 'hicsAmount',
+                                    render: (text) => {
+                                       return numberToCurrency(text);
+                                    }
+                                 }
+                              ]}
+                              dataSource={noTimeRequirePayments}
+                              pagination={false}
+                           />
                         </div>
-                     )}
+                     </div>
                   </div>
                </div>
             </div>

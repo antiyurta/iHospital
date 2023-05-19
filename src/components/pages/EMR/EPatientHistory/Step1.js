@@ -13,7 +13,7 @@ export default function Step1() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Хэдэн онд" name={['birth', 'birthDate']}>
                         <DatePicker locale={mnMN} />
@@ -22,7 +22,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Яаж төрсөн" name={['birth', 'whatBorn']}>
                         <Radio.Group>
@@ -34,7 +34,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Хаана" name={['birth', 'locate']}>
                         <Input />
@@ -43,7 +43,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Хугацаандаа" name={['birth', 'stateTime']}>
                         <Select className="p-1 h-7 inline-table">
@@ -56,7 +56,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Хэдэн 7 хоног" name={['birth', 'fewWeeks']}>
                         <InputNumber />
@@ -70,7 +70,7 @@ export default function Step1() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Бага насны өсөлт, бойжилт" name={['birth', 'growthChildHood']}>
                         <Radio.Group>
@@ -82,7 +82,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Цэцэрлэгт явсан эсэх" name={['birth', 'isKindergarden']}>
                         <Radio.Group>
@@ -94,7 +94,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item className="mb-0" label="Сургуульд сурсан эсэх" name={['birth', 'isSchool']}>
                         <Radio.Group>
@@ -111,7 +111,7 @@ export default function Step1() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         className="mb-0"
@@ -137,7 +137,7 @@ export default function Step1() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label=""
@@ -156,7 +156,7 @@ export default function Step1() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Биеийн өндөр (см)"
@@ -169,7 +169,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Биеийн жин (кг)"
@@ -182,7 +182,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Систол даралт"
@@ -195,7 +195,7 @@ export default function Step1() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Диастол даралт"

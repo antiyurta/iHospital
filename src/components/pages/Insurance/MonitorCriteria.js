@@ -48,12 +48,12 @@ function MonitorCriteria({ props }) {
                   gap: 12
                }}
             >
-               <div className="rounded-md bg-gray-100 w-full inline-block">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3 pr-5">
                      <Progress percent={data?.gpa} />
                   </div>
                </div>
-               <div className="rounded-md bg-gray-100 w-full inline-block">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <div
                         style={{

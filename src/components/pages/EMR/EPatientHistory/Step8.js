@@ -11,7 +11,7 @@ export default function Step8() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Удамд ижил өвчтэй хүн байсан уу"
@@ -27,7 +27,7 @@ export default function Step8() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Удамшлын өвчинүүд"

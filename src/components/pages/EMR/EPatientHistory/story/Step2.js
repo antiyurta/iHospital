@@ -6,7 +6,7 @@ function Step2({ templateId }) {
    return (
       <div className="flex flex-wrap">
          <div className="w-full p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item className="mb-0" label="Хэвтэх үеийн зовиур:" name={['anemis', 'inPatientPain']}>
                      <TextArea rows={5} className="w-full" />
@@ -15,7 +15,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-full p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item className="mb-0" label="Өвчний түүх:" name={['anemis', 'painStory']}>
                      <TextArea rows={5} className="w-full" />
@@ -25,7 +25,7 @@ function Step2({ templateId }) {
          </div>
          {templateId === 2 && (
             <div className="w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         className="mb-0"
@@ -39,7 +39,7 @@ function Step2({ templateId }) {
             </div>
          )}
          <div className="w-full p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item className="mb-0" label="Амьдралын түүх:" name={['anemis', 'lifeStory']}>
                      <TextArea rows={5} className="w-full" />
@@ -48,7 +48,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Ахуйн нөхцөл:" name={['anemis', 'locate']} className="mb-0">
                      <Checkbox.Group>
@@ -63,7 +63,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   {templateId === 2 ? (
                      <Form.Item label="Ам бүл хэдүүл" name={['anemis', 'familyCondition']} className="mb-0">
@@ -86,7 +86,7 @@ function Step2({ templateId }) {
          </div>
          {templateId === 2 && (
             <div className="w-1/4 p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Хэнтэйгээ амьдардаг:"
@@ -101,7 +101,7 @@ function Step2({ templateId }) {
          )}
          {templateId === 2 && (
             <div className="w-1/4 p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Урьд өвчилсөн өвчин, эмгэгийн байдал:"
@@ -115,7 +115,7 @@ function Step2({ templateId }) {
             </div>
          )}
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Халдварт:" name={['anemis', 'contagious']} className="mb-0">
                      <Checkbox.Group>
@@ -157,7 +157,7 @@ function Step2({ templateId }) {
             <div className="w-1/4 p-1">
                <div className="flex flex-wrap">
                   <div className="w-full">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item label="Улаан бурхан хэдэн онд:" name={['anemis', 'isMeasles']} className="mb-0">
                               <Input />
@@ -166,7 +166,7 @@ function Step2({ templateId }) {
                      </div>
                   </div>
                   <div className="w-full">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item label="Улаан бурхан хэдэн онд:" name={['anemis', 'isMeasles']} className="mb-0">
                               <Input />
@@ -178,7 +178,7 @@ function Step2({ templateId }) {
             </div>
          )}
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Мэс ажилбар хийсэн эсэх:" name={['anemis', 'isSurgery']} className="mb-0">
                      <TextArea rows={5} />
@@ -187,7 +187,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Осол гэмтэл, хордлого, шалтгаан:" name={['anemis', 'accidents']} className="mb-0">
                      <TextArea rows={5} />
@@ -196,7 +196,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Харшлын анамнез:" name={['anemis', 'allergy']} className="mb-0">
                      <Checkbox.Group>
@@ -211,7 +211,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item
                      label="Удамшлын анамнез:
@@ -225,7 +225,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Хооллолтын байдал:" name={['anemis', 'whatFoodie']} className="mb-0">
                      <Checkbox.Group>
@@ -240,7 +240,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Архи хэрэглэдэг эсэх:" name={['anemis', 'isAlcoholUse']} className="mb-0">
                      <Checkbox.Group>
@@ -254,7 +254,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Тамхи татдаг эсэх:" name={['anemis', 'isCigarUse']} className="mb-0">
                      <Checkbox.Group>
@@ -268,7 +268,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Хэдэн наснаас эхэлж татсан:" name={['anemis', 'fromAge']} className="mb-0">
                      <Input />
@@ -277,7 +277,7 @@ function Step2({ templateId }) {
             </div>
          </div>
          <div className="w-1/4 p-1">
-            <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                <div className="p-1">
                   <Form.Item label="Хэдэн жил татаж байгаа:" name={['anemis', 'usedYear']} className="mb-0">
                      <Input />

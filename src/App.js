@@ -90,13 +90,14 @@ const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/
 const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
 
 const Privacy = React.lazy(() => import('./privacy/Index'));
-//
 const InsuranceDocterList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
-//
-// import ProtectedRoute from './features/ProtectedRoute';
 const ProtectedRoute = React.lazy(() => import('./features/ProtectedRoute'));
+const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 import Layout from './components/pages/Layout/MainLayout';
 // const Layout = React.lazy(() => import('./components/pages/Layout/MainLayout'));
+
+import { PublicRoutes, ProtectedRoutes } from './Routes';
+
 function App() {
    return (
       <div className="App">
@@ -105,11 +106,18 @@ function App() {
                <Fragment>
                   <Suspense fallback={<FullScreenLoader full={true} />}>
                      <Routes>
+                        {PublicRoutes.map((route, index) => {
+                           return <Route key={index} path={route.path} element={<route.element />} />;
+                        })}
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/privacy" element={<Privacy />} />
                         <Route element={<ProtectedRoute />}>
+                           {ProtectedRoutes.map((route, index) => {
+                              return <Route key={index} path={route.path} element={<route.element />} />;
+                           })}
                            <Route path="*" element={<NotFound />} />
+                           <Route path="/urgentEnr" element={<BeforeUrgentEnr />} />
                            <Route path="/insuranceDoctor" element={<InsuranceDocterList />} />
                            <Route path="/docforlist" element={<DocForRoleList />} />
                            <Route path="/home" element={<Home />} />

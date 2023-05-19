@@ -30,7 +30,7 @@ function Index() {
                         <Title
                            level={5}
                            style={{
-                              color: '#2d8cff'
+                              color: '#4a7fc1'
                            }}
                         >
                            ЕРӨНХИЙ ЗҮЙЛ
@@ -54,7 +54,7 @@ function Index() {
                         <Title
                            level={5}
                            style={{
-                              color: '#2d8cff'
+                              color: '#4a7fc1'
                            }}
                         >
                            НУУЦЛАЛЫН БОДЛОГО
@@ -106,7 +106,7 @@ function Index() {
                         <Title
                            level={5}
                            style={{
-                              color: '#2d8cff'
+                              color: '#4a7fc1'
                            }}
                         >
                            ХЭРЭГЛЭГЧИЙН ЭРХ
@@ -131,7 +131,7 @@ function Index() {
                         <Title
                            level={5}
                            style={{
-                              color: '#2d8cff'
+                              color: '#4a7fc1'
                            }}
                         >
                            iHospital ПЛАТФОРМЫН ЭРХ, ҮҮРЭГ
@@ -161,7 +161,7 @@ function Index() {
                         <Title
                            level={5}
                            style={{
-                              color: '#2d8cff'
+                              color: '#4a7fc1'
                            }}
                         >
                            Бусад

@@ -60,7 +60,7 @@ function AM22II() {
                      >
                         Эмнэлгийн нэр: ____________________
                      </span>
-                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-22В</span>
+                     <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-22Й</span>
                   </div>
                </div>
                <div style={{ textAlign: 'center', marginTop: 5, marginBottom: 5 }}>
