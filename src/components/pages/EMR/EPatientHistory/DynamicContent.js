@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Divider, Form, Input, Row, Select, Spin, Table } from 'antd';
 import DynamicFormInspection from '../../DynamicFormInspection';
 import Diagnose from '../../service/Diagnose';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { useDispatch, useSelector } from 'react-redux';
 import EditableFormItem from '../../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
 import jwtInterceopter from '../../../jwtInterceopter';
@@ -11,10 +9,13 @@ import { openNofi } from '../../../comman';
 const { TextArea } = Input;
 const { Column } = Table;
 const { Option } = Select;
-function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, hicsServiceId }) {
+function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, appointmentHasInsurance }) {
    const [form] = Form.useForm();
    const [loading, setLoading] = useState(false);
-   const DiagnoseHandleClick = (diagnoses) => {
+   const DiagnoseHandleClick = (diagnoses, hicsServiceId) => {
+      if (incomeData.usageType === 'OUT') {
+         jwtInterceopter.patch('appointment/' + incomeData.appointmentId, hicsServiceId);
+      }
       form.setFieldValue('diagnose', diagnoses);
    };
    const saveDynamicTab = async (values, key) => {
@@ -281,7 +282,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
                            <Diagnose
                               handleClick={DiagnoseHandleClick}
                               types={[0, 1, 2]}
-                              hicsServiceId={hicsServiceId}
+                              appointmentHasInsurance={appointmentHasInsurance}
                            />
                            <Form.List name="diagnose">
                               {(diagnose) => (

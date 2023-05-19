@@ -12,10 +12,10 @@ import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 import Diagnose from './service/Diagnose';
 //
 
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 const { RangePicker } = DatePicker;
 
-function EmrSupports({ hiscServiceName, appointmentId, usageType, patient, patientId }) {
+function EmrSupports({ appointmentId, usageType, patient, patientId }) {
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    let location = useLocation();
@@ -229,8 +229,7 @@ function EmrSupports({ hiscServiceName, appointmentId, usageType, patient, patie
          getSentReason(); // ilgeeh shaltgaan
          getPaymentService(); // tolbin medeelel
       }
-   }, []);
-   //
+   }, []); //
    return (
       <>
          <Card
@@ -245,9 +244,7 @@ function EmrSupports({ hiscServiceName, appointmentId, usageType, patient, patie
             }}
          >
             <div className="flow-root">
-               <div className="float-left">
-                  <p style={{ fontWeight: 700, fontSize: 18 }}>{hiscServiceName}</p>
-               </div>
+               <div className="float-left"></div>
                <div className="float-right">
                   <Button
                      danger

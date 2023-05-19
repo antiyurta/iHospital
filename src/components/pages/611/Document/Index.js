@@ -69,7 +69,20 @@ import AM30A from './AM30A';
 import AM30B from './AM30B';
 import AM31 from './AM31';
 import AM32 from './AM32';
+import AM33 from './AM33';
+import AM34 from './AM34';
+import AM35 from './AM35';
+import AM36 from './AM36';
+import AM37 from './AM37';
+import AM38 from './AM38';
+import AM39 from './AM39';
+import AM40 from './AM40';
+import AM41 from './AM41';
 // AM end
+// EIM start
+import EIM4_2 from './../EIM/EIM4_2';
+import EIM5_2 from './../EIM/EIM5_2';
+// EIM end
 
 // nemelt tushaal
 const C537M1 = React.lazy(() => import('../Command/537M1')); // tushaal maygt
@@ -418,6 +431,92 @@ const options = [
       value: 68,
       label: 'A/611 АМ-32',
       docName: '29 ХОНОГООС 5 ХҮРТЭЛХ НАСНЫ ХҮҮХДИЙН ТӨРӨЛХИЙН ХӨГЖЛИЙН ГАЖГИЙГ МЭДЭЭЛЭХ ХУУДАС'
+   },
+   {
+      value: 69,
+      label: 'A/611 АМ-33',
+      docName: 'ОСОЛ ГЭМТЛИЙН ТОХИОЛДЛЫГ БҮРТГЭХ ХУУДАС'
+   },
+   {
+      value: 70,
+      label: 'A/611 АМ-34',
+      docName: 'ХӨДӨЛГӨӨН ЗАСАЛ ЭМЧИЛГЭЭНИЙ ҮНЭЛГЭЭНИЙ ХУУДАС'
+   },
+   {
+      value: 71,
+      label: 'A/611 АМ-35',
+      docName: 'ХӨДӨЛМӨР ЗАСЛЫН ҮНЭЛГЭЭНИЙ ХУУДАС'
+   },
+   {
+      value: 72,
+      label: 'A/611 АМ-36',
+      docName:
+         'БҮХ НИЙТЭЭР ТЭМДЭГЛЭХ БАЯР, ТЭМДЭГЛЭЛТ ӨДРИЙН АМРАЛТЫН ҮЕИЙН ЭМНЭЛГИЙН ТУСЛАМЖ, ҮЙЛЧИЛГЭЭГ МЭДЭЭЛЭХ БҮРТГЭЛ'
+   },
+   {
+      value: 73,
+      label: 'A/611 АМ-37',
+      docName: 'НҮҮР АМНЫ ЭМЧЛЭГЧ ЭМЧИЙН ЭМЧИЛГЭЭНИЙ БҮРТГЭЛ'
+   },
+   {
+      value: 74,
+      label: 'A/611 АМ-38',
+      docName: 'НҮҮР АМНЫ МЭС ЗАСЛЫН ЭМЧИЙН ЭМЧИЛГЭЭНИЙ БҮРТГЭЛ'
+   },
+   {
+      value: 75,
+      label: 'A/611 АМ-39',
+      docName: 'НҮҮР АМНЫ СОГОГ ЗАСЛЫН ЭМЧИЙН ЭМЧИЛГЭЭНИЙ БҮРТГЭЛ'
+   },
+   {
+      value: 76,
+      label: 'A/611 АМ-40',
+      docName: 'НҮҮР АМНЫ ГАЖИГ ЗАСЛЫН ЭМЧИЙН ЭМЧИЛГЭЭНИЙ БҮРТГЭЛ'
+   },
+   {
+      value: 77,
+      label: 'A/611 АМ-41',
+      docName: 'НҮҮР АМНЫ УРЬДЧИЛАН СЭРГИЙЛЭХ ҮЗЛЭГИЙН БҮРТГЭЛ'
+   },
+   {
+      value: 78,
+      label: 'A/611 ЭИМ-4.1',
+      docName: 'ХӨХНИЙ ХОРТ ХАВДРЫН ЭРТ ИЛРҮҮЛЭГ ҮЗЛЭГИЙН ХУУДАC'
+   },
+   {
+      value: 79,
+      label: 'A/611 ЭИМ-4.2',
+      docName: 'ХӨХНИЙ ХОРТ ХАВДРЫН ЭРТ ИЛРҮҮЛЭГ ҮЗЛЭГИЙН ХУУДАC'
+   },
+   {
+      value: 80,
+      label: 'A/611 ЭИМ-4.3',
+      docName: 'Маммографи шинжилгээний маягт'
+   },
+   {
+      value: 81,
+      label: 'A/611 ЭИМ-5.1',
+      docName: 'УМАЙН ХҮЗҮҮНИЙ ХОРТ ХАВДРЫН ЭРТ ИЛРҮҮЛЭГ ҮЗЛЭГИЙН ХУУДАС'
+   },
+   {
+      value: 82,
+      label: 'A/611 ЭИМ-5.2',
+      docName: 'УМАЙН ХҮЗҮҮНИЙ ХОРТ ХАВДРЫН ЭРТ ИЛРҮҮЛЭГ ҮЗЛЭГИЙН ХУУДАС'
+   },
+   {
+      value: 83,
+      label: 'A/611 CT-1',
+      docName: 'ӨВЧНИЙ ТҮҮХ /НҮҮР/'
+   },
+   {
+      value: 83,
+      label: 'A/611 CT-1',
+      docName: 'ЭМЧЛҮҮЛЭГЧИЙН АНАМНЕЗ'
+   },
+   {
+      value: 83,
+      label: 'A/611 CT-1',
+      docName: 'ЕРӨНХИЙ ҮЗЛЭГ'
    }
 ];
 
@@ -526,6 +625,21 @@ export function ReturnById({ type, id, isOpen }) {
    else if (id === 65) return <AM30A />;
    else if (id === 66) return <AM30B />;
    else if (id === 67) return <AM31 />;
+   else if (id === 68) return <AM32 />;
+   else if (id === 69) return <AM33 />;
+   else if (id === 70) return <AM34 />;
+   else if (id === 71) return <AM35 />;
+   else if (id === 72) return <AM36 />;
+   else if (id === 73) return <AM37 />;
+   else if (id === 74) return <AM38 />;
+   else if (id === 75) return <AM39 />;
+   else if (id === 76) return <AM40 />;
+   else if (id === 77) return <AM41 />;
+   else if (id === 78) return <NotFound />;
+   else if (id === 79) return <EIM4_2 />;
+   else if (id === 80) return <NotFound />;
+   else if (id === 81) return <NotFound />;
+   else if (id === 82) return <EIM5_2 />;
    // if (id === 1) {
    //    return (
    //       <Suspense fallback={'<div>Loading</div>'}>

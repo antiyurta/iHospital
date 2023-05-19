@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-// import am34 from "./AM34.PNG";
+import am34 from './AM34.png';
 
 //маягт АМ-34
 function AM34() {
