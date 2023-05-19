@@ -1,10 +1,10 @@
 import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Input, Modal } from 'antd';
+import { Button, Input, Modal, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+// import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, openNofi } from '../../comman';
+import { Get, numberToCurrency, openNofi } from '../../comman';
 
 function Examination({ isOpen, isClose, handleclick }) {
    const token = useSelector(selectCurrentToken);
@@ -51,10 +51,15 @@ function Examination({ isOpen, isClose, handleclick }) {
    }, [isOpen]);
    return (
       <>
+         <Button>Шинжилгээ</Button>
          <Modal
             title="Шинжилгээ сонгох"
             width={'80%'}
             open={isOpen}
+            bodyStyle={{
+               height: 600,
+               maxHeight: 600
+            }}
             onCancel={() => isClose('examination', false)}
             onOk={() => {
                handleclick(selectedExaminations);
@@ -63,7 +68,147 @@ function Examination({ isOpen, isClose, handleclick }) {
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <div className="flex flex-row">
+            <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-3">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                  <div
+                     className="p-3"
+                     style={{
+                        height: 552,
+                        overflow: 'auto'
+                     }}
+                  >
+                     <div className="flex flex-col gap-2">
+                        {examinations.map((examination, index) => {
+                           return (
+                              <button
+                                 onClick={() => getTypeById(examination.id)}
+                                 className="w-full bg-[#3d9970] text-white rounded-lg"
+                                 key={index}
+                              >
+                                 {examination.name}
+                              </button>
+                           );
+                        })}
+                     </div>
+                  </div>
+               </div>
+               <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
+                        <Table
+                           rowKey={'id'}
+                           bordered
+                           scroll={{
+                              y: 400
+                           }}
+                           columns={[
+                              {
+                                 title: 'Нэр',
+                                 dataIndex: 'name',
+                                 render: (text) => {
+                                    return (
+                                       <p
+                                          style={{
+                                             whiteSpace: 'normal',
+                                             color: 'black'
+                                          }}
+                                       >
+                                          {text}
+                                       </p>
+                                    );
+                                 }
+                              },
+                              {
+                                 title: 'Үнэ',
+                                 dataIndex: 'price',
+                                 width: 100,
+                                 render: (text) => {
+                                    return numberToCurrency(text);
+                                 }
+                              },
+                              {
+                                 title: '',
+                                 width: 40,
+                                 render: (_text, row) => {
+                                    return (
+                                       <Button
+                                          icon={
+                                             <PlusCircleOutlined
+                                                style={{
+                                                   color: 'green'
+                                                }}
+                                             />
+                                          }
+                                       />
+                                    );
+                                 }
+                              }
+                           ]}
+                           dataSource={filteredExamination}
+                           pagination={false}
+                        />
+                     </div>
+                  </div>
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <Table
+                           rowKey={'id'}
+                           bordered
+                           scroll={{
+                              y: 400
+                           }}
+                           columns={[
+                              {
+                                 title: 'Нэр',
+                                 dataIndex: 'name',
+                                 render: (text) => {
+                                    return (
+                                       <p
+                                          style={{
+                                             whiteSpace: 'normal',
+                                             color: 'black'
+                                          }}
+                                       >
+                                          {text}
+                                       </p>
+                                    );
+                                 }
+                              },
+                              {
+                                 title: 'Үнэ',
+                                 dataIndex: 'price',
+                                 width: 100,
+                                 render: (text) => {
+                                    return numberToCurrency(text);
+                                 }
+                              },
+                              {
+                                 title: '',
+                                 width: 40,
+                                 render: (_text, row) => {
+                                    return (
+                                       <Button
+                                          icon={
+                                             <PlusCircleOutlined
+                                                style={{
+                                                   color: 'green'
+                                                }}
+                                             />
+                                          }
+                                       />
+                                    );
+                                 }
+                              }
+                           ]}
+                           dataSource={filteredExamination}
+                           pagination={false}
+                        />
+                     </div>
+                  </div>
+               </div>
+            </div>
+            {/* <div className="flex flex-row">
                <div className="basis-1/5">
                   {examinations.map((examination, index) => {
                      return (
@@ -145,7 +290,7 @@ function Examination({ isOpen, isClose, handleclick }) {
                      </Table>
                   </div>
                </div>
-            </div>
+            </div> */}
          </Modal>
       </>
    );

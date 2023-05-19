@@ -69,7 +69,7 @@ function index({ options, namePanel, handleChange }) {
             {(fields, { add, remove }) => (
                <>
                   {fields.map(({ key, name, ...restField }) => (
-                     <div key={key} className="rounded-md bg-gray-100 m-2">
+                     <div key={key} className="rounded-md bg-[#F3F4F6] m-2">
                         <div className="p-2">
                            <div className="flex flex-wrap">
                               <div className="basis-5/12 p-1">

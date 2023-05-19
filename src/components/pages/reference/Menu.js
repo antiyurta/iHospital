@@ -182,7 +182,7 @@ function Menu() {
                   initialValue={isSubMenu}
                >
                   <Switch
-                     className="bg-[#2d8cff]"
+                     className="bg-[#4a7fc1]"
                      checkedChildren="Тийм"
                      unCheckedChildren="Үгүй"
                      onChange={() => setIsSubMenu(!isSubMenu)}

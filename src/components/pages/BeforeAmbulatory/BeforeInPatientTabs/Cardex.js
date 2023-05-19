@@ -311,7 +311,7 @@ function Cardex() {
             </div>
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pr-2">
-            <div className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800" role="alert">
+            <div className="p-1 text-sm text-white bg-[#4a7fc1] dark:bg-blue-200 dark:text-blue-800" role="alert">
                <span className="font-medium mx-1">Эмийн бус эмчилгээ</span>
             </div>
             <Table
@@ -334,7 +334,7 @@ function Cardex() {
             />
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pl-2">
-            <div className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800" role="alert">
+            <div className="p-1 text-sm text-white bg-[#4a7fc1] dark:bg-blue-200 dark:text-blue-800" role="alert">
                <span className="font-medium mx-1">Шинжилгээ</span>
             </div>
             <Table
@@ -357,7 +357,7 @@ function Cardex() {
             />
          </div>
          <div className="md:w-1/2 sm:w-full py-2 pr-2">
-            <div className="p-1 text-sm text-white bg-[#2d8cff] dark:bg-blue-200 dark:text-blue-800" role="alert">
+            <div className="p-1 text-sm text-white bg-[#4a7fc1] dark:bg-blue-200 dark:text-blue-800" role="alert">
                <span className="font-medium mx-1">Оношилгоо</span>
             </div>
             <Table

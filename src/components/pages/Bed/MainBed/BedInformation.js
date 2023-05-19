@@ -202,7 +202,7 @@ const BedInformation = (props) => {
                                        style={{
                                           ...styles.total,
                                           ...{
-                                             color: '#2d8cff'
+                                             color: '#4a7fc1'
                                           }
                                        }}
                                     >
@@ -435,7 +435,7 @@ const BedInformation = (props) => {
                                              style={{
                                                 ...styles.total,
                                                 ...{
-                                                   color: '#2d8cff'
+                                                   color: '#4a7fc1'
                                                 }
                                              }}
                                           >
@@ -532,7 +532,7 @@ const BedInformation = (props) => {
                                     style={{
                                        ...styles.bedContainer,
                                        ...{
-                                          borderColor: selectedBed && selectedBed.id === el.id ? '#2d8cff' : null
+                                          borderColor: selectedBed && selectedBed.id === el.id ? '#4a7fc1' : null
                                        }
                                     }}
                                     onClick={() => selectBed(el)}
@@ -573,7 +573,7 @@ const BedInformation = (props) => {
                      </div>
                   )}
                </Row>
-               <Divider orientation="left" className="text-sm my-2" style={{ color: '#2d8cff' }}>
+               <Divider orientation="left" className="text-sm my-2" style={{ color: '#4a7fc1' }}>
                   Өвчтөний мэдээлэл
                </Divider>
                <Col className="gutter-row" span={24}>

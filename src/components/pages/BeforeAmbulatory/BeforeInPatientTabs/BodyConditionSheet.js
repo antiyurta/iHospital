@@ -135,7 +135,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Амьсгал/Зүрх судас" key="1">
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Амьсгалалт"
                                     className="p-1"
@@ -184,7 +184,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Чимээ"
                                     className="p-1"
@@ -225,7 +225,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Ханиалгалт"
                                     className="p-1"
@@ -244,7 +244,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хаван"
                                     className="p-1"
@@ -297,7 +297,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хялгасан судасны дахин дүүрэлт"
                                     className="p-1"
@@ -315,7 +315,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Зүрхний хэм"
                                     className="p-1"
@@ -339,7 +339,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Хоол боловсруулалт" key="2" forceRender={true}>
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хооллолт"
                                     className="p-1"
@@ -358,7 +358,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хоолны дэглэм"
                                     className="p-1"
@@ -376,7 +376,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хоолны дуршил"
                                     className="p-1"
@@ -396,7 +396,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хэвлий"
                                     className="p-1"
@@ -415,7 +415,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Өтгөн"
                                     className="p-1"
@@ -439,7 +439,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Шээс ялгаруулалт" key="3" forceRender={true}>
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Шээсний гарц"
                                     className="p-1"
@@ -458,7 +458,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Зовиур"
                                     className="p-1"
@@ -478,7 +478,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Өнгө үнэр"
                                     className="p-1"
@@ -496,7 +496,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Шээс"
                                     className="p-1"
@@ -518,7 +518,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Арьс" key="4" forceRender={true}>
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Арьсны байдал"
                                     className="p-1"
@@ -582,7 +582,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               Арьсны эрүүл ахуй
                            </Divider>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Бүр биеийн угаалга хийх"
                                     className="p-1"
@@ -600,7 +600,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хэсэгчилсэн угаалга хийх"
                                     className="p-1"
@@ -618,7 +618,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Ор цэвэрлэх"
                                     className="p-1"
@@ -637,7 +637,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                            </div>
                            <Divider></Divider>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Мэс заслын шарх"
                                     className="p-1"
@@ -673,7 +673,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Уян зүү тавьсан хэсэг"
                                     className="p-1"
@@ -696,7 +696,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Мэдрэл, сэтгэхүйн байдал" key="5" forceRender={true}>
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Ухаан санааны байдал"
                                     className="p-1"
@@ -716,7 +716,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Орчиндоо (Бусадтай)"
                                     className="p-1"
@@ -735,7 +735,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Өвдөлт"
                                     className="p-1"
@@ -753,7 +753,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Үе мөчний хөдөлгөөн"
                                     className="p-1"
@@ -776,7 +776,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Өдөр тутмын сувилгаа" key="6" forceRender={true}>
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Уян зүү"
                                     className="p-1"
@@ -794,7 +794,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Гуурсны арчилгаа"
                                     className="p-1"
@@ -812,7 +812,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Бургүй хийсэн"
                                     className="p-1"
@@ -831,7 +831,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хэсэгчилсэн асаргаа"
                                     className="p-1"
@@ -853,7 +853,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="ЭМБ/Зөвлөгөө өгөх"
                                     className="p-1"
@@ -871,7 +871,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Нөхөн сэргээх"
                                     className="p-1"
@@ -889,7 +889,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Байрлал"
                                     className="p-1"
@@ -910,7 +910,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               Ариун цэвэр
                            </Divider>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Цагаан хэрэглэл сольсон"
                                     className="p-1"
@@ -929,7 +929,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Үс угаасан"
                                     className="p-1"
@@ -948,7 +948,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Үс самнасан"
                                     className="p-1"
@@ -967,7 +967,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Сахал хуссан"
                                     className="p-1"
@@ -986,7 +986,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хувцас сольсон"
                                     className="p-1"
@@ -1005,7 +1005,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хөл гарын хумс авсан"
                                     className="p-1"
@@ -1024,7 +1024,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Амны хөндий, шүд угаасан"
                                     className="p-1"
@@ -1043,7 +1043,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хооллосон"
                                     className="p-1"
@@ -1063,7 +1063,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                            </div>
                            <Divider></Divider>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Аюулгүй байдал"
                                     className="p-1"
@@ -1087,7 +1087,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                      <Panel header="Сувилгааны асуудал" key="7" forceRender={true}>
                         <div className="flex flex-wrap">
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Амьсгал/зүрх судас"
                                     className="p-1"
@@ -1105,7 +1105,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Хоол боловсруулах"
                                     className="p-1"
@@ -1123,7 +1123,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Шээс ялгаруулалт"
                                     className="p-1"
@@ -1141,7 +1141,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Арьс"
                                     className="p-1"
@@ -1159,7 +1159,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Мэдрэл, сэтгэхүйн байдал"
                                     className="p-1"
@@ -1177,7 +1177,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                               </div>
                            </div>
                            <div className="basis-1/2 p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
                                     label="Өдөр тутмын сувилгаа"
                                     className="p-1"

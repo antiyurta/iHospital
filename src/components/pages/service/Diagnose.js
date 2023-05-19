@@ -266,7 +266,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                cancelText="Болих"
             >
                <div className="flex flex-col gap-3">
-                  <div className="rounded-md bg-gray-100 w-full inline-block">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <Search
                            placeholder={'Код , Нэрүүдээр хайх'}
@@ -276,7 +276,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                         />
                      </div>
                   </div>
-                  <div className="rounded-md bg-gray-100 w-full inline-block">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <p
                            className="pb-3"
@@ -317,7 +317,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                   </div>
                   <div className="grid sm:grid-rows-2 xl:grid-rows-1 xl:grid-cols-3 gap-3">
                      <div className="xl:col-span-2">
-                        <div className="rounded-md bg-gray-100 w-full inline-block">
+                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                            <div className="p-3">
                               <p
                                  className="pb-3"
@@ -358,7 +358,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                                                       <ArrowRightOutlined
                                                          style={{
                                                             font: 24,
-                                                            color: '#2d8cff'
+                                                            color: '#4a7fc1'
                                                          }}
                                                       />
                                                    }
@@ -394,7 +394,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                         </div>
                      </div>
                      <div>
-                        <div className="rounded-md bg-gray-100 w-full inline-block">
+                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                            <div className="p-3">
                               <p
                                  className="pb-3"

@@ -12,7 +12,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
          {data?.map((element, index) => {
             if (element.type === 'checkbox') {
                return (
-                  <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
+                  <div key={index} className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
                      <div className="inline-flex p-1">
                         <Form.Item
                            label={element.value}
@@ -35,7 +35,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'radio') {
                return (
-                  <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
+                  <div key={index} className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
                      <div className="inline-flex p-1">
                         <Form.Item
                            label={element.value}
@@ -58,7 +58,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'dropdown') {
                return (
-                  <div key={index} className="rounded-md bg-gray-100 w-1/2 inline-block m-1">
+                  <div key={index} className="rounded-md bg-[#F3F4F6] w-1/2 inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            label={element.value}
@@ -85,7 +85,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'input') {
                return (
-                  <div key={index} className="rounded-md bg-gray-100 w-max inline-block m-1">
+                  <div key={index} className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
                      <div className="inline-flex p-1">
                         <Form.Item
                            label={element.value}
@@ -100,7 +100,7 @@ export default function DynamicFormInspection({ data, forkey, unikey }) {
                );
             } else if (element.type === 'textarea') {
                return (
-                  <div key={index} className="rounded-md bg-gray-100 m-1">
+                  <div key={index} className="rounded-md bg-[#F3F4F6] m-1">
                      <div className="p-1">
                         <Form.Item
                            label={element.value}

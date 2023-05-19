@@ -10,7 +10,7 @@ export default function Step4() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/5 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Хаана амьдардаг вэ"
@@ -27,7 +27,7 @@ export default function Step4() {
                </div>
             </div>
             <div className="md:w-1/5 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Гэрлэлтийн байдал"
@@ -43,7 +43,7 @@ export default function Step4() {
                </div>
             </div>
             <div className="md:w-1/5 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Ажлын нөхцөл"
@@ -60,7 +60,7 @@ export default function Step4() {
                </div>
             </div>
             <div className="md:w-1/5 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Хаана ямар ажил эрхэлдэг"
@@ -73,7 +73,7 @@ export default function Step4() {
                </div>
             </div>
             <div className="md:w-1/5 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item label="Ажлын цаг" name={['lifeCondition', 'workCondition', 'clock']} className="mb-0">
                         <Input size="small" />

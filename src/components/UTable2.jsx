@@ -92,7 +92,7 @@ function UTable2({ title, url, column, action }) {
             </Space>
          </div>
       ),
-      filterIcon: () => <SearchOutlined style={{ color: '#2d8cff' }} />
+      filterIcon: () => <SearchOutlined style={{ color: '#4a7fc1' }} />
    });
    // haitl
    // mor ynzlah
