@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 import { Card, ConfigProvider, Modal, Progress, Table } from 'antd';
-import { localMn } from '../../comman';
+import { localMn, numberToCurrency } from '../../comman';
 import { CheckCircleOutlined, ExclamationCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
 
@@ -35,8 +35,42 @@ function InsuranceDocterList() {
    };
    const columns = [
       {
+         title: 'Тасаг',
+         dataIndex: 'departName'
+      },
+      {
+         title: 'Овог',
+         dataIndex: 'patientLastname'
+      },
+      {
+         title: 'Нэр',
+         dataIndex: 'patientFirstname'
+      },
+      {
+         title: 'Регистр',
+         dataIndex: 'patientRegno'
+      },
+      {
+         title: 'Регистр',
+         dataIndex: 'patientRegno'
+      },
+      {
          title: 'Хувь',
          dataIndex: 'gpa'
+      },
+      {
+         title: 'Хөнгөлөлт үнэ',
+         dataIndex: 'discountAmount',
+         render: (text) => {
+            return numberToCurrency(text);
+         }
+      },
+      {
+         title: 'Нийт үнэ',
+         dataIndex: 'totalAmount',
+         render: (text) => {
+            return numberToCurrency(text);
+         }
       },
       {
          title: '',

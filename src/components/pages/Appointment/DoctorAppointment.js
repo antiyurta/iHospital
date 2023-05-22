@@ -67,7 +67,7 @@ function DoctorAppointment() {
             />
          </div>
       ),
-      filterIcon: (filtered) => <SearchOutlined style={{ color: '#2d8cff' }} />
+      filterIcon: (filtered) => <SearchOutlined style={{ color: '#4a7fc1' }} />
    });
    const notPatientsListColumn = [
       {

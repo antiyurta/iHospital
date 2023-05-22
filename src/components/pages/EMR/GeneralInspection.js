@@ -62,7 +62,7 @@ export default function GeneralInspection({ patientId, inspection }) {
             <Panel header="Ерөнхий" key="1" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/3 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Биеийн ерөнхий байдал"
@@ -94,7 +94,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Ухаан санаа"
@@ -123,7 +123,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Арьс салст"
@@ -153,7 +153,7 @@ export default function GeneralInspection({ patientId, inspection }) {
             <Panel header="Амьсгалын эрхтэн тогтолцоо" key="2" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/2 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Амьсгал 1 минутанд"
@@ -172,7 +172,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/2 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Чагналтаар"
@@ -208,7 +208,7 @@ export default function GeneralInspection({ patientId, inspection }) {
             <Panel header="Цусны эргэлтийн тогтолцоо" key="3" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Судасны цохилт 1 минутанд"
@@ -227,7 +227,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Хүчдэл дүүрэлт"
@@ -246,7 +246,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Тогшилтоор /Зүрхний хил/"
@@ -272,7 +272,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Чагналтаар /Зүрхний авиа/"
@@ -310,7 +310,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="АД баруун талд"
@@ -329,7 +329,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Зүүн талд"
@@ -348,7 +348,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Хэл"
@@ -380,7 +380,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/3 sm:w-1/2 p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Хэвлийн үзлэг"
@@ -422,7 +422,7 @@ export default function GeneralInspection({ patientId, inspection }) {
             <Panel header="Мэдрэлийн тогтолцоо" key="4" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/2 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Сонсох чадвар"
@@ -448,7 +448,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/2 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Рефлексүүд"
@@ -474,7 +474,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/2 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Бусад"
@@ -493,7 +493,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                      </div>
                   </div>
                   <div className="md:w-1/2 sm:w-full p-1">
-                     <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                         <div className="p-1">
                            <Form.Item
                               label="Cэтгэцийн байдал"

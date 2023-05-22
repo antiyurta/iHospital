@@ -97,6 +97,20 @@ function Index({ type, isDoctor }) {
       // tolbor shalgah
       if (row.process != 2 && row.process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
+      } else if (row.process === 2) {
+         const data = {
+            patientId: row.patientId
+         };
+         if (type === 2) {
+            data['usageType'] = 'IN';
+            data['inpatientRequestId'] = row.id;
+            data['departmentId'] = row.inDepartmentId;
+         }
+         dispatch(setEmrData(data));
+         console.log(data);
+         navigate(`/emr`, {
+            state: data
+         });
       } else {
          const payment = row.isPayment || row.isInsurance;
          if (!payment && type != 1) {
@@ -106,7 +120,7 @@ function Index({ type, isDoctor }) {
             const data = {
                patientId: row.patientId,
                inspection: inspectionType === undefined ? 1 : inspectionType,
-               hicsServiceId: row.hicsServiceId
+               isInsurance: row.isInsurance
             };
             if (row.startDate === null) {
                const conf = {
@@ -121,7 +135,7 @@ function Index({ type, isDoctor }) {
                data['usageType'] = 'OUT';
                data['appointmentId'] = row.id;
                data['cabinetId'] = row.cabinetId;
-               data['deparmentId'] = row.cabinet?.parentId;
+               data['departmentId'] = row.cabinet?.parentId;
             } else if (type === 1) {
                data['usageType'] = 'OUT';
                data['appointmentId'] = row.id;
@@ -129,7 +143,7 @@ function Index({ type, isDoctor }) {
             } else if (type === 2) {
                data['usageType'] = 'IN';
                data['inpatientRequestId'] = row.id;
-               data['dapartmentId'] = row.inDepartmentId;
+               data['departmentId'] = row.inDepartmentId;
             }
             dispatch(setEmrData(data));
             navigate(`/emr`, {

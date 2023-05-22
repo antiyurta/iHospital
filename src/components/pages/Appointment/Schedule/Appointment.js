@@ -144,21 +144,16 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             getSlots();
          }
       } else {
-         if (!selectedInsuranceId && stateInsurance) {
-            openNofi('error', 'Алдаа', 'Даатгалын үйлчилгээний төрөл сонгох заавал');
-         } else {
-            data.type = 3;
-            data.status = 1;
-            data.hicsServiceId = selectedInsuranceId;
-            data.isInsurance = stateInsurance;
-            data.appointmentWorkDate = filterForm.getFieldValue('date');
-            config.params = {};
-            const response = await Post('appointment', token, config, data);
-            if (response === 201) {
-               setAppointmentModal(false);
-               changeDate(date);
-               getSlots();
-            }
+         data.type = 3;
+         data.status = 1;
+         data.isInsurance = stateInsurance;
+         data.appointmentWorkDate = filterForm.getFieldValue('date');
+         config.params = {};
+         const response = await Post('appointment', token, config, data);
+         if (response === 201) {
+            setAppointmentModal(false);
+            changeDate(date);
+            getSlots();
          }
       }
       setIsConfirmLoading(false);
@@ -259,7 +254,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             width={'40%'}
          >
             <div className="flex flex-col gap-3">
-               <div className="rounded-md bg-gray-100 w-full inline-block">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <Descriptions layout="vertical">
                         <Descriptions.Item label="Кабинет">{qwe.structure}</Descriptions.Item>
@@ -278,7 +273,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                      </Descriptions>
                   </div>
                </div>
-               <div className="rounded-md bg-gray-100 w-full inline-block">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <div className="flow-root">
                         <div className="float-left">
@@ -292,7 +287,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                         </div>
                         <div className="float-right">
                            <Switch
-                              className="bg-[#2d8cff]"
+                              className="bg-[#4a7fc1]"
                               checkedChildren="Тийм"
                               unCheckedChildren="Үгүй"
                               defaultChecked={false}
@@ -304,7 +299,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                   </div>
                </div>
                {stateInsurance && (
-                  <div className="rounded-md bg-gray-100 w-full inline-block">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <Form onFinish={checkPatientInsurance}>
                            <Form.Item>
@@ -316,8 +311,8 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                      </div>
                   </div>
                )}
-               {isInsurance && stateInsurance && (
-                  <div className="rounded-md bg-gray-100 w-full inline-block">
+               {/* {isInsurance && stateInsurance && (
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <p
                            className="py-3"
@@ -349,7 +344,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                         </Select>
                      </div>
                   </div>
-               )}
+               )} */}
             </div>
          </Modal>
          <Card

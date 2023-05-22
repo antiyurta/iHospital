@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 //маягт АМ-22В
-function AM22C() {
+function AM22V() {
    const styles = {
       generalText: {
          fontSize: 12
@@ -254,4 +254,4 @@ function AM22C() {
    );
 }
 
-export default AM22C;
+export default AM22V;

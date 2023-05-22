@@ -7,7 +7,7 @@ function Step3({ id }) {
          {id === 1 ? (
             <div className="flex flex-wrap">
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Биеийн ерөнхий байдал:" name={['general', 'bodyCondition']}>
                            <Checkbox.Group className="ml-0">
@@ -24,7 +24,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Ухаан санаа:" name={['general', 'mindStatus']}>
                            <Checkbox.Group className="ml-0">
@@ -42,7 +42,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Орчиндоо:" name={['general', 'area']}>
                            <Checkbox.Group className="ml-0">
@@ -57,7 +57,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Байрлал:" name={['general', 'position']}>
                            <Checkbox.Group className="ml-0">
@@ -74,14 +74,14 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <h5>Арьс салстын байдал:</h5>
                      </div>
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="а. Арьс салсын өнгө:" name={['general', 'skincolor']}>
                            <Checkbox.Group className="ml-0">
@@ -95,7 +95,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="б. Арьсны уян чанар:" name={['general', 'skinElasticity']}>
                            <Checkbox.Group className="ml-0">
@@ -110,7 +110,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="в.Арьсны чийглэг байдал:" name={['general', 'skinMoisture']}>
                            <Checkbox.Group className="ml-0">
@@ -124,7 +124,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="г.Арьсан дээрх тууралт:" name={['general', 'skinRash']}>
                            <Checkbox.Group className="ml-0">
@@ -138,7 +138,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Хаван:" name={['general', 'edema']}>
                            <Checkbox.Group className="ml-0">
@@ -152,7 +152,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="а. Ерөнхий б. Хэсгийн:" name={['general', 'skinArea']}>
                            <Checkbox.Group className="ml-0">
@@ -168,7 +168,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            className="mb-0"
@@ -187,7 +187,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="б. Байрлал" name={['general', 'b.position']}>
                            <Checkbox.Group className="ml-0">
@@ -203,7 +203,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="в. Эмзэглэл" name={['general', 'injury']}>
                            <Checkbox.Group className="ml-0">
@@ -217,7 +217,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Үе мөчний хэлбэр:" name={['general', 'bodyShape']}>
                            <Checkbox.Group className="ml-0">
@@ -231,7 +231,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Үений хөдөлгөөн:" name={['general', 'bodyMove']}>
                            <Checkbox.Group className="ml-0">
@@ -249,7 +249,7 @@ function Step3({ id }) {
          ) : (
             <div className="flex flex-wrap">
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Биеийн ерөнхий байдал:" name={['general', 'bodyCondition']}>
                            <Checkbox.Group className="ml-0">
@@ -265,7 +265,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Ухаан санаа:" name={['general', 'mindStatus']}>
                            <Checkbox.Group className="ml-0">
@@ -280,7 +280,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Арьс салст" name={['general', 'skincolor']}>
                            <Checkbox.Group className="ml-0">
@@ -294,7 +294,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            className="mb-0"
@@ -307,14 +307,14 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <h5>Амьсгалын эрхтэн тогтолцоо:</h5>
                      </div>
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Амьсгал 1 минутанд:" name={['general', 'breathOneMinute']}>
                            <Input />
@@ -323,7 +323,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Чагналтаар:" name={['general', 'hear']}>
                            <Checkbox.Group>
@@ -340,7 +340,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Амьсгал сулавтар бол:" name={['general', 'unNormalBreath']}>
                            <Checkbox.Group>
@@ -355,14 +355,14 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <h5>Цусны эргэлтийн тогтолцоо:</h5>
                      </div>
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            className="mb-0"
@@ -375,7 +375,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Хүчдэл дүүрэлт:" name={['general', 'voltage']}>
                            <Input />
@@ -384,7 +384,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Тогшилтоор Зүрхний хил:" name={['general', 'touchHeart']}>
                            <Checkbox.Group>
@@ -398,7 +398,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Томорсон бол:" name={['general', 'touchHeartUnNormal']}>
                            <Checkbox.Group>
@@ -412,7 +412,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Чагналтаар зүрхний авиа:" name={['general', 'hearHeart']}>
                            <Checkbox.Group>
@@ -430,7 +430,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="АД баруун талд:" name={['general', 'adRight']}>
                            <Input />
@@ -439,7 +439,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="АД Зүүн талд:" name={['general', 'adLeft']}>
                            <Input />
@@ -448,14 +448,14 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <h5>Хоол шингээх эрхтэн тогтолцоо:</h5>
                      </div>
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Хэл:" name={['general', 'tongue']}>
                            <Checkbox.Group>
@@ -471,7 +471,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Хэвлийн үзлэг:" name={['general', 'abdominal']}>
                            <Checkbox.Group>
@@ -489,7 +489,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            className="mb-0"
@@ -502,14 +502,14 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <h5>Мэдрэлийн тогтолцоо:</h5>
                      </div>
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Сонсох чадвахи:" name={['general', 'hearStatus']}>
                            <Checkbox.Group>
@@ -523,7 +523,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item
                            className="mb-0"
@@ -541,7 +541,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-1/5 p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Рефлексүүд:" name={['general', 'reflex']}>
                            <Checkbox.Group>
@@ -555,7 +555,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Бусад:" name={['general', 'others']}>
                            <TextArea />
@@ -564,7 +564,7 @@ function Step3({ id }) {
                   </div>
                </div>
                <div className="w-full p-1">
-                  <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                      <div className="p-1">
                         <Form.Item className="mb-0" label="Сэтгэцийн байдал:" name={['general', 'mindStatus2']}>
                            <TextArea />

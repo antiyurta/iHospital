@@ -13,9 +13,10 @@ function MainPatientHistory({
    InpatientRequestId,
    PatientId,
    CabinetId,
+   DeparmentId,
    Inspection,
    UsageType,
-   hicsServiceId,
+   AppointmentHasInsurance,
    handleClick
 }) {
    const [form] = Form.useForm();
@@ -51,7 +52,7 @@ function MainPatientHistory({
                inspection: Inspection
             }}
             handleClick={handleClick}
-            hicsServiceId={hicsServiceId}
+            appointmentHasInsurance={AppointmentHasInsurance}
          />
       );
    }, []);
@@ -227,7 +228,6 @@ function MainPatientHistory({
       ]);
    };
    useEffect(() => {
-      console.log(UsageType, inspection);
       if (UsageType === 'OUT') {
          if (inspection === 1) {
             getInspectionTabs();
@@ -272,7 +272,7 @@ function MainPatientHistory({
             <MainInpatientHistory
                patientId={PatientId}
                inpatientRequestId={InpatientRequestId}
-               hicsServiceId={hicsServiceId}
+               deparmentId={DeparmentId}
             />
          )}
          <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>

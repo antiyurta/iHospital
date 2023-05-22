@@ -14,7 +14,7 @@ body {
    background-color: #fafafa;
    letter-spacing: -0.3px;
    color: rgba(0, 0, 0, 0.65);
-   font-size: 14px;
+   font-size: 14px !important;
    line-height: 1.6;
    font-weight: 400;
    font-family: open sans, Helvetica, Arial, sans-serif;
@@ -1088,8 +1088,8 @@ span.blue {
 /* Handle */
 ::-webkit-scrollbar-thumb {
    border-radius: 6px;
-   background-color: #2d8cff;
-   border: 3px solid #2d8cff;
+   background-color: #4a7fc1;
+   border: 3px solid #4a7fc1;
 }
 .py-1 {
    padding-top: 0.25rem !important;

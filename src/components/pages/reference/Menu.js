@@ -6,10 +6,14 @@ import { Button, Card, Form, Input, InputNumber, Modal, Pagination, Select, Swit
 import { Table } from 'react-bootstrap';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
+import { PublicRoutes, ProtectedRoutes } from '../../../Routes';
+
 const { Option } = Select;
 const { TextArea } = Input;
 
 function Menu() {
+   let Routes = [...PublicRoutes, ...ProtectedRoutes];
+   console.log('=>', Routes);
    const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
@@ -182,7 +186,7 @@ function Menu() {
                   initialValue={isSubMenu}
                >
                   <Switch
-                     className="bg-[#2d8cff]"
+                     className="bg-[#4a7fc1]"
                      checkedChildren="Тийм"
                      unCheckedChildren="Үгүй"
                      onChange={() => setIsSubMenu(!isSubMenu)}
@@ -201,7 +205,14 @@ function Menu() {
                      </Select>
                   </Form.Item>
                )}
-               <Form.Item label="Нэр mongol" name="title">
+               <Form.Item label="Route" name="route">
+                  <Select>
+                     {Routes?.map((route, index) => {
+                        return <Option key={index}>{route.mnName}</Option>;
+                     })}
+                  </Select>
+               </Form.Item>
+               {/* <Form.Item label="Нэр mongol" name="title">
                   <Input />
                </Form.Item>
                <Form.Item label="Нэр angli" name="name">
@@ -215,7 +226,7 @@ function Menu() {
                </Form.Item>
                <Form.Item label="ICON" name="icon">
                   <TextArea />
-               </Form.Item>
+               </Form.Item> */}
             </Form>
          </Modal>
       </div>

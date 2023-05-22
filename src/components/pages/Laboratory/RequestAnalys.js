@@ -943,7 +943,7 @@ function RequestAnalys() {
                         </div>
                         <p
                            className="font-bold text-center"
-                           style={{ fontSize: 28, color: '#2d8cff' }}
+                           style={{ fontSize: 28, color: '#4a7fc1' }}
                         >
                            УНИВЕРСАЛ МЕД ЭМНЭЛЭГ
                         </p>
@@ -957,7 +957,7 @@ function RequestAnalys() {
                            style={{
                               width: '100%',
                               height: 2,
-                              backgroundColor: '#2d8cff',
+                              backgroundColor: '#4a7fc1',
                               marginTop: 5
                            }}
                         ></div>
@@ -999,7 +999,7 @@ function RequestAnalys() {
                            style={{
                               width: '100%',
                               height: 2,
-                              backgroundColor: '#2d8cff',
+                              backgroundColor: '#4a7fc1',
                               marginBottom: 5
                            }}
                         ></div>
@@ -1145,7 +1145,7 @@ function RequestAnalys() {
                               style={{
                                  width: '100%',
                                  height: 2,
-                                 backgroundColor: '#2d8cff',
+                                 backgroundColor: '#4a7fc1',
                                  marginBottom: 5
                               }}
                            ></div>

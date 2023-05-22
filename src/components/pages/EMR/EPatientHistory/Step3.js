@@ -11,7 +11,7 @@ export default function Step3() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item label="Архи хэрэглэдэг эсэх" name={['lifeStyle', 'alcohol', 'isUse']} className="mb-0">
                         <Radio.Group>
@@ -23,7 +23,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item label="Хэр удаан(Cар)" name={['lifeStyle', 'alcohol', 'howLong']} className="mb-0">
                         <Input size="small" />
@@ -32,7 +32,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item label="Ямар архи" name={['lifeStyle', 'alcohol', 'whatAlc']} className="mb-0">
                         <Input size="small" />
@@ -41,7 +41,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Нэг удаа хэрэглэх хэмжээ"
@@ -59,7 +59,7 @@ export default function Step3() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item label="Тамхи хэрэглэдэг эсэх" name={['lifeStyle', 'cigar', 'isUse']} className="mb-0">
                         <Radio.Group>
@@ -71,7 +71,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Хэдэн наснаас эхэлж татсан"
@@ -84,7 +84,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Хэдэн жил татаж байгаа"
@@ -102,7 +102,7 @@ export default function Step3() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/2 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Ямар нэг мансууруулах бодис, эм, химийн бодис хэрэглэдэг үү /
@@ -119,7 +119,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/2 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Хэрэглэхгүй удвал түүнийгээ үгүйлдэг үү/ нэхдэг үү"
@@ -140,7 +140,7 @@ export default function Step3() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item label="Ямар хоолтон" name={['lifeStyle', 'food', 'whatFoodie']} className="mb-0">
                         <Radio.Group>
@@ -153,7 +153,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Өдөрт хэд хооллодог"
@@ -166,7 +166,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Ямар төрлийн хоол голдуу хэрэглэдэг"
@@ -182,7 +182,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/4 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Ихэвчлэн хаана хооллодог"
@@ -203,7 +203,7 @@ export default function Step3() {
          </Divider>
          <div className="flex flex-wrap">
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Дасгал хөдөлгөөн тогтмол хийдэг үү"
@@ -219,7 +219,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Нэг удаад ямар хугацаанд"
@@ -232,7 +232,7 @@ export default function Step3() {
                </div>
             </div>
             <div className="md:w-1/3 sm:w-full p-1">
-               <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="p-1">
                      <Form.Item
                         label="Долоо хоногт хэдэн удаа"

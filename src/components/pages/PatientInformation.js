@@ -5,11 +5,10 @@ import male from '../../assets/images/maleAvatar.svg';
 import { selectCurrentAppId, selectCurrentToken } from '../../features/authReducer';
 import { Get, openNofi } from '../comman';
 import { SnippetsOutlined } from '@ant-design/icons';
-import AMIndex from './EMR/InPatient/document/Ambulatory/Index';
-import { ReturnById, ReturnDetails } from './611/Document/Index';
 
 import Customized from './BeforeAmbulatory/Customized/Index';
 import jwtInterceopter from '../jwtInterceopter';
+import DocumentShow from './611/DocumentShow';
 
 const { Search } = Input;
 
@@ -273,6 +272,14 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                                  >
                                     Маягт
                                  </Button>
+                                 <DocumentShow
+                                    props={{
+                                       appIds: AppIds,
+                                       deparmentId: deparmentId,
+                                       usageType: 'OUT',
+                                       documentType: 0
+                                    }}
+                                 />
                               </div>
                            )}
                         </div>

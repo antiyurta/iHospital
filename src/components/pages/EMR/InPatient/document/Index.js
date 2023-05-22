@@ -79,7 +79,7 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
                      {data.pain?.map((pain, index) => {
                         return (
                            <div key={index} className="w-full p-1">
-                              <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                              <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <p className="p-1 font-bold">{pain.label ? pain.label : ''}</p>
                                  {pain.options?.length > 0 && (
                                     <div className="flex flex-wrap">

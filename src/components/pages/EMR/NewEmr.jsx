@@ -36,8 +36,7 @@ class NewEmr extends React.Component {
          appointments: [],
          isUsageType: this.props.IncomeEMRData.usageType,
          isOpen: false,
-         payments: [],
-         hiscServiceName: ''
+         payments: []
       };
    }
    async getByIdPatient() {
@@ -150,9 +149,9 @@ class NewEmr extends React.Component {
    async componentDidMount() {
       await this.getByIdPatient();
       await this.getInspectionNotes();
-      if (this.props.IncomeEMRData.hicsServiceId) {
-         await this.getInsuranceServiceIdName();
-      }
+      // if (this.props.IncomeEMRData.hicsServiceId) {
+      //    await this.getInsuranceServiceIdName();
+      // }
    }
    async componentDidUpdate(_prevProps, prevState) {
       if (prevState.appointments !== this.state.appointments) {
@@ -180,7 +179,6 @@ class NewEmr extends React.Component {
                         }
                      />
                      <EmrSupports
-                        hiscServiceName={this.state.hiscServiceName}
                         appointmentId={this.props.IncomeEMRData.appointmentId}
                         usageType={this.props.IncomeEMRData.usageType}
                         patient={this.state.selectedPatient}
@@ -360,9 +358,10 @@ class NewEmr extends React.Component {
                            InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
                            PatientId={this.props.IncomeEMRData.patientId}
                            CabinetId={this.props.IncomeEMRData.cabinetId}
+                           DeparmentId={this.props.IncomeEMRData.departmentId}
                            Inspection={this.props.IncomeEMRData.inspection}
                            UsageType={this.props.IncomeEMRData.usageType}
-                           hicsServiceId={this.props.IncomeEMRData.hicsServiceId}
+                           AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
                            handleClick={this.handleTypeChange}
                         />
                      </Card>

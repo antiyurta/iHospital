@@ -4,7 +4,7 @@ import { ArrowLeftOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const cardStyle = {
-   borderColor: '#2d8cff'
+   borderColor: '#4a7fc1'
 };
 const cardBodyStyle = {
    flex: 1,
@@ -18,7 +18,7 @@ const cardBodyStyle = {
    width: '100%'
 };
 const iconStyle = {
-   backgroundColor: '#2d8cff',
+   backgroundColor: '#4a7fc1',
    padding: 15,
    borderRadius: 12,
    fontSize: 20,

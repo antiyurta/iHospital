@@ -224,7 +224,7 @@ function Orders() {
                <Form form={form} layout="vertical">
                   <div className="flex flex-wrap">
                      <div className="md:w-1/2 sm:w-full p-1">
-                        <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                            <div className="p-1">
                               <Form.Item label="Ханаас" rules={[{ required: true, message: 'Заавал' }]} name={'dep_id'}>
                                  <Select onChange={test}>
@@ -241,7 +241,7 @@ function Orders() {
                         </div>
                      </div>
                      <div className="md:w-1/2 sm:w-full p-1">
-                        <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                            <div className="p-1">
                               <Form.Item
                                  label="Хааш нь"
@@ -262,7 +262,7 @@ function Orders() {
                         </div>
                      </div>
                      <div className="md:w-full sm:w-full p-1">
-                        <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                            <div className="p-1">
                               <Form.Item
                                  label="Яагаад зарлага хийж байгаа"
@@ -282,7 +282,7 @@ function Orders() {
                         <div className="w-full">
                            <Form.List name="expenses">
                               {(fields, { add, remove }) => (
-                                 <div className="rounded-md bg-gray-100 w-full inline-block m-1">
+                                 <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                     {fields.map(({ key, name, ...restField }) => (
                                        <div key={key} className="flex flex-wrap items-center">
                                           <div className="w-6/12 p-1">

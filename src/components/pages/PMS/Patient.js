@@ -257,7 +257,7 @@ function Patient() {
             />
          </div>
       ),
-      filterIcon: () => <SearchOutlined style={{ color: '#2d8cff' }} />
+      filterIcon: () => <SearchOutlined style={{ color: '#4a7fc1' }} />
    });
    const colums = [
       {
