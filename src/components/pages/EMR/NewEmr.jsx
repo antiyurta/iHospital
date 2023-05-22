@@ -358,6 +358,7 @@ class NewEmr extends React.Component {
                            InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
                            PatientId={this.props.IncomeEMRData.patientId}
                            CabinetId={this.props.IncomeEMRData.cabinetId}
+                           DeparmentId={this.props.IncomeEMRData.departmentId}
                            Inspection={this.props.IncomeEMRData.inspection}
                            UsageType={this.props.IncomeEMRData.usageType}
                            AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}

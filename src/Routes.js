@@ -4,6 +4,8 @@ const Home = React.lazy(() => import('./components/Home'));
 const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
+const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/DocumentUpload'));
+const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
 
 export const PublicRoutes = [
    {
@@ -25,5 +27,17 @@ export const ProtectedRoutes = [
       mnName: 'Маягт жагсаалт',
       path: '/DocumentList',
       element: DocumentList
+   },
+   {
+      name: 'documentForm',
+      mnName: 'Маягт Form',
+      path: '/DocumentForm',
+      element: DocumentUpload
+   },
+   {
+      name: 'documentPermission',
+      mnName: 'Маягт Permission',
+      path: '/DocumentPermission',
+      element: DocForRoleList
    }
 ];

@@ -505,17 +505,17 @@ const options = [
    },
    {
       value: 83,
-      label: 'A/611 CT-1',
+      label: 'A/611 СТ-1 /НҮҮР/',
       docName: 'ӨВЧНИЙ ТҮҮХ /НҮҮР/'
    },
    {
-      value: 83,
-      label: 'A/611 CT-1',
+      value: 84,
+      label: 'A/611 СТ-1 ЭМЧЛҮҮЛЭГЧИЙН АНАМНЕЗ',
       docName: 'ЭМЧЛҮҮЛЭГЧИЙН АНАМНЕЗ'
    },
    {
-      value: 83,
-      label: 'A/611 CT-1',
+      value: 85,
+      label: 'A/611 СТ-1 ЕРӨНХИЙ ҮЗЛЭГ',
       docName: 'ЕРӨНХИЙ ҮЗЛЭГ'
    }
 ];
@@ -768,22 +768,32 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                      },
                      {
                         title: 'Баримт бичгийн нэр',
-                        dataIndex: 'docName'
+                        dataIndex: 'docName',
+                        render: (text) => {
+                           return <p className="whitespace-normal text-black">{text}</p>;
+                        }
                      },
                      {
                         title: 'Тушаал шийдвэрийн дугаар',
-                        dataIndex: 'label'
+                        dataIndex: 'label',
+                        render: (text) => {
+                           return <p className="whitespace-normal text-black">{text}</p>;
+                        }
                      },
                      {
                         title: '',
                         width: 40,
                         render: (_text, row) => {
                            return (
-                              <RightOutlined
-                                 style={{
-                                    color: 'blue'
-                                 }}
+                              <Button
                                  onClick={() => add(row)}
+                                 icon={
+                                    <RightOutlined
+                                       style={{
+                                          color: 'blue'
+                                       }}
+                                    />
+                                 }
                               />
                            );
                         }

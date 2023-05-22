@@ -86,9 +86,6 @@ const Diagnoses = React.lazy(() => import('./components/pages/service/Diagnoses'
 const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
 const HicsLists = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
 
-const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/DocumentUpload'));
-const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
-
 const Privacy = React.lazy(() => import('./privacy/Index'));
 const InsuranceDocterList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
 const ProtectedRoute = React.lazy(() => import('./features/ProtectedRoute'));
@@ -119,9 +116,7 @@ function App() {
                            <Route path="*" element={<NotFound />} />
                            <Route path="/urgentEnr" element={<BeforeUrgentEnr />} />
                            <Route path="/insuranceDoctor" element={<InsuranceDocterList />} />
-                           <Route path="/docforlist" element={<DocForRoleList />} />
                            <Route path="/home" element={<Home />} />
-                           <Route path="/documents" element={<DocumentUpload />} />
                            <Route path="/hicsCost" element={<HicsCost />} />
                            <Route path="/hicsList" element={<HicsLists />} />
                            <Route path="/notPermission" element={<NotPermission />} />

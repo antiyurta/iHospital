@@ -13,6 +13,7 @@ function MainPatientHistory({
    InpatientRequestId,
    PatientId,
    CabinetId,
+   DeparmentId,
    Inspection,
    UsageType,
    AppointmentHasInsurance,
@@ -271,7 +272,7 @@ function MainPatientHistory({
             <MainInpatientHistory
                patientId={PatientId}
                inpatientRequestId={InpatientRequestId}
-               hicsServiceId={hicsServiceId}
+               deparmentId={DeparmentId}
             />
          )}
          <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>

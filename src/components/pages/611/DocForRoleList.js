@@ -277,9 +277,6 @@ function DocForRoleList() {
                   />
                </ConfigProvider>
             </Card>
-            <Card bordered={false} className="header-solid max-h-max rounded-md" title="Маягтын Жагсаалт">
-               <ReturnDetails type={0} />
-            </Card>
          </div>
          <Modal
             title={!editMode ? 'Нэмэх' : 'Засах'}
