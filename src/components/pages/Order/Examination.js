@@ -1,38 +1,63 @@
-import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space, Table } from 'antd';
+import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider, Empty, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-// import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, numberToCurrency, openNofi } from '../../comman';
+import { localMn, numberToCurrency, openNofi } from '../../comman';
+import jwtInterceopter from '../../jwtInterceopter';
 
-function Examination({ isOpen, isClose, handleclick }) {
-   const token = useSelector(selectCurrentToken);
+const { Search } = Input;
+
+function Examination({ handleclick }) {
+   const [isLoading, setIsLoading] = useState(false);
+   const [isOpenModal, setIsOpenModal] = useState(false);
+   const [selectedExaminationId, setSelectedExaminationId] = useState(null);
    const [examinations, setExaminations] = useState([]);
    const [examination, setExamination] = useState([]);
+   const [metaExamination, setMetaExamination] = useState({});
    const [selectedExaminations, setSelectedExaminations] = useState([]);
-   const [searchField, setSearchField] = useState('');
-
-   const config = {
-      headers: {},
-      params: {}
-   };
+   const [filterValue, setFilterValue] = useState('');
    const getExamination = async () => {
-      config.params.type = 0;
-      const response = await Get('service/type', token, config);
-      setExaminations(response.data);
+      await jwtInterceopter
+         .get('service/type', {
+            params: {
+               type: 0
+            }
+         })
+         .then((response) => {
+            setExaminations(response.data.response?.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
 
-   const getTypeById = async (id) => {
-      config.params.type = null;
-      config.params.examinationTypeId = id;
-      const response = await Get('service/examination', token, config);
-      setExamination(response.data);
+   const getTypeById = async (id, page, pageSize, filterValue) => {
+      setIsLoading(true);
+      setFilterValue(filterValue);
+      await jwtInterceopter
+         .get('service/examination', {
+            params: {
+               examinationTypeId: id,
+               page: page,
+               limit: pageSize,
+               name: filterValue ? filterValue : null
+            }
+         })
+         .then((response) => {
+            setSelectedExaminationId(id);
+            setExamination(response.data.response.data);
+            setMetaExamination(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
    };
    const add = (examination) => {
       const state = selectedExaminations.includes(examination);
       if (state) {
-         openNofi('warning', 'EXA', 'EXA сонгогдсон байна');
+         openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
          examination.type = examination.types.type;
          setSelectedExaminations([...selectedExaminations, examination]);
@@ -43,27 +68,34 @@ function Examination({ isOpen, isClose, handleclick }) {
       arr.splice(index, 1);
       setSelectedExaminations(arr);
    };
-   const filteredExamination = examination.filter((exmintion) => {
-      return exmintion.name?.toLowerCase().includes(searchField?.toLowerCase());
-   });
    useEffect(() => {
       getExamination();
-   }, [isOpen]);
+   }, []);
    return (
       <>
-         <Button>Шинжилгээ</Button>
+         <Button
+            type="primary"
+            onClick={() => {
+               setIsOpenModal(true);
+               setSelectedExaminationId(null);
+               setSelectedExaminations([]);
+            }}
+         >
+            Шинжилгээ
+         </Button>
          <Modal
             title="Шинжилгээ сонгох"
             width={'80%'}
-            open={isOpen}
+            open={isOpenModal}
             bodyStyle={{
                height: 600,
-               maxHeight: 600
+               maxHeight: 600,
+               overflow: 'auto'
             }}
-            onCancel={() => isClose('examination', false)}
+            onCancel={() => setIsOpenModal(false)}
             onOk={() => {
                handleclick(selectedExaminations);
-               isClose('examination', false);
+               setIsOpenModal(false);
             }}
             okText={'Хадгалах'}
             cancelText={'Болих'}
@@ -81,7 +113,7 @@ function Examination({ isOpen, isClose, handleclick }) {
                         {examinations.map((examination, index) => {
                            return (
                               <button
-                                 onClick={() => getTypeById(examination.id)}
+                                 onClick={() => getTypeById(examination.id, 1, 10)}
                                  className="w-full bg-[#3d9970] text-white rounded-lg"
                                  key={index}
                               >
@@ -95,59 +127,95 @@ function Examination({ isOpen, isClose, handleclick }) {
                <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
-                        <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
-                        <Table
-                           rowKey={'id'}
-                           bordered
-                           scroll={{
-                              y: 400
-                           }}
-                           columns={[
-                              {
-                                 title: 'Нэр',
-                                 dataIndex: 'name',
-                                 render: (text) => {
-                                    return (
-                                       <p
-                                          style={{
-                                             whiteSpace: 'normal',
-                                             color: 'black'
-                                          }}
-                                       >
-                                          {text}
-                                       </p>
-                                    );
-                                 }
-                              },
-                              {
-                                 title: 'Үнэ',
-                                 dataIndex: 'price',
-                                 width: 100,
-                                 render: (text) => {
-                                    return numberToCurrency(text);
-                                 }
-                              },
-                              {
-                                 title: '',
-                                 width: 40,
-                                 render: (_text, row) => {
-                                    return (
-                                       <Button
-                                          icon={
-                                             <PlusCircleOutlined
-                                                style={{
-                                                   color: 'green'
-                                                }}
-                                             />
-                                          }
-                                       />
-                                    );
-                                 }
+                        <Search
+                           className="mb-3"
+                           placeholder="Хайх"
+                           allowClear
+                           enterButton={
+                              <SearchOutlined
+                                 style={{
+                                    fontSize: 16,
+                                    color: 'white'
+                                 }}
+                              />
+                           }
+                           onSearch={(e) => {
+                              if (selectedExaminationId === null) {
+                                 openNofi('warning', 'Анхааруулга', 'Төрөл сонгоно уу');
+                              } else {
+                                 getTypeById(selectedExaminationId, 1, 10, e);
                               }
-                           ]}
-                           dataSource={filteredExamination}
-                           pagination={false}
+                           }}
                         />
+                        <ConfigProvider locale={localMn()}>
+                           <Table
+                              rowKey={'id'}
+                              bordered
+                              scroll={{
+                                 y: 400
+                              }}
+                              loading={isLoading}
+                              locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                              columns={[
+                                 {
+                                    title: 'Нэр',
+                                    dataIndex: 'name',
+                                    render: (text) => {
+                                       return (
+                                          <p
+                                             style={{
+                                                whiteSpace: 'normal',
+                                                color: 'black'
+                                             }}
+                                          >
+                                             {text}
+                                          </p>
+                                       );
+                                    }
+                                 },
+                                 {
+                                    title: 'Үнэ',
+                                    dataIndex: 'price',
+                                    width: 100,
+                                    render: (text) => {
+                                       return numberToCurrency(text);
+                                    }
+                                 },
+                                 {
+                                    title: '',
+                                    width: 40,
+                                    render: (_text, row) => {
+                                       return (
+                                          <Button
+                                             onClick={() => add(row)}
+                                             icon={
+                                                <PlusCircleOutlined
+                                                   style={{
+                                                      color: 'green'
+                                                   }}
+                                                />
+                                             }
+                                          />
+                                       );
+                                    }
+                                 }
+                              ]}
+                              dataSource={examination}
+                              pagination={{
+                                 position: ['bottomCenter'],
+                                 size: 'small',
+                                 current: metaExamination.page,
+                                 total: metaExamination.itemCount,
+                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 pageSize: metaExamination.limit,
+                                 showSizeChanger: true,
+                                 pageSizeOptions: ['5', '10', '20', '50'],
+                                 showQuickJumper: true,
+                                 onChange: (page, pageSize) =>
+                                    getTypeById(selectedExaminationId, page, pageSize, filterValue)
+                              }}
+                           />
+                        </ConfigProvider>
                      </div>
                   </div>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
@@ -158,6 +226,7 @@ function Examination({ isOpen, isClose, handleclick }) {
                            scroll={{
                               y: 400
                            }}
+                           locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                            columns={[
                               {
                                  title: 'Нэр',
@@ -186,13 +255,14 @@ function Examination({ isOpen, isClose, handleclick }) {
                               {
                                  title: '',
                                  width: 40,
-                                 render: (_text, row) => {
+                                 render: (_text, _row, index) => {
                                     return (
                                        <Button
+                                          onClick={() => remove(index)}
                                           icon={
-                                             <PlusCircleOutlined
+                                             <CloseCircleOutlined
                                                 style={{
-                                                   color: 'green'
+                                                   color: 'red'
                                                 }}
                                              />
                                           }
@@ -201,96 +271,13 @@ function Examination({ isOpen, isClose, handleclick }) {
                                  }
                               }
                            ]}
-                           dataSource={filteredExamination}
+                           dataSource={selectedExaminations}
                            pagination={false}
                         />
                      </div>
                   </div>
                </div>
             </div>
-            {/* <div className="flex flex-row">
-               <div className="basis-1/5">
-                  {examinations.map((examination, index) => {
-                     return (
-                        <Button
-                           onClick={() => getTypeById(examination.id)}
-                           className="w-full mb-1 bg-[#3d9970] text-white rounded-lg"
-                           key={index}
-                        >
-                           {examination.name}
-                        </Button>
-                     );
-                  })}
-               </div>
-               <div className="basis-2/5">
-                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
-                     <Table className="ant-border-space" style={{ width: '100%' }}>
-                        <thead className="ant-table-thead bg-slate-200">
-                           <tr>
-                              <th className="font-bold text-sm align-middle">Нэр</th>
-                              <th rowSpan={2} className="font-bold text-sm align-middle">
-                                 Үнэ
-                              </th>
-                           </tr>
-                           <tr>
-                              <th>
-                                 <Input
-                                    placeholder="Хайх"
-                                    allowClear
-                                    onChange={(e) => setSearchField(e.target.value)}
-                                 />
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody className="ant-table-tbody p-0">
-                           {filteredExamination.map((item, index) => {
-                              return (
-                                 <tr
-                                    onDoubleClick={() => add(item)}
-                                    key={index}
-                                    className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
-                                 >
-                                    <td className="whitespace-pre-line">{item.name}</td>
-                                    <td>{item.price}₮</td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </Table>
-                  </div>
-               </div>
-               <div className="basis-2/5">
-                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
-                     <Table className="ant-border-space" style={{ width: '100%' }}>
-                        <thead className="ant-table-thead bg-slate-200">
-                           <tr>
-                              <th className="font-bold text-sm align-middle">Нэр</th>
-                              <th className="font-bold text-sm align-middle">Үнэ</th>
-                              <th></th>
-                           </tr>
-                        </thead>
-                        <tbody className="ant-table-tbody p-0">
-                           {selectedExaminations.map((item, index) => {
-                              return (
-                                 <tr key={index} className="ant-table-row ant-table-row-level-0">
-                                    <td className="whitespace-pre-line">{item.name}</td>
-                                    <td>{item.price}₮</td>
-                                    <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
-                                       <CloseOutlined
-                                          style={{
-                                             color: 'red',
-                                             verticalAlign: 'middle'
-                                          }}
-                                       />
-                                    </td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </Table>
-                  </div>
-               </div>
-            </div> */}
          </Modal>
       </>
    );
