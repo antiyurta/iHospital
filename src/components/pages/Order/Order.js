@@ -20,6 +20,7 @@ import { useLocation } from 'react-router-dom';
 import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
+import OrderTable from './OrderTable/OrderTable';
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, save }) {
    const token = useSelector(selectCurrentToken);
    const IncomePatientId = useLocation()?.state?.patientId;
@@ -32,6 +33,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
    const [total, setTotal] = useState(Number);
 
    const handleclick = async (value) => {
+      console.log(value);
       if (isPackage) {
          var services = [];
          value.map((item) => {
@@ -67,7 +69,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
             if (item.type === 8) {
                service.id = item.id;
                service.name = item.name;
-               service.dose = '';
+               service.dose = item.dose;
                service.price = 0;
                service.oPrice = item.price;
                service.type = item.type;
@@ -187,6 +189,39 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
          setShowInpatient(false);
       }
    };
+   const RenderCategories = () => {
+      categories?.map((category) => {
+         if (category.name === 'Examination') {
+            setShowExamination(true);
+         } else if (category.name === 'Xray') {
+            setShowXray(true);
+         } else if (category.name === 'Medicine') {
+            setShowMedicine(true);
+         } else if (category.name === 'SetOrder') {
+            // setModalBody(<SetOrder handleclick={handleclick} />);
+            // setModalTitle('СетОрдер сонгох');
+         } else if (category.name === 'RecentRecipe') {
+            // setModalBody(<RecentRecipe handleclick={handleclick} />);
+            // setModalTitle('Өмнөх жор сонгох');
+         } else if (category.name === 'Treatment') {
+            setShowTreatment(true);
+         } else if (category.name === 'Surgery') {
+            // setModalBody(<Surgery handleclick={handleclick} />);
+            // setModalTitle('Мэс, засал сонгох');
+         } else if (category.name === 'Endo') {
+            // setModalBody(<Endo handleclick={handleclick} />);
+            // setModalTitle('Дуран сонгох');
+         } else if (category.name === 'Package') {
+            setShowPackage(true);
+         } else if (category.name === 'Inpatient') {
+            setShowInpatient(true);
+         } else if (category.name === 'doctorInspection') {
+            setShowDoctorInspection(true);
+         } else if (category.name === 'Reinspection') {
+            setShowReinspection(true);
+         }
+      });
+   };
    const newModalCategory = (category) => {
       if (selectedPatient?.id || isPackage) {
          if (category.name === 'Examination') {
@@ -227,38 +262,33 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
       setTotal(0);
    }, [selectedPatient]);
    useEffect(() => {
-      console.log('asdasdas');
-   }, [orderForm.getFieldValue('services')]);
+      RenderCategories();
+   }, []);
+
    return (
       <>
-         {showExamination && <Examination isOpen={showExamination} isClose={isClose} handleclick={handleclick} />}
-         {showXray && <Xray isOpen={showXray} isClose={isClose} handleclick={handleclick} />}
-         {showTreatment && <Treatment isOpen={showTreatment} isClose={isClose} handleclick={handleclick} />}
-         {showMedicine && <Medicine isOpen={showMedicine} isClose={isClose} handleclick={handleclick} />}
-         {showPackage && <Package isOpen={showPackage} isClose={isClose} handleclick={handleclick} />}
-         {showInpatient && (
-            <InpatientRequest isOpen={showInpatient} isClose={isClose} handleClick={inpatientRequestClick} />
-         )}
-         {showDoctorInspection && (
-            <DoctorInspection isOpen={showDoctorInspection} isClose={isClose} handleclick={handleclick} />
-         )}
-         {showReinspection && (
-            <Reinspection isOpen={showReinspection} isClose={isClose} selectedPatient={selectedPatient} />
-         )}
+         <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+            {showExamination && <Examination handleclick={handleclick} />}
+            {showXray && <Xray handleclick={handleclick} />}
+            {showTreatment && <Treatment handleclick={handleclick} />}
+            {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
+            {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
+            {/* {showInpatient && ( */}
+            {/* <InpatientRequest isOpen={showInpatient} isClose={isClose} handleClick={inpatientRequestClick} /> */}
+            {/* )} */}
+            {/* {showDoctorInspection && ( */}
+            {/* <DoctorInspection isOpen={showDoctorInspection} isClose={isClose} handleclick={handleclick} /> */}
+            {/* )} */}
+            {/* {showReinspection && ( */}
+            {/* <Reinspection isOpen={showReinspection} isClose={isClose} selectedPatient={selectedPatient} /> */}
+            {/* )} */}
+         </div>
+
          <div className="flex flex-wrap">
             <div className="w-full pb-4">
-               {categories.map((category, index) => {
-                  return (
-                     <Button
-                        style={{ marginRight: 1, marginLeft: 1 }}
-                        type="primary"
-                        key={index}
-                        onClick={() => newModalCategory(category)}
-                     >
-                        {category.label}
-                     </Button>
-                  );
-               })}
+               {/* {categories.map((category, index) => {
+                  return category.children;
+               })} */}
                <Button
                   className="float-right"
                   type="primary"
@@ -274,6 +304,11 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
             </div>
             <div className="w-full">
                <Form form={orderForm}>
+                  <Form.List name="services">
+                     {(services, { add, remove }) => (
+                        <OrderTable usageType={usageType} form={orderForm} services={services} remove={remove} />
+                     )}
+                  </Form.List>
                   <Form.List name="services">
                      {(fields, { add, remove }) => (
                         <>

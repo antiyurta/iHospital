@@ -25,7 +25,7 @@ function FormRender({ form, formOptionIds }) {
                         <Checkbox.Group>
                            {data?.options?.map((option, index) => {
                               return (
-                                 <Checkbox key={index} value={index}>
+                                 <Checkbox key={index} value={option.keyWord}>
                                     {option.label}
                                  </Checkbox>
                               );

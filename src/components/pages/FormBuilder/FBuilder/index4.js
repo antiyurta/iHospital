@@ -126,10 +126,19 @@ function index4({ options, namePanel, handleChange }) {
                                                                {() => {
                                                                   return (
                                                                      <div className="inline-flex p-1 w-full">
-                                                                        <div className="p-1 w-full">
+                                                                        <div className="p-1 grid grid-cols-2 gap-1">
                                                                            <Form.Item
                                                                               label="Хариулт"
                                                                               name={[optionFields.name, 'label']}
+                                                                              style={{
+                                                                                 marginBottom: 0
+                                                                              }}
+                                                                           >
+                                                                              <Input />
+                                                                           </Form.Item>
+                                                                           <Form.Item
+                                                                              label="Түлхүүр"
+                                                                              name={[optionFields.name, 'keyWord']}
                                                                               style={{
                                                                                  marginBottom: 0
                                                                               }}

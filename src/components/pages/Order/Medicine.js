@@ -1,11 +1,11 @@
-import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
-import { Input, Modal, Table } from 'antd';
+import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get, numberToCurrency, openNofi } from '../../comman';
+import { Get, localMn, openNofi } from '../../comman';
 const { Search } = Input;
-function Medicine({ isOpen, isClose, handleclick }) {
+function Medicine({ usageType, handleclick }) {
    const token = useSelector(selectCurrentToken);
    const [loading, setLoading] = useState(false);
    const [medicines, setMedicines] = useState([]);
@@ -13,9 +13,7 @@ function Medicine({ isOpen, isClose, handleclick }) {
    const [selectedMedicines, setSelectedMedicines] = useState([]);
    const [pIndex, setPindex] = useState('');
    const [pValue, setPvalue] = useState('');
-   //
-   const [testField, setTestField] = useState('');
-   const [testData, setTestData] = useState([]);
+   const [isOpenModal, setIsOpenModal] = useState(false);
    //
    const getMedicine = async (page, pageSize, value, index) => {
       setLoading(true);
@@ -37,14 +35,6 @@ function Medicine({ isOpen, isClose, handleclick }) {
          setMedicineMeta(response.meta);
       }
       setLoading(false);
-   };
-   const getHealtInsurance = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await DefualtGet('health-insurance/tablets', token, conf);
-      setTestData(response);
    };
    const add = (medicine) => {
       const state = selectedMedicines.includes(medicine);
@@ -77,14 +67,9 @@ function Medicine({ isOpen, isClose, handleclick }) {
    });
    const columns = [
       {
-         title: 'Код',
-         dataIndex: 'code',
-         ...getColumnSearchProps('code')
-      },
-      {
-         title: 'Худалдааны нэршил',
-         dataIndex: 'name',
-         ...getColumnSearchProps('name')
+         title: 'Олон улсын нэршил',
+         dataIndex: 'iName',
+         ...getColumnSearchProps('iName')
       },
       {
          title: 'Монгол нэршил',
@@ -94,115 +79,141 @@ function Medicine({ isOpen, isClose, handleclick }) {
             return <p className="whitespace-pre-wrap text-black">{text}</p>;
          }
       },
-      // {
-      //    title: 'Үлдэгдэл',
-      //    dataIndex: 'countC2'
-      // },
-      // {
-      //    title: 'Хэмжих нэгж',
-      //    dataIndex: 'ratecode',
-      //    width: 90
-      // },
       {
-         title: 'Үнэ',
-         dataIndex: 'price',
-         render: (text) => {
-            return numberToCurrency(text);
+         title: 'Худалдааны нэршил',
+         dataIndex: 'name',
+         ...getColumnSearchProps('name')
+      },
+      {
+         title: '',
+         width: 40,
+         render: (_text, row) => {
+            return (
+               <Button
+                  onClick={() => add(row)}
+                  icon={
+                     <PlusCircleOutlined
+                        style={{
+                           color: 'green'
+                        }}
+                     />
+                  }
+               />
+            );
          }
       }
    ];
    const selectedColumns = [
       {
-         title: 'Код',
-         dataIndex: 'code'
+         title: 'Олон улсын нэршил',
+         dataIndex: 'iName'
       },
       {
-         title: 'Нэр',
+         title: 'Монгол нэршил',
+         dataIndex: 'mnName',
+         render: (text) => {
+            return <p className="whitespace-pre-wrap text-black">{text}</p>;
+         }
+      },
+      {
+         title: 'Худалдааны нэршил',
          dataIndex: 'name'
       },
       {
-         title: 'Үйлдэл',
-         render: (_, row, rowIndex) => {
+         title: '',
+         width: 40,
+         render: (_text, _row, index) => {
             return (
-               <p onClick={() => remove(rowIndex)} className="hover:cursor-pointer">
-                  <CloseOutlined
-                     style={{
-                        color: 'red',
-                        verticalAlign: 'middle'
-                     }}
-                  />
-               </p>
+               <Button
+                  onClick={() => remove(index)}
+                  icon={
+                     <CloseCircleOutlined
+                        style={{
+                           color: 'red'
+                        }}
+                     />
+                  }
+               />
             );
          }
       }
    ];
    //
    useEffect(() => {
-      getMedicine(1, 10);
-      // getHealtInsurance();
-   }, [isOpen]);
+      if (usageType === 'OUT') {
+         getMedicine(1, 10);
+      }
+   }, []);
 
    return (
-      <div>
+      <>
+         <Button
+            type="primary"
+            onClick={() => {
+               setIsOpenModal(true);
+               setSelectedMedicines([]);
+            }}
+         >
+            Эм
+         </Button>
          <Modal
             title="Эм сонгох"
             width={'70%'}
-            open={isOpen}
-            onCancel={() => isClose('medicine', false)}
+            open={isOpenModal}
+            onCancel={() => setIsOpenModal(false)}
             onOk={() => {
                handleclick(selectedMedicines);
-               isClose('medicine', false);
+               setIsOpenModal(false);
             }}
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <div className="flex flex-wrap">
-               <div className="w-2/3">
-                  <div className="p-2">
-                     <Table
-                        rowKey={'id'}
-                        bordered
-                        loading={loading}
-                        rowClassName="hover: cursor-pointer"
-                        // scroll={{
-                        //    y: 400
-                        // }}
-                        onRow={(row, rowIndex) => {
-                           return {
-                              onDoubleClick: () => {
-                                 add(row);
-                              }
-                           };
-                        }}
-                        locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-                        columns={columns}
-                        dataSource={medicines}
-                        // dataSource={filteredMedicine}
-                        pagination={{
-                           simple: true,
-                           pageSize: 10,
-                           total: medicineMeta.itemCount,
-                           current: medicineMeta.page,
-                           onChange: (page, pageSize) => getMedicine(page, pageSize, pValue, pIndex)
-                        }}
-                     />
+            <div className="grid sm:grid-cols-1 xl:grid-cols-2 gap-3">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                  <div className="p-3">
+                     <p className="font-bold mb-3">Жагсаалт</p>
+                     <ConfigProvider locale={localMn()}>
+                        <Table
+                           rowKey={'id'}
+                           bordered
+                           loading={loading}
+                           locale={{ emptyText: 'Мэдээлэл байхгүй' }}
+                           columns={columns}
+                           dataSource={medicines}
+                           pagination={{
+                              position: ['bottomCenter'],
+                              size: 'small',
+                              current: medicineMeta.page,
+                              total: medicineMeta.itemCount,
+                              showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                              pageSize: medicineMeta.limit,
+                              showSizeChanger: true,
+                              pageSizeOptions: ['5', '10', '20', '50'],
+                              showQuickJumper: true,
+                              onChange: (page, pageSize) => getMedicine(page, pageSize, pValue, pIndex)
+                           }}
+                        />
+                     </ConfigProvider>
                   </div>
                </div>
-               <div className="w-1/3">
-                  <div className="p-2">
-                     <Table
-                        rowKey={'id'}
-                        bordered
-                        locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-                        columns={selectedColumns}
-                        dataSource={selectedMedicines}
-                        pagination={false}
-                     />
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                  <div className="p-3">
+                     <p className="font-bold mb-3">Сонгогдсон</p>
+                     <ConfigProvider locale={localMn()}>
+                        <Table
+                           rowKey={'id'}
+                           bordered
+                           locale={{ emptyText: 'Мэдээлэл байхгүй' }}
+                           columns={selectedColumns}
+                           dataSource={selectedMedicines}
+                           pagination={false}
+                        />
+                     </ConfigProvider>
                   </div>
                </div>
             </div>
          </Modal>
-      </div>
+      </>
    );
 }
 export default Medicine;
