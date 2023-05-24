@@ -152,10 +152,21 @@ function Index({ type, isDoctor }) {
          }
       }
    };
-   const getENR = (listId, id, departmentId, inspectionType, isPayment, regNum, roomNumber, departmentName) => {
+   const getENR = (
+      listId,
+      id,
+      departmentId,
+      inspectionType,
+      isPayment,
+      isInsurance,
+      regNum,
+      roomNumber,
+      departmentName
+   ) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
-      if (isPayment === false) {
+      const payment = isPayment || isInsurance;
+      if (payment === false) {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
          navigate(`/ambulatoryDetail`, {
@@ -645,6 +656,7 @@ function Index({ type, isDoctor }) {
                              row.inDepartmentId,
                              row.inspectionType,
                              row.isPayment,
+                             row.isInsurance,
                              row.patient?.registerNumber,
                              row.rooms?.roomNumber,
                              row.structure?.name
@@ -725,7 +737,16 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Төлбөр',
+         width: 60,
          dataIndex: ['isPayment'],
+         render: (text) => {
+            return getPaymentInfo(text);
+         }
+      },
+      {
+         title: 'Даатгал',
+         width: 60,
+         dataIndex: 'isInsurance',
          render: (text) => {
             return getPaymentInfo(text);
          }
