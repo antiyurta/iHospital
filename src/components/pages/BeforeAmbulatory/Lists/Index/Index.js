@@ -166,6 +166,7 @@ function Index({ type, isDoctor }) {
       // status heregteii anhan dawtan
       // tolbor shalgah
       const payment = isPayment || isInsurance;
+      console.log('=======>', payment);
       if (payment === false) {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
@@ -514,6 +515,7 @@ function Index({ type, isDoctor }) {
                                 row.inDepartmentId,
                                 row.inspectionType,
                                 row.isPayment,
+                                row.isInsurance,
                                 row.patient?.registerNumber,
                                 row.rooms?.roomNumber,
                                 row.structure?.name
@@ -755,6 +757,38 @@ function Index({ type, isDoctor }) {
          title: 'ЭСҮ Оноо',
          render: (_, row) => {
             // return getEWSInfo(row?.assesments[0]?.colorTotal, row?.assesments[0]?.totalEWS)
+         }
+      },
+      {
+         title: 'Үйлдэл',
+         fixed: 'right',
+         width: 170,
+         render: (_text, row) => {
+            return (
+               <Button
+                  className="hover:border-[#5cb85c]"
+                  style={{
+                     backgroundColor: '#5cb85c',
+                     color: 'white'
+                  }}
+                  onClick={() => {
+                     getENR(
+                        row.id,
+                        row.patientId,
+                        row.inDepartmentId,
+                        row.inspectionType,
+                        row.isPayment,
+                        row.isInsurance,
+                        row.patient?.registerNumber,
+                        row.rooms?.roomNumber,
+                        row.structure?.name
+                     );
+                  }}
+                  icon={<PlusCircleOutlined />}
+               >
+                  Үзлэг хийх
+               </Button>
+            );
          }
       }
    ];
