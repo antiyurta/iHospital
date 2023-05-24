@@ -261,10 +261,15 @@ export const openNofi = (type, message, description) => {
 };
 
 export const numberToCurrency = (amount) => {
-   return amount?.toLocaleString('mn-MN', {
+   const convertedAmount = amount?.toLocaleString('mn-MN', {
       style: 'currency',
       currency: 'MNT'
    });
+   if (convertedAmount === 'MNTNaN') {
+      return '';
+   } else {
+      return convertedAmount;
+   }
 };
 
 export const getAge = (registerNumber) => {

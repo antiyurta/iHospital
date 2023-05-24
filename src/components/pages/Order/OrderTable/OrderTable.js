@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, DatePicker, Input, InputNumber, Table } from 'antd';
+import { Button, Checkbox, DatePicker, Empty, Input, InputNumber, Table } from 'antd';
 import OrderForm from './OrderForm';
 import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
@@ -17,23 +17,19 @@ const checkNumber = (event) => {
 };
 
 function OrderTable(props) {
-   const { usageType, services, form, remove } = props;
+   const { usageType, services, form, remove, setTotal } = props;
    const minRule = (index) => {
+      const type = form.getFieldValue(['services', index, 'type']);
+      const state = type === 8 || type === 2 ? true : false;
       return [
          {
-            required:
-               form.getFieldValue(['services', index, 'type']) === 8 ||
-               form.getFieldValue(['services', index, 'type']) === 2
-                  ? true
-                  : false,
+            required: state,
             message: 'Заавал'
          },
          {
             validator: async (_, item) => {
-               if (item < 1) {
+               if (state && item < 1) {
                   return Promise.reject(new Error('Хамгийн багадаа 1'));
-               } else {
-                  return Promise.reject(new Error());
                }
             }
          }
@@ -65,24 +61,33 @@ function OrderTable(props) {
       const oPrice = form.getFieldValue(['services', key, 'oPrice']);
       form.setFieldValue(['services', key, 'total'], repeatTime * dayCount);
       form.setFieldValue(['services', key, 'price'], repeatTime * dayCount * oPrice);
-      // const services = form.getFieldValue('services');
-      // var total = 0;
-      // services.map((service) => {
-      //    total += service.price;
-      // });
-      // setTotal(total);
+      const services = form.getFieldValue('services');
+      var total = 0;
+      services.map((service) => {
+         if (service.price) {
+            total += service.price;
+         }
+      });
+      setTotal(total);
    };
    const isDisable = (index, name) => {
-      if (name === 'repeatTime') {
-         return form.getFieldValue(['services', index, 'type']) === 8 ||
-            form.getFieldValue(['services', index, 'type']) === 2
-            ? false
-            : true;
+      if (name === 'repeatTime' || name === 'dayCount') {
+         const type = form.getFieldValue(['services', index, 'type']);
+         if (type === 8 || type === 2) {
+            return false;
+         } else {
+            return true;
+         }
       }
    };
    return (
       <div className="overflow-auto">
-         <Table bordered dataSource={services} pagination={false}>
+         <Table
+            bordered
+            locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+            dataSource={services}
+            pagination={false}
+         >
             <Column
                title="Cito"
                width={40}
@@ -139,7 +144,6 @@ function OrderTable(props) {
                      <OrderForm
                         name={[index, 'specimen']}
                         editing={form.getFieldValue(['services', index, 'type']) === 0 ? true : false}
-                        // editing={true}
                      >
                         <TextArea />
                      </OrderForm>
@@ -180,7 +184,7 @@ function OrderTable(props) {
                         />
                         <OrderForm
                            name={[index, 'repeatTime']}
-                           rules={minRule(index)}
+                           rules={minRule(index, 'repeatTime')}
                            editing={!isDisable(index, 'repeatTime')}
                         >
                            <InputNumber
@@ -210,27 +214,52 @@ function OrderTable(props) {
             />
             <Column
                title="Хэдэн өдөр"
-               width={50}
+               width={130}
                dataIndex={'dayCount'}
                render={(value, row, index) => {
                   return (
-                     <OrderForm
-                        name={[index, 'dayCount']}
-                        rules={minRule(index)}
-                        editing={
-                           form.getFieldValue(['services', index, 'type']) === 8 ||
-                           form.getFieldValue(['services', index, 'type']) === 2
-                              ? true
-                              : false
-                        }
-                     >
-                        <InputNumber
-                           min={1}
-                           onChange={(_e) => totalCalculator(index)}
-                           keyboard={false}
-                           onKeyPress={checkNumber}
+                     <div className="inline-flex">
+                        <Button
+                           title="Хасах"
+                           onClick={() => totalCalculator(index, 'decrease', 'dayCount')}
+                           disabled={isDisable(index, 'dayCount')}
+                           className={isDisable(index, 'dayCount') ? 'hidden' : ''}
+                           icon={
+                              <MinusCircleOutlined
+                                 style={{
+                                    color: 'red'
+                                 }}
+                              />
+                           }
+                           shape="circle"
                         />
-                     </OrderForm>
+                        <OrderForm
+                           name={[index, 'dayCount']}
+                           rules={minRule(index, 'dayCount')}
+                           editing={!isDisable(index, 'dayCount')}
+                        >
+                           <InputNumber
+                              disabled={true}
+                              className=" font-semibold text-black"
+                              min={1}
+                              onKeyPress={checkNumber}
+                           />
+                        </OrderForm>
+                        <Button
+                           title="Нэмэх"
+                           onClick={() => totalCalculator(index, 'increase', 'dayCount')}
+                           disabled={isDisable(index, 'dayCount')}
+                           className={isDisable(index, 'dayCount') ? 'hidden' : ''}
+                           icon={
+                              <PlusCircleOutlined
+                                 style={{
+                                    color: 'green'
+                                 }}
+                              />
+                           }
+                           shape="circle"
+                        />
+                     </div>
                   );
                }}
             />
@@ -240,17 +269,7 @@ function OrderTable(props) {
                dataIndex={'total'}
                render={(value, row, index) => {
                   return (
-                     <OrderForm
-                        noStyle
-                        name={[index, 'total']}
-                        editing={false}
-                        // editing={
-                        //    form.getFieldValue(['services', index, 'type']) === 8 ||
-                        //    form.getFieldValue(['services', index, 'type']) === 2
-                        //       ? true
-                        //       : false
-                        // }
-                     >
+                     <OrderForm noStyle name={[index, 'total']} editing={false}>
                         <InputNumber onKeyPress={checkNumber} />
                      </OrderForm>
                   );

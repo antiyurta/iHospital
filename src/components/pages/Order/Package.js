@@ -36,7 +36,8 @@ function Package({ registerNumber, handleclick }) {
    const add = (packge) => {
       if (packge && registerNumber) {
          const age = getAge(registerNumber);
-         if (packge.minAge <= age && packge.maxAge <= age) {
+         console.log(age);
+         if (packge.minAge <= age && packge.maxAge >= age) {
             const state = selectedPackages.includes(packge);
             if (state) {
                openNofi('warning', 'Анхааруулга', 'Багц сонгогдсон байна');

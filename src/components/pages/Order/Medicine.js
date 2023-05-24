@@ -177,6 +177,9 @@ function Medicine({ usageType, handleclick }) {
                            rowKey={'id'}
                            bordered
                            loading={loading}
+                           scroll={{
+                              x: 500
+                           }}
                            locale={{ emptyText: 'Мэдээлэл байхгүй' }}
                            columns={columns}
                            dataSource={medicines}
