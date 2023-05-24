@@ -9,7 +9,6 @@ import { openNofi } from '../../comman';
 import Customized from '../BeforeAmbulatory/Customized/Index';
 
 function DocumentShow({ props }) {
-   console.log(props);
    const [documents, setDocuments] = useState([]);
    const [isOpenAM, setIsOpenAM] = useState(false);
    const [documentId, setDocumentId] = useState(Number);

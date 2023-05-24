@@ -1,4 +1,4 @@
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Select } from 'antd';
+import { Button, Form } from 'antd';
 import RecentRecipe from './RecentRecipe';
 import SetOrder from './SetOrder';
 import Medicine from './Medicine';
@@ -10,17 +10,15 @@ import Endo from './Endo';
 import Package from './Package';
 import InpatientRequest from './InpatientRequest';
 import React, { useState, useEffect } from 'react';
-import { Table } from 'react-bootstrap';
-import { MinusCircleOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost, Get, numberToCurrency, openNofi, Post } from '../../comman';
+import { DefaultPost } from '../../comman';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
-import mnMN from 'antd/es/calendar/locale/mn_MN';
 import OrderTable from './OrderTable/OrderTable';
+import PackageTable from './PackageTable/PackageTable';
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, save }) {
    const token = useSelector(selectCurrentToken);
    const IncomePatientId = useLocation()?.state?.patientId;
@@ -33,7 +31,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
    const [total, setTotal] = useState(Number);
 
    const handleclick = async (value) => {
-      console.log(value);
       if (isPackage) {
          var services = [];
          value.map((item) => {
@@ -115,13 +112,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
          setTotal(total + subTotal);
       }
    };
-   const removeOrder = (name) => {
-      const orders = orderForm.getFieldsValue('services');
-      var arr = [...orders.services];
-      arr.splice(name, 1);
-      setTotal(total - orders.services[name].price);
-      orderForm.setFieldValue('services', arr);
-   };
 
    const [showMedicine, setShowMedicine] = useState(false);
    const [showExamination, setShowExamination] = useState(false);
@@ -135,50 +125,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
    const [inPatientId, setInPatientId] = useState(Number);
    //
    const [orderForm] = Form.useForm();
-   const checkNumber = (event) => {
-      var charCode = event.charCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-         event.preventDefault();
-      } else {
-         return true;
-      }
-   };
-   const totalCalculator = (value, key) => {
-      const repeatTime = orderForm.getFieldValue(['services', key, 'repeatTime']);
-      const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
-      orderForm.setFieldValue(['services', key, 'total'], repeatTime * value);
-      orderForm.setFieldValue(['services', key, 'price'], repeatTime * value * oPrice);
-      const services = orderForm.getFieldValue('services');
-      var total = 0;
-      services.map((service) => {
-         total += service.price;
-      });
-      setTotal(total);
-   };
-   const calc = (e, key) => {
-      const oPrice = orderForm.getFieldValue(['services', key, 'oPrice']);
-      orderForm.setFieldValue(['services', key, 'qty'], e);
-      orderForm.setFieldValue(['services', key, 'price'], e * oPrice);
-   };
-   const isClose = (name, state) => {
-      if (name === 'inpatient') {
-         setShowInpatient(state);
-      } else if (name === 'medicine') {
-         setShowMedicine(state);
-      } else if (name === 'examination') {
-         setShowExamination(state);
-      } else if (name === 'treatment') {
-         setShowTreatment(state);
-      } else if (name === 'xray') {
-         setShowXray(state);
-      } else if (name === 'package') {
-         setShowPackage(state);
-      } else if (name === 'doctorInspection') {
-         setShowDoctorInspection(state);
-      } else if (name === 'Reinspection') {
-         setShowReinspection(state);
-      }
-   };
    const inpatientRequestClick = async (values) => {
       values.patientId = IncomePatientId;
       values.cabinetId = IncomeCabinetId;
@@ -222,41 +168,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
          }
       });
    };
-   const newModalCategory = (category) => {
-      if (selectedPatient?.id || isPackage) {
-         if (category.name === 'Examination') {
-            setShowExamination(true);
-         } else if (category.name === 'Xray') {
-            setShowXray(true);
-         } else if (category.name === 'Medicine') {
-            setShowMedicine(true);
-         } else if (category.name === 'SetOrder') {
-            // setModalBody(<SetOrder handleclick={handleclick} />);
-            // setModalTitle('СетОрдер сонгох');
-         } else if (category.name === 'RecentRecipe') {
-            // setModalBody(<RecentRecipe handleclick={handleclick} />);
-            // setModalTitle('Өмнөх жор сонгох');
-         } else if (category.name === 'Treatment') {
-            setShowTreatment(true);
-         } else if (category.name === 'Surgery') {
-            // setModalBody(<Surgery handleclick={handleclick} />);
-            // setModalTitle('Мэс, засал сонгох');
-         } else if (category.name === 'Endo') {
-            // setModalBody(<Endo handleclick={handleclick} />);
-            // setModalTitle('Дуран сонгох');
-         } else if (category.name === 'Package') {
-            setShowPackage(true);
-         } else if (category.name === 'Inpatient') {
-            setShowInpatient(true);
-         } else if (category.name === 'doctorInspection') {
-            setShowDoctorInspection(true);
-         } else if (category.name === 'Reinspection') {
-            setShowReinspection(true);
-         }
-      } else {
-         openNofi('error', 'Өвчтөн', 'Өвчтөн сонгоно уу');
-      }
-   };
    useEffect(() => {
       orderForm.resetFields();
       setTotal(0);
@@ -266,29 +177,55 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
    }, []);
 
    return (
-      <>
-         <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+      <div className="flex flex-col gap-3">
+         <div
+            className={
+               isPackage
+                  ? 'grid grid-cols-3 gap-3'
+                  : 'grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'
+            }
+         >
             {showExamination && <Examination handleclick={handleclick} />}
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
-            {/* {showInpatient && ( */}
-            {/* <InpatientRequest isOpen={showInpatient} isClose={isClose} handleClick={inpatientRequestClick} /> */}
-            {/* )} */}
-            {/* {showDoctorInspection && ( */}
-            {/* <DoctorInspection isOpen={showDoctorInspection} isClose={isClose} handleclick={handleclick} /> */}
-            {/* )} */}
-            {/* {showReinspection && ( */}
-            {/* <Reinspection isOpen={showReinspection} isClose={isClose} selectedPatient={selectedPatient} /> */}
-            {/* )} */}
+            {showInpatient && <InpatientRequest handleClick={inpatientRequestClick} />}
+            {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
+            {showReinspection && <Reinspection selectedPatient={selectedPatient} />}
          </div>
-
          <div className="flex flex-wrap">
+            <div className="w-full">
+               <Form form={orderForm}>
+                  <Form.List name="services">
+                     {(services, { add, remove }) => {
+                        if (isPackage) {
+                           return <PackageTable form={orderForm} services={services} remove={remove} />;
+                        } else {
+                           return (
+                              <OrderTable
+                                 usageType={usageType}
+                                 form={orderForm}
+                                 services={services}
+                                 remove={remove}
+                                 setTotal={setTotal}
+                              />
+                           );
+                        }
+                     }}
+                  </Form.List>
+               </Form>
+               <div className="flow-root py-3">
+                  <p className="float-left font-extrabold">Нийт Үнэ</p>
+                  <p className="float-right font-extrabold">
+                     {total.toLocaleString('mn-MN', {
+                        style: 'currency',
+                        currency: 'MNT'
+                     })}
+                  </p>
+               </div>
+            </div>
             <div className="w-full pb-4">
-               {/* {categories.map((category, index) => {
-                  return category.children;
-               })} */}
                <Button
                   className="float-right"
                   type="primary"
@@ -302,203 +239,8 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
                   {isPackage ? 'Багц хадгалах' : 'OTS Хадгалах'}
                </Button>
             </div>
-            <div className="w-full">
-               <Form form={orderForm}>
-                  <Form.List name="services">
-                     {(services, { add, remove }) => (
-                        <OrderTable usageType={usageType} form={orderForm} services={services} remove={remove} />
-                     )}
-                  </Form.List>
-                  <Form.List name="services">
-                     {(fields, { add, remove }) => (
-                        <>
-                           <div className="table-responsive pb-4" id="style-8" style={{ maxHeight: '420px' }}>
-                              <Table className="ant-border-space" style={{ width: '100%' }} bordered>
-                                 <thead className="ant-table-thead bg-slate-200">
-                                    {isPackage ? (
-                                       <tr>
-                                          <th>Нэр</th>
-                                          <th></th>
-                                       </tr>
-                                    ) : (
-                                       <tr>
-                                          <th className="font-bold text-sm align-middle">cito</th>
-                                          <th className="font-bold text-sm align-middle">Нэр</th>
-                                          <th className="font-bold text-sm align-middle">Хэлбэр</th>
-                                          <th className="font-bold text-sm align-middle">Тун</th>
-                                          <th className="font-bold text-sm align-middle">Сорьц</th>
-                                          <th className="font-bold text-sm align-middle">Тайлбар</th>
-                                          <th className="font-bold text-sm align-middle">Өдөрт хэдэн удаа</th>
-                                          <th className="font-bold text-sm align-middle w-5">Хэдэн өдөр</th>
-                                          <th className="font-bold text-sm align-middle">Нийт хэмжээ</th>
-                                          {usageType === 'IN' && (
-                                             <th className="font-bold text-sm align-middle">Хэрэгжүүлэх өдөр</th>
-                                          )}
-                                          <th className="font-bold text-sm align-middle">Үнэ</th>
-                                          <th className="font-bold text-sm align-middle">Үйлдэл</th>
-                                       </tr>
-                                    )}
-                                 </thead>
-                                 <tbody className="ant-table-tbody p-0">
-                                    {fields?.map(({ key, name }) => (
-                                       <tr key={key}>
-                                          {isPackage ? (
-                                             <>
-                                                <td>{orderForm.getFieldValue(['services', name, 'serviceName'])}</td>
-                                                <td>
-                                                   <MinusCircleOutlined
-                                                      style={{ color: 'red' }}
-                                                      onClick={() => remove(name)}
-                                                   />
-                                                </td>
-                                             </>
-                                          ) : (
-                                             <>
-                                                <td>
-                                                   <Form.Item
-                                                      name={[name, 'isCito']}
-                                                      valuePropName="checked"
-                                                      className="mb-0 hover:bg-transparent"
-                                                   >
-                                                      <Checkbox className="bg-transparent align-middle items-center" />
-                                                   </Form.Item>
-                                                </td>
-                                                <td className="whitespace-pre-line">
-                                                   {orderForm.getFieldValue(['services', name, 'name'])}
-                                                </td>
-                                                <td>{orderForm.getFieldValue(['services', name, 'medicineType'])}</td>
-                                                <td>
-                                                   <Form.Item name={[name, 'dose']} className="mb-0">
-                                                      <Input
-                                                         disabled={
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 8
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item name={[name, 'specimen']} className="mb-0">
-                                                      <Input
-                                                         disabled={
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 0
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item name={[name, 'description']} className="mb-0">
-                                                      <Input
-                                                      // disabled={
-                                                      //    orderForm.getFieldValue(
-                                                      //       [
-                                                      //          'services',
-                                                      //          name,
-                                                      //          'type'
-                                                      //       ]
-                                                      //    ) === 8
-                                                      //       ? false
-                                                      //       : true
-                                                      // }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item name={[name, 'repeatTime']} className="mb-0">
-                                                      <InputNumber
-                                                         onKeyPress={checkNumber}
-                                                         disabled={
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 2
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item name={[name, 'dayCount']} className="mb-0">
-                                                      <InputNumber
-                                                         onChange={(e) => totalCalculator(e, name)}
-                                                         disabled={
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 2
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <Form.Item name={[name, 'total']} className="mb-0">
-                                                      <InputNumber
-                                                         onChange={(e) => calc(e, name)}
-                                                         disabled={
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 8 ||
-                                                            orderForm.getFieldValue(['services', name, 'type']) === 2
-                                                               ? false
-                                                               : true
-                                                         }
-                                                      />
-                                                   </Form.Item>
-                                                </td>
-                                                {usageType === 'IN' && (
-                                                   <td>
-                                                      <Form.Item name={[name, 'startAt']} className="mb-0">
-                                                         <DatePicker
-                                                            showTime={{
-                                                               format: 'HH:mm'
-                                                            }}
-                                                            locale={mnMN}
-                                                            placeholder="Өдөр сонгох"
-                                                         />
-                                                      </Form.Item>
-                                                   </td>
-                                                )}
-                                                <td>
-                                                   <Form.Item shouldUpdate className="mb-0">
-                                                      {() => {
-                                                         const price = orderForm.getFieldValue([
-                                                            'services',
-                                                            name,
-                                                            'price'
-                                                         ]);
-                                                         return numberToCurrency(price);
-                                                      }}
-                                                   </Form.Item>
-                                                </td>
-                                                <td>
-                                                   <MinusCircleOutlined
-                                                      style={{ color: 'red' }}
-                                                      onClick={() => removeOrder(name)}
-                                                   />
-                                                </td>
-                                             </>
-                                          )}
-                                       </tr>
-                                    ))}
-                                 </tbody>
-                              </Table>
-                           </div>
-                        </>
-                     )}
-                  </Form.List>
-               </Form>
-               <div>
-                  <p className="float-left font-extrabold">Нийт Үнэ</p>
-                  <p className="float-right font-extrabold">
-                     {total.toLocaleString('mn-MN', {
-                        style: 'currency',
-                        currency: 'MNT'
-                     })}
-                  </p>
-               </div>
-            </div>
          </div>
-      </>
+      </div>
    );
 }
 export default Order;
