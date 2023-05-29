@@ -309,3 +309,20 @@ export const checkNumber = (event) => {
       return true;
    }
 };
+
+export const dateReduceTree = (data) => {
+   const date = '2023-04-30';
+   let i = 4;
+   function rec(index) {
+      if (index + i <= 10) {
+         console.log('======>', date.substring(index, index + i));
+         i = i + 1;
+         return rec(index + i);
+      } else {
+         return 1;
+      }
+   }
+   if (data?.length > 0) {
+      console.log(rec(0));
+   }
+};

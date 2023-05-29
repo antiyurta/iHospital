@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+@import url('https://fonts.cdnfonts.com/css/montserrat');
 @import './style/main.css';
 @import './style/responsive.css';
 @import './style/Hospital.css';
@@ -12,6 +14,84 @@
    --primary-color: #4a7fc1;
    --second-color: #f3f4f6;
 }
+
+.ant-spin-container {
+   height: 100%;
+}
+
+.offcanvas-header .btn-close {
+   /* background-color: #2d8cff; */
+   background: url('/src/assets/landing/x.svg');
+   background-size: cover;
+}
+
+/*  */
+.box {
+   flex: 1;
+   padding: 12px 0px;
+   align-items: center;
+   overflow: hidden;
+   transition: 1.5s;
+   line-height: 0;
+   background-color: white;
+   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+   border-radius: 12px;
+}
+
+.box > .subBox {
+   display: flex;
+   flex-direction: row;
+   align-items: flex-start;
+   gap: 24px;
+}
+
+.box > .subBox > img {
+   width: 150px;
+   height: calc(100%);
+   object-fit: cover;
+   margin: auto;
+   transition: 0.5s;
+}
+
+.box > p {
+   font-family: 'Roboto';
+   font-style: normal;
+   font-weight: 700;
+   font-size: 16px;
+   line-height: 150%;
+   /* identical to box height, or 24px */
+
+   text-align: center;
+
+   color: #2b395c;
+}
+
+.box:hover {
+   flex: 1 1 50%;
+   cursor: pointer;
+}
+.box:hover > .subBox {
+   padding: 0px 24px 0px 0px;
+}
+.box > .subBox > .text {
+   display: none;
+}
+.box:hover > .subBox > .text {
+   display: block;
+   font-family: 'Roboto';
+   font-style: normal;
+   text-align: justify;
+   font-weight: 400;
+   font-size: 14px;
+   line-height: 20px;
+}
+.box:hover > img {
+   width: 150px;
+   height: 150px;
+   margin: 0;
+}
+
+/*  */
 
 ol {
    list-style-type: none;
@@ -27,7 +107,7 @@ ol > li {
 }
 
 ol > li:before {
-   color: rgb(45, 140, 255);
+   color: #4a7fc1;
    font-weight: 600;
    font-size: 16px;
    content: counters(item, '.') '. ';

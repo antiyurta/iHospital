@@ -58,12 +58,16 @@ export const AuthContextProvider = ({ children }) => {
          .post('authentication/logout')
          .then((response) => {
             console.log(response);
-            localStorage.removeItem('tokens');
-            setUser(null);
+            // localStorage.removeItem('tokens');
+            // setUser(null);
             // navigate('/');
          })
          .catch((error) => {
             console.log(error);
+         })
+         .finally(() => {
+            localStorage.removeItem('tokens');
+            setUser(null);
          });
    };
 

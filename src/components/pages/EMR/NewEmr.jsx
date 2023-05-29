@@ -1,7 +1,7 @@
 import React from 'react';
 import Ocs from '../OCS/Ocs';
 import { connect } from 'react-redux';
-import { Get, Post, openNofi } from '../../comman';
+import { Get, Post, dateReduceTree, openNofi } from '../../comman';
 import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import moment from 'moment';
@@ -64,6 +64,7 @@ class NewEmr extends React.Component {
       };
       const response = await Get('appointment', this.props.token, conf);
       if (response.data.length > 0) {
+         dateReduceTree(response.data);
          var result = response.data.reduce(function (r, a) {
             r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);

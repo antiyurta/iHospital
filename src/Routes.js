@@ -1,6 +1,8 @@
 import React from 'react';
+//
 const Home = React.lazy(() => import('./components/Home'));
-
+const Privacy = React.lazy(() => import('./privacy/Index'));
+//
 const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
@@ -9,10 +11,10 @@ const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRol
 
 export const PublicRoutes = [
    {
-      name: 'Home',
-      mnName: 'Нүүр',
-      path: '/asdasdsad',
-      element: Home
+      name: 'Privacy',
+      mnName: 'Үйлчилгээний нөхцөл',
+      path: '/privacy',
+      element: Privacy
    }
 ];
 export const ProtectedRoutes = [

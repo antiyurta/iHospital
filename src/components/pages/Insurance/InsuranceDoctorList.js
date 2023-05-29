@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
-import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Table } from 'antd';
+import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table } from 'antd';
 import { localMn, numberToCurrency } from '../../comman';
 import { CheckCircleOutlined, EditOutlined, ExclamationCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
+import moment from 'moment';
 
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 function InsuranceDocterList() {
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState({});
    const [filterForm] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
+   const [icdGroup, setIcdGroup] = useState([]);
    //
    const [monitorData, setMonitorData] = useState({});
    //
    const getList = async (page, pageSize, filterValues) => {
       setIsLoading(true);
-      console.log(filterValues);
       const conf = {
          params: {
             page: page,
@@ -26,10 +28,19 @@ function InsuranceDocterList() {
          }
       };
       if (filterValues) {
-         const start = moment(filterValues.date[0]).set({ hour: 0, minute: 0, second: 0 });
-         const end = moment(filterValues.date[1]).set({ hour: 23, minute: 59, second: 59 });
-         conf.params.startDate = moment(start).format('YYYY-MM-DD HH:mm');
-         conf.params.endDate = moment(end).format('YYYY-MM-DD HH:mm');
+         if (filterValues.date) {
+            const start = moment(filterValues.date[0]).set({ hour: 0, minute: 0, second: 0 });
+            const end = moment(filterValues.date[1]).set({ hour: 23, minute: 59, second: 59 });
+            conf.params.startDate = moment(start).format('YYYY-MM-DD HH:mm');
+            conf.params.endDate = moment(end).format('YYYY-MM-DD HH:mm');
+         }
+         conf.params.icdGroup = filterValues.icdGroup;
+         conf.params.serviceType = filterValues.serviceType;
+         conf.params.firstname = filterValues.firstname;
+         conf.params.lastname = filterValues.lastname;
+         conf.params.regno = filterValues.regno;
+         conf.params.process = filterValues.process;
+         conf.params.resCode = filterValues.resCode;
       }
       jwtInterceopter
          .get('insurance-seal', conf)
@@ -44,6 +55,16 @@ function InsuranceDocterList() {
             setIsLoading(false);
          });
    };
+   const getIcdGroup = async () => {
+      await jwtInterceopter
+         .get('insurance/hics-service-group')
+         .then((response) => {
+            setIcdGroup(response.data.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
+   };
    const getInfoProcess = (process) => {
       if (process === 0) {
          return 'Битүүмж үүсээгүй байна.';
@@ -56,6 +77,13 @@ function InsuranceDocterList() {
       }
    };
    const columns = [
+      {
+         title: 'Огноо',
+         dataIndex: 'createdAt',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD');
+         }
+      },
       {
          title: 'Тасаг',
          dataIndex: 'departName'
@@ -119,6 +147,7 @@ function InsuranceDocterList() {
    ];
    useEffect(() => {
       getList(1, 10, null);
+      getIcdGroup();
    }, []);
    return (
       <div className="flex flex-col gap-3">
@@ -130,25 +159,53 @@ function InsuranceDocterList() {
                         <RangePicker locale={mnMN} />
                      </Form.Item>
                      <Form.Item label="Бүлэг" name="icdGroup" className="mb-0">
-                        <Input />
+                        <Select allowClear>
+                           {icdGroup?.map((group, index) => {
+                              return (
+                                 <Option key={index} value={group.id}>
+                                    {group.name}
+                                 </Option>
+                              );
+                           })}
+                        </Select>
                      </Form.Item>
                      <Form.Item label="Төрөл" name="serviceType" className="mb-0">
-                        <Input />
+                        <Select allowClear>
+                           <Option value={0}>Шинжилгээ</Option>
+                           <Option value={1}>Оношилгоо</Option>
+                           <Option value={2}>Эмчилгээ</Option>
+                           <Option value={3}>Мэс засал</Option>
+                           <Option value={4}>Дуран</Option>
+                           <Option value={5}>Үзлэг</Option>
+                           <Option value={6}>Хэвтэн</Option>
+                           <Option value={7}>Багц</Option>
+                           <Option value={8}>Эм</Option>
+                           <Option value={9}>Өрөө</Option>
+                           <Option value={10}>Утаснаас</Option>
+                        </Select>
                      </Form.Item>
                      <Form.Item label="РД Дугаар" name="regno" className="mb-0">
                         <Input />
                      </Form.Item>
                      <Form.Item label="Овог" name="lastname" className="mb-0">
-                        <Input />
+                        <Input allowClear />
                      </Form.Item>
                      <Form.Item label="Нэр" name="firstname" className="mb-0">
-                        <Input />
+                        <Input allowClear />
                      </Form.Item>
                      <Form.Item label="Урсгал" name="process" className="mb-0">
-                        <Input />
+                        <Select allowClear>
+                           <Option value={0}>Битүүмж үүсээгүй байна.</Option>
+                           <Option value={1}>Битүүмж амжилттай үүссэн байна.</Option>
+                           <Option value={2}>Төлбөрийн мэдээлэл илгээгүй байна.</Option>
+                           <Option value={3}>Төлбөрийн мэдээлэл илгээсэн байна.</Option>
+                        </Select>
                      </Form.Item>
                      <Form.Item label="RКод" name="resCode" className="mb-0">
-                        <Input />
+                        <Select allowClear>
+                           <Option value={200}>Амжиллтай</Option>
+                           <Option value={400}>Амжилтгүй</Option>
+                        </Select>
                      </Form.Item>
                   </div>
                </Form>
