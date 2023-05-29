@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Fragment, Suspense, useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../features/AuthContext';
 import { Nav, Navbar } from 'react-bootstrap';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo/iHospital.svg';
 import collapsedLogo from '../../../assets/logo/iHospitalCollapsed.svg';
 import male from '../../../assets/images/maleAvatar.svg';
@@ -27,6 +27,7 @@ import {
 } from '../../../features/authReducer';
 import jwtInterceopter from '../../jwtInterceopter';
 import { logout } from '../../../features/authReducer';
+import FullScreenLoader from '../../FullScreenLoader';
 const { Content, Sider } = Layout;
 function MainLayout({ children }) {
    const { user, logoutt } = useContext(AuthContext);
@@ -216,19 +217,7 @@ function MainLayout({ children }) {
                   <Navbar.Toggle />
                   <Navbar.Collapse className="justify-content-end">
                      <Navbar.Text className="h-16">
-                        {!user ? (
-                           <Button
-                              style={{
-                                 margin: '10px 0px',
-                                 fontWeight: 600
-                              }}
-                              type="primary"
-                           >
-                              <Nav.Link as={Link} to="/login">
-                                 Нэвтрэх
-                              </Nav.Link>
-                           </Button>
-                        ) : (
+                        {user && (
                            <Dropdown
                               overlay={menu}
                               trigger={['click']}
@@ -253,7 +242,13 @@ function MainLayout({ children }) {
                </Navbar>
                <Content className="bg-[#F7F8FA] overflow-auto">
                   <div className="body">
-                     <div className="tabled">{children}</div>
+                     <div className="tabled">
+                        <Fragment>
+                           <Suspense fallback={<FullScreenLoader full={true} />}>
+                              <Outlet />
+                           </Suspense>
+                        </Fragment>
+                     </div>
                   </div>
                </Content>
             </Layout>

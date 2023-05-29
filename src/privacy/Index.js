@@ -6,7 +6,7 @@ function Index() {
    return (
       <Container>
          <div className="flex flex-wrap">
-            <div className="w-full">
+            <div className="w-full pt-[144px]">
                <Card
                   className="header-solid max-h-max rounded-md"
                   title={<Title level={2}>Үйлчилгээний нөхцөл</Title>}
