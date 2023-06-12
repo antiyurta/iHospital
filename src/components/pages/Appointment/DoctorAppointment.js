@@ -149,7 +149,7 @@ function DoctorAppointment() {
                <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
             </div>
          </div>
-         <Appointment selectedPatient={selectedPatient} type={1} />
+         <Appointment selectedPatient={selectedPatient} type={1} prevAppointmentId={null} />
       </div>
    );
 }

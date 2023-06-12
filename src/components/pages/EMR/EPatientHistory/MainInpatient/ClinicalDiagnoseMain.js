@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Get, Patch, Post } from '../../../../comman';
 import { selectCurrentToken } from '../../../../../features/authReducer';
 import { useSelector } from 'react-redux';
-import { Button, Card, Form, Input, List, Modal } from 'antd';
+import { Button, Card, Form, Input, List, Modal, Select, Table } from 'antd';
 import Diagnose from '../../../service/Diagnose';
+import jwtInterceopter from '../../../../jwtInterceopter';
+import EditableFormItem from '../../../611/Support/EditableFormItem';
+import EditableFormItemSelect from '../../../611/Support/EditableFormItemSelect';
 const { TextArea } = Input;
-function ClinicalDiagnoseMain({ PatientId, InpatientRequestId }) {
+const { Column } = Table;
+const { Option } = Select;
+function ClinicalDiagnoseMain({ PatientId, InpatientRequestId, ServiceId }) {
    const token = useSelector(selectCurrentToken);
    const [form] = Form.useForm();
    const [clinicalDiagnoses, setClinicalDiagnoses] = useState([]);
@@ -13,29 +18,37 @@ function ClinicalDiagnoseMain({ PatientId, InpatientRequestId }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
    const getDiagnoses = async () => {
       setClinicalIsLoading(true);
-      const conf = {
-         headers: {},
-         params: {
-            inpatientRequestId: InpatientRequestId
-         }
-      };
-      const response = await Get('emr/inspectionNote', token, conf);
-      setClinicalDiagnoses(response.data);
-      setClinicalIsLoading(false);
+      await jwtInterceopter
+         .get('emr/inspectionNote', {
+            params: {
+               inpatientRequestId: InpatientRequestId
+            }
+         })
+         .then((response) => {
+            setClinicalDiagnoses(response.data.response.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setClinicalIsLoading(false);
+         });
    };
    const openModal = () => {
       form.resetFields();
       setIsOpenModal(true);
    };
    const onFinish = async (values) => {
-      console.log(values);
       const conf = {
          headers: {},
          params: {}
       };
       const data = {
          patientId: PatientId,
-         inpatientRequestId: InpatientRequestId
+         inpatientRequestId: InpatientRequestId,
+         pain: values.pain,
+         question: values.question,
+         inspection: values.inspection
       };
       var diagnoseData = [];
       values.diagnose?.map((diagnose) => {
@@ -50,6 +63,7 @@ function ClinicalDiagnoseMain({ PatientId, InpatientRequestId }) {
          });
       });
       data['diagnoses'] = diagnoseData;
+      console.log('===>', data);
       const response = await Post('emr/inspectionNote', token, conf, data);
       if (response === 201) {
          form.resetFields();
@@ -57,7 +71,8 @@ function ClinicalDiagnoseMain({ PatientId, InpatientRequestId }) {
       }
    };
    const DiagnoseHandleClick = (diagnoses) => {
-      form.setFieldValue('diagnose', diagnoses);
+      console.log(diagnoses);
+      form.setFieldsValue({ diagnose: diagnoses });
    };
    useEffect(() => {
       getDiagnoses();
@@ -122,7 +137,56 @@ function ClinicalDiagnoseMain({ PatientId, InpatientRequestId }) {
                <Form.Item label="Бодит үзлэгээс:" name="inspection">
                   <TextArea />
                </Form.Item>
-               <Diagnose handleClick={DiagnoseHandleClick} type={0} />
+               <Diagnose
+                  handleClick={DiagnoseHandleClick}
+                  type={[0, 1, 2]}
+                  appointmentHasInsurance={false}
+                  serviceId={ServiceId}
+               />
+               <Form.List name="diagnose">
+                  {(diagnose) => (
+                     <Table bordered dataSource={diagnose} pagination={false}>
+                        <Column
+                           dataIndex={'code'}
+                           title="Код"
+                           render={(_value, _row, index) => {
+                              return (
+                                 <EditableFormItem name={[index, 'code']}>
+                                    <Input />
+                                 </EditableFormItem>
+                              );
+                           }}
+                        />
+                        <Column
+                           dataIndex={'nameMn'}
+                           title="Код"
+                           render={(_value, _row, index) => {
+                              return (
+                                 <EditableFormItem name={[index, 'nameMn']}>
+                                    <Input />
+                                 </EditableFormItem>
+                              );
+                           }}
+                        />
+                        <Column
+                           dataIndex={'diagnoseType'}
+                           title="Оношийн төрөл"
+                           render={(_value, _row, index) => {
+                              return (
+                                 <EditableFormItemSelect name={[index, 'diagnoseType']}>
+                                    <Select style={{ width: '100%' }}>
+                                       <Option value={0}>Үндсэн</Option>
+                                       <Option value={1}>Урьдчилсан</Option>
+                                       <Option value={2}>Хавсрах онош</Option>
+                                       <Option value={3}>Дагалдах</Option>
+                                    </Select>
+                                 </EditableFormItemSelect>
+                              );
+                           }}
+                        />
+                     </Table>
+                  )}
+               </Form.List>
             </Form>
          </Modal>
       </>

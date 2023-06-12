@@ -19,7 +19,7 @@ import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
 import OrderTable from './OrderTable/OrderTable';
 import PackageTable from './PackageTable/PackageTable';
-function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, save }) {
+function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, appointmentHasInsurance, save }) {
    const token = useSelector(selectCurrentToken);
    const IncomePatientId = useLocation()?.state?.patientId;
    const IncomeCabinetId = useLocation()?.state?.cabinetId;
@@ -117,6 +117,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
    const [showExamination, setShowExamination] = useState(false);
    const [showTreatment, setShowTreatment] = useState(false);
    const [showXray, setShowXray] = useState(false);
+   const [showSurgery, setShowSurgery] = useState(false);
    const [showInpatient, setShowInpatient] = useState(false);
    const [showPackage, setShowPackage] = useState(false);
    //
@@ -129,10 +130,10 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
       values.patientId = IncomePatientId;
       values.cabinetId = IncomeCabinetId;
       values.appointmentId = IncomeAppointmentId;
+      values.isInsurance = appointmentHasInsurance;
       const response = await DefaultPost('service/inpatient-request', token, config, values);
       if (response) {
          setInPatientId(response.id);
-         setShowInpatient(false);
       }
    };
    const RenderCategories = () => {
@@ -152,8 +153,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
          } else if (category.name === 'Treatment') {
             setShowTreatment(true);
          } else if (category.name === 'Surgery') {
-            // setModalBody(<Surgery handleclick={handleclick} />);
-            // setModalTitle('Мэс, засал сонгох');
+            setShowSurgery(true);
          } else if (category.name === 'Endo') {
             // setModalBody(<Endo handleclick={handleclick} />);
             // setModalTitle('Дуран сонгох');
@@ -189,10 +189,11 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, sa
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
+            {showSurgery && <Surgery />}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
             {showInpatient && <InpatientRequest handleClick={inpatientRequestClick} />}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
-            {showReinspection && <Reinspection selectedPatient={selectedPatient} />}
+            {showReinspection && <Reinspection selectedPatient={selectedPatient} appointmentId={IncomeAppointmentId} />}
          </div>
          <div className="flex flex-wrap">
             <div className="w-full">

@@ -10,6 +10,7 @@ import Marquee from 'react-fast-marquee';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
+import NewMainPatientHistory from './EPatientHistory/newMainPatientHistory';
 import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
 import { delEmrData } from '../../../features/emrReducer';
@@ -161,7 +162,7 @@ class NewEmr extends React.Component {
       }
    }
    async componentWillUnmount() {
-      this.props.delEmrData();
+      // this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -363,6 +364,7 @@ class NewEmr extends React.Component {
                            Inspection={this.props.IncomeEMRData.inspection}
                            UsageType={this.props.IncomeEMRData.usageType}
                            AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                           ServiceId={this.props.IncomeEMRData.serviceId}
                            handleClick={this.handleTypeChange}
                         />
                      </Card>
@@ -381,6 +383,7 @@ class NewEmr extends React.Component {
                         <Ocs
                            selectedPatient={this.state.selectedPatient}
                            UsageType={this.props.IncomeEMRData.usageType}
+                           AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
                            handleClick={this.saveOrder}
                         />
                      </Card>

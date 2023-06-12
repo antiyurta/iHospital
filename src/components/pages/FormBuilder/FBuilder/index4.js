@@ -1,6 +1,6 @@
 import React from 'react';
 import { DeleteOutlined, PlusCircleOutlined, PlusOutlined, RightCircleOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Radio, Select } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
 function index4({ options, namePanel, handleChange }) {
@@ -80,6 +80,7 @@ function index4({ options, namePanel, handleChange }) {
                                                       <Option value="radio">Radio</Option>
                                                       <Option value="dropdown">Dropdown</Option>
                                                       <Option value="input">Input</Option>
+                                                      <Option value="inputNumber">InputNumber</Option>
                                                       <Option value="textarea">TextArea</Option>
                                                    </Select>
                                                 </Form.Item>
@@ -98,6 +99,19 @@ function index4({ options, namePanel, handleChange }) {
                                                    style={{ marginBottom: 0 }}
                                                 >
                                                    <TextArea />
+                                                </Form.Item>
+                                                <Form.Item
+                                                   {...restField}
+                                                   label="Too?"
+                                                   name={[optionField.name, 'isInteger']}
+                                                   style={{
+                                                      marginBottom: 0
+                                                   }}
+                                                >
+                                                   <Radio.Group>
+                                                      <Radio value={true}>YES</Radio>
+                                                      <Radio value={false}>NO</Radio>
+                                                   </Radio.Group>
                                                 </Form.Item>
                                              </div>
                                           </div>

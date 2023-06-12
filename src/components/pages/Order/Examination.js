@@ -1,10 +1,11 @@
 import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Empty, Input, Modal, Table } from 'antd';
+import { Button, ConfigProvider, Empty, Input, Modal, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { localMn, numberToCurrency, openNofi } from '../../comman';
 import jwtInterceopter from '../../jwtInterceopter';
 
 const { Search } = Input;
+const { Option } = Select;
 
 function Examination({ handleclick }) {
    const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +16,7 @@ function Examination({ handleclick }) {
    const [metaExamination, setMetaExamination] = useState({});
    const [selectedExaminations, setSelectedExaminations] = useState([]);
    const [filterValue, setFilterValue] = useState('');
+   const [filterDrgCode, setFilterDrgCode] = useState(null);
    const getExamination = async () => {
       await jwtInterceopter
          .get('service/type', {
@@ -30,7 +32,7 @@ function Examination({ handleclick }) {
          });
    };
 
-   const getTypeById = async (id, page, pageSize, filterValue) => {
+   const getTypeById = async (id, page, pageSize, filterValue, drgCode) => {
       setIsLoading(true);
       setFilterValue(filterValue);
       await jwtInterceopter
@@ -39,7 +41,8 @@ function Examination({ handleclick }) {
                examinationTypeId: id,
                page: page,
                limit: pageSize,
-               name: filterValue ? filterValue : null
+               name: filterValue ? filterValue : null,
+               drgCode: filterDrgCode
             }
          })
          .then((response) => {
@@ -127,6 +130,20 @@ function Examination({ handleclick }) {
                <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
+                        <div className="mb-3">
+                           <label>Төрөл сонгох</label>
+                           <Select
+                              onChange={(e) => {
+                                 console.log(e);
+                                 setFilterDrgCode(e);
+                              }}
+                              allowClear
+                              className="w-full"
+                           >
+                              <Option value="300040">Өндөр өртөгтэй</Option>
+                              <Option value="300011">Амбулатори тусламж үйлчилгээ</Option>
+                           </Select>
+                        </div>
                         <Search
                            className="mb-3"
                            placeholder="Хайх"
@@ -147,6 +164,7 @@ function Examination({ handleclick }) {
                               }
                            }}
                         />
+
                         <ConfigProvider locale={localMn()}>
                            <Table
                               rowKey={'id'}

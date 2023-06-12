@@ -5,17 +5,10 @@ import Ambulatory from './Lists/Ambulatory';
 import PatientList from './Lists/PatientList';
 import PreOrder from './Lists/PreOrder';
 import { SnippetsOutlined } from '@ant-design/icons';
-// import { WebSocketDemo } from './Websocket';
 
 export default function BeforeAmbulatoryList() {
    const documents = (
-      <Button
-         type="primary"
-         onClick={() => {
-            connect();
-         }}
-         icon={<SnippetsOutlined />}
-      >
+      <Button type="primary" icon={<SnippetsOutlined />}>
          Маягт
       </Button>
    );
@@ -38,7 +31,6 @@ export default function BeforeAmbulatoryList() {
    ];
    return (
       <>
-         {/* <WebSocketDemo /> */}
          <Tabs type="card" tabBarExtraContent={documents} items={items} />
       </>
    );

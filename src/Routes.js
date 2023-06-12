@@ -8,6 +8,9 @@ const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/Befor
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
 const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/DocumentUpload'));
 const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
+const InsuranceDoctorList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
+const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
+const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
 
 export const PublicRoutes = [
    {
@@ -18,6 +21,24 @@ export const PublicRoutes = [
    }
 ];
 export const ProtectedRoutes = [
+   {
+      name: 'hicsList',
+      mnName: 'Даатгалын Үнэ',
+      path: '/hicsList',
+      element: hicsList
+   },
+   {
+      name: 'hicsCost',
+      mnName: 'Даатгалын Өртөг',
+      path: '/hicsCost',
+      element: HicsCost
+   },
+   {
+      name: 'InsuranceDoctor',
+      mnName: 'Даатгалын эмч',
+      path: '/insuranceDoctor',
+      element: InsuranceDoctorList
+   },
    {
       name: 'UrgentEnr',
       mnName: 'Яаралтай сувилагч',

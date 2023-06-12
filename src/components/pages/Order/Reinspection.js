@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import Appointment from '../Appointment/Schedule/Appointment';
 
-function Reinspection({ selectedPatient }) {
+function Reinspection({ selectedPatient, appointmentId }) {
    const [isOpenMOdal, setIsOpenModal] = useState(false);
    return (
       <>
@@ -29,7 +29,7 @@ function Reinspection({ selectedPatient }) {
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <Appointment selectedPatient={selectedPatient} type={1} />
+            <Appointment selectedPatient={selectedPatient} type={1} prevAppointmentId={appointmentId} />
          </Modal>
       </>
    );

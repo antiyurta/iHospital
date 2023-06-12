@@ -1,12 +1,5 @@
-import {
-   ArrowRightOutlined,
-   CloseOutlined,
-   EditOutlined,
-   MinusCircleOutlined,
-   MinusOutlined,
-   SaveOutlined
-} from '@ant-design/icons';
-import { Button, ConfigProvider, Form, Input, Modal, Pagination, Popconfirm, Select, Table } from 'antd';
+import { ArrowRightOutlined, CloseOutlined, EditOutlined, MinusOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider, Form, Input, Modal, Popconfirm, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 // import { Table } from 'react-bootstrap';
 import { localMn, openNofi } from '../../comman';
@@ -14,17 +7,17 @@ import jwtInterceopter from '../../jwtInterceopter';
 import EditableFormItem from '../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
 const { Search } = Input;
-const { TextArea } = Input;
 const { Option, OptGroup } = Select;
 const { Column } = Table;
-function Diagnose({ handleClick, types, appointmentHasInsurance }) {
+function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId }) {
    const [diagnosesForm] = Form.useForm();
    const [hicsServiceIdForm] = Form.useForm();
    const [diagnoses, setDiagnoses] = useState([]);
    const [hicsCost, setHicsCost] = useState([]);
-   const [editMode, setEditMode] = useState(false);
    const [meta, setMeta] = useState({});
    const [loading, setLoading] = useState(false);
+   const [isLoadingHicsCost, setIsLoadingHicsCost] = useState(false);
+   const [selectedCost, setSelectedCost] = useState([]);
    //
    const [param, setParam] = useState('');
    const [paramValue, setParamValue] = useState('');
@@ -96,12 +89,13 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
       setNewUser(false);
       setEditingIndex(undefined);
    };
-   const onSave = () => {
+   const onSave = (index) => {
       diagnosesForm
          .validateFields()
          .then(() => {
             setNewUser(false);
             setEditingIndex(undefined);
+            getHicsCost(index);
          })
          .catch((error) => {
             console.log(error.errorFields);
@@ -120,17 +114,19 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
          });
    };
 
-   const getHicsCost = async (value, index) => {
+   const getHicsCost = async (index) => {
       setHicsCost([]);
+      setIsLoadingHicsCost(true);
       const diagnoeses = diagnosesForm.getFieldValue('diagnoses');
       const selectedIcdCode = diagnosesForm.getFieldValue(['diagnoses', index, 'code']);
+      const selectedDiagnoseType = diagnosesForm.getFieldValue(['diagnoses', index, 'diagnoseType']);
       const state = diagnoeses?.filter((e) => e.diagnoseType === 0);
       if (state?.length > 1) {
          openNofi('error', 'Алдаа', 'Үндсэн онош сонгогдсон байна');
          diagnosesForm.resetFields([['diagnoses', index, 'diagnoseType']]);
       } else {
-         console.log(hicsServiceId, value);
-         if (hicsServiceId && value === 0) {
+         console.log(hicsServiceId, selectedDiagnoseType);
+         if (hicsServiceId && selectedDiagnoseType === 0) {
             const conf = {
                params: {
                   icdCode: selectedIcdCode,
@@ -142,6 +138,9 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                .then((response) => {
                   openNofi('success', 'Амжилттай', response.data.description);
                   setHicsCost(response.data.result);
+                  if (response.data.result?.length === 1) {
+                     setSelectedCost(response.data.result);
+                  }
                })
                .catch((error) => {
                   setHicsCost([]);
@@ -149,6 +148,7 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                });
          }
       }
+      setIsLoadingHicsCost(false);
    };
 
    const EditableTable = (props) => {
@@ -187,7 +187,7 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                         name={[index, 'diagnoseType']}
                         editing={index === editingIndex}
                      >
-                        <Select onChange={(e) => getHicsCost(e, index)} style={{ width: '100%' }}>
+                        <Select style={{ width: '100%' }}>
                            <Option value={0}>Үндсэн</Option>
                            <Option value={1}>Урьдчилсан</Option>
                            <Option value={2}>Хавсрах онош</Option>
@@ -208,7 +208,7 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                               shape={'circle'}
                               type={'primary'}
                               style={{ marginBottom: 8 }}
-                              onClick={onSave}
+                              onClick={() => onSave(index)}
                            />
                            <Button icon={<CloseOutlined />} shape={'circle'} onClick={() => onCancel(index)} />
                         </React.Fragment>
@@ -249,12 +249,23 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
       );
    };
    //
+   const rowSelection = {
+      type: 'radio',
+      selectedCost,
+      onSelect: (record, selected, selectedRows) => {
+         setSelectedCost(selectedRows);
+      }
+   };
+   //
    useEffect(() => {
       getDiagnoses(1, 10, paramValue, param);
    }, []);
    useEffect(() => {
       if (appointmentHasInsurance) {
          getInsuranceService();
+      }
+      if (serviceId) {
+         setHicsServiceId(serviceId);
       }
    }, [appointmentHasInsurance]);
    return (
@@ -266,6 +277,8 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                   setIsOpenDiagnoseModal(true);
                   diagnosesForm.resetFields();
                   hicsServiceIdForm.resetFields();
+                  setHicsCost([]);
+                  setSelectedCost([]);
                }}
             >
                Онош сонгох
@@ -277,9 +290,13 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                   setIsOpenDiagnoseModal(false);
                }}
                onOk={() => {
-                  diagnosesForm.validateFields().then((value) => {
-                     handleClick(value.diagnoses, hicsServiceIdForm.getFieldsValue());
-                     setIsOpenDiagnoseModal(false);
+                  diagnosesForm.validateFields().then(async (value) => {
+                     if (selectedCost?.length === 0) {
+                        openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
+                     } else {
+                        handleClick(value.diagnoses, hicsServiceIdForm.getFieldsValue(), selectedCost);
+                        setIsOpenDiagnoseModal(false);
+                     }
                   });
                }}
                width={'90%'}
@@ -309,8 +326,9 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                         </p>
                         <ConfigProvider locale={localMn()}>
                            <Table
-                              rowKey={'icd9Code'}
-                              loading={loading}
+                              rowKey={'drgCode'}
+                              loading={isLoadingHicsCost}
+                              rowSelection={rowSelection}
                               bordered
                               columns={[
                                  {
@@ -399,7 +417,7 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                                                             openNofi(
                                                                'warning',
                                                                'Анхааруулга',
-                                                               'Үйлчилгээний төрөл сонгох'
+                                                               'Үйлчилгээний төрөл заавал сонгох'
                                                             );
                                                          });
                                                    }}
@@ -427,53 +445,57 @@ function Diagnose({ handleClick, types, appointmentHasInsurance }) {
                         </div>
                      </div>
                      <div className="flex flex-col gap-3">
-                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                           <div className="p-3">
-                              <p
-                                 className="pb-3"
-                                 style={{
-                                    fontWeight: '600'
-                                 }}
-                              >
-                                 Үйлчилгээний төрөл
-                              </p>
-                              {appointmentHasInsurance && (
-                                 <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                                    <div className="p-1">
-                                       <Form form={hicsServiceIdForm}>
-                                          <Form.Item
-                                             name="hicsServiceId"
-                                             rules={[{ required: true, message: 'Заавал' }]}
-                                             style={{
-                                                width: '100%'
-                                             }}
-                                             className="mb-0"
-                                          >
-                                             <Select
-                                                placeholder="Үйлчилгээний төрөл сонгох"
-                                                onChange={(e) => setHicsServiceId(e)}
+                        {appointmentHasInsurance ? (
+                           <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                              <div className="p-3">
+                                 <p
+                                    className="pb-3"
+                                    style={{
+                                       fontWeight: '600'
+                                    }}
+                                 >
+                                    Үйлчилгээний төрөл
+                                 </p>
+                                 {appointmentHasInsurance && (
+                                    <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                                       <div className="p-1">
+                                          <Form form={hicsServiceIdForm}>
+                                             <Form.Item
+                                                name="hicsServiceId"
+                                                rules={[
+                                                   { required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }
+                                                ]}
+                                                style={{
+                                                   width: '100%'
+                                                }}
+                                                className="mb-0"
                                              >
-                                                {insuranceService?.map((group, index) => {
-                                                   return (
-                                                      <OptGroup key={index} label={group.name}>
-                                                         {group?.hicsServices?.map((service, idx) => {
-                                                            return (
-                                                               <Option key={`${index}-${idx}`} value={service.id}>
-                                                                  {service.name}
-                                                               </Option>
-                                                            );
-                                                         })}
-                                                      </OptGroup>
-                                                   );
-                                                })}
-                                             </Select>
-                                          </Form.Item>
-                                       </Form>
+                                                <Select
+                                                   placeholder="Үйлчилгээний төрөл сонгох"
+                                                   onChange={(e) => setHicsServiceId(e)}
+                                                >
+                                                   {insuranceService?.map((group, index) => {
+                                                      return (
+                                                         <OptGroup key={index} label={group.name}>
+                                                            {group?.hicsServices?.map((service, idx) => {
+                                                               return (
+                                                                  <Option key={`${index}-${idx}`} value={service.id}>
+                                                                     {service.name}
+                                                                  </Option>
+                                                               );
+                                                            })}
+                                                         </OptGroup>
+                                                      );
+                                                   })}
+                                                </Select>
+                                             </Form.Item>
+                                          </Form>
+                                       </div>
                                     </div>
-                                 </div>
-                              )}
+                                 )}
+                              </div>
                            </div>
-                        </div>
+                        ) : null}
                         <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                            <div className="p-3">
                               <p
