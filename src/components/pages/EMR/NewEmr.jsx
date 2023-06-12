@@ -364,6 +364,7 @@ class NewEmr extends React.Component {
                            Inspection={this.props.IncomeEMRData.inspection}
                            UsageType={this.props.IncomeEMRData.usageType}
                            AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                           AppointmentType={this.props.IncomeEMRData.type}
                            ServiceId={this.props.IncomeEMRData.serviceId}
                            handleClick={this.handleTypeChange}
                         />

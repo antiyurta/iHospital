@@ -23,7 +23,7 @@ function Index(props) {
    const getData = async () => {
       setIsLoading(true);
       await jwtInterceopter
-         .get(documentForm.url, {
+         .get('document-middleware', {
             params: {
                usageType: usageType,
                appointmentId: appointmentId,
@@ -33,7 +33,7 @@ function Index(props) {
          })
          .then((response) => {
             console.log(response);
-            setData(response.data.response.response.data);
+            setData(response.data.response.data);
          })
          .finally(() => {
             setIsLoading(false);

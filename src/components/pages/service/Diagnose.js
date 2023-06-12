@@ -9,7 +9,7 @@ import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
 const { Search } = Input;
 const { Option, OptGroup } = Select;
 const { Column } = Table;
-function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId }) {
+function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appointmentType }) {
    const [diagnosesForm] = Form.useForm();
    const [hicsServiceIdForm] = Form.useForm();
    const [diagnoses, setDiagnoses] = useState([]);
@@ -102,16 +102,20 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId }) {
          });
    };
    const getInsuranceService = async () => {
-      await jwtInterceopter
-         .get('insurance/hics-service-group', {
-            params: {
-               usageType: 'OUT'
-            }
-         })
-         .then((response) => {
-            console.log(response);
-            setInsuranceService(response.data.data);
-         });
+      const conf = {
+         params: {
+            usageType: null
+         }
+      };
+      if (appointmentType === 1) {
+         conf.params['usageType'] = 'EMERGENCY';
+      } else {
+         conf.params['usageType'] = 'OUT';
+      }
+      await jwtInterceopter.get('insurance/hics-service-group', conf).then((response) => {
+         console.log(response);
+         setInsuranceService(response.data.data);
+      });
    };
 
    const getHicsCost = async (index) => {
@@ -291,7 +295,7 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId }) {
                }}
                onOk={() => {
                   diagnosesForm.validateFields().then(async (value) => {
-                     if (selectedCost?.length === 0) {
+                     if (selectedCost?.length === 0 && appointmentHasInsurance) {
                         openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
                      } else {
                         handleClick(value.diagnoses, hicsServiceIdForm.getFieldsValue(), selectedCost);

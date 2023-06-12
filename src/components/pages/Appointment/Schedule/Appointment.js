@@ -171,6 +171,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
       setIsConfirmLoading(true);
       data.type = 1;
       data.status = 1;
+      data.isInsurance = stateInsurance;
       config.params = {};
       data.appointmentWorkDate = new Date();
       const response = await Post('appointment', token, config, data);
@@ -222,7 +223,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
             }
          })
          .then((res) => {
-            if (res.data?.isChance && res.data?.notInsuranceInfo === null) {
+            if (res.data?.isChance) {
                openNofi('success', 'Амжилттай', 'Үйлчүүлэгч даатгалтай байна');
                setIsSent(false);
             } else {
@@ -357,19 +358,18 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
                         </ConfigProvider>
                         <div className="flow-root">
                            <div className="pt-3 float-right">
-                              {/* <Button
+                              <Button
                                  loading={isLoadingCheckPatientInsurance}
                                  type="primary"
-                                 // onClick={() => checkPatientInsurance()}
-                                 onClick={() => setIsOpenFingerModal(true)}
+                                 onClick={() => checkPatientInsurance('daad')}
                               >
                                  Даатгал шалгах
-                              </Button> */}
-                              <Finger
+                              </Button>
+                              {/* <Finger
                                  handleClick={(data) => {
                                     checkPatientInsurance(data);
                                  }}
-                              />
+                              /> */}
                            </div>
                         </div>
                      </div>

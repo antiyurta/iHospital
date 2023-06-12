@@ -7,6 +7,7 @@ import { selectCurrentAppId, selectCurrentDepId } from '../../../features/authRe
 import jwtInterceopter from '../../jwtInterceopter';
 
 import Customized from './Customized/Index';
+import { openNofi } from '../../comman';
 
 export default function BeforeAmbulatoryTabs({ patientId, type, structureId, listId }) {
    const AppIds = useSelector(selectCurrentAppId);

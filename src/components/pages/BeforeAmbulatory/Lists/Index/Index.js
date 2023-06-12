@@ -124,7 +124,8 @@ function Index({ type, isDoctor }) {
             const data = {
                patientId: row.patientId,
                inspection: inspectionType === undefined ? 1 : inspectionType,
-               isInsurance: row.isInsurance
+               isInsurance: row.isInsurance,
+               type: row.type
             };
             if (row.startDate === null) {
                const conf = {
@@ -144,6 +145,7 @@ function Index({ type, isDoctor }) {
                data['usageType'] = 'OUT';
                data['appointmentId'] = row.id;
                data['cabinetId'] = row.cabinetId;
+               data['EWSColor'] = row.emergencySorter?.color;
             } else if (type === 2) {
                data['usageType'] = 'IN';
                data['inpatientRequestId'] = row.id;
@@ -399,7 +401,7 @@ function Index({ type, isDoctor }) {
                <p
                   style={{
                      backgroundColor: text?.color,
-                     color: 'white'
+                     color: 'black'
                   }}
                >
                   {text?.supportTime}

@@ -11,15 +11,23 @@ import { selectCurrentNote } from '../../../../features/noteReducer';
 const { TextArea } = Input;
 const { Column } = Table;
 const { Option } = Select;
-function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, appointmentHasInsurance }) {
+function DynamicContent({
+   props,
+   incomeData,
+   handleClick,
+   editForm,
+   editForOUT = true,
+   appointmentHasInsurance,
+   appointmentType
+}) {
    const [form] = Form.useForm();
    const note = useSelector(selectCurrentNote);
    const [loading, setLoading] = useState(false);
    const DiagnoseHandleClick = (diagnoses, hicsServiceData, cost) => {
       if (incomeData.usageType === 'OUT') {
          if (cost?.length > 0) {
-            console.log(cost);
             var data = {
+               hicsServiceId: hicsServiceData.hicsServiceId,
                serviceId: incomeData.appointmentId,
                serviceType: 5,
                icdCode: cost[0]?.icd10Code,
@@ -35,7 +43,6 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
             data['icdAddCode'] = AddCode;
             jwtInterceopter.patch('insurance-seal', data);
          }
-         jwtInterceopter.patch('appointment/' + incomeData.appointmentId, hicsServiceData);
       }
       form.setFieldValue('diagnose', diagnoses);
    };
@@ -324,6 +331,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
                               handleClick={DiagnoseHandleClick}
                               types={[0, 1, 2]}
                               appointmentHasInsurance={appointmentHasInsurance}
+                              appointmentType={appointmentType}
                            />
                            <Form.List name="diagnose">
                               {(diagnose) => (

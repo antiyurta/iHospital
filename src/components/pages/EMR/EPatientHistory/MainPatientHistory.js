@@ -17,6 +17,7 @@ function MainPatientHistory({
    Inspection,
    UsageType,
    AppointmentHasInsurance,
+   AppointmentType,
    ServiceId,
    handleClick
 }) {
@@ -54,6 +55,7 @@ function MainPatientHistory({
             }}
             handleClick={handleClick}
             appointmentHasInsurance={AppointmentHasInsurance}
+            appointmentType={AppointmentType}
          />
       );
    }, []);
@@ -99,13 +101,23 @@ function MainPatientHistory({
    const getInspectionTabs = async () => {
       setLoading(true);
       //Тухайн эмчид харагдах TAB ууд
+      console.log('==========>', AppointmentType);
       const conf = {
          params: {
             usageType: UsageType,
-            structureId: UsageType === 'IN' ? cabinetId : null,
-            cabinetId: UsageType === 'OUT' ? cabinetId : null
+            structureId: null,
+            cabinetId: null
          }
       };
+      if (AppointmentType === 1) {
+         conf.params['structureId'] = cabinetId;
+      } else {
+         if (UsageType === 'IN') {
+            conf.params['structureId'] = cabinetId;
+         } else {
+            conf.params['cabinetId'] = cabinetId;
+         }
+      }
       await jwtInterceopter
          .get('emr/inspection-form', conf)
          .then((response) => {

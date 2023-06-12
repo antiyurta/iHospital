@@ -15,7 +15,8 @@ function Treatment({ handleclick }) {
    const [metaTreatment, setMetaTreatment] = useState({});
    const [selectedTreatments, setSelectedTreatments] = useState([]);
    const [filterValue, setFilterValue] = useState('');
-   const getExamination = async () => {
+   const getTreatment = async () => {
+      console.log('asdasdsad');
       await jwtInterceopter
          .get('service/type', {
             params: {
@@ -69,7 +70,7 @@ function Treatment({ handleclick }) {
       setSelectedTreatments(arr);
    };
    useEffect(() => {
-      getExamination();
+      getTreatment();
    }, []);
    return (
       <>

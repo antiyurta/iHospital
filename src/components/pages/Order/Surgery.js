@@ -27,7 +27,7 @@ function Surgery() {
    };
    useEffect(() => {
       getSurguries();
-   });
+   }, []);
    return (
       <>
          <Button
