@@ -1,11 +1,12 @@
 import React from 'react';
-import { Checkbox, Divider, Form, Input } from 'antd';
+import { Checkbox, Divider, Form, Input, InputNumber, Radio } from 'antd';
 
 function FormRender({ form, formOptionIds }) {
    const Render = ({ form, optionId }) => {
       console.log('=======>', form);
       console.log('==>', optionId);
       const data = form.find((e) => e.keyWord === optionId);
+      console.log(data);
       if (data) {
          if (data.type === 'input') {
             return (
@@ -13,6 +14,16 @@ function FormRender({ form, formOptionIds }) {
                   <div className="inline-flex p-1">
                      <Form.Item label={data.value} name={data.keyWord} className="mb-0">
                         <Input />
+                     </Form.Item>
+                  </div>
+               </div>
+            );
+         } else if (data.type === 'inputNumber') {
+            return (
+               <div className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
+                  <div className="inline-flex p-1">
+                     <Form.Item label={data.value} name={data.keyWord} className="mb-0">
+                        <InputNumber />
                      </Form.Item>
                   </div>
                </div>
@@ -25,12 +36,36 @@ function FormRender({ form, formOptionIds }) {
                         <Checkbox.Group>
                            {data?.options?.map((option, index) => {
                               return (
-                                 <Checkbox key={index} value={index}>
+                                 <Checkbox
+                                    key={index}
+                                    value={data.isInteger ? parseInt(option.keyWord) : option.keyWord}
+                                 >
                                     {option.label}
                                  </Checkbox>
                               );
                            })}
                         </Checkbox.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            );
+         } else if (data.type === 'radio') {
+            return (
+               <div className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
+                  <div className="inline-flex p-1">
+                     <Form.Item label={data.value} name={data.keyWord} className="mb-0">
+                        <Radio.Group>
+                           {data?.options?.map((option, index) => {
+                              return (
+                                 <Radio
+                                    key={index}
+                                    value={option.isInteger ? parseInt(option.keyWord) : option.keyWord}
+                                 >
+                                    {option.label}
+                                 </Radio>
+                              );
+                           })}
+                        </Radio.Group>
                      </Form.Item>
                   </div>
                </div>

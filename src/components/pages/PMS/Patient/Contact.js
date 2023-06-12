@@ -21,7 +21,7 @@ function Contact({ form }) {
                               rules={[
                                  {
                                     required: true,
-                                    message: 'Нэр заавал'
+                                    message: 'Холбоо барих хүний Нэр заавал'
                                  }
                               ]}
                            >
@@ -36,7 +36,7 @@ function Contact({ form }) {
                               rules={[
                                  {
                                     required: true,
-                                    message: 'Регистр дугаар оруулна уу'
+                                    message: 'Холбоо барих хүний Регистр дугаар оруулна уу'
                                  },
                                  {
                                     validator: async (_, registerNumber) => {

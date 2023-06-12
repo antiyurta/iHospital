@@ -51,7 +51,7 @@ function Medicine() {
    const [pValue, setPvalue] = useState('');
 
    const addModal = (state, type) => {
-      editMode(false);
+      setEditMode(false);
       if (type === 0) {
          setIsOpenMedicineModal(state);
       } else {

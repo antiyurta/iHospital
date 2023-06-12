@@ -1,11 +1,11 @@
-import { Form, InputNumber, Modal, Select } from 'antd';
+import { Button, Form, InputNumber, Modal, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { DefualtGet, Get } from '../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentInsurance } from '../../../features/authReducer';
+import jwtInterceopter from '../../jwtInterceopter';
 const { Option, OptGroup } = Select;
 
-function InpatientRequest({ isOpen, isClose, handleClick }) {
+function InpatientRequest({ handleClick }) {
    const isInsurance = useSelector(selectCurrentInsurance);
    const [InpatientRequestForm] = Form.useForm();
    const [isDuration, setIsDuration] = useState(true);
@@ -13,13 +13,8 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
    const [structures, setStructures] = useState([]);
    const [selectedDep, setSelectedDep] = useState();
    const [selectedDoctor, setSelectedDoctor] = useState();
-   const token = useSelector(selectCurrentToken);
    const [insuranceServices, setInsurranceServices] = useState([]);
-
-   const config = {
-      headers: {},
-      params: {}
-   };
+   const [isOpenModal, setIsOpenModal] = useState(false);
 
    const checkDuration = (e) => {
       if (e === 'PLAN') {
@@ -29,37 +24,51 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
       }
    };
    const getStructures = async () => {
-      config.params.type = 2;
-      const response = await Get('organization/structure', token, config);
-      if (response.data.length != 0) {
-         setStructures(response.data);
-      }
+      await jwtInterceopter
+         .get('organization/structure', {
+            params: {
+               type: 2
+            }
+         })
+         .then((response) => {
+            setStructures(response.data.response.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    const getDoctor = async (value) => {
       setSelectedDep(structures.filter((e) => e['id'] === value));
-      config.params.depId = value;
-      config.params.registerNumber = null;
-      config.params.type = null;
-      const response = await Get('organization/employee', token, config);
-      if (response.data.length != 0) {
-         setDoctors(response.data);
-      } else {
-         setDoctors([]);
-      }
+      await jwtInterceopter
+         .get('organization/employee', {
+            params: {
+               depId: value
+            }
+         })
+         .then((response) => {
+            setDoctors(response.data.response.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    const selectDoctor = (value) => {
       const selectedDoctor = doctors.filter((e) => e.id === value);
       setSelectedDoctor(selectedDoctor[0]);
    };
    const getInsuranceServices = async () => {
-      const conf = {
-         headers: {},
-         params: {
-            usageType: 'IN'
-         }
-      };
-      const response = await DefualtGet('insurance/hics-service-group', token, conf);
-      setInsurranceServices(response.data);
+      await jwtInterceopter
+         .get('insurance/hics-service-group', {
+            params: {
+               usageType: 'IN'
+            }
+         })
+         .then((response) => {
+            setInsurranceServices(response.data.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    useEffect(() => {
       getStructures();
@@ -68,11 +77,21 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
 
    return (
       <>
+         <Button
+            type="primary"
+            onClick={() => {
+               setIsOpenModal(true);
+               // setSelectedExaminationId(null);
+               // setSelectedExaminations([]);
+            }}
+         >
+            Хэвтүүлэх
+         </Button>
          <Modal
             title="Хэвтүүлэх хүсэлт"
-            open={isOpen}
+            open={isOpenModal}
             onCancel={() => {
-               isClose('inpatient', false);
+               setIsOpenModal(false);
             }}
             okText="Захиалах"
             cancelText="Болих"
@@ -80,6 +99,7 @@ function InpatientRequest({ isOpen, isClose, handleClick }) {
                InpatientRequestForm.validateFields().then((values) => {
                   handleClick(values);
                });
+               setIsOpenModal(false);
             }}
          >
             <Form form={InpatientRequestForm} wrapperCol={{ span: 15 }} labelCol={{ span: 9 }}>

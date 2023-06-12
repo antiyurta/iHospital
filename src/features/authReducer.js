@@ -9,7 +9,6 @@ export const auth = createSlice({
       depId: [],
       appIds: [],
       userId: null,
-      note: null,
       isInsurance: null,
       roleId: null
    },
@@ -46,12 +45,6 @@ export const auth = createSlice({
          state.firstName = null;
          state.lastName = null;
       },
-      setNote: (state, action) => {
-         state.note = action.payload;
-      },
-      DelNote: (state) => {
-         state.note = null;
-      },
       setInsurrance: (state, action) => {
          state.isInsurance = action.payload;
       },
@@ -78,8 +71,6 @@ export const {
    DelUserId,
    setUserInfo,
    DelUserInfo,
-   setNote,
-   DelNote,
    setInsurrance,
    DelInsurrance,
    setRoleId,
@@ -93,6 +84,5 @@ export const selectCurrentAppId = (state) => state.authReducer.appIds;
 export const selectCurrentUserId = (state) => state.authReducer.userId;
 export const selectCurrentFirstName = (state) => state.authReducer.firstName;
 export const selectCurrentLastName = (state) => state.authReducer.lastName;
-export const selectCurrentNote = (state) => state.authReducer.note;
 export const selectCurrentInsurance = (state) => state.authReducer.isInsurance;
 export const selectCurrentRoleId = (state) => state.authReducer.roleId;

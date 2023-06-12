@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import EIM_4_2_IMG from './EIM_4_2_2.PNG';
+import image1 from './EIM4_2.jpeg';
 
 //маягт ЭИМ-4.2
 function EIM_4_2() {
@@ -254,7 +254,7 @@ function EIM_4_2() {
                                  <b>Зүүн хөх </b>
                               </div>
                            </div>
-                           <img src={EIM_4_2_IMG} width="100%" style={{ paddingLeft: 100, paddingRight: 100 }} />
+                           <img src={image1} width="100%" style={{ paddingLeft: 100, paddingRight: 100 }} />
                         </td>
                      </tr>
                      <tr>

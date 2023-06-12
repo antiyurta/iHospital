@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Tabs, Button, Form, Modal, Result, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
-import { selectCurrentNote, selectCurrentUserId } from '../../../../features/authReducer';
+import { selectCurrentUserId } from '../../../../features/authReducer';
 import HistoryTab from './HistoryTab';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
@@ -13,13 +13,15 @@ function MainPatientHistory({
    InpatientRequestId,
    PatientId,
    CabinetId,
+   DeparmentId,
    Inspection,
    UsageType,
    AppointmentHasInsurance,
+   ServiceId,
    handleClick
 }) {
-   const [form] = Form.useForm();
-   const editNote = useSelector(selectCurrentNote);
+   // const [form] = Form.useForm();
+   // const editNote = useSelector(selectCurrentNote);
    const userId = useSelector(selectCurrentUserId);
    const config = {
       headers: {},
@@ -239,27 +241,27 @@ function MainPatientHistory({
          }
       }
    }, [UsageType]);
-   const configure = () => {
-      if (editNote) {
-         const data = JSON.parse(editNote);
-         if (data) {
-            setActiveKey(`item-${data.formId}`);
-            data.diagnose?.map((diagnose, index) => {
-               data['diagnose'][index] = diagnose.diagnose;
-            });
-            data['inspection'] = JSON.parse(data.inspection);
-            data['pain'] = JSON.parse(data.pain);
-            data['plan'] = JSON.parse(data.plan);
-            data['question'] = JSON.parse(data.question);
-            form.setFieldsValue(data);
-         } else {
-            form.resetFields();
-         }
-      }
-   };
-   useEffect(() => {
-      configure();
-   }, [editNote]);
+   // const configure = () => {
+   //    if (editNote) {
+   //       const data = JSON.parse(editNote);
+   //       if (data) {
+   //          setActiveKey(`item-${data.formId}`);
+   //          data.diagnose?.map((diagnose, index) => {
+   //             data['diagnose'][index] = diagnose.diagnose;
+   //          });
+   //          data['inspection'] = JSON.parse(data.inspection);
+   //          data['pain'] = JSON.parse(data.pain);
+   //          data['plan'] = JSON.parse(data.plan);
+   //          data['question'] = JSON.parse(data.question);
+   //          form.setFieldsValue(data);
+   //       } else {
+   //          form.resetFields();
+   //       }
+   //    }
+   // };
+   // useEffect(() => {
+   //    configure();
+   // }, [editNote]);
    return (
       <>
          {UsageType === 'OUT' && (
@@ -271,14 +273,14 @@ function MainPatientHistory({
             <MainInpatientHistory
                patientId={PatientId}
                inpatientRequestId={InpatientRequestId}
-               hicsServiceId={hicsServiceId}
+               deparmentId={DeparmentId}
+               serviceId={ServiceId}
             />
          )}
          <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>
             <Result
                status="success"
                title="EMR амжилттай хадгалагдлаа та OT руу шилжих үү"
-               // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
                extra={
                   <>
                      <Button type="primary" key="console" onClick={() => handleClick({ target: { value: 'OCS' } })}>

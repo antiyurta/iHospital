@@ -84,8 +84,13 @@ import EIM4_2 from './../EIM/EIM4_2';
 import EIM5_2 from './../EIM/EIM5_2';
 // EIM end
 
+//CT
+import CT1_2H2 from './CT_1_2H2';
+//
+
 // nemelt tushaal
 const C537M1 = React.lazy(() => import('../Command/537M1')); // tushaal maygt
+const A293 = React.lazy(() => import('../Command/A293')); // ert seremjulleg yaralta
 const FC537M1 = React.lazy(() => import('../Forms/Command/537M1')); // form
 // nemelt tushaal
 const { Search } = Input;
@@ -505,18 +510,28 @@ const options = [
    },
    {
       value: 83,
-      label: 'A/611 CT-1',
+      label: 'A/611 СТ-1 /НҮҮР/',
       docName: 'ӨВЧНИЙ ТҮҮХ /НҮҮР/'
    },
    {
-      value: 83,
-      label: 'A/611 CT-1',
+      value: 84,
+      label: 'A/611 СТ-1 ЭМЧЛҮҮЛЭГЧИЙН АНАМНЕЗ',
       docName: 'ЭМЧЛҮҮЛЭГЧИЙН АНАМНЕЗ'
    },
    {
-      value: 83,
-      label: 'A/611 CT-1',
+      value: 85,
+      label: 'A/611 СТ-1 ЕРӨНХИЙ ҮЗЛЭГ',
       docName: 'ЕРӨНХИЙ ҮЗЛЭГ'
+   },
+   {
+      value: 86,
+      label: 'А/293',
+      docName: 'Яаралтай үнэлэх'
+   },
+   {
+      value: 87,
+      label: 'CT-1,2 Хавсралт 2',
+      docName: 'Амин үзүүлэлтийг хянах'
    }
 ];
 
@@ -640,6 +655,8 @@ export function ReturnById({ type, id, isOpen }) {
    else if (id === 80) return <NotFound />;
    else if (id === 81) return <NotFound />;
    else if (id === 82) return <EIM5_2 />;
+   else if (id === 86) return <A293 />;
+   else if (id === 87) return <CT1_2H2 />;
    // if (id === 1) {
    //    return (
    //       <Suspense fallback={'<div>Loading</div>'}>
@@ -659,6 +676,10 @@ export function ReturnById({ type, id, isOpen }) {
 
 export function ReturnAll() {
    return options;
+}
+
+export function ReturnByIdToName(id) {
+   return options.find((e) => e.value === id)?.docName;
 }
 
 export function ReturnDetails({ type, oldDocuments, handleClick }) {
@@ -768,22 +789,32 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                      },
                      {
                         title: 'Баримт бичгийн нэр',
-                        dataIndex: 'docName'
+                        dataIndex: 'docName',
+                        render: (text) => {
+                           return <p className="whitespace-normal text-black">{text}</p>;
+                        }
                      },
                      {
                         title: 'Тушаал шийдвэрийн дугаар',
-                        dataIndex: 'label'
+                        dataIndex: 'label',
+                        render: (text) => {
+                           return <p className="whitespace-normal text-black">{text}</p>;
+                        }
                      },
                      {
                         title: '',
                         width: 40,
                         render: (_text, row) => {
                            return (
-                              <RightOutlined
-                                 style={{
-                                    color: 'blue'
-                                 }}
+                              <Button
                                  onClick={() => add(row)}
+                                 icon={
+                                    <RightOutlined
+                                       style={{
+                                          color: 'blue'
+                                       }}
+                                    />
+                                 }
                               />
                            );
                         }

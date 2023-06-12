@@ -6,15 +6,22 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import EditableTable from './Support/EditableTable';
 import mnMN from 'antd/es/locale/mn_MN';
-import { ReturnAll, ReturnDetails } from './Document/Index';
+import { ReturnAll, ReturnByIdToName, ReturnDetails } from './Document/Index';
+import jwtInterceopter from '../../jwtInterceopter';
 const { Option } = Select;
 
 function DocForRoleList() {
    const [form] = Form.useForm();
    const token = useSelector(selectCurrentToken);
+   //
    const [list, setList] = useState([]);
    const [spinner, setSpinner] = useState(false);
    const [meta, setMeta] = useState({});
+   //
+   const [options, setOptions] = useState([]);
+   const [opMeta, setOpMeta] = useState({});
+   const [opSpinner, setOpSpinner] = useState(false);
+   //
    const [selectedId, setSelectedId] = useState(Number);
    const [structures, setStructures] = useState([]);
    const [positions, setPositions] = useState([]);
@@ -34,6 +41,29 @@ function DocForRoleList() {
       setList(response.data);
       setMeta(response.meta);
       setSpinner(false);
+   };
+   const getOptions = async (page, pageSize) => {
+      setOpSpinner(true);
+      const conf = {
+         headers: {},
+         params: {
+            page: page,
+            limit: pageSize
+         }
+      };
+      await jwtInterceopter
+         .get('organization/document-option', conf)
+         .then((response) => {
+            console.log(response);
+            setOptions(response.data.response.data);
+            setOpMeta(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setOpSpinner(false);
+         });
    };
    const openModal = (state, row) => {
       form.resetFields();
@@ -121,6 +151,14 @@ function DocForRoleList() {
       };
       await Delete('organization/document-role/' + id, token, conf);
       getList(1, 10);
+   };
+   const getDeleteOption = async (id) => {
+      const conf = {
+         headers: {},
+         params: {}
+      };
+      await Delete('organization/document-option/' + id, token, conf);
+      getOptions(1, 10);
    };
    const columns = [
       {
@@ -223,10 +261,75 @@ function DocForRoleList() {
          }
       }
    ];
+   const columnsOption = [
+      {
+         title: 'Тасаг',
+         dataIndex: ['structure', 'name']
+      },
+      {
+         title: 'Хэн',
+         dataIndex: 'employeePositionId',
+         render: (text) => {
+            return getPositionInfo([text]);
+         }
+      },
+      {
+         title: 'Маягт',
+         dataIndex: 'documentValue',
+         render: (text) => {
+            return ReturnByIdToName(text);
+         }
+      },
+      {
+         title: 'Бөглөх асуумж',
+         dataIndex: 'formOptionIds',
+         render: (text) => {
+            return (
+               <ul>
+                  {text?.map((item, index) => {
+                     return <li key={index}>{item}</li>;
+                  })}
+               </ul>
+            );
+         }
+      },
+      {
+         title: 'Үйлдэл',
+         width: 40,
+         render: (_text, row) => {
+            return (
+               <div
+                  style={{
+                     display: 'flex',
+                     flexDirection: 'row',
+                     gap: 6
+                  }}
+               >
+                  <Popconfirm
+                     title="Та устгахдаа итгэлтэй байна уу?"
+                     okText="Тийм"
+                     cancelText="Үгүй"
+                     onConfirm={() => getDeleteOption(row.id)}
+                  >
+                     <Button
+                        icon={<DeleteOutlined />}
+                        shape="circle"
+                        type="danger"
+                        style={{
+                           backgroundColor: 'red'
+                        }}
+                     />
+                  </Popconfirm>
+               </div>
+            );
+         }
+      }
+   ];
    useEffect(() => {
       getList(1, 20);
       getStructures();
       getPositions();
+      getOptions();
    }, []);
    return (
       <div>
@@ -277,8 +380,36 @@ function DocForRoleList() {
                   />
                </ConfigProvider>
             </Card>
-            <Card bordered={false} className="header-solid max-h-max rounded-md" title="Маягтын Жагсаалт">
-               <ReturnDetails type={0} />
+            <Card bordered={false} className="header-solid max-h-max rounded-md" title="asda">
+               <ConfigProvider locale={mnMN}>
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     size="small"
+                     columns={columnsOption}
+                     dataSource={options}
+                     scroll={{
+                        x: 1500
+                     }}
+                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                     loading={{
+                        spinning: opSpinner,
+                        tip: 'Уншиж байна...'
+                     }}
+                     pagination={{
+                        position: ['topCenter', 'bottomCenter'],
+                        size: 'small',
+                        current: opMeta.page,
+                        total: opMeta.itemCount,
+                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                        pageSize: opMeta.limit,
+                        showSizeChanger: true,
+                        pageSizeOptions: ['5', '10', '20', '50'],
+                        showQuickJumper: true,
+                        onChange: (page, pageSize) => getOptions(page, pageSize)
+                     }}
+                  />
+               </ConfigProvider>
             </Card>
          </div>
          <Modal

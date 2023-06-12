@@ -5,16 +5,37 @@ import Diagnose from '../../service/Diagnose';
 import EditableFormItem from '../../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
 import jwtInterceopter from '../../../jwtInterceopter';
-import { openNofi } from '../../../comman';
+import { inspectionTOJSON, openNofi } from '../../../comman';
+import { useSelector } from 'react-redux';
+import { selectCurrentNote } from '../../../../features/noteReducer';
 const { TextArea } = Input;
 const { Column } = Table;
 const { Option } = Select;
 function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, appointmentHasInsurance }) {
    const [form] = Form.useForm();
+   const note = useSelector(selectCurrentNote);
    const [loading, setLoading] = useState(false);
-   const DiagnoseHandleClick = (diagnoses, hicsServiceId) => {
+   const DiagnoseHandleClick = (diagnoses, hicsServiceData, cost) => {
       if (incomeData.usageType === 'OUT') {
-         jwtInterceopter.patch('appointment/' + incomeData.appointmentId, hicsServiceId);
+         if (cost?.length > 0) {
+            console.log(cost);
+            var data = {
+               serviceId: incomeData.appointmentId,
+               serviceType: 5,
+               icdCode: cost[0]?.icd10Code,
+               icdCodeName: cost[0]?.icd10Name,
+               icd9Code: cost[0]?.icd9Code,
+               icd9Name: cost[0]?.icd9Name,
+               drgCode: cost[0]?.drgCode,
+               discountAmount: cost[0]?.amountHi,
+               payedAmount: cost[0]?.amountCit,
+               totalAmount: cost[0]?.amountTotal
+            };
+            const AddCode = diagnoses?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
+            data['icdAddCode'] = AddCode;
+            jwtInterceopter.patch('insurance-seal', data);
+         }
+         jwtInterceopter.patch('appointment/' + incomeData.appointmentId, hicsServiceData);
       }
       form.setFieldValue('diagnose', diagnoses);
    };
@@ -91,9 +112,29 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
       if (editForm != undefined && editForm != null) {
          if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
             form.setFieldsValue(editForm);
+            console.log(editForm);
          } else {
             form.resetFields();
          }
+      } else {
+         let data = {};
+         if (note.inspectionNote != null) {
+            data = inspectionTOJSON(note.inspectionNote);
+         }
+         if (note.diagnosis?.length > 0) {
+            const diagnosis = note.diagnosis?.map((diagnose) => {
+               return {
+                  code: diagnose.diagnose.code,
+                  nameMn: diagnose.diagnose.nameMn,
+                  diagnoseType: diagnose.diagnoseType,
+                  type: diagnose.diagnose.type,
+                  id: diagnose.diagnose.id
+               };
+            });
+            data['diagnose'] = diagnosis;
+         }
+         data['description'] = 'DEFAULT OROOD GARSAN';
+         form.setFieldsValue(data);
       }
    }, [editForm]);
    return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import Ocs from '../OCS/Ocs';
 import { connect } from 'react-redux';
-import { Get, Post, openNofi } from '../../comman';
+import { Get, Post, dateReduceTree, openNofi } from '../../comman';
 import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import moment from 'moment';
@@ -10,6 +10,7 @@ import Marquee from 'react-fast-marquee';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
+import NewMainPatientHistory from './EPatientHistory/newMainPatientHistory';
 import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
 import { delEmrData } from '../../../features/emrReducer';
@@ -64,6 +65,7 @@ class NewEmr extends React.Component {
       };
       const response = await Get('appointment', this.props.token, conf);
       if (response.data.length > 0) {
+         dateReduceTree(response.data);
          var result = response.data.reduce(function (r, a) {
             r[a.createdAt.substring(0, 4)] = r[a.createdAt.substring(0, 4)] || [];
             r[a.createdAt.substring(0, 4)].push(a);
@@ -160,7 +162,7 @@ class NewEmr extends React.Component {
       }
    }
    async componentWillUnmount() {
-      this.props.delEmrData();
+      // this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -358,9 +360,11 @@ class NewEmr extends React.Component {
                            InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
                            PatientId={this.props.IncomeEMRData.patientId}
                            CabinetId={this.props.IncomeEMRData.cabinetId}
+                           DeparmentId={this.props.IncomeEMRData.departmentId}
                            Inspection={this.props.IncomeEMRData.inspection}
                            UsageType={this.props.IncomeEMRData.usageType}
                            AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                           ServiceId={this.props.IncomeEMRData.serviceId}
                            handleClick={this.handleTypeChange}
                         />
                      </Card>
@@ -379,6 +383,7 @@ class NewEmr extends React.Component {
                         <Ocs
                            selectedPatient={this.state.selectedPatient}
                            UsageType={this.props.IncomeEMRData.usageType}
+                           AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
                            handleClick={this.saveOrder}
                         />
                      </Card>

@@ -261,10 +261,15 @@ export const openNofi = (type, message, description) => {
 };
 
 export const numberToCurrency = (amount) => {
-   return amount?.toLocaleString('mn-MN', {
+   const convertedAmount = amount?.toLocaleString('mn-MN', {
       style: 'currency',
       currency: 'MNT'
    });
+   if (convertedAmount === 'MNTNaN') {
+      return '';
+   } else {
+      return convertedAmount;
+   }
 };
 
 export const getAge = (registerNumber) => {
@@ -303,4 +308,51 @@ export const checkNumber = (event) => {
    } else {
       return true;
    }
+};
+
+export const dateReduceTree = (data) => {
+   const date = '2023-04-30';
+   let i = 4;
+   function rec(index) {
+      if (index + i <= 10) {
+         var result = data.reduce(function (r, a) {
+            r[a.createdAt.substring(index, index + i)] = r[a.createdAt.substring(index, index + i)] || [];
+            r[a.createdAt.substring(index, index + i)].push(a);
+            return r;
+         }, Object.create(null));
+         console.log('======>', date.substring(index, index + i));
+         i = i + 1;
+         return rec(index + i);
+      } else {
+         return 1;
+      }
+   }
+   if (data?.length > 0) {
+      console.log(rec(0));
+   }
+};
+export const isObjectEmpty = (object) => {
+   return Object.keys(object).length === 0;
+};
+export const inspectionTOJSON = (inspectionNote) => {
+   var data = {};
+   if (inspectionNote.inspection) {
+      data['inspection'] = JSON.parse(inspectionNote.inspection);
+   }
+   if (inspectionNote.pain) {
+      data['pain'] = JSON.parse(inspectionNote.pain);
+   }
+   if (inspectionNote.plan) {
+      data['plan'] = JSON.parse(inspectionNote.plan);
+   }
+   if (inspectionNote.question) {
+      data['question'] = JSON.parse(inspectionNote.question);
+   }
+   if (inspectionNote.advice) {
+      data['advice'] = JSON.parse(inspectionNote.advice);
+   }
+   if (inspectionNote.conclusion) {
+      data['conclusion'] = JSON.parse(inspectionNote.conclusion);
+   }
+   return data;
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Tabs, Empty, ConfigProvider } from 'antd';
-import { EyeOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { EyeOutlined, EditOutlined, SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
 import axios from 'axios';
 import 'moment/locale/mn';
@@ -13,6 +13,8 @@ import ResidentialAddress from './Patient/ResidentialAddress';
 import Insurance from './Patient/Insurance';
 import Contact from './Patient/Contact';
 import mnMN from 'antd/es/locale/mn_MN';
+import UPatient from './Urgent/UPatient';
+import jwtInterceopter from '../../jwtInterceopter';
 const { Search } = Input;
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -40,6 +42,10 @@ function Patient() {
    //
    const [form] = Form.useForm();
    const scrollRef = useRef();
+   // urgent
+   const [urgentForm] = Form.useForm();
+   const [urgentEditMode, setUrgentEditMode] = useState(false);
+   const [isOpenUrgent, setIsOpenUrgent] = useState(false);
    //
    const dd = (value) => {
       setIsGlobalDb(value);
@@ -60,7 +66,7 @@ function Patient() {
       },
       {
          forceRender: true,
-         label: 'Даатгалын харьяалал',
+         label: 'Даатгал',
          key: 4,
          children: <Insurance form={form} />
       },
@@ -106,6 +112,11 @@ function Patient() {
       form.resetFields();
       setEditMode(false);
    };
+   const showModalUrgent = () => {
+      setIsOpenUrgent(true);
+      urgentForm.resetFields();
+      setUrgentEditMode(false);
+   };
    const viewModal = async (id) => {
       await axios
          .get(DEV_URL + 'pms/patient/' + id, config)
@@ -135,6 +146,17 @@ function Patient() {
    const handleCancel = () => {
       setIsModalVisible(false);
    };
+   const onFinishUrgent = async (data) => {
+      data['isEmergency'] = true;
+      data['isGlobalDb'] = false;
+      await jwtInterceopter.post('pms/patient', data).then((response) => {
+         console.log(response);
+         if (response.status === 201) {
+            setIsOpenUrgent(false);
+            openNofi('success', 'Амжиллтай', 'Амжиллтай хадгалагдсан');
+         }
+      });
+   };
    const onFinish = async (data) => {
       setIsConfirmLoading(true);
       if (isGlobalDb) {
@@ -142,6 +164,7 @@ function Patient() {
       } else {
          data.isGlobalDb = false;
       }
+      data['isEmergency'] = false;
       const conf = {
          headers: {},
          params: {}
@@ -149,20 +172,16 @@ function Patient() {
       if (data?.contacts === undefined || data?.contacts === null || data?.contacts.length === 0) {
          openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
       } else {
+         var response;
          if (editMode) {
-            const response = await Patch('pms/patient/' + id, token, conf, data);
-            if (response === 200) {
-               getData(1, 20);
-               setIsConfirmLoading(false);
-               setIsModalVisible(false);
-            }
+            response = await Patch('pms/patient/' + id, token, conf, data);
          } else {
-            const response = await Post('pms/patient', token, conf, data);
-            if (response === 201) {
-               getData(1, 20);
-               setIsConfirmLoading(false);
-               setIsModalVisible(false);
-            }
+            response = await Post('pms/patient', token, conf, data);
+         }
+         if (response === 200 || response === 201) {
+            getData(1, 20);
+            setIsConfirmLoading(false);
+            setIsModalVisible(false);
          }
       }
    };
@@ -383,9 +402,19 @@ function Patient() {
             className="header-solid max-h-max rounded-md"
             title="Өвчтөн"
             extra={
-               <Button type="primary" onClick={showModal}>
-                  Нэмэх
-               </Button>
+               <div className="flex flex-row gap-3">
+                  <Button
+                     className="bg-red-500"
+                     type="danger"
+                     icon={<PlusCircleOutlined />}
+                     onClick={() => showModalUrgent()}
+                  >
+                     Яаралтай нэмэх
+                  </Button>
+                  <Button type="primary" onClick={() => showModal()} icon={<PlusCircleOutlined />}>
+                     Нэмэх
+                  </Button>
+               </div>
             }
          >
             <ConfigProvider locale={mnMN}>
@@ -437,7 +466,13 @@ function Patient() {
             onCancel={handleCancel}
             width="18cm"
          >
-            <Form form={form} layout="horizontal">
+            <Form
+               form={form}
+               layout="horizontal"
+               initialValues={{
+                  contacts: [{}]
+               }}
+            >
                <Tabs tabPosition="left" items={items} />
             </Form>
          </Modal>
@@ -463,6 +498,69 @@ function Patient() {
                <Descriptions.Item label="И-мэйл">{view.email}</Descriptions.Item>
                <Descriptions.Item label="Аймаг/Дүүрэг">{view.countries?.name}</Descriptions.Item>
             </Descriptions>
+         </Modal>
+         <Modal
+            title="Яаралтай бүртгэл"
+            open={isOpenUrgent}
+            onCancel={() => setIsOpenUrgent(false)}
+            okText="Хадгалах"
+            cancelText="Болих"
+            onOk={() => {
+               urgentForm
+                  .validateFields()
+                  .then((values) => {
+                     onFinishUrgent(values);
+                  })
+                  .catch((error) => {
+                     onFinishFailed(error);
+                  });
+            }}
+         >
+            <Form
+               form={urgentForm}
+               labelCol={{
+                  span: 8
+               }}
+               wrapperCol={{
+                  span: 14
+               }}
+               initialValues={{
+                  lastName: 'EMERGENCY',
+                  firstName: `EMERGENCY ${moment(new Date()).format('HH:mm:ss')}`,
+                  birthDate: moment(new Date())
+               }}
+            >
+               <UPatient />
+            </Form>
+            <div className="flex flex-row gap-3">
+               {/* <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                  <div className="p-3">
+                     <div className="flow-root">
+                        <div className="float-left">
+                           <p
+                              style={{
+                                 fontWeight: 600
+                              }}
+                           ></p>
+                        </div>
+                        <div className="float-right">
+                           <Switch
+                              className="bg-[#4a7fc1]"
+                              checkedChildren="Тийм"
+                              unCheckedChildren="Үгүй"
+                              defaultChecked={false}
+                              checked={stateInsurance}
+                              onChange={(e) => {
+                                 setStateInsurance(e);
+                                 setIsSent(e);
+                                 setNotInsuranceInfo([]);
+                              }}
+                           />
+                        </div>
+                     </div>
+                  </div>
+               </div> */}
+            </div>
          </Modal>
       </>
    );

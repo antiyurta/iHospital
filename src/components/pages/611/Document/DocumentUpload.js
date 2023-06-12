@@ -1,12 +1,13 @@
 import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Modal, Popconfirm, Select, Upload } from 'antd';
+import { Button, Card, Form, Input, Modal, Popconfirm, Select, Spin, Upload } from 'antd';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { DefualtGet, Get, Patch, Post } from '../../../comman';
+import { DefualtGet, Get, Patch, Post, openNofi } from '../../../comman';
 import { ReturnById, ReturnDetails, ReturnAll } from './Index';
 //
 import Index4 from '../../FormBuilder/FBuilder/index4';
+import jwtInterceopter from '../../../jwtInterceopter';
 //
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -25,6 +26,10 @@ const typeSelectData = [
    {
       label: 'INPUT',
       value: 'input'
+   },
+   {
+      label: 'INPUTNUMBER',
+      value: 'inputNumber'
    },
    {
       label: 'TEXTAREA',
@@ -64,13 +69,13 @@ const options = [
 function DocumentUpload() {
    const token = useSelector(selectCurrentToken);
    const [form] = Form.useForm();
+   const documents = ReturnAll();
    const [selectedId, setSelectedId] = useState(Number);
    const [editMode, setEditMode] = useState(false);
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    const [searchField, setSearchField] = useState('');
    const [documentForms, setDocumentForms] = useState([]);
    //
-   const [documents, setDocuments] = useState(ReturnAll());
    const [isOpen, setIsOpen] = useState(false);
    const [loading, setLoading] = useState(false);
    const [jsFilePath, setJsFilePath] = useState('');
@@ -125,16 +130,37 @@ function DocumentUpload() {
       }
    };
    const getDocumentForms = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('organization/document-form', token, conf);
-      setDocumentForms(response.data);
+      setLoading(true);
+      await jwtInterceopter
+         .get('organization/document-form')
+         .then((response) => {
+            console.log(response);
+            setDocumentForms(response.data.response.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setLoading(false);
+         });
    };
    const filteredForm = documentForms.filter((form) => {
-      return form.name.toLowerCase().includes(searchField.toLowerCase());
+      return form.name?.toLowerCase().includes(searchField.toLowerCase());
    });
+   const deleteForm = async (id) => {
+      await jwtInterceopter
+         .delete('organization/document-form/' + id)
+         .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+               getDocumentForms();
+               openNofi('success', 'asdsa', 'asdsa');
+            }
+         })
+         .catch((error) => {
+            console.log(error);
+         });
+   };
    useEffect(() => {
       getDocumentForms();
    }, []);
@@ -161,50 +187,53 @@ function DocumentUpload() {
                </div>
             </div>
          </div>
-         <div className="grid grid-cols-4 gap-3 m-3">
-            {filteredForm?.map((form, index) => {
-               return (
-                  <Card
-                     key={index}
-                     className="custom-card"
-                     title={
-                        <>
-                           <p>{form?.name}</p>
-                        </>
-                     }
-                     size="small"
-                     extra={
-                        <div className="inline-flex">
-                           <div className="px-2">
-                              <EditOutlined
-                                 style={{
-                                    color: 'blue',
-                                    fontSize: '18px'
-                                 }}
-                                 onClick={() => openModal(true, form)}
-                              />
-                           </div>
-                           <div className="px-2">
-                              <Popconfirm
-                                 title="Устгасан тохиолдолд сэргээх боломжгүй"
-                                 onConfirm={() => deleteForm(form.id)}
-                                 okText="Тийм"
-                                 cancelText="Үгүй"
-                              >
-                                 <DeleteOutlined
+         <Spin spinning={loading}>
+            <div className="grid grid-cols-4 gap-3 m-3">
+               {filteredForm?.map((form, index) => {
+                  return (
+                     <Card
+                        key={index}
+                        className="custom-card"
+                        title={
+                           <>
+                              <p>{form?.name}</p>
+                           </>
+                        }
+                        size="small"
+                        extra={
+                           <div className="inline-flex">
+                              <div className="px-2">
+                                 <EditOutlined
                                     style={{
-                                       color: 'red',
+                                       color: 'blue',
                                        fontSize: '18px'
                                     }}
+                                    onClick={() => openModal(true, form)}
                                  />
-                              </Popconfirm>
+                              </div>
+                              <div className="px-2">
+                                 <Popconfirm
+                                    title="Устгасан тохиолдолд сэргээх боломжгүй"
+                                    onConfirm={() => deleteForm(form.id)}
+                                    okText="Тийм"
+                                    cancelText="Үгүй"
+                                 >
+                                    <DeleteOutlined
+                                       style={{
+                                          color: 'red',
+                                          fontSize: '18px'
+                                       }}
+                                    />
+                                 </Popconfirm>
+                              </div>
                            </div>
-                        </div>
-                     }
-                  />
-               );
-            })}
-         </div>
+                        }
+                     />
+                  );
+               })}
+            </div>
+         </Spin>
+
          <Modal
             title="Маягтын асуумж"
             open={isOpenEditModal}
@@ -220,11 +249,25 @@ function DocumentUpload() {
                <Form.Item label="Form name Нэр" name="name">
                   <Input />
                </Form.Item>
+               <Form.Item label="URL" name="url">
+                  <Input />
+               </Form.Item>
                <Form.Item label="Холбогдох маягт" name="documentValue">
-                  <Select>
+                  <Select
+                     showSearch
+                     allowClear
+                     optionFilterProp="children"
+                     filterOption={(input, option) =>
+                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                     }
+                  >
                      {documents?.map((document, index) => {
                         return (
-                           <Option key={index} value={document.value}>
+                           <Option
+                              disabled={documentForms.find((e) => e.documentValue === document.value) ? true : false}
+                              key={index}
+                              value={document.value}
+                           >
                               {document.label}
                            </Option>
                         );

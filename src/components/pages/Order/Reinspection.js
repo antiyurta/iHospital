@@ -1,23 +1,35 @@
-import React from 'react';
-import { Modal } from 'antd';
+import React, { useState } from 'react';
+import { Button, Modal } from 'antd';
 import Appointment from '../Appointment/Schedule/Appointment';
 
-function Reinspection({ isOpen, isClose, selectedPatient }) {
+function Reinspection({ selectedPatient, appointmentId }) {
+   const [isOpenMOdal, setIsOpenModal] = useState(false);
    return (
       <>
-         <Modal
-            title="Шинжилгээ сонгох"
-            width={'80%'}
-            open={isOpen}
-            onCancel={() => isClose('Reinspection', false)}
-            onOk={() => {
-               // handleclick(selectedExaminations);
-               isClose('Reinspection', false);
+         <Button
+            type="primary"
+            onClick={() => {
+               setIsOpenModal(true);
             }}
+         >
+            Давтан үзлэг
+         </Button>
+         <Modal
+            title="Давтан үзлэгын цаг"
+            width={'80%'}
+            open={isOpenMOdal}
+            onCancel={() => setIsOpenModal(false)}
+            onOk={() => {
+               setIsOpenModal(false);
+            }}
+            bodyStyle={{
+               background: '#F3F4F6'
+            }}
+            footer={null}
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <Appointment selectedPatient={selectedPatient} type={1} />
+            <Appointment selectedPatient={selectedPatient} type={1} prevAppointmentId={appointmentId} />
          </Modal>
       </>
    );

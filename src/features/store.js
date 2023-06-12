@@ -1,13 +1,16 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import authReducer from './authReducer';
 import emrReducer from './emrReducer';
+import noteReducer from './noteReducer';
 
 const reducers = combineReducers({
    authReducer,
-   emrReducer
+   emrReducer,
+   noteReducer
 });
 
 const persistConfig = {

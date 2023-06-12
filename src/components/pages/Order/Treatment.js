@@ -1,62 +1,63 @@
-import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { configure } from '@testing-library/react';
-import { Button, Input, InputNumber, Modal } from 'antd';
-import axios from 'axios';
+import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider, Empty, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { numberToCurrency, openNofi } from '../../comman';
+import { localMn, numberToCurrency, openNofi } from '../../comman';
+import jwtInterceopter from '../../jwtInterceopter';
 
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
+const { Search } = Input;
 
-function Treatment({ isOpen, isClose, handleclick }) {
-   const token = useSelector(selectCurrentToken);
-   let usageType = useLocation()?.state?.usageType;
-   const [searchField, setSearchField] = useState('');
+function Treatment({ handleclick }) {
+   const [isLoading, setIsLoading] = useState(false);
+   const [isOpenModal, setIsOpenModal] = useState(false);
+   const [selectedTreatmentId, setSelectedTreatmentId] = useState(null);
    const [treatments, setTreatments] = useState([]);
    const [treatment, setTreatment] = useState([]);
+   const [metaTreatment, setMetaTreatment] = useState({});
    const [selectedTreatments, setSelectedTreatments] = useState([]);
-   const config = {
-      headers: {
-         Authorization: `Bearer ${token}`,
-         'x-api-key': API_KEY
-      },
-      params: {
-         type: 2
-      }
-   };
-   const getTreatment = async () => {
-      await axios
-         .get(DEV_URL + 'service/type', config)
-         .then((res) => {
-            setTreatments(res.data.response.data);
+   const [filterValue, setFilterValue] = useState('');
+   const getExamination = async () => {
+      await jwtInterceopter
+         .get('service/type', {
+            params: {
+               type: 2
+            }
          })
-         .catch((err) => {
-            console.log(err);
+         .then((response) => {
+            setTreatments(response.data.response?.data);
+         })
+         .catch((error) => {
+            console.log(error);
          });
    };
 
-   const getTypeById = async (id) => {
-      config.params.type = null;
-      config.params.treatmentTypeId = id;
-      await axios.get(DEV_URL + 'service/treatment', config).then((response) => {
-         setTreatment(response.data.response.data);
-      });
-   };
-
-   const configure = (value) => {
-      if (value.qty) {
-         value['calCprice'] = value.price * value.qty;
-      }
-      handleclick(value);
+   const getTypeById = async (id, page, pageSize, filterValue) => {
+      setIsLoading(true);
+      setFilterValue(filterValue);
+      await jwtInterceopter
+         .get('service/treatment', {
+            params: {
+               treatmentTypeId: id,
+               page: page,
+               limit: pageSize,
+               name: filterValue ? filterValue : null
+            }
+         })
+         .then((response) => {
+            setSelectedTreatmentId(id);
+            setTreatment(response.data.response.data);
+            setMetaTreatment(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
    };
    const add = (treatment) => {
       const state = selectedTreatments.includes(treatment);
       if (state) {
-         openNofi('warning', 'Treat', 'Treat сонгогдсон байна');
+         openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
          treatment.type = treatment.types.type;
          setSelectedTreatments([...selectedTreatments, treatment]);
@@ -67,106 +68,213 @@ function Treatment({ isOpen, isClose, handleclick }) {
       arr.splice(index, 1);
       setSelectedTreatments(arr);
    };
-   const filteredTreatment = treatment.filter((trtment) => {
-      return trtment.name.toLowerCase().includes(searchField.toLowerCase());
-   });
    useEffect(() => {
-      getTreatment();
-   }, [isOpen]);
+      getExamination();
+   }, []);
    return (
       <>
+         <Button
+            type="primary"
+            onClick={() => {
+               setIsOpenModal(true);
+               setSelectedTreatmentId(null);
+               setSelectedTreatments([]);
+            }}
+         >
+            Эмчилгээ
+         </Button>
          <Modal
             title="Эмчилгээ сонгох"
             width={'80%'}
-            open={isOpen}
-            onCancel={() => isClose('treatment', false)}
+            open={isOpenModal}
+            bodyStyle={{
+               height: 600,
+               maxHeight: 600,
+               overflow: 'auto'
+            }}
+            onCancel={() => setIsOpenModal(false)}
             onOk={() => {
                handleclick(selectedTreatments);
-               isClose('treatment', false);
+               setIsOpenModal(false);
             }}
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <div className="flex flex-row">
-               <div className="basis-1/5">
-                  {treatments.map((treatment, index) => {
-                     return (
-                        <Button
-                           onClick={() => getTypeById(treatment.id)}
-                           className="w-full mb-1 bg-[#3d9970] text-white rounded-lg"
-                           key={index}
-                        >
-                           {treatment.name}
-                        </Button>
-                     );
-                  })}
-               </div>
-               <div className="basis-2/5">
-                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
-                     <Table className="ant-border-space" style={{ width: '100%' }}>
-                        <thead className="ant-table-thead bg-slate-200">
-                           <tr>
-                              <th className="font-bold text-sm align-middle">Нэр</th>
-                              <th rowSpan={2} className="font-bold text-sm align-middle">
-                                 Үнэ
-                              </th>
-                           </tr>
-                           <tr>
-                              <th>
-                                 <Input
-                                    placeholder="Хайх"
-                                    allowClear
-                                    onChange={(e) => setSearchField(e.target.value)}
-                                 />
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody className="ant-table-tbody p-0">
-                           {filteredTreatment.map((item, index) => {
-                              return (
-                                 <tr
-                                    onDoubleClick={() => add(item)}
-                                    key={index}
-                                    className="ant-table-row ant-table-row-level-0 hover:cursor-pointer"
-                                 >
-                                    <td>{item.name}</td>
-                                    <td>{numberToCurrency(usageType === 'IN' ? item.inpatientPrice : item.price)}</td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </Table>
+            <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-3">
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                  <div
+                     className="p-3"
+                     style={{
+                        height: 552,
+                        overflow: 'auto'
+                     }}
+                  >
+                     <div className="flex flex-col gap-2">
+                        {treatments.map((treatment, index) => {
+                           return (
+                              <button
+                                 onClick={() => getTypeById(treatment.id, 1, 10)}
+                                 className="w-full bg-[#3d9970] text-white rounded-lg"
+                                 key={index}
+                              >
+                                 {treatment.name}
+                              </button>
+                           );
+                        })}
+                     </div>
                   </div>
                </div>
-               <div className="basis-2/5">
-                  <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
-                     <Table className="ant-border-space" style={{ width: '100%' }}>
-                        <thead className="ant-table-thead bg-slate-200">
-                           <tr>
-                              <th className="font-bold text-sm align-middle">Нэр</th>
-                              <th className="font-bold text-sm align-middle">Үнэ</th>
-                              <th></th>
-                           </tr>
-                        </thead>
-                        <tbody className="ant-table-tbody p-0">
-                           {selectedTreatments.map((item, index) => {
-                              return (
-                                 <tr key={index} className="ant-table-row ant-table-row-level-0">
-                                    <td>{item.name}</td>
-                                    <td>{numberToCurrency(usageType === 'IN' ? item.inpatientPrice : item.price)}</td>
-                                    <td onDoubleClick={() => remove(index)} className="hover:cursor-pointer">
-                                       <CloseOutlined
+               <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <Search
+                           className="mb-3"
+                           placeholder="Хайх"
+                           allowClear
+                           enterButton={
+                              <SearchOutlined
+                                 style={{
+                                    fontSize: 16,
+                                    color: 'white'
+                                 }}
+                              />
+                           }
+                           onSearch={(e) => {
+                              if (selectedTreatmentId === null) {
+                                 openNofi('warning', 'Анхааруулга', 'Төрөл сонгоно уу');
+                              } else {
+                                 getTypeById(selectedTreatmentId, 1, 10, e);
+                              }
+                           }}
+                        />
+                        <ConfigProvider locale={localMn()}>
+                           <Table
+                              rowKey={'id'}
+                              bordered
+                              scroll={{
+                                 y: 400
+                              }}
+                              loading={isLoading}
+                              locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                              columns={[
+                                 {
+                                    title: 'Нэр',
+                                    dataIndex: 'name',
+                                    render: (text) => {
+                                       return (
+                                          <p
+                                             style={{
+                                                whiteSpace: 'normal',
+                                                color: 'black'
+                                             }}
+                                          >
+                                             {text}
+                                          </p>
+                                       );
+                                    }
+                                 },
+                                 {
+                                    title: 'Үнэ',
+                                    dataIndex: 'price',
+                                    width: 100,
+                                    render: (text) => {
+                                       return numberToCurrency(text);
+                                    }
+                                 },
+                                 {
+                                    title: '',
+                                    width: 40,
+                                    render: (_text, row) => {
+                                       return (
+                                          <Button
+                                             onClick={() => add(row)}
+                                             icon={
+                                                <PlusCircleOutlined
+                                                   style={{
+                                                      color: 'green'
+                                                   }}
+                                                />
+                                             }
+                                          />
+                                       );
+                                    }
+                                 }
+                              ]}
+                              dataSource={treatment}
+                              pagination={{
+                                 position: ['bottomCenter'],
+                                 size: 'small',
+                                 current: metaTreatment.page,
+                                 total: metaTreatment.itemCount,
+                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 pageSize: metaTreatment.limit,
+                                 showSizeChanger: true,
+                                 pageSizeOptions: ['5', '10', '20', '50'],
+                                 showQuickJumper: true,
+                                 onChange: (page, pageSize) =>
+                                    getTypeById(selectedTreatmentId, page, pageSize, filterValue)
+                              }}
+                           />
+                        </ConfigProvider>
+                     </div>
+                  </div>
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <Table
+                           rowKey={'id'}
+                           bordered
+                           scroll={{
+                              y: 400
+                           }}
+                           locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                           columns={[
+                              {
+                                 title: 'Нэр',
+                                 dataIndex: 'name',
+                                 render: (text) => {
+                                    return (
+                                       <p
                                           style={{
-                                             color: 'red',
-                                             verticalAlign: 'middle'
+                                             whiteSpace: 'normal',
+                                             color: 'black'
                                           }}
+                                       >
+                                          {text}
+                                       </p>
+                                    );
+                                 }
+                              },
+                              {
+                                 title: 'Үнэ',
+                                 dataIndex: 'price',
+                                 width: 100,
+                                 render: (text) => {
+                                    return numberToCurrency(text);
+                                 }
+                              },
+                              {
+                                 title: '',
+                                 width: 40,
+                                 render: (_text, _row, index) => {
+                                    return (
+                                       <Button
+                                          onClick={() => remove(index)}
+                                          icon={
+                                             <CloseCircleOutlined
+                                                style={{
+                                                   color: 'red'
+                                                }}
+                                             />
+                                          }
                                        />
-                                    </td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </Table>
+                                    );
+                                 }
+                              }
+                           ]}
+                           dataSource={selectedTreatments}
+                           pagination={false}
+                        />
+                     </div>
                   </div>
                </div>
             </div>

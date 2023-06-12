@@ -1,7 +1,7 @@
 import { Button, Collapse, Dropdown, Form, Input, Menu, Modal, Spin, Tabs, Tag } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
+import { selectCurrentAppId, selectCurrentToken } from '../../../../features/authReducer';
 import { Get, Post } from '../../../comman';
 import Epicriz from '../../BeforeAmbulatory/Lists/Epicriz';
 import Diagnose from '../../service/Diagnose';
@@ -11,16 +11,24 @@ import StoryGeneral from './StoryGeneral';
 import Anamnesis from './MainInpatient/Anamnesis';
 import ClinicalDiagnoeMain from './MainInpatient/ClinicalDiagnoseMain';
 import Epicrisis from './MainInpatient/Epicrisis';
+import { SnippetsOutlined } from '@ant-design/icons';
+import jwtInterceopter from '../../../jwtInterceopter';
+import DocumentShow from '../../611/DocumentShow';
 //
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
-function MainInpatientHistory({ patientId, inpatientRequestId, insuranceServiceId }) {
+function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
+   console.log('-------------->', serviceId);
    const token = useSelector(selectCurrentToken);
+   const AppIds = useSelector(selectCurrentAppId);
    const [checkedKey, setCheckedKey] = useState(0);
    const [doctorDailyForm] = Form.useForm();
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
    const [story, setStory] = useState({});
    const [dailyNotes, setDailyNotes] = useState([]);
+   //
+   const [documents, setDocuments] = useState([]);
+   //
    const testItems = [
       {
          key: '1',
@@ -41,7 +49,9 @@ function MainInpatientHistory({ patientId, inpatientRequestId, insuranceServiceI
       {
          key: '5',
          label: 'КЛИНИКИЙН ОНОШИЙН ҮНДЭСЛЭЛ',
-         children: <ClinicalDiagnoeMain PatientId={patientId} InpatientRequestId={inpatientRequestId} />
+         children: (
+            <ClinicalDiagnoeMain PatientId={patientId} InpatientRequestId={inpatientRequestId} ServiceId={serviceId} />
+         )
       },
       {
          key: '6',
@@ -52,11 +62,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, insuranceServiceI
          key: '7',
          label: 'Гарах үеийн эпекриз',
          children: (
-            <Epicrisis
-               PatientId={patientId}
-               InpatientRequestId={inpatientRequestId}
-               InsuranceServiceId={insuranceServiceId}
-            />
+            <Epicrisis PatientId={patientId} InpatientRequestId={inpatientRequestId} InsuranceServiceId={serviceId} />
          )
       }
    ];
@@ -136,49 +142,86 @@ function MainInpatientHistory({ patientId, inpatientRequestId, insuranceServiceI
          ]);
       }
    };
-   const menu = (
-      <Menu
-         onClick={handleMenuClick}
-         items={[
-            {
-               key: 1,
-               label: 'Өдрийн тэмдэглэл'
-            },
-            {
-               key: 2,
-               label: 'Шилжүүлэх үеийн үзлэг'
-            },
-            {
-               key: 3,
-               label: 'Хэвтэх үеийн үзлэг'
-            },
-            {
-               key: 4,
-               label: 'Мэдээгүйжүүлэг'
-            },
-            {
-               key: 5,
-               label: 'Мэс засал'
-            },
-            {
-               key: 6,
-               label: 'Эмнэлгээс гаргах'
-            }
-         ]}
-      />
-   );
    const documentHandleClick = (document) => {
       setItems([document]);
       setIsOpenDocumentModal(false);
    };
-   const Render = () => {
-      return <div className="p-2">{testItems[checkedKey].children}</div>;
+   const getDocuments = async () => {
+      // setIsLoadingGetDocuments(true);
+      const conf = {
+         headers: {},
+         params: {
+            employeePositionIds: AppIds,
+            structureId: deparmentId,
+            usageType: 'IN',
+            documentType: 0
+         }
+      };
+      await jwtInterceopter
+         .get('organization/document-role/show', conf)
+         .then((response) => {
+            if (response.data.response?.length === 0) {
+               // openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
+            } else {
+               var data = [];
+               response.data.response?.map((item) =>
+                  item?.documents?.map((document) => {
+                     data.push(document);
+                  })
+               );
+               console.log(data);
+               setDocuments(data);
+               // setDocuments(data);
+               // setIsOpenAM(true);
+               // setDocumentId(0);
+            }
+         })
+         .catch((error) => {
+            console.log(error);
+         });
+      // .finally(() => setIsLoadingGetDocuments(false));
    };
+   const documentsMenu = <Menu onClick={(e) => console.log(e)} items={documents} />;
    useEffect(() => {
       // getStory();
+      getDocuments();
    }, []);
    return (
       <div>
+         <Button
+            type="primary"
+            onClick={() => getDocuments()}
+            // loading={isLoadingGetDocuments}
+            icon={<SnippetsOutlined />}
+         >
+            Маягт
+         </Button>
+         <Dropdown
+            overlay={documentsMenu}
+            trigger={['click']}
+            arrow={{
+               pointAtCenter: true
+            }}
+         >
+            <Button
+               type="link"
+               style={{
+                  paddingTop: 0
+               }}
+               className="ant-dropdown-link"
+               onClick={(e) => e.preventDefault()}
+            >
+               asdasd
+            </Button>
+         </Dropdown>
+         <DocumentShow
+            props={{
+               appIds: AppIds,
+               deparmentId: deparmentId,
+               usageType: 'IN',
+               documentType: 0
+            }}
+         />
          <div>
             <Tabs type="card" items={testItems} />
          </div>
