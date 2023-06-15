@@ -102,7 +102,10 @@ function InsuranceDocterList() {
       },
       {
          title: 'Хувь',
-         dataIndex: 'gpa'
+         dataIndex: 'gpa',
+         render: (text) => {
+            return `${text}%`;
+         }
       },
       {
          title: 'Үйлчилгээний нэр',
@@ -230,6 +233,13 @@ function InsuranceDocterList() {
                   loading={isLoading}
                   columns={columns}
                   dataSource={data}
+                  rowClassName={(record, _index) => {
+                     if (record.gpa) {
+                        const value = Math.floor(record.gpa / 10);
+                        // return 'bg-color-range-5';
+                        return `bg-color-range-${value}`;
+                     }
+                  }}
                   pagination={{
                      position: ['bottomCenter', 'topCenter'],
                      size: 'small',

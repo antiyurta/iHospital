@@ -4,15 +4,15 @@ import { openNofi } from './comman';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-const jwtInterceopter = axios.create({});
+var jwtInterceopter = axios.create({});
 
 jwtInterceopter.defaults.baseURL = DEV_URL;
 
 jwtInterceopter.interceptors.request.use((config) => {
    let tokens = JSON.parse(localStorage.getItem('tokens'));
    if (tokens) {
-      config.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
-      config.headers.common['x-api-key'] = API_KEY;
+      config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
+      config.headers['x-api-key'] = API_KEY;
    }
    return config;
 });
@@ -23,7 +23,8 @@ jwtInterceopter.interceptors.response.use(
    },
    async (error) => {
       const originalConfig = error.config;
-      if (originalConfig.url !== '/login' && error.response) {
+      if (originalConfig?.url !== '/login' && error.response) {
+         console.log(error);
          if (error.response.status === 401 && !originalConfig._retry) {
             originalConfig._retry = true;
             try {

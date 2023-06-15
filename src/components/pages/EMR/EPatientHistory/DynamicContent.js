@@ -5,18 +5,53 @@ import Diagnose from '../../service/Diagnose';
 import EditableFormItem from '../../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
 import jwtInterceopter from '../../../jwtInterceopter';
-import { openNofi } from '../../../comman';
+import { inspectionTOJSON, openNofi } from '../../../comman';
+import { useSelector } from 'react-redux';
+import { selectCurrentNote } from '../../../../features/noteReducer';
 const { TextArea } = Input;
 const { Column } = Table;
 const { Option } = Select;
-function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT = true, appointmentHasInsurance }) {
+function DynamicContent({
+   props,
+   incomeData,
+   handleClick,
+   editForm,
+   editForOUT = true,
+   appointmentHasInsurance,
+   appointmentType
+}) {
    const [form] = Form.useForm();
+   const notes = useSelector(selectCurrentNote);
+   //
+   const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(Number);
+   const [editModeInspectionNote, setEditModeInspectionNote] = useState(false);
+   //
+   const [selectedDiagnoseIds, setSelectedDiagnoseIds] = useState([]);
+   const [editModeDiagnosis, setEditModeDiagnosis] = useState(false);
+   //
    const [loading, setLoading] = useState(false);
-   const DiagnoseHandleClick = (diagnoses, hicsServiceId) => {
+   const DiagnoseHandleClick = (diagnosis, hicsServiceData, cost) => {
       if (incomeData.usageType === 'OUT') {
-         jwtInterceopter.patch('appointment/' + incomeData.appointmentId, hicsServiceId);
+         if (cost?.length > 0) {
+            var data = {
+               hicsServiceId: hicsServiceData.hicsServiceId,
+               serviceId: incomeData.appointmentId,
+               serviceType: 5,
+               icdCode: cost[0]?.icd10Code,
+               icdCodeName: cost[0]?.icd10Name,
+               icd9Code: cost[0]?.icd9Code,
+               icd9Name: cost[0]?.icd9Name,
+               drgCode: cost[0]?.drgCode,
+               discountAmount: cost[0]?.amountHi,
+               payedAmount: cost[0]?.amountCit,
+               totalAmount: cost[0]?.amountTotal
+            };
+            const AddCode = diagnosis?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
+            data['icdAddCode'] = AddCode;
+            jwtInterceopter.patch('insurance-seal', data);
+         }
       }
-      form.setFieldValue('diagnose', diagnoses);
+      form.setFieldValue('diagnose', diagnosis);
    };
    const saveDynamicTab = async (values, key) => {
       setLoading(true);
@@ -58,29 +93,58 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
       }
       data['formId'] = key;
       data['diagnoses'] = diagnoseData;
-      await jwtInterceopter
-         .post('emr/inspectionNote', data)
-         .then((response) => {
-            if (response.status === 201) {
-               openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
-               if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-                  jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
-                     xrayProcess: 2
-                  });
-               } else {
+      console.log('=======>', data);
+      if (editModeInspectionNote) {
+         await jwtInterceopter
+            .patch('emr/inspectionNote/' + selectedInspectionNoteId, data)
+            .then((response) => {
+               console.log(response);
+               if (response.status === 200) {
+                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
                   handleClick({ target: { value: 'OCS' } });
+                  // if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                  //    jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                  //       xrayProcess: 2
+                  //    });
+                  // } else {
+                  //    handleClick({ target: { value: 'OCS' } });
+                  // }
                }
-            }
-            console.log(response);
-         })
-         .catch((error) => {
-            if (error.response.status === 409) {
-               openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
-            }
-         })
-         .finally(() => {
-            setLoading(false);
+            })
+            .finally(() => {
+               setLoading(false);
+            });
+      }
+      if (editModeDiagnosis && incomeData.inspection != 11 && incomeData.inspection != 12) {
+         selectedDiagnoseIds?.map((id) => {
+            jwtInterceopter.delete('emr/patient-diagnose/' + id);
          });
+      }
+      if (!editModeDiagnosis && !editModeInspectionNote) {
+         await jwtInterceopter
+            .post('emr/inspectionNote', data)
+            .then((response) => {
+               if (response.status === 201) {
+                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+                  if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                     jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                        xrayProcess: 2
+                     });
+                  } else {
+                     handleClick({ target: { value: 'OCS' } });
+                  }
+               }
+               console.log(response);
+            })
+            .catch((error) => {
+               if (error.response.status === 409) {
+                  openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
+               }
+            })
+            .finally(() => {
+               setLoading(false);
+            });
+      }
    };
 
    const onFinishFailed = (errorInfo) => {
@@ -88,12 +152,38 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
       setValidStep(false);
    };
    useEffect(() => {
+      console.log('=========>', editForm, editForOUT);
       if (editForm != undefined && editForm != null) {
          if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
             form.setFieldsValue(editForm);
+            console.log(editForm);
          } else {
             form.resetFields();
          }
+      } else {
+         let data = {};
+         if (notes.inspectionNotes?.length > 0) {
+            data = inspectionTOJSON(notes.inspectionNotes[0]);
+            setEditModeInspectionNote(true);
+            setSelectedInspectionNoteId(notes.inspectionNotes[0].id);
+         }
+         if (notes.diagnosis?.length > 0) {
+            var diagnoseIds = [];
+            const diagnosis = notes.diagnosis?.map((diagnose) => {
+               diagnoseIds.push(diagnose.id);
+               return {
+                  code: diagnose.diagnose.code,
+                  nameMn: diagnose.diagnose.nameMn,
+                  diagnoseType: diagnose.diagnoseType,
+                  type: diagnose.diagnose.type,
+                  id: diagnose.diagnose.id
+               };
+            });
+            setEditModeDiagnosis(true);
+            setSelectedDiagnoseIds(diagnoseIds);
+            data['diagnose'] = diagnosis;
+         }
+         form.setFieldsValue(data);
       }
    }, [editForm]);
    return (
@@ -144,12 +234,13 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
                            })}
                         </>
                      ) : null}
-                     {props.data.inspection?.length > 0 ? (
+                     {'inspection' in props.data && props.data.inspection?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Бодит үзлэг
                            </Divider>
                            {props.data['inspection'].map((inspection, index) => {
+                              console.log(props);
                               return (
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (
@@ -283,6 +374,7 @@ function DynamicContent({ props, incomeData, handleClick, editForm, editForOUT =
                               handleClick={DiagnoseHandleClick}
                               types={[0, 1, 2]}
                               appointmentHasInsurance={appointmentHasInsurance}
+                              appointmentType={appointmentType}
                            />
                            <Form.List name="diagnose">
                               {(diagnose) => (

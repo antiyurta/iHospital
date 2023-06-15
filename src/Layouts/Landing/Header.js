@@ -11,8 +11,8 @@ function Header() {
    return (
       <>
          <section>
-            <div className="fixed z-50 w-full bg-transparent top-9">
-               <Container>
+            <div className="fixed z-50 w-full bg-transparent">
+               <>
                   <Navbar
                      expand={'sm'}
                      style={{
@@ -20,7 +20,6 @@ function Header() {
                         backgroundColor: 'white',
                         height: 72,
                         padding: '12px 20px',
-                        borderRadius: 12,
                         boxShadow: '0px 8px 8px rgba(0,0,0,0.1)'
                      }}
                   >
@@ -40,6 +39,9 @@ function Header() {
                         id="offcanvasNavbar-expand-sm"
                         aria-labelledby="offcanvasNavbar-expand-sm"
                         placement="end"
+                        style={{
+                           width: 300
+                        }}
                      >
                         <Offcanvas.Header closeButton>
                            <Offcanvas.Title id="offcanvasNavbar-expand-sm">
@@ -116,7 +118,7 @@ function Header() {
                                  onClick={() => {
                                     navigate('/login');
                                  }}
-                                 className="py-2 px-5 rounded-md bg-[#2D8CFF]"
+                                 className="py-2 px-5 rounded-md bg-[#2D8CFF] w-full"
                               >
                                  <p
                                     style={{
@@ -135,7 +137,7 @@ function Header() {
                         </Offcanvas.Body>
                      </Navbar.Offcanvas>
                   </Navbar>
-               </Container>
+               </>
             </div>
          </section>
       </>

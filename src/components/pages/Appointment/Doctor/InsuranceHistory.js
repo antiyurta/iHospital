@@ -3,7 +3,8 @@ import { openNofi } from '../../../comman';
 import jwtInterceopter from '../../../jwtInterceopter';
 import { Spin, Table } from 'antd';
 import moment from 'moment';
-function InsuranceHistory({ registerNumber }) {
+function InsuranceHistory(props) {
+   const { registerNumber, isFull } = props;
    const [data, setData] = useState(null);
    const [isLoading, setIsloading] = useState(false);
    const getData = async () => {
@@ -26,8 +27,10 @@ function InsuranceHistory({ registerNumber }) {
          });
    };
    useEffect(() => {
-      getData();
-   }, []);
+      if (registerNumber) {
+         getData();
+      }
+   }, [registerNumber]);
    if (data === null) {
       return <div>Иргэнд даатгалын түүх байхгүй</div>;
    }
@@ -67,9 +70,6 @@ function InsuranceHistory({ registerNumber }) {
                   }
                }
             ]}
-            scroll={{
-               y: 150
-            }}
             dataSource={data.details}
             pagination={false}
          />

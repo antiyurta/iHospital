@@ -5,6 +5,10 @@ import NurseNote from '../NurseNote';
 import ProgressCheck from './ProgressCheck';
 import Xray from '../Xray';
 
+//
+import Assesments from './Nurse/Assesments';
+//
+
 export default function MainAmbulatory({ patientId, appointments }) {
    const items = [
       {
@@ -18,10 +22,15 @@ export default function MainAmbulatory({ patientId, appointments }) {
          children: <ProgressCheck PatientId={patientId} />
       },
       {
-         label: 'Сувилагчийн тэмдэглэл',
-         key: 'item-6',
-         children: <NurseNote PatientId={patientId} />
+         label: 'Амин үзүүлэлт',
+         key: 'item-3',
+         children: <Assesments patientId={patientId} />
       },
+      // {
+      //    label: 'Сувилагчийн тэмдэглэл',
+      //    key: 'item-6',
+      //    children: <NurseNote PatientId={patientId} />
+      // },
       {
          label: 'Оношилгоо',
          key: 'item-2',

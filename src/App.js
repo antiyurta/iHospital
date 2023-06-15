@@ -116,10 +116,6 @@ function App() {
                      {ProtectedRoutes.map((route, index) => {
                         return <Route key={index} path={route.path} element={<route.element />} />;
                      })}
-                     <Route path="/urgentEnr" element={<BeforeUrgentEnr />} />
-                     <Route path="/insuranceDoctor" element={<InsuranceDocterList />} />
-                     <Route path="/hicsCost" element={<HicsCost />} />
-                     <Route path="/hicsList" element={<HicsLists />} />
                      <Route path="/notPermission" element={<NotPermission />} />
                      <Route path="/profile" element={<Profile />} />
                      <Route path="/acting" element={<Acting />} />

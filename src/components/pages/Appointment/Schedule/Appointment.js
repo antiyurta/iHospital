@@ -4,31 +4,38 @@ import {
    Button,
    Card,
    Collapse,
+   ConfigProvider,
    DatePicker,
    Descriptions,
    Empty,
    Form,
    Modal,
+   Radio,
+   Result,
    Select,
    Space,
    Steps,
    Switch
 } from 'antd';
+import AntTable from 'antd/es/table';
 import moment from 'moment';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentInsurance, selectCurrentToken } from '../../../../features/authReducer';
-import { DefaultPost, DefualtGet, Get, openNofi, Patch, Post, ScrollRef } from '../../../comman';
+import { DefaultPost, DefualtGet, Get, localMn, openNofi, Patch, Post, ScrollRef } from '../../../comman';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
-import { ClockCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
+//
+import Finger from '../../../../features/finger';
+//
 const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
 const { Step } = Steps;
-function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
+function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId }) {
    const [today] = useState(moment(new Date()));
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
@@ -56,9 +63,12 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
    const [isLoadingCheckPatientInsurance, setIsLoadingCheckPatientInsurance] = useState(false);
    const [stateInsurance, setStateInsurance] = useState(Boolean);
    const [insuranceService, setInsuranceService] = useState([]);
-   const [selectedInsuranceId, setSelectedInsuranceId] = useState(Number);
+   const [isSent, setIsSent] = useState(false);
+   const [notInsuranceInfo, setNotInsuranceInfo] = useState([]);
+   const [reasonComming, setReasonComming] = useState(null);
    //
    const orderAppointment = async (type, desc, value) => {
+      setIsSent(false);
       if (type) {
          setQwe(desc);
          setIsUrgent(false);
@@ -148,6 +158,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
          data.status = 1;
          data.isInsurance = stateInsurance;
          data.appointmentWorkDate = filterForm.getFieldValue('date');
+         data.appointmentId = prevAppointmentId;
          config.params = {};
          const response = await Post('appointment', token, config, data);
          if (response === 201) {
@@ -159,15 +170,22 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       setIsConfirmLoading(false);
    };
    const urgentRequest = async () => {
-      setIsConfirmLoading(true);
-      data.type = 1;
-      data.status = 1;
-      config.params = {};
-      const response = await Post('appointment', token, config, data);
-      if (response === 201) {
-         setAppointmentModal(false);
+      if (reasonComming != null) {
+         setIsConfirmLoading(true);
+         config.params = {};
+         data.type = 1;
+         data.status = 1;
+         data.isInsurance = stateInsurance;
+         data.appointmentWorkDate = new Date();
+         data.reasonComming = reasonComming;
+         const response = await Post('appointment', token, config, data);
+         if (response === 201) {
+            setAppointmentModal(false);
+         }
+         setIsConfirmLoading(false);
+      } else {
+         openNofi('warning', 'Анхааруулга', 'Хэрхэн ирсэн бөглөх');
       }
-      setIsConfirmLoading(false);
    };
    const onFinish = () => {
       filterForm
@@ -193,7 +211,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       const response = await DefualtGet('insurance/hics-service-group', token, conf);
       setInsuranceService(response.data);
    };
-   const checkPatientInsurance = async () => {
+   const checkPatientInsurance = async (fingerData) => {
       setIsLoadingCheckPatientInsurance(true);
       const conf = {
          headers: {},
@@ -202,7 +220,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
       const data = {
          regNo: selectedPatient.registerNumber,
          isChild: selectedPatient.isChild,
-         fingerPrint: 'sadasd'
+         fingerPrint: fingerData
       };
       await axios
          .post(process.env.REACT_APP_DEV_URL + 'health-insurance/citizen-info', data, {
@@ -212,17 +230,20 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
             }
          })
          .then((res) => {
-            console.log(res);
-            if (!res.data?.isChance) {
-               openNofi('warning', 'Анхааруулга', 'Үйлчүүлэгч даатгалгүй байна');
-            } else {
+            if (res.data?.isChance) {
                openNofi('success', 'Амжилттай', 'Үйлчүүлэгч даатгалтай байна');
+               setIsSent(false);
+            } else {
+               setNotInsuranceInfo(res.data?.notInsuranceInfo);
+               setIsSent(true);
+               openNofi('warning', 'Анхааруулга', 'Үйлчүүлэгч даатгалгүй байна');
             }
-            setStateInsurance(res.data?.isChance);
-            setIsLoadingCheckPatientInsurance(false);
+            // setStateInsurance(res.data?.isChance);
          })
          .catch((err) => {
             console.log(err);
+         })
+         .finally(() => {
             setIsLoadingCheckPatientInsurance(false);
          });
    };
@@ -241,6 +262,9 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
          <Modal
             title="Цаг захиалах"
             open={appointmentModal}
+            okButtonProps={{
+               disabled: isSent
+            }}
             onOk={() => {
                isUrgent ? urgentRequest() : getdd();
             }}
@@ -273,6 +297,30 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                      </Descriptions>
                   </div>
                </div>
+               {isUrgent ? (
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flow-root">
+                           <div className="float-left">
+                              <p
+                                 style={{
+                                    fontWeight: 600
+                                 }}
+                              >
+                                 Яаж ирсэн
+                              </p>
+                           </div>
+                           <div className="float-right">
+                              <Radio.Group value={reasonComming} onChange={(e) => setReasonComming(e.target.value)}>
+                                 <Radio value={1}>Өөрөө</Radio>
+                                 <Radio value={2}>Түргэн тусламжаар</Radio>
+                                 <Radio value={3}>Бусад</Radio>
+                              </Radio.Group>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               ) : null}
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <div className="flow-root">
@@ -292,7 +340,11 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                               unCheckedChildren="Үгүй"
                               defaultChecked={false}
                               checked={stateInsurance}
-                              onChange={(e) => setStateInsurance(e)}
+                              onChange={(e) => {
+                                 setStateInsurance(e);
+                                 setIsSent(e);
+                                 setNotInsuranceInfo([]);
+                              }}
                            />
                         </div>
                      </div>
@@ -301,50 +353,59 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick }) {
                {stateInsurance && (
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
-                        <Form onFinish={checkPatientInsurance}>
-                           <Form.Item>
-                              <Button loading={isLoadingCheckPatientInsurance} type="primary" htmlType="submit">
-                                 Шалгах
+                        <ConfigProvider locale={localMn()}>
+                           <AntTable
+                              size="small"
+                              rowKey={'id'}
+                              bordered
+                              loading={isLoadingCheckPatientInsurance}
+                              locale={{
+                                 emptyText: <Result title="Даатгалын төлөлтын мэдээлэл" />
+                              }}
+                              columns={[
+                                 {
+                                    title: 'Он',
+                                    dataIndex: 'pyear'
+                                 },
+                                 {
+                                    title: 'Сар',
+                                    dataIndex: 'pmonth'
+                                 },
+                                 {
+                                    title: 'Төлсөн эсэх',
+                                    render: () => {
+                                       return (
+                                          <CloseCircleOutlined
+                                             style={{
+                                                color: 'red'
+                                             }}
+                                          />
+                                       );
+                                    }
+                                 }
+                              ]}
+                              dataSource={notInsuranceInfo}
+                           />
+                        </ConfigProvider>
+                        <div className="flow-root">
+                           <div className="pt-3 float-right">
+                              <Button
+                                 loading={isLoadingCheckPatientInsurance}
+                                 type="primary"
+                                 onClick={() => checkPatientInsurance('daad')}
+                              >
+                                 Даатгал шалгах
                               </Button>
-                           </Form.Item>
-                        </Form>
+                              {/* <Finger
+                                 handleClick={(data) => {
+                                    checkPatientInsurance(data);
+                                 }}
+                              /> */}
+                           </div>
+                        </div>
                      </div>
                   </div>
                )}
-               {/* {isInsurance && stateInsurance && (
-                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <div className="p-3">
-                        <p
-                           className="py-3"
-                           style={{
-                              fontWeight: 600
-                           }}
-                        >
-                           Даатгалын үйлчилгээний төрөл
-                        </p>
-                        <Select
-                           style={{
-                              width: '100%'
-                           }}
-                           onChange={(e) => setSelectedInsuranceId(e)}
-                        >
-                           {insuranceService?.map((group, index) => {
-                              return (
-                                 <OptGroup key={index} label={group.name}>
-                                    {group?.hicsServices?.map((service, idx) => {
-                                       return (
-                                          <Option key={`${index}-${idx}`} value={service.id}>
-                                             {service.name}
-                                          </Option>
-                                       );
-                                    })}
-                                 </OptGroup>
-                              );
-                           })}
-                        </Select>
-                     </div>
-                  </div>
-               )} */}
             </div>
          </Modal>
          <Card

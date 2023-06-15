@@ -28,6 +28,10 @@ const typeSelectData = [
       value: 'input'
    },
    {
+      label: 'INPUTNUMBER',
+      value: 'inputNumber'
+   },
+   {
       label: 'TEXTAREA',
       value: 'textarea'
    },
@@ -141,7 +145,7 @@ function DocumentUpload() {
          });
    };
    const filteredForm = documentForms.filter((form) => {
-      return form.name.toLowerCase().includes(searchField.toLowerCase());
+      return form.name?.toLowerCase().includes(searchField.toLowerCase());
    });
    const deleteForm = async (id) => {
       await jwtInterceopter
@@ -243,6 +247,9 @@ function DocumentUpload() {
          >
             <Form form={form} layout="vertical">
                <Form.Item label="Form name Нэр" name="name">
+                  <Input />
+               </Form.Item>
+               <Form.Item label="URL" name="url">
                   <Input />
                </Form.Item>
                <Form.Item label="Холбогдох маягт" name="documentValue">

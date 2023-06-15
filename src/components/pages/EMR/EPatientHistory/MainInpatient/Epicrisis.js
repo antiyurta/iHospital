@@ -62,14 +62,17 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
          headers: {},
          params: {}
       };
+      const hicsCost = JSON.parse(values.hicsCost);
+      values['hicsCost'] = null;
       values['patientId'] = PatientId;
       values['inpatientRequestId'] = InpatientRequestId;
-      console.log(values);
-      //   const response = await Post('inpatient/epicrisis', token, conf, values);
-      //   if (response === 201) {
-      //      form.resetFields();
-      //      setIsOpenModal(false);
-      //   }
+      values['drgCode'] = hicsCost[0];
+      values['groupId'] = hicsCost[1];
+      const response = await Post('inpatient/epicrisis', token, conf, values);
+      if (response === 201) {
+         form.resetFields();
+         setIsOpenModal(false);
+      }
    };
    useEffect(() => {
       const icdCode = diagnoses.find((e) => e.diagnoseId === selectedDiagnoseId)?.diagnose?.code;
@@ -118,13 +121,13 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
                <Form.Item label="Үндсэн онош:" name="diagnoseId">
                   <Select onChange={(e) => setSelectedDiagnoseId(e)}>
                      {diagnoses?.map((diagnose, index) => {
-                        if (diagnose.diagnoseType === 0) {
-                           return (
-                              <Option key={index} value={diagnose.diagnoseId}>
-                                 {`${diagnose.diagnose?.code} -> ${diagnose.diagnose?.nameMn}`}
-                              </Option>
-                           );
-                        }
+                        // if (diagnose.diagnoseType === 0) {
+                        return (
+                           <Option key={index} value={diagnose.diagnoseId}>
+                              {`${diagnose.diagnose?.code} -> ${diagnose.diagnose?.nameMn}`}
+                           </Option>
+                        );
+                        // }
                      })}
                   </Select>
                </Form.Item>
@@ -143,13 +146,13 @@ function Epicrisis({ PatientId, InpatientRequestId, InsuranceServiceId }) {
                <Form.Item label="Дагалдах онош:" name="addDiagnoseId">
                   <Select>
                      {diagnoses?.map((diagnose, index) => {
-                        if (diagnose.diagnoseType === 3) {
-                           return (
-                              <Option key={index} value={diagnose.id}>
-                                 {`${diagnose.diagnose?.code} -> ${diagnose.diagnose?.nameMn}`}
-                              </Option>
-                           );
-                        }
+                        // if (diagnose.diagnoseType === 3) {
+                        return (
+                           <Option key={index} value={diagnose.id}>
+                              {`${diagnose.diagnose?.code} -> ${diagnose.diagnose?.nameMn}`}
+                           </Option>
+                        );
+                        // }
                      })}
                   </Select>
                </Form.Item>

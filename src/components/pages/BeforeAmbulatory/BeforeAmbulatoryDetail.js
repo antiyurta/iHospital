@@ -123,7 +123,13 @@ function BeforeAmbulatoryDetail() {
             </div>
             <div className="w-full p-1">
                {location?.state?.type === 0 ? (
-                  <BeforeAmbulatoryTabs patientId={selectedPatient?.id} />
+                  <BeforeAmbulatoryTabs
+                     patientId={selectedPatient?.id}
+                     type={location.state.appointmentType}
+                     structureId={location.state?.structureId}
+                     listId={location.state?.appointmentId}
+                     reasonComming={location.state?.reasonComming}
+                  />
                ) : (
                   <BeforeInPatientTabs
                      patientId={selectedPatient?.id}

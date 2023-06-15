@@ -20,7 +20,6 @@ import {
    DelAppId,
    DelDepId,
    DelInsurrance,
-   DelNote,
    DelRoleId,
    selectCurrentRoleId,
    selectCurrentUserId
@@ -43,7 +42,6 @@ function MainLayout({ children }) {
          dispatch(logout());
          dispatch(DelDepId());
          dispatch(DelAppId());
-         dispatch(DelNote());
          dispatch(DelInsurrance());
          dispatch(DelRoleId());
          navigate('/');

@@ -16,10 +16,12 @@ import Mongur from '../assets/landing/mongur.png';
 import check from '../assets/landing/check.png';
 import bluCheck from '../assets/landing/bluCheck.png';
 
+import Widget from '../Layouts/Landing/Widget';
+
 function Home() {
    return (
       <>
-         <section>
+         <section className="pt-[72px]">
             <Carousel>
                <Carousel.Item>
                   <img className="d-block w-100" src={banner} alt="First slide" />
@@ -39,7 +41,7 @@ function Home() {
          </section>
          <section>
             <Container>
-               <div className="flex flex-col justify-center items-center pt-[60px] pb-[120px] gap-[60px] bg-transparent">
+               <div className="flex flex-col justify-center items-center pt-[60px] pb-[60px] gap-[60px] bg-transparent">
                   <p
                      style={{
                         fontFamily: 'Roboto',
@@ -51,59 +53,60 @@ function Home() {
                   >
                      ЭМНЭЛГИЙН ЦОГЦ ПЛАТФОРМ
                   </p>
-                  <div className="flex flex-col md:flex-row box-border w-full gap-12">
-                     <div className="box">
-                        <div className="subBox">
-                           <img src={AI} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 box-border w-full gap-3">
+                     <div className="box md:flex-row lg:flex-col">
+                        <img src={AI} />
+                        <div className="subbox">
+                           <p className="title">НЭГДСЭН ЦОГЦ СИСТЕМ</p>
                            <p className="text">
                               Ай Хоспититал платформ нь эмнэлгийн мэдээллийн систем, нягтлан бодох бүртгэл, ERP,
                               санхүүгийн хяналтын систем болон үйлчлүүлэгчтэй холбосон мобайл апп зэрэг хоорондоо уялдаа
                               холбоотой рийл тайм мэдээллээ солилцож ажилладаг нэгдсэн платформ юм.
                            </p>
                         </div>
-                        <p>НЭГДСЭН ЦОГЦ СИСТЕМ</p>
                      </div>
                      <div className="box">
-                        <div className="subBox">
-                           <img src={SIXG} />
+                        <img src={SIXG} />
+                        <div className="subbox">
+                           <p className="title">ТЕХНОЛОГИ</p>
                            <p className="text">
                               Ай Хоспититал платформ нь эмнэлгийн мэдээллийн систем, нягтлан бодох бүртгэл, ERP,
                               санхүүгийн хяналтын систем болон үйлчлүүлэгчтэй холбосон мобайл апп зэрэг хоорондоо уялдаа
                               холбоотой рийл тайм мэдээллээ солилцож ажилладаг нэгдсэн платформ юм.
                            </p>
                         </div>
-                        <p>ТЕХНОЛОГИ</p>
                      </div>
                      <div className="box">
-                        <div className="subBox">
-                           <img src={ThreDholo} />
+                        <img src={ThreDholo} />
+                        <div className="subbox">
+                           <p className="title">УДИРДЛАГА ХЯНАЛТ</p>
                            <p className="text">
                               Ай Хоспититал платформ нь эмнэлгийн мэдээллийн систем, нягтлан бодох бүртгэл, ERP,
                               санхүүгийн хяналтын систем болон үйлчлүүлэгчтэй холбосон мобайл апп зэрэг хоорондоо уялдаа
                               холбоотой рийл тайм мэдээллээ солилцож ажилладаг нэгдсэн платформ юм.
                            </p>
                         </div>
-                        <p>УДИРДЛАГА ХЯНАЛТ</p>
                      </div>
                      <div className="box">
-                        <div className="subBox">
-                           <img src={biemetr} />
+                        <img src={biemetr} />
+                        <div className="subbox">
+                           <p className="title">ХЭРЭГЛЭГЧ ТӨВТЭЙ</p>
                            <p className="text">
                               Ай Хоспититал платформ нь эмнэлгийн мэдээллийн систем, нягтлан бодох бүртгэл, ERP,
                               санхүүгийн хяналтын систем болон үйлчлүүлэгчтэй холбосон мобайл апп зэрэг хоорондоо уялдаа
                               холбоотой рийл тайм мэдээллээ солилцож ажилладаг нэгдсэн платформ юм.
                            </p>
                         </div>
-                        <p>ХЭРЭГЛЭГЧ ТӨВТЭЙ</p>
                      </div>
                   </div>
                </div>
             </Container>
          </section>
          <section>
-            <div className="bg-white py-[120px]">
+            <div className="bg-white py-[60px]">
                <Container>
-                  <div className="flex flex-col md:flex-row">
+                  <Widget />
+                  {/* <div className="flex flex-col md:flex-row">
                      <div className="flex sm:flex-row md:flex-col justify-center items-start gap-3">
                         <div
                            className="flex flex-row items-start p-3 max-h-28 w-28 bg-[#EAF3FF]"
@@ -208,7 +211,7 @@ function Home() {
                         </div>
                         <div>2</div>
                      </div>
-                  </div>
+                  </div> */}
                </Container>
             </div>
          </section>
@@ -228,7 +231,7 @@ function Home() {
             </div>
          </section>
          <section>
-            <div className="bg-white py-[120px]">
+            <div className="bg-white py-[60px]">
                <Container>
                   <div className="flex flex-col gap-16">
                      <p

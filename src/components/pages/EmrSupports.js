@@ -10,6 +10,7 @@ import { DefaultPost, DefualtGet, Get, localMn, localMnC, openNofi, Post } from 
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 import Diagnose from './service/Diagnose';
+import jwtInterceopter from '../jwtInterceopter';
 //
 
 const { Option, OptGroup } = Select;
@@ -196,15 +197,28 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
             setIsOpenFinger(true);
          } else {
             data['finger'] = values;
-            const response = await Post('insurance/appointment-seal', token, conf, data);
-            if (response === 201) {
-               openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-               navigate('/ambulatoryList', {
-                  state: {
-                     isRead: true
+            await jwtInterceopter
+               .post('insurance/appointment-seal', data)
+               .then((response) => {
+                  console.log(response);
+                  if (response.data.code === 400) {
+                     openNofi('error', 'Алдаа', response.data.description);
+                  } else {
+                     openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+                     navigate('/ambulatoryList', {
+                        state: {
+                           isRead: true
+                        }
+                     });
                   }
+               })
+               .catch((error) => {
+                  if (error.response.status === 400) {
+                     const message = error.response.data.message.replaceAll('HttpException:', '');
+                     openNofi('error', 'Алдаа', message);
+                  }
+                  console.log(error);
                });
-            }
          }
       } else {
          const response = await Post('insurance/appointment-seal', token, conf, data);

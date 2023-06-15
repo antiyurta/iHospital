@@ -17,8 +17,8 @@ import DocumentShow from '../../611/DocumentShow';
 //
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
-function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId }) {
-   console.log('-------------->', deparmentId);
+function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
+   console.log('-------------->', serviceId);
    const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
    const [checkedKey, setCheckedKey] = useState(0);
@@ -49,7 +49,9 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId }) {
       {
          key: '5',
          label: 'КЛИНИКИЙН ОНОШИЙН ҮНДЭСЛЭЛ',
-         children: <ClinicalDiagnoeMain PatientId={patientId} InpatientRequestId={inpatientRequestId} />
+         children: (
+            <ClinicalDiagnoeMain PatientId={patientId} InpatientRequestId={inpatientRequestId} ServiceId={serviceId} />
+         )
       },
       {
          key: '6',
@@ -59,7 +61,9 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId }) {
       {
          key: '7',
          label: 'Гарах үеийн эпекриз',
-         children: <Epicrisis PatientId={patientId} InpatientRequestId={inpatientRequestId} InsuranceServiceId={null} />
+         children: (
+            <Epicrisis PatientId={patientId} InpatientRequestId={inpatientRequestId} InsuranceServiceId={serviceId} />
+         )
       }
    ];
    const getStory = async () => {

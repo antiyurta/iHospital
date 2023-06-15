@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
+import jwtInterceopter from '../../jwtInterceopter';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 const { RangePicker } = DatePicker;
@@ -114,8 +115,17 @@ function IndexBefore({ type }) {
          // });
       }
    };
-   const handleRemove = (info) => {
+   const handleRemove = async (info) => {
       console.log(info.response.response);
+      const id = info.response.response.id;
+      await jwtInterceopter.delete('local-files/' + id).then((response) => {
+         if (response.status === 200) {
+            var clone = photoIds;
+            var index = clone.indexOf(id);
+            clone.splice(index, 1);
+            setPhotoIds(clone);
+         }
+      });
    };
    const newModal = (id, isPayment, usageType) => {
       if (usageType === 'OUT') {
