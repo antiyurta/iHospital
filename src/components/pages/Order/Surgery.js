@@ -6,27 +6,67 @@ import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-de
 
 const { Search } = Input;
 
-function Surgery() {
+function Surgery(props) {
+   const { usageType, selectedPatient, handleClick } = props;
    const [isOpenModal, setIsOpenModal] = useState(false);
-   const [selectedSurgery, setSelectedSurgury] = useState([]);
+   const [surgeries, setSurgeries] = useState([]);
+   const [surgery, setSurgery] = useState([]);
+   const [metaSurgery, setMetaSurgery] = useState({});
+   const [selectedSurgeries, setSelectedSurgeries] = useState([]);
+   const [selectedSurgeryId, setSelectedSurgeryId] = useState(Number);
    const [isLoading, setIsLoading] = useState(false);
-   const getSurguries = async () => {
+   const getSurgeries = async () => {
       await jwtInterceopter
          .get('service/type', {
             params: {
-               type: 2
+               type: 3
             }
          })
          .then((response) => {
-            console.log(response);
-            // setTreatments(response.data.response?.data);
+            setSurgeries(response.data.response?.data);
          })
          .catch((error) => {
             console.log(error);
          });
    };
+   const getTypeById = async (id, page, pageSize) => {
+      setIsLoading(true);
+      await jwtInterceopter
+         .get('service/surgery', {
+            params: {
+               surgeryTypeId: id,
+               page: page,
+               limit: pageSize
+            }
+         })
+         .then((response) => {
+            setSelectedSurgeryId(id);
+            setSurgery(response.data.response.data);
+            setMetaSurgery(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
+   };
+   const add = (surgery) => {
+      const state = selectedSurgeries.includes(surgery);
+      if (state) {
+         openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
+      } else {
+         surgery.type = surgery.types.type;
+         setSelectedSurgeries([...selectedSurgeries, surgery]);
+      }
+   };
+   const remove = (index) => {
+      var arr = [...selectedSurgeries];
+      arr.splice(index, 1);
+      setSelectedSurgeries(arr);
+   };
    useEffect(() => {
-      getSurguries();
+      getSurgeries();
    }, []);
    return (
       <>
@@ -34,8 +74,8 @@ function Surgery() {
             type="primary"
             onClick={() => {
                setIsOpenModal(true);
-               // setSelectedTreatmentId(null);
-               // setSelectedTreatments([]);
+               setSelectedSurgeryId(null);
+               setSelectedSurgeries([]);
             }}
          >
             Мэс засал
@@ -67,17 +107,17 @@ function Surgery() {
                      }}
                   >
                      <div className="flex flex-col gap-2">
-                        {/* {treatments.map((treatment, index) => {
+                        {surgeries.map((surgery, index) => {
                            return (
-                              <button
-                                 onClick={() => getTypeById(treatment.id, 1, 10)}
+                              <Button
+                                 onClick={() => getTypeById(surgery.id, 1, 10)}
                                  className="w-full bg-[#3d9970] text-white rounded-lg"
                                  key={index}
                               >
-                                 {treatment.name}
-                              </button>
+                                 {surgery.name}
+                              </Button>
                            );
-                        })} */}
+                        })}
                      </div>
                   </div>
                </div>
@@ -132,7 +172,7 @@ function Surgery() {
                                  },
                                  {
                                     title: 'Үнэ',
-                                    dataIndex: 'price',
+                                    dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
                                     width: 100,
                                     render: (text) => {
                                        return numberToCurrency(text);
@@ -157,20 +197,19 @@ function Surgery() {
                                     }
                                  }
                               ]}
-                              dataSource={[]}
-                              // pagination={{
-                              //    position: ['bottomCenter'],
-                              //    size: 'small',
-                              //    current: metaTreatment.page,
-                              //    total: metaTreatment.itemCount,
-                              //    showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                              //    pageSize: metaTreatment.limit,
-                              //    showSizeChanger: true,
-                              //    pageSizeOptions: ['5', '10', '20', '50'],
-                              //    showQuickJumper: true,
-                              //    onChange: (page, pageSize) =>
-                              //       getTypeById(selectedTreatmentId, page, pageSize, filterValue)
-                              // }}
+                              dataSource={surgery}
+                              pagination={{
+                                 position: ['bottomCenter'],
+                                 size: 'small',
+                                 current: metaSurgery.page,
+                                 total: metaSurgery.itemCount,
+                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 pageSize: metaSurgery.limit,
+                                 showSizeChanger: true,
+                                 pageSizeOptions: ['5', '10', '20', '50'],
+                                 showQuickJumper: true,
+                                 onChange: (page, pageSize) => getTypeById(selectedSurgeryId, page, pageSize)
+                              }}
                            />
                         </ConfigProvider>
                      </div>
@@ -203,7 +242,7 @@ function Surgery() {
                               },
                               {
                                  title: 'Үнэ',
-                                 dataIndex: 'price',
+                                 dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
                                  width: 100,
                                  render: (text) => {
                                     return numberToCurrency(text);
@@ -228,7 +267,7 @@ function Surgery() {
                                  }
                               }
                            ]}
-                           dataSource={selectedSurgery}
+                           dataSource={selectedSurgeries}
                            pagination={false}
                         />
                      </div>

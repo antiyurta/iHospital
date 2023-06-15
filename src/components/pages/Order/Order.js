@@ -189,7 +189,9 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
-            {showSurgery && <Surgery />}
+            {showSurgery && (
+               <Surgery usageType={usageType} selectedPatient={selectedPatient} handleclick={(e) => console.log(e)} />
+            )}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
             {showInpatient && <InpatientRequest handleClick={inpatientRequestClick} />}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}

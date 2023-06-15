@@ -1,4 +1,12 @@
 {
+   "name": "iHospital үйлчилгээний портал систем",
+   "short_name": "iHospital",
+   "orientation": "portrait",
+   "display": "standalone",
+   "start_url": ".",
+   "description": "iHospital үйлчилгээний портал систем",
+   "theme_color": "#000000",
+   "background_color": "#ffffff",
    "icons": [
       {
          "src": "favicon-32x32.png",
@@ -35,13 +43,5 @@
          "sizes": "192x192",
          "type": "image/png"
       }
-   ],
-   "name": "iHospital үйлчилгээний портал систем",
-   "short_name": "iHospital",
-   "orientation": "portrait",
-   "display": "standalone",
-   "start_url": ".",
-   "description": "iHospital үйлчилгээний портал систем",
-   "theme_color": "#000000",
-   "background_color": "#ffffff"
+   ]
 }

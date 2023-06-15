@@ -93,7 +93,6 @@ function DynamicContent({
       }
       data['formId'] = key;
       data['diagnoses'] = diagnoseData;
-      console.log('=======>', data);
       if (editModeInspectionNote) {
          await jwtInterceopter
             .patch('emr/inspectionNote/' + selectedInspectionNoteId, data)
