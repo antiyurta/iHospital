@@ -2,6 +2,15 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
+const EasySeo = require('webpack-easy-seo');
+
+const seoInst = new EasySeo({
+   title: 'i-Hospital',
+   description: 'Эмнэлэгийн цахим систем',
+   publicUrl: 'https://ihospital.mn',
+   imagePath: './public/ihospital.png'
+});
+
 module.exports = {
    devtool: 'inline-source-map',
    context: __dirname,
@@ -63,10 +72,12 @@ module.exports = {
       new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
          template: path.resolve(__dirname, './public/index.html'),
+         title: seoInst.getTitle(),
+         meta: seoInst.getMetaTags(),
          filename: 'index.html',
          inject: true,
-         favicon: "./public/favicon.ico",
-         manifest: "./public/manifest.json"
+         favicon: './public/favicon.ico',
+         manifest: './public/manifest.json'
       }),
       new webpack.IgnorePlugin({
          resourceRegExp: /^\.\/locale$/,
