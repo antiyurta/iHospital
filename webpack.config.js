@@ -76,8 +76,7 @@ module.exports = {
          meta: seoInst.getMetaTags(),
          filename: 'index.html',
          inject: true,
-         favicon: './public/favicon.ico',
-         manifest: './public/manifest.json'
+         favicon: './public/favicon.ico'
       }),
       new webpack.IgnorePlugin({
          resourceRegExp: /^\.\/locale$/,
