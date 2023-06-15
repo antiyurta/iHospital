@@ -7,12 +7,13 @@ import { selectCurrentAppId, selectCurrentDepId } from '../../../features/authRe
 import jwtInterceopter from '../../jwtInterceopter';
 
 import Customized from './Customized/Index';
+import OtherCustomized from './OtherCustomized/Index';
 import { openNofi } from '../../comman';
 
-export default function BeforeAmbulatoryTabs({ patientId, type, structureId, listId }) {
+export default function BeforeAmbulatoryTabs({ patientId, type, structureId, listId, reasonComming }) {
    const AppIds = useSelector(selectCurrentAppId);
    const [documents, setDocuments] = useState([]);
-   const [documentId, setDocumentId] = useState(0);
+   const [documentId, setDocumentId] = useState(null);
    var items = [
       {
          label: 'Эрт сэрэмжлүүлэх үнэлгээ',
@@ -72,7 +73,7 @@ export default function BeforeAmbulatoryTabs({ patientId, type, structureId, lis
                   data.push(document);
                })
             );
-            setDocuments(data);
+            setDocuments([...documents, ...data]);
             // setIsOpenAM(true);
             setDocumentId(0);
          }
@@ -83,6 +84,11 @@ export default function BeforeAmbulatoryTabs({ patientId, type, structureId, lis
          getDocuments();
       }
    }, [structureId]);
+   useEffect(() => {
+      if (reasonComming) {
+         documents.push({ docName: 'Түргэн тусламж', value: 'EMERGENCY' });
+      }
+   }, [reasonComming]);
    if (type) {
       return (
          <>
@@ -96,19 +102,36 @@ export default function BeforeAmbulatoryTabs({ patientId, type, structureId, lis
                   paddingBottom: 10
                }}
             >
-               <Segmented
-                  className="department-bed-segment"
-                  size="small"
-                  options={documents}
-                  onChange={(e) => setDocumentId(e)}
-               />
-               <Customized
-                  usageType={'OUT'}
-                  documentValue={documentId}
-                  structureId={structureId}
-                  appointmentId={listId}
-                  patientId={patientId}
-               />
+               <div className="flex flex-col gap-3">
+                  <Segmented
+                     className="department-bed-segment"
+                     size="small"
+                     options={documents?.map((document) => {
+                        return {
+                           label: document.docName,
+                           value: document.value
+                        };
+                     })}
+                     onChange={(e) => setDocumentId(e)}
+                  />
+                  {typeof documentId != 'number' ? (
+                     <OtherCustomized
+                        usageType={'OUT'}
+                        documentValue={documentId}
+                        appointmentId={listId}
+                        patientId={patientId}
+                        reasonComming={reasonComming}
+                     />
+                  ) : (
+                     <Customized
+                        usageType={'OUT'}
+                        documentValue={documentId}
+                        structureId={structureId}
+                        appointmentId={listId}
+                        patientId={patientId}
+                     />
+                  )}
+               </div>
             </Card>
             <Tabs type="card" size="small" items={items} />
          </>

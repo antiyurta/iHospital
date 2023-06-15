@@ -26,7 +26,7 @@ export async function Get(url, token, config) {
             }
          })
          .catch((error) => {
-            if (error.response.status === 401) {
+            if (error.response?.status === 401) {
                resolve({ data: [], meta: {}, status: 401 });
             } else if (
                (error?.response?.status === 400 && error?.response?.data?.status === 409) ||
@@ -309,7 +309,61 @@ export const checkNumber = (event) => {
       return true;
    }
 };
-
+export const dataToTree = (data) => {
+   let treeData = [];
+   data?.map((element, idx) => {
+      let date = new Date(element.createdAt);
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+      if (treeData.length > 0) {
+         treeData.map((tree, index) => {
+            if (tree.title === year) {
+               console.log('asdasdasd', !!tree.children.find((e) => e.title === `${month}-${day}`));
+               if (!!tree.children.find((e) => e.title === `${month}-${day}`)) {
+                  const index = tree.children.findIndex((e) => e.title === `${month}-${day}`);
+                  tree.children[index].children.push({
+                     title: element.xray.name,
+                     key: element.id,
+                     isLeaf: true
+                  });
+               } else {
+                  tree.children.push({
+                     title: `${month}-${day}`,
+                     key: `${idx}-${index}`,
+                     children: [
+                        {
+                           title: element.xray.name,
+                           key: element.id,
+                           isLeaf: true
+                        }
+                     ]
+                  });
+               }
+            }
+         });
+      } else {
+         treeData.push({
+            title: year,
+            key: `${idx}`,
+            children: [
+               {
+                  title: `${month}-${day}`,
+                  key: `${idx}-${idx}`,
+                  children: [
+                     {
+                        title: element.xray.name,
+                        key: element.id,
+                        isLeaf: true
+                     }
+                  ]
+               }
+            ]
+         });
+      }
+   });
+   return treeData;
+};
 export const dateReduceTree = (data) => {
    const date = '2023-04-30';
    let i = 4;

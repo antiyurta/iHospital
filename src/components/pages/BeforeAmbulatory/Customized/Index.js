@@ -75,6 +75,10 @@ function Index(props) {
       await jwtInterceopter
          .post(documentForm.url, data)
          .then((response) => {
+            if (response.status === 201) {
+               setIsOpenFormModal(false);
+               getData();
+            }
             console.log(response);
          })
          .catch((error) => {

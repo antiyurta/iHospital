@@ -10,10 +10,10 @@ import Marquee from 'react-fast-marquee';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
-import NewMainPatientHistory from './EPatientHistory/newMainPatientHistory';
 import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
 import { delEmrData } from '../../../features/emrReducer';
+import { delNote } from '../../../features/noteReducer';
 const { Option } = Select;
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -23,7 +23,8 @@ const getReduxDatas = (state) => {
 };
 const dispatchReduxDatas = (dispatch) => {
    return {
-      delEmrData: () => dispatch(delEmrData())
+      delEmrData: () => dispatch(delEmrData()),
+      delNoteData: () => dispatch(delNote())
    };
 };
 class NewEmr extends React.Component {
@@ -80,29 +81,26 @@ class NewEmr extends React.Component {
          });
       }
    }
-   getProblems() {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      Object.entries(this.state.appointments).map(async ([_key, value], _index) => {
-         var problems = [];
-         await Promise.all(
-            value.map(async (item) => {
-               const response = await Get('appointment/show/' + item.id, this.props.token, conf);
-               if (response?.patientDiagnosis?.length > 0) {
-                  problems.push({
-                     id: item.id,
-                     doctor: response.employee?.lastName.substring(0, 1) + '.' + response.employee?.firstName,
-                     diagnose: response.patientDiagnosis,
-                     inspectionDate: response.createdAt
-                  });
-               }
-            })
-         );
-         this.setState({ problems: problems });
-         this.setState({ problemsLoading: false });
-      });
+   async getProblems() {
+      await jwtInterceopter
+         .get('appointment', {
+            params: {
+               patientId: this.props.IncomeEMRData.patientId
+            }
+         })
+         .then((response) => {
+            const data = response.data.response?.data?.map((appointment, index) => {
+               return {
+                  id: index,
+                  cabinetName: appointment.cabinet?.name,
+                  doctor: appointment.employee?.lastName.substring(0, 1) + '.' + appointment.employee?.firstName,
+                  diagnoses: appointment.patientDiagnosis,
+                  inspectionDate: appointment.createdAt
+               };
+            });
+            this.setState({ problems: data });
+            this.setState({ problemsLoading: false });
+         });
    }
    handleTypeChange = ({ target: { value } }) => {
       this.setState({
@@ -151,18 +149,10 @@ class NewEmr extends React.Component {
    async componentDidMount() {
       await this.getByIdPatient();
       await this.getInspectionNotes();
-      // if (this.props.IncomeEMRData.hicsServiceId) {
-      //    await this.getInsuranceServiceIdName();
-      // }
-   }
-   async componentDidUpdate(_prevProps, prevState) {
-      if (prevState.appointments !== this.state.appointments) {
-         this.getProblems();
-         this.setState({ problemsLoading: true });
-      }
+      await this.getProblems();
    }
    async componentWillUnmount() {
-      // this.props.delEmrData();
+      this.props.delNoteData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -232,12 +222,16 @@ class NewEmr extends React.Component {
                            }}
                            columns={[
                               {
+                                 title: 'Кабинет',
+                                 dataIndex: 'cabinetName'
+                              },
+                              {
                                  title: 'Эмч',
                                  dataIndex: 'doctor'
                               },
                               {
                                  title: 'Онош',
-                                 dataIndex: 'diagnose',
+                                 dataIndex: 'diagnoses',
                                  render: (text) => {
                                     return (
                                        <ul

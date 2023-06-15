@@ -1,19 +1,12 @@
 //Явцын тэмдэглэл
 import React, { useEffect, useState } from 'react';
-import { Card, Collapse, Modal, Result, Spin, Tree } from 'antd';
-import { FolderOutlined, FolderOpenOutlined, CarryOutOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
-import FormIndex from '../FormPrint';
+import { Card, Modal, Result, Spin, Tree } from 'antd';
 import Prescription from '../PrescriptionPrint';
 import Magadlaga from '../MagadlagaPrint';
-import moment from 'moment';
 import jwtInterceopter from '../../../jwtInterceopter';
 import DiagnoseTypes from '../../service/DiagnoseTypes.json';
 
 const { DirectoryTree } = Tree;
-const { Panel } = Collapse;
 export default function ProgressNotes({ Appointments }) {
    const [testData, setTestData] = useState([]);
    const RenderHTML = ({ data }) => {
@@ -56,45 +49,14 @@ export default function ProgressNotes({ Appointments }) {
          );
       });
    };
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const [spinner, setSpinner] = useState(false);
    const [spinerInfo, setSpinnerInfo] = useState(false);
    const [appointment, setAppointment] = useState({});
-   const [inspectionNotes, setInspectionNotes] = useState(null);
-   const [patientDiagnosis, setPatientDiagnosis] = useState(null);
-   const [serviceRequests, setServiceRequests] = useState(null);
-   const [patientInfo, setPatientInfo] = useState({});
-   const [employee, setEmployee] = useState({});
    const [printPrescription, setPrintPrescription] = useState([]);
    const [printMagadlaga, setPrintMagadlaga] = useState({});
    const [isOpenModalPrescription, setIsOpenModalPrescription] = useState(false);
    const [isOpenModalMagadlaga, setIsOpenModalMagadlaga] = useState(false);
-   const onChange = async (id) => {
-      setSpinner(true);
-      if (id) {
-         const conf = {
-            headers: {},
-            params: {}
-         };
-         const response = await Get('appointment/show/' + id, token, conf);
-         setInspectionNotes(response.inspectionNote);
-         setPatientDiagnosis(response.patientDiagnosis);
-         setServiceRequests(response.serviceRequest?.services);
-         getPatientInfo(response.patientId);
-         setEmployee(response.employee);
-      }
-      setSpinner(false);
-   };
-   const getPatientInfo = async (id) => {
-      const response = await Get('pms/patient/' + id, token, config);
-      setPatientInfo(response);
-   };
    const onChangeTree = async (key, evnt) => {
-      console.log(key, evnt);
       if (evnt?.node?.isLeaf) {
          setSpinnerInfo(true);
          await jwtInterceopter
@@ -104,7 +66,7 @@ export default function ProgressNotes({ Appointments }) {
                setAppointment({
                   employee: data.employee?.lastName.substring(0, 1) + '.' + data.employee?.firstName,
                   name: data.cabinet?.name,
-                  inspectionNote: data.inspectionNote,
+                  inspectionNotes: data.inspectionNotes,
                   diagnoses: data.patientDiagnosis,
                   services: data.serviceRequest?.services
                });
@@ -122,15 +84,13 @@ export default function ProgressNotes({ Appointments }) {
       if (Appointments) {
          var cloneAppointments = Appointments;
          var treeData = [];
-         Object.entries(cloneAppointments).map(([key, value], index) => {
-            console.log(key, value, index);
+         Object.entries(cloneAppointments).map(([key, value], _index) => {
             if (value?.length > 0) {
                var result = value?.reduce(function (r, a) {
                   r[a.createdAt.substring(5, 10)] = r[a.createdAt.substring(5, 10)] || [];
                   r[a.createdAt.substring(5, 10)].push(a);
                   return r;
                }, Object.create(null));
-               console.log(result);
                cloneAppointments[`${key}`] = result;
             }
          });
@@ -168,7 +128,6 @@ export default function ProgressNotes({ Appointments }) {
             treeData.push(tree);
          });
          setTestData(treeData);
-         console.log(treeData);
       }
       const timer = setTimeout(() => {
          setSpinner(false);
@@ -205,10 +164,10 @@ export default function ProgressNotes({ Appointments }) {
                               >
                                  <ul className="list-disc list-inside">
                                     <li>ЭМЧИЙН ҮЗЛЭГ</li>
-                                    <RenderHTML data={appointment?.inspectionNote?.pain} />
-                                    <RenderHTML data={appointment?.inspectionNote?.inspection} />
-                                    <RenderHTML data={appointment?.inspectionNote?.question} />
-                                    <RenderHTML data={appointment?.inspectionNote?.plan} />
+                                    <RenderHTML data={appointment?.inspectionNotes[0]?.pain} />
+                                    <RenderHTML data={appointment?.inspectionNotes[0]?.inspection} />
+                                    <RenderHTML data={appointment?.inspectionNotes[0]?.question} />
+                                    <RenderHTML data={appointment?.inspectionNotes[0]?.plan} />
                                     <li>ОНОШ</li>
                                     <RenderHTMLDiagnose diagnoses={appointment.diagnoses} />
                                     <li>ЗАХИАЛГА</li>
@@ -224,53 +183,6 @@ export default function ProgressNotes({ Appointments }) {
                </div>
             </div>
          </div>
-
-         {/* <Collapse
-            collapsible="header"
-            expandIcon={({ isActive }) => {
-               return isActive ? (
-                  <FolderOpenOutlined style={{ fontSize: '24px' }} />
-               ) : (
-                  <FolderOutlined style={{ fontSize: '24px' }} />
-               );
-            }}
-            ghost
-            accordion
-         >
-            {Object.entries(Appointments).map(([key, value], index) => {
-               return (
-                  <Panel header={`${key} Он`} key={index}>
-                     <Collapse Collapse collapsible="header" onChange={onChange} accordion>
-                        {value.map((el, index) => {
-                           return (
-                              <Panel
-                                 header={
-                                    <div className="row-auto">
-                                       <span className="font-bold">{el.cabinet?.name}</span>
-                                       <span>&nbsp;</span>
-                                       <span>{moment(el.createdAt).format('YYYY-MM-DD HH:mm')}</span>
-                                    </div>
-                                 }
-                                 key={value[index].id}
-                              >
-                                 <Spin spinning={spinner}>
-                                    <FormIndex
-                                       key={index}
-                                       patientInfo={patientInfo}
-                                       inspectionNote={inspectionNotes}
-                                       diagnoses={patientDiagnosis}
-                                       services={serviceRequests}
-                                       employee={employee}
-                                    />
-                                 </Spin>
-                              </Panel>
-                           );
-                        })}
-                     </Collapse>
-                  </Panel>
-               );
-            })}
-         </Collapse> */}
          <Modal
             open={isOpenModalPrescription}
             onCancel={() => setIsOpenModalPrescription(false)}

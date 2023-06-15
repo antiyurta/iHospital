@@ -128,6 +128,7 @@ function BeforeAmbulatoryDetail() {
                      type={location.state.appointmentType}
                      structureId={location.state?.structureId}
                      listId={location.state?.appointmentId}
+                     reasonComming={location.state?.reasonComming}
                   />
                ) : (
                   <BeforeInPatientTabs

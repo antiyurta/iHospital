@@ -21,9 +21,16 @@ function DynamicContent({
    appointmentType
 }) {
    const [form] = Form.useForm();
-   const note = useSelector(selectCurrentNote);
+   const notes = useSelector(selectCurrentNote);
+   //
+   const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(Number);
+   const [editModeInspectionNote, setEditModeInspectionNote] = useState(false);
+   //
+   const [selectedDiagnoseIds, setSelectedDiagnoseIds] = useState([]);
+   const [editModeDiagnosis, setEditModeDiagnosis] = useState(false);
+   //
    const [loading, setLoading] = useState(false);
-   const DiagnoseHandleClick = (diagnoses, hicsServiceData, cost) => {
+   const DiagnoseHandleClick = (diagnosis, hicsServiceData, cost) => {
       if (incomeData.usageType === 'OUT') {
          if (cost?.length > 0) {
             var data = {
@@ -39,12 +46,12 @@ function DynamicContent({
                payedAmount: cost[0]?.amountCit,
                totalAmount: cost[0]?.amountTotal
             };
-            const AddCode = diagnoses?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
+            const AddCode = diagnosis?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
             data['icdAddCode'] = AddCode;
             jwtInterceopter.patch('insurance-seal', data);
          }
       }
-      form.setFieldValue('diagnose', diagnoses);
+      form.setFieldValue('diagnose', diagnosis);
    };
    const saveDynamicTab = async (values, key) => {
       setLoading(true);
@@ -86,29 +93,58 @@ function DynamicContent({
       }
       data['formId'] = key;
       data['diagnoses'] = diagnoseData;
-      await jwtInterceopter
-         .post('emr/inspectionNote', data)
-         .then((response) => {
-            if (response.status === 201) {
-               openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
-               if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-                  jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
-                     xrayProcess: 2
-                  });
-               } else {
+      console.log('=======>', data);
+      if (editModeInspectionNote) {
+         await jwtInterceopter
+            .patch('emr/inspectionNote/' + selectedInspectionNoteId, data)
+            .then((response) => {
+               console.log(response);
+               if (response.status === 200) {
+                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
                   handleClick({ target: { value: 'OCS' } });
+                  // if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                  //    jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                  //       xrayProcess: 2
+                  //    });
+                  // } else {
+                  //    handleClick({ target: { value: 'OCS' } });
+                  // }
                }
-            }
-            console.log(response);
-         })
-         .catch((error) => {
-            if (error.response.status === 409) {
-               openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
-            }
-         })
-         .finally(() => {
-            setLoading(false);
+            })
+            .finally(() => {
+               setLoading(false);
+            });
+      }
+      if (editModeDiagnosis && incomeData.inspection != 11 && incomeData.inspection != 12) {
+         selectedDiagnoseIds?.map((id) => {
+            jwtInterceopter.delete('emr/patient-diagnose/' + id);
          });
+      }
+      if (!editModeDiagnosis && !editModeInspectionNote) {
+         await jwtInterceopter
+            .post('emr/inspectionNote', data)
+            .then((response) => {
+               if (response.status === 201) {
+                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+                  if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                     jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                        xrayProcess: 2
+                     });
+                  } else {
+                     handleClick({ target: { value: 'OCS' } });
+                  }
+               }
+               console.log(response);
+            })
+            .catch((error) => {
+               if (error.response.status === 409) {
+                  openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
+               }
+            })
+            .finally(() => {
+               setLoading(false);
+            });
+      }
    };
 
    const onFinishFailed = (errorInfo) => {
@@ -116,6 +152,7 @@ function DynamicContent({
       setValidStep(false);
    };
    useEffect(() => {
+      console.log('=========>', editForm, editForOUT);
       if (editForm != undefined && editForm != null) {
          if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
             form.setFieldsValue(editForm);
@@ -125,11 +162,15 @@ function DynamicContent({
          }
       } else {
          let data = {};
-         if (note.inspectionNote != null) {
-            data = inspectionTOJSON(note.inspectionNote);
+         if (notes.inspectionNotes?.length > 0) {
+            data = inspectionTOJSON(notes.inspectionNotes[0]);
+            setEditModeInspectionNote(true);
+            setSelectedInspectionNoteId(notes.inspectionNotes[0].id);
          }
-         if (note.diagnosis?.length > 0) {
-            const diagnosis = note.diagnosis?.map((diagnose) => {
+         if (notes.diagnosis?.length > 0) {
+            var diagnoseIds = [];
+            const diagnosis = notes.diagnosis?.map((diagnose) => {
+               diagnoseIds.push(diagnose.id);
                return {
                   code: diagnose.diagnose.code,
                   nameMn: diagnose.diagnose.nameMn,
@@ -138,9 +179,10 @@ function DynamicContent({
                   id: diagnose.diagnose.id
                };
             });
+            setEditModeDiagnosis(true);
+            setSelectedDiagnoseIds(diagnoseIds);
             data['diagnose'] = diagnosis;
          }
-         data['description'] = 'DEFAULT OROOD GARSAN';
          form.setFieldsValue(data);
       }
    }, [editForm]);
@@ -192,12 +234,13 @@ function DynamicContent({
                            })}
                         </>
                      ) : null}
-                     {props.data.inspection?.length > 0 ? (
+                     {'inspection' in props.data && props.data.inspection?.length > 0 ? (
                         <>
                            <Divider orientation="left" className="text-sm my-2">
                               Бодит үзлэг
                            </Divider>
                            {props.data['inspection'].map((inspection, index) => {
+                              console.log(props);
                               return (
                                  <div key={index}>
                                     {incomeData.inspection === 1 && (

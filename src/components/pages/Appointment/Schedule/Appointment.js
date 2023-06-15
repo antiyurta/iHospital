@@ -10,6 +10,7 @@ import {
    Empty,
    Form,
    Modal,
+   Radio,
    Result,
    Select,
    Space,
@@ -64,6 +65,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
    const [insuranceService, setInsuranceService] = useState([]);
    const [isSent, setIsSent] = useState(false);
    const [notInsuranceInfo, setNotInsuranceInfo] = useState([]);
+   const [reasonComming, setReasonComming] = useState(null);
    //
    const orderAppointment = async (type, desc, value) => {
       setIsSent(false);
@@ -168,17 +170,22 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
       setIsConfirmLoading(false);
    };
    const urgentRequest = async () => {
-      setIsConfirmLoading(true);
-      data.type = 1;
-      data.status = 1;
-      data.isInsurance = stateInsurance;
-      config.params = {};
-      data.appointmentWorkDate = new Date();
-      const response = await Post('appointment', token, config, data);
-      if (response === 201) {
-         setAppointmentModal(false);
+      if (reasonComming != null) {
+         setIsConfirmLoading(true);
+         config.params = {};
+         data.type = 1;
+         data.status = 1;
+         data.isInsurance = stateInsurance;
+         data.appointmentWorkDate = new Date();
+         data.reasonComming = reasonComming;
+         const response = await Post('appointment', token, config, data);
+         if (response === 201) {
+            setAppointmentModal(false);
+         }
+         setIsConfirmLoading(false);
+      } else {
+         openNofi('warning', 'Анхааруулга', 'Хэрхэн ирсэн бөглөх');
       }
-      setIsConfirmLoading(false);
    };
    const onFinish = () => {
       filterForm
@@ -290,6 +297,30 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
                      </Descriptions>
                   </div>
                </div>
+               {isUrgent ? (
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flow-root">
+                           <div className="float-left">
+                              <p
+                                 style={{
+                                    fontWeight: 600
+                                 }}
+                              >
+                                 Яаж ирсэн
+                              </p>
+                           </div>
+                           <div className="float-right">
+                              <Radio.Group value={reasonComming} onChange={(e) => setReasonComming(e.target.value)}>
+                                 <Radio value={1}>Өөрөө</Radio>
+                                 <Radio value={2}>Түргэн тусламжаар</Radio>
+                                 <Radio value={3}>Бусад</Radio>
+                              </Radio.Group>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               ) : null}
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <div className="flow-root">

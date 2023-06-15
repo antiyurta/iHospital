@@ -17,12 +17,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import { Get, localMn, localMnC, openNofi, Patch, ScrollRef } from '../../../../comman';
+import { Get, inspectionTOJSON, localMn, localMnC, openNofi, Patch, ScrollRef } from '../../../../comman';
 import orderType from './orderType.json';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 import MonitorCriteria from '../../../Insurance/MonitorCriteria';
 import Marquee from 'react-fast-marquee';
 import { setNote } from '../../../../../features/noteReducer';
+import jwtInterceopter from '../../../../jwtInterceopter';
+import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -55,7 +57,6 @@ function Index({ type, isDoctor }) {
    const [formStyle, setFormStyle] = useState({});
    const [formData, setFormData] = useState({});
    //
-   const [selectedRowCabinetId, setSelectRowCabinetId] = useState(Number);
    const [selectedRowPatientId, setSelectedRowPatientId] = useState(Number);
    const [selectedTags, setSelectedTags] = useState(0);
    const getAppointment = async (page, pageSize, start, end, process) => {
@@ -153,7 +154,7 @@ function Index({ type, isDoctor }) {
             }
             dispatch(
                setNote({
-                  inspectionNote: row.inspectionNote,
+                  inspectionNotes: row.inspectionNotes,
                   diagnosis: row.patientDiagnosis
                })
             );
@@ -193,7 +194,8 @@ function Index({ type, isDoctor }) {
                type: type,
                appointmentType: row.type,
                roomNumber: roomNumber,
-               departmentName: departmentName
+               departmentName: departmentName,
+               reasonComming: row.reasonComming
             }
          });
       } else {
@@ -286,8 +288,8 @@ function Index({ type, isDoctor }) {
          return 'Дуудлагаа';
       }
    };
-   const checkInspection = (inspectionNote) => {
-      if (inspectionNote === null || inspectionNote === undefined) {
+   const checkInspection = (inspectionNotes) => {
+      if (inspectionNotes?.length === 0) {
          return (
             <p>
                <CloseOutlined style={{ color: 'red', fontSize: '20px' }} />
@@ -295,14 +297,10 @@ function Index({ type, isDoctor }) {
          );
       } else {
          var state = true;
-         const clonedInspectionNote = [];
-         clonedInspectionNote.push(JSON.parse(inspectionNote?.inspection));
-         clonedInspectionNote.push(JSON.parse(inspectionNote?.pain));
-         clonedInspectionNote.push(JSON.parse(inspectionNote?.plan));
-         clonedInspectionNote.push(JSON.parse(inspectionNote?.question));
-         clonedInspectionNote?.map((notes) => {
-            if (notes != null) {
-               Object.values(notes)?.map((note) => {
+         inspectionNotes?.map((inspectionNote) => {
+            const data = inspectionTOJSON(inspectionNote);
+            if (data != null) {
+               Object.values(data)?.map((note) => {
                   Object.values(note)?.map((item) => {
                      if ((typeof item === 'object' && item?.length === 0) || (typeof item === 'string' && !item)) {
                         state = false;
@@ -331,14 +329,13 @@ function Index({ type, isDoctor }) {
    }, [selectedTags]);
    //
    // uzleg zasah ued uzleg er bhgu bol depId gar inspection awchrah uzleg baiwal formId gar formAwcirah
-   const getInspectionFormDesc = async (inspectionNote, cabinetId, patientId) => {
-      setSelectRowCabinetId(cabinetId);
-      if (inspectionNote) {
-         const data = {};
-         data['inspection'] = JSON.parse(inspectionNote.inspection);
-         data['pain'] = JSON.parse(inspectionNote.pain);
-         data['plan'] = JSON.parse(inspectionNote.plan);
-         data['question'] = JSON.parse(inspectionNote.question);
+   const getInspectionFormDesc = async (inspectionNotes, patientId) => {
+      // magadgu type aas hamaarch 0 element esvel bugdin
+      // ghde odoo 0 element
+      if (inspectionNotes?.length > 0) {
+         const data = inspectionTOJSON(inspectionNotes[0]);
+         data['formId'] = inspectionNotes[0].formId;
+         console.log(data);
          setFormData(data);
          setSelectedRowPatientId(patientId);
       } else {
@@ -349,22 +346,17 @@ function Index({ type, isDoctor }) {
    };
    const createDescription = async (values) => {
       setIsOpenEditFormDesc(false);
-      const conf = {
-         headers: {},
-         params: {
-            cabinetId: selectedRowCabinetId,
-            usageType: 'OUT'
-         }
-      };
-      const response = await Get('emr/inspection-form', token, conf);
-      if (formData === null) {
-         setFormData({
-            description: values.description
+      console.log('=====>', formData);
+      if (formData.formId !== undefined) {
+         await jwtInterceopter.get('emr/inspection-form/' + formData.formId).then((response) => {
+            setFormStyle(response.data.response);
          });
       } else {
-         formData['description'] = values.description;
+         setFormStyle({
+            formItem: defaultForm()
+         });
       }
-      setFormStyle(response.data[0]);
+      formData['description'] = values.description;
       setIsOpenEditForm(true);
    };
    //
@@ -521,7 +513,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Үзлэг',
          width: 60,
-         dataIndex: 'inspectionNote',
+         dataIndex: 'inspectionNotes',
          render: (text) => {
             return checkInspection(text);
          }
@@ -535,7 +527,7 @@ function Index({ type, isDoctor }) {
             if (text) {
                return (
                   <Button
-                     onClick={() => getInspectionFormDesc(row.inspectionNote, row.cabinetId, row.patientId)}
+                     onClick={() => getInspectionFormDesc(row.inspectionNotes, row.patientId)}
                      icon={<EditOutlined />}
                   >
                      Тэмдэглэл засах
@@ -997,7 +989,7 @@ function Index({ type, isDoctor }) {
                banner
                message={
                   <Marquee pauseOnHover gradient={false}>
-                     Баруун дээд буланд амжилттай хадаглаа гэсэн анхууралгын дараа Тэмдэглэл захах хэсэгийг хааж болно.
+                     Баруун дээд буланд амжилттай хадаглалаа гэсэн анхууралгын дараа Тэмдэглэл засах хэсгийг хааж болно.
                   </Marquee>
                }
             />

@@ -21,6 +21,7 @@
       "react-cookie": "^4.1.1",
       "react-dom": "^18.2.0",
       "react-fast-marquee": "^1.5.2",
+      "react-helmet": "^6.1.0",
       "react-password-checklist": "^1.4.3",
       "react-qr-code": "^2.0.8",
       "react-redux": "^8.0.4",
@@ -72,8 +73,6 @@
       "babel-preset-react": "^6.24.1",
       "css-loader": "^6.8.1",
       "dotenv-webpack": "^8.0.1",
-       
-      
       "eslint": "^8.32.0",
       "eslint-config-prettier": "^8.6.0",
       "eslint-config-standard": "^17.0.0",

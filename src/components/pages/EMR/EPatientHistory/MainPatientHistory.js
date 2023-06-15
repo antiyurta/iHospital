@@ -160,11 +160,11 @@ function MainPatientHistory({
       ],
       question: [
          {
-            label: 'Бодит үзлэг',
+            label: 'Асуумж',
             options: [
                {
                   type: 'textarea',
-                  value: 'Бодит үзлэг'
+                  value: 'Асуумж'
                }
             ],
             inspectionType: 'question'
@@ -172,11 +172,11 @@ function MainPatientHistory({
       ],
       inspection: [
          {
-            label: 'Асуумж',
+            label: 'Бодит үзлэг',
             options: [
                {
                   type: 'textarea',
-                  value: 'Асуумж'
+                  value: 'Бодит үзлэг'
                }
             ],
             inspectionType: 'inspection'
