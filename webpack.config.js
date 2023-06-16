@@ -66,7 +66,8 @@ module.exports = {
       new FaviconsWebpackPlugin({
          logo: './public/ihospital.png',
          mode: 'webapp',
-         manifest: './public/manifest.json'
+         manifest: './public/manifest.json',
+         publicPath: ''
       }),
       new HtmlWebpackPlugin({
          template: path.resolve(__dirname, './public/index.html'),
