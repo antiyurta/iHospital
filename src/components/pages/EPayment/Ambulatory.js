@@ -1,10 +1,11 @@
-import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider } from 'antd';
-import React, { useState } from 'react';
+import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Progress } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { localMn, openNofi } from '../../comman';
 import PatientInformation from '../PatientInformation';
 import Order from '../Order/Order';
 import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
+import moment from 'moment';
 
 function Ambulatory() {
    const [orderModal, setOrderModal] = useState(false);
@@ -24,6 +25,9 @@ function Ambulatory() {
    const [notPatientsValue, setNotPatientsValue] = useState('');
    const [payments, setPayments] = useState([]);
    const [selectedPatient, setSelectedPatient] = useState([]);
+   //ebarimt getInfohadaglah
+   const [ebarimtInfo, setEbarimtInfo] = useState({});
+   //ebarimt getInfohadaglah
    const onSearch = async (_page, _pageSize, value) => {
       setIsLoadingFilter(true);
       await jwtInterceopter
@@ -125,17 +129,27 @@ function Ambulatory() {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       }
    };
-
-   // const checkAPI = async () => {
-   //    const conf = {
-   //       headers: {},
-   //       params: {}
-   //    };
-   //    const response = await Get('ebarimt/checkApi', token, conf);
-   //    if (!response.database.success) {
-   //       Get('ebarimt/sendData', token, config);
-   //    }
-   // };
+   const sendData = async () => {
+      await jwtInterceopter.get('ebarimt/sendData').then((response) => {
+         if (response.data.response.status && response.status === 200) {
+            openNofi('success', 'Амжиллтай', 'Амжилттай татлаа');
+            getInformation();
+         } else {
+            openNofi('error', 'Алдаа', 'Татах үед алдаа гарлаа');
+         }
+      });
+   };
+   const checkEbarimtInfo = () => {
+      if ((ebarimtInfo?.countBill * 100) / ebarimtInfo?.countLottery > 98) {
+         return false;
+      }
+      return true;
+   };
+   const getInformation = async () => {
+      await jwtInterceopter.get('ebarimt/information').then((response) => {
+         setEbarimtInfo(response.data.response.result?.extraInfo);
+      });
+   };
    const [notPatientLoading, setNotPatientLoading] = useState(false);
    const categories = [
       {
@@ -217,6 +231,9 @@ function Ambulatory() {
          }
       }
    ];
+   useEffect(() => {
+      getInformation();
+   }, []);
    return (
       <div className="flex flex-col gap-3">
          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
@@ -232,10 +249,27 @@ function Ambulatory() {
                   paddingBottom: 10
                }}
             >
-               <div className="grid sm:grid-cols-1 xl:grid-cols-2 gap-3">
-                  <Button className="bg-[#4a7fc1]" type="primary" onClick={() => setOrderModal(true)}>
-                     Оношилгоо шинжилгээ захиалах
-                  </Button>
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block mb-3">
+                  <div className="p-3 flex justify-between">
+                     <div className="flex flex-row gap-3">
+                        <label>И-Баримт:</label>
+                        <p>{ebarimtInfo?.countBill}</p>/<p>{ebarimtInfo?.countLottery}</p>
+                        <label>Сүүлд татсан огноо:</label>
+                        <p>{moment(ebarimtInfo?.lastSentdate).format('YYYY-MM-DD')}</p>
+                     </div>
+                     <Button disabled={checkEbarimtInfo()} onClick={() => sendData()} type="primary">
+                        И-баримт илгээх
+                     </Button>
+                  </div>
+               </div>
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                  <div className="p-3">
+                     <div className="grid sm:grid-cols-1 xl:grid-cols-2 gap-3">
+                        <Button className="bg-[#4a7fc1]" type="primary" onClick={() => setOrderModal(true)}>
+                           Оношилгоо шинжилгээ захиалах
+                        </Button>
+                     </div>
+                  </div>
                </div>
             </Card>
          </div>
@@ -349,6 +383,7 @@ function Ambulatory() {
             incomeData={payments}
             selectedPatient={selectedPatient}
             isClose={() => setIsOpen(false)}
+            isSuccess={() => getInformation()}
          />
       </div>
    );

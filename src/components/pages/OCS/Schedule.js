@@ -6,9 +6,10 @@ import { selectCurrentToken } from '../../../features/authReducer';
 import { DefaultPost, DefualtGet, Get, numberToCurrency, openNofi } from '../../comman';
 import Appointment from '../Appointment/Schedule/Appointment';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
+import jwtInterceopter from '../../jwtInterceopter';
 const { Option } = Select;
 const { Search } = Input;
-function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
+function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSuccess }) {
    // isOCS = true bol emch OSC false bol burgel tolbor awah ued
    const token = useSelector(selectCurrentToken);
    const config = {
@@ -114,6 +115,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
             }
             const response = await DefaultPost('payment/payment', token, config, data);
             if (response) {
+               isSuccess(true);
                setTotalAmount(0);
                isClose(false);
                setPaymentModal(false);
@@ -128,23 +130,19 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
    };
    const onSearchCustomer = async (event) => {
       setCustomerNo(event);
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await DefualtGet(`ebarimt/organization/${event}`, token, conf);
-      console.log(response);
-      if (response?.response?.found) {
-         openNofi('success', 'Амжиллтай', `Байгууллага: ${response?.response?.name}`);
-         setCustomerInfo(response?.response);
-      } else {
-         openNofi('error', 'Алдаа', 'Байгууллага олдсонгүй');
-         setCustomerInfo({});
-      }
+      await jwtInterceopter.get(`ebarimt/organization/${event}`).then((response) => {
+         if (response.data.response.result?.found && response.status === 200) {
+            openNofi('success', 'Амжиллтай', `Байгууллага: ${response?.data.response.result?.name}`);
+            setCustomerInfo(response.data.response.result);
+         } else {
+            openNofi('error', 'Алдаа', 'Байгууллага олдсонгүй');
+            setCustomerInfo({});
+         }
+      });
    };
    // nemelterer select table
    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
+      onChange: (_selectedRowKeys, selectedRows) => {
          setInvoiceRequest(selectedRows);
          var tAmount = 0;
          selectedRows?.map((item) => {
@@ -245,6 +243,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose }) {
                                     onSearch={onSearchCustomer}
                                     placeholder="Байгууллагын РД"
                                     style={{
+                                       background: 'white',
                                        width: '100%'
                                     }}
                                  />

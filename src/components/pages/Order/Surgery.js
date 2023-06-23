@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ConfigProvider, Empty, Input, Modal, Table } from 'antd';
+import { Button, ConfigProvider, Empty, Input, Modal, Form, Table, Select } from 'antd';
 import jwtInterceopter from '../../jwtInterceopter';
-import { localMn, numberToCurrency } from '../../comman';
+import { localMn, numberToCurrency, openNofi } from '../../comman';
 import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
+const { Option } = Select;
 
 function Surgery(props) {
-   const { usageType, selectedPatient, handleClick } = props;
+   const { usageType, appointmentId, handleclick } = props;
+   const [form] = Form.useForm();
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [isOpenSubModal, setIsOpenSubModal] = useState(false);
    const [surgeries, setSurgeries] = useState([]);
    const [surgery, setSurgery] = useState([]);
+   const [diagnosis, setDiagnosis] = useState([]);
    const [metaSurgery, setMetaSurgery] = useState({});
    const [selectedSurgeries, setSelectedSurgeries] = useState([]);
    const [selectedSurgeryId, setSelectedSurgeryId] = useState(Number);
+   const [surgeryId, setSurgeryId] = useState(Number);
    const [isLoading, setIsLoading] = useState(false);
    const getSurgeries = async () => {
       await jwtInterceopter
@@ -27,6 +32,22 @@ function Surgery(props) {
          })
          .catch((error) => {
             console.log(error);
+         });
+   };
+   const getPatientDiagnosis = async () => {
+      await jwtInterceopter
+         .get('emr/patient-diagnose', {
+            params: {
+               appointmentId: appointmentId
+            }
+         })
+         .then((response) => {
+            const data = response.data.response.data;
+            const diagnose = data?.map((diagnose) => {
+               diagnose.diagnose['diagnoseType'] = diagnose.diagnoseType;
+               return diagnose.diagnose;
+            });
+            setDiagnosis(diagnose);
          });
    };
    const getTypeById = async (id, page, pageSize) => {
@@ -51,13 +72,20 @@ function Surgery(props) {
             setIsLoading(false);
          });
    };
+   const onFinishSub = (values) => {
+      const data = surgery.find((e) => e.id === surgeryId);
+      data['diagnose'] = diagnosis;
+      data['surgeryType'] = values.surgeryType;
+      setSelectedSurgeries([...selectedSurgeries, data]);
+   };
    const add = (surgery) => {
       const state = selectedSurgeries.includes(surgery);
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
          surgery.type = surgery.types.type;
-         setSelectedSurgeries([...selectedSurgeries, surgery]);
+         setSurgeryId(surgery.id);
+         setIsOpenSubModal(true);
       }
    };
    const remove = (index) => {
@@ -67,6 +95,7 @@ function Surgery(props) {
    };
    useEffect(() => {
       getSurgeries();
+      getPatientDiagnosis();
    }, []);
    return (
       <>
@@ -91,7 +120,7 @@ function Surgery(props) {
             }}
             onCancel={() => setIsOpenModal(false)}
             onOk={() => {
-               // handleclick(selectedTreatments);
+               handleclick(selectedSurgeries);
                setIsOpenModal(false);
             }}
             okText={'Хадгалах'}
@@ -241,6 +270,14 @@ function Surgery(props) {
                                  }
                               },
                               {
+                                 title: 'Төрөл',
+                                 dataIndex: 'surgeryType',
+                                 render: (text) => {
+                                    if (text === 1) return 'Төлөвлөгөөт';
+                                    return 'Яаралтай';
+                                 }
+                              },
+                              {
                                  title: 'Үнэ',
                                  dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
                                  width: 100,
@@ -273,6 +310,43 @@ function Surgery(props) {
                      </div>
                   </div>
                </div>
+            </div>
+         </Modal>
+         <Modal
+            title="sad"
+            open={isOpenSubModal}
+            onCancel={() => setIsOpenSubModal(false)}
+            onOk={() =>
+               form.validateFields().then((values) => {
+                  onFinishSub(values);
+                  setIsOpenSubModal(false);
+               })
+            }
+         >
+            <div className="flex flex-col gap-3">
+               <Form form={form}>
+                  <div className="flex flex-col gap-3">
+                     <Form.Item
+                        name="surgeryType"
+                        label="Мэс заслын төрөл"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Төрөл заавал'
+                           }
+                        ]}
+                     >
+                        <Select
+                           style={{
+                              width: '100%'
+                           }}
+                        >
+                           <Option value={2}>Яаралтай</Option>
+                           <Option value={1}>Төлөвлөгөөт</Option>
+                        </Select>
+                     </Form.Item>
+                  </div>
+               </Form>
             </div>
          </Modal>
       </>

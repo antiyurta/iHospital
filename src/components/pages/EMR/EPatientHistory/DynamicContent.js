@@ -391,7 +391,7 @@ function DynamicContent({
                                     />
                                     <Column
                                        dataIndex={'nameMn'}
-                                       title="Код"
+                                       title="Монгол нэр"
                                        render={(_value, _row, index) => {
                                           return (
                                              <EditableFormItem name={[index, 'nameMn']}>

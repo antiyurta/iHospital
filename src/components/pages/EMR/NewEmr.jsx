@@ -122,9 +122,7 @@ class NewEmr extends React.Component {
          data['services'] = value;
          const conf = {
             headers: {},
-            params: {
-               patientId: this.state.selectedPatient.id
-            }
+            params: {}
          };
          const response = await Post('service-request', this.props.token, conf, data);
          if (response === 201) {

@@ -46,6 +46,8 @@ export const AuthContextProvider = ({ children }) => {
             console.log(error);
             if (error.code === 'ERR_NETWORK') {
                openNofi('error', 'Алдаа', 'Сервертэй холбогдоход алдаа гарлаа');
+            } else if (error.response.data.status === 401) {
+               openNofi('warning', 'Даатгал', 'Даатгалтай холбогдож чадсангүй');
             } else if (error.response.status == 400) {
                openNofi('warning', 'Нэвтрэх', 'Нэвтрэх нэр эсвэл нууц үг буруу');
             }

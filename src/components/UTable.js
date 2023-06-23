@@ -104,7 +104,7 @@ function UTable(props) {
          title: 'Устгах',
          okText: 'Устгах',
          closable: true,
-         content: <div>Устгасан дохиолдолд дахин сэргэхгүй болно</div>,
+         content: <div>Устгасан тохиолдолд дахин сэргээгдэхгүй болно</div>,
          async onOk() {
             await Delete(props.url + '/' + id, token, config);
             onStart(meta.page, 10);

@@ -67,7 +67,7 @@ module.exports = {
          logo: './public/ihospital.png',
          mode: 'webapp',
          manifest: './public/manifest.json',
-         publicPath: ''
+         publicPath: './public/'
       }),
       new HtmlWebpackPlugin({
          template: path.resolve(__dirname, './public/index.html'),
