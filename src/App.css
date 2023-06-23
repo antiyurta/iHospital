@@ -15,6 +15,77 @@
    --second-color: #f3f4f6;
 }
 
+/* new footer */
+footer {
+   background: #2d8cff;
+   box-shadow: 1x 1px 1px 1px rgba(0, 0, 0, 0.3);
+   font-size: 16px;
+   color: white;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+}
+.footer-sections {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   justify-content: space-between;
+   gap: 36px;
+   /* margin: 0 auto; */
+   /* max-width: 720px; */
+   padding: 14px;
+}
+.social-links {
+   display: flex;
+   flex-direction: row;
+   gap: 8px;
+}
+.social-links a {
+   padding: 2px;
+   margin: 2px;
+   background-color: white;
+   border-radius: 100%;
+}
+.social-links img {
+   margin: 2px;
+   width: 22px;
+   height: 22px;
+}
+.footer-bottom {
+   min-height: 60px;
+   display: flex;
+   text-align: center;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   background-color: #1f1b3d;
+   font-size: 14px;
+   opacity: 0.8;
+}
+.logo {
+   /* max-width: 160px; */
+   margin-bottom: 8px;
+}
+h2 {
+   font-family: 'Roboto';
+   font-style: normal;
+   text-align: left;
+   color: white;
+   margin-top: 0px;
+   margin-bottom: 16px;
+   font-size: 20px;
+   font-weight: 500;
+}
+menu {
+   list-style-type: none;
+   padding: 0;
+   margin: 0;
+}
+menu li {
+   margin-bottom: 12px;
+}
+/* new footer */
+
 .ant-spin-container {
    height: 100%;
 }

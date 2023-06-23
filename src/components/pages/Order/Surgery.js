@@ -1,32 +1,101 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ConfigProvider, Empty, Input, Modal, Table } from 'antd';
+import { Button, ConfigProvider, Empty, Input, Modal, Form, Table, Select } from 'antd';
 import jwtInterceopter from '../../jwtInterceopter';
-import { localMn, numberToCurrency } from '../../comman';
+import { localMn, numberToCurrency, openNofi } from '../../comman';
 import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
+const { Option } = Select;
 
-function Surgery() {
+function Surgery(props) {
+   const { usageType, appointmentId, handleclick } = props;
+   const [form] = Form.useForm();
    const [isOpenModal, setIsOpenModal] = useState(false);
-   const [selectedSurgery, setSelectedSurgury] = useState([]);
+   const [isOpenSubModal, setIsOpenSubModal] = useState(false);
+   const [surgeries, setSurgeries] = useState([]);
+   const [surgery, setSurgery] = useState([]);
+   const [diagnosis, setDiagnosis] = useState([]);
+   const [metaSurgery, setMetaSurgery] = useState({});
+   const [selectedSurgeries, setSelectedSurgeries] = useState([]);
+   const [selectedSurgeryId, setSelectedSurgeryId] = useState(Number);
+   const [surgeryId, setSurgeryId] = useState(Number);
    const [isLoading, setIsLoading] = useState(false);
-   const getSurguries = async () => {
+   const getSurgeries = async () => {
       await jwtInterceopter
          .get('service/type', {
             params: {
-               type: 2
+               type: 3
             }
          })
          .then((response) => {
-            console.log(response);
-            // setTreatments(response.data.response?.data);
+            setSurgeries(response.data.response?.data);
          })
          .catch((error) => {
             console.log(error);
          });
    };
+   const getPatientDiagnosis = async () => {
+      await jwtInterceopter
+         .get('emr/patient-diagnose', {
+            params: {
+               appointmentId: appointmentId
+            }
+         })
+         .then((response) => {
+            const data = response.data.response.data;
+            const diagnose = data?.map((diagnose) => {
+               diagnose.diagnose['diagnoseType'] = diagnose.diagnoseType;
+               return diagnose.diagnose;
+            });
+            setDiagnosis(diagnose);
+         });
+   };
+   const getTypeById = async (id, page, pageSize) => {
+      setIsLoading(true);
+      await jwtInterceopter
+         .get('service/surgery', {
+            params: {
+               surgeryTypeId: id,
+               page: page,
+               limit: pageSize
+            }
+         })
+         .then((response) => {
+            setSelectedSurgeryId(id);
+            setSurgery(response.data.response.data);
+            setMetaSurgery(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
+   };
+   const onFinishSub = (values) => {
+      const data = surgery.find((e) => e.id === surgeryId);
+      data['diagnose'] = diagnosis;
+      data['surgeryType'] = values.surgeryType;
+      setSelectedSurgeries([...selectedSurgeries, data]);
+   };
+   const add = (surgery) => {
+      const state = selectedSurgeries.includes(surgery);
+      if (state) {
+         openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
+      } else {
+         surgery.type = surgery.types.type;
+         setSurgeryId(surgery.id);
+         setIsOpenSubModal(true);
+      }
+   };
+   const remove = (index) => {
+      var arr = [...selectedSurgeries];
+      arr.splice(index, 1);
+      setSelectedSurgeries(arr);
+   };
    useEffect(() => {
-      getSurguries();
+      getSurgeries();
+      getPatientDiagnosis();
    }, []);
    return (
       <>
@@ -34,8 +103,8 @@ function Surgery() {
             type="primary"
             onClick={() => {
                setIsOpenModal(true);
-               // setSelectedTreatmentId(null);
-               // setSelectedTreatments([]);
+               setSelectedSurgeryId(null);
+               setSelectedSurgeries([]);
             }}
          >
             Мэс засал
@@ -51,7 +120,7 @@ function Surgery() {
             }}
             onCancel={() => setIsOpenModal(false)}
             onOk={() => {
-               // handleclick(selectedTreatments);
+               handleclick(selectedSurgeries);
                setIsOpenModal(false);
             }}
             okText={'Хадгалах'}
@@ -67,17 +136,17 @@ function Surgery() {
                      }}
                   >
                      <div className="flex flex-col gap-2">
-                        {/* {treatments.map((treatment, index) => {
+                        {surgeries.map((surgery, index) => {
                            return (
-                              <button
-                                 onClick={() => getTypeById(treatment.id, 1, 10)}
+                              <Button
+                                 onClick={() => getTypeById(surgery.id, 1, 10)}
                                  className="w-full bg-[#3d9970] text-white rounded-lg"
                                  key={index}
                               >
-                                 {treatment.name}
-                              </button>
+                                 {surgery.name}
+                              </Button>
                            );
-                        })} */}
+                        })}
                      </div>
                   </div>
                </div>
@@ -132,7 +201,7 @@ function Surgery() {
                                  },
                                  {
                                     title: 'Үнэ',
-                                    dataIndex: 'price',
+                                    dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
                                     width: 100,
                                     render: (text) => {
                                        return numberToCurrency(text);
@@ -157,20 +226,19 @@ function Surgery() {
                                     }
                                  }
                               ]}
-                              dataSource={[]}
-                              // pagination={{
-                              //    position: ['bottomCenter'],
-                              //    size: 'small',
-                              //    current: metaTreatment.page,
-                              //    total: metaTreatment.itemCount,
-                              //    showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                              //    pageSize: metaTreatment.limit,
-                              //    showSizeChanger: true,
-                              //    pageSizeOptions: ['5', '10', '20', '50'],
-                              //    showQuickJumper: true,
-                              //    onChange: (page, pageSize) =>
-                              //       getTypeById(selectedTreatmentId, page, pageSize, filterValue)
-                              // }}
+                              dataSource={surgery}
+                              pagination={{
+                                 position: ['bottomCenter'],
+                                 size: 'small',
+                                 current: metaSurgery.page,
+                                 total: metaSurgery.itemCount,
+                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 pageSize: metaSurgery.limit,
+                                 showSizeChanger: true,
+                                 pageSizeOptions: ['5', '10', '20', '50'],
+                                 showQuickJumper: true,
+                                 onChange: (page, pageSize) => getTypeById(selectedSurgeryId, page, pageSize)
+                              }}
                            />
                         </ConfigProvider>
                      </div>
@@ -202,8 +270,16 @@ function Surgery() {
                                  }
                               },
                               {
+                                 title: 'Төрөл',
+                                 dataIndex: 'surgeryType',
+                                 render: (text) => {
+                                    if (text === 1) return 'Төлөвлөгөөт';
+                                    return 'Яаралтай';
+                                 }
+                              },
+                              {
                                  title: 'Үнэ',
-                                 dataIndex: 'price',
+                                 dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
                                  width: 100,
                                  render: (text) => {
                                     return numberToCurrency(text);
@@ -228,12 +304,49 @@ function Surgery() {
                                  }
                               }
                            ]}
-                           dataSource={selectedSurgery}
+                           dataSource={selectedSurgeries}
                            pagination={false}
                         />
                      </div>
                   </div>
                </div>
+            </div>
+         </Modal>
+         <Modal
+            title="sad"
+            open={isOpenSubModal}
+            onCancel={() => setIsOpenSubModal(false)}
+            onOk={() =>
+               form.validateFields().then((values) => {
+                  onFinishSub(values);
+                  setIsOpenSubModal(false);
+               })
+            }
+         >
+            <div className="flex flex-col gap-3">
+               <Form form={form}>
+                  <div className="flex flex-col gap-3">
+                     <Form.Item
+                        name="surgeryType"
+                        label="Мэс заслын төрөл"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Төрөл заавал'
+                           }
+                        ]}
+                     >
+                        <Select
+                           style={{
+                              width: '100%'
+                           }}
+                        >
+                           <Option value={2}>Яаралтай</Option>
+                           <Option value={1}>Төлөвлөгөөт</Option>
+                        </Select>
+                     </Form.Item>
+                  </div>
+               </Form>
             </div>
          </Modal>
       </>

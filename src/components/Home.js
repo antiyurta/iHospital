@@ -1,17 +1,18 @@
 import React from 'react';
-import { Carousel, Container } from 'react-bootstrap';
+import { Button, Carousel, Container, Form, InputGroup } from 'react-bootstrap';
 
 import AI from '../assets/landing/ai.png';
 import SIXG from '../assets/landing/6g.png';
 import ThreDholo from '../assets/landing/3dhologram.png';
 import biemetr from '../assets/landing/biemetr.png';
 //
-import banner from '../assets/landing/banner.png';
+import banner from '../assets/landing/testBanner.jpg';
 //
 import hospital from '../assets/landing/hospital.png';
 import { Alert } from 'antd';
 import Marquee from 'react-fast-marquee';
 import Mongur from '../assets/landing/mongur.png';
+import Universal from '../assets/landing/universal.png';
 
 import check from '../assets/landing/check.png';
 import bluCheck from '../assets/landing/bluCheck.png';
@@ -53,7 +54,7 @@ function Home() {
                   >
                      ЭМНЭЛГИЙН ЦОГЦ ПЛАТФОРМ
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 box-border w-full gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 box-border w-full gap-12">
                      <div className="box md:flex-row lg:flex-col">
                         <img src={AI} />
                         <div className="subbox">
@@ -106,112 +107,6 @@ function Home() {
             <div className="bg-white py-[60px]">
                <Container>
                   <Widget />
-                  {/* <div className="flex flex-col md:flex-row">
-                     <div className="flex sm:flex-row md:flex-col justify-center items-start gap-3">
-                        <div
-                           className="flex flex-row items-start p-3 max-h-28 w-28 bg-[#EAF3FF]"
-                           style={{
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12
-                           }}
-                        >
-                           <p>iHospital</p>
-                        </div>
-                        <div
-                           className="flex flex-row items-start p-3 max-h-28 w-24 bg-[#EAF3FF]"
-                           style={{
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12
-                           }}
-                        >
-                           <p
-                              style={{
-                                 color: 'gray'
-                              }}
-                           >
-                              iBalance
-                           </p>
-                        </div>
-                        <div
-                           className="flex flex-row items-start p-3 max-h-28 w-24 bg-[#EAF3FF]"
-                           style={{
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12
-                           }}
-                        >
-                           <p
-                              style={{
-                                 color: 'gray'
-                              }}
-                           >
-                              ERP
-                           </p>
-                        </div>
-                        <div
-                           className="flex flex-row items-start p-3 max-h-28 w-24 bg-[#EAF3FF]"
-                           style={{
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12
-                           }}
-                        >
-                           <p
-                              style={{
-                                 color: 'gray'
-                              }}
-                           >
-                              Client
-                           </p>
-                        </div>
-                        <div
-                           className="flex flex-row items-start p-3 max-h-28 w-24 bg-[#EAF3FF]"
-                           style={{
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12
-                           }}
-                        >
-                           <p
-                              style={{
-                                 color: 'gray'
-                              }}
-                           >
-                              Boss
-                           </p>
-                        </div>
-                     </div>
-                     <div className="flex w-full flex-row justify-center py-[44px] px-[33px] bg-[#EAF3FF]">
-                        <div className="flex flex-col items-center gap-7">
-                           <p
-                              style={{
-                                 fontFamily: 'Roboto',
-                                 fontStyle: 'normal',
-                                 fontWeight: 600,
-                                 fontSize: '20px',
-                                 lineHeight: '24px',
-                                 color: '#0B2340'
-                              }}
-                           >
-                              Эмнэлэгийн мэдээллийн систем
-                           </p>
-                           <p
-                              style={{
-                                 fontFamily: 'Roboto',
-                                 fontStyle: 'normal',
-                                 fontWeight: 400,
-                                 fontSize: '16px',
-                                 lineHeight: '19px',
-                                 textAlign: 'justify',
-                                 color: '#2062B3'
-                              }}
-                           >
-                              Ай Хоспититал платформ нь эмнэлгийн мэдээллийн систем, нягтлан бодох бүртгэл, ERP,
-                              санхүүгийн хяналтын систем болон үйлчлүүлэгчтэй холбосон мобайл апп зэрэг хоорондоо уялдаа
-                              холбоотой рийл тайм мэдээллээ солилцож ажилладаг нэгдсэн платформ юм. Амбулатори
-                              Стационари ЭМД
-                           </p>
-                        </div>
-                        <div>2</div>
-                     </div>
-                  </div> */}
                </Container>
             </div>
          </section>
@@ -222,9 +117,7 @@ function Home() {
                   message={
                      <Marquee pauseOnHover gradient={false}>
                         <img className="h-[30px] px-3" src={Mongur} />
-                        <img className="h-[30px] px-3" src={Mongur} />
-                        <img className="h-[30px] px-3" src={Mongur} />
-                        <img className="h-[30px] px-3" src={Mongur} />
+                        <img className="h-[30px] px-3" src={Universal} />
                      </Marquee>
                   }
                />
@@ -496,6 +389,104 @@ function Home() {
                                  Сонгох
                               </button>
                            </div>
+                        </div>
+                     </div>
+                  </div>
+               </Container>
+            </div>
+         </section>
+         <section>
+            <div className="bg-white py-[120px]">
+               <Container>
+                  <div className="flex">
+                     <div
+                        style={{
+                           display: 'flex',
+                           flexDirection: 'row',
+                           flexWrap: 'wrap',
+                           justifyContent: 'space-around',
+                           gap: 16,
+                           width: '100%',
+                           alignItems: 'center'
+                        }}
+                     >
+                        <div className="flex flex-col gap-6">
+                           <p
+                              style={{
+                                 fontFamily: 'Roboto',
+                                 fontStyle: 'normal',
+                                 fontWeight: 600,
+                                 fontSize: 30,
+                                 lineHeight: '36px',
+                                 textAlign: 'center',
+                                 color: '#2B395C'
+                              }}
+                           >
+                              Бидэнтэй илүү ойр байгаарай
+                           </p>
+                           <p
+                              style={{
+                                 fontFamily: 'Roboto',
+                                 fontStyle: 'normal',
+                                 fontWeight: 300,
+                                 fontSize: 18,
+                                 lineHeight: '22px',
+                                 textAlign: 'center',
+                                 color: '#797E89'
+                              }}
+                           >
+                              Цаг алдалгүй шинэ мэдээлэл хүлээн аваарай!
+                           </p>
+                        </div>
+                        <div
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              background: '#F7F9FF',
+                              borderRadius: 12,
+                              padding: 16,
+                              width: 400
+                           }}
+                        >
+                           <Form>
+                              <Form.Group className="mb-3" controlId="formBasicUserName">
+                                 <Form.Label>Нэр</Form.Label>
+                                 <Form.Control
+                                    style={{
+                                       borderColor: '#F8A71B',
+                                       borderRadius: 7
+                                    }}
+                                    className="focus:shadow-2xl"
+                                    type="username"
+                                    placeholder="Нэр оруулна уу"
+                                 />
+                              </Form.Group>
+                              <Form.Group className="mb-3" controlId="formBasicEmail">
+                                 <Form.Label>И-мэйл</Form.Label>
+                                 <Form.Control
+                                    style={{
+                                       borderColor: '#F8A71B',
+                                       borderRadius: 7
+                                    }}
+                                    className="focus:shadow-2xl"
+                                    type="email"
+                                    placeholder="И-мэйл оруулна уу"
+                                 />
+                              </Form.Group>
+                              <Button
+                                 style={{
+                                    background: 'linear-gradient(180deg, #FAB31D 0%, #F6A219 100%)',
+                                    borderRadius: 7,
+                                    fontWeight: 700,
+                                    color: 'white',
+                                    borderColor: '#F8A71B'
+                                 }}
+                                 variant="outline-secondary"
+                                 type="submit"
+                              >
+                                 Илгээх
+                              </Button>
+                           </Form>
                         </div>
                      </div>
                   </div>

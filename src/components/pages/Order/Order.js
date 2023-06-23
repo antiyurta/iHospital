@@ -51,6 +51,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
       } else {
          var services = [];
          var subTotal = 0;
+         console.log('----------ORDER', value);
          value.map((item) => {
             const service = {};
             service.id = item.id;
@@ -63,6 +64,10 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
                service.oPrice = item.price;
             }
             service.type = item.types?.type;
+            if (item.type === 3) {
+               service.diagnose = item.diagnose;
+               service.surgeryType = item.surgeryType;
+            }
             if (item.type === 8) {
                service.id = item.id;
                service.name = item.name;
@@ -109,6 +114,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             data = datas.services.concat(services);
          }
          orderForm.setFieldsValue({ services: data });
+         console.log('----------ORDER', data);
          setTotal(total + subTotal);
       }
    };
@@ -189,7 +195,14 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
-            {showSurgery && <Surgery />}
+            {showSurgery && (
+               <Surgery
+                  usageType={usageType}
+                  selectedPatient={selectedPatient}
+                  appointmentId={IncomeAppointmentId}
+                  handleclick={handleclick}
+               />
+            )}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
             {showInpatient && <InpatientRequest handleClick={inpatientRequestClick} />}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}

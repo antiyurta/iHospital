@@ -11,7 +11,10 @@ const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRol
 const InsuranceDoctorList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
 const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
 const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
-
+// mes zasal
+const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryList'));
+const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
+// mes zasal
 export const PublicRoutes = [
    {
       name: 'Privacy',
@@ -62,5 +65,17 @@ export const ProtectedRoutes = [
       mnName: 'Маягт Permission',
       path: '/DocumentPermission',
       element: DocForRoleList
+   },
+   {
+      name: 'surgeryList',
+      mnName: 'Мэс засал жагсаалт',
+      path: '/SurgeryList',
+      element: SurgeryList
+   },
+   {
+      name: 'surgeryDashboard',
+      mnName: 'Мэс засал Самбар',
+      path: '/SurgeryDashboard',
+      element: SurgeryDashboard
    }
 ];

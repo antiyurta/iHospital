@@ -2,6 +2,7 @@ import axios from 'axios';
 import { notification } from 'antd';
 import mnMn from 'antd/es/locale/mn_MN';
 import mnMnn from 'antd/es/calendar/locale/mn_MN';
+import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.json';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -409,4 +410,8 @@ export const inspectionTOJSON = (inspectionNote) => {
       data['conclusion'] = JSON.parse(inspectionNote.conclusion);
    }
    return data;
+};
+
+export const diagnoseTypeInfo = (diagnoseTypeId) => {
+   return DiagnoseTypes.find((e) => e.value === diagnoseTypeId)?.label;
 };
