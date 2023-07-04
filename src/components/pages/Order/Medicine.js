@@ -29,7 +29,13 @@ function Medicine({ usageType, handleclick }) {
          setPindex(index);
          setPvalue(value);
       }
-      const response = await Get('service/global-medicine', token, conf);
+      let url = '';
+      if (usageType === 'OUT') {
+         url = 'service/global-medicine';
+      } else {
+         url = 'medicine';
+      }
+      const response = await Get(url, token, conf);
       if (response) {
          setMedicines(response.data);
          setMedicineMeta(response.meta);
@@ -140,9 +146,7 @@ function Medicine({ usageType, handleclick }) {
    ];
    //
    useEffect(() => {
-      if (usageType === 'OUT') {
-         getMedicine(1, 10);
-      }
+      getMedicine(1, 10);
    }, []);
 
    return (

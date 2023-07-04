@@ -1,29 +1,63 @@
-import { DatePicker, Divider, Form, Input, Select, Table, TimePicker } from 'antd';
+import React from 'react';
+import { DatePicker, Divider, Form, Select, Table, TimePicker } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-import { labelStyle, contentStyle } from './SurgeryList';
-import { diagnoseTypeInfo } from '../../comman';
+import { labelStyle, contentStyle } from './Index';
+import { diagnoseTypeInfo, numberToCurrency, openNofi } from '../../comman';
 import { useEffect, useState } from 'react';
-import moment from 'moment';
 import jwtInterceopter from '../../jwtInterceopter';
 
 const { Option } = Select;
-const { Column } = Table;
 
 function General(props) {
-   const { form, selectedSurgery } = props;
+   const { form, selectedSurgery, diagnosis, selectedCost } = props;
    const [rooms, setRooms] = useState([]);
+   const [hicsCost, setHicsCost] = useState([]);
+   const [isLoadingHicsCost, setIsLoadingHicsCost] = useState(false);
    const surgeryType = (type) => {
-      if (type === 1) return 'Яаралтай';
-      return 'Төлөвлөгөөт';
+      if (type === 1) return 'Төлөвлөгөөт';
+      return 'Яаралтай';
    };
    const getRooms = async () => {
       await jwtInterceopter.get('organization/room').then((response) => {
          setRooms(response.data.response.data);
       });
    };
+   const getHicsCost = async (value) => {
+      const insuranceServiceId = selectedSurgery?.taskWorkers?.surgery.insuranceServiceId;
+      if (value != undefined && insuranceServiceId != null) {
+         setIsLoadingHicsCost(true);
+         await jwtInterceopter
+            .get('health-insurance/hics-cost-by-field', {
+               params: {
+                  icdCode: value,
+                  serviceId: insuranceServiceId
+               }
+            })
+            .then((response) => {
+               openNofi('success', 'Амжилттай', response.data.description);
+               setHicsCost(response.data.result);
+            })
+            .catch((error) => {
+               console.log(error);
+               openNofi('error', 'Алдаа', error.response?.data?.message?.replaceAll('HttpException:', ''));
+            })
+            .finally(() => {
+               setIsLoadingHicsCost(false);
+            });
+      } else {
+         console.log(insuranceServiceId);
+      }
+   };
+   const rowSelection = {
+      type: 'radio',
+      onSelect: (record, selected, selectedRows) => {
+         selectedCost(selectedRows);
+      }
+   };
    useEffect(() => {
       getRooms();
-   }, []);
+      setHicsCost([]);
+   }, [selectedSurgery]);
    return (
       <div className="flex flex-col gap-2">
          <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
@@ -38,7 +72,7 @@ function General(props) {
                   <p style={contentStyle}>{selectedSurgery?.registerNumber}</p>
                   <p style={labelStyle}>Онош:</p>
                   <p>
-                     {selectedSurgery.diagnose?.map((diagnose, index) => {
+                     {diagnosis?.map((diagnose, index) => {
                         return (
                            <span key={index} className="flex flex-col">
                               <span className="font-semibold">{diagnoseTypeInfo(diagnose.diagnoseType)}: </span>
@@ -56,6 +90,66 @@ function General(props) {
          </div>
          <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
             <div className="p-3">
+               <Divider className="mt-0">Даатгалд хамрагдах онош</Divider>
+               <Form.Item
+                  label="Онош"
+                  name="icdCode"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Заавал'
+                     }
+                  ]}
+               >
+                  <Select allowClear onChange={getHicsCost}>
+                     {diagnosis?.map((diagnose, index) => {
+                        return (
+                           <Option key={index} value={diagnose.code}>
+                              {diagnose?.code}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+               <p
+                  className="pb-3"
+                  style={{
+                     fontWeight: '600'
+                  }}
+               >
+                  Өртгийн жин
+               </p>
+               <div className="max-w-[430px] overflow-auto">
+                  <Table
+                     size="small"
+                     rowKey={'drgCode'}
+                     loading={isLoadingHicsCost}
+                     rowSelection={rowSelection}
+                     columns={[
+                        {
+                           title: 'ICD 10',
+                           dataIndex: 'icd10Code'
+                        },
+                        {
+                           title: 'ICD 9',
+                           dataIndex: 'icd9Code'
+                        },
+                        {
+                           title: 'Үйлчилгээний нэр',
+                           dataIndex: 'drgName'
+                        },
+                        {
+                           title: 'Даатгалаас төлөх',
+                           dataIndex: 'amountHi',
+                           render: (text) => {
+                              return numberToCurrency(text);
+                           }
+                        }
+                     ]}
+                     dataSource={hicsCost}
+                     pagination={false}
+                  />
+               </div>
                <Divider className="mt-0">Хугацаа</Divider>
                <Form.Item
                   label="Огноо:"

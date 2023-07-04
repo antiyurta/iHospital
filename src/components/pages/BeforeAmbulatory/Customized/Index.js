@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal, Result, Table } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { Get, isObjectEmpty, openNofi } from '../../../comman';
@@ -8,18 +8,44 @@ import FormRender from './FormRender';
 import { PrinterOutlined } from '@ant-design/icons';
 import jwtInterceopter from '../../../jwtInterceopter';
 import moment from 'moment';
+import { useReactToPrint } from 'react-to-print';
 function Index(props) {
    const { usageType, documentValue, structureId, appointmentId, patientId } = props;
+   const printRef = useRef();
    const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
+   const [isCreate, setIsCreate] = useState(true);
    const [data, setData] = useState([]);
+   //
+   const [printData, setPrintData] = useState({});
+   //
    const [isLoading, setIsLoading] = useState(false);
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
    const [selectedOptionId, setSelectedOptionId] = useState(Number);
    const [isOpenSelectPositionModal, setIsOpenSelectPositionModal] = useState(false);
    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
+   //
+   const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
+   //
+   const handlePrint = useReactToPrint({
+      // onBeforeGetContent: () => setPrintLoading(true),
+      // onBeforePrint: () => setPrintLoading(false),
+      // onPrintError: () => console.log('asda'),
+      content: () => printRef.current
+   });
+   //
+   const getPatientInfo = async () => {
+      await jwtInterceopter.get('pms/patient/' + patientId).then((response) => {
+         setPrintData({
+            patientData: response.data.response,
+            formData: data[0]?.data
+         });
+         setIsOpenPrintModal(true);
+      });
+   };
+   //
    const getData = async () => {
       setIsLoading(true);
       await jwtInterceopter
@@ -33,7 +59,11 @@ function Index(props) {
          })
          .then((response) => {
             console.log(response);
-            setData(response.data.response.data);
+            const data = response.data.response.data;
+            if (data?.length > 0) {
+               setIsCreate(false);
+               setData(response.data.response.data);
+            }
          })
          .finally(() => {
             setIsLoading(false);
@@ -125,7 +155,7 @@ function Index(props) {
             }
          }
       ];
-      documentForm?.documentForm?.map((item, index) => {
+      documentForm?.documentForm?.map((item, _index) => {
          columns.push({
             title: item.label,
             children: item?.options?.map((option) => {
@@ -146,7 +176,7 @@ function Index(props) {
             })
          });
       });
-      columns.push(...findSupportColumns(1));
+      // columns.push(...findSupportColumns(1));
       return columns;
    };
    useEffect(() => {
@@ -174,10 +204,17 @@ function Index(props) {
                      gap: '6px'
                   }}
                >
-                  <Button type="primary" onClick={() => setIsOpenSelectPositionModal(true)}>
+                  <Button type="primary" disabled={!isCreate} onClick={() => setIsOpenSelectPositionModal(true)}>
                      Бөглөх
                   </Button>
-                  <Button icon={<PrinterOutlined />}>Хэвлэх</Button>
+                  <Button
+                     icon={<PrinterOutlined />}
+                     onClick={() => {
+                        getPatientInfo();
+                     }}
+                  >
+                     Хэвлэх
+                  </Button>
                </div>
             </div>
             <div className="float-right">
@@ -186,7 +223,7 @@ function Index(props) {
          </div>
          <div>
             <Table
-               rowKey={'id'}
+               rowKey={'_id'}
                bordered
                loading={{
                   spinning: isLoading,
@@ -239,6 +276,19 @@ function Index(props) {
                      </Button>
                   );
                })}
+            </div>
+         </Modal>
+         <Modal
+            title="Маягт хэвлэх хэсэг"
+            open={isOpenPrintModal}
+            onCancel={() => setIsOpenPrintModal(false)}
+            onOk={() => handlePrint()}
+            style={{
+               width: 'max-content'
+            }}
+         >
+            <div ref={printRef}>
+               <ReturnById type={usageType} id={documentValue} data={printData} />
             </div>
          </Modal>
       </div>

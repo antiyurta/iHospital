@@ -34,7 +34,7 @@ function Index({ type, isDoctor }) {
    //type 0 bol ambultor
    //1 bol urdcilsan sergiileh
    //2 bol hewten
-   //3 bol emiin bus emchilgee
+   //3 bol mes zasal
    const scrollRef = useRef();
    const today = new Date();
    const [editFormDesc] = Form.useForm();
@@ -82,12 +82,14 @@ function Index({ type, isDoctor }) {
       } else if (type === 1) {
          conf.params.doctorId = null;
          response = await Get('appointment/pre-order', token, conf);
-      } else {
+      } else if (type === 2) {
          conf.params.doctorId = null;
          conf.params.depIds = depIds?.toString();
          conf.params.process = process ? process.toString() : 0;
          response = await Get(`service/inpatient-request`, token, conf);
          conf.params.process = null;
+      } else if (type === 3) {
+         response = await Get(`tasks`, token, conf);
       }
       setAppointments(response.data);
       setMeta(response.meta);
@@ -840,15 +842,105 @@ function Index({ type, isDoctor }) {
          }
       }
    ];
-
-   useEffect(() => {
-      if (type) {
-         getAppointment(1, 20, today, today);
-         ScrollRef(scrollRef);
-         console.log(type);
+   // mes zaslin menu
+   const SurgeryColumns = [
+      {
+         title: 'sdad'
       }
-   }, [type]);
-
+   ];
+   // mes zaslin menu
+   // info configure
+   const CurrentInfo = () => {
+      if (type === 0) {
+         return (
+            <div className="flex float-left">
+               <div
+                  className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+               >
+                  <span className="font-medium mx-1">Яаралтай</span>
+               </div>
+               <div
+                  className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+               >
+                  <span className="font-medium mx-1">Шууд</span>
+               </div>
+               <div
+                  className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+               >
+                  <span className="font-medium mx-1">Урьдчилсан захиалга</span>
+               </div>
+            </div>
+         );
+      } else if (type === 1) {
+         return (
+            <div className="flex float-left">
+               <div
+                  className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                  role="alert"
+               >
+                  <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
+               </div>
+            </div>
+         );
+      } else if (type === 2) {
+         return (
+            <div className="w-full">
+               <div className="bg-[#1890ff] checkTag">
+                  {orderType.map((tag, index) => {
+                     return (
+                        <CheckableTag
+                           key={index}
+                           checked={selectedTags === tag.value}
+                           onChange={() => {
+                              setSelectedTags(tag.value);
+                           }}
+                           className="text-white m-1"
+                        >
+                           <div className="flex">
+                              <img src={require(`../../../../../assets/bed/${tag.img}`)} width="20" />
+                              {tag.label}
+                           </div>
+                        </CheckableTag>
+                     );
+                  })}
+               </div>
+            </div>
+         );
+      } else if (type === 3) {
+         if (isDoctor) {
+            return;
+         } else {
+            return;
+         }
+      }
+   };
+   // info configure
+   // column configure
+   const CurrentColumn = () => {
+      if (type === 0 || type === 1) {
+         if (isDoctor) {
+            return columns;
+         } else {
+            return nurseColumns;
+         }
+      } else if (type === 2) {
+         return InPatientColumns;
+      } else if (type === 3) {
+         if (isDoctor) {
+            return SurgeryColumns;
+         } else {
+            return;
+         }
+      }
+   };
+   // column configure
+   useEffect(() => {
+      // getAppointment(1, 20, today, today);
+      ScrollRef(scrollRef);
+   }, []);
    return (
       <>
          <div className="flex flex-wrap">
@@ -883,65 +975,7 @@ function Index({ type, isDoctor }) {
                            </div>
                         </div>
                      </div>
-                     <div className="w-full py-2">
-                        {type != 2 ? (
-                           type === 0 ? (
-                              <div className="flex float-left">
-                                 <div
-                                    className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                                    role="alert"
-                                 >
-                                    <span className="font-medium mx-1">Яаралтай</span>
-                                 </div>
-                                 <div
-                                    className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                                    role="alert"
-                                 >
-                                    <span className="font-medium mx-1">Шууд</span>
-                                 </div>
-                                 <div
-                                    className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                                    role="alert"
-                                 >
-                                    <span className="font-medium mx-1">Урьдчилсан захиалга</span>
-                                 </div>
-                              </div>
-                           ) : (
-                              <div className="flex float-left">
-                                 <div
-                                    className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                                    role="alert"
-                                 >
-                                    <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
-                                 </div>
-                              </div>
-                           )
-                        ) : (
-                           <>
-                              <div className="w-full">
-                                 <div className="bg-[#1890ff] checkTag">
-                                    {orderType.map((tag, index) => {
-                                       return (
-                                          <CheckableTag
-                                             key={index}
-                                             checked={selectedTags === tag.value}
-                                             onChange={() => {
-                                                setSelectedTags(tag.value);
-                                             }}
-                                             className="text-white m-1"
-                                          >
-                                             <div className="flex">
-                                                <img src={require(`../../../../../assets/bed/${tag.img}`)} width="20" />
-                                                {tag.label}
-                                             </div>
-                                          </CheckableTag>
-                                       );
-                                    })}
-                                 </div>
-                              </div>
-                           </>
-                        )}
-                     </div>
+                     <div className="w-full py-2">{CurrentInfo()}</div>
                      <div className="w-full py-2">
                         <ConfigProvider locale={localMn()}>
                            <Table
@@ -955,7 +989,7 @@ function Index({ type, isDoctor }) {
                                  tip: 'Уншиж байна....'
                               }}
                               bordered
-                              columns={type === 2 ? InPatientColumns : isDoctor ? columns : nurseColumns}
+                              columns={CurrentColumn()}
                               dataSource={appointments}
                               scroll={{
                                  x: 1500

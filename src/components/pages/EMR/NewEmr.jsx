@@ -198,6 +198,9 @@ class NewEmr extends React.Component {
                               : false
                         }
                         type={this.state.type}
+                        appointmentId={
+                           this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
+                        }
                         deparmentId={this.props.IncomeEMRData.deparmentId}
                      />
                      <Card

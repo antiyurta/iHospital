@@ -14,6 +14,7 @@ const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists
 // mes zasal
 const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryList'));
 const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
+const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
 // mes zasal
 export const PublicRoutes = [
    {
@@ -77,5 +78,11 @@ export const ProtectedRoutes = [
       mnName: 'Мэс засал Самбар',
       path: '/SurgeryDashboard',
       element: SurgeryDashboard
+   },
+   {
+      name: 'surgeryDashboard',
+      mnName: 'Мэс засал Дарга',
+      path: '/SurgeryListStatus',
+      element: SurgeryListStatus
    }
 ];
