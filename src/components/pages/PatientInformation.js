@@ -12,7 +12,8 @@ import DocumentShow from './611/DocumentShow';
 
 const { Search } = Input;
 
-function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type, deparmentId }) {
+function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type, appointmentId, deparmentId }) {
+   console.log('===============>a[pp', appointmentId);
    const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
    const [citizens, setCitizens] = useState([]);
@@ -131,7 +132,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
             employeePositionIds: AppIds,
             structureId: deparmentId,
             usageType: 'OUT',
-            documentType: 0
+            documentType: 2
          }
       };
       await jwtInterceopter
@@ -330,7 +331,13 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                   </div>
                </div>
                <div className="w-full">
-                  <Customized usageType={'OUT'} documentValue={documentId} structureId={deparmentId} />
+                  <Customized
+                     usageType={'OUT'}
+                     documentValue={documentId}
+                     structureId={deparmentId}
+                     appointmentId={appointmentId}
+                     patientId={patient.id}
+                  />
                </div>
             </div>
          </Modal>

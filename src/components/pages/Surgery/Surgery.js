@@ -1,4 +1,5 @@
-import { Button, Divider, Form, Input, Select } from 'antd';
+import React from 'react';
+import { Button, Divider, Form, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 import { PlusOutlined } from '@ant-design/icons';
@@ -7,23 +8,11 @@ const { Option } = Select;
 
 export function List(props) {
    const { label, name } = props;
-   const [departments, setDepartments] = useState([]);
    const [employees, setEmployess] = useState([]);
-   const getEmployees = async (depId) => {
+   const getEmployees = async () => {
       await jwtInterceopter.get('organization/employee').then((response) => {
          setEmployess(response.data.response.data);
       });
-   };
-   const getStructures = async () => {
-      await jwtInterceopter
-         .get('organization/structure', {
-            params: {
-               type: 2
-            }
-         })
-         .then((response) => {
-            setDepartments(response.data.response.data);
-         });
    };
    useEffect(() => {
       getEmployees();
@@ -32,7 +21,15 @@ export function List(props) {
       <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
          <div className="p-3">
             <Divider className="mt-0">{label}</Divider>
-            <Form.Item name={name}>
+            <Form.Item
+               name={name}
+               rules={[
+                  {
+                     required: true,
+                     message: 'Заавал'
+                  }
+               ]}
+            >
                <Select
                   showSearch
                   allowClear
@@ -59,34 +56,6 @@ export function List(props) {
 }
 
 function Surgery() {
-   const [departments, setDepartments] = useState([]);
-   const [employees, setEmployess] = useState([]);
-   const getEmployees = async (depId) => {
-      await jwtInterceopter
-         .get('organization/employee', {
-            params: {
-               depId: depId
-            }
-         })
-         .then((response) => {
-            setEmployess(response.data.response.data);
-         });
-   };
-   const getStructures = async () => {
-      await jwtInterceopter
-         .get('organization/structure', {
-            params: {
-               type: 2
-            }
-         })
-         .then((response) => {
-            setDepartments(response.data.response.data);
-         });
-   };
-   useEffect(() => {
-      getStructures();
-      getEmployees(null);
-   }, []);
    return (
       <div className="flex flex-col gap-2">
          <Divider>Эмч нар</Divider>

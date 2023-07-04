@@ -2,7 +2,11 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 //маягт АМ-2А
-function AM2A() {
+function AM2A(props) {
+   const {
+      data: { patientData, formData }
+   } = props;
+   console.log('data', patientData, formData);
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -95,6 +99,7 @@ function AM2A() {
                <div style={styles.rowStyle}>
                   <b>
                      Хамшинж, сэжигтэй тохиолдлын нэр:
+                     {formData['AM2A.1']}
                      ___________________________________________________________________________
                   </b>
                </div>
@@ -106,8 +111,8 @@ function AM2A() {
                         </td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>Эцэг/эхийн нэр</td>
-                        <td style={styles.leftText}>Өөрийн нэр</td>
+                        <td style={styles.leftText}>Эцэг/эхийн нэр: {patientData?.lastName}</td>
+                        <td style={styles.leftText}>Өөрийн нэр: {patientData?.firstName}</td>
                         <td style={styles.leftText}>Нас</td>
                         <td style={styles.leftText}>Хүйс</td>
                         <td style={styles.leftText}>Утасны дугаар</td>
@@ -116,8 +121,8 @@ function AM2A() {
                         <td colSpan={2} style={styles.leftText}>
                            <span style={{ marginRight: 5 }}>Регистрийн дугаар </span>
                            <div style={{ display: 'flex' }}>
-                              <div style={styles.rowCells}></div>
-                              <div style={styles.rowCells}></div>
+                              <div style={styles.rowCells}>{patientData?.registerNumber.substring(0, 1)}</div>
+                              <div style={styles.rowCells}>{patientData?.registerNumber.substring(1, 2)}</div>
                               <div style={styles.rowCells}></div>
                               <div style={styles.rowCells}></div>
                               <div style={styles.rowCells}></div>

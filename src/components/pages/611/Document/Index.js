@@ -571,11 +571,11 @@ const NotFound = () => {
    return <div>NotFound</div>;
 };
 
-export function ReturnById({ type, id, isOpen }) {
+export function ReturnById({ type, id, data }) {
    //type ni maygt harulah esvel form harulah
    if (id === 1) return <AM1B />;
    else if (id === 2) return <AM_1V />;
-   else if (id === 3) return <AM2A />;
+   else if (id === 3) return <AM2A data={data} />;
    else if (id === 4) return <AM2B />;
    else if (id === 5) return <AM3 />;
    else if (id === 6) return <AM4 />;

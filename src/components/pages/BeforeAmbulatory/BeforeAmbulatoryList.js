@@ -4,6 +4,7 @@ import { Button, Tabs } from 'antd';
 import Ambulatory from './Lists/Ambulatory';
 import PatientList from './Lists/PatientList';
 import PreOrder from './Lists/PreOrder';
+import Surgery from './Lists/Surgery';
 import { SnippetsOutlined } from '@ant-design/icons';
 
 export default function BeforeAmbulatoryList() {
@@ -27,11 +28,16 @@ export default function BeforeAmbulatoryList() {
          label: 'Хэвтэн',
          key: '3',
          children: <PatientList />
+      },
+      {
+         label: 'Мэс засал',
+         key: 4,
+         children: <Surgery />
       }
    ];
    return (
       <>
-         <Tabs type="card" tabBarExtraContent={documents} items={items} />
+         <Tabs type="card" tabBarExtraContent={documents} items={items} destroyInactiveTabPane={true} />
       </>
    );
 }
