@@ -199,7 +199,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      }}
                   >
                      <img className="w-24" src={male} alt="patient" />
-                     <Descriptions column={{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 2, xs: 1 }}>
+                     <Descriptions column={{ xxl: 3, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}>
                         <Descriptions.Item label="Овог">{patient?.lastName}</Descriptions.Item>
                         <Descriptions.Item label="Нэр">{patient?.firstName}</Descriptions.Item>
                         <Descriptions.Item label="Хүйс">{getGender(patient?.registerNumber)}</Descriptions.Item>
@@ -336,7 +336,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      documentValue={documentId}
                      structureId={deparmentId}
                      appointmentId={appointmentId}
-                     patientId={patient.id}
+                     patientId={patient?.id}
                   />
                </div>
             </div>
