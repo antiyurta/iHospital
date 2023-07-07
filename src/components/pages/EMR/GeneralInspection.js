@@ -58,7 +58,7 @@ export default function GeneralInspection({ patientId, inspection }) {
          layout="vertical"
          form={form}
       >
-         <Collapse accordion defaultActiveKey={['1']}>
+         <Collapse accordion>
             <Panel header="Ерөнхий" key="1" forceRender={true}>
                <div className="flex flex-wrap">
                   <div className="md:w-1/3 sm:w-full p-1">

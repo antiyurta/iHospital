@@ -47,7 +47,7 @@ export default function HistoryTab({ patientId, inspection }) {
    return (
       <Form form={historyForm} autoComplete="off" labelAlign="left" scrollToFirstError layout="vertical">
          <div className="flex flex-col gap-3">
-            <Collapse accordion defaultActiveKey={['1']}>
+            <Collapse accordion>
                <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
                   <Step1 />
                </Panel>

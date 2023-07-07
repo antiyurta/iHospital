@@ -5,11 +5,12 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo/iHospital.svg';
 import collapsedLogo from '../../../assets/logo/iHospitalCollapsed.svg';
 import male from '../../../assets/images/maleAvatar.svg';
-import { Button, Dropdown, Menu, Layout } from 'antd';
+import { Button, Dropdown, Menu, Layout, Drawer } from 'antd';
 import {
    LeftOutlined,
    MenuFoldOutlined,
    MenuUnfoldOutlined,
+   MessageOutlined,
    PoweroffOutlined,
    RightOutlined,
    UserOutlined
@@ -36,6 +37,9 @@ function MainLayout({ children }) {
    const RoleId = useSelector(selectCurrentRoleId);
    const [collapsed, setCollapsed] = useState(false);
    const [menus, setMenus] = useState([]);
+   //
+   const [isOpenTenChatModal, setIsOpenTenChatModal] = useState(false);
+   //
    const handleMenuClick = async (e) => {
       if (e.key == 2) {
          await logoutt();
@@ -215,26 +219,48 @@ function MainLayout({ children }) {
                   <Navbar.Toggle />
                   <Navbar.Collapse className="justify-content-end">
                      <Navbar.Text className="h-16">
-                        {user && (
-                           <Dropdown
-                              overlay={menu}
-                              trigger={['click']}
-                              arrow={{
-                                 pointAtCenter: true
-                              }}
-                           >
-                              <Button
-                                 type="link"
+                        {user ? (
+                           <div className="flex flex-row gap-3">
+                              <div
+                                 className="flex items-center hover:cursor-pointer rounded-full"
                                  style={{
-                                    paddingTop: 0
+                                    width: 48,
+                                    height: 48
                                  }}
-                                 className="ant-dropdown-link"
-                                 onClick={(e) => e.preventDefault()}
                               >
-                                 <img className="h-12 w-12" src={male} alt="avatar" />
-                              </Button>
-                           </Dropdown>
-                        )}
+                                 <MessageOutlined
+                                    title="TenChat"
+                                    style={{
+                                       padding: 8,
+                                       color: '#4a7fc1',
+                                       fontSize: 32
+                                    }}
+                                    onClick={() => setIsOpenTenChatModal(true)}
+                                 />
+                              </div>
+                              <Dropdown
+                                 overlay={menu}
+                                 trigger={['click']}
+                                 arrow={{
+                                    pointAtCenter: true
+                                 }}
+                              >
+                                 <Button
+                                    type="link"
+                                    style={{
+                                       paddingTop: 0,
+                                       padding: 0,
+                                       minHeight: 48,
+                                       width: 48
+                                    }}
+                                    className="ant-dropdown-link"
+                                    onClick={(e) => e.preventDefault()}
+                                 >
+                                    <img className="h-12 w-12" src={male} alt="avatar" />
+                                 </Button>
+                              </Dropdown>
+                           </div>
+                        ) : null}
                      </Navbar.Text>
                   </Navbar.Collapse>
                </Navbar>
@@ -248,6 +274,11 @@ function MainLayout({ children }) {
                         </Fragment>
                      </div>
                   </div>
+                  <Drawer
+                     open={isOpenTenChatModal}
+                     title="TenChat"
+                     onClose={() => setIsOpenTenChatModal(false)}
+                  ></Drawer>
                </Content>
             </Layout>
          </Layout>
