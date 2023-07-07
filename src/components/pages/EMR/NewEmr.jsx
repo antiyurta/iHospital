@@ -5,7 +5,7 @@ import { Get, Post, dateReduceTree, openNofi } from '../../comman';
 import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import moment from 'moment';
-import { Alert, Card, Radio, Select, Table } from 'antd';
+import { Alert, Card, Collapse, Radio, Select, Table } from 'antd';
 import Marquee from 'react-fast-marquee';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
@@ -14,7 +14,9 @@ import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
 import { delEmrData } from '../../../features/emrReducer';
 import { delNote } from '../../../features/noteReducer';
+import InspectionHistory from './InspectionHistory';
 const { Option } = Select;
+const { Panel } = Collapse;
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
    const token = state.authReducer.token;
@@ -112,6 +114,9 @@ class NewEmr extends React.Component {
          const data = {};
          if (this.props.IncomeEMRData.usageType === 'IN') {
             data['inpatientRequestId'] = this.props.IncomeEMRData.inpatientRequestId;
+            value?.map((item) => {
+               item.inpatientPrice = item.price;
+            });
          } else {
             data['appointmentId'] = this.props.IncomeEMRData.appointmentId;
          }
@@ -176,7 +181,212 @@ class NewEmr extends React.Component {
                      />
                   </div>
                )}
-               <div
+               <div className={this.state.type === 'EMR' ? 'grid grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
+                  <div className={this.state.type === 'EMR' ? 'sm:col-span-5 xl:col-span-3' : null}>
+                     <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3">
+                        <PatientInformation
+                           patient={this.state.selectedPatient}
+                           handlesearch={false}
+                           handleTypeChange={this.handleTypeChange}
+                           OCS={
+                              this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
+                                 ? true
+                                 : false
+                           }
+                           type={this.state.type}
+                           appointmentId={
+                              this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
+                           }
+                           deparmentId={this.props.IncomeEMRData.deparmentId}
+                        />
+                        <Card
+                           bordered={false}
+                           title={<h6 className="font-semibold m-0">Асуудлын жагсаалт</h6>}
+                           className="header-solid rounded-md"
+                           bodyStyle={{
+                              paddingTop: 0,
+                              paddingLeft: 10,
+                              paddingRight: 10,
+                              paddingBottom: 10
+                           }}
+                        >
+                           <Table
+                              rowKey={'id'}
+                              bordered
+                              loading={this.state.problemsLoading}
+                              scroll={{
+                                 y: 100
+                              }}
+                              columns={[
+                                 {
+                                    title: 'Кабинет',
+                                    dataIndex: 'cabinetName'
+                                 },
+                                 {
+                                    title: 'Эмч',
+                                    dataIndex: 'doctor'
+                                 },
+                                 {
+                                    title: 'Онош',
+                                    dataIndex: 'diagnoses',
+                                    render: (text) => {
+                                       return (
+                                          <ul
+                                             className="list-disc list-inside"
+                                             style={{
+                                                paddingLeft: '4px',
+                                                textAlign: 'start',
+                                                whiteSpace: 'normal'
+                                             }}
+                                          >
+                                             {text.map((item, index) => {
+                                                return <li key={index}>{item.diagnose.code}</li>;
+                                             })}
+                                          </ul>
+                                       );
+                                    }
+                                 },
+                                 {
+                                    title: 'Огноо',
+                                    dataIndex: 'inspectionDate',
+                                    width: 80,
+                                    render: (text) => {
+                                       return moment(text).format('YYYY-MM-DD');
+                                    }
+                                 }
+                              ]}
+                              dataSource={this.state.problems}
+                              pagination={false}
+                           />
+                        </Card>
+                        <div
+                           className={
+                              this.state.type === 'EMR' ? 'lg:col-span-2 xl:col-span-2' : 'lg:col-span-2 xl:col-span-2'
+                           }
+                        >
+                           {this.props.IncomeEMRData.usageType === 'OUT' ? (
+                              <InspectionHistory
+                                 isUsageType={this.state.isUsageType}
+                                 setIsUsageType={(e) => {
+                                    this.setState({
+                                       isUsageType: e
+                                    });
+                                 }}
+                                 appointments={this.state.appointments}
+                                 patientId={this.props.IncomeEMRData.patientId}
+                              />
+                           ) : (
+                              <Collapse
+                                 bordered={false}
+                                 className="header-solid max-h-max rounded-md"
+                                 style={{
+                                    backgroundColor: 'white',
+                                    padding: 2
+                                 }}
+                              >
+                                 <Panel header="Түүх">
+                                    <div
+                                       style={{
+                                          backgroundColor: '#f3f4f6',
+                                          padding: 12
+                                       }}
+                                    >
+                                       <InspectionHistory
+                                          isUsageType={this.state.isUsageType}
+                                          setIsUsageType={(e) => {
+                                             this.setState({
+                                                isUsageType: e
+                                             });
+                                          }}
+                                          appointments={this.state.appointments}
+                                          patientId={this.props.IncomeEMRData.patientId}
+                                       />
+                                    </div>
+                                 </Panel>
+                              </Collapse>
+                           )}
+                        </div>
+                     </div>
+                  </div>
+                  <div className={this.state.type === 'EMR' ? 'sm:col-span-5 xl:col-span-2' : null}>
+                     {this.state.type === 'EMR' ? (
+                        <Card
+                           bordered={false}
+                           title={<h6 className="font-semibold m-0">Явцын үзлэг</h6>}
+                           className="header-solid max-h-max rounded-md scroll"
+                           bodyStyle={{
+                              paddingTop: 0,
+                              paddingLeft: 10,
+                              paddingRight: 10,
+                              paddingBottom: 10,
+                              maxHeight: 780,
+                              overflow: 'auto'
+                           }}
+                           extra={
+                              <>
+                                 <Select
+                                    defaultValue={this.props.IncomeEMRData.inspection}
+                                    disabled={this.props.IncomeEMRData.inspection === 11 ? true : false}
+                                    style={{ width: 200 }}
+                                 >
+                                    <Option value={1} disabled={true}>
+                                       Анхан
+                                    </Option>
+                                    <Option value={2} disabled={true}>
+                                       Давтан
+                                    </Option>
+                                    <Option value={3}>Урьдчилан сэргийлэх</Option>
+                                    <Option value={4}>Гэрийн эргэлт</Option>
+                                    <Option value={5}>Идэвхтэй хяналт</Option>
+                                    <Option value={6}>Дуудлагаар</Option>
+                                    <Option value={11} disabled={true}>
+                                       xray
+                                    </Option>
+                                    <Option value={12} disabled={true}>
+                                       exo
+                                    </Option>
+                                 </Select>
+                              </>
+                           }
+                        >
+                           <MainPatientHistory
+                              AppointmentId={this.props.IncomeEMRData.appointmentId}
+                              XrayRequestId={this.props.IncomeEMRData.xrayRequestId}
+                              InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
+                              PatientId={this.props.IncomeEMRData.patientId}
+                              CabinetId={this.props.IncomeEMRData.cabinetId}
+                              DeparmentId={this.props.IncomeEMRData.departmentId}
+                              Inspection={this.props.IncomeEMRData.inspection}
+                              UsageType={this.props.IncomeEMRData.usageType}
+                              AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                              AppointmentType={this.props.IncomeEMRData.type}
+                              ServiceId={this.props.IncomeEMRData.serviceId}
+                              handleClick={this.handleTypeChange}
+                           />
+                        </Card>
+                     ) : (
+                        <Card
+                           bordered={false}
+                           title={<h6 className="font-semibold m-0">Шинэ захиалга</h6>}
+                           className="header-solid max-h-max rounded-md"
+                           bodyStyle={{
+                              paddingTop: 0,
+                              paddingLeft: 10,
+                              paddingRight: 10,
+                              paddingBottom: 10
+                           }}
+                        >
+                           <Ocs
+                              selectedPatient={this.state.selectedPatient}
+                              UsageType={this.props.IncomeEMRData.usageType}
+                              AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                              handleClick={this.saveOrder}
+                           />
+                        </Card>
+                     )}
+                  </div>
+               </div>
+               {/* <div
                   className={
                      this.state.type === 'EMR' ? 'grid sm:grid-cols-1 xl:grid-cols-2 gap-3' : 'flex flex-col gap-3'
                   }
@@ -184,7 +394,7 @@ class NewEmr extends React.Component {
                   <div
                      className={
                         this.state.type === 'EMR'
-                           ? 'grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-3'
+                           ? 'grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3'
                            : 'grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3'
                      }
                   >
@@ -244,11 +454,7 @@ class NewEmr extends React.Component {
                                           }}
                                        >
                                           {text.map((item, index) => {
-                                             return (
-                                                <li key={index}>
-                                                   {`${item.diagnose.code} -> ${item.diagnose.nameMn}`}
-                                                </li>
-                                             );
+                                             return <li key={index}>{item.diagnose.code}</li>;
                                           })}
                                        </ul>
                                     );
@@ -384,7 +590,7 @@ class NewEmr extends React.Component {
                         />
                      </Card>
                   )}
-               </div>
+               </div> */}
             </div>
             <Schedule
                isOpen={this.state.isOpen}
