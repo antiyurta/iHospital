@@ -11,7 +11,7 @@ import youtube from '../../assets/landing/youtube.png';
 import twitter from '../../assets/landing/twitter.png';
 import linkin from '../../assets/landing/linkin.png';
 import logo from '../../assets/logo/test.svg';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 //
 function Footer() {
    return (
@@ -51,7 +51,7 @@ function Footer() {
                         <a>Бидний тухай</a>
                      </li>
                      <li>
-                        <a>Үйлчилгээний нөхцөл</a>
+                        <Link to="/privacy">Үйлчилгээний нөхцөл</Link>
                      </li>
                      <li>
                         <a>Түгээмэл асуулт, хариулт</a>

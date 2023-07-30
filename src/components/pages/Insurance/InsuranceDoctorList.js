@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import jwtInterceopter from '../../jwtInterceopter';
 import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table } from 'antd';
 import { localMn, numberToCurrency, openNofi } from '../../comman';
 import { EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
+//request service uud
+import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';
+import healtInsuranceService from '../../../services/healt-insurance/healtInsurance';
+//request service uud
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
+const basicRule = [
+   {
+      required: true,
+      message: 'Заавал'
+   }
+];
+
 function InsuranceDocterList() {
    const [returnForm] = Form.useForm();
+   const [editForm] = Form.useForm();
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState({});
    const [filterForm] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
    const [icdGroup, setIcdGroup] = useState([]);
    const [isOpenReturnModal, setIsOpenReturnModal] = useState(false);
+   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    //
    const getList = async (page, pageSize, filterValues) => {
       setIsLoading(true);
@@ -43,8 +55,7 @@ function InsuranceDocterList() {
          conf.params.process = filterValues.process;
          conf.params.resCode = filterValues.resCode;
       }
-      jwtInterceopter
-         .get('insurance-seal', conf)
+      await InsuranceSealService.getByPageFilter(conf)
          .then((response) => {
             setData(response.data.response.data);
             setMeta(response.data.response.meta);
@@ -56,6 +67,21 @@ function InsuranceDocterList() {
             setIsLoading(false);
          });
    };
+   const getById = async (id) => {
+      await InsuranceSealService.getById(id).then((response) => {
+         const data = {
+            serviceNumber: response.data.response.hicsServiceNo,
+            patientRegno: response.data.response.patientRegno,
+            drgCode: response.data.response.drgCode,
+            icdCode: response.data.response.icdCode,
+            icdCodeName: response.data.response.icdCodeName,
+            icd9Code: response.data.response.icd9Code,
+            repairDesc: ''
+         };
+         editForm.setFieldsValue(data);
+         setIsOpenEditModal(true);
+      });
+   };
    const returnInsurance = (serviceNumber) => {
       returnForm.setFieldsValue({
          serviceNumber: serviceNumber
@@ -63,8 +89,8 @@ function InsuranceDocterList() {
       setIsOpenReturnModal(true);
    };
    const getReturnInsurance = async (values) => {
-      await jwtInterceopter
-         .post('health-insurance/cancel-service', values)
+      await healtInsuranceService
+         .postCancelService(values)
          .then((response) => {
             console.log(response);
             if (response.data.code === 201 || response.data.code === 200) {
@@ -80,9 +106,19 @@ function InsuranceDocterList() {
             getList(1, 10, filterForm.getFieldsValue());
          });
    };
+   const getRepairInsurance = async (values) => {
+      await healtInsuranceService.postRepair(values).then((response) => {
+         if (response.data.code === 400) {
+            openNofi('warning', 'Анхааруулга', response.data.description);
+         } else if (response.data.code === 200) {
+            openNofi('warning', 'Анхааруулга', response.data.description);
+            setIsOpenEditModal(false);
+         }
+      });
+   };
    const getIcdGroup = async () => {
-      await jwtInterceopter
-         .get('insurance/hics-service-group')
+      await healtInsuranceService
+         .getHicsServiceGroup()
          .then((response) => {
             setIcdGroup(response.data.data);
          })
@@ -130,8 +166,42 @@ function InsuranceDocterList() {
       {
          title: 'Хувь',
          dataIndex: 'gpa',
+         width: 120,
          render: (text) => {
-            return `${text}%`;
+            return (
+               <div className="m-1 flex">
+                  <Progress
+                     style={{
+                        wordBreak: 'normal',
+                        width: '90px'
+                     }}
+                     strokeColor={{
+                        '0%': 'yellow',
+                        '100%': 'green'
+                     }}
+                     percent={text}
+                  />
+               </div>
+            );
+         }
+      },
+      {
+         title: 'Хугацаа',
+         dataIndex: 'createdAt',
+         render: (text) => {
+            const date1 = new Date(text);
+            const date2 = new Date();
+            var delta = Math.abs(date2 - date1) / 1000;
+            var days = Math.floor(delta / 86400);
+            delta -= days * 86400;
+            var hours = Math.floor(delta / 3600) % 24;
+            delta -= hours * 3600;
+            var minutes = Math.floor(delta / 60) % 60;
+            delta -= minutes * 60;
+            if (days * 24 + hours > 48) {
+               return 'Засах хугацаа дууссан';
+            }
+            return `${hours + days * 24}:${minutes}`;
          }
       },
       {
@@ -168,9 +238,9 @@ function InsuranceDocterList() {
       {
          title: '',
          dataIndex: 'process',
-         render: (text) => {
-            if (text === 2) {
-               return <Button icon={<EditOutlined style={{ color: 'blue' }} />} />;
+         render: (text, row) => {
+            if (text === 3) {
+               return <Button onClick={() => getById(row.id)} icon={<EditOutlined style={{ color: 'blue' }} />} />;
             }
          }
       },
@@ -276,15 +346,6 @@ function InsuranceDocterList() {
                      loading={isLoading}
                      columns={columns}
                      dataSource={data}
-                     rowClassName={(record, _index) => {
-                        if (record.process === 4) {
-                           return 'bg-red-400';
-                        } else if (record.gpa) {
-                           const value = Math.floor(record.gpa / 10);
-                           // return 'bg-color-range-5';
-                           return `bg-color-range-${value}`;
-                        }
-                     }}
                      pagination={{
                         position: ['bottomCenter', 'topCenter'],
                         size: 'small',
@@ -327,6 +388,90 @@ function InsuranceDocterList() {
                      }
                   ]}
                >
+                  <TextArea />
+               </Form.Item>
+            </Form>
+         </Modal>
+         <Modal
+            title="Битүүмж засах"
+            open={isOpenEditModal}
+            onCancel={() => setIsOpenEditModal(false)}
+            onOk={() => {
+               editForm.validateFields().then((values) => {
+                  getRepairInsurance(values);
+               });
+            }}
+         >
+            <Form form={editForm} layout="vertical">
+               <div className="flex flex-col gap-3">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flex flex-col gap-3">
+                           <div className="flex justify-between">
+                              <p>Үйлчилгээний бүртгэлийн дугаар:</p>
+                              <Form.Item noStyle shouldUpdate>
+                                 {() => {
+                                    return (
+                                       <p
+                                          style={{
+                                             fontWeight: 600
+                                          }}
+                                       >
+                                          {editForm.getFieldValue('serviceNumber')}
+                                       </p>
+                                    );
+                                 }}
+                              </Form.Item>
+                           </div>
+                           <div className="flex justify-between">
+                              <p>Иргэний регистр:</p>
+                              <Form.Item noStyle shouldUpdate>
+                                 {() => {
+                                    return (
+                                       <p
+                                          style={{
+                                             fontWeight: 600
+                                          }}
+                                       >
+                                          {editForm.getFieldValue('patientRegno')}
+                                       </p>
+                                    );
+                                 }}
+                              </Form.Item>
+                           </div>
+                           <div className="flex justify-between">
+                              <p>ОХБ-ийн дугаар:</p>
+                              <Form.Item noStyle shouldUpdate>
+                                 {() => {
+                                    return (
+                                       <p
+                                          style={{
+                                             fontWeight: 600
+                                          }}
+                                       >
+                                          {editForm.getFieldValue('drgCode')}
+                                       </p>
+                                    );
+                                 }}
+                              </Form.Item>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <Form.Item className="hidden" name="serviceNumber">
+                  <Input />
+               </Form.Item>
+               <Form.Item label="ICD 10 Код:" name="icdCode" rules={basicRule}>
+                  <Input />
+               </Form.Item>
+               <Form.Item label="ICD 10 Нэр:" name="icdCodeName" rules={basicRule}>
+                  <Input />
+               </Form.Item>
+               <Form.Item label="ICD 9 Код:" name="icd9Code" rules={basicRule}>
+                  <Input />
+               </Form.Item>
+               <Form.Item label="Засварлаж буй шалтгаан:" name="repairDesc" rules={basicRule}>
                   <TextArea />
                </Form.Item>
             </Form>

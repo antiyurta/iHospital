@@ -6,10 +6,13 @@ import { localMn, numberToCurrency, openNofi } from '../../comman';
 import jwtInterceopter from '../../jwtInterceopter';
 import EditableFormItem from '../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
+import { useDispatch } from 'react-redux';
+import { setHicsService } from '../../../features/emrReducer';
 const { Search } = Input;
 const { Option, OptGroup } = Select;
 const { Column } = Table;
 function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appointmentType }) {
+   const dispatch = useDispatch();
    const [diagnosesForm] = Form.useForm();
    const [hicsServiceIdForm] = Form.useForm();
    const [diagnoses, setDiagnoses] = useState([]);
@@ -254,10 +257,20 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
    const rowSelection = {
       type: 'radio',
       selectedCost,
-      onSelect: (record, selected, selectedRows) => {
+      onSelect: (_record, _selected, selectedRows) => {
          setSelectedCost(selectedRows);
       }
    };
+   //
+   useEffect(() => {
+      insuranceService?.map((service) => {
+         service.hicsServices.find((e) => {
+            if (e.id === hicsServiceId) {
+               dispatch(setHicsService(e));
+            }
+         });
+      });
+   }, [hicsServiceId]);
    //
    useEffect(() => {
       getDiagnoses(1, 10, paramValue, param);
@@ -477,7 +490,10 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
                                              >
                                                 <Select
                                                    placeholder="Үйлчилгээний төрөл сонгох"
-                                                   onChange={(e) => setHicsServiceId(e)}
+                                                   onChange={(e) => {
+                                                      console.log(e);
+                                                      setHicsServiceId(e);
+                                                   }}
                                                 >
                                                    {insuranceService?.map((group, index) => {
                                                       return (

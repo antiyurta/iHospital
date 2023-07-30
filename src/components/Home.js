@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Carousel, Container, Form, InputGroup } from 'react-bootstrap';
+import { Carousel, Container } from 'react-bootstrap';
 
 import AI from '../assets/landing/ai.png';
 import SIXG from '../assets/landing/6g.png';
@@ -8,10 +8,8 @@ import biemetr from '../assets/landing/biemetr.png';
 //
 import banner from '../assets/landing/testBanner.jpg';
 //
-import hospital from '../assets/landing/hospital.png';
 import { Alert } from 'antd';
 import Marquee from 'react-fast-marquee';
-import Mongur from '../assets/landing/mongur.png';
 import Universal from '../assets/landing/universal.png';
 
 import check from '../assets/landing/check.png';
@@ -116,7 +114,6 @@ function Home() {
                   className="bg-transparent border-none"
                   message={
                      <Marquee pauseOnHover gradient={false}>
-                        <img className="h-[30px] px-3" src={Mongur} />
                         <img className="h-[30px] px-3" src={Universal} />
                      </Marquee>
                   }
@@ -138,7 +135,7 @@ function Home() {
                      >
                         Мэдээ мэдээлэл
                      </p>
-                     <p>1</p>
+                     <p>Мэдээ мэдээлэл</p>
                   </div>
                </Container>
             </div>
@@ -389,104 +386,6 @@ function Home() {
                                  Сонгох
                               </button>
                            </div>
-                        </div>
-                     </div>
-                  </div>
-               </Container>
-            </div>
-         </section>
-         <section>
-            <div className="bg-white py-[120px]">
-               <Container>
-                  <div className="flex">
-                     <div
-                        style={{
-                           display: 'flex',
-                           flexDirection: 'row',
-                           flexWrap: 'wrap',
-                           justifyContent: 'space-around',
-                           gap: 16,
-                           width: '100%',
-                           alignItems: 'center'
-                        }}
-                     >
-                        <div className="flex flex-col gap-6">
-                           <p
-                              style={{
-                                 fontFamily: 'Roboto',
-                                 fontStyle: 'normal',
-                                 fontWeight: 600,
-                                 fontSize: 30,
-                                 lineHeight: '36px',
-                                 textAlign: 'center',
-                                 color: '#2B395C'
-                              }}
-                           >
-                              Бидэнтэй илүү ойр байгаарай
-                           </p>
-                           <p
-                              style={{
-                                 fontFamily: 'Roboto',
-                                 fontStyle: 'normal',
-                                 fontWeight: 300,
-                                 fontSize: 18,
-                                 lineHeight: '22px',
-                                 textAlign: 'center',
-                                 color: '#797E89'
-                              }}
-                           >
-                              Цаг алдалгүй шинэ мэдээлэл хүлээн аваарай!
-                           </p>
-                        </div>
-                        <div
-                           style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              background: '#F7F9FF',
-                              borderRadius: 12,
-                              padding: 16,
-                              width: 400
-                           }}
-                        >
-                           <Form>
-                              <Form.Group className="mb-3" controlId="formBasicUserName">
-                                 <Form.Label>Нэр</Form.Label>
-                                 <Form.Control
-                                    style={{
-                                       borderColor: '#F8A71B',
-                                       borderRadius: 7
-                                    }}
-                                    className="focus:shadow-2xl"
-                                    type="username"
-                                    placeholder="Нэр оруулна уу"
-                                 />
-                              </Form.Group>
-                              <Form.Group className="mb-3" controlId="formBasicEmail">
-                                 <Form.Label>И-мэйл</Form.Label>
-                                 <Form.Control
-                                    style={{
-                                       borderColor: '#F8A71B',
-                                       borderRadius: 7
-                                    }}
-                                    className="focus:shadow-2xl"
-                                    type="email"
-                                    placeholder="И-мэйл оруулна уу"
-                                 />
-                              </Form.Group>
-                              <Button
-                                 style={{
-                                    background: 'linear-gradient(180deg, #FAB31D 0%, #F6A219 100%)',
-                                    borderRadius: 7,
-                                    fontWeight: 700,
-                                    color: 'white',
-                                    borderColor: '#F8A71B'
-                                 }}
-                                 variant="outline-secondary"
-                                 type="submit"
-                              >
-                                 Илгээх
-                              </Button>
-                           </Form>
                         </div>
                      </div>
                   </div>

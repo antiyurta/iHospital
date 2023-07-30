@@ -1,12 +1,12 @@
 import React from 'react';
 import { SnippetsOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Table } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import { useState } from 'react';
-import jwtInterceopter from '../../jwtInterceopter';
 import { openNofi } from '../../comman';
 
-// import Customized from './BeforeAmbulatory/Customized/Index';
 import Customized from '../BeforeAmbulatory/Customized/Index';
+import { NewColumn, NewTable } from '../../Table/Table';
+import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
 
 function DocumentShow({ props }) {
    const [documents, setDocuments] = useState([]);
@@ -16,17 +16,14 @@ function DocumentShow({ props }) {
    const [documentSearchValue, setDocumentSearchValue] = useState('');
    const getDocuments = async () => {
       setIsLoadingGetDocuments(true);
-      const conf = {
-         headers: {},
+      await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: props.appIds,
             structureId: props.deparmentId,
             usageType: props.usageType,
             documentType: props.documentType
          }
-      };
-      await jwtInterceopter
-         .get('organization/document-role/show', conf)
+      })
          .then((response) => {
             if (response.data.response?.length === 0) {
                openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
@@ -60,50 +57,75 @@ function DocumentShow({ props }) {
          >
             Маягт
          </Button>
-         <Modal title="Маягт жагсаалт" open={isOpenAM} onCancel={() => setIsOpenAM(false)} width={'70%'} footer={null}>
+         <Modal
+            title="Маягт жагсаалт"
+            open={isOpenAM}
+            onCancel={() => setIsOpenAM(false)}
+            width={'70%'}
+            bodyStyle={{
+               paddingLeft: 0
+            }}
+            footer={null}
+         >
             <div className="flex flex-row gap-3">
-               <div className="flex flex-col gap-3 p-3 border-r-[2px] w-[300px]">
-                  <Input
-                     placeholder="Хайх"
-                     value={documentSearchValue}
-                     onChange={(e) => setDocumentSearchValue(e.target.value)}
-                  />
-                  <div>
-                     <Table
-                        rowKey={'value'}
-                        rowClassName="hover:cursor-pointer"
-                        bordered
-                        columns={[
-                           {
-                              title: 'ДТ',
-                              width: 40,
-                              dataIndex: 'value'
-                           },
-                           {
-                              title: 'Нэр',
-                              dataIndex: 'label',
-                              render: (text) => {
-                                 return <p className="text-black whitespace-normal">{text}</p>;
-                              }
-                           }
-                        ]}
-                        scroll={{
-                           y: 3000
-                        }}
-                        onRow={(record, _rowIndex) => {
-                           return {
-                              onClick: () => {
-                                 setDocumentId(record.value);
-                              }
-                           };
-                        }}
-                        pagination={false}
-                        dataSource={filteredDocument}
-                     />
+               <div className="flex flex-col gap-3 px-3 border-r-[2px] w-[300px]">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <Input
+                           style={{
+                              backgroundColor: 'white'
+                           }}
+                           placeholder="Хайх"
+                           value={documentSearchValue}
+                           onChange={(e) => setDocumentSearchValue(e.target.value)}
+                        />
+                        <div
+                           style={{
+                              marginTop: 12
+                           }}
+                        >
+                           <NewTable
+                              prop={{
+                                 rowKey: 'value',
+                                 bordered: true,
+                                 // scroll: {
+                                 //    y: 3000
+                                 // },
+                                 dataSource: filteredDocument,
+                                 onRow: (record, _rowIndex) => {
+                                    return {
+                                       onClick: () => {
+                                          setDocumentId(record.value);
+                                       }
+                                    };
+                                 }
+                              }}
+                              meta={{
+                                 page: 1,
+                                 limit: filteredDocument.length
+                              }}
+                              isLoading={false}
+                              isPagination={false}
+                           >
+                              <NewColumn width={'40'} dataIndex={'value'} title="ДТ" />
+                              <NewColumn width={'40'} dataIndex={'label'} title="Нэр" />
+                           </NewTable>
+                        </div>
+                     </div>
                   </div>
                </div>
                <div className="w-full">
-                  <Customized usageType={'OUT'} documentValue={documentId} structureId={props.deparmentId} />
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <Customized
+                           usageType={'OUT'}
+                           documentValue={documentId}
+                           structureId={props.departmentId}
+                           appointmentId={props.appointmentId}
+                           patientId={props.patientId}
+                        />
+                     </div>
+                  </div>
                </div>
             </div>
          </Modal>

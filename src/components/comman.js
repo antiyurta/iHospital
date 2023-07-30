@@ -3,6 +3,7 @@ import { notification } from 'antd';
 import mnMn from 'antd/es/locale/mn_MN';
 import mnMnn from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.json';
+import moment from 'moment';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -11,6 +12,10 @@ export function localMn() {
 }
 export function localMnC() {
    return mnMnn;
+}
+
+export function newMoment(date) {
+   return moment(date).format('YYYY-MM-DD');
 }
 
 export async function Get(url, token, config) {

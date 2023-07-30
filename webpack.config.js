@@ -3,9 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
-   devtool: 'inline-source-map',
+   devtool: 'source-map',
    context: __dirname,
    entry: './src/index.js',
    output: {
@@ -14,11 +16,14 @@ module.exports = {
       path: path.resolve(__dirname, './build')
    },
    devServer: {
+      compress: true,
       port: 3000,
-      hot: true,
       open: true,
+      hot: true,
       historyApiFallback: true
    },
+   watch: true,
+   target: 'web',
    resolve: {
       extensions: ['.js', '.jsx']
    },
@@ -62,6 +67,11 @@ module.exports = {
       }
    },
    plugins: [
+      new BundleAnalyzerPlugin(),
+      new CompressionPlugin({
+         algorithm: 'gzip',
+         test: /.js$|.css$/
+      }),
       new webpack.HotModuleReplacementPlugin(),
       new FaviconsWebpackPlugin({
          logo: './public/ihospital.png',

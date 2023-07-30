@@ -1,327 +1,309 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
+import { getGender } from '../../../comman';
+import { useSelector } from 'react-redux';
+import {
+   selectCurrentFirstName,
+   selectCurrentHospitalName,
+   selectCurrentLastName,
+   selectCurrentPhoneNo
+} from '../../../../features/authReducer';
 
-function am9A() {
+import patientDiagnoseService from '../../../../services/emr/patientDiagnose';
+
+function am9A(props) {
+   const { data, appointmentId } = props;
+   const RpS = 3;
+   const hospitalName = useSelector(selectCurrentHospitalName);
+   const doctorPhoneNo = useSelector(selectCurrentPhoneNo);
+   const doctorUserFirstName = useSelector(selectCurrentFirstName);
+   const doctorUserLastName = useSelector(selectCurrentLastName);
+   const [length, setLength] = useState(0);
+   const [icdCode, setIcdCode] = useState('TEST');
    const styles = {
       generalText: {
          fontSize: 12,
          lineHeight: 1.3
       },
       blockContentLg: {
-         fontSize: 12,
+         fontSize: 13,
          display: 'block',
          width: '100%',
          height: 40
       },
       blockContentSm: {
-         fontSize: 12,
+         fontSize: 13,
          display: 'block',
          width: '100%',
          height: 30
       }
    };
+   const UnderlineText = (props) => {
+      return (
+         <span
+            style={{
+               textDecoration: 'underline',
+               paddingLeft: '3px',
+               paddingRight: '3px'
+            }}
+         >
+            {props.children}
+         </span>
+      );
+   };
+   const calcPage = () => {
+      const length = data?.formData?.length;
+      if (length / 3 === 0) {
+         setLength(length / 3);
+      } else {
+         setLength(Math.floor(length / 3) + 1);
+      }
+   };
+   const getPatientDiagnose = async () => {
+      patientDiagnoseService
+         .getByPageFilter({
+            params: {
+               appointmentId: appointmentId,
+               patientId: data?.patientData?.id
+            }
+         })
+         .then((response) => {
+            console.log(response);
+         });
+   };
+   useEffect(() => {
+      calcPage();
+   }, [data]);
+   useEffect(() => {
+      getPatientDiagnose();
+   }, [appointmentId]);
    return (
-      <div className="page">
-         <div className="subpage">
-            <div
-               style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textAlign: 'right'
-               }}
-            >
-               <span
-                  style={{
-                     ...styles.generalText,
-                     ...{}
-                  }}
-               >
-                  Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны өдрийн
-               </span>
-               <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
-               <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-9А</span>
-            </div>
-            <div style={{ textAlign: 'center', marginTop: 10, marginBottom: 15 }}>
-               <span style={{ fontWeight: 'bold', fontSize: 14 }}>Энгийн эмийн жорын маягт</span>
-            </div>
-            <div
-               style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-               }}
-            >
-               <div
-                  style={{
-                     display: 'flex',
-                     flexDirection: 'column',
-                     width: '48%'
-                  }}
-               >
-                  <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <div
-                        style={{
-                           textAlign: 'center',
-                           marginTop: 10,
-                           marginBottom: 15
-                        }}
-                     >
-                        <span style={{ fontWeight: 'bold', fontSize: 14 }}>Энгийн эмийн жор</span>
-                     </div>
-                     <div style={{ textAlign: 'right', marginTop: 10 }}>
-                        <span
+      <>
+         {[...Array(length)].map((_page, index) => {
+            return (
+               <div key={index}>
+                  <div className="pageMNS5376">
+                     <div className="subpageMNS5376">
+                        <p>MNS:5376:2016</p>
+                        <div
                            style={{
-                              ...styles.generalText,
-                              ...{ paddingRight: 30 }
+                              border: '1px solid black'
                            }}
                         >
-                           ..... оны ....сарын ....
-                        </span>
-                     </div>
-                     <span style={{ fontSize: 12 }}>Өвчтөний овог, нэр: ____________________</span>
-                     <br />
-                     <span style={{ fontSize: 12 }}>Нас:_____ Хүйс:______ Онош:____________</span>
-                     <br />
-                     <span style={{ fontSize: 12 }}>____________________________________________</span>
-                     <br />
-                     <span style={{ fontSize: 12 }}>Регистрийн №________________________________</span>
-                     <br />
-                     <span style={styles.blockContentLg}>Rp:</span>
-                     <br />
-                     <span style={styles.blockContentLg}>S:</span>
-                     <br />
-                     <div style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: 12 }}>#</span>
-                     </div>
-                     <span style={styles.blockContentSm}>Rp:</span>
-                     <br />
-                     <span style={styles.blockContentLg}>S:</span>
-                     <div style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: 12 }}>#</span>
-                     </div>
-                     <span style={styles.blockContentSm}>Rp:</span>
-                     <br />
-                     <span style={styles.blockContentLg}>S:</span>
-                     <div style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: 12 }}>#</span>
+                           <div
+                              style={{
+                                 padding: '0.3cm'
+                              }}
+                           >
+                              <div style={{ textAlign: 'center' }}>
+                                 <span style={{ fontWeight: 'bold', fontSize: 13 }}>Энгийн эмийн жор</span>
+                              </div>
+                              <div className="flex justify-between">
+                                 <div></div>
+                                 <span
+                                    style={{
+                                       ...styles.generalText,
+                                       paddingTop: 10
+                                    }}
+                                 >
+                                    2023 оны 07 сарын 20
+                                 </span>
+                              </div>
+                              <span style={{ fontSize: 13 }}>
+                                 Өвчтөний овог, нэр:
+                                 <UnderlineText>
+                                    {data?.patientData?.lastName}.{data?.patientData?.firstName}
+                                 </UnderlineText>
+                              </span>
+                              <br />
+                              <span style={{ fontSize: 13 }}>
+                                 Нас:<UnderlineText>{data?.patientData?.age}</UnderlineText>
+                                 Хүйс:<UnderlineText>{getGender(data?.patientData?.registerNumber)}</UnderlineText>
+                                 Онош:<UnderlineText>{icdCode}</UnderlineText>
+                              </span>
+                              <br />
+                              <span style={{ fontSize: 13 }}>____________________________________________</span>
+                              <br />
+                              <span style={{ fontSize: 13 }}>
+                                 Регистрийн №<UnderlineText>{data?.patientData?.registerNumber}</UnderlineText>
+                              </span>
+                              <br />
+                              {[...Array(RpS)].map((_rps, idx) => (
+                                 <div key={idx}>
+                                    <span style={styles.blockContentLg}>
+                                       Rp: {data?.formData?.[index * 3 + idx]?.data.rp}
+                                    </span>
+                                    <span style={styles.blockContentLg}>
+                                       S: {data?.formData?.[index * 3 + idx]?.data.s}
+                                    </span>
+                                    <div style={{ textAlign: 'center' }}>
+                                       <span style={{ fontSize: 13 }}>#</span>
+                                    </div>
+                                 </div>
+                              ))}
+                              <div
+                                 style={{
+                                    borderWidth: 1,
+                                    borderTopColor: 'black',
+                                    borderBottomColor: 'black',
+                                    borderLeftColor: 'white',
+                                    borderRightColor: 'white',
+                                    borderStyle: 'solid'
+                                 }}
+                              >
+                                 <span style={{ fontSize: 13 }}>
+                                    Жор бичсэн эмчийн нэр, утас, тэмдэг:
+                                    <UnderlineText>
+                                       {doctorUserLastName?.substring(0, 1) +
+                                          ',' +
+                                          doctorUserFirstName +
+                                          ', ' +
+                                          doctorPhoneNo}
+                                    </UnderlineText>
+                                 </span>
+                                 <br />
+                                 <br />
+                              </div>
+                              <div
+                                 style={{
+                                    borderWidth: 1,
+                                    borderTopColor: 'white',
+                                    borderBottomColor: 'black',
+                                    borderLeftColor: 'white',
+                                    borderRightColor: 'white',
+                                    borderStyle: 'solid'
+                                 }}
+                              >
+                                 <span style={{ fontSize: 13 }}>
+                                    Эмнэлгийн нэр: <UnderlineText>{hospitalName}</UnderlineText>
+                                 </span>
+                                 {/* <p>_______________________________</p> */}
+                                 <br />
+                              </div>
+                              <span style={{ fontSize: 13 }}>
+                                 ---------------------------------------------------------------
+                              </span>
+                           </div>
+                        </div>
+                        <Table bordered className="document">
+                           <thead>
+                              <tr>
+                                 <th>№</th>
+                                 <th>Эмийн нэр, тун, хэмжээ, хэлбэр</th>
+                                 <th>Хэрэглэх арга, хугацаа</th>
+                                 <th>Олгосон /гарын үсэг/</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>1</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>2</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                              </tr>
+                              <tr>
+                                 <td>3</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                                 <td>1</td>
+                              </tr>
+                           </tbody>
+                        </Table>
                      </div>
                   </div>
-                  <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг:</span>
-                     <br />
-                     <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: _______________________</span>
-                     <br />
-                     <br />
-                  </div>
-                  <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <span style={{ fontSize: 12 }}>
-                        ------------------------------------------------------------------
-                     </span>
-                  </div>
-                  <table>
-                     <thead>
-                        <tr
+                  <div className="pageMNS5376">
+                     <div className="subpageMNS5376">
+                        <div
                            style={{
-                              verticalAlign: 'middle'
+                              border: '1px solid black'
                            }}
                         >
-                           <td
+                           <div
                               style={{
-                                 width: '10%',
-                                 textAlign: 'center',
-                                 fontSize: 12
+                                 padding: '0.3cm'
                               }}
                            >
-                              <span>№</span>
-                           </td>
-                           <td
+                              <span style={{ display: 'flex', fontSize: 12, textAlign: 'justify', marginTop: 50 }}>
+                                 Энгийн эмийн жорын маягтад 3-аас илүүгүй эмийг бичих ба энэхүү жор нь бичигдсэн өдрөөс
+                                 хойш 7 хүртэлх хоногийн хугацаанд хүчинтэй.
+                              </span>
+                              <br />
+                              <span style={{ display: 'flex', fontSize: 12, textAlign: 'justify' }}>
+                                 Жорыг стандартын дагуу бүрэн бичээгүй, эмийн нэр, тун хэмжээг засварласан, эмчийн
+                                 тэмдэггүй тохиолдолд хүчингүйд тооцно.
+                              </span>
+                              <br />
+                              <span style={{ display: 'flex', fontSize: 12, textAlign: 'justify' }}>
+                                 Жорыг иргэдээс хүлээн авсан жорын бүртгэлд бүртгэнэ.
+                              </span>
+                              <br />
+                              <span style={{ display: 'flex', fontSize: 12, textAlign: 'justify' }}>
+                                 Жор баригч доорх мэдээллийг бүрэн хөтөлж, эмийг олгоно.
+                              </span>
+                           </div>
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <br />
+                           <div className="px-[0.3cm]">
+                              <span style={{ display: 'flex', fontSize: 12, textAlign: 'justify' }}>
+                                 Гарын үсэг, огноо:
+                              </span>
+                           </div>
+                           <Table bordered className="document mb-0">
+                              <thead>
+                                 <tr>
+                                    <th>Жор хүлээн авсан</th>
+                                    <th>Бэлтгэсэн</th>
+                                    <th>Шалгасан</th>
+                                    <th>Олгосон</th>
+                                    <th>Огноо</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                 </tr>
+                              </tbody>
+                           </Table>
+                           <div
                               style={{
-                                 width: '35%',
-                                 textAlign: 'center',
-                                 fontSize: 12
+                                 padding: '0.3cm'
                               }}
                            >
-                              <span>Эмийн нэр, тун, хэмжээ, хэлбэр</span>
-                           </td>
-                           <td
-                              style={{
-                                 width: '35%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Хэрэглэх арга, хугацаа</span>
-                           </td>
-                           <td
-                              style={{
-                                 width: '20%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Олгосон /гарын үсэг/</span>
-                           </td>
-                        </tr>
-                        <tr style={{ height: 30 }}>
-                           <td style={styles.generalText}>1</td>
-                           <td style={styles.generalText}></td>
-                           <td style={styles.generalText}></td>
-                           <td style={styles.generalText}></td>
-                        </tr>
-                        <tr style={{ height: 30 }}>
-                           <td style={styles.generalText}>2</td>
-                           <td style={styles.generalText}></td>
-                           <td style={styles.generalText}></td>
-                           <td style={styles.generalText}></td>
-                        </tr>
-                        <tr style={{ height: 30 }}>
-                           <td style={styles.generalText}>3</td>
-                           <td style={styles.generalText}></td>
-                           <td style={styles.generalText}></td>
-                           <td style={styles.generalText}></td>
-                        </tr>
-                     </thead>
-                  </table>
-                  <div
-                     style={{
-                        textAlign: 'center',
-                        marginTop: 10,
-                        marginBottom: 15
-                     }}
-                  >
-                     <span style={{ fontSize: 12 }}>Урд тал</span>
+                              <span className="w-full flex justify-center" style={{ fontSize: 13 }}>
+                                 ---------------------------------------------------------------
+                              </span>
+                              <span style={{ display: 'flex', fontSize: 12, textAlign: 'justify' }}>
+                                 Энэхүү хэсгийг жор баригч эмчийн бичсэн жорын дагуу олгох эмийг тэмдэглэн, тасархай
+                                 зураасын дагуу таслан, эмийн хамт иргэнд олгоно.
+                                 <br />
+                                 Эмчилгээний явцад гаж нөлөө илэрвэл жор бичсэн эмчдээ яаралтай хандана уу.
+                              </span>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                </div>
-               <div
-                  style={{
-                     width: '48%',
-                     display: 'flex',
-                     flexDirection: 'column'
-                  }}
-               >
-                  <div
-                     style={{
-                        borderWidth: 1,
-                        borderStyle: 'solid',
-                        display: 'flex',
-                        flexDirection: 'column'
-                     }}
-                  >
-                     <span style={{ fontSize: 12, paddingTop: 80 }}>
-                        Энгийн эмийн жорын маягтад 3-аас илүүгүй эмийг бичих ба энэхүү жор нь бичигдсэн өдрөөс хойш 7
-                        хүртэлх хоногийн хугацаанд хүчинтэй.
-                     </span>
-                     <span style={{ fontSize: 12, paddingTop: 40 }}>
-                        Жорыг стандартын дагуу бүрэн бичээгүй, эмийн нэр, тун хэмжээг засварласан, эмчийн тэмдэггүй
-                        тохиолдолд хүчингүйд тооцно
-                     </span>
-                     <span style={{ fontSize: 12, paddingTop: 30 }}>
-                        Жорыг иргэдээс хүлээн авсан жорын бүртгэлд бүртгэнэ.
-                     </span>
-                     <span style={{ fontSize: 12 }}>Жор баригч доорх мэдээллийг бүрэн хөтөлж, эмийг олгоно</span>
-                     <span style={{ fontSize: 12, paddingTop: 180 }}>Гарын үсэг, огноо:</span>
-                  </div>
-                  <table>
-                     <thead>
-                        <tr
-                           style={{
-                              verticalAlign: 'middle'
-                           }}
-                        >
-                           <td
-                              style={{
-                                 width: '20%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Жор хүлээн авсан</span>
-                           </td>
-                           <td
-                              style={{
-                                 width: '20%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Бэлтгэсэн</span>
-                           </td>
-                           <td
-                              style={{
-                                 width: '20%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Шалгасан</span>
-                           </td>
-                           <td
-                              style={{
-                                 width: '20%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Олгосон</span>
-                           </td>
-                           <td
-                              style={{
-                                 width: '20%',
-                                 textAlign: 'center',
-                                 fontSize: 12
-                              }}
-                           >
-                              <span>Огноо</span>
-                           </td>
-                        </tr>
-                        <tr style={{ height: 60 }}>
-                           <td></td>
-                           <td></td>
-                           <td></td>
-                           <td></td>
-                           <td></td>
-                        </tr>
-                     </thead>
-                  </table>
-                  <div
-                     style={{
-                        borderWidth: 1,
-                        borderStyle: 'solid',
-                        display: 'grid'
-                     }}
-                  >
-                     <span style={{ fontSize: 12 }}>
-                        ------------------------------------------------------------------
-                     </span>
-                     <span
-                        style={{
-                           fontSize: 12,
-                           paddingTop: 50,
-                           paddingBottom: 50
-                        }}
-                     >
-                        Энэхүү хэсгийг жор баригч эмчийн бичсэн жорын дагуу олгох эмийг тэмдэглэж, тасархай зураасын
-                        дагуу таслан, эмийн хамт иргэнд олгоно. Эмчилгээний явцад гаж нөлөө илэрвэл жор бичсэн эмчдээ
-                        яаралтай хандана уу
-                     </span>
-                  </div>
-                  <div
-                     style={{
-                        textAlign: 'center',
-                        marginTop: 10,
-                        marginBottom: 15
-                     }}
-                  >
-                     <span style={{ fontSize: 12 }}>Ар тал</span>
-                  </div>
-               </div>
-            </div>
-            <span style={{ fontSize: 12 }}>
-               <span style={{ fontWeight: 'bold', fontSize: 12 }}>АНХААР:</span>
-               Энгийн эмийн жорын маягтыг “Эмийн жорын маягт, жор бичилт” MNS 5376:2016 стандартад заасан загвар,
-               хэмжээтэй хэвлэнэ.
-            </span>
-         </div>
-      </div>
+            );
+         })}
+      </>
    );
 }
 

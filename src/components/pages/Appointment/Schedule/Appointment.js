@@ -211,8 +211,9 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
       const response = await DefualtGet('insurance/hics-service-group', token, conf);
       setInsuranceService(response.data);
    };
-   const checkPatientInsurance = async (fingerData) => {
+   const checkPatientInsurance = async (values) => {
       setIsLoadingCheckPatientInsurance(true);
+      console.log(values);
       const conf = {
          headers: {},
          params: {}
@@ -220,8 +221,9 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
       const data = {
          regNo: selectedPatient.registerNumber,
          isChild: selectedPatient.isChild,
-         fingerPrint: fingerData
+         fingerPrint: values.fingerPrint
       };
+      console.log(data);
       await axios
          .post(process.env.REACT_APP_DEV_URL + 'health-insurance/citizen-info', data, {
             headers: {
@@ -389,18 +391,26 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
                         </ConfigProvider>
                         <div className="flow-root">
                            <div className="pt-3 float-right">
-                              <Button
+                              {/* <Button
                                  loading={isLoadingCheckPatientInsurance}
                                  type="primary"
-                                 onClick={() => checkPatientInsurance('daad')}
+                                 // onClick={() => checkPatientInsurance('daad')}
                               >
                                  Даатгал шалгах
-                              </Button>
-                              {/* <Finger
-                                 handleClick={(data) => {
-                                    checkPatientInsurance(data);
-                                 }}
-                              /> */}
+                              </Button> */}
+                              <Finger
+                                 text="Даатгал шалгах"
+                                 isDanger={false}
+                                 isFinger={true}
+                                 steps={[
+                                    {
+                                       title: 'Өвтний',
+                                       path: 'fingerPrint'
+                                    }
+                                 ]}
+                                 isPatientSheet={false}
+                                 handleClick={checkPatientInsurance}
+                              />
                            </div>
                         </div>
                      </div>
@@ -523,7 +533,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
                </div>
             </Form>
             <div className="mt-2">
-               {schedules.length > 0 ? (
+               {schedules?.length > 0 ? (
                   <Collapse onChange={onChangePanel} accordion>
                      {schedules?.map((schedule) => {
                         return (

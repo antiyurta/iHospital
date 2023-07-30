@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 export const emr = createSlice({
    name: 'emr',
    initialState: {
-      emrData: {}
+      emrData: {},
+      hicsService: {}
    },
    reducers: {
       setEmrData: (state, action) => {
@@ -11,10 +12,15 @@ export const emr = createSlice({
       },
       delEmrData: (state) => {
          state.emrData = {};
+         state.hicsService = {};
+      },
+      setHicsService: (state, action) => {
+         state.hicsService = action.payload;
       }
    }
 });
-export const { setEmrData, delEmrData } = emr.actions;
+export const { setEmrData, setHicsService, delEmrData } = emr.actions;
 export default emr.reducer;
 
 export const selectCurrentEmrData = (state) => state.emrReducer.emrData;
+export const selectCurrentHicsService = (state) => state.emrReducer.hicsService;
