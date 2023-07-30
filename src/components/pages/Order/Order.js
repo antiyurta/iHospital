@@ -70,7 +70,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             }
             if (item.type === 8) {
                service.id = item.id;
-               service.name = item.name;
+               service.name = item.iName;
                service.dose = item.dose;
                service.price = 0;
                service.oPrice = item.price;
@@ -126,6 +126,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
    const [showSurgery, setShowSurgery] = useState(false);
    const [showInpatient, setShowInpatient] = useState(false);
    const [showPackage, setShowPackage] = useState(false);
+   const [showSetOrder, setShowSetOrder] = useState(false);
    //
    const [showDoctorInspection, setShowDoctorInspection] = useState(false);
    const [showReinspection, setShowReinspection] = useState(false);
@@ -151,6 +152,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
          } else if (category.name === 'Medicine') {
             setShowMedicine(true);
          } else if (category.name === 'SetOrder') {
+            setShowSetOrder(true);
             // setModalBody(<SetOrder handleclick={handleclick} />);
             // setModalTitle('СетОрдер сонгох');
          } else if (category.name === 'RecentRecipe') {
@@ -195,6 +197,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
+            {showSetOrder && <SetOrder />}
             {showSurgery && (
                <Surgery
                   usageType={usageType}

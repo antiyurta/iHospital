@@ -20,6 +20,20 @@ body {
    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.pageMNS5376 {
+   width: 3.9in;
+   height: 8.4in;
+   padding: 5mm;
+   /* margin: auto auto; */
+   /* border-radius: 5px; */
+   background: white;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.subpageMNS5376 {
+   /* padding: 2mm; */
+   /* height: 190mm; */
+}
+
 .labPage {
    width: 21cm;
    min-height: 29.7cm;
@@ -250,7 +264,14 @@ body {
    margin: 0;
 } */
 
+@page {
+   margin: 0.2cm !important;
+}
+
 @media print {
+   .pageMNS5376 {
+      page-break-after: always;
+   }
    .page {
       margin: 0;
       page-break-after: always;

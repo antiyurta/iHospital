@@ -1,26 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
 
 import UTable from '../../UTable';
 
+import OrganizationBedService from '../../../services/organization/bed';
+import OrganizationRoomService from '../../../services/organization/room';
+
+import { NewTable, NewColumn } from '../../Table/Table';
+import NewCard from '../../Card/Card';
+
 function Bed() {
+   const [beds, setBeds] = useState([]);
+   const [bedsMeta, setBedsMeta] = useState({});
+   const [isLoading, setIsLoading] = useState(false);
    const [rooms, setRooms] = useState([]); //Хэвтэн өрөөнүүд
-   const config = {
-      headers: {},
-      params: {}
+   const getBeds = async (page, pageSize) => {
+      setIsLoading(true);
+      await OrganizationBedService.getByPageFilter({
+         params: {
+            page: page,
+            limit: pageSize
+         }
+      })
+         .then((response) => {
+            setBeds(response.data.response.data);
+            setBedsMeta(response.data.response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
    };
-   const token = useSelector(selectCurrentToken);
    const getRooms = async () => {
-      config.params.isInpatient = true;
-      const response = await Get('organization/room', token, config);
-      if (response.data?.length > 0) {
-         setRooms(response.data);
-      }
+      await OrganizationRoomService.getByPageFilter({
+         params: {
+            isInpatient: true
+         }
+      }).then((response) => {
+         console.log(response);
+         setRooms(response.data.response.data);
+      });
    };
 
    useEffect(() => {
+      getBeds(1, 1);
       getRooms();
    }, []);
 
@@ -46,6 +70,29 @@ function Bed() {
    return (
       <div className="flex flex-wrap">
          <div className="w-full">
+            <NewCard title="Ор">
+               <NewTable
+                  prop={{
+                     rowKey: 'id',
+                     bordered: true,
+                     dataSource: beds
+                  }}
+                  meta={bedsMeta}
+                  isLoading={isLoading}
+                  onChange={(page, pageSize) => getBeds(page, pageSize)}
+               >
+                  <NewColumn dataIndex={'bedNumber'} title="Ор дугаар" />
+                  <NewColumn
+                     dataIndex={'roomId'}
+                     title="Өрөөны дугаар"
+                     render={(value) => {
+                        return rooms?.find((e) => e.id === value)?.roomNumber;
+                     }}
+                  />
+               </NewTable>
+            </NewCard>
+         </div>
+         {/* <div className="w-full">
             <UTable
                title={'Ор'}
                url={'organization/bed'}
@@ -56,7 +103,7 @@ function Bed() {
                isUpdate={true}
                isDelete={true}
             />
-         </div>
+         </div> */}
       </div>
    );
 }

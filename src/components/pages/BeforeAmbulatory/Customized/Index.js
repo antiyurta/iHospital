@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Modal, Result, Table } from 'antd';
+import { Button, Form, Modal, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
-import { Get, isObjectEmpty, openNofi } from '../../../comman';
+import { isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentToken } from '../../../../features/authReducer';
+import { selectCurrentAppId } from '../../../../features/authReducer';
 import FormRender from './FormRender';
 import { PrinterOutlined } from '@ant-design/icons';
 import jwtInterceopter from '../../../jwtInterceopter';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
+import { NewColumn, NewColumnGroup, NewTable } from '../../../Table/Table';
+import PmsPatientServices from '../../../../services/pms/patient';
+//
+import DocumentFormServices from '../../../../services/organization/documentForm';
+import DocumentOptionServices from '../../../../services/organization/documentOption';
+//
 function Index(props) {
    const { usageType, documentValue, structureId, appointmentId, patientId } = props;
    const printRef = useRef();
-   const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
    const [isCreate, setIsCreate] = useState(true);
@@ -29,6 +34,11 @@ function Index(props) {
    //
    const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
    //
+   const pageStyle = `
+  @page {
+    margin: 0px;
+  }
+`;
    const handlePrint = useReactToPrint({
       // onBeforeGetContent: () => setPrintLoading(true),
       // onBeforePrint: () => setPrintLoading(false),
@@ -37,10 +47,10 @@ function Index(props) {
    });
    //
    const getPatientInfo = async () => {
-      await jwtInterceopter.get('pms/patient/' + patientId).then((response) => {
+      await PmsPatientServices.getById(patientId).then((response) => {
          setPrintData({
             patientData: response.data.response,
-            formData: data[0]?.data
+            formData: data
          });
          setIsOpenPrintModal(true);
       });
@@ -58,12 +68,8 @@ function Index(props) {
             }
          })
          .then((response) => {
-            console.log(response);
             const data = response.data.response.data;
-            if (data?.length > 0) {
-               setIsCreate(false);
-               setData(response.data.response.data);
-            }
+            setData(data);
          })
          .finally(() => {
             setIsLoading(false);
@@ -76,10 +82,15 @@ function Index(props) {
             documentValue: documentValue
          }
       };
-      const response = await Get('organization/document-form', token, conf);
-      if (response.data?.length > 0) {
-         setDocumentForm(response.data[0]);
-      }
+      await DocumentFormServices.getByPageFilter(conf)
+         .then((response) => {
+            if (response.data.response?.data?.length > 0) {
+               setDocumentForm(response.data.response?.data[0]);
+            }
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    const getDocumentOption = async () => {
       const conf = {
@@ -90,12 +101,18 @@ function Index(props) {
             documentValue: documentValue
          }
       };
-      const response = await Get('organization/document-option', token, conf);
-      setDocumentOptions(response.data);
+      await DocumentOptionServices.getByPageFilter(conf)
+         .then((response) => {
+            setDocumentOptions(response.data.response?.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
    const onFinish = async (values) => {
       setIsLoading(true);
       const data = {
+         isDoctorWrite: true,
          appointmentId: appointmentId,
          usageType: usageType,
          documentId: documentValue,
@@ -146,38 +163,32 @@ function Index(props) {
       ];
    };
    const columnConfigure = () => {
-      var columns = [
-         {
-            title: 'Огноо',
-            dataIndex: 'createdAt',
-            render: (text) => {
-               return moment(text).format('YYYY-MM-DD HH:mm');
-            }
-         }
-      ];
-      documentForm?.documentForm?.map((item, _index) => {
-         columns.push({
-            title: item.label,
-            children: item?.options?.map((option) => {
-               return {
-                  title: option.value,
-                  dataIndex: ['data', `${option.keyWord}`],
-                  render: (text) => {
-                     if (option.isInteger) {
-                        return option.options?.map((itm) => {
-                           if (parseInt(itm.keyWord) === text) {
-                              return itm.label;
+      return documentForm?.documentForm?.map((item, index) => {
+         return (
+            <NewColumnGroup key={index} title={item.label}>
+               {item?.options?.map((option, idx) => {
+                  return (
+                     <NewColumn
+                        key={idx}
+                        title={option.value}
+                        dataIndex={['data', `${option.keyWord}`]}
+                        render={(text) => {
+                           if (option.isInteger) {
+                              return option.options?.map((itm) => {
+                                 if (parseInt(itm.keyWord) === text) {
+                                    return itm.label;
+                                 }
+                              });
                            }
-                        });
-                     }
-                     return text;
-                  }
-               };
-            })
-         });
+                           return text;
+                        }}
+                     />
+                  );
+               })}
+            </NewColumnGroup>
+         );
       });
       // columns.push(...findSupportColumns(1));
-      return columns;
    };
    useEffect(() => {
       if (documentValue != 0) {
@@ -204,7 +215,7 @@ function Index(props) {
                      gap: '6px'
                   }}
                >
-                  <Button type="primary" disabled={!isCreate} onClick={() => setIsOpenSelectPositionModal(true)}>
+                  <Button type="primary" onClick={() => setIsOpenSelectPositionModal(true)}>
                      Бөглөх
                   </Button>
                   <Button
@@ -218,32 +229,34 @@ function Index(props) {
                </div>
             </div>
             <div className="float-right">
-               <Button>Сэргээх</Button>
+               <Button onClick={() => getData()}>Сэргээх</Button>
             </div>
          </div>
          <div>
-            <Table
-               rowKey={'_id'}
-               bordered
-               loading={{
-                  spinning: isLoading,
-                  tip: 'Уншиж байна...'
+            <NewTable
+               prop={{
+                  rowKey: '_id',
+                  bordered: true,
+                  dataSource: data
                }}
-               columns={columnConfigure()}
-               dataSource={data}
-            />
+               meta={{
+                  page: 1,
+                  limit: data.length
+               }}
+               isLoading={isLoading}
+               isPagination={false}
+            >
+               <NewColumn
+                  width={120}
+                  dataIndex={'createdAt'}
+                  title={'Огноо'}
+                  render={(text) => {
+                     return moment(text).format('YYYY-MM-DD HH:mm');
+                  }}
+               />
+               {columnConfigure()}
+            </NewTable>
          </div>
-         {/* <div
-            style={
-               usageType === 'OUT'
-                  ? {
-                       zoom: '50%'
-                    }
-                  : { width: '100%' }
-            }
-         >
-            <ReturnById type={usageType === 'OUT' ? true : false} id={documentValue} />
-         </div> */}
          <Modal
             title="Маягт бөглөх"
             open={isOpenFormModal}
@@ -288,7 +301,7 @@ function Index(props) {
             }}
          >
             <div ref={printRef}>
-               <ReturnById type={usageType} id={documentValue} data={printData} />
+               <ReturnById type={usageType} id={documentValue} appointmentId={appointmentId} data={printData} />
             </div>
          </Modal>
       </div>

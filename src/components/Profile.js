@@ -14,7 +14,11 @@ import {
    selectCurrentInsurance,
    setInsurrance,
    setRoleId,
-   selectCurrentRoleId
+   selectCurrentRoleId,
+   selectCurrentHospitalName,
+   selectCurrentPhoneNo,
+   setHospitalName,
+   setPhoneNo
 } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
@@ -35,6 +39,8 @@ function Profile() {
    const userFirstName = useSelector(selectCurrentFirstName);
    const userLastName = useSelector(selectCurrentLastName);
    const isInsurance = useSelector(selectCurrentInsurance);
+   const hospitalName = useSelector(selectCurrentHospitalName);
+   const phoneNo = useSelector(selectCurrentPhoneNo);
    const dispatch = useDispatch();
    const [profileForm] = Form.useForm();
    const [user, setUser] = useState([]);
@@ -76,6 +82,12 @@ function Profile() {
             }
             if (isInsurance === null) {
                dispatch(setInsurrance(response.data.response.hospital?.isInsurance));
+            }
+            if (hospitalName === null) {
+               dispatch(setHospitalName(response.data.response.hospital?.name));
+            }
+            if (phoneNo === null) {
+               dispatch(setPhoneNo(response.data.response.phoneNo));
             }
             setUser(response.data.response);
          })

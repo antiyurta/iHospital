@@ -23,6 +23,7 @@
       "react-dom": "^18.2.0",
       "react-fast-marquee": "^1.5.2",
       "react-helmet": "^6.1.0",
+      "react-infinite-scroll-component": "^6.1.0",
       "react-password-checklist": "^1.4.3",
       "react-qr-code": "^2.0.8",
       "react-redux": "^8.0.4",
@@ -36,6 +37,7 @@
    },
    "scripts": {
       "dev": "react-scripts start",
+      "start:analyze": "npm run dev -- --env.addons=bundleanalyzer",
       "start": "webpack-dev-server --mode=development --progress",
       "watch": "webpack --watch --mode development",
       "build": "set NODE_OPTIONS=--max_old_space_size=4096 && webpack --mode production",
@@ -73,6 +75,7 @@
       "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
       "babel-preset-env": "^1.7.0",
       "babel-preset-react": "^6.24.1",
+      "compression-webpack-plugin": "^10.0.0",
       "css-loader": "^6.8.1",
       "dotenv-webpack": "^8.0.1",
       "eslint": "^8.32.0",
@@ -90,7 +93,7 @@
       "tailwindcss": "^3.1.8",
       "url-loader": "^4.1.1",
       "webpack": "^5.75.0",
-      "webpack-bundle-analyzer": "^4.8.0",
+      "webpack-bundle-analyzer": "^4.9.0",
       "webpack-cli": "^5.0.1",
       "webpack-dev-server": "^4.11.1"
    }

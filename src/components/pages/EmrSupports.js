@@ -5,23 +5,27 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { selectCurrentInsurance, selectCurrentToken } from '../../features/authReducer';
+import { selectCurrentAppId, selectCurrentInsurance, selectCurrentToken } from '../../features/authReducer';
+import { selectCurrentHicsService } from '../../features/emrReducer';
 import { DefaultPost, DefualtGet, Get, localMn, localMnC, openNofi, Post } from '../comman';
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 import Diagnose from './service/Diagnose';
 import jwtInterceopter from '../jwtInterceopter';
+import Finger from '../../features/finger';
+import DocumentShow from './611/DocumentShow';
 //
 
-const { Option, OptGroup } = Select;
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function EmrSupports({ appointmentId, usageType, patient, patientId }) {
+function EmrSupports({ appointmentId, usageType, patient, patientId, departmentId }) {
+   const AppIds = useSelector(selectCurrentAppId);
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
+   const emrHicsService = useSelector(selectCurrentHicsService);
    let location = useLocation();
    const navigate = useNavigate();
-   const [fingerData] = Form.useForm();
    const [sentForm] = Form.useForm(); // shiljuuleh
    const [clauseForm] = Form.useForm(); // zaalt
    const [moveForm] = Form.useForm(); // ilgeeh
@@ -53,9 +57,6 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
    const [paymentServices, setPaymendServices] = useState([]);
    const [paymentServiceId, setPaymentServiceId] = useState(Number);
    // tolboring medeelel
-   //
-   const [isOpenFinger, setIsOpenFinger] = useState(false);
-   //
    const getStoryTEST = async () => {
       setStoryLoading(true);
       const conf = {
@@ -168,58 +169,39 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
       // console.log(response);
       setPaymendServices(response.data);
    };
-   const onFInish = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const data = {
-         appointmentId: appointmentId
-      };
-      const response = await Post('insurance/appointment-seal', token, conf, data);
-      if (response === 201) {
-         openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-      }
-   };
    //
    const endInspection = async (values) => {
       const conf = {
          headers: {},
          params: {}
       };
-      console.log(appointmentId);
+      values['appointmentId'] = appointmentId;
       var data = {
          appointmentId: appointmentId
       };
       if (isInsurance) {
-         if (!values) {
-            console.log(values);
-            setIsOpenFinger(true);
-         } else {
-            data['finger'] = values;
-            await jwtInterceopter
-               .post('insurance/appointment-seal', data)
-               .then((response) => {
-                  console.log(response);
-                  if (response.data.code === 400) {
-                     openNofi('error', 'Алдаа', response.data.description);
-                  } else {
-                     openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-                     navigate('/ambulatoryList', {
-                        state: {
-                           isRead: true
-                        }
-                     });
-                  }
-               })
-               .catch((error) => {
-                  if (error.response.status === 400) {
-                     const message = error.response.data.message.replaceAll('HttpException:', '');
-                     openNofi('error', 'Алдаа', message);
-                  }
-                  console.log(error);
-               });
-         }
+         await jwtInterceopter
+            .post('insurance/appointment-seal', values)
+            .then((response) => {
+               console.log(response);
+               if (response.data.code === 400) {
+                  openNofi('error', 'Алдаа', response.data.description);
+               } else {
+                  openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+                  navigate('/ambulatoryList', {
+                     state: {
+                        isRead: true
+                     }
+                  });
+               }
+            })
+            .catch((error) => {
+               if (error.response.status === 400) {
+                  const message = error.response.data.message.replaceAll('HttpException:', '');
+                  openNofi('error', 'Алдаа', message);
+               }
+               console.log(error);
+            });
       } else {
          const response = await Post('insurance/appointment-seal', token, conf, data);
          if (response === 201) {
@@ -258,22 +240,55 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
             }}
          >
             <div className="flow-root">
-               <div className="float-left"></div>
+               <div className="float-left">
+                  <div className="flex justify-between gap-3">
+                     <Button type="primary">Өвчний түүх</Button>
+                     <DocumentShow
+                        props={{
+                           appIds: AppIds,
+                           departmentId: departmentId,
+                           appointmentId: appointmentId,
+                           usageType: 'OUT',
+                           documentType: 0,
+                           patientId: patientId
+                        }}
+                     />
+                  </div>
+               </div>
                <div className="float-right">
-                  <Button
-                     danger
-                     onClick={() => {
-                        endInspection();
-                        fingerData.resetFields();
-                     }}
-                     icon={<CloseCircleOutlined />}
-                     style={{
-                        display: 'flex',
-                        alignItems: 'center'
-                     }}
-                  >
-                     Үзлэг дуусгах
-                  </Button>
+                  {isInsurance ? (
+                     <Finger
+                        text={'Үзлэг дуусгах'}
+                        isDanger={true}
+                        isFinger={emrHicsService?.isFinger}
+                        steps={[
+                           {
+                              title: 'Эмчийн',
+                              path: 'doctorFinger'
+                           },
+                           {
+                              title: 'Өвтний',
+                              path: 'patientFinger'
+                           }
+                        ]}
+                        isPatientSheet={emrHicsService?.isPatientSheet}
+                        handleClick={endInspection}
+                     />
+                  ) : (
+                     <Button
+                        danger
+                        onClick={() => {
+                           endInspection();
+                        }}
+                        icon={<CloseCircleOutlined />}
+                        style={{
+                           display: 'flex',
+                           alignItems: 'center'
+                        }}
+                     >
+                        Үзлэг дуусгах
+                     </Button>
+                  )}
                </div>
             </div>
             {/* {isInsurance && (
@@ -564,23 +579,6 @@ function EmrSupports({ appointmentId, usageType, patient, patientId }) {
                      <Diagnose handleClick={DiagnoseHandleClick} />
                   </div>
                </div>
-            </Form>
-         </Modal>
-         <Modal
-            title="Хурууний хээ уншуулах"
-            open={isOpenFinger}
-            onCancel={() => setIsOpenFinger(false)}
-            onOk={() => fingerData.validateFields().then((values) => endInspection(values))}
-            cancelText="Болих"
-            okText="Хадгалах"
-         >
-            <Form form={fingerData} layout="vertical">
-               <Form.Item label="Эмчийн хурууний хээ" name="doctorFinger">
-                  <Input />
-               </Form.Item>
-               <Form.Item label="Өвчтний хурууний хээ" name="patientFinger">
-                  <Input />
-               </Form.Item>
             </Form>
          </Modal>
       </>

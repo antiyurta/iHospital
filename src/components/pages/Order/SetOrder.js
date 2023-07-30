@@ -1,20 +1,35 @@
-import { Table } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
+import { Get, localMn } from '../../comman';
+import { Button, ConfigProvider, Modal, Table } from 'antd';
+import jwtInterceopter from '../../jwtInterceopter';
 
 function SetOrder({ handleclick }) {
+   const [isLoading, setIsLoading] = useState(false);
+   const [isOpenModal, setIsOpenModal] = useState(false);
    const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
       params: {}
    };
    const [packages, setPackages] = useState([]);
+   const [meta, setMeta] = useState({});
 
    const getPackages = async () => {
-      const response = await Get('service/setorder', token, config);
-      setPackages(response.data);
+      setIsLoading(true);
+      await jwtInterceopter
+         .get('service/setorder')
+         .then((response) => {
+            setPackages(response.data);
+            setMeta(response.meta);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
    };
 
    const dada = (value) => {
@@ -42,30 +57,40 @@ function SetOrder({ handleclick }) {
    }, []);
 
    return (
-      <div className="flex flex-row">
-         <div className="w-full">
-            <div className="table-responsive px-4 pb-4" id="style-8" style={{ maxHeight: '500px' }}>
-               <Table className="ant-border-space" style={{ width: '100%' }}>
-                  <thead className="ant-table-thead bg-slate-200">
-                     <tr>
-                        <th>Код</th>
-                        <th>Тайлбар</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {packages.map((item, index) => {
-                        return (
-                           <tr key={index} onDoubleClick={() => dada(item)}>
-                              <td>{item.code}</td>
-                              <td>{item.description}</td>
-                           </tr>
-                        );
-                     })}
-                  </tbody>
-               </Table>
-            </div>
-         </div>
-      </div>
+      <>
+         <Button
+            type="primary"
+            onClick={() => {
+               setIsOpenModal(true);
+            }}
+         >
+            Сэт-Ордер
+         </Button>
+         <Modal
+            title="SET ORDER"
+            width={'80%'}
+            open={isOpenModal}
+            bodyStyle={{
+               height: 600,
+               maxHeight: 600,
+               overflow: 'auto'
+            }}
+            onCancel={() => setIsOpenModal(false)}
+         >
+            <ConfigProvider locale={localMn()}>
+               <Table
+                  rowKey={'id'}
+                  bordered
+                  scroll={{
+                     y: 400
+                  }}
+                  loading={isLoading}
+                  columns={[]}
+                  dataSource={[]}
+               />
+            </ConfigProvider>
+         </Modal>
+      </>
    );
 }
 export default SetOrder;

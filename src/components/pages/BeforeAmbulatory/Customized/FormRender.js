@@ -1,12 +1,11 @@
 import React from 'react';
 import { Checkbox, Divider, Form, Input, InputNumber, Radio } from 'antd';
 
+const { TextArea } = Input;
+
 function FormRender({ form, formOptionIds }) {
    const Render = ({ form, optionId }) => {
-      console.log('=======>', form);
-      console.log('==>', optionId);
       const data = form.find((e) => e.keyWord === optionId);
-      console.log(data);
       if (data) {
          if (data.type === 'input') {
             return (
@@ -66,6 +65,16 @@ function FormRender({ form, formOptionIds }) {
                               );
                            })}
                         </Radio.Group>
+                     </Form.Item>
+                  </div>
+               </div>
+            );
+         } else if (data.type === 'textarea') {
+            return (
+               <div className="rounded-md bg-[#F3F4F6] w-max inline-block m-1">
+                  <div className="inline-flex p-1">
+                     <Form.Item label={data.value} name={data.keyWord} className="mb-0">
+                        <TextArea />
                      </Form.Item>
                   </div>
                </div>

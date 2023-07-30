@@ -571,7 +571,7 @@ const NotFound = () => {
    return <div>NotFound</div>;
 };
 
-export function ReturnById({ type, id, data }) {
+export function ReturnById({ type, id, appointmentId, data }) {
    //type ni maygt harulah esvel form harulah
    if (id === 1) return <AM1B />;
    else if (id === 2) return <AM_1V />;
@@ -584,7 +584,7 @@ export function ReturnById({ type, id, data }) {
    else if (id === 9) return <AM6 />;
    else if (id === 10) return <AM7 />;
    else if (id === 11) return <AM8 />;
-   else if (id === 12) return <AM9A />;
+   else if (id === 12) return <AM9A data={data} appointmentId={appointmentId} />;
    else if (id === 13) return <AM9B />;
    else if (id === 14) return <AM9C />;
    else if (id === 15) return <AM9D />;

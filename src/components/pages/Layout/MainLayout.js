@@ -7,7 +7,6 @@ import collapsedLogo from '../../../assets/logo/iHospitalCollapsed.svg';
 import male from '../../../assets/images/maleAvatar.svg';
 import { Button, Dropdown, Menu, Layout, Drawer } from 'antd';
 import {
-   LeftOutlined,
    MenuFoldOutlined,
    MenuUnfoldOutlined,
    MessageOutlined,
@@ -20,7 +19,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
    DelAppId,
    DelDepId,
+   DelHospitalName,
    DelInsurrance,
+   DelPhonoNo,
    DelRoleId,
    selectCurrentRoleId,
    selectCurrentUserId
@@ -28,6 +29,9 @@ import {
 import jwtInterceopter from '../../jwtInterceopter';
 import { logout } from '../../../features/authReducer';
 import FullScreenLoader from '../../FullScreenLoader';
+//
+import Chat from '../../../chat/List';
+//
 const { Content, Sider } = Layout;
 function MainLayout({ children }) {
    const { user, logoutt } = useContext(AuthContext);
@@ -48,6 +52,8 @@ function MainLayout({ children }) {
          dispatch(DelAppId());
          dispatch(DelInsurrance());
          dispatch(DelRoleId());
+         dispatch(DelHospitalName());
+         dispatch(DelPhonoNo());
          navigate('/');
       } else if (e.key == 3) {
          //  setIsChatModal(true);
@@ -276,9 +282,14 @@ function MainLayout({ children }) {
                   </div>
                   <Drawer
                      open={isOpenTenChatModal}
-                     title="TenChat"
+                     title="Messenger"
                      onClose={() => setIsOpenTenChatModal(false)}
-                  ></Drawer>
+                     bodyStyle={{
+                        padding: 0
+                     }}
+                  >
+                     <Chat isRender={isOpenTenChatModal} />
+                  </Drawer>
                </Content>
             </Layout>
          </Layout>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import jwtInterceopter from '../../jwtInterceopter';
 import { Button, Modal, Progress } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
 import { openNofi } from '../../comman';
+
+//request service uud
+import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';
+//request service uud
 
 function MonitorCriteria({ props }) {
    const { serviceId, serviceType } = props;
@@ -17,8 +20,7 @@ function MonitorCriteria({ props }) {
             serviceType: serviceType
          }
       };
-      await jwtInterceopter
-         .get('insurance-seal/gpa', conf)
+      await InsuranceSealService.getGPA(conf)
          .then((response) => {
             setIsOpenModal(true);
             setData(response.data.response);

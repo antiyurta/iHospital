@@ -10,7 +10,9 @@ export const auth = createSlice({
       appIds: [],
       userId: null,
       isInsurance: null,
-      roleId: null
+      roleId: null,
+      phoneNo: null,
+      hospitalName: null
    },
    reducers: {
       login: (state, action) => {
@@ -56,6 +58,18 @@ export const auth = createSlice({
       },
       DelRoleId: (state) => {
          state.roleId = null;
+      },
+      setPhoneNo: (state, action) => {
+         state.phoneNo = action.payload;
+      },
+      DelPhonoNo: (state) => {
+         state.phoneNo = null;
+      },
+      setHospitalName: (state, action) => {
+         state.hospitalName = action.payload;
+      },
+      DelHospitalName: (state) => {
+         state.hospitalName = null;
       }
    }
 });
@@ -74,7 +88,11 @@ export const {
    setInsurrance,
    DelInsurrance,
    setRoleId,
-   DelRoleId
+   DelRoleId,
+   setPhoneNo,
+   DelPhonoNo,
+   setHospitalName,
+   DelHospitalName
 } = auth.actions;
 export default auth.reducer;
 
@@ -86,3 +104,5 @@ export const selectCurrentFirstName = (state) => state.authReducer.firstName;
 export const selectCurrentLastName = (state) => state.authReducer.lastName;
 export const selectCurrentInsurance = (state) => state.authReducer.isInsurance;
 export const selectCurrentRoleId = (state) => state.authReducer.roleId;
+export const selectCurrentPhoneNo = (state) => state.authReducer.phoneNo;
+export const selectCurrentHospitalName = (state) => state.authReducer.hospitalName;
