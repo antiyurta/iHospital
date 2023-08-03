@@ -12,6 +12,9 @@ class Payment {
    async getDiscount() {
       return await jwtInterceopter.get('payment/discount');
    }
+   async postPayment(data) {
+      return await jwtInterceopter.post('payment/payment', data);
+   }
    async patchPayment(id) {
       return await jwtInterceopter.patch('payment/payment/' + id, {
          id: id

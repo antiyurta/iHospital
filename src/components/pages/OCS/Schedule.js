@@ -3,10 +3,14 @@ import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost, DefualtGet, Get, numberToCurrency, openNofi } from '../../comman';
+import { DefaultPost, DefualtGet, Get, expiredDateEbarimt, numberToCurrency, openNofi } from '../../comman';
 import Appointment from '../Appointment/Schedule/Appointment';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
 import jwtInterceopter from '../../jwtInterceopter';
+
+import PaymentService from '../../../services/payment/payment';
+import EbarimtService from '../../../services/ebarimt/ebarimt';
+
 const { Option } = Select;
 const { Search } = Input;
 function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSuccess }) {
@@ -89,16 +93,6 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
          transfer(id);
       }
    };
-   const check = (e) => {
-      setInvoiceRequest(e);
-   };
-   const dd = (value, e) => {
-      if (e.target.checked) {
-         setSelectedAmount(selectedAmount + value.amount);
-      } else {
-         setSelectedAmount(selectedAmount - value.amount);
-      }
-   };
    const PaymentRequest = async () => {
       setPaymentConfirmLoading(true);
       if (isCustomerNo && Object.keys(customerInfo).length === 0) {
@@ -113,14 +107,20 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
             if (isCustomerNo && customerNo) {
                data['customerNo'] = customerNo;
             }
-            const response = await DefaultPost('payment/payment', token, config, data);
-            if (response) {
-               isSuccess(true);
-               setTotalAmount(0);
-               isClose(false);
-               setPaymentModal(false);
-               setEbarimtData(response);
-               setEbarimtModal(true);
+            const ebarimtState = await expiredDateEbarimt();
+            if (ebarimtState) {
+               await PaymentService.postPayment(data).then((response) => {
+                  if (response.data.success) {
+                     isSuccess(true);
+                     setTotalAmount(0);
+                     isClose(false);
+                     setPaymentModal(false);
+                     setEbarimtData(response.data.response);
+                     setEbarimtModal(true);
+                  }
+               });
+            } else {
+               openNofi('warning', 'Алдаа', 'И-Баримттай холбогдож чадсангүй. Та түр хүлээгээд дахин оролдоно уу');
             }
          } else {
             openNofi('warning', 'Сонгох', 'Аль нэг сонгох');
@@ -130,7 +130,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    };
    const onSearchCustomer = async (event) => {
       setCustomerNo(event);
-      await jwtInterceopter.get(`ebarimt/organization/${event}`).then((response) => {
+      await EbarimtService.getOrganizationInfo(event).then((response) => {
          if (response.data.response.result?.found && response.status === 200) {
             openNofi('success', 'Амжиллтай', `Байгууллага: ${response?.data.response.result?.name}`);
             setCustomerInfo(response.data.response.result);
