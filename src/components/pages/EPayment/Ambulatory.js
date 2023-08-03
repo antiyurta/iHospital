@@ -257,7 +257,7 @@ function Ambulatory() {
                         <label>Сүүлд татсан огноо:</label>
                         <p>{moment(ebarimtInfo?.lastSentdate).format('YYYY-MM-DD')}</p>
                      </div>
-                     <Button disabled={checkEbarimtInfo()} onClick={() => sendData()} type="primary">
+                     <Button onClick={() => sendData()} type="primary">
                         И-баримт илгээх
                      </Button>
                   </div>
