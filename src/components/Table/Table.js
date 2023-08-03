@@ -17,8 +17,8 @@ function NewTable(props) {
    return (
       <ConfigProvider locale={localMn()}>
          <Table
+            rowClassName={!prop.rowClassName && 'hover: cursor-pointer'}
             {...prop}
-            rowClassName="hover: cursor-pointer"
             loading={{
                spinning: isLoading,
                tip: 'Уншиж байна....'

@@ -128,6 +128,7 @@ function IndexBefore({ type }) {
       });
    };
    const newModal = (id, isPayment, usageType) => {
+      form.resetFields();
       if (usageType === 'OUT') {
          if (!isPayment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
@@ -350,6 +351,12 @@ function IndexBefore({ type }) {
          }
       }
    ];
+   const normFile = (e) => {
+      if (Array.isArray(e)) {
+         return e;
+      }
+      return e && e.fileList;
+   };
    return (
       <>
          <div className="flex flex-wrap">
@@ -437,7 +444,18 @@ function IndexBefore({ type }) {
             }
          >
             <Form form={form}>
-               <Form.Item valuePropName="fileList">
+               <Form.Item
+                  label="Зураг"
+                  name="file"
+                  getValueFromEvent={normFile}
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Зураг оруулах!'
+                     }
+                  ]}
+                  valuePropName="fileList"
+               >
                   <Upload
                      multiple={true}
                      headers={headers}

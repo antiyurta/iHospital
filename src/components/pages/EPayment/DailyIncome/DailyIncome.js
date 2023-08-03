@@ -1,5 +1,5 @@
 import { EyeOutlined, RollbackOutlined, DownloadOutlined } from '@ant-design/icons';
-import { Button, Card, DatePicker, Modal, Table } from 'antd';
+import { Button, DatePicker, Modal } from 'antd';
 import moment from 'moment';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,10 @@ import { Get, numberToCurrency, Patch, ScrollRef } from '../../../comman';
 import EbarimtPrint from '../EbarimtPrint';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import PrintIndex from './PrintIndex';
+
+import NewCard from '../../../Card/Card';
+import { NewColumn, NewTable } from '../../../Table/Table';
+
 const { RangePicker } = DatePicker;
 function DailyIncome() {
    const token = useSelector(selectCurrentToken);
@@ -150,58 +154,157 @@ function DailyIncome() {
    }, []);
    return (
       <>
-         <div className="flex flex-wrap">
-            <div className="w-full">
-               <Card
-                  bordered={false}
-                  className="header-solid max-h-max rounded-md"
-                  title="Өдрийн орлогийн тайлан"
-                  extra={
-                     <>
-                        <Button type="primary" onClick={() => setPrintOneDay(true)}>
-                           Өдрийн орлого
-                        </Button>
-                     </>
-                  }
-               >
-                  <div className="flex flex-wrap">
-                     <div className="basis-1/3">
-                        <RangePicker
-                           onChange={(e) => {
-                              if (e != null) {
-                                 getDailyIncome(1, 10, e[0], e[1]);
-                              }
-                           }}
-                           locale={mnMN}
-                        />
+         <NewCard
+            title="Өдрийн орлогийн тайлан"
+            extra={
+               <>
+                  <Button type="primary" onClick={() => setPrintOneDay(true)}>
+                     Өдрийн орлого
+                  </Button>
+               </>
+            }
+         >
+            <div className="flex flex-col gap-3">
+               <div className="w-1/3 md:w-1/2">
+                  <RangePicker
+                     onChange={(e) => {
+                        if (e != null) {
+                           getDailyIncome(1, 10, e[0], e[1]);
+                        }
+                     }}
+                     locale={mnMN}
+                  />
+               </div>
+               <div className="w-full">
+                  <div className="flex float-left">
+                     <div
+                        className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                        role="alert"
+                     >
+                        <span className="font-medium mx-1">Хувь хүн</span>
                      </div>
-                     <div className="basis-1/3">{/* <p>Нийт : {totalAmount}</p> */}</div>
-                     <div className="w-full py-2">
-                        <Table
-                           rowKey={'id'}
-                           rowClassName={(record, index) => {
-                              if (record.isReturn) {
-                                 return 'bg-red-200';
-                              }
-                           }}
-                           locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-                           bordered={true}
-                           loading={spinner}
-                           columns={incomeColumns}
-                           dataSource={incomes}
-                           pagination={{
-                              simple: true,
-                              pageSize: 10,
-                              total: meta.itemCount,
-                              current: meta.page,
-                              onChange: (page, pageSize) => getDailyIncome(page, pageSize, start, end)
-                           }}
-                        />
+                     <div
+                        className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                        role="alert"
+                     >
+                        <span className="font-medium mx-1">Байгууллагаар</span>
+                     </div>
+                     <div
+                        className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                        role="alert"
+                     >
+                        <span className="font-medium mx-1">Буцаалт хийгдсэн</span>
                      </div>
                   </div>
-               </Card>
+               </div>
+               <NewTable
+                  prop={{
+                     rowKey: 'id',
+                     bordered: true,
+                     dataSource: incomes,
+                     rowClassName: (record) => {
+                        if (record.isReturn) {
+                           return 'bg-red-200 hover:cursor-pointer';
+                        } else {
+                           return 'hover: cursor-pointer';
+                        }
+                     }
+                  }}
+                  meta={meta}
+                  onChange={(page, pageSize) => getDailyIncome(page, pageSize, start, end)}
+                  isLoading={spinner}
+                  isPagination={true}
+               >
+                  <NewColumn
+                     dataIndex={'createdAt'}
+                     title="ТТ Огноо"
+                     width={120}
+                     render={(text, row) => {
+                        if (row?.merchantId != null) {
+                           return (
+                              <div className="bg-[#5cb85c] text-white">{moment(text).format('YYYY/MM/DD HH:mm')}</div>
+                           );
+                        } else {
+                           return (
+                              <div className="bg-[#f0ad4e] text-white">{moment(text).format('YYYY/MM/DD HH:mm')}</div>
+                           );
+                        }
+                     }}
+                  />
+                  <NewColumn dataIndex={['patient', 'lastName']} title="Овог" />
+                  <NewColumn dataIndex={['patient', 'firstName']} title="Нэр" />
+                  <NewColumn
+                     dataIndex={'totalAmount'}
+                     title="Нийт дүн"
+                     render={(text) => {
+                        return numberToCurrency(text);
+                     }}
+                  />
+                  <NewColumn
+                     width={40}
+                     dataIndex={'discountPercentId'}
+                     title="Хөнгөлөлт"
+                     render={(text) => {
+                        return checkDiscount(text);
+                     }}
+                  />
+                  <NewColumn
+                     dataIndex={'paidAmount'}
+                     title="Төлсөн дүн"
+                     render={(text) => {
+                        return numberToCurrency(text);
+                     }}
+                  />
+                  <NewColumn dataIndex={'createdEmployeeName'} title="Ажилтны нэр" />
+                  <NewColumn
+                     dataIndex={'id'}
+                     title="Харах"
+                     width={50}
+                     render={(text) => {
+                        return (
+                           <Button
+                              type="link"
+                              onClick={() => viewModal(text, false)}
+                              title="Харах"
+                              style={{ paddingRight: 5 }}
+                           >
+                              <EyeOutlined />
+                           </Button>
+                        );
+                     }}
+                  />
+                  <NewColumn
+                     dataIndex={'id'}
+                     title="Дахин татах"
+                     width={50}
+                     render={(text) => {
+                        return (
+                           <Button type="link" onClick={() => reload(text)} title="ТАТАХ" style={{ paddingRight: 5 }}>
+                              <DownloadOutlined />
+                           </Button>
+                        );
+                     }}
+                  />
+                  <NewColumn
+                     dataIndex={'id'}
+                     title="Буцаалт"
+                     width={50}
+                     render={(text) => {
+                        return (
+                           <Button
+                              type="link"
+                              onClick={() => viewModal(text, true)}
+                              title="Харах"
+                              style={{ paddingRight: 5, color: 'red' }}
+                           >
+                              <RollbackOutlined />
+                           </Button>
+                        );
+                     }}
+                  />
+               </NewTable>
             </div>
-         </div>
+         </NewCard>
          <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
             <EbarimtPrint props={ebarimtData} isBackPayment={isBackPayment} />
          </Modal>
