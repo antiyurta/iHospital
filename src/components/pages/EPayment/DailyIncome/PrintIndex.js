@@ -67,7 +67,7 @@ function PrintIndex({ data }) {
          }
       },
       {
-         title: 'Бэлэн',
+         title: 'Төлсөн',
          render: (_, row) => {
             return numberToCurrency(row.totalAmount);
          }
