@@ -15,10 +15,8 @@ class Payment {
    async postPayment(data) {
       return await jwtInterceopter.post('payment/payment', data);
    }
-   async patchPayment(id) {
-      return await jwtInterceopter.patch('payment/payment/' + id, {
-         id: id
-      });
+   async patchPayment(id, data) {
+      return await jwtInterceopter.patch('payment/payment/' + id, data);
    }
 }
 export default new Payment();

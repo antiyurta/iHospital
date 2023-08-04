@@ -12,6 +12,14 @@ function NewColumnGroup(props) {
    return <ColumnGroup {...props}>{children}</ColumnGroup>;
 }
 
+function NewSummaryRow(props) {
+   return <Table.Summary.Row {...props}>{props.children}</Table.Summary.Row>;
+}
+
+function NewSummaryCell(props) {
+   return <Table.Summary.Cell {...props}>{props.children}</Table.Summary.Cell>;
+}
+
 function NewTable(props) {
    const { children, prop, meta, isLoading, isPagination, onChange } = props;
    return (
@@ -52,4 +60,5 @@ function NewTable(props) {
       </ConfigProvider>
    );
 }
-export { NewTable, NewColumn, NewColumnGroup };
+
+export { NewTable, NewColumn, NewSummaryRow, NewSummaryCell, NewColumnGroup };

@@ -1,100 +1,38 @@
-import { Button, DatePicker, Form, Select, Table } from 'antd';
+import { Button, DatePicker, Form, Select } from 'antd';
 import moment from 'moment';
-import React, { Children, useRef } from 'react';
+import React, { useRef } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { useState } from 'react';
 import { Get, numberToCurrency } from '../../../comman';
 import { useSelector } from 'react-redux';
-import {
-   selectCurrentFirstName,
-   selectCurrentLastName,
-   selectCurrentToken,
-   selectCurrentUserInfo
-} from '../../../../features/authReducer';
+import { selectCurrentHospitalName, selectCurrentToken } from '../../../../features/authReducer';
 import { useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
+
+import PaymentService from '../../../../services/payment/payment';
+
 const { Option } = Select;
-function PrintIndex({ data }) {
-   // const today = new Date();
+function PrintIndex() {
+   const printRef = useRef();
+   const [form] = Form.useForm();
+   const hospitalName = useSelector(selectCurrentHospitalName);
    const [today, setToday] = useState(new Date());
-   const userFirstName = useSelector(selectCurrentFirstName);
-   const userLastName = useSelector(selectCurrentLastName);
+   const [discounts, setDiscounts] = useState([]);
    const token = useSelector(selectCurrentToken);
    const [employees, setEmployees] = useState([]);
    const [employee, setEmployee] = useState({
       lastName: '',
       firstName: ''
    });
-   const [employeeId, setEmployeeId] = useState(Number);
    const [incomes, setIncomes] = useState([]);
-   const [meta, setMeta] = useState({});
-   const [spinner, setSpinner] = useState(false);
-   const printRef = useRef();
-   const [form] = Form.useForm();
-   const [start, setStart] = useState('');
-   const [end, setEnd] = useState('');
-   const [totalAmount, setTotalAmount] = useState(Number);
+
    const handlePrint = useReactToPrint({
       content: () => printRef.current
    });
-   const dayColumns = [
-      {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName']
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName']
-      },
-      {
-         title: 'Төлбөр төлсөн огноо',
-         render: (_, row) => {
-            return moment(row.updatedAt).format('YYYY-MM-DD HH:mm');
-         }
-      },
-      {
-         title: 'Үйлчилгээний төрөл',
-         render: (_, row) => {
-            return (
-               <div className="whitespace-pre-wrap">
-                  <ul className="list-disc list-inside">
-                     {row.invoices?.map((invoice, index) => {
-                        return <li key={index}>{invoice.name}</li>;
-                     })}
-                  </ul>
-               </div>
-            );
-         }
-      },
-      {
-         title: 'Төлсөн',
-         render: (_, row) => {
-            return numberToCurrency(row.totalAmount);
-         }
-      },
-      {
-         title: 'Нийт',
-         render: (_, row) => {
-            return numberToCurrency(row.totalAmount);
-         }
-      }
-   ];
-   const calcutorTotalAmount = (data) => {
-      var amount = 0;
-      data.map((item) => {
-         amount += item.totalAmount;
-      });
-      setTotalAmount(amount);
-   };
    const filter = async (start, end, employeeId) => {
-      setSpinner(true);
       var start = moment(start).set({ hour: 0, minute: 0, second: 0 });
       var end = moment(end).set({ hour: 23, minute: 59, second: 59 });
       setToday(start);
-      setStart(start);
-      setEnd(end);
-      setEmployeeId(employeeId);
-      console.log(employeeId);
       const filteredEmployee = employees.filter((e) => e.userId == employeeId);
       setEmployee(filteredEmployee[0]);
       const conf = {
@@ -106,10 +44,7 @@ function PrintIndex({ data }) {
          }
       };
       const response = await Get('payment/payment', token, conf);
-      calcutorTotalAmount(response.data);
       setIncomes(response.data);
-      setMeta(response.meta);
-      setSpinner(false);
    };
    const getEmployees = async (id) => {
       const conf = {
@@ -121,8 +56,20 @@ function PrintIndex({ data }) {
       const response = await Get('organization/employee', token, conf);
       setEmployees(response.data);
    };
+   const getDiscounts = async () => {
+      await PaymentService.getDiscount().then((response) => {
+         setDiscounts(response.data.response.data);
+      });
+   };
+   const getDiscountPercent = (id) => {
+      return discounts.find((e) => e.id === id)?.percent;
+   };
+   const getDiscountName = (id) => {
+      return discounts.find((e) => e.id === id)?.name;
+   };
    useEffect(() => {
       getEmployees(50);
+      getDiscounts();
    }, []);
    return (
       <>
@@ -153,7 +100,7 @@ function PrintIndex({ data }) {
                         }
                      ]}
                   >
-                     <Select>
+                     <Select onChange={() => setIncomes([])}>
                         {employees.map((employee, index) => {
                            return (
                               <Option key={index} value={employee.userId}>
@@ -174,35 +121,282 @@ function PrintIndex({ data }) {
             Шүүх
          </Button>
          <div ref={printRef}>
-            <p className="text-center py-10" style={{ fontSize: '20px', fontWeight: 'bold' }}>
-               ӨДРИЙН ОРЛОГО({moment(today).format('YYYY-MM-DD')})
-            </p>
-            <div className="printBody">
-               <Table
-                  rowKey={'id'}
-                  bordered
-                  locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-                  loading={spinner}
-                  columns={dayColumns}
-                  dataSource={incomes}
-                  pagination={false}
-               />
+            <div className="p-3">
+               <div className="flex flex-col gap-2">
+                  <div className="flow-root">
+                     <p
+                        className="float-right"
+                        style={{
+                           fontSize: 10
+                        }}
+                     >
+                        {hospitalName}
+                     </p>
+                  </div>
+                  <p
+                     className="text-center"
+                     style={{
+                        fontSize: 14
+                     }}
+                  >
+                     Өдрийн орлогын тайлан
+                  </p>
+                  <div className="flow-root">
+                     <p
+                        className="float-left"
+                        style={{
+                           fontSize: 10
+                        }}
+                     >
+                        Тайлант огноо: {moment(today).format('YYYY/MM/DD')}
+                     </p>
+                  </div>
+                  <table className="dailyTable">
+                     <thead>
+                        <tr>
+                           <th>№</th>
+                           <th>Овог</th>
+                           <th>Нэр</th>
+                           <th
+                              style={{
+                                 minWidth: 150
+                              }}
+                           >
+                              Үйлчилгээний төрөл
+                           </th>
+                           <th
+                              style={{
+                                 minWidth: 100
+                              }}
+                           >
+                              Нийт төлбөр
+                           </th>
+                           <th
+                              style={{
+                                 minWidth: 50
+                              }}
+                           >
+                              Хөнгөлөлтийн хувь
+                           </th>
+                           <th>Хөнгөлөлтийн утга</th>
+                           <th>Төлсөн урьдчилгаа</th>
+                           <th
+                              style={{
+                                 minWidth: 100
+                              }}
+                           >
+                              Төлсөн дүн
+                           </th>
+                           <th>Төлбөрийн хэлбэр</th>
+                           <th
+                              style={{
+                                 minWidth: 100
+                              }}
+                           >
+                              Төлсөн огноо, цаг
+                           </th>
+                           <th>И-баримтын дүн</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {incomes?.map((item, index) => {
+                           return (
+                              <tr key={index}>
+                                 <td>{index + 1}</td>
+                                 <td
+                                    style={{
+                                       textAlign: 'start'
+                                    }}
+                                 >
+                                    {item.patient?.lastName}
+                                 </td>
+                                 <td
+                                    style={{
+                                       textAlign: 'start'
+                                    }}
+                                 >
+                                    {item.patient?.firstName}
+                                 </td>
+                                 <td>
+                                    {item.invoices?.map((invoice, indx) => {
+                                       return (
+                                          <p
+                                             key={indx}
+                                             style={{
+                                                fontSize: 10,
+                                                textAlign: 'start',
+                                                color: 'black'
+                                             }}
+                                          >
+                                             -{invoice?.name}
+                                          </p>
+                                       );
+                                    })}
+                                 </td>
+                                 <td
+                                    style={{
+                                       textAlign: 'end'
+                                    }}
+                                 >
+                                    {numberToCurrency(item.totalAmount)}
+                                 </td>
+                                 <td>{getDiscountPercent(item.discountPercentId)}</td>
+                                 <td>{getDiscountName(item.discountPercentId)}</td>
+                                 <td></td>
+                                 <td
+                                    style={{
+                                       textAlign: 'end'
+                                    }}
+                                 >
+                                    {numberToCurrency(item.paidAmount)}
+                                 </td>
+                                 <td></td>
+                                 <td>{moment(item.createdAt).format('YYYY-MM-DD HH:mm')}</td>
+                                 <td
+                                    style={{
+                                       textAlign: 'end'
+                                    }}
+                                 ></td>
+                              </tr>
+                           );
+                        })}
+                        <tr>
+                           <th
+                              colSpan={4}
+                              style={{
+                                 textAlign: 'end'
+                              }}
+                           >
+                              Нийт дүн:
+                           </th>
+                           <th
+                              style={{
+                                 textAlign: 'end'
+                              }}
+                           >
+                              {numberToCurrency(
+                                 incomes.reduce((total, current) => {
+                                    return total + current.totalAmount;
+                                 }, 0)
+                              )}
+                           </th>
+                           <th></th>
+                           <th></th>
+                           <th></th>
+                           <th
+                              style={{
+                                 textAlign: 'end'
+                              }}
+                           >
+                              {numberToCurrency(
+                                 incomes.reduce((total, current) => {
+                                    return total + current.paidAmount;
+                                 }, 0)
+                              )}
+                           </th>
+                           <th></th>
+                           <th></th>
+                           <th>0</th>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <div className="w-1/2">
+                     <table className="dailyTable">
+                        <thead>
+                           <tr>
+                              <th
+                                 style={{
+                                    minWidth: 120
+                                 }}
+                              >
+                                 Төлбөрийн хэлбэр
+                              </th>
+                              <th
+                                 style={{
+                                    minWidth: 120
+                                 }}
+                              >
+                                 Төлсөн дүн
+                              </th>
+                              <th
+                                 style={{
+                                    maxWidth: 120
+                                 }}
+                              >
+                                 Үүнээс төлсөн урьдчилгаа дүн
+                              </th>
+                              <th
+                                 style={{
+                                    minWidth: 120
+                                 }}
+                              >
+                                 И-баримтын дүн
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td
+                                 style={{
+                                    textAlign: 'start'
+                                 }}
+                              >
+                                 Карт
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td
+                                 style={{
+                                    textAlign: 'start'
+                                 }}
+                              >
+                                 Шилжүүлэг
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td
+                                 style={{
+                                    textAlign: 'start'
+                                 }}
+                              >
+                                 Бэлэн
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <th
+                                 style={{
+                                    textAlign: 'start'
+                                 }}
+                              >
+                                 Нийт
+                              </th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <div className="text-center">
+                     <br />
+                     <p>
+                        Тайлан гаргасан: Бүртгэлийн ажилтан ........................................./
+                        {employee.lastName.substring(0, 1)}.{employee.firstName}/
+                     </p>
+                     <br />
+                     <p>Тайланг хянасан: Нягтлан бодогч: ........................................./_______________/</p>
+                  </div>
+               </div>
             </div>
-            <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>
-               Хэвлэх огноо: {moment().format('YYYY-MM-DD HH:mm')}
-            </p>
-            <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>
-               Бэлнээр: {numberToCurrency(totalAmount)}
-            </p>
-            <p className="text-center py-1" style={{ fontSize: '15px', fontWeight: 'bold' }}>
-               Нийт мөнгөн дүн: {numberToCurrency(totalAmount)}
-            </p>
-            <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
-               Тайлан гаргасан: {employee?.lastName?.substring(0, 1) + '.' + employee?.firstName} /.............../
-            </p>
-            <p className="text-center py-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>
-               Хэвлэсэн: {userLastName?.substring(0, 1) + '.' + userFirstName} /.............../
-            </p>
          </div>
          <Button type="primary" onClick={handlePrint}>
             Хэвлэх

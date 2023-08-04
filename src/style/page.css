@@ -10,6 +10,22 @@ body {
    -moz-box-sizing: border-box;
 }
 
+.dailyTable > .ant-table-wrapper table .ant-table-thead > tr > th,
+.dailyTable > .ant-table-wrapper table .ant-table-tbody > tr > td {
+   font-size: 10px;
+   /* white-space: normal; */
+}
+
+table.dailyTable thead > tr > th,
+table.dailyTable tbody > tr > td,
+table.dailyTable tbody > tr > th {
+   padding: 3px;
+   white-space: pre-wrap;
+   text-align: center;
+   font-size: 10px;
+   border: 1px solid black;
+}
+
 .page {
    width: 21cm;
    min-height: 29.7cm;
@@ -265,7 +281,7 @@ body {
 } */
 
 @page {
-   margin: 0.2cm !important;
+   margin: 15cm 1cm !important;
 }
 
 @media print {
@@ -273,7 +289,8 @@ body {
       page-break-after: always;
    }
    .page {
-      margin: 0;
+      margin-top: 15cm !important;
+      margin-left: 10cm !important;
       page-break-after: always;
    }
    .page-landscape {

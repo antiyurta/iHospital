@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { EyeOutlined, RollbackOutlined, DownloadOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Modal } from 'antd';
 import moment from 'moment';
-import { numberToCurrency, openNofi, Patch } from '../../../comman';
+import { numberToCurrency, openNofi } from '../../../comman';
 import EbarimtPrint from '../EbarimtPrint';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import PrintIndex from './PrintIndex';
 
 import PaymentServices from '../../../../services/payment/payment';
 import NewCard from '../../../Card/Card';
-import { NewColumn, NewTable } from '../../../Table/Table';
+import { NewColumn, NewSummaryCell, NewSummaryRow, NewTable } from '../../../Table/Table';
 
 const { RangePicker } = DatePicker;
 function DailyIncome() {
@@ -38,7 +38,8 @@ function DailyIncome() {
             endDate: moment(end).format('YYYY-MM-DD HH:mm')
          }
       }).then((response) => {
-         setIncomes(response.data.response.data);
+         const data = response.data.response.data;
+         setIncomes(data);
          setMeta(response.data.response.meta);
          setSpinner(false);
       });
@@ -59,7 +60,7 @@ function DailyIncome() {
       });
    };
    const reload = async (id) => {
-      await PaymentServices.patchPayment(id).then((response) => {
+      await PaymentServices.patchPayment(id, { id: id }).then((response) => {
          if (response.status === 200) {
             openNofi('success', 'Амжиллтай', 'Дахин татах үйлдэл амжилттай');
             getDailyIncome(1, 10, start, end);
@@ -105,7 +106,7 @@ function DailyIncome() {
                         className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
                         role="alert"
                      >
-                        <span className="font-medium mx-1">Байгууллагаар</span>
+                        <span className="font-medium mx-1">Бизнес эрхлэгч</span>
                      </div>
                      <div
                         className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
@@ -126,6 +127,53 @@ function DailyIncome() {
                         } else {
                            return 'hover: cursor-pointer';
                         }
+                     },
+                     summary: (pageData) => {
+                        return (
+                           <NewSummaryRow>
+                              <NewSummaryCell index={0} colSpan={4}>
+                                 <p
+                                    style={{
+                                       fontWeight: 'bold',
+                                       textAlign: 'end'
+                                    }}
+                                 >
+                                    Нийт
+                                 </p>
+                              </NewSummaryCell>
+                              <NewSummaryCell index={1}>
+                                 <p
+                                    style={{
+                                       fontWeight: 'bold',
+                                       textAlign: 'center'
+                                    }}
+                                 >
+                                    {numberToCurrency(
+                                       pageData.reduce((total, current) => {
+                                          return total + current.totalAmount;
+                                       }, 0)
+                                    )}
+                                 </p>
+                              </NewSummaryCell>
+                              <NewSummaryCell index={2} />
+                              <NewSummaryCell index={3} />
+                              <NewSummaryCell index={4}>
+                                 <p
+                                    style={{
+                                       fontWeight: 'bold',
+                                       textAlign: 'center'
+                                    }}
+                                 >
+                                    {numberToCurrency(
+                                       pageData.reduce((total, current) => {
+                                          return total + current.paidAmount;
+                                       }, 0)
+                                    )}
+                                 </p>
+                              </NewSummaryCell>
+                              <NewSummaryCell index={5} colSpan={5} />
+                           </NewSummaryRow>
+                        );
                      }
                   }}
                   meta={meta}
@@ -161,11 +209,12 @@ function DailyIncome() {
                   <NewColumn
                      width={40}
                      dataIndex={'discountPercentId'}
-                     title="Хөнгөлөлт"
+                     title="Хөнгөлөлтын утга"
                      render={(text) => {
                         return checkDiscount(text);
                      }}
                   />
+                  <NewColumn width={40} title="Төлсөн урьдчилгаа" />
                   <NewColumn
                      dataIndex={'paidAmount'}
                      title="Төлсөн дүн"
@@ -173,6 +222,7 @@ function DailyIncome() {
                         return numberToCurrency(text);
                      }}
                   />
+                  <NewColumn width={40} title="Төлбөрийн хэлбэр" />
                   <NewColumn dataIndex={'createdEmployeeName'} title="Ажилтны нэр" />
                   <NewColumn
                      dataIndex={'id'}
@@ -230,7 +280,7 @@ function DailyIncome() {
             title={'Өдрийн орлого'}
             open={printOneDay}
             footer={null}
-            width={'800px'}
+            width={'1200px'}
             onCancel={() => setPrintOneDay(false)}
          >
             <PrintIndex />
