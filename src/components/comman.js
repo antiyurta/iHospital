@@ -4,6 +4,7 @@ import mnMn from 'antd/es/locale/mn_MN';
 import mnMnn from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.json';
 import moment from 'moment';
+import { NumericFormat } from 'react-number-format';
 
 import EbarimtService from '../services/ebarimt/ebarimt';
 
@@ -270,15 +271,15 @@ export const openNofi = (type, message, description) => {
 };
 
 export const numberToCurrency = (amount) => {
-   const convertedAmount = amount?.toLocaleString('mn-MN', {
-      style: 'currency',
-      currency: 'MNT'
-   });
-   if (convertedAmount === 'MNTNaN') {
-      return '';
-   } else {
-      return convertedAmount;
-   }
+   return (
+      <NumericFormat
+         value={amount.toFixed(2)}
+         displayType={'text'}
+         thousandSeparator={true}
+         fixedDecimalScale={true}
+         prefix={'₮ '}
+      />
+   );
 };
 
 export const getAge = (registerNumber) => {

@@ -12,7 +12,7 @@ import InpatientRequest from './InpatientRequest';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost } from '../../comman';
+import { DefaultPost, numberToCurrency } from '../../comman';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import DoctorInspection from './DoctorInspection';
@@ -234,12 +234,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
                </Form>
                <div className="flow-root py-3">
                   <p className="float-left font-extrabold">Нийт Үнэ</p>
-                  <p className="float-right font-extrabold">
-                     {total.toLocaleString('mn-MN', {
-                        style: 'currency',
-                        currency: 'MNT'
-                     })}
-                  </p>
+                  <p className="float-right font-extrabold">{numberToCurrency(total)}</p>
                </div>
             </div>
             <div className="w-full pb-4">

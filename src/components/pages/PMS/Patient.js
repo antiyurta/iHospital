@@ -362,7 +362,7 @@ function Patient() {
          title: 'Карт нээлгэсэн огноо',
          dataIndex: 'createdAt',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return moment(text).format('YYYY/MM/DD HH:mm');
          }
       },
       {

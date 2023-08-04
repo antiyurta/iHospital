@@ -1,39 +1,22 @@
+import React, { useRef } from 'react';
 import { Button } from 'antd';
-import React, { useRef, useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
 import moment from 'moment';
-import { numberToCurrency, Patch } from '../../comman';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { numberToCurrency, openNofi } from '../../comman';
+
+import PaymentService from '../../../services/payment/payment';
 
 function EbarimtPrint(props) {
    const printRef = useRef();
-   const token = useSelector(selectCurrentToken);
-   const [total, setTotal] = useState(Number);
    const handleBack = async (id) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      await Patch('payment/payment/' + id, token, conf, {
-         isReturn: true
+      await PaymentService.patchPayment(id, { isReturn: true }).then((response) => {
+         openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
       });
    };
    const handlePrint = useReactToPrint({
       content: () => printRef.current
    });
-   const calculator = () => {
-      var total = 0;
-      props?.props?.invoices?.map((invoice) => {
-         total += invoice.amount;
-      });
-      setTotal(total);
-   };
-   useEffect(() => {
-      calculator();
-   }, [props]);
    return (
       <div className="pt-6">
          <div ref={printRef} style={{ width: '80mm' }}>
@@ -97,7 +80,7 @@ function EbarimtPrint(props) {
                </div>
                <p>
                   Захиалсан цаг:
-                  {moment(props?.props?.createdAt).format('YYYY-MM-DD HH:mm:ss')}{' '}
+                  {moment(props?.props?.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                </p>
                <p>Ажилтан: {props?.props?.createdEmployeeName} </p>
             </div>
