@@ -170,7 +170,7 @@ function IndexBefore({ type }) {
    };
    useEffect(() => {
       getXrayRequest(1, 10, today, today);
-      getXrayMaterials();
+      // getXrayMaterials();
       ScrollRef(scrollRef);
    }, []);
 
@@ -216,8 +216,11 @@ function IndexBefore({ type }) {
       rows.splice(idx, 1);
       setUsedMaterials(rows);
    };
-   const getTypeInfo = (begin, end) => {
+   const getTypeInfo = (begin, end, usageType) => {
       if (begin === undefined && end === undefined) {
+         if (usageType === 'OUT') {
+            return <p className="bg-[#ffbb00] text-black">Цаг оруулаагүй</p>;
+         }
          return <p className="bg-[#f0ad4e] text-white">Шууд</p>;
       } else {
          return (
@@ -253,7 +256,7 @@ function IndexBefore({ type }) {
       },
       {
          title: 'Он сар',
-         dataIndex: 'updatedAt',
+         dataIndex: 'requestDate',
          render: (text) => {
             return moment(text).format('YYYY-MM-DD');
          }
@@ -261,7 +264,11 @@ function IndexBefore({ type }) {
       {
          title: 'Орох цаг',
          render: (_, row) => {
-            return getTypeInfo(row.deviceSlots?.startTime?.substr(0, 5), row.deviceSlots?.endTime?.substr(0, 5));
+            return getTypeInfo(
+               row.deviceSlots?.startTime?.substr(0, 5),
+               row.deviceSlots?.endTime?.substr(0, 5),
+               row.usageType
+            );
          }
       },
       {
@@ -339,17 +346,17 @@ function IndexBefore({ type }) {
                </Button>
             );
          }
-      },
-      {
-         title: 'Материал',
-         render: () => {
-            return (
-               <Button type="primary" onClick={showModal}>
-                  Зарлагадах
-               </Button>
-            );
-         }
       }
+      // {
+      //    title: 'Материал',
+      //    render: () => {
+      //       return (
+      //          <Button type="primary" onClick={showModal}>
+      //             Зарлагадах
+      //          </Button>
+      //       );
+      //    }
+      // }
    ];
    const normFile = (e) => {
       if (Array.isArray(e)) {
