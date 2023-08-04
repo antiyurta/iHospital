@@ -3,13 +3,14 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { useState } from 'react';
-import { Get, numberToCurrency } from '../../../comman';
+import { numberToCurrency } from '../../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentHospitalName, selectCurrentToken } from '../../../../features/authReducer';
+import { selectCurrentHospitalName } from '../../../../features/authReducer';
 import { useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
 import PaymentService from '../../../../services/payment/payment';
+import OrganizationEmployeeService from '../../../../services/organization/employee';
 
 const { Option } = Select;
 function PrintIndex() {
@@ -18,14 +19,12 @@ function PrintIndex() {
    const hospitalName = useSelector(selectCurrentHospitalName);
    const [today, setToday] = useState(new Date());
    const [discounts, setDiscounts] = useState([]);
-   const token = useSelector(selectCurrentToken);
    const [employees, setEmployees] = useState([]);
    const [employee, setEmployee] = useState({
       lastName: '',
       firstName: ''
    });
    const [incomes, setIncomes] = useState([]);
-
    const handlePrint = useReactToPrint({
       content: () => printRef.current
    });
@@ -35,26 +34,24 @@ function PrintIndex() {
       setToday(start);
       const filteredEmployee = employees.filter((e) => e.userId == employeeId);
       setEmployee(filteredEmployee[0]);
-      const conf = {
-         headers: {},
+      await PaymentService.getPayment({
          params: {
             createdBy: employeeId,
             startDate: moment(start).format('YYYY-MM-DD HH:mm'),
             endDate: moment(end).format('YYYY-MM-DD HH:mm')
          }
-      };
-      const response = await Get('payment/payment', token, conf);
-      setIncomes(response.data);
+      }).then((response) => {
+         setIncomes(response.data.response.data);
+      });
    };
    const getEmployees = async (id) => {
-      const conf = {
-         headers: {},
+      await OrganizationEmployeeService.getEmployee({
          params: {
             depId: id
          }
-      };
-      const response = await Get('organization/employee', token, conf);
-      setEmployees(response.data);
+      }).then((response) => {
+         setEmployees(response.data.response.data);
+      });
    };
    const getDiscounts = async () => {
       await PaymentService.getDiscount().then((response) => {
@@ -136,7 +133,8 @@ function PrintIndex() {
                   <p
                      className="text-center"
                      style={{
-                        fontSize: 14
+                        fontSize: 14,
+                        fontWeight: 'bold'
                      }}
                   >
                      Өдрийн орлогын тайлан
