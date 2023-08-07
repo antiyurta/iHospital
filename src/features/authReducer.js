@@ -15,85 +15,39 @@ export const auth = createSlice({
       hospitalName: null
    },
    reducers: {
+      set: (state, action) => {
+         state.firstName = action.payload.firstName;
+         state.lastName = action.payload.lastName;
+         state.depId = action.payload.depId;
+         state.appIds = action.payload.appIds;
+         state.userId = action.payload.userId;
+         state.isInsurance = action.payload.isInsurance;
+         state.roleId = action.payload.roleId;
+         state.phoneNo = action.payload.phoneNo;
+         state.hospitalName = action.payload.hospitalName;
+      },
+      Delete: (state) => {
+         state.firstName = null;
+         state.firstName = null;
+         state.lastName = null;
+         state.depId = null;
+         state.appIds = null;
+         state.userId = null;
+         state.isInsurance = null;
+         state.roleId = null;
+         state.phoneNo = null;
+         state.hospitalName = null;
+      },
       login: (state, action) => {
          state.token = action.payload;
       },
       logout: (state) => {
          state.token = null;
-      },
-      setDepId: (state, action) => {
-         state.depId = action.payload;
-      },
-      DelDepId: (state) => {
-         state.depId = null;
-      },
-      setAppId: (state, action) => {
-         state.appIds = action.payload;
-      },
-      DelAppId: (state) => {
-         state.appIds = null;
-      },
-      setUserId: (state, action) => {
-         state.userId = action.payload;
-      },
-      DelUserId: (state) => {
-         state.userId = null;
-      },
-      setUserInfo: (state, action) => {
-         state.firstName = action.payload.firstName;
-         state.lastName = action.payload.lastName;
-      },
-      DelUserInfo: (state) => {
-         state.firstName = null;
-         state.lastName = null;
-      },
-      setInsurrance: (state, action) => {
-         state.isInsurance = action.payload;
-      },
-      DelInsurrance: (state) => {
-         state.isInsurance = null;
-      },
-      setRoleId: (state, action) => {
-         state.roleId = action.payload;
-      },
-      DelRoleId: (state) => {
-         state.roleId = null;
-      },
-      setPhoneNo: (state, action) => {
-         state.phoneNo = action.payload;
-      },
-      DelPhonoNo: (state) => {
-         state.phoneNo = null;
-      },
-      setHospitalName: (state, action) => {
-         state.hospitalName = action.payload;
-      },
-      DelHospitalName: (state) => {
-         state.hospitalName = null;
       }
    }
 });
 
-export const {
-   login,
-   logout,
-   setDepId,
-   DelDepId,
-   setAppId,
-   DelAppId,
-   setUserId,
-   DelUserId,
-   setUserInfo,
-   DelUserInfo,
-   setInsurrance,
-   DelInsurrance,
-   setRoleId,
-   DelRoleId,
-   setPhoneNo,
-   DelPhonoNo,
-   setHospitalName,
-   DelHospitalName
-} = auth.actions;
+export const { set, Delete, login, logout } = auth.actions;
 export default auth.reducer;
 
 export const selectCurrentToken = (state) => state.authReducer.token;

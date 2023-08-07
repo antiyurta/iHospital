@@ -16,6 +16,9 @@ const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryL
 const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
 const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
 // mes zasal
+// tsag zasah
+const AppointmentConfig = React.lazy(() => import('./components/pages/Appointment/ReConfig/Index'));
+// tsag zasah
 export const PublicRoutes = [
    {
       name: 'Privacy',
@@ -84,5 +87,11 @@ export const ProtectedRoutes = [
       mnName: 'Мэс засал Дарга',
       path: '/SurgeryListStatus',
       element: SurgeryListStatus
+   },
+   {
+      name: 'AppointmentConfig',
+      mnName: 'Цаг захиалга засах',
+      path: '/AppointmentConfig',
+      element: AppointmentConfig
    }
 ];

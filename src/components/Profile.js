@@ -1,29 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-   selectCurrentAppId,
-   selectCurrentDepId,
-   selectCurrentToken,
-   selectCurrentUserId,
-   setAppId,
-   setDepId,
-   setUserId,
-   setUserInfo,
-   selectCurrentLastName,
-   selectCurrentFirstName,
-   selectCurrentInsurance,
-   setInsurrance,
-   setRoleId,
-   selectCurrentRoleId,
-   selectCurrentHospitalName,
-   selectCurrentPhoneNo,
-   setHospitalName,
-   setPhoneNo
-} from '../features/authReducer';
+import { selectCurrentToken, selectCurrentInsurance, set } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
-import { Get, openNofi, Patch } from './comman';
+import { openNofi, Patch } from './comman';
 import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
@@ -32,15 +13,7 @@ import jwtInterceopter from './jwtInterceopter';
 
 function Profile() {
    const token = useSelector(selectCurrentToken);
-   const depId = useSelector(selectCurrentDepId);
-   const appIds = useSelector(selectCurrentAppId);
-   const userId = useSelector(selectCurrentUserId);
-   const roleId = useSelector(selectCurrentRoleId);
-   const userFirstName = useSelector(selectCurrentFirstName);
-   const userLastName = useSelector(selectCurrentLastName);
    const isInsurance = useSelector(selectCurrentInsurance);
-   const hospitalName = useSelector(selectCurrentHospitalName);
-   const phoneNo = useSelector(selectCurrentPhoneNo);
    const dispatch = useDispatch();
    const [profileForm] = Form.useForm();
    const [user, setUser] = useState([]);
@@ -60,35 +33,19 @@ function Profile() {
          .get('authentication')
          .then((response) => {
             profileForm.setFieldsValue(response.data.response);
-            if (depId === null) {
-               dispatch(setDepId(response.data.response.employee?.depIds));
-            }
-            if (appIds === null) {
-               dispatch(setAppId(response.data.response.employee?.appIds));
-            }
-            if (userId === null) {
-               dispatch(setUserId(response.data.response.employee?.id));
-            }
-            if (roleId === null) {
-               dispatch(setRoleId(response.data.response.roleId));
-            }
-            if (userLastName === null && userFirstName === null) {
-               dispatch(
-                  setUserInfo({
-                     firstName: response.data.response.employee?.firstName,
-                     lastName: response.data.response.employee?.lastName
-                  })
-               );
-            }
-            if (isInsurance === null) {
-               dispatch(setInsurrance(response.data.response.hospital?.isInsurance));
-            }
-            if (hospitalName === null) {
-               dispatch(setHospitalName(response.data.response.hospital?.name));
-            }
-            if (phoneNo === null) {
-               dispatch(setPhoneNo(response.data.response.phoneNo));
-            }
+            dispatch(
+               set({
+                  firstName: response.data.response.employee?.firstName,
+                  lastName: response.data.response.employee?.lastName,
+                  depId: response.data.response.employee?.depIds,
+                  appIds: response.data.response.employee?.appIds,
+                  userId: response.data.response.employee?.id,
+                  isInsurance: response.data.response.hospital?.isInsurance,
+                  roleId: response.data.response?.roleId,
+                  phoneNo: response.data.response?.employee?.phoneNo,
+                  hospitalName: response.data.response.hospital?.name
+               })
+            );
             setUser(response.data.response);
          })
          .catch((error) => {

@@ -54,7 +54,7 @@ function EbarimtPrint(props) {
                })}
                <p style={{ fontSize: 14, fontWeight: 'bold' }} className="text-end">
                   {/* Нийт үнэ: {numberToCurrency(total)} */}
-                  Нийт үнэ: {numberToCurrency(props?.props?.totalAmount)}
+                  Нийт үнэ: {numberToCurrency(props?.props?.plusAmount)}
                </p>
                <p style={{ fontSize: 14, fontWeight: 'bold' }} className="text-end">
                   Төлөх үнэ: {numberToCurrency(props?.props?.paidAmount)}

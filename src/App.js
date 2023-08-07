@@ -83,15 +83,15 @@ const Acting = React.lazy(() => import('./components/pages/BeforeAmbulatory/Befo
 const DepBalance = React.lazy(() => import('./components/pages/EMR/InPatient/DepBalance'));
 const Diagnoses = React.lazy(() => import('./components/pages/service/Diagnoses'));
 //
-const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
-const HicsLists = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
+// const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
+// const HicsLists = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
 
-const Privacy = React.lazy(() => import('./privacy/Index'));
-const InsuranceDocterList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
+// const Privacy = React.lazy(() => import('./privacy/Index'));
+// const InsuranceDocterList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
 const ProtectedRoute = React.lazy(() => import('./features/ProtectedRoute'));
-const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
-import Layout from './components/pages/Layout/MainLayout';
+// const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 // const Layout = React.lazy(() => import('./components/pages/Layout/MainLayout'));
+// import Layout from './components/pages/Layout/MainLayout';
 
 import { PublicRoutes, ProtectedRoutes } from './Routes';
 
