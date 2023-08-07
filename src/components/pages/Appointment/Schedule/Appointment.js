@@ -39,6 +39,7 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
    const [today] = useState(moment(new Date()));
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
+   console.log('=====================>asdasd', isInsurance);
    const config = {
       headers: {},
       params: {}
@@ -323,35 +324,37 @@ function Appointment({ selectedPatient, type, invoiceData, handleClick, prevAppo
                      </div>
                   </div>
                ) : null}
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                  <div className="p-3">
-                     <div className="flow-root">
-                        <div className="float-left">
-                           <p
-                              style={{
-                                 fontWeight: 600
-                              }}
-                           >
-                              Үйлчүүлэгч даатгалтай эсэх
-                           </p>
-                        </div>
-                        <div className="float-right">
-                           <Switch
-                              className="bg-[#4a7fc1]"
-                              checkedChildren="Тийм"
-                              unCheckedChildren="Үгүй"
-                              defaultChecked={false}
-                              checked={stateInsurance}
-                              onChange={(e) => {
-                                 setStateInsurance(e);
-                                 setIsSent(e);
-                                 setNotInsuranceInfo([]);
-                              }}
-                           />
+               {isInsurance ? (
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                     <div className="p-3">
+                        <div className="flow-root">
+                           <div className="float-left">
+                              <p
+                                 style={{
+                                    fontWeight: 600
+                                 }}
+                              >
+                                 Үйлчүүлэгч даатгалтай эсэх
+                              </p>
+                           </div>
+                           <div className="float-right">
+                              <Switch
+                                 className="bg-[#4a7fc1]"
+                                 checkedChildren="Тийм"
+                                 unCheckedChildren="Үгүй"
+                                 defaultChecked={false}
+                                 checked={stateInsurance}
+                                 onChange={(e) => {
+                                    setStateInsurance(e);
+                                    setIsSent(e);
+                                    setNotInsuranceInfo([]);
+                                 }}
+                              />
+                           </div>
                         </div>
                      </div>
                   </div>
-               </div>
+               ) : null}
                {stateInsurance && (
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">

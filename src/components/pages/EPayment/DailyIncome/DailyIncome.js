@@ -24,6 +24,7 @@ function DailyIncome() {
    const [end, setEnd] = useState('');
    const [isBackPayment, setIsBackPayment] = useState(false);
    const [discount, setDiscount] = useState([]);
+   const [paymentShape, setPaymentShape] = useState([]);
    const getDailyIncome = async (page, pageSize, start, end) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -52,6 +53,9 @@ function DailyIncome() {
    const checkDiscount = (id) => {
       return discount.find((e) => e.id === id)?.name;
    };
+   const checkPaymentShape = (id) => {
+      return paymentShape.find((e) => e.id === id)?.name;
+   };
    const viewModal = async (id, isBack) => {
       setIsBackPayment(isBack);
       await PaymentServices.getPaymentById(id).then((response) => {
@@ -67,8 +71,14 @@ function DailyIncome() {
          }
       });
    };
+   const getPaymentType = async () => {
+      await PaymentServices.getPaymentType().then((response) => {
+         setPaymentShape(response.data.response);
+      });
+   };
    useEffect(() => {
       getDailyIncome(1, 10, today, today);
+      getPaymentType();
       getDiscount();
    }, []);
    return (
@@ -150,7 +160,10 @@ function DailyIncome() {
                                  >
                                     {numberToCurrency(
                                        pageData.reduce((total, current) => {
-                                          return total + current.totalAmount;
+                                          if (current.status != 'pre') {
+                                             return total + current.plusAmount;
+                                          }
+                                          return total + 0;
                                        }, 0)
                                     )}
                                  </p>
@@ -200,10 +213,12 @@ function DailyIncome() {
                   <NewColumn dataIndex={['patient', 'lastName']} title="Овог" />
                   <NewColumn dataIndex={['patient', 'firstName']} title="Нэр" />
                   <NewColumn
-                     dataIndex={'totalAmount'}
-                     title="Нийт дүн"
-                     render={(text) => {
-                        return numberToCurrency(text);
+                     dataIndex={'plusAmount'}
+                     title="Нийт төлбөр"
+                     render={(text, row) => {
+                        if (row.status != 'pre') {
+                           return numberToCurrency(text);
+                        }
                      }}
                   />
                   <NewColumn
@@ -214,7 +229,14 @@ function DailyIncome() {
                         return checkDiscount(text);
                      }}
                   />
-                  <NewColumn width={40} title="Төлсөн урьдчилгаа" />
+                  <NewColumn
+                     width={40}
+                     title="Төлсөн урьдчилгаа"
+                     dataIndex={'preAmount'}
+                     render={(text) => {
+                        return numberToCurrency(text);
+                     }}
+                  />
                   <NewColumn
                      dataIndex={'paidAmount'}
                      title="Төлсөн дүн"
@@ -222,7 +244,14 @@ function DailyIncome() {
                         return numberToCurrency(text);
                      }}
                   />
-                  <NewColumn width={40} title="Төлбөрийн хэлбэр" />
+                  <NewColumn
+                     width={40}
+                     title="Төлбөрийн хэлбэр"
+                     dataIndex={'paymentTypeId'}
+                     render={(text) => {
+                        return checkPaymentShape(text);
+                     }}
+                  />
                   <NewColumn dataIndex={'createdEmployeeName'} title="Ажилтны нэр" />
                   <NewColumn
                      dataIndex={'id'}

@@ -16,6 +16,7 @@ const { Option } = Select;
 function PrintIndex() {
    const printRef = useRef();
    const [form] = Form.useForm();
+   const [paymentShape, setPaymentShape] = useState([]);
    const hospitalName = useSelector(selectCurrentHospitalName);
    const [today, setToday] = useState(new Date());
    const [discounts, setDiscounts] = useState([]);
@@ -36,6 +37,7 @@ function PrintIndex() {
       setEmployee(filteredEmployee[0]);
       await PaymentService.getPayment({
          params: {
+            isReturn: false,
             createdBy: employeeId,
             startDate: moment(start).format('YYYY-MM-DD HH:mm'),
             endDate: moment(end).format('YYYY-MM-DD HH:mm')
@@ -64,9 +66,19 @@ function PrintIndex() {
    const getDiscountName = (id) => {
       return discounts.find((e) => e.id === id)?.name;
    };
+   const getPaymentType = async () => {
+      await PaymentService.getPaymentType().then((response) => {
+         setPaymentShape(response.data.response);
+      });
+   };
+   const checkPaymentShape = (id) => {
+      return paymentShape.find((e) => e.id === id)?.name;
+   };
    useEffect(() => {
       getEmployees(50);
+      // getEmployees(1);
       getDiscounts();
+      getPaymentType();
    }, []);
    return (
       <>
@@ -236,11 +248,17 @@ function PrintIndex() {
                                        textAlign: 'end'
                                     }}
                                  >
-                                    {numberToCurrency(item.totalAmount)}
+                                    {item.status != 'pre' ? numberToCurrency(item.plusAmount) : null}
                                  </td>
                                  <td>{getDiscountPercent(item.discountPercentId)}</td>
                                  <td>{getDiscountName(item.discountPercentId)}</td>
-                                 <td></td>
+                                 <td
+                                    style={{
+                                       textAlign: 'end'
+                                    }}
+                                 >
+                                    {numberToCurrency(item.preAmount)}
+                                 </td>
                                  <td
                                     style={{
                                        textAlign: 'end'
@@ -248,13 +266,15 @@ function PrintIndex() {
                                  >
                                     {numberToCurrency(item.paidAmount)}
                                  </td>
-                                 <td></td>
+                                 <td>{checkPaymentShape(item.paymentTypeId)}</td>
                                  <td>{moment(item.createdAt).format('YYYY-MM-DD HH:mm')}</td>
                                  <td
                                     style={{
                                        textAlign: 'end'
                                     }}
-                                 ></td>
+                                 >
+                                    {numberToCurrency(item.isEbarimt ? item.totalAmount : 0)}
+                                 </td>
                               </tr>
                            );
                         })}
@@ -274,7 +294,10 @@ function PrintIndex() {
                            >
                               {numberToCurrency(
                                  incomes.reduce((total, current) => {
-                                    return total + current.totalAmount;
+                                    if (current.status != 'pre') {
+                                       return total + current.plusAmount;
+                                    }
+                                    return total + 0;
                                  }, 0)
                               )}
                            </th>
@@ -294,7 +317,17 @@ function PrintIndex() {
                            </th>
                            <th></th>
                            <th></th>
-                           <th>0</th>
+                           <th
+                              style={{
+                                 textAlign: 'end'
+                              }}
+                           >
+                              {numberToCurrency(
+                                 incomes.reduce((total, current) => {
+                                    return total + current.totalAmount;
+                                 }, 0)
+                              )}
+                           </th>
                         </tr>
                      </tbody>
                   </table>
@@ -308,6 +341,13 @@ function PrintIndex() {
                                  }}
                               >
                                  Төлбөрийн хэлбэр
+                              </th>
+                              <th
+                                 style={{
+                                    minWidth: 120
+                                 }}
+                              >
+                                 Нийт төлбөр
                               </th>
                               <th
                                  style={{
@@ -333,42 +373,59 @@ function PrintIndex() {
                            </tr>
                         </thead>
                         <tbody>
-                           <tr>
-                              <td
-                                 style={{
-                                    textAlign: 'start'
-                                 }}
-                              >
-                                 Карт
-                              </td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                           </tr>
-                           <tr>
-                              <td
-                                 style={{
-                                    textAlign: 'start'
-                                 }}
-                              >
-                                 Шилжүүлэг
-                              </td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                           </tr>
-                           <tr>
-                              <td
-                                 style={{
-                                    textAlign: 'start'
-                                 }}
-                              >
-                                 Бэлэн
-                              </td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                           </tr>
+                           {paymentShape?.map((shape, index) => {
+                              return (
+                                 <tr key={index}>
+                                    <td
+                                       style={{
+                                          textAlign: 'start'
+                                       }}
+                                    >
+                                       {shape.name}
+                                    </td>
+                                    <td>
+                                       {numberToCurrency(
+                                          incomes.reduce((total, current) => {
+                                             if (current.paymentTypeId === shape.id) {
+                                                return total + current.plusAmount;
+                                             }
+                                             return total + 0;
+                                          }, 0)
+                                       )}
+                                    </td>
+                                    <td>
+                                       {numberToCurrency(
+                                          incomes.reduce((total, current) => {
+                                             if (current.paymentTypeId === shape.id) {
+                                                return total + current.paidAmount;
+                                             }
+                                             return total + 0;
+                                          }, 0)
+                                       )}
+                                    </td>
+                                    <td>
+                                       {numberToCurrency(
+                                          incomes.reduce((total, current) => {
+                                             if (current.paymentTypeId === shape.id && current.status === 'pre') {
+                                                return total + current.preAmount;
+                                             }
+                                             return total + 0;
+                                          }, 0)
+                                       )}
+                                    </td>
+                                    <td>
+                                       {numberToCurrency(
+                                          incomes.reduce((total, current) => {
+                                             if (current.paymentTypeId === shape.id) {
+                                                return total + current.totalAmount;
+                                             }
+                                             return total + 0;
+                                          }, 0)
+                                       )}
+                                    </td>
+                                 </tr>
+                              );
+                           })}
                            <tr>
                               <th
                                  style={{
@@ -377,9 +434,37 @@ function PrintIndex() {
                               >
                                  Нийт
                               </th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
+                              <th>
+                                 {numberToCurrency(
+                                    incomes.reduce((total, current) => {
+                                       return total + current.plusAmount;
+                                    }, 0)
+                                 )}
+                              </th>
+                              <th>
+                                 {numberToCurrency(
+                                    incomes.reduce((total, current) => {
+                                       return total + current.paidAmount;
+                                    }, 0)
+                                 )}
+                              </th>
+                              <th>
+                                 {numberToCurrency(
+                                    incomes.reduce((total, current) => {
+                                       if (current.status === 'pre') {
+                                          return total + current.preAmount;
+                                       }
+                                       return total + 0;
+                                    }, 0)
+                                 )}
+                              </th>
+                              <th>
+                                 {numberToCurrency(
+                                    incomes.reduce((total, current) => {
+                                       return total + current.totalAmount;
+                                    }, 0)
+                                 )}
+                              </th>
                            </tr>
                         </tbody>
                      </table>

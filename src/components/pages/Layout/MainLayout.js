@@ -11,29 +11,18 @@ import {
    MenuUnfoldOutlined,
    MessageOutlined,
    PoweroffOutlined,
-   RightOutlined,
    UserOutlined
 } from '@ant-design/icons';
 import Sidenav from './Sidenav';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-   DelAppId,
-   DelDepId,
-   DelHospitalName,
-   DelInsurrance,
-   DelPhonoNo,
-   DelRoleId,
-   selectCurrentRoleId,
-   selectCurrentUserId
-} from '../../../features/authReducer';
+import { Delete, logout, selectCurrentRoleId, selectCurrentUserId } from '../../../features/authReducer';
 import jwtInterceopter from '../../jwtInterceopter';
-import { logout } from '../../../features/authReducer';
 import FullScreenLoader from '../../FullScreenLoader';
 //
 import Chat from '../../../chat/List';
 //
 const { Content, Sider } = Layout;
-function MainLayout({ children }) {
+function MainLayout() {
    const { user, logoutt } = useContext(AuthContext);
    const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -46,14 +35,9 @@ function MainLayout({ children }) {
    //
    const handleMenuClick = async (e) => {
       if (e.key == 2) {
+         dispatch(Delete());
+         dispatch(logout()); // tur bicew jwtBugdin ajilah ued ustagna
          await logoutt();
-         dispatch(logout());
-         dispatch(DelDepId());
-         dispatch(DelAppId());
-         dispatch(DelInsurrance());
-         dispatch(DelRoleId());
-         dispatch(DelHospitalName());
-         dispatch(DelPhonoNo());
          navigate('/');
       } else if (e.key == 3) {
          //  setIsChatModal(true);

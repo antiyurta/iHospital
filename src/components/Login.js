@@ -2,13 +2,10 @@ import React, { useContext } from 'react';
 import { Button, Row, Col, Typography, Form, Input } from 'antd';
 import signinbg from '../assets/images/background/front.svg';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout, DelAppId, DelDepId, DelUserId, DelUserInfo, DelInsurrance } from '../features/authReducer';
 import { useEffect, useState } from 'react';
 import AuthContext from '../features/AuthContext';
 const { Title } = Typography;
 function Login() {
-   const dispatch = useDispatch();
    const navigate = useNavigate();
    const [loginLoading, setLoginLoading] = useState(false);
    const { loginn, user } = useContext(AuthContext);
@@ -20,19 +17,9 @@ function Login() {
    const onFinishFailed = (errorInfo) => {
       console.log('Failed:', errorInfo);
    };
-   const clearStorage = () => {
-      dispatch(logout());
-      dispatch(DelAppId());
-      dispatch(DelDepId());
-      dispatch(DelUserId());
-      dispatch(DelUserInfo());
-      dispatch(DelInsurrance());
-   };
    useEffect(() => {
       if (user) {
          navigate('/profile');
-      } else {
-         clearStorage();
       }
    }, []);
 

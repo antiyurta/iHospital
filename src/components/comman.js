@@ -274,7 +274,7 @@ export const openNofi = (type, message, description) => {
 export const numberToCurrency = (amount) => {
    return (
       <NumericFormat
-         value={amount.toFixed(2)}
+         value={amount?.toFixed(2)}
          displayType={'text'}
          thousandSeparator={true}
          fixedDecimalScale={true}

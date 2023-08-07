@@ -1,11 +1,19 @@
-import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Progress } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Form } from 'antd';
 import { localMn, openNofi } from '../../comman';
 import PatientInformation from '../PatientInformation';
 import Order from '../Order/Order';
 import Schedule from '../OCS/Schedule';
 import jwtInterceopter from '../../jwtInterceopter';
 import moment from 'moment';
+import NewModal from '../../Modal/Modal';
+import NewCard from '../../Card/Card';
+
+//service uud
+import PaymentService from '../../../services/payment/payment';
+import { NewInput, NewInputNumber, NewOption, NewRadio, NewRadioGroup, NewSelect } from '../../Input/Input';
+import { NumericFormat } from 'react-number-format';
+import EbarimtPrint from './EbarimtPrint';
 
 function Ambulatory() {
    const [orderModal, setOrderModal] = useState(false);
@@ -24,10 +32,17 @@ function Ambulatory() {
    });
    const [notPatientsValue, setNotPatientsValue] = useState('');
    const [payments, setPayments] = useState([]);
-   const [selectedPatient, setSelectedPatient] = useState([]);
+   const [selectedPatient, setSelectedPatient] = useState({});
    //ebarimt getInfohadaglah
    const [ebarimtInfo, setEbarimtInfo] = useState({});
    //ebarimt getInfohadaglah
+   //tolbor urdchilan
+   const [ebarimtModal, setEbarimtModal] = useState(false);
+   const [ebarimtData, setEbarimtData] = useState({});
+   const [beforePayForm] = Form.useForm();
+   const [paymentShape, setPaymentShape] = useState([]);
+   const [isOpenBeforePaymentModal, setIsOpenBeforePaymentModal] = useState(false);
+   //tolbor urdchilan
    const onSearch = async (_page, _pageSize, value) => {
       setIsLoadingFilter(true);
       await jwtInterceopter
@@ -231,6 +246,27 @@ function Ambulatory() {
          }
       }
    ];
+   //
+   const getPaymentType = async () => {
+      await PaymentService.getPaymentType().then((response) => {
+         setPaymentShape(response.data.response);
+      });
+   };
+   const beforePay = async (values) => {
+      values['patientId'] = selectedPatient.id;
+      values['invoiceIds'] = [];
+      await PaymentService.postPrePayment(values).then((response) => {
+         if (values.isEbarimt) {
+            setEbarimtData(response.data.response);
+            setEbarimtModal(true);
+         }
+         setIsOpenBeforePaymentModal(false);
+      });
+   };
+   //
+   useEffect(() => {
+      isOpenBeforePaymentModal && getPaymentType();
+   }, [isOpenBeforePaymentModal]);
    useEffect(() => {
       getInformation();
    }, []);
@@ -268,6 +304,13 @@ function Ambulatory() {
                         <Button className="bg-[#4a7fc1]" type="primary" onClick={() => setOrderModal(true)}>
                            Оношилгоо шинжилгээ захиалах
                         </Button>
+                        <Button
+                           className="bg-[#4a7fc1]"
+                           type="primary"
+                           onClick={() => setIsOpenBeforePaymentModal(true)}
+                        >
+                           Урьдчилгаа төлбөр
+                        </Button>
                      </div>
                   </div>
                </div>
@@ -303,6 +346,103 @@ function Ambulatory() {
                />
             </ConfigProvider>
          </Card>
+         <NewModal
+            title="Урьдчилгаа төлбөр"
+            open={isOpenBeforePaymentModal}
+            onCancel={() => setIsOpenBeforePaymentModal(false)}
+            onOk={() =>
+               beforePayForm.validateFields().then((values) => {
+                  beforePay(values);
+               })
+            }
+            maskClosable={true}
+            cancelText="Болих"
+            okText="Хадгалах"
+            bodyStyle={{
+               backgroundColor: '#F3F4F6',
+               padding: 10
+            }}
+         >
+            <div className="flex flex-col gap-3">
+               <div className="grid sm:grid-cols-1 lg:grid-cols-1 gap-3">
+                  <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
+                  <Card
+                     bordered={false}
+                     title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
+                     className="header-solid max-h-max rounded-md"
+                     bodyStyle={{
+                        paddingTop: 0,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        paddingBottom: 10
+                     }}
+                     extra={
+                        <>
+                           <Pagination
+                              simple
+                              current={notPatientsMeta.page}
+                              pageSize={notPatientsMeta.limit}
+                              total={notPatientsMeta.itemCount}
+                              onChange={(page, pageSize) => onSearchPayment(page, pageSize, notPatientsValue)}
+                           />
+                        </>
+                     }
+                  >
+                     <Table
+                        rowKey={'id'}
+                        bordered
+                        rowClassName="hover:cursor-pointer"
+                        onRow={(row, rowIndex) => {
+                           return {
+                              onClick: () => {
+                                 setSelectedPatient(row);
+                              }
+                           };
+                        }}
+                        loading={notPatientLoading}
+                        columns={notPatientColumn}
+                        dataSource={notPatientsList}
+                        pagination={false}
+                        scroll={{ y: 120 }}
+                     />
+                  </Card>
+                  <NewCard title="Төлбөр">
+                     <Form form={beforePayForm} layout="vertical">
+                        <Form.Item name="preAmount" label="Урьдчилсан төлбөр">
+                           <NewInputNumber
+                              style={{
+                                 width: '100%'
+                              }}
+                              prefix={'₮ '}
+                              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                              parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                           />
+                        </Form.Item>
+                        <Form.Item name="paymentTypeId" label="Төлбөрийн хэлбэр">
+                           <NewSelect>
+                              {paymentShape?.map((paymentShape, index) => {
+                                 return (
+                                    <NewOption key={index} value={paymentShape.id}>
+                                       {paymentShape.name}
+                                    </NewOption>
+                                 );
+                              })}
+                           </NewSelect>
+                        </Form.Item>
+                        <Form.Item name={'isEbarimt'} label="И-Баримт өгөх эсэх">
+                           <NewRadioGroup>
+                              <NewRadio value={true}>Тийм</NewRadio>
+                              <NewRadio value={false}>Үгүй</NewRadio>
+                           </NewRadioGroup>
+                        </Form.Item>
+                     </Form>
+                  </NewCard>
+               </div>
+            </div>
+         </NewModal>
+         <NewModal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
+            <EbarimtPrint props={ebarimtData} isBackPayment={false} />
+         </NewModal>
          <Modal
             title={'Оношилгоо шинжилгээ захиалах'}
             open={orderModal}

@@ -1,14 +1,19 @@
 import React from 'react';
-import { Input, Radio } from 'antd';
+import { DatePicker, Input, InputNumber, Radio, Select } from 'antd';
 
 const { TextArea, Search } = Input;
+const { Option } = Select;
 
-function NewInput() {
-   return <Input />;
+function NewInput(props) {
+   return <Input {...props} />;
 }
 
-function NewTextArea() {
-   return <TextArea />;
+function NewInputNumber(props) {
+   return <InputNumber {...props} />;
+}
+
+function NewTextArea(props) {
+   return <TextArea {...props} rows={4} />;
 }
 
 function NewSearch(props) {
@@ -23,4 +28,26 @@ function NewRadioGroup(props) {
    return <Radio.Group {...props}>{props.children}</Radio.Group>;
 }
 
-export { NewInput, NewTextArea, NewSearch, NewRadio, NewRadioGroup };
+function NewSelect(props) {
+   return <Select {...props}>{props.children}</Select>;
+}
+
+function NewOption(props) {
+   return <Option {...props}>{props.children}</Option>;
+}
+
+function NewDatePicker(props) {
+   return <DatePicker {...props} />;
+}
+
+export {
+   NewInput,
+   NewInputNumber,
+   NewTextArea,
+   NewSearch,
+   NewRadio,
+   NewRadioGroup,
+   NewSelect,
+   NewOption,
+   NewDatePicker
+};
