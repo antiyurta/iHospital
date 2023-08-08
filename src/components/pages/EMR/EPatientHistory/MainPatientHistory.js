@@ -81,12 +81,20 @@ function MainPatientHistory({
             }
          })
          .then((response) => {
-            response.data.response.data?.map((el) => {
-               setItems([
+            setItems([]);
+            response.data.response.data?.map((el, index) => {
+               setItems((items) => [
+                  ...items,
                   {
-                     label: 'Дүгнэлт',
-                     key: `item-exo`,
-                     children: <DynamicTabContent data={el.formItem} />
+                     label: el.name,
+                     key: `item-ex-${el.id}`,
+                     children: (
+                        <DynamicTabContent
+                           data={el.formItem}
+                           formKey={el.formId != null ? el.formId : el.id}
+                           formName={el.name}
+                        />
+                     )
                   }
                ]);
             });
