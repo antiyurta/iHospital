@@ -3,10 +3,9 @@ import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefaultPost, DefualtGet, Get, expiredDateEbarimt, numberToCurrency, openNofi } from '../../comman';
-import Appointment from '../Appointment/Schedule/Appointment';
+import { Get, numberToCurrency, openNofi } from '../../comman';
+import Appointment from '../Appointment/Index';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
-import jwtInterceopter from '../../jwtInterceopter';
 
 import PaymentService from '../../../services/payment/payment';
 import EbarimtService from '../../../services/ebarimt/ebarimt';
@@ -122,9 +121,8 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                if (isCustomerNo && customerNo) {
                   data['customerNo'] = customerNo;
                }
-               const ebarimtState = await expiredDateEbarimt();
-               if (ebarimtState) {
-                  await PaymentService.postPayment(data).then((response) => {
+               await PaymentService.postPayment(data)
+                  .then((response) => {
                      if (response.data.success) {
                         isSuccess(true);
                         setTotalAmount(0);
@@ -133,10 +131,10 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                         setEbarimtData(response.data.response);
                         setEbarimtModal(true);
                      }
+                  })
+                  .catch((error) => {
+                     openNofi('error', 'Алдаа', 'И-баримт');
                   });
-               } else {
-                  openNofi('warning', 'Алдаа', 'И-Баримттай холбогдож чадсангүй. Та түр хүлээгээд дахин оролдоно уу');
-               }
             } else {
                openNofi('warning', 'Сонгох', 'Аль нэг сонгох');
             }
@@ -299,36 +297,6 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                         </div>
                      </div>
                   </div>
-                  {/* <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <div className="p-3">
-                        <div className="flex flex-col gap-3">
-                           <Checkbox
-                              onChange={(e) => {
-                                 setIsDiscount(e.target.checked);
-                                 if (!e.target.checked) {
-                                    setDiscountPercentRequest(null);
-                                 }
-                              }}
-                           >
-                              Урьдчилгаа өгөх эсэх
-                           </Checkbox>
-                           {isDiscount && (
-                              <div className="w-full p-1">
-                                 <label>Хөнгөлөх хувь</label>
-                                 <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
-                                    {discounts.map((discount, index) => {
-                                       return (
-                                          <Option key={index} value={discount.id}>
-                                             {discount.name}
-                                          </Option>
-                                       );
-                                    })}
-                                 </Select>
-                              </div>
-                           )}
-                        </div>
-                     </div>
-                  </div> */}
                </div>
                <Divider className="m-0">Захиалсан</Divider>
                <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
