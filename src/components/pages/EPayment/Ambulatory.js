@@ -146,6 +146,7 @@ function Ambulatory() {
    };
    const sendData = async () => {
       await jwtInterceopter.get('ebarimt/sendData').then((response) => {
+         console.log('====>', response);
          if (response.data.response.status && response.status === 200) {
             openNofi('success', 'Амжиллтай', 'Амжилттай татлаа');
             getInformation();
@@ -153,12 +154,6 @@ function Ambulatory() {
             openNofi('error', 'Алдаа', 'Татах үед алдаа гарлаа');
          }
       });
-   };
-   const checkEbarimtInfo = () => {
-      if ((ebarimtInfo?.countBill * 100) / ebarimtInfo?.countLottery > 98) {
-         return false;
-      }
-      return true;
    };
    const getInformation = async () => {
       await jwtInterceopter.get('ebarimt/information').then((response) => {

@@ -156,7 +156,8 @@ function Index(props) {
                type: invoiceData.type
             })
             .then((response) => {
-               if (response.status === 201) {
+               console.log(response);
+               if (response.status === 200) {
                   setAppointmentModal(false);
                   handleClick(true, invoiceData.invoiceId);
                   setGetIsSlot({ state: true, slotType: 0 });
@@ -195,7 +196,7 @@ function Index(props) {
       <>
          <div className="flex flex-col gap-4">
             <NewCard
-               title="Цаг захиалга ddd"
+               title="Цаг захиалга"
                extra={
                   <div className="flex flex-row gap-3">
                      {type === 1 ? (

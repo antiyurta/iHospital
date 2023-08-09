@@ -17,6 +17,7 @@ import ScheduleService from '../../../services/schedule';
 function List(props) {
    const { schedules, type, selectedPatient, orderAppointment, isGetSlots, isExtraGrud } = props;
    const [changeForm] = Form.useForm();
+   const [selectedDoctorId, setSelectedDoctorId] = useState(Number);
    const [cancalForm] = Form.useForm();
    const [slots, setSlots] = useState([]);
    const [filteredSchedules, setFilteredSchedules] = useState([]);
@@ -31,12 +32,13 @@ function List(props) {
    //
    // functions
    // slot change hiih button click
-   const changeSlot = (id, appointmentId) => {
+   const changeSlot = (id, appointmentId, doctorId) => {
       changeForm.resetFields();
       setFilteredSchedules([]);
       setFilteredSlots([]);
       setSelectedSlotId(id);
       setSelectedAppointmentId(appointmentId);
+      setSelectedDoctorId(doctorId);
       setIsOpenChangeModal(true);
    };
    // slot cancel hiih button click
@@ -49,6 +51,7 @@ function List(props) {
    const onFinishChangeSlot = async (values) => {
       setIsLoadingChangeLoading(true);
       await ScheduleService.postChangeSlot({
+         type: type,
          slotId: selectedSlotId,
          newSlotId: values.newSlotId,
          appointmentId: selectedAppointmentId,
@@ -65,6 +68,7 @@ function List(props) {
    const onFinishCancelSlot = async (values) => {
       setIsLoadingCancelLoading(true);
       await ScheduleService.postReturnSlot({
+         type: type,
          description: values.desc,
          slotId: selectedSlotId
       }).then((response) => {
@@ -81,8 +85,7 @@ function List(props) {
          await ScheduleService.get({
             params: {
                findOneDate: moment(date).format('YYYY-MM-DD'),
-               structureId: changeForm.getFieldValue('structureId'),
-               doctorId: changeForm.getFieldValue('doctorId'),
+               doctorId: selectedDoctorId,
                type: type
             }
          }).then((response) => {
@@ -109,7 +112,6 @@ function List(props) {
       const params = {
          scheduleId: scheduleId
       };
-      console.log('=-=========>', scheduleId);
       if (scheduleId) {
          if (type === 3) {
             await ScheduleService.getDeviceSlot({ params: params }).then((response) => {
@@ -127,7 +129,7 @@ function List(props) {
                   setFilteredSlots(response.data.response.data);
                }
             });
-         } else {
+         } else if (type === 1) {
             await ScheduleService.getDoctorSlot({ params: params }).then((response) => {
                if (state === 0) {
                   setSlots(response.data.response.data);
@@ -144,7 +146,6 @@ function List(props) {
    }, [selectedScheduleId]);
    // effect slot reload hiih slotType ni
    useEffect(() => {
-      console.log(isGetSlots);
       if (isGetSlots.state) {
          getSlots(selectedScheduleId, isGetSlots.slotType);
       }
@@ -298,7 +299,9 @@ function List(props) {
                                              if (!text && row.slotStatus === 0) {
                                                 return (
                                                    <Button
-                                                      onClick={() => changeSlot(row.id, row.appointmentId)}
+                                                      onClick={() =>
+                                                         changeSlot(row.id, row.appointmentId, row.schedule.doctorId)
+                                                      }
                                                       icon={<SwapOutlined />}
                                                       className="bg-yellow-500 text-black"
                                                    />
