@@ -6,12 +6,23 @@ import moment from 'moment';
 import { numberToCurrency, openNofi } from '../../comman';
 
 import PaymentService from '../../../services/payment/payment';
+import EbarimtService from '../../../services/ebarimt/ebarimt';
+import { useSelector } from 'react-redux';
+import { selectCurrentHospitalName } from '../../../features/authReducer';
 
 function EbarimtPrint(props) {
    const printRef = useRef();
+   const hospitalName = useSelector(selectCurrentHospitalName);
    const handleBack = async (id) => {
-      await PaymentService.patchPayment(id, { isReturn: true }).then((response) => {
-         openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
+      await EbarimtService.ReturnBill(props?.props?.billId).then(async (response) => {
+         console.log(response);
+         if (response.data.response.result.errorCode === 0) {
+            await PaymentService.patchPayment(id, { isReturn: true }).then((response) => {
+               openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
+            });
+         } else {
+            openNofi('error', 'Алдаа И-Баримт буцаалт', response.data.response.result.message);
+         }
       });
    };
    const handlePrint = useReactToPrint({
@@ -22,7 +33,7 @@ function EbarimtPrint(props) {
          <div ref={printRef} style={{ width: '80mm' }}>
             <div>
                <div className="flow-root">
-                  <p className="float-right font-normal whitespace-pre-wrap">UNIVERSAL MED HOSPITAL</p>
+                  <p className="float-right font-normal whitespace-pre-wrap">{hospitalName}</p>
                </div>
                <div>
                   <p className="text-center pt-2">ТӨЛБӨРИЙН БАРИМТ</p>

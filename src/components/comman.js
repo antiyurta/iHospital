@@ -425,29 +425,3 @@ export const inspectionTOJSON = (inspectionNote) => {
 export const diagnoseTypeInfo = (diagnoseTypeId) => {
    return DiagnoseTypes.find((e) => e.value === diagnoseTypeId)?.label;
 };
-
-export const expiredDateEbarimt = async () => {
-   return await EbarimtService.getInformation().then(async (response) => {
-      const data = response.data.response.result?.extraInfo;
-      const date1 = new Date(data.lastSentdate);
-      const date2 = new Date();
-      var delta = Math.abs(date2 - date1) / 1000;
-      var days = Math.floor(delta / 86400);
-      delta -= days * 86400;
-      var hours = Math.floor(delta / 3600) % 24;
-      delta -= hours * 3600;
-      var minutes = Math.floor(delta / 60) % 60;
-      delta -= minutes * 60;
-      if ((71 < days * 24 + hours && days * 24 + hours <= 72) || data.countBill === data.countLottery) {
-         return await EbarimtService.sendData().then((response) => {
-            if (response.data.response.result.errorCode === 0) {
-               return true;
-            } else {
-               openNofi('info', 'Анхааруулга', response.data.response.result.message);
-               return false;
-            }
-         });
-      }
-      return true;
-   });
-};
