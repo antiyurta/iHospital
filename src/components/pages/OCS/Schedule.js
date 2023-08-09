@@ -439,6 +439,11 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                   type={appointmentType}
                   invoiceData={invoiceData}
                   handleClick={callBackClick}
+                  isExtraGrud={{
+                     isCreate: true,
+                     isChange: false,
+                     isDelete: false
+                  }}
                />
             </div>
          </Modal>

@@ -1,12 +1,13 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
 import { DefualtGet, Get } from '../../comman';
 import UTable from '../../UTable';
 
 function Treatment() {
    const token = useSelector(selectCurrentToken);
+   const isInsurance = useSelector(selectCurrentInsurance);
    const [treatmentTypeData, setTreatmentTypeData] = useState([]);
    const [hicsServices, setHicsServices] = useState([]);
    const config = {
@@ -32,7 +33,9 @@ function Treatment() {
    };
    useEffect(() => {
       getTreatmentTypeData();
-      getInsuranceService();
+      if (isInsurance) {
+         getInsuranceService();
+      }
    }, []);
    const column = [
       {
