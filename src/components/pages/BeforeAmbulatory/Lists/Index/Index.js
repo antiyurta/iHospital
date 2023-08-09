@@ -113,7 +113,6 @@ function Index({ type, isDoctor }) {
             data['departmentId'] = row.inDepartmentId;
             data['serviceId'] = row.insuranceServiceId;
          }
-         console.log(data);
          dispatch(setEmrData(data));
          navigate(`/emr`, {
             state: data
@@ -135,8 +134,15 @@ function Index({ type, isDoctor }) {
                   headers: {},
                   params: {}
                };
+               // uzleg ehleh tsag
                Patch('appointment/' + row.id, token, conf, {
                   startDate: new Date()
+               });
+               // incomeDate // irsent tsag
+               // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
+               Patch('slot/' + row.slots?.id, token, conf, {
+                  incomeDate: new Date(),
+                  slotStatus: 1
                });
             }
             if (type === 0) {
@@ -455,6 +461,19 @@ function Index({ type, isDoctor }) {
          dataIndex: ['createdAt'],
          render: (text) => {
             return moment(text).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'Статус',
+         dataIndex: 'status',
+         render: (text) => {
+            if (text === 1) {
+               return 'Цаг захиалсан';
+            } else if (text === 2) {
+               return 'Өдөр солисон, цаг солисон';
+            } else if (text === 3) {
+               return 'Цаг цуцалсан';
+            }
          }
       },
       {

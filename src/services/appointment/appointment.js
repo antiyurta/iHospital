@@ -6,5 +6,8 @@ class Appointment {
    async getByPageFilter(conf) {
       return await jwtInterceopter.get('appointment', conf);
    }
+   async postAppointment(data) {
+      return await jwtInterceopter.post('appointment', data);
+   }
 }
 export default new Appointment();

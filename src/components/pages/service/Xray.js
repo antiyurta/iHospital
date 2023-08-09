@@ -23,7 +23,12 @@ function Xray() {
    };
 
    const getDevices = async () => {
-      const response = await Get('device', token, config);
+      const response = await Get('device', token, {
+         headers: {},
+         params: {
+            deviceType: 1
+         }
+      });
       setDevices(response.data);
    };
 

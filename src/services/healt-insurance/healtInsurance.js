@@ -9,5 +9,8 @@ class HealtInsurance {
    async postRepair(data) {
       return await jwtInterceopter.post('health-insurance/repair', data);
    }
+   async postCitizenInfo(data) {
+      return await jwtInterceopter.post('health-insurance/citizen-info', data);
+   }
 }
 export default new HealtInsurance();
