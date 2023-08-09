@@ -4,10 +4,12 @@ import React, { useRef, useState } from 'react';
 import PatientInformation from '../PatientInformation';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { useSelector } from 'react-redux';
-import Appointment from './Schedule/Appointment';
 import { useEffect } from 'react';
 import Index from './Doctor/Index';
 import { SearchOutlined } from '@ant-design/icons';
+
+import Appointment from './Index';
+
 const { Search } = Input;
 
 function DoctorAppointment() {
@@ -149,7 +151,16 @@ function DoctorAppointment() {
                <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
             </div>
          </div>
-         <Appointment selectedPatient={selectedPatient} type={1} prevAppointmentId={null} />
+         <Appointment
+            selectedPatient={selectedPatient}
+            type={1}
+            prevAppointmentId={null}
+            isExtraGrud={{
+               isCreate: true,
+               isChange: true,
+               isDelete: true
+            }}
+         />
       </div>
    );
 }

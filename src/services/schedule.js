@@ -15,5 +15,8 @@ class Schedule {
    async postReturnSlot(data) {
       return await jwtInterceopter.post('appoinment/return', data);
    }
+   async postChangeSlot(data) {
+      return await jwtInterceopter.post('appoinment/return/change', data);
+   }
 }
 export default new Schedule();

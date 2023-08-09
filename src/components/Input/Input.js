@@ -29,7 +29,7 @@ function NewRadioGroup(props) {
 }
 
 function NewSelect(props) {
-   return <Select {...props}>{props.children}</Select>;
+   return <Select {...props}></Select>;
 }
 
 function NewOption(props) {

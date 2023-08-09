@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
-import Appointment from '../Appointment/Schedule/Appointment';
+import Appointment from '../Appointment/Index';
 
 function Reinspection({ selectedPatient, appointmentId }) {
    const [isOpenMOdal, setIsOpenModal] = useState(false);
