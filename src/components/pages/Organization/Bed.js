@@ -6,7 +6,10 @@ import OrganizationBedService from '../../../services/organization/bed';
 import OrganizationRoomService from '../../../services/organization/room';
 
 import { NewTable, NewColumn } from '../../Table/Table';
+import NewModal from '../../Modal/Modal';
 import NewCard from '../../Card/Card';
+import { Button } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 function Bed() {
    const [beds, setBeds] = useState([]);
@@ -68,30 +71,42 @@ function Bed() {
    ];
 
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <NewCard title="Ор">
-               <NewTable
-                  prop={{
-                     rowKey: 'id',
-                     bordered: true,
-                     dataSource: beds
-                  }}
-                  meta={bedsMeta}
-                  isLoading={isLoading}
-                  onChange={(page, pageSize) => getBeds(page, pageSize)}
+      <>
+         <div className="flex flex-wrap">
+            <div className="w-full">
+               <NewCard
+                  title="Ор"
+                  extra={
+                     <>
+                        <Button type="primary" icon={<PlusCircleOutlined />}>
+                           Нэмэх
+                        </Button>
+                     </>
+                  }
                >
-                  <NewColumn dataIndex={'bedNumber'} title="Ор дугаар" />
-                  <NewColumn
-                     dataIndex={'roomId'}
-                     title="Өрөөны дугаар"
-                     render={(value) => {
-                        return rooms?.find((e) => e.id === value)?.roomNumber;
+                  <NewTable
+                     prop={{
+                        rowKey: 'id',
+                        bordered: true,
+                        dataSource: beds
                      }}
-                  />
-               </NewTable>
-            </NewCard>
+                     meta={bedsMeta}
+                     isLoading={isLoading}
+                     onChange={(page, pageSize) => getBeds(page, pageSize)}
+                  >
+                     <NewColumn
+                        dataIndex={'roomId'}
+                        title="Өрөөны дугаар"
+                        render={(value) => {
+                           return rooms?.find((e) => e.id === value)?.roomNumber;
+                        }}
+                     />
+                     <NewColumn dataIndex={'bedNumber'} title="Ор дугаар" />
+                  </NewTable>
+               </NewCard>
+            </div>
          </div>
+         <NewModal title="Ор нэмэх"></NewModal>
          {/* <div className="w-full">
             <UTable
                title={'Ор'}
@@ -104,7 +119,7 @@ function Bed() {
                isDelete={true}
             />
          </div> */}
-      </div>
+      </>
    );
 }
 export default Bed;

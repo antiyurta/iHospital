@@ -8,7 +8,7 @@ function PackageTable(props) {
    const { services, form, remove } = props;
    return (
       <div className="overflow-auto">
-         <Table bordered dataSource={services} pagination={false}>
+         <Table rowKey={'unikey'} bordered dataSource={services} pagination={false}>
             <Column
                title="Нэр"
                dataIndex={'serviceName'}

@@ -26,7 +26,7 @@ function Xray() {
       const response = await Get('device', token, {
          headers: {},
          params: {
-            deviceType: 1
+            deviceType: 0
          }
       });
       setDevices(response.data);

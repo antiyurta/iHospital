@@ -19,11 +19,17 @@ import DoctorInspection from './DoctorInspection';
 import Reinspection from './Reinspection';
 import OrderTable from './OrderTable/OrderTable';
 import PackageTable from './PackageTable/PackageTable';
+///
+import ExaminationService from '../../../services/service/examination';
+import TreatmentService from '../../../services/service/treatment';
+import XrayService from '../../../services/service/xray';
+//
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, appointmentHasInsurance, save }) {
    const token = useSelector(selectCurrentToken);
    const IncomePatientId = useLocation()?.state?.patientId;
    const IncomeCabinetId = useLocation()?.state?.cabinetId;
    const IncomeAppointmentId = useLocation()?.state?.appointmentId;
+   const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const config = {
       headers: {},
       params: {}
@@ -31,10 +37,12 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
    const [total, setTotal] = useState(Number);
 
    const handleclick = async (value) => {
+      setIsLoadingOrderTable(true);
       if (isPackage) {
          var services = [];
-         value.map((item) => {
+         value.map((item, index) => {
             const service = {};
+            service.unikey = index;
             service.serviceId = item.id;
             service.serviceName = item.name;
             service.serviceType = item.type;
@@ -51,11 +59,12 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
       } else {
          var services = [];
          var subTotal = 0;
-         console.log('----------ORDER', value);
-         value.map((item) => {
-            const service = {};
+         value.map((item, index) => {
+            var service = {};
+            service.unikey = index;
             service.id = item.id;
             service.name = item.name;
+            service.type = item.types?.type;
             if (usageType === 'IN') {
                service.price = item.inpatientPrice;
                service.oPrice = item.inpatientPrice;
@@ -63,7 +72,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
                service.price = item.price;
                service.oPrice = item.price;
             }
-            service.type = item.types?.type;
             if (item.type === 3) {
                service.diagnose = item.diagnose;
                service.surgeryType = item.surgeryType;
@@ -77,11 +85,14 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
                service.type = item.type;
                service.medicineType = null;
                service.description = '';
+               service.repeatTime = 1;
                service.dayCount = 1;
                service.total = 0;
-            } else if (item.type === 2) {
+            } else if (service.type === 2 || item.type === 2) {
                service.name = item.name;
                service.qty = item.qty ? item.qty : 1;
+               service.repeatTime = 1;
+               service.dayCount = 1;
                if (service.qty != 1) {
                   service.price = item.calCprice;
                   service.oPrice = item.price;
@@ -114,9 +125,33 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             data = datas.services.concat(services);
          }
          orderForm.setFieldsValue({ services: data });
-         console.log('----------ORDER', data);
          setTotal(total + subTotal);
       }
+      setIsLoadingOrderTable(false);
+   };
+   const handleClickSetOrder = async (services) => {
+      setIsLoadingOrderTable(true);
+      var newServices = [];
+      await Promise.all(
+         services?.map(async (service) => {
+            if (service.serviceType === 0) {
+               await ExaminationService.getById(service.serviceId).then((response) => {
+                  newServices.push(response.data.response);
+               });
+            } else if (service.serviceType === 1) {
+               await XrayService.getById(service.serviceId).then((response) => {
+                  console.log(response);
+                  newServices.push(response.data.response);
+               });
+            } else if (service.serviceType === 2) {
+               await TreatmentService.getById(service.serviceId).then((response) => {
+                  console.log(response);
+                  newServices.push(response.data.response);
+               });
+            }
+         })
+      );
+      handleclick(newServices);
    };
 
    const [showMedicine, setShowMedicine] = useState(false);
@@ -127,6 +162,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
    const [showInpatient, setShowInpatient] = useState(false);
    const [showPackage, setShowPackage] = useState(false);
    const [showSetOrder, setShowSetOrder] = useState(false);
+   const [showRecentRepice, setShowRecentRepice] = useState(false);
    //
    const [showDoctorInspection, setShowDoctorInspection] = useState(false);
    const [showReinspection, setShowReinspection] = useState(false);
@@ -153,9 +189,8 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             setShowMedicine(true);
          } else if (category.name === 'SetOrder') {
             setShowSetOrder(true);
-            // setModalBody(<SetOrder handleclick={handleclick} />);
-            // setModalTitle('СетОрдер сонгох');
          } else if (category.name === 'RecentRecipe') {
+            setShowRecentRepice(true);
             // setModalBody(<RecentRecipe handleclick={handleclick} />);
             // setModalTitle('Өмнөх жор сонгох');
          } else if (category.name === 'Treatment') {
@@ -197,7 +232,8 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
-            {showSetOrder && <SetOrder />}
+            {showSetOrder && <SetOrder handleclick={handleClickSetOrder} />}
+            {showRecentRepice && <RecentRecipe />}
             {showSurgery && (
                <Surgery
                   usageType={usageType}
@@ -221,6 +257,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
                         } else {
                            return (
                               <OrderTable
+                                 isLoading={isLoadingOrderTable}
                                  usageType={usageType}
                                  form={orderForm}
                                  services={services}
@@ -248,7 +285,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
                      })
                   }
                >
-                  {isPackage ? 'Багц хадгалах' : 'OTS Хадгалах'}
+                  {isPackage ? 'Хадгалах' : 'OTS Хадгалах'}
                </Button>
             </div>
          </div>
