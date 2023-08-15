@@ -36,7 +36,10 @@ function ListOfIssues({ patientId }) {
             prop={{
                rowKey: 'id',
                bordered: true,
-               dataSource: data
+               dataSource: data,
+               scroll: {
+                  y: 100
+               }
             }}
             meta={{
                page: 1,

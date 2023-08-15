@@ -1,12 +1,11 @@
 import React from 'react';
-import { Button, Checkbox, DatePicker, Empty, Input, InputNumber, Table } from 'antd';
+import { Button, Checkbox, DatePicker, Input, InputNumber } from 'antd';
 import OrderForm from './OrderForm';
 import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-
-const { Column } = Table;
-
+import { MinusCircleOutlined } from '@ant-design/icons';
+import { NewInputNumber } from '../../../Input/Input';
+import { NewColumn, NewTable } from '../../../Table/Table';
 const checkNumber = (event) => {
    var charCode = event.charCode;
    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
@@ -17,7 +16,7 @@ const checkNumber = (event) => {
 };
 
 function OrderTable(props) {
-   const { usageType, services, form, remove, setTotal } = props;
+   const { isLoading, usageType, services, form, remove, setTotal } = props;
    const minRule = (index) => {
       const type = form.getFieldValue(['services', index, 'type']);
       const state = type === 8 || type === 2 ? true : false;
@@ -35,29 +34,10 @@ function OrderTable(props) {
          }
       ];
    };
-   const totalCalculator = (key, type, name) => {
-      if (type === 'increase') {
-         let count = form.getFieldValue(['services', key, `${name}`]);
-         if (count === undefined) {
-            form.setFieldValue(['services', key, `${name}`], 1);
-            count = 1;
-         } else {
-            form.setFieldValue(['services', key, `${name}`], count + 1);
-         }
-      } else if (type === 'decrease') {
-         const count = form.getFieldValue(['services', key, `${name}`]);
-         form.setFieldValue(['services', key, `${name}`], count - 1);
-      }
+   const totalCalculator = (key, value, name) => {
+      form.setFieldValue(['services', key, `${name}`], value);
       let repeatTime = form.getFieldValue(['services', key, 'repeatTime']);
       let dayCount = form.getFieldValue(['services', key, 'dayCount']);
-      if (repeatTime === undefined) {
-         form.setFieldValue(['services', key, 'repeatTime'], 1);
-         repeatTime = 1;
-      }
-      if (dayCount === undefined) {
-         form.setFieldValue(['services', key, 'dayCount'], 1);
-         dayCount = 1;
-      }
       const oPrice = form.getFieldValue(['services', key, 'oPrice']);
       form.setFieldValue(['services', key, 'total'], repeatTime * dayCount);
       form.setFieldValue(['services', key, 'price'], repeatTime * dayCount * oPrice);
@@ -81,18 +61,25 @@ function OrderTable(props) {
       }
    };
    return (
-      <div className="overflow-auto">
-         <Table
-            bordered
-            locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-            dataSource={services}
-            pagination={false}
+      <>
+         <NewTable
+            prop={{
+               rowKey: 'unikey',
+               bordered: true,
+               dataSource: services
+            }}
+            meta={{
+               page: 1,
+               limit: services.length
+            }}
+            isLoading={isLoading}
+            isPagination={false}
          >
-            <Column
+            <NewColumn
                title="Cito"
                width={40}
                dataIndex={'isCito'}
-               render={(value, row, index) => {
+               render={(_value, _row, index) => {
                   return (
                      <OrderForm noStyle name={[index, 'isCito']} valuePropName="checked" editing={true}>
                         <Checkbox />
@@ -100,10 +87,10 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Нэр"
                dataIndex={'name'}
-               render={(value, row, index) => {
+               render={(_value, _row, index) => {
                   return (
                      <OrderForm noStyle name={[index, 'name']} editing={false}>
                         <Input />
@@ -111,10 +98,10 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Хэлбэр"
                dataIndex={'medicineType'}
-               render={(value, row, index) => {
+               render={(_value, _row, index) => {
                   return (
                      <OrderForm name={[index, 'medicineType']} editing={false}>
                         <TextArea />
@@ -122,10 +109,10 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Тун"
                dataIndex={'dose'}
-               render={(value, row, index) => {
+               render={(_value, _row, index) => {
                   return (
                      <OrderForm
                         name={[index, 'dose']}
@@ -136,10 +123,10 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Сорьц"
                dataIndex={'specimen'}
-               render={(value, row, index) => {
+               render={(_value, _row, index) => {
                   return (
                      <OrderForm
                         name={[index, 'specimen']}
@@ -150,7 +137,7 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Тайлбар"
                dataIndex={'description'}
                render={(value, row, index) => {
@@ -161,109 +148,51 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Өдөрт хэдэн удаа"
                width={130}
                dataIndex={'repeatTime'}
                render={(value, row, index) => {
                   return (
-                     <div className="inline-flex">
-                        <Button
-                           title="Хасах"
-                           onClick={() => totalCalculator(index, 'decrease', 'repeatTime')}
-                           disabled={isDisable(index, 'repeatTime')}
-                           className={isDisable(index, 'repeatTime') ? 'hidden' : ''}
-                           icon={
-                              <MinusCircleOutlined
-                                 style={{
-                                    color: 'red'
-                                 }}
-                              />
-                           }
-                           shape="circle"
+                     <OrderForm
+                        name={[index, 'repeatTime']}
+                        rules={minRule(index, 'repeatTime')}
+                        editing={!isDisable(index, 'repeatTime')}
+                     >
+                        <NewInputNumber
+                           onChange={(e) => totalCalculator(index, e, 'repeatTime')}
+                           defualtvalue={1}
+                           controls={false}
+                           min={1}
+                           onKeyPress={checkNumber}
                         />
-                        <OrderForm
-                           name={[index, 'repeatTime']}
-                           rules={minRule(index, 'repeatTime')}
-                           editing={!isDisable(index, 'repeatTime')}
-                        >
-                           <InputNumber
-                              disabled={true}
-                              className=" font-semibold text-black"
-                              min={1}
-                              onKeyPress={checkNumber}
-                           />
-                        </OrderForm>
-                        <Button
-                           title="Нэмэх"
-                           onClick={() => totalCalculator(index, 'increase', 'repeatTime')}
-                           disabled={isDisable(index, 'repeatTime')}
-                           className={isDisable(index, 'repeatTime') ? 'hidden' : ''}
-                           icon={
-                              <PlusCircleOutlined
-                                 style={{
-                                    color: 'green'
-                                 }}
-                              />
-                           }
-                           shape="circle"
-                        />
-                     </div>
+                     </OrderForm>
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Хэдэн өдөр"
                width={130}
                dataIndex={'dayCount'}
                render={(value, row, index) => {
                   return (
-                     <div className="inline-flex">
-                        <Button
-                           title="Хасах"
-                           onClick={() => totalCalculator(index, 'decrease', 'dayCount')}
-                           disabled={isDisable(index, 'dayCount')}
-                           className={isDisable(index, 'dayCount') ? 'hidden' : ''}
-                           icon={
-                              <MinusCircleOutlined
-                                 style={{
-                                    color: 'red'
-                                 }}
-                              />
-                           }
-                           shape="circle"
+                     <OrderForm
+                        name={[index, 'dayCount']}
+                        rules={minRule(index, 'dayCount')}
+                        editing={!isDisable(index, 'dayCount')}
+                     >
+                        <NewInputNumber
+                           onChange={(e) => totalCalculator(index, e, 'dayCount')}
+                           defualtvalue={1}
+                           controls={false}
+                           min={1}
+                           onKeyPress={checkNumber}
                         />
-                        <OrderForm
-                           name={[index, 'dayCount']}
-                           rules={minRule(index, 'dayCount')}
-                           editing={!isDisable(index, 'dayCount')}
-                        >
-                           <InputNumber
-                              disabled={true}
-                              className=" font-semibold text-black"
-                              min={1}
-                              onKeyPress={checkNumber}
-                           />
-                        </OrderForm>
-                        <Button
-                           title="Нэмэх"
-                           onClick={() => totalCalculator(index, 'increase', 'dayCount')}
-                           disabled={isDisable(index, 'dayCount')}
-                           className={isDisable(index, 'dayCount') ? 'hidden' : ''}
-                           icon={
-                              <PlusCircleOutlined
-                                 style={{
-                                    color: 'green'
-                                 }}
-                              />
-                           }
-                           shape="circle"
-                        />
-                     </div>
+                     </OrderForm>
                   );
                }}
             />
-            <Column
+            <NewColumn
                title="Нийт"
                width={60}
                dataIndex={'total'}
@@ -276,7 +205,7 @@ function OrderTable(props) {
                }}
             />
             {usageType === 'IN' && (
-               <Column
+               <NewColumn
                   title="Нийт хэмжээ"
                   dataIndex={'startAt'}
                   render={(value, row, index) => {
@@ -294,7 +223,7 @@ function OrderTable(props) {
                   }}
                />
             )}
-            <Column
+            <NewColumn
                title="Үнэ"
                width={200}
                dataIndex={'price'}
@@ -306,7 +235,7 @@ function OrderTable(props) {
                   );
                }}
             />
-            <Column
+            <NewColumn
                title=""
                width={40}
                render={(value, row, index) => {
@@ -315,8 +244,8 @@ function OrderTable(props) {
                   );
                }}
             />
-         </Table>
-      </div>
+         </NewTable>
+      </>
    );
 }
 export default OrderTable;

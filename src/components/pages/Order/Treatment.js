@@ -16,7 +16,6 @@ function Treatment({ handleclick }) {
    const [selectedTreatments, setSelectedTreatments] = useState([]);
    const [filterValue, setFilterValue] = useState('');
    const getTreatment = async () => {
-      console.log('asdasdsad');
       await jwtInterceopter
          .get('service/type', {
             params: {
