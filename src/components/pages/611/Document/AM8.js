@@ -1,7 +1,11 @@
 import React from 'react';
 
 //маягт АМ-8
-function AM8() {
+function AM8(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData }
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -106,6 +110,7 @@ function AM8() {
                7. Мэргэжил______________________________________________________________________
             </div>
             <div style={styles.rowStyle}>
+               {JSON.stringify(formData[0].data['AM8.1'])}
                8. (зур) өвчтэй байсан, өвчтөн асрамжилсан, хөл хоригдсон, эмчид үзүүлсэн, шинжилгээ, ариутгал эмчилгээ,
                протез хийлгэсэн________оны_____сарын____өдрөөс______оны____сарын____өдөр хүртэл (зур) ажлаас, хичээлээс)
                чөлөөлснийг магадлав.
