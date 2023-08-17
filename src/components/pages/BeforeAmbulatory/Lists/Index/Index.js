@@ -220,13 +220,16 @@ function Index({ type, isDoctor }) {
       } else if (type === 2) {
          return 'sadasd';
       } else if (type === 3) {
-         const beginTime = begin.split(':');
-         const endTime = end.split(':');
-         return (
-            <p className="bg-[#5cb85c] text-white">
-               {beginTime[0] + ':' + beginTime[1] + '-' + endTime[0] + ':' + endTime[1]}
-            </p>
-         );
+         const beginTime = begin?.split(':');
+         const endTime = end?.split(':');
+         if ((beginTime, endTime)) {
+            return (
+               <p className="bg-[#5cb85c] text-white">
+                  {beginTime[0] + ':' + beginTime[1] + '-' + endTime[0] + ':' + endTime[1]}
+               </p>
+            );
+         }
+         return;
       } else {
          return <p className="bg-[#5bc0de] text-white">Урьдчилан сэргийлэх</p>;
       }
