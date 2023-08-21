@@ -6,12 +6,12 @@ import { useSelector } from 'react-redux';
 import { selectCurrentAppId } from '../../../../features/authReducer';
 import FormRender from './FormRender';
 import { PrinterOutlined } from '@ant-design/icons';
-import jwtInterceopter from '../../../jwtInterceopter';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import { NewColumn, NewColumnGroup, NewTable } from '../../../Table/Table';
-import PmsPatientServices from '../../../../services/pms/patient';
 //
+import jwtInterceopter from '../../../jwtInterceopter';
+import PmsPatientServices from '../../../../services/pms/patient';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
 //
@@ -20,9 +20,7 @@ function Index(props) {
    const printRef = useRef();
    const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
-   const [isCreate, setIsCreate] = useState(true);
    const [data, setData] = useState([]);
-   const [meta, setMeta] = useState({});
    //
    const [printData, setPrintData] = useState({});
    //
@@ -57,13 +55,11 @@ function Index(props) {
       });
    };
    //
-   const getData = async (page, pageSize) => {
+   const getData = async () => {
       setIsLoading(true);
       await jwtInterceopter
          .get('document-middleware', {
             params: {
-               page: page,
-               limit: pageSize,
                usageType: usageType,
                appointmentId: appointmentId,
                documentId: documentValue,
@@ -71,26 +67,22 @@ function Index(props) {
             }
          })
          .then((response) => {
-            const data = response.data.response.data;
-            const meta = response.data.response.meta;
+            const data = response.data.response;
             setData(data);
-            setMeta(meta);
          })
          .finally(() => {
             setIsLoading(false);
          });
    };
    const getDocumentForm = async () => {
-      const conf = {
-         headers: {},
+      await DocumentFormServices.getByPageFilter({
          params: {
             documentValue: documentValue
          }
-      };
-      await DocumentFormServices.getByPageFilter(conf)
+      })
          .then((response) => {
-            if (response.data.response?.data?.length > 0) {
-               setDocumentForm(response.data.response?.data[0]);
+            if (response.data.response?.length > 0) {
+               setDocumentForm(response.data.response[0]);
             }
          })
          .catch((error) => {
@@ -184,7 +176,7 @@ function Index(props) {
                setIsLoading(false);
             });
       }
-      getData(1, 10);
+      getData();
    };
    const findSupportColumns = (id) => {
       console.log(id);
@@ -228,7 +220,7 @@ function Index(props) {
                         key={idx}
                         title={option.value}
                         dataIndex={['data', `${option.keyWord}`]}
-                        render={(text, row) => {
+                        render={(text) => {
                            if (option.isInteger) {
                               if (option.type === 'checkbox') {
                                  return text?.map((txt) => {
@@ -272,7 +264,7 @@ function Index(props) {
    }, [documentValue]);
    useEffect(() => {
       if (!isObjectEmpty(documentForm)) {
-         getData(1, 10);
+         getData();
       }
    }, [documentForm]);
    if (documentValue === 0) {
@@ -303,7 +295,7 @@ function Index(props) {
                </div>
             </div>
             <div className="float-right">
-               <Button onClick={() => getData(1, 10)}>Сэргээх</Button>
+               <Button onClick={() => getData()}>Сэргээх</Button>
             </div>
          </div>
          <div>
@@ -313,10 +305,12 @@ function Index(props) {
                   bordered: true,
                   dataSource: data
                }}
-               meta={meta}
-               onChange={(page, pageSize) => getData(page, pageSize)}
+               meta={{
+                  page: 1,
+                  limit: data.length
+               }}
                isLoading={isLoading}
-               isPagination={true}
+               isPagination={false}
             >
                <NewColumn
                   width={120}
@@ -356,8 +350,6 @@ function Index(props) {
                            setIsOpenSelectPositionModal(false);
                            setIsOpenFormModal(true);
                            form.resetFields();
-                           console.log(data);
-                           form.setFieldsValue(data[0]?.data);
                         }}
                      >
                         {option.structure?.name}
