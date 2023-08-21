@@ -82,6 +82,8 @@ function index4({ options, namePanel, handleChange }) {
                                                       <Option value="input">Input</Option>
                                                       <Option value="inputNumber">InputNumber</Option>
                                                       <Option value="textarea">TextArea</Option>
+                                                      <Option value="rangepicker">RangePicker</Option>
+                                                      <Option value="datepicker">DatePicker</Option>
                                                    </Select>
                                                 </Form.Item>
                                                 <Form.Item
@@ -109,8 +111,8 @@ function index4({ options, namePanel, handleChange }) {
                                                    }}
                                                 >
                                                    <Radio.Group>
-                                                      <Radio value={true}>YES</Radio>
-                                                      <Radio value={false}>NO</Radio>
+                                                      <Radio value={true}>Тийм</Radio>
+                                                      <Radio value={false}>Үгүй</Radio>
                                                    </Radio.Group>
                                                 </Form.Item>
                                              </div>

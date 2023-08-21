@@ -88,9 +88,6 @@ function DocumentShow({ props }) {
                               prop={{
                                  rowKey: 'value',
                                  bordered: true,
-                                 // scroll: {
-                                 //    y: 3000
-                                 // },
                                  dataSource: filteredDocument,
                                  onRow: (record, _rowIndex) => {
                                     return {

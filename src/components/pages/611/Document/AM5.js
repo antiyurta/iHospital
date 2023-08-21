@@ -2,7 +2,9 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 //маягт АМ-5
-function AM5() {
+function AM5(props) {
+   const { data } = props;
+   console.log(data);
    const styles = {
       rowCells: {
          borderWidth: 1,

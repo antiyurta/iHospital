@@ -1,12 +1,18 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
 const webpack = require('webpack');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionPlugin = require('compression-webpack-plugin');
+const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+
+const DEV_URL = dotenv.parsed.REACT_APP_DEV_URL;
+
+const isDevelopment = dotenv.parsed.NODE_ENV != 'production';
 
 module.exports = {
+   mode: isDevelopment ? 'development' : 'production',
    devtool: 'source-map',
    context: __dirname,
    entry: './src/index.js',
@@ -17,10 +23,22 @@ module.exports = {
    },
    devServer: {
       compress: true,
+      proxy: {
+         '/api/': {
+            target: DEV_URL,
+            changeOrigin: true,
+            pathRewrite: {
+               ['^/api']: ''
+            }
+         }
+      },
       port: 3000,
       open: true,
-      hot: true,
-      historyApiFallback: true
+      historyApiFallback: true,
+      client: {
+         logging: 'error',
+         overlay: true
+      }
    },
    watch: true,
    target: 'web',
@@ -67,7 +85,6 @@ module.exports = {
       }
    },
    plugins: [
-      new BundleAnalyzerPlugin(),
       new CompressionPlugin({
          algorithm: 'gzip',
          test: /.js$|.css$/
@@ -75,10 +92,11 @@ module.exports = {
       new webpack.HotModuleReplacementPlugin(),
       new FaviconsWebpackPlugin({
          logo: './public/ihospital.png',
-         mode: 'webapp',
+         mode: 'auto',
          manifest: './public/manifest.json',
          publicPath: './public/'
       }),
+      isDevelopment && new ReactRefreshPlugin(),
       new HtmlWebpackPlugin({
          template: path.resolve(__dirname, './public/index.html'),
          filename: 'index.html',

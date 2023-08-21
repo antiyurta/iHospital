@@ -6,12 +6,12 @@ import { useSelector } from 'react-redux';
 import { selectCurrentAppId } from '../../../../features/authReducer';
 import FormRender from './FormRender';
 import { PrinterOutlined } from '@ant-design/icons';
-import jwtInterceopter from '../../../jwtInterceopter';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import { NewColumn, NewColumnGroup, NewTable } from '../../../Table/Table';
-import PmsPatientServices from '../../../../services/pms/patient';
 //
+import jwtInterceopter from '../../../jwtInterceopter';
+import PmsPatientServices from '../../../../services/pms/patient';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
 //
@@ -20,7 +20,6 @@ function Index(props) {
    const printRef = useRef();
    const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
-   const [isCreate, setIsCreate] = useState(true);
    const [data, setData] = useState([]);
    //
    const [printData, setPrintData] = useState({});
@@ -68,7 +67,7 @@ function Index(props) {
             }
          })
          .then((response) => {
-            const data = response.data.response.data;
+            const data = response.data.response;
             setData(data);
          })
          .finally(() => {
@@ -76,16 +75,14 @@ function Index(props) {
          });
    };
    const getDocumentForm = async () => {
-      const conf = {
-         headers: {},
+      await DocumentFormServices.getByPageFilter({
          params: {
             documentValue: documentValue
          }
-      };
-      await DocumentFormServices.getByPageFilter(conf)
+      })
          .then((response) => {
-            if (response.data.response?.data?.length > 0) {
-               setDocumentForm(response.data.response?.data[0]);
+            if (response.data.response?.length > 0) {
+               setDocumentForm(response.data.response[0]);
             }
          })
          .catch((error) => {
@@ -119,23 +116,67 @@ function Index(props) {
          patientId: patientId,
          data: values
       };
-      await jwtInterceopter
-         .post(documentForm.url, data)
-         .then((response) => {
-            if (response.status === 201) {
-               setIsOpenFormModal(false);
-               getData();
-            }
-            console.log(response);
-         })
-         .catch((error) => {
-            if (error.response.status === 409) {
-               openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
-            }
-         })
-         .finally(() => {
-            setIsLoading(false);
-         });
+      if (documentForm.isMulti) {
+         await jwtInterceopter
+            .get(documentForm.url, {
+               params: {
+                  appointmentId: appointmentId,
+                  usageType: usageType,
+                  documentId: documentValue,
+                  patientId: patientId
+               }
+            })
+            .then(async (response) => {
+               const incomeData = response.data.response.data;
+               if (incomeData?.length > 0) {
+                  await jwtInterceopter
+                     .patch(documentForm.url + '/' + incomeData[0]._id, {
+                        data: {
+                           ...incomeData[0].data,
+                           ...values
+                        }
+                     })
+                     .then((res) => {
+                        if (res.status === 200) {
+                           setIsOpenFormModal(false);
+                        }
+                     });
+               } else {
+                  await jwtInterceopter
+                     .post(documentForm.url, data)
+                     .then((response) => {
+                        if (response.status === 201) {
+                           setIsOpenFormModal(false);
+                        }
+                     })
+                     .catch((error) => {
+                        if (error.response.status === 409) {
+                           openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+                        }
+                     })
+                     .finally(() => {
+                        setIsLoading(false);
+                     });
+               }
+            });
+      } else {
+         await jwtInterceopter
+            .post(documentForm.url, data)
+            .then((response) => {
+               if (response.status === 201) {
+                  setIsOpenFormModal(false);
+               }
+            })
+            .catch((error) => {
+               if (error.response.status === 409) {
+                  openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+               }
+            })
+            .finally(() => {
+               setIsLoading(false);
+            });
+      }
+      getData();
    };
    const findSupportColumns = (id) => {
       console.log(id);
@@ -162,6 +203,13 @@ function Index(props) {
          }
       ];
    };
+   const equalerNumber = (text, option) => {
+      return option.options?.map((itm) => {
+         if (parseInt(itm.keyWord) === text) {
+            return itm.label + ', ';
+         }
+      });
+   };
    const columnConfigure = () => {
       return documentForm?.documentForm?.map((item, index) => {
          return (
@@ -174,13 +222,31 @@ function Index(props) {
                         dataIndex={['data', `${option.keyWord}`]}
                         render={(text) => {
                            if (option.isInteger) {
-                              return option.options?.map((itm) => {
-                                 if (parseInt(itm.keyWord) === text) {
-                                    return itm.label;
+                              if (option.type === 'checkbox') {
+                                 return text?.map((txt) => {
+                                    return equalerNumber(txt, option);
+                                 });
+                              } else {
+                                 return equalerNumber(text, option);
+                              }
+                           } else {
+                              if (option.type === 'rangepicker') {
+                                 if (text) {
+                                    return (
+                                       moment(text[0]).format('YYYY/MM/DD') +
+                                       '->' +
+                                       moment(text[1]).format('YYYY/MM/DD')
+                                    );
                                  }
-                              });
+                                 return;
+                              } else if (option.type === 'datepicker') {
+                                 if (text) {
+                                    return moment(text).format('YYYY/MM/DD');
+                                 }
+                                 return;
+                              }
+                              return text;
                            }
-                           return text;
                         }}
                      />
                   );
@@ -216,7 +282,7 @@ function Index(props) {
                   }}
                >
                   <Button type="primary" onClick={() => setIsOpenSelectPositionModal(true)}>
-                     Бөглөх
+                     {documentForm.isMulti ? (data?.length > 0 ? 'Засах' : 'Бөглөх') : 'Бөглөх'}
                   </Button>
                   <Button
                      icon={<PrinterOutlined />}
@@ -283,6 +349,7 @@ function Index(props) {
                            setSelectedOptionId(index);
                            setIsOpenSelectPositionModal(false);
                            setIsOpenFormModal(true);
+                           form.resetFields();
                         }}
                      >
                         {option.structure?.name}
