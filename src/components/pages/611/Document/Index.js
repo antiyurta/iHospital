@@ -1,7 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { CloseOutlined, EyeOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Select, Table } from 'antd';
-import React, { Suspense, useEffect, useState } from 'react';
+import { Button } from 'antd';
 import { openNofi } from '../../../comman';
+import { NewInput } from '../../../Input/Input';
+import { NewColumn, NewTable } from '../../../Table/Table';
+import NewModal from '../../../Modal/Modal';
 // AM start
 import AM1B from './AM1B';
 import AM_1V from './AM_1V';
@@ -93,8 +96,6 @@ const C537M1 = React.lazy(() => import('../Command/537M1')); // tushaal maygt
 const A293 = React.lazy(() => import('../Command/A293')); // ert seremjulleg yaralta
 const FC537M1 = React.lazy(() => import('../Forms/Command/537M1')); // form
 // nemelt tushaal
-const { Search } = Input;
-const { Option } = Select;
 
 const options = [
    {
@@ -551,7 +552,7 @@ class ReturnByIdComponent extends React.Component {
                   this.setState({ isOpenModal: true });
                }}
             />
-            <Modal
+            <NewModal
                title={options?.find((e) => e.value === this.props.value)?.label}
                open={this.state.isOpenModal}
                onCancel={() => this.setState({ isOpenModal: false })}
@@ -561,7 +562,7 @@ class ReturnByIdComponent extends React.Component {
                }}
             >
                <ReturnById type={true} id={this.props.value} />
-            </Modal>
+            </NewModal>
          </>
       );
    }
@@ -657,21 +658,6 @@ export function ReturnById({ type, id, appointmentId, data }) {
    else if (id === 82) return <EIM5_2 type={type} data={data} appointmentId={appointmentId} />;
    else if (id === 86) return <A293 type={type} data={data} appointmentId={appointmentId} />;
    else if (id === 87) return <CT1_2H2 type={type} data={data} appointmentId={appointmentId} />;
-   // if (id === 1) {
-   //    return (
-   //       <Suspense fallback={'<div>Loading</div>'}>
-   //          <AM1B />
-   //       </Suspense>
-   //    );
-   // } else if (id === 2) {
-   //    return (
-   //       <Suspense fallback={'<div>Loading</div>'}>
-   //          <AM1V />
-   //       </Suspense>
-   //    );
-   // } else if (id === 3) {
-   //    return <Suspense fallback={'<div>Loading</div>'}>{type ? <C537M1 /> : <FC537M1 isOpen={isOpen} />}</Suspense>;
-   // }
 }
 
 export function ReturnAll() {
@@ -734,7 +720,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   }}
                >
                   <div>
-                     <Input
+                     <NewInput
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                         placeholder="Хайх"
@@ -774,96 +760,92 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
       return (
          <div className="grid grid-cols-2 gap-6">
             <div className="grid gap-6">
-               <Input onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
-               <Table
-                  rowKey={'value'}
-                  bordered
-                  scroll={{
-                     y: 500
+               <NewInput onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
+               <NewTable
+                  prop={{
+                     rowKey: 'value',
+                     bordered: true,
+                     scroll: {
+                        y: 500
+                     },
+                     dataSource: filteredOptionsSelect
                   }}
-                  columns={[
-                     {
-                        title: '№',
-                        dataIndex: 'value',
-                        width: 40
-                     },
-                     {
-                        title: 'Баримт бичгийн нэр',
-                        dataIndex: 'docName',
-                        render: (text) => {
-                           return <p className="whitespace-normal text-black">{text}</p>;
-                        }
-                     },
-                     {
-                        title: 'Тушаал шийдвэрийн дугаар',
-                        dataIndex: 'label',
-                        render: (text) => {
-                           return <p className="whitespace-normal text-black">{text}</p>;
-                        }
-                     },
-                     {
-                        title: '',
-                        width: 40,
-                        render: (_text, row) => {
-                           return (
-                              <Button
-                                 onClick={() => add(row)}
-                                 icon={
-                                    <RightOutlined
-                                       style={{
-                                          color: 'blue'
-                                       }}
-                                    />
-                                 }
-                              />
-                           );
-                        }
-                     }
-                  ]}
-                  dataSource={filteredOptionsSelect}
-                  pagination={false}
-               />
+                  meta={{
+                     page: 1,
+                     limit: filteredOptionsSelect.length
+                  }}
+                  isLoading={false}
+                  isPagination={false}
+               >
+                  <NewColumn
+                     title="Баримт бичгийн нэр"
+                     dataIndex="docName"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="Тушаал шийдвэрийн дугаар"
+                     dataIndex="label"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title=""
+                     width={40}
+                     render={(_text, row) => {
+                        return (
+                           <Button
+                              onClick={() => add(row)}
+                              icon={
+                                 <RightOutlined
+                                    style={{
+                                       color: 'blue'
+                                    }}
+                                 />
+                              }
+                           />
+                        );
+                     }}
+                  />
+               </NewTable>
             </div>
             <div className="grid gap-6">
-               <Table
-                  rowKey={'value'}
-                  bordered
-                  scroll={{
-                     y: 500
+               <NewTable
+                  prop={{
+                     rowKey: 'value',
+                     bordered: true,
+                     scroll: {
+                        y: 500
+                     },
+                     dataSource: selectedOptions
                   }}
-                  columns={[
-                     {
-                        title: '№',
-                        dataIndex: 'value',
-                        width: 40
-                     },
-                     {
-                        title: 'Баримт бичгийн нэр',
-                        dataIndex: 'docName'
-                     },
-                     {
-                        title: 'Тушаал шийдвэрийн дугаар',
-                        dataIndex: 'label'
-                     },
-                     {
-                        title: '',
-                        width: 40,
-                        dataIndex: 'value',
-                        render: (_text, _row, index) => {
-                           return (
-                              <CloseOutlined
-                                 style={{
-                                    color: 'red'
-                                 }}
-                                 onClick={() => remove(index)}
-                              />
-                           );
-                        }
-                     }
-                  ]}
-                  dataSource={selectedOptions}
-                  pagination={false}
-               />
+                  meta={{
+                     page: 1,
+                     limit: selectedOptions.length
+                  }}
+                  isLoading={false}
+                  isPagination={false}
+               >
+                  <NewColumn title="Баримт бичгийн нэр" dataIndex="docName" />
+                  <NewColumn title="Тушаал шийдвэрийн дугаар" dataIndex="label" />
+                  <NewColumn
+                     title=""
+                     width={40}
+                     dataIndex="value"
+                     render={(_text, _row, index) => {
+                        return (
+                           <CloseOutlined
+                              style={{
+                                 color: 'red'
+                              }}
+                              onClick={() => remove(index)}
+                           />
+                        );
+                     }}
+                  />
+               </NewTable>
                <Button type="primary" onClick={() => handleClick(selectedOptions)}>
                   Хадгалах
                </Button>

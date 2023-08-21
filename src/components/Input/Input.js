@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, DatePicker, Input, InputNumber, Radio, Select } from 'antd';
+import { Checkbox, DatePicker, Input, InputNumber, Radio, Select, Switch } from 'antd';
 
 const { TextArea, Search } = Input;
 const { Option } = Select;
@@ -52,6 +52,10 @@ function NewRangePicker(props) {
    return <RangePicker {...props} />;
 }
 
+function NewSwitch(props) {
+   return <Switch {...props} />;
+}
+
 export {
    NewInput,
    NewInputNumber,
@@ -64,5 +68,6 @@ export {
    NewDatePicker,
    NewRangePicker,
    NewCheckboxGroup,
-   NewCheckbox
+   NewCheckbox,
+   NewSwitch
 };
