@@ -50,7 +50,7 @@ function NewTable(props) {
          >
             <NewColumn
                title="№"
-               width={10}
+               width={50}
                render={(_value, _row, index) => {
                   return meta.page * meta.limit - (meta.limit - index - 1);
                }}

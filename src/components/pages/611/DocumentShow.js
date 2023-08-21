@@ -1,12 +1,13 @@
 import React from 'react';
 import { SnippetsOutlined } from '@ant-design/icons';
-import { Button, Input, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { useState } from 'react';
 import { openNofi } from '../../comman';
 
 import Customized from '../BeforeAmbulatory/Customized/Index';
 import { NewColumn, NewTable } from '../../Table/Table';
 import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
+import { NewInput } from '../../Input/Input';
 
 function DocumentShow({ props }) {
    const [documents, setDocuments] = useState([]);
@@ -71,7 +72,7 @@ function DocumentShow({ props }) {
                <div className="flex flex-col gap-3 px-3 border-r-[2px] w-[300px]">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
-                        <Input
+                        <NewInput
                            style={{
                               backgroundColor: 'white'
                            }}

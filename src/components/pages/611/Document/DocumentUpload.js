@@ -1,18 +1,16 @@
-import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Modal, Popconfirm, Select, Spin, Switch, Upload } from 'antd';
-import React, { Suspense, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { DefualtGet, Get, Patch, Post, openNofi } from '../../../comman';
-import { ReturnById, ReturnDetails, ReturnAll } from './Index';
-//
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Form, Popconfirm, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { openNofi } from '../../../comman';
+import { ReturnAll } from './Index';
+// components
 import Index4 from '../../FormBuilder/FBuilder/index4';
-import jwtInterceopter from '../../../jwtInterceopter';
+import NewModal from '../../../Modal/Modal';
+import NewCard from '../../../Card/Card';
+import { NewInput, NewOption, NewSelect, NewSwitch } from '../../../Input/Input';
+// services
+import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 //
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
-const { Option } = Select;
-const { TextArea } = Input;
 
 const typeSelectData = [
    {
@@ -67,7 +65,6 @@ const options = [
 ];
 
 function DocumentUpload() {
-   const token = useSelector(selectCurrentToken);
    const [form] = Form.useForm();
    const documents = ReturnAll();
    const [selectedId, setSelectedId] = useState(Number);
@@ -75,12 +72,7 @@ function DocumentUpload() {
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    const [searchField, setSearchField] = useState('');
    const [documentForms, setDocumentForms] = useState([]);
-   //
-   const [isOpen, setIsOpen] = useState(false);
    const [loading, setLoading] = useState(false);
-   const [jsFilePath, setJsFilePath] = useState('');
-   const [uploadForm] = Form.useForm();
-   const [dd, setdd] = useState(false);
    //
    const openModal = (state, row) => {
       if (row != null) {
@@ -91,10 +83,8 @@ function DocumentUpload() {
       setIsOpenEditModal(true);
    };
    const HandleChangeTest = (panelName, optionName, name) => {
-      console.log(panelName, optionName, name);
       const formData = form.getFieldsValue();
       const type = form.getFieldValue([panelName, optionName, 'options', name, 'type']);
-      console.log(type);
       if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
          formData[panelName][optionName].options[name] = {
             type: type,
@@ -110,32 +100,29 @@ function DocumentUpload() {
       form.setFieldsValue(formData);
    };
    const onFinish = async (values) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
       if (editMode) {
-         const response = await Patch('organization/document-form/' + selectedId, token, conf, values);
-         if (response === 200) {
-            form.resetFields();
-            setIsOpenEditModal(false);
-         }
+         await OrganizationDocumentFormService.patch(selectedId, values).then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+               form.resetFields();
+               setIsOpenEditModal(false);
+            }
+         });
       } else {
-         const response = await Post('organization/document-form', token, conf, values);
-         if (response === 201) {
-            form.resetFields();
-            getDocumentForms();
-            setIsOpenEditModal(false);
-         }
+         await OrganizationDocumentFormService.post(values).then((response) => {
+            if (response.status === 201) {
+               form.resetFields();
+               getDocumentForms();
+               setIsOpenEditModal(false);
+            }
+         });
       }
    };
    const getDocumentForms = async () => {
       setLoading(true);
-      await jwtInterceopter
-         .get('organization/document-form')
+      await OrganizationDocumentFormService.getAll()
          .then((response) => {
-            console.log(response);
-            setDocumentForms(response.data.response.data);
+            setDocumentForms(response.data.response);
          })
          .catch((error) => {
             console.log(error);
@@ -148,13 +135,11 @@ function DocumentUpload() {
       return form.name?.toLowerCase().includes(searchField.toLowerCase());
    });
    const deleteForm = async (id) => {
-      await jwtInterceopter
-         .delete('organization/document-form/' + id)
+      await OrganizationDocumentFormService.delete(id)
          .then((response) => {
-            console.log(response);
             if (response.status === 200) {
                getDocumentForms();
-               openNofi('success', 'asdsa', 'asdsa');
+               openNofi('success', 'Амжилттай', 'Устгагдсан');
             }
          })
          .catch((error) => {
@@ -169,7 +154,7 @@ function DocumentUpload() {
          <div className="flex flex-wrap">
             <div className="w-full md:w-1/2">
                <div className="mx-3">
-                  <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
+                  <NewInput placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
                </div>
             </div>
             <div className="w-full md:w-1/2">
@@ -191,7 +176,7 @@ function DocumentUpload() {
             <div className="grid grid-cols-4 gap-3 m-3">
                {filteredForm?.map((form, index) => {
                   return (
-                     <Card
+                     <NewCard
                         key={index}
                         className="custom-card"
                         title={
@@ -233,7 +218,7 @@ function DocumentUpload() {
                })}
             </div>
          </Spin>
-         <Modal
+         <NewModal
             title="Маягтын асуумж"
             open={isOpenEditModal}
             onCancel={() => setIsOpenEditModal(false)}
@@ -254,13 +239,13 @@ function DocumentUpload() {
             >
                <div className="grid grid-cols-2 gap-3">
                   <Form.Item label="Маягтын нэр" name="name">
-                     <Input />
+                     <NewInput />
                   </Form.Item>
                   <Form.Item label="URL" name="url">
-                     <Input />
+                     <NewInput />
                   </Form.Item>
                   <Form.Item label="Холбогдох маягт" name="documentValue">
-                     <Select
+                     <NewSelect
                         showSearch
                         allowClear
                         optionFilterProp="children"
@@ -270,26 +255,26 @@ function DocumentUpload() {
                      >
                         {documents?.map((document, index) => {
                            return (
-                              <Option
+                              <NewOption
                                  disabled={documentForms.find((e) => e.documentValue === document.value) ? true : false}
                                  key={index}
                                  value={document.value}
                               >
                                  {document.label}
-                              </Option>
+                              </NewOption>
                            );
                         })}
-                     </Select>
+                     </NewSelect>
                   </Form.Item>
                   <Form.Item label="Олон талт эсэх" name="isMulti" valuePropName="checked">
-                     <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                     <NewSwitch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                   </Form.Item>
                </div>
                <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
                   <Index4 options={options} namePanel={'documentForm'} handleChange={HandleChangeTest} />
                </div>
             </Form>
-         </Modal>
+         </NewModal>
       </>
    );
 }
