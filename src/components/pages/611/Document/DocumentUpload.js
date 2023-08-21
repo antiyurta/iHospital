@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input, Modal, Popconfirm, Select, Spin, Upload } from 'antd';
+import { Button, Card, Form, Input, Modal, Popconfirm, Select, Spin, Switch, Upload } from 'antd';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
@@ -233,7 +233,6 @@ function DocumentUpload() {
                })}
             </div>
          </Spin>
-
          <Modal
             title="Маягтын асуумж"
             open={isOpenEditModal}
@@ -245,35 +244,47 @@ function DocumentUpload() {
             }
             width="70%"
          >
-            <Form form={form} layout="vertical">
-               <Form.Item label="Form name Нэр" name="name">
-                  <Input />
-               </Form.Item>
-               <Form.Item label="URL" name="url">
-                  <Input />
-               </Form.Item>
-               <Form.Item label="Холбогдох маягт" name="documentValue">
-                  <Select
-                     showSearch
-                     allowClear
-                     optionFilterProp="children"
-                     filterOption={(input, option) =>
-                        (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                     }
-                  >
-                     {documents?.map((document, index) => {
-                        return (
-                           <Option
-                              disabled={documentForms.find((e) => e.documentValue === document.value) ? true : false}
-                              key={index}
-                              value={document.value}
-                           >
-                              {document.label}
-                           </Option>
-                        );
-                     })}
-                  </Select>
-               </Form.Item>
+            <Form
+               form={form}
+               layout="vertical"
+               initialValues={{
+                  url: 'document-middleware',
+                  isMulti: false
+               }}
+            >
+               <div className="grid grid-cols-2 gap-3">
+                  <Form.Item label="Маягтын нэр" name="name">
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="URL" name="url">
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Холбогдох маягт" name="documentValue">
+                     <Select
+                        showSearch
+                        allowClear
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                           (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                     >
+                        {documents?.map((document, index) => {
+                           return (
+                              <Option
+                                 disabled={documentForms.find((e) => e.documentValue === document.value) ? true : false}
+                                 key={index}
+                                 value={document.value}
+                              >
+                                 {document.label}
+                              </Option>
+                           );
+                        })}
+                     </Select>
+                  </Form.Item>
+                  <Form.Item label="Олон талт эсэх" name="isMulti" valuePropName="checked">
+                     <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                  </Form.Item>
+               </div>
                <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
                   <Index4 options={options} namePanel={'documentForm'} handleChange={HandleChangeTest} />
                </div>

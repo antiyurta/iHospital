@@ -1,9 +1,9 @@
 import React from 'react';
-import { DatePicker, Input, InputNumber, Radio, Select } from 'antd';
+import { Checkbox, DatePicker, Input, InputNumber, Radio, Select } from 'antd';
 
 const { TextArea, Search } = Input;
 const { Option } = Select;
-
+const { RangePicker } = DatePicker;
 function NewInput(props) {
    return <Input {...props} />;
 }
@@ -21,11 +21,19 @@ function NewSearch(props) {
 }
 
 function NewRadio(props) {
-   return <Radio {...props}>{props.children}</Radio>;
+   return <Radio {...props} />;
 }
 
 function NewRadioGroup(props) {
-   return <Radio.Group {...props}>{props.children}</Radio.Group>;
+   return <Radio.Group {...props} />;
+}
+
+function NewCheckbox(props) {
+   return <Checkbox {...props} />;
+}
+
+function NewCheckboxGroup(props) {
+   return <Checkbox.Group {...props} />;
 }
 
 function NewSelect(props) {
@@ -40,6 +48,10 @@ function NewDatePicker(props) {
    return <DatePicker {...props} />;
 }
 
+function NewRangePicker(props) {
+   return <RangePicker {...props} />;
+}
+
 export {
    NewInput,
    NewInputNumber,
@@ -49,5 +61,8 @@ export {
    NewRadioGroup,
    NewSelect,
    NewOption,
-   NewDatePicker
+   NewDatePicker,
+   NewRangePicker,
+   NewCheckboxGroup,
+   NewCheckbox
 };

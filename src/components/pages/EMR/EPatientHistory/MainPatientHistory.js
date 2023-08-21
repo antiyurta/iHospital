@@ -82,7 +82,7 @@ function MainPatientHistory({
          })
          .then((response) => {
             setItems([]);
-            response.data.response.data?.map((el, index) => {
+            response.data.response.data?.map((el) => {
                setItems((items) => [
                   ...items,
                   {

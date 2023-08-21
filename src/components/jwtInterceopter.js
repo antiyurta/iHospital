@@ -6,9 +6,10 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 var jwtInterceopter = axios.create({});
 
-jwtInterceopter.defaults.baseURL = DEV_URL;
+jwtInterceopter.defaults.baseURL = '/api/';
 
 jwtInterceopter.interceptors.request.use((config) => {
+   config.headers['Content-Type'] = 'application/json';
    let tokens = JSON.parse(localStorage.getItem('tokens'));
    if (tokens) {
       config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
@@ -22,6 +23,7 @@ jwtInterceopter.interceptors.response.use(
       return response;
    },
    async (error) => {
+      console.log('============>', error);
       const originalConfig = error.config;
       if (originalConfig?.url !== '/login' && error.response) {
          console.log(error);

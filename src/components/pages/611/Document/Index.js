@@ -579,7 +579,7 @@ export function ReturnById({ type, id, appointmentId, data }) {
    else if (id === 4) return <AM2B />;
    else if (id === 5) return <AM3 />;
    else if (id === 6) return <AM4 />;
-   else if (id === 7) return <AM5 />;
+   else if (id === 7) return <AM5 data={data} />;
    else if (id === 8) return <NotFound />;
    else if (id === 9) return <AM6 />;
    else if (id === 10) return <AM7 />;

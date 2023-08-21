@@ -22,7 +22,7 @@ function ProgressCheck({ PatientId }) {
    const getProgressChecks = async (id) => {
       config.params.patientId = id;
       const response = await Get('emr/patient-history', token, config);
-      if (response.data.length != 0) {
+      if (response.data?.length > 0) {
          setHistory(response.data.slice(-1)[0]);
       }
    };

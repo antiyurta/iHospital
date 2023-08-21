@@ -22,6 +22,7 @@ function Index(props) {
    const [form] = Form.useForm();
    const [isCreate, setIsCreate] = useState(true);
    const [data, setData] = useState([]);
+   const [meta, setMeta] = useState({});
    //
    const [printData, setPrintData] = useState({});
    //
@@ -56,11 +57,13 @@ function Index(props) {
       });
    };
    //
-   const getData = async () => {
+   const getData = async (page, pageSize) => {
       setIsLoading(true);
       await jwtInterceopter
          .get('document-middleware', {
             params: {
+               page: page,
+               limit: pageSize,
                usageType: usageType,
                appointmentId: appointmentId,
                documentId: documentValue,
@@ -69,7 +72,9 @@ function Index(props) {
          })
          .then((response) => {
             const data = response.data.response.data;
+            const meta = response.data.response.meta;
             setData(data);
+            setMeta(meta);
          })
          .finally(() => {
             setIsLoading(false);
@@ -119,23 +124,67 @@ function Index(props) {
          patientId: patientId,
          data: values
       };
-      await jwtInterceopter
-         .post(documentForm.url, data)
-         .then((response) => {
-            if (response.status === 201) {
-               setIsOpenFormModal(false);
-               getData();
-            }
-            console.log(response);
-         })
-         .catch((error) => {
-            if (error.response.status === 409) {
-               openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
-            }
-         })
-         .finally(() => {
-            setIsLoading(false);
-         });
+      if (documentForm.isMulti) {
+         await jwtInterceopter
+            .get(documentForm.url, {
+               params: {
+                  appointmentId: appointmentId,
+                  usageType: usageType,
+                  documentId: documentValue,
+                  patientId: patientId
+               }
+            })
+            .then(async (response) => {
+               const incomeData = response.data.response.data;
+               if (incomeData?.length > 0) {
+                  await jwtInterceopter
+                     .patch(documentForm.url + '/' + incomeData[0]._id, {
+                        data: {
+                           ...incomeData[0].data,
+                           ...values
+                        }
+                     })
+                     .then((res) => {
+                        if (res.status === 200) {
+                           setIsOpenFormModal(false);
+                        }
+                     });
+               } else {
+                  await jwtInterceopter
+                     .post(documentForm.url, data)
+                     .then((response) => {
+                        if (response.status === 201) {
+                           setIsOpenFormModal(false);
+                        }
+                     })
+                     .catch((error) => {
+                        if (error.response.status === 409) {
+                           openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+                        }
+                     })
+                     .finally(() => {
+                        setIsLoading(false);
+                     });
+               }
+            });
+      } else {
+         await jwtInterceopter
+            .post(documentForm.url, data)
+            .then((response) => {
+               if (response.status === 201) {
+                  setIsOpenFormModal(false);
+               }
+            })
+            .catch((error) => {
+               if (error.response.status === 409) {
+                  openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+               }
+            })
+            .finally(() => {
+               setIsLoading(false);
+            });
+      }
+      getData(1, 10);
    };
    const findSupportColumns = (id) => {
       console.log(id);
@@ -162,6 +211,13 @@ function Index(props) {
          }
       ];
    };
+   const equalerNumber = (text, option) => {
+      return option.options?.map((itm) => {
+         if (parseInt(itm.keyWord) === text) {
+            return itm.label + ', ';
+         }
+      });
+   };
    const columnConfigure = () => {
       return documentForm?.documentForm?.map((item, index) => {
          return (
@@ -172,15 +228,33 @@ function Index(props) {
                         key={idx}
                         title={option.value}
                         dataIndex={['data', `${option.keyWord}`]}
-                        render={(text) => {
+                        render={(text, row) => {
                            if (option.isInteger) {
-                              return option.options?.map((itm) => {
-                                 if (parseInt(itm.keyWord) === text) {
-                                    return itm.label;
+                              if (option.type === 'checkbox') {
+                                 return text?.map((txt) => {
+                                    return equalerNumber(txt, option);
+                                 });
+                              } else {
+                                 return equalerNumber(text, option);
+                              }
+                           } else {
+                              if (option.type === 'rangepicker') {
+                                 if (text) {
+                                    return (
+                                       moment(text[0]).format('YYYY/MM/DD') +
+                                       '->' +
+                                       moment(text[1]).format('YYYY/MM/DD')
+                                    );
                                  }
-                              });
+                                 return;
+                              } else if (option.type === 'datepicker') {
+                                 if (text) {
+                                    return moment(text).format('YYYY/MM/DD');
+                                 }
+                                 return;
+                              }
+                              return text;
                            }
-                           return text;
                         }}
                      />
                   );
@@ -198,7 +272,7 @@ function Index(props) {
    }, [documentValue]);
    useEffect(() => {
       if (!isObjectEmpty(documentForm)) {
-         getData();
+         getData(1, 10);
       }
    }, [documentForm]);
    if (documentValue === 0) {
@@ -216,7 +290,7 @@ function Index(props) {
                   }}
                >
                   <Button type="primary" onClick={() => setIsOpenSelectPositionModal(true)}>
-                     Бөглөх
+                     {documentForm.isMulti ? (data?.length > 0 ? 'Засах' : 'Бөглөх') : 'Бөглөх'}
                   </Button>
                   <Button
                      icon={<PrinterOutlined />}
@@ -229,7 +303,7 @@ function Index(props) {
                </div>
             </div>
             <div className="float-right">
-               <Button onClick={() => getData()}>Сэргээх</Button>
+               <Button onClick={() => getData(1, 10)}>Сэргээх</Button>
             </div>
          </div>
          <div>
@@ -239,12 +313,10 @@ function Index(props) {
                   bordered: true,
                   dataSource: data
                }}
-               meta={{
-                  page: 1,
-                  limit: data.length
-               }}
+               meta={meta}
+               onChange={(page, pageSize) => getData(page, pageSize)}
                isLoading={isLoading}
-               isPagination={false}
+               isPagination={true}
             >
                <NewColumn
                   width={120}
@@ -283,6 +355,9 @@ function Index(props) {
                            setSelectedOptionId(index);
                            setIsOpenSelectPositionModal(false);
                            setIsOpenFormModal(true);
+                           form.resetFields();
+                           console.log(data);
+                           form.setFieldsValue(data[0]?.data);
                         }}
                      >
                         {option.structure?.name}
