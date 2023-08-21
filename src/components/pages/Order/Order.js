@@ -233,7 +233,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
             {showSetOrder && <SetOrder handleclick={handleClickSetOrder} />}
-            {showRecentRepice && <RecentRecipe />}
+            {/* {showRecentRepice && <RecentRecipe />} */}
             {showSurgery && (
                <Surgery
                   usageType={usageType}
