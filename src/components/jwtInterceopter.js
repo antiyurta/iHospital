@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { openNofi } from './comman';
 
-const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 var jwtInterceopter = axios.create({});
@@ -31,7 +30,7 @@ jwtInterceopter.interceptors.response.use(
             originalConfig._retry = true;
             try {
                let tokens = JSON.parse(localStorage.getItem('tokens'));
-               const response = await axios.get(DEV_URL + 'authentication/refresh', {
+               const response = await axios.get('/api/authentication/refresh', {
                   headers: {
                      Authorization: `Bearer ${tokens.accessToken}`,
                      'refresh-token': `${tokens.refreshToken}`,
