@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { openNofi } from '../../comman';
 import { Button, Form, Input } from 'antd';
-import jwtInterceopter from '../../jwtInterceopter';
 import { CloseOutlined, PlusCircleFilled } from '@ant-design/icons';
 
 //components
 import OrderTable from '../Order/Order';
 import OrderForm from './OrderTable/OrderForm';
-import { NewColumn, NewColumnGroup, NewTable } from '../../Table/Table';
+import { NewColumn, NewTable } from '../../Table/Table';
 import { NewInput, NewSearch, NewTextArea } from '../../Input/Input';
 import NewModal from '../../Modal/Modal';
 // services
@@ -20,6 +19,7 @@ function SetOrder({ handleclick }) {
    //
    const [form] = Form.useForm();
    const [editMode, setEditMode] = useState(false);
+   const [searchValue, setSearchValue] = useState('');
    const [isLoading, setIsLoading] = useState(false);
    const [isLoadingConfirm, setIsLoadingConfirm] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -37,12 +37,14 @@ function SetOrder({ handleclick }) {
          form.resetFields();
       }
    };
-   const getSetOrders = async (page, pageSize) => {
+   const getSetOrders = async (page, pageSize, value) => {
       setIsLoading(true);
+      setSearchValue(value);
       await ServiceService.getSetOrder({
          params: {
             page: page,
-            limit: pageSize
+            limit: pageSize,
+            code: value
          }
       }).then((response) => {
          if (response.data.success) {
@@ -209,19 +211,22 @@ function SetOrder({ handleclick }) {
             Сэт-Ордер
          </Button>
          <NewModal
-            title="SET ORDER"
+            title="Сэт-Ордер"
             width={'80%'}
             open={isOpenModal}
-            bodyStyle={{
-               height: 600,
-               maxHeight: 600,
-               overflow: 'auto'
-            }}
             onCancel={() => setIsOpenModal(false)}
+            footer={null}
          >
             <div className="flex flex-col gap-3">
                <div className="flex justify-between gap-3">
-                  <NewSearch placeholder="Код хайх" onChange={(value) => filter(value.target.value)} />
+                  <NewSearch
+                     style={{
+                        width: 300
+                     }}
+                     placeholder="Код хайх"
+                     enterButton="Хайх"
+                     onSearch={(value) => getSetOrders(1, 10, value)}
+                  />
                   <Button type="primary" onClick={() => openOrCloseModal(false, true)}>
                      Нэмэх
                   </Button>
@@ -234,6 +239,7 @@ function SetOrder({ handleclick }) {
                   }}
                   meta={meta}
                   isLoading={isLoading}
+                  onChange={(page, pageSize) => getSetOrders(page, pageSize, searchValue)}
                   isPagination={true}
                >
                   <NewColumn title="Код" dataIndex={'code'} />
@@ -276,7 +282,7 @@ function SetOrder({ handleclick }) {
                            <div className="flex flex-row justify-center gap-3">
                               <div>
                                  {user.userId === row.createdBy ? (
-                                    <Button onClick={() => openOrCloseModal(true, true, row)}>Жор засах</Button>
+                                    <Button onClick={() => openOrCloseModal(true, true, row)}>Засах</Button>
                                  ) : null}
                               </div>
                               <Button
@@ -286,7 +292,7 @@ function SetOrder({ handleclick }) {
                                     setIsOpenModal(false);
                                  }}
                               >
-                                 Жор ашиглах
+                                 Aшиглах
                               </Button>
                            </div>
                         );
@@ -296,7 +302,7 @@ function SetOrder({ handleclick }) {
             </div>
          </NewModal>
          <NewModal
-            title={editMode ? 'SET ORDER ЗАСАХ' : 'SET ORDER НЭМЭХ'}
+            title={editMode ? 'Сэт-Ордер засах' : 'Сэт-Ордер нэмэх'}
             open={isOpenAddModal}
             onCancel={() => openOrCloseModal(false, false)}
             onOk={() => {
