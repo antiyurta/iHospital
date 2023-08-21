@@ -22,15 +22,6 @@ module.exports = (_env, argv) => {
       },
       devServer: {
          compress: true,
-         proxy: {
-            '/api/': {
-               target: 'http://192.168.5.113:8000/',
-               changeOrigin: true,
-               pathRewrite: {
-                  ['^/api']: ''
-               }
-            }
-         },
          port: 3000,
          open: true,
          historyApiFallback: true,
