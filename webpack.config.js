@@ -53,7 +53,7 @@ module.exports = (_env, argv) => {
                   loader: require.resolve('babel-loader'),
                   options: {
                      presets: [['@babel/preset-env', { targets: 'defaults' }], ['@babel/preset-react']],
-                     plugins: ['react-refresh/babel']
+                     plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean)
                   }
                }
             },
@@ -116,7 +116,7 @@ module.exports = (_env, argv) => {
             path: './.env',
             systemvars: true
          })
-      ],
+      ].filter(Boolean),
       externals: {
          React: 'react'
       }
