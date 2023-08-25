@@ -10,9 +10,11 @@ import {
 } from '../../../../features/authReducer';
 
 import patientDiagnoseService from '../../../../services/emr/patientDiagnose';
+import moment from 'moment';
 
 function am9A(props) {
    const { data, appointmentId } = props;
+   console.log('data', data);
    const RpS = 3;
    const hospitalName = useSelector(selectCurrentHospitalName);
    const doctorPhoneNo = useSelector(selectCurrentPhoneNo);
@@ -106,7 +108,9 @@ function am9A(props) {
                                        paddingTop: 10
                                     }}
                                  >
-                                    2023 оны 07 сарын 20
+                                    {moment(data?.formData[0]?.data?.['9A.1']).format('YYYY')} оны{' '}
+                                    {moment(data?.formData[0]?.data?.['9A.1']).format('MM')} сарын{' '}
+                                    {moment(data?.formData[0]?.data?.['9A.1']).format('DD')} өдөр
                                  </span>
                               </div>
                               <span style={{ fontSize: 13 }}>
@@ -128,19 +132,27 @@ function am9A(props) {
                                  Регистрийн №<UnderlineText>{data?.patientData?.registerNumber}</UnderlineText>
                               </span>
                               <br />
-                              {[...Array(RpS)].map((_rps, idx) => (
-                                 <div key={idx}>
-                                    <span style={styles.blockContentLg}>
-                                       Rp: {data?.formData?.[index * 3 + idx]?.data.rp}
-                                    </span>
-                                    <span style={styles.blockContentLg}>
-                                       S: {data?.formData?.[index * 3 + idx]?.data.s}
-                                    </span>
-                                    <div style={{ textAlign: 'center' }}>
-                                       <span style={{ fontSize: 13 }}>#</span>
-                                    </div>
+                              <div>
+                                 <span style={styles.blockContentLg}>Rp: {data?.formData[0]?.data?.['9A.3.1']}</span>
+                                 <span style={styles.blockContentLg}>S: {data?.formData[0]?.data?.['9A.3.2']}</span>
+                                 <div style={{ textAlign: 'center' }}>
+                                    <span style={{ fontSize: 13 }}>#</span>
                                  </div>
-                              ))}
+                              </div>
+                              <div>
+                                 <span style={styles.blockContentLg}>Rp: {data?.formData[0]?.data?.['9A.4.1']}</span>
+                                 <span style={styles.blockContentLg}>S: {data?.formData[0]?.data?.['9A.4.2']}</span>
+                                 <div style={{ textAlign: 'center' }}>
+                                    <span style={{ fontSize: 13 }}>#</span>
+                                 </div>
+                              </div>
+                              <div>
+                                 <span style={styles.blockContentLg}>Rp: {data?.formData[0]?.data?.['9A.5.1']}</span>
+                                 <span style={styles.blockContentLg}>S: {data?.formData[0]?.data?.['9A.5.2']}</span>
+                                 <div style={{ textAlign: 'center' }}>
+                                    <span style={{ fontSize: 13 }}>#</span>
+                                 </div>
+                              </div>
                               <div
                                  style={{
                                     borderWidth: 1,

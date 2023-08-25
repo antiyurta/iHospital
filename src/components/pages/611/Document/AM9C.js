@@ -1,6 +1,13 @@
 import React from 'react';
+import moment from 'moment';
+import { Table } from 'react-bootstrap';
 
-function AM9C() {
+function AM9C(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       generalText: {
          fontSize: 12,
@@ -79,20 +86,27 @@ function AM9C() {
                               }}
                            >
                               Индекс: Хэвлэмэл дугаар байна
-                              <span style={{ marginLeft: 30 }}>.... оны ...сарын ...</span>
+                              <span style={{ marginLeft: 30 }}>
+                                 {moment(formData[0]?.data?.['AM9C.1']).format('YYYY')} оны{' '}
+                                 {moment(formData[0]?.data?.['AM9C.1']).format('MM')} сарын{' '}
+                                 {moment(formData[0]?.data?.['AM9C.1']).format('DD')} өдөр
+                              </span>
                            </span>
                         </div>
-                        <span style={{ fontSize: 12 }}>Өвчтөний овог, нэр: ____________________</span>
+                        <span style={{ fontSize: 12 }}>Өвчтөний овог: {patientData?.lastName}</span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Нэр: ______________________ Нас:_____ Хүйс:__</span>
+                        <span style={{ fontSize: 12 }}>
+                           Нэр: {patientData?.firstName} Нас:{patientData?.age} Хүйс:{' '}
+                           {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
+                        </span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Онош: _______________________________________</span>
+                        <span style={{ fontSize: 12 }}>Онош: {formData[0]?.data?.['AM9C.2']}</span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Регистрийн №________________________________</span>
+                        <span style={{ fontSize: 12 }}>Регистрийн № {patientData?.registerNumber}</span>
                         <br />
-                        <span style={styles.blockContentSm}>Rp:</span>
+                        <span style={styles.blockContentSm}>Rp: {formData[0]?.data?.['AM9C.3.1']}</span>
                         <br />
-                        <span style={styles.blockContentLg}>S:</span>
+                        <span style={styles.blockContentLg}>S: {formData[0]?.data?.['AM9C.3.2']}</span>
                         <br />
                         <div style={{ textAlign: 'center' }}>
                            <span style={{ fontSize: 12 }}>#</span>
@@ -102,18 +116,19 @@ function AM9C() {
                         <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг: ___________________</span>
                         <br />
 
-                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: ___________________</span>
+                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: {formData[0]?.data?.['AM9C.4']}</span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: _______________________</span>
+                        <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: {hospitalName}</span>
                         <br />
                      </div>
                      <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
                         <span style={{ fontSize: 12 }}>
                            ------------------------------------------------------------------
                         </span>
+                        <br />
                         <span style={{ fontSize: 12 }}>Индекс: Хэвлэмэл дугаар байна.</span>
                      </div>
-                     <table>
+                     <Table bordered>
                         <thead>
                            <tr
                               style={{
@@ -164,7 +179,7 @@ function AM9C() {
                               <td style={styles.generalText}></td>
                            </tr>
                         </thead>
-                     </table>
+                     </Table>
                   </div>
                   <div
                      style={{

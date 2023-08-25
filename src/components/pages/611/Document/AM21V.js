@@ -1,7 +1,14 @@
 import React from 'react';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import moment from 'moment';
 
 //маягт АМ-21В
-function AM21V() {
+function AM21V(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       generalText: {
          fontSize: 12
@@ -37,7 +44,7 @@ function AM21V() {
                            ...{ float: 'left' }
                         }}
                      >
-                        Эмнэлгийн нэр: ____________________
+                        Эмнэлгийн нэр: {hospitalName}
                      </span>
                      <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-21В</span>
                   </div>
@@ -46,21 +53,44 @@ function AM21V() {
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Шинжилгээнд явуулах бичиг</span>
                </div>
                <span style={{ fontSize: 12 }}>Кабинетийн №____________</span>
-               <div style={styles.rowStyle}>_____________овогтой________________нэр</div>
-               <div style={styles.rowStyle}>Нас__________Хүйс: /зур/ эр, эм</div>
-               <div style={styles.rowStyle}>Онош__________________________________</div>
+               <div style={styles.rowStyle}>
+                  {' '}
+                  {patientData?.lastName} овогтой {patientData?.firstName} нэр
+               </div>
+               <div style={styles.rowStyle}>
+                  Нас: {patientData?.age} Хүйс: /зур/{' '}
+                  <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+                  <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
+               </div>
+               <div style={styles.rowStyle}>Онош: {formData[0]?.data?.['AM21.3']}</div>
                <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>Өндөгний цусны шинжилгээ</div>
-               <div style={styles.rowStyle}>1. Ерөнхий шинжилгээ (Лейкоцит, Гемоглобин, СОЭ, Лейкограмм)</div>
-               <div style={styles.rowStyle}>2. Дэлгэрэнгүй (ЦЕШ+Эритроцит, Тромбоцит, Гематокрит)</div>
-               <div style={styles.rowStyle}>3. Цусны урсалт, гоожилт</div>
-               <div style={styles.rowStyle}>4. _______________________________</div>
+               <NewCheckboxGroup value={formData[0]?.data?.['АМ21.1.1']} className="dstory">
+                  <NewCheckbox value={0} className="test">
+                     <span style={{ fontSize: 12 }}>1. Ерөнхий шинжилгээ (Лейкоцит, Гемоглобин, СОЭ, Лейкограмм)</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>2. Дэлгэрэнгүй (ЦЕШ+Эритроцит, Тромбоцит, Гематокрит)</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={2} className="test">
+                     <span style={{ fontSize: 12 }}>3. Цусны урсалт, гоожилт</span>
+                  </NewCheckbox>
+                  <br />
+               </NewCheckboxGroup>
+               <br />
+               <NewCheckboxGroup value={null} className="dstory">
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>4. Бусад {formData[0]?.data?.['АМ21.1.2']}</span>
+                  </NewCheckbox>
+               </NewCheckboxGroup>
                <div
                   style={{
                      ...styles.rowStyle,
                      ...{ marginTop: 10 }
                   }}
                >
-                  Эмчийн нэр
+                  Эмчийн нэр {formData[0]?.data?.['АМ21.4']}
                   <span style={{ marginLeft: 30 }}>/................................./</span>
                </div>
                <div
@@ -69,7 +99,9 @@ function AM21V() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  _______оны_______сарын________өдөр
+                  {moment(formData[0]?.data?.['AM21.2']).format('YYYY')} оны{' '}
+                  {moment(formData[0]?.data?.['AM21.2']).format('MM')} сарын{' '}
+                  {moment(formData[0]?.data?.['AM21.2']).format('DD')} өдөр
                </div>
                <div
                   style={{

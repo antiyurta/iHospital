@@ -1,6 +1,13 @@
 import React from 'react';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import moment from 'moment';
 
-function AM13A() {
+function AM13A(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -35,7 +42,7 @@ function AM13A() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
+               <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-13A</span>
@@ -58,17 +65,7 @@ function AM13A() {
                   <div style={styles.rowCells}></div>
                </div>
                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ fontSize: 12, marginRight: 5 }}>РД </span>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
+                  <span style={{ fontSize: 12, marginRight: 5 }}>РД {patientData?.registerNumber}</span>
                </div>
                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span style={{ fontSize: 12, marginRight: 5 }}>ЭМД </span>
@@ -86,16 +83,19 @@ function AM13A() {
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС</span>
             </div>
             <div style={styles.generalText}>
-               1. Эцэг /эх/-ийн нэр ____________________ Нэр ___________________ Нас ______ 2. Хүйс /зур/ эр, эм
+               1. Эцэг /эх/-ийн нэр {patientData?.lastName} Нэр {patientData?.firstName} Нас: {patientData?.age} 2. Хүйс
+               /зур/
+               <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+               <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
             </div>
             <div style={styles.generalText}>
                Шилжүүлж буй эмнэлгийн нэр _______________________________________________________________
             </div>
             <div style={styles.generalText}>
-               3. Тогтмол хаяг: ___________________________________________________________________________
+               3. Тогтмол хаяг: {patientData?.address}, {patientData?.building}
             </div>
             <div style={styles.generalText}>
-               4. Ажлын газар, албан тушаал: ______________________________________________________________
+               4. Ажлын газар, албан тушаал: {patientData?.organization}, {patientData?.jobPosition}
             </div>
             <div style={styles.generalText}>
                5. Шилжүүлж буй эрүүл мэндийн байгууллагад хийгдсэн шинжилгээ (
@@ -104,75 +104,48 @@ function AM13A() {
             <div
                style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
                   fontSize: 12,
                   marginTop: 5
                }}
             >
-               <span>ЦЕШ</span>
-               <span>
-                  ____________________________________________________________________________________________________________________________________
-               </span>
+               <span className="mr-1">ЦЕШ:</span>
+               <span>{formData[0]?.data?.['АМ13.1.1']}</span>
             </div>
             <div
                style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
                   fontSize: 12
                }}
             >
-               <span>ШЕШ</span>
-               <span>
-                  ____________________________________________________________________________________________________________________________________
-               </span>
+               <span className="mr-1">ШЕШ:</span>
+               <span>{formData[0]?.data?.['АМ13.1.2']}</span>
             </div>
             <div
                style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
                   fontSize: 12
                }}
             >
-               <span>Биохими</span>
-               <span>
-                  ____________________________________________________________________________________________________________________________________
-               </span>
+               <span className="mr-1">Биохими:</span>
+               <span>{formData[0]?.data?.['АМ13.1.3']}</span>
             </div>
             <div
                style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
                   fontSize: 12
                }}
             >
-               <span>Рентген</span>
-               <span>
-                  ____________________________________________________________________________________________________________________________________
-               </span>
+               <span className="mr-1">Рентген: </span>
+               <span>{formData[0]?.data?.['АМ13.1.4']}</span>
             </div>
             <div
                style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
                   fontSize: 12
                }}
             >
-               <span>Бусад</span>
-               <span>
-                  ____________________________________________________________________________________________________________________________________
-               </span>
-            </div>
-            <div
-               style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontSize: 12
-               }}
-            >
-               <span></span>
-               <span>
-                  ____________________________________________________________________________________________________________________________________
-               </span>
+               <span className="mr-1">Бусад: </span>
+               <span> {formData[0]?.data?.['АМ13.1.5']}</span>
             </div>
             <div
                style={{
@@ -184,18 +157,7 @@ function AM13A() {
             >
                6. Шилжүүлж буй эмнэлэгт хийгдсэн эмчилгээний үр дүн, өвчтөний биеийн байдал
             </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
+            <div style={styles.blankSpaces}>{formData[0]?.data?.['АМ13.2']}</div>
             <div
                style={{
                   ...styles.generalText,
@@ -208,10 +170,18 @@ function AM13A() {
             </div>
             <div style={styles.generalText}>
                Онош:
-               _______________________________________________________________________________________________________________________________________
+               {formData[0]?.data?.['АМ13.3']}
             </div>
             <div style={styles.generalText}>
-               8. Дараагийн шатлалын эмнэлэгт явуулж буй үндэслэл: (зур) 1. онош тодруулах 2. эмчилгээ хийх
+               8. Дараагийн шатлалын эмнэлэгт явуулж буй үндэслэл: (зур)
+               <NewCheckboxGroup value={formData[0]?.data?.['АМ13.4']} className="dstory">
+                  <NewCheckbox value={0} className="test">
+                     <span style={{ fontSize: 12 }}>1. онош тодруулах</span>
+                  </NewCheckbox>
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>2. эмчилгээ хийхгүй</span>
+                  </NewCheckbox>
+               </NewCheckboxGroup>
             </div>
             <div
                style={{
@@ -235,7 +205,11 @@ function AM13A() {
                   <span>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                </div>
             </div>
-            <div style={{ ...styles.generalText, ...{ textAlign: 'right' } }}>_________он______ сар_____ өдөр</div>
+            <div style={{ ...styles.generalText, ...{ textAlign: 'right' } }}>
+               {moment(formData[0]?.data?.['АМ13.5']).format('YYYY')} оны{' '}
+               {moment(formData[0]?.data?.['АМ13.5']).format('MM')} сарын{' '}
+               {moment(formData[0]?.data?.['АМ13.5']).format('DD')} өдөр
+            </div>
             <div style={styles.generalText}>
                ....................................................................................................................................................................................................................................................................................
             </div>

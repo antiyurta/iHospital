@@ -1,8 +1,14 @@
+import moment from 'moment';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 
 //маягт АМ-24Б
-function AM24Б() {
+function AM24Б(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -39,7 +45,7 @@ function AM24Б() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
+               <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-24Б</span>
@@ -60,120 +66,165 @@ function AM24Б() {
                <span style={{ fontWeight: 'bold', fontSize: 16 }}>ХЭВЛИЙН ХӨНДИЙН ЭРХТНҮҮДИЙН ХЭТ АВИАН ОНОШИЛГОО</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 550 } }}>
-               <div>......он.....сар....өдөр</div>
+               <div>
+                  {moment(formData[0]?.data?.['AM24B.1']).format('YYYY')} оны{' '}
+                  {moment(formData[0]?.data?.['AM24B.1']).format('MM')} сарын{' '}
+                  {moment(formData[0]?.data?.['AM24B.1']).format('DD')} өдөр
+               </div>
             </div>
             <div style={styles.rowStyle}>
-               Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>Нас ______Хүйс: /зур/ эр, эм</span>
+               Эцэг /эх/-ийн нэр {patientData?.lastName} Нас: {patientData?.age} Хүйс: /зур/{' '}
+               <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+               <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
             </div>
             <div style={styles.rowStyle}>
-               Нэр _______________________________
+               Нэр {patientData?.firstName}
                <span style={{ marginLeft: 50 }}></span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Элэг:</span> Хэмжээ _________________
-               <span style={{ fontWeight: 'bold' }}> Гадаргуу:</span> тэгш, тэгш бус
-               <span style={{ fontWeight: 'bold' }}> Бүтэц:</span> _________ жигд, жигд бус
+               <span style={{ fontWeight: 'bold' }}>Элэг:</span> Хэмжээ {formData[0]?.data?.['AM24B.2']}
+               <span style={{ fontWeight: 'bold' }}> Гадаргуу:</span>
+               <span className={formData[0]?.data?.['AM24B.3'] === 0 ? 'underline mr-1' : 'mr-1'}> тэгш, </span>
+               <span className={formData[0]?.data?.['AM24B.3'] === 1 ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
+               <span style={{ fontWeight: 'bold' }}> Бүтэц:</span>
+               <span className={formData[0]?.data?.['AM24B.4'] === 0 ? 'underline mr-1' : 'mr-1'}> жигд, </span>
+               <span className={formData[0]?.data?.['AM24B.4'] === 1 ? 'underline mr-1' : 'mr-1'}> жигд бус </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Эхо ойлт:</span> ________ хэвийн, ихэссэн, багассан,
+               <span style={{ fontWeight: 'bold' }}>Эхо ойлт:</span>
+               <span className={formData[0]?.data?.['AM24B.5'] === 0 ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
+               <span className={formData[0]?.data?.['AM24B.5'] === 1 ? 'underline mr-1' : 'mr-1'}> ихэссэн, </span>
+               <span className={formData[0]?.data?.['AM24B.5'] === 1 ? 'underline mr-1' : 'mr-1'}> багассан </span>
                <span style={{ fontWeight: 'bold' }}> Үүдэн венийн голч:</span>
-               ___________
+               {formData[0]?.data?.['AM24B.6']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Голомтот:</span>
-               өөрчлөлтгүй, өөрчлөлттэй
-               __________________________________________________________________________________________________
-            </div>
-            <div style={styles.rowStyle}>
-               ____________________________________________________________________________________________________________________________________________
+               <span className={formData[0]?.data?.['AM24B.7'] === 0 ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.7'] === 1 ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй </span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Бусад:</span>
-               ____________________________________________________________________________________________________________________________________
+               {formData[0]?.data?.['AM24B.8']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Цөсний хүүдий:</span>
-               Байрлал, хэлбэр хэмжээ: _____________
+               Байрлал, хэлбэр хэмжээ: {formData[0]?.data?.['AM24B.9']}
                <span style={{ fontWeight: 'bold' }}> Хана:</span>
-               хэвийн, зузаарсан, нимгэрсэн ________
+               <span className={formData[0]?.data?.['AM24B.10'] === 0 ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
+               <span className={formData[0]?.data?.['AM24B.10'] === 1 ? 'underline mr-1' : 'mr-1'}> зузаарсан, </span>
+               <span className={formData[0]?.data?.['AM24B.10'] === 2 ? 'underline mr-1' : 'mr-1'}> нимгэрсэн </span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Агууламж, голомтот өөрчлөлт:</span>
-               цөс, хэвийн, цөс өтгөрсөн, тунадастай, чулуутай, ургацагтай ___________
+               <span className={formData[0]?.data?.['AM24B.11'] === 0 ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
+               <span className={formData[0]?.data?.['AM24B.11'] === 1 ? 'underline mr-1' : 'mr-1'}>
+                  {' '}
+                  цөс өтгөрсөн,{' '}
+               </span>
+               <span className={formData[0]?.data?.['AM24B.11'] === 2 ? 'underline mr-1' : 'mr-1'}> тунадастай, </span>
+               <span className={formData[0]?.data?.['AM24B.11'] === 3 ? 'underline mr-1' : 'mr-1'}> чулуутай, </span>
+               <span className={formData[0]?.data?.['AM24B.11'] === 4 ? 'underline mr-1' : 'mr-1'}> ургацагтай </span>
             </div>
             <div style={styles.rowStyle}>
-               Цөсний ерөнхий цорго: өргөсөөгүй, өргөссөн голч__________, Бусад
-               ____________________________________________
+               <span style={{ fontWeight: 'bold' }}>Цөсний ерөнхий цорго:</span>
+               <span className={formData[0]?.data?.['AM24B.12'] === 0 ? 'underline mr-1' : 'mr-1'}> өргөсөөгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.12'] === 1 ? 'underline mr-1' : 'mr-1'}> өргөссөн </span>
+               голч {formData[0]?.data?.['AM24B.13']},
             </div>
             <div style={styles.rowStyle}>
-               ____________________________________________________________________________________________________________________________________
+               <span style={{ fontWeight: 'bold' }}>Бусад </span>
+               {formData[0]?.data?.['AM24B.14']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Нойр булчирхай:</span>
-               Хэмжээ____________________,
-               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span>
-               тэгш, тэгш бус, Бүтэц: __________ жиг, жигд бус
+               Хэмжээ {formData[0]?.data?.['AM24B.15']},<span style={{ fontWeight: 'bold' }}> Хүрээ:</span>
+               <span className={formData[0]?.data?.['AM24B.16'] === 0 ? 'underline mr-1' : 'mr-1'}> тэгш, </span>
+               <span className={formData[0]?.data?.['AM24B.16'] === 1 ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
+            </div>
+            <div style={styles.rowStyle}>
+               <span style={{ fontWeight: 'bold' }}> Бүтэц:</span>
+               <span className={formData[0]?.data?.['AM24B.39'] === 0 ? 'underline mr-1' : 'mr-1'}> жигд, </span>
+               <span className={formData[0]?.data?.['AM24B.39'] === 1 ? 'underline mr-1' : 'mr-1'}> жигд бус </span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Эхо ойлт:</span>
-               ________ хэвийн, ихэссэн, багассан,
+               <span className={formData[0]?.data?.['AM24B.17'] === 0 ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
+               <span className={formData[0]?.data?.['AM24B.17'] === 1 ? 'underline mr-1' : 'mr-1'}> ихэссэн, </span>
+               <span className={formData[0]?.data?.['AM24B.17'] === 2 ? 'underline mr-1' : 'mr-1'}> багассан, </span>
                <span style={{ fontWeight: 'bold' }}> Голомтот:</span>
-               өөрчлөлтгүй, өөрчлөлттэй ____________________________________
+               <span className={formData[0]?.data?.['AM24B.18'] === 0 ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.18'] === 1 ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}> Бусад:</span>
-               ____________________________________________________________________________________________________________________________________
+               <span style={{ fontWeight: 'bold' }}> Бусад: {formData[0]?.data?.['AM24B.19']}</span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}> Дэлүү:</span> Хэмжээ __________________________________
+               <span style={{ fontWeight: 'bold' }}> Дэлүү:</span> Хэмжээ {formData[0]?.data?.['AM24B.20']}
                <span style={{ fontWeight: 'bold' }}> ДИ/дэлүүний индекс:</span>
-               ____________________________
+               {formData[0]?.data?.['AM24B.21']}
                <span style={{ fontWeight: 'bold' }}> Бусад:</span>
-               ________________________
+               {formData[0]?.data?.['AM24B.22']}
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Бөөр:</span> Баруун-байрлал: хэвийн, хэвийн бус,
+               <span style={{ fontWeight: 'bold' }}>Бөөр:</span> Баруун-байрлал:
+               <span className={formData[0]?.data?.['AM24B.23'] === 0 ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
+               <span className={formData[0]?.data?.['AM24B.23'] === 1 ? 'underline mr-1' : 'mr-1'}> хэвийн бус </span>
                <span style={{ fontWeight: 'bold' }}> Хэмжээ:</span>
-               _________________________________
-               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span> тэгш, тэгш бус __________________
+               {formData[0]?.data?.['AM24B.24']}
+               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span>
+               <span className={formData[0]?.data?.['AM24B.25'] === 0 ? 'underline mr-1' : 'mr-1'}> тэгш, </span>
+               <span className={formData[0]?.data?.['AM24B.25'] === 1 ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>АТ:</span> өргөсөөгүй, өргөссөн, сийрэгжсэн,
-               <span style={{ fontWeight: 'bold' }}> Голомтот:</span> өөрчлөлтгүй, өөрчлөлттэй
-               __________________________________________________
+               <span style={{ fontWeight: 'bold' }}>АТ:</span>
+               <span className={formData[0]?.data?.['AM24B.26'] === 0 ? 'underline mr-1' : 'mr-1'}> өргөсөөгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.26'] === 1 ? 'underline mr-1' : 'mr-1'}> өргөссөн, </span>
+               <span className={formData[0]?.data?.['AM24B.26'] === 2 ? 'underline mr-1' : 'mr-1'}> сийрэгжсэн </span>
+               <span style={{ fontWeight: 'bold' }}> Голомтот:</span>
+               <span className={formData[0]?.data?.['AM24B.27'] === 0 ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.27'] === 1 ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Зүүн-байрлал:</span> хэвийн, хэвийн бус, сийрэгжсэн,
-               <span style={{ fontWeight: 'bold' }}> Хэмжээ:</span>
-               _________________
-               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span> тэгш, тэгш бус,
-               <span style={{ fontWeight: 'bold' }}> АТ:</span> өргөсөөгүй, өргөссөн, сийрэгжсэн
+               <span style={{ fontWeight: 'bold' }}>Зүүн-байрлал:</span>
+               <span className={formData[0]?.data?.['AM24B.28'] === 0 ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
+               <span className={formData[0]?.data?.['AM24B.28'] === 1 ? 'underline mr-1' : 'mr-1'}> хэвийн бус, </span>
+               <span className={formData[0]?.data?.['AM24B.28'] === 2 ? 'underline mr-1' : 'mr-1'}> сийрэгжсэн </span>
+               <span style={{ fontWeight: 'bold' }}> Хэмжээ: {formData[0]?.data?.['AM24B.29']}</span>
+               <span style={{ fontWeight: 'bold' }}> Хүрээ:</span>
+               <span className={formData[0]?.data?.['AM24B.30'] === 0 ? 'underline mr-1' : 'mr-1'}> тэгш, </span>
+               <span className={formData[0]?.data?.['AM24B.30'] === 1 ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
+               <span style={{ fontWeight: 'bold' }}> АТ:</span>
+               <span className={formData[0]?.data?.['AM24B.31'] === 0 ? 'underline mr-1' : 'mr-1'}> өргөсөөгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.31'] === 1 ? 'underline mr-1' : 'mr-1'}> өргөссөн, </span>
+               <span className={formData[0]?.data?.['AM24B.31'] === 2 ? 'underline mr-1' : 'mr-1'}> сийрэгжсэн </span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Голомтот:</span>
-               өөрчлөлтгүй, өөрчлөлттэй ______________________________________,
-               <span style={{ fontWeight: 'bold' }}> Бусад:</span>
-               ___________________________________
+               <span className={formData[0]?.data?.['AM24B.32'] === 0 ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.32'] === 1 ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
+               <span style={{ fontWeight: 'bold' }}> Бусад: {formData[0]?.data?.['AM24B.33']}</span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Давсаг: </span>
-               Хана: _________________________________,
-               <span style={{ fontWeight: 'bold' }}> Голомтот: </span>
-               өөрчлөлтгүй, өөрчлөлттэй _______________________________________________
+               Хана: {formData[0]?.data?.['AM24B.34']},<span style={{ fontWeight: 'bold' }}> Голомтот: </span>
+               <span className={formData[0]?.data?.['AM24B.35'] === 0 ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
+               <span className={formData[0]?.data?.['AM24B.35'] === 1 ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Хэвлийн хөндийд:</span>
-               сул шингэнгүй, шингэнтэй
-               ________________________________________________________________________________________
+               <span className={formData[0]?.data?.['AM24B.36'] === 0 ? 'underline mr-1' : 'mr-1'}>
+                  {' '}
+                  сул шингэнгүй,{' '}
+               </span>
+               <span className={formData[0]?.data?.['AM24B.36'] === 1 ? 'underline mr-1' : 'mr-1'}> шингэнтэй, </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}> Бусад:</span>
-               ____________________________________________________________________________________________________________________________________
+               <span style={{ fontWeight: 'bold' }}> Бусад: {formData[0]?.data?.['AM24B.37']}</span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold', marginLeft: '40%' }}>
-                  Эмчийн нэр_____________________/_______________________
+                  Эмчийн нэр {formData[0]?.data?.['AM24B.38']}/_______________________
                </span>
             </div>
          </div>
