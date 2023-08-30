@@ -1,7 +1,14 @@
 import React from 'react';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import moment from 'moment';
 
 //маягт АМ-21Г
-function AM21D() {
+function AM21D(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       generalText: {
          fontSize: 10
@@ -43,7 +50,7 @@ function AM21D() {
                            ...{ float: 'left' }
                         }}
                      >
-                        Эмнэлгийн нэр: ____________________
+                        Эмнэлгийн нэр: {hospitalName}
                      </span>
                      <span style={{ fontWeight: 'bold', fontSize: 10 }}>АМ-21Г</span>
                   </div>
@@ -52,44 +59,108 @@ function AM21D() {
                   <span style={{ fontWeight: 'bold', fontSize: 12 }}>Шинжилгээнд явуулах бичиг</span>
                </div>
                <span style={{ fontSize: 10 }}>Кабинетийн №____________</span>
-               <div style={styles.rowStyle}>_____________овогтой________________нэр</div>
-               <div style={styles.rowStyle}>Нас__________Хүйс: /зур/ эр, эм</div>
+               <div style={styles.rowStyle}>
+                  {patientData?.lastName} овогтой {patientData?.firstName} нэр
+               </div>
+               <div style={styles.rowStyle}>
+                  Нас: {patientData?.age} Хүйс: /зур/{' '}
+                  <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+                  <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
+               </div>
 
                <div style={styles.rowStyle}>
                   <div style={{ display: 'flex' }}>
-                     <span style={{ marginRight: 5 }}>РД </span>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
+                     <span style={{ marginRight: 5 }}>РД {patientData?.registerNumber}</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>Онош__________________________________</div>
-               <div style={styles.rowStyle}>1.Цусны ариун чанар \ бактер судлах\</div>
-               <div style={styles.rowStyle}>2.Өтгөн \ бактер судлах\</div>
-               <div style={styles.rowStyle}>3.Шээс \ бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>4.Цэр бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>5.Шархны идээр \бактер судлах\</div>
-               <div style={styles.rowStyle}>6.Нүдний арчдас \бактер судлах\</div>
-               <div style={styles.rowStyle}>7.Хамар, залгиурын арчдас \бактер суплах\</div>
-               <div style={styles.rowStyle}>8.Хамрын арчдас \бактер судлах\</div>
-               <div style={styles.rowStyle}>9.Үтрээний арчдас \бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>10.Амны хөндийн арчдас \бактер судлах\</div>
-               <div style={styles.rowStyle}>11.Плеврийн шингэн \ бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>12.Үений шингэн \ бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>13.Хэвлий хөндийн шингэн \ бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>14.Чихний арчдас \бактер судлах\</div>
-               <div style={styles.rowStyle}>15.Цөс \бактер судлах\</div>
-               <div style={styles.rowStyle}>16.Хүйн арчдас \бактер судлах\</div>
-               <div style={styles.rowStyle}>17.Задлангийн мат \ бичил харах, бактер судлах\</div>
-               <div style={styles.rowStyle}>18.Шимэгч хорхой илрүүлэх \бактер судлах\</div>
-               <div style={styles.rowStyle}>19.Дисбактериоз \ам, арьс, гэдэсний хэвийн няи \бактер судлах\</div>
+               <div style={styles.rowStyle}>Онош {formData[0]?.data?.['AM21.1']}</div>
+               <div
+                  style={{
+                     ...styles.rowStyle,
+                     ...{ marginTop: 20 }
+                  }}
+               >
+                  Нян судлалын шинжилгээний сорьц хийгдэх арга:
+               </div>
+               <NewCheckboxGroup value={formData[0]?.data?.['AM21.2']} className="dstory">
+                  <NewCheckbox value={0} className="test">
+                     <span style={{ fontSize: 12 }}>1. Цусны ариун чанар \ бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>2. Өтгөн \ бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={2} className="test">
+                     <span style={{ fontSize: 12 }}>3. Шээс \ бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={3} className="test">
+                     <span style={{ fontSize: 12 }}>4. Цэр бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={4} className="test">
+                     <span style={{ fontSize: 12 }}>5. Шархны идээр \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={5} className="test">
+                     <span style={{ fontSize: 12 }}>6. Нүдний арчдас \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={6} className="test">
+                     <span style={{ fontSize: 12 }}>7. Хамар, залгиурын арчдас \бактер суплах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={7} className="test">
+                     <span style={{ fontSize: 12 }}>8. Хамрын арчдас \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={8} className="test">
+                     <span style={{ fontSize: 12 }}>9. Үтрээний арчдас \бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={9} className="test">
+                     <span style={{ fontSize: 12 }}>10. Амны хөндийн арчдас \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={10} className="test">
+                     <span style={{ fontSize: 12 }}>11. Плеврийн шингэн \ бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>12. Үений шингэн \ бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>13. Хэвлий хөндийн шингэн \ бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>14. Чихний арчдас \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>15. Цөс \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>16. Хүйн арчдас \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>17. Задлангийн мат \ бичил харах, бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>18. Шимэгч хорхой илрүүлэх \бактер судлах\</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={11} className="test">
+                     <span style={{ fontSize: 12 }}>
+                        19. Дисбактериоз \ам, арьс, гэдэсний хэвийн няи \бактер судлах\
+                     </span>
+                  </NewCheckbox>
+               </NewCheckboxGroup>
                <div
                   style={{
                      ...styles.rowStyle,
@@ -104,7 +175,9 @@ function AM21D() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  _______оны_______сарын________өдөр
+                  {moment(formData[0]?.data?.['AM21.3']).format('YYYY')} оны{' '}
+                  {moment(formData[0]?.data?.['AM21.3']).format('MM')} сарын{' '}
+                  {moment(formData[0]?.data?.['AM21.3']).format('DD')} өдөр
                </div>
                <div
                   style={{

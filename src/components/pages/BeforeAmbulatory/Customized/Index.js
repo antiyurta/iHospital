@@ -3,7 +3,7 @@ import { Button, Form, Modal, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId } from '../../../../features/authReducer';
+import { selectCurrentAppId, selectCurrentHospitalName } from '../../../../features/authReducer';
 import FormRender from './FormRender';
 import { PrinterOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -17,6 +17,7 @@ import DocumentOptionServices from '../../../../services/organization/documentOp
 //
 function Index(props) {
    const { usageType, documentValue, structureId, appointmentId, patientId } = props;
+   const hospitalName = useSelector(selectCurrentHospitalName);
    const printRef = useRef();
    const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
@@ -127,8 +128,10 @@ function Index(props) {
                }
             })
             .then(async (response) => {
-               const incomeData = response.data.response.data;
+               const incomeData = response.data.response;
                if (incomeData?.length > 0) {
+                  console.log(incomeData[0].data);
+                  console.log(values);
                   await jwtInterceopter
                      .patch(documentForm.url + '/' + incomeData[0]._id, {
                         data: {
@@ -368,7 +371,13 @@ function Index(props) {
             }}
          >
             <div ref={printRef}>
-               <ReturnById type={usageType} id={documentValue} appointmentId={appointmentId} data={printData} />
+               <ReturnById
+                  type={usageType}
+                  id={documentValue}
+                  appointmentId={appointmentId}
+                  data={printData}
+                  hospitalName={hospitalName}
+               />
             </div>
          </Modal>
       </div>

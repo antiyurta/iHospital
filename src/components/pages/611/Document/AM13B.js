@@ -1,5 +1,11 @@
+import moment from 'moment';
 import React from 'react';
-function AM13B() {
+function AM13B(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -9,11 +15,12 @@ function AM13B() {
          borderColor: 'black'
       },
       generalText: {
-         fontSize: 12,
-         lineHeight: 1.3
+         fontSize: 14,
+         lineHeight: 1.3,
+         marginTop: 5
       },
       blankSpaces: {
-         fontSize: 10
+         fontSize: 14
       }
    };
    return (
@@ -50,17 +57,7 @@ function AM13B() {
                   <div style={styles.rowCells}></div>
                </div>
                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ fontSize: 14, marginRight: 5 }}>РД </span>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
-                  <div style={styles.rowCells}></div>
+                  <span style={{ fontSize: 14, marginRight: 5 }}>РД {patientData?.registerNumber}</span>
                </div>
                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span style={{ fontSize: 14, marginRight: 5 }}>ЭМД </span>
@@ -78,61 +75,40 @@ function AM13B() {
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС</span>
             </div>
             <div style={styles.generalText}>
-               1. Эцэг /эх/-ийн нэр ____________________ Нэр ___________________ Нас ______ 2. Хүйс /зур/ эр, эм
+               1. Эцэг /эх/-ийн нэр{patientData?.lastName} Нэр {patientData?.firstName} Нас: {patientData?.age} 2. Хүйс
+               /зур/
+               <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+               <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
             </div>
             <div style={styles.generalText}>
                Эмчилгээ оношлогоо хийлгэсэн эмнэлгийн нэр
-               __________________________________________________________________________________________
+               {hospitalName}
             </div>
             <div style={styles.generalText}>
                Онош:
-               _______________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               ___________________________________________________________________________________________________________________________________________________________________________
+               {formData[0]?.data?.['АМ13.1']}
             </div>
             <div style={styles.generalText}>Хийгдсэн эмчилгээ:</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>1</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>2</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>3</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>4</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>1. {formData[0]?.data?.['АМ13.2.1']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>2. {formData[0]?.data?.['АМ13.2.2']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>3. {formData[0]?.data?.['АМ13.2.3']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>4. {formData[0]?.data?.['АМ13.2.4']}</div>
             <div style={styles.generalText}>
                Эмнэлгээс гарах үеийн биеийн байдал:
-               ___________________________________________________________________________________________________
+               {formData[0]?.data?.['АМ13.3']}
             </div>
-            <div style={styles.blankSpaces}>
-               ____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               ____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               ____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.generalText}>Өвчтөнд өгсөн зөвлөгөө</div>
+            <div style={styles.generalText}>Өвчтөнд өгсөн зөвлөгөө :{formData[0]?.data?.['АМ13.4']}</div>
             <div style={styles.generalText}>
-               Эмийн эмчилгээ
-               ____________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
+               Эмийн эмчилгээ:
+               {formData[0]?.data?.['АМ13.5']}
             </div>
             <div style={styles.generalText}>
-               Эмийн бус эмчилгээ
-               ________________________________________________________________________________________________________________________
+               Эмийн бус эмчилгээ:
+               {formData[0]?.data?.['АМ13.6']}
             </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.generalText}>Хүлээн авч буй эрүүл мэндийн байгууллагад өгөх зөвлөмж:</div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.blankSpaces}>
-               _____________________________________________________________________________________________________________________________________________________________________________
+            <div style={styles.generalText}>
+               Хүлээн авч буй эрүүл мэндийн байгууллагад өгөх зөвлөмж:
+               {formData[0]?.data?.['АМ13.7']}
             </div>
             <div style={styles.generalText}>Шилжүүлж буй эмчийн нэр Хувийн тамга:</div>
             <div
@@ -141,7 +117,9 @@ function AM13B() {
                   ...{ textAlign: 'right', paddingRight: 40 }
                }}
             >
-               _______ он _____ сар _____ өдөр
+               {moment(formData[0]?.data?.['АМ13.8']).format('YYYY')} оны{' '}
+               {moment(formData[0]?.data?.['АМ13.8']).format('MM')} сарын{' '}
+               {moment(formData[0]?.data?.['АМ13.8']).format('DD')} өдөр
             </div>
          </div>
       </div>

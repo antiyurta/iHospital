@@ -71,10 +71,11 @@ function EditableTable(props) {
          }
       };
       const response = await Get('organization/document-form', token, conf);
-      if (response.data?.length === 0) {
+      console.log('-=>', response);
+      if (response?.length === 0) {
          openNofi('error', 'Алдаа', 'Маягт холбоотой FORM байхгүй байна');
       } else {
-         setDocumentForm(response.data[0]);
+         setDocumentForm(response[0]);
          setIsOpenConfModal(true);
       }
    };

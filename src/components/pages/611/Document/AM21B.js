@@ -1,7 +1,14 @@
 import React from 'react';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import moment from 'moment';
 
 //маягт АМ-21Б
-function AM21B() {
+function AM21B(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -70,7 +77,7 @@ function AM21B() {
                            ...{ float: 'left' }
                         }}
                      >
-                        Эмнэлгийн нэр: ____________________
+                        Эмнэлгийн нэр: {hospitalName}
                      </span>
                      <span style={{ fontWeight: 'bold', fontSize: 12 }}>АМ-21Б</span>
                   </div>
@@ -85,31 +92,73 @@ function AM21B() {
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Шинжилгээнд явуулах бичиг</span>
                </div>
                <span style={{ fontSize: 12 }}>Кабинетийн №____________</span>
-               <div style={styles.rowStyle}>_____________овогтой________________нэр</div>
-               <div style={styles.rowStyle}>Нас__________Хүйс: /зур/ эр, эм</div>
-               <div style={styles.rowStyle}>Онош__________________________________</div>
+               <div style={styles.rowStyle}>
+                  {patientData?.lastName} овогтой {patientData?.firstName} нэр
+               </div>
+               <div style={styles.rowStyle}>
+                  Нас: {patientData?.age} Хүйс: /зур/{' '}
+                  <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+                  <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
+               </div>
+               <div style={styles.rowStyle}>Онош: {formData[0]?.data?.['AM21.1']}</div>
                <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>Cудасны цусны шинжилгээ</div>
-               <div style={styles.rowStyle}>1. Элэгний үйл ажиллагаа (АЛАТ, АСАТ, Билирубин, тимол, сульма)</div>
-               <div style={styles.rowStyle}>2. Бөөрний үйл ажиллагаа (мочевин, креатинин, үлдэгдэл азот)</div>
-               <div style={styles.rowStyle}>3. Микроэлементүүд (Na, K, CL, Ca, Fe, Mg, P)</div>
-               <div style={styles.rowStyle}>4. Бусад (сахар, уураг, альбумин, холестерин, липид)</div>
-               <div style={styles.rowStyle}>5. Өвөрмөц /АСЛО, РФ, C реак-уураг, ЛЕ эс/</div>
-               <div style={styles.rowStyle}>6. Иммуны шинжилгээ /LgA, LgM, LgG/</div>
-               <div style={styles.rowStyle}>7. Альфа амилаза</div>
-               <div style={styles.rowStyle}>8. Фермент /КК, ГГТ, ШФ, КФ, ЛДГ/</div>
-               <div style={styles.rowStyle}>9. Коагулограмм /РТ, ТТ, АРТВ, Фибриноген/</div>
-               <div style={styles.rowStyle}>10. Хеликобактери /H pylori/</div>
-
-               <div style={styles.rowStyle}>11. Серологи /RPR/</div>
-               <div style={styles.rowStyle}>12. Бусад_______________</div>
-               <div
-                  style={{
-                     ...styles.rowStyle,
-                     ...{ marginTop: 10 }
-                  }}
-               >
-                  Эмчийн нэр
-                  <span style={{ marginLeft: 30 }}>/................................./</span>
+               <NewCheckboxGroup value={formData[0]?.data?.['AM21.2.1']} className="dstory">
+                  <NewCheckbox value={0} className="test">
+                     <span style={{ fontSize: 12 }}>
+                        1. Элэгний үйл ажиллагаа (АЛАТ, АСАТ, Билирубин, тимол, сульма)
+                     </span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>2. Бөөрний үйл ажиллагаа (мочевин, креатинин, үлдэгдэл азот)</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={2} className="test">
+                     <span style={{ fontSize: 12 }}>3. Микроэлементүүд (Na, K, CL, Ca, Fe, Mg, P)</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={3} className="test">
+                     <span style={{ fontSize: 12 }}>4. Бусад (сахар, уураг, альбумин, холестерин, липид)</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={4} className="test">
+                     <span style={{ fontSize: 12 }}>5. Өвөрмөц /АСЛО, РФ, C реак-уураг, ЛЕ эс/</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={5} className="test">
+                     <span style={{ fontSize: 12 }}>6. Иммуны шинжилгээ /LgA, LgM, LgG/</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={6} className="test">
+                     <span style={{ fontSize: 12 }}>7. Альфа амилаза</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={7} className="test">
+                     <span style={{ fontSize: 12 }}>8. Фермент /КК, ГГТ, ШФ, КФ, ЛДГ/</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={8} className="test">
+                     <span style={{ fontSize: 12 }}>9. Коагулограмм /РТ, ТТ, АРТВ, Фибриноген/</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={9} className="test">
+                     <span style={{ fontSize: 12 }}>10. Хеликобактери /H pylori/</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={10} className="test">
+                     <span style={{ fontSize: 12 }}>11. Серологи /RPR/</span>
+                  </NewCheckbox>
+                  <br />
+               </NewCheckboxGroup>
+               <br />
+               <NewCheckboxGroup value={null} className="dstory">
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>12. Бусад {formData[0]?.data?.['AM21.2.2']}</span>
+                  </NewCheckbox>
+               </NewCheckboxGroup>
+               <div style={styles.rowStyle}>
+                  Эмчийн нэр {formData[0]?.data?.['AM21.3']}
+                  <span style={{ marginLeft: 10 }}>/................................./</span>
                </div>
                <div
                   style={{
@@ -117,7 +166,9 @@ function AM21B() {
                      ...{ marginTop: 10 }
                   }}
                >
-                  20___оны_______сарын________өдөр
+                  {moment(formData[0]?.data?.['AM21.4']).format('YYYY')} оны{' '}
+                  {moment(formData[0]?.data?.['AM21.4']).format('MM')} сарын{' '}
+                  {moment(formData[0]?.data?.['AM21.4']).format('DD')} өдөр
                </div>
                <div
                   style={{

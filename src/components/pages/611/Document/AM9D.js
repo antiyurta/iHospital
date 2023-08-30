@@ -1,6 +1,14 @@
+import moment from 'moment';
 import React from 'react';
+import { Table } from 'react-bootstrap';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
 
-function AM9D() {
+function AM9D(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       generalText: {
          fontSize: 12,
@@ -70,20 +78,25 @@ function AM9D() {
                         <span style={{ fontWeight: 'bold', fontSize: 14 }}>Уламжлалт эмийн жор</span>
                      </div>
                      <div style={{ textAlign: 'right', marginRight: 20 }}>
-                        <span style={{ fontSize: 12 }}>..... оны ....сарын ....</span>
+                        <span style={{ fontSize: 12 }}>
+                           {moment(formData[0]?.data?.['AM9D.1']).format('YYYY')} оны{' '}
+                           {moment(formData[0]?.data?.['AM9D.1']).format('MM')} сарын{' '}
+                           {moment(formData[0]?.data?.['AM9D.1']).format('DD')} өдөр
+                        </span>
                      </div>
                      <br />
-                     <span style={{ fontSize: 12 }}>Өвчтөний овог, нэр: ____________________</span>
+                     <span style={{ fontSize: 12 }}>
+                        Өвчтөний овог, нэр: {patientData?.lastName} {patientData?.firstName}
+                     </span>
                      <br />
-                     <span style={{ fontSize: 12 }}>Нас:_____ Хүйс:__</span>
+                     <span style={{ fontSize: 12 }}>
+                        Нас: {patientData?.age} Хүйс: {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
+                     </span>
                      <br />
-                     <span style={{ fontSize: 12 }}>Уламжлалт анагаахын онош:____________</span>
-                     <br />
-                     <span style={{ fontSize: 12 }}>____________________________________________</span>
-                     <br />
+                     <span style={{ fontSize: 12 }}>Уламжлалт анагаахын онош:{formData[0]?.data?.['AM9D.2']}</span>
                      <br />
                   </div>
-                  <table>
+                  <Table bordered>
                      <thead>
                         <tr
                            style={{
@@ -119,85 +132,186 @@ function AM9D() {
                            </td>
                         </tr>
                         <tr>
-                           <td style={styles.generalText} rowSpan={4}>
-                              Rp:
+                           <td
+                              style={{
+                                 ...styles.generalText,
+                                 ...{ verticalAlign: 'top' }
+                              }}
+                              rowSpan={4}
+                           >
+                              Rp: {formData[0]?.data?.['AM9D.3.1']}
                            </td>
-                           <td style={styles.generalText} rowSpan={4}>
-                              <span>Тун:</span>
+                           <td
+                              style={{
+                                 ...styles.generalText,
+                                 ...{ verticalAlign: 'top' }
+                              }}
+                              rowSpan={4}
+                           >
+                              <span>Тун: {formData[0]?.data?.['AM9D.3.2']}</span>
                               <br />
-                              <br />
-                              <span>Цаг:</span>
-                              <br />
-                           </td>
-                           <td style={styles.generalText}>1. Буцалгаж уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>2. Буцалсан усаар уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>3. Залгиж уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>4. Бүрж уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText} rowSpan={4}>
-                              Rp:
-                           </td>
-                           <td style={styles.generalText} rowSpan={4}>
-                              <span>Тун:</span>
-                              <br />
-                              <br />
-                              <span>Цаг:</span>
+                              <span>Цаг:{formData[0]?.data?.['AM9D.3.3']}</span>
                               <br />
                            </td>
-                           <td style={styles.generalText}>1. Буцалгаж уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>2. Буцалсан усаар уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>3. Залгиж уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>4. Бүрж уух</td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText} rowSpan={4}>
-                              Rp:
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                                 <NewCheckbox value={0} className="test">
+                                    <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
                            </td>
-                           <td style={styles.generalText} rowSpan={4}>
-                              <span>Тун:</span>
+                        </tr>
+                        <tr>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                                 <NewCheckbox value={1} className="test">
+                                    <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                                 <NewCheckbox value={2} className="test">
+                                    <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                                 <NewCheckbox value={3} className="test">
+                                    <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td
+                              style={{
+                                 ...styles.generalText,
+                                 ...{ verticalAlign: 'top' }
+                              }}
+                              rowSpan={4}
+                           >
+                              Rp: {formData[0]?.data?.['AM9D.4.1']}
+                           </td>
+                           <td
+                              style={{
+                                 ...styles.generalText,
+                                 ...{ verticalAlign: 'top' }
+                              }}
+                              rowSpan={4}
+                           >
+                              <span>Тун: {formData[0]?.data?.['AM9D.4.2']}</span>
                               <br />
-                              <br />
-                              <span>Цаг:</span>
+                              <span>Цаг:{formData[0]?.data?.['AM9D.4.3']}</span>
                               <br />
                            </td>
-                           <td style={styles.generalText}>1. Буцалгаж уух</td>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                                 <NewCheckbox value={0} className="test">
+                                    <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
                         </tr>
                         <tr>
-                           <td style={styles.generalText}>2. Буцалсан усаар уух</td>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                                 <NewCheckbox value={1} className="test">
+                                    <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
                         </tr>
                         <tr>
-                           <td style={styles.generalText}>3. Залгиж уух</td>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                                 <NewCheckbox value={2} className="test">
+                                    <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
                         </tr>
                         <tr>
-                           <td style={styles.generalText}>4. Бүрж уух</td>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                                 <NewCheckbox value={3} className="test">
+                                    <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td
+                              style={{
+                                 ...styles.generalText,
+                                 ...{ verticalAlign: 'top' }
+                              }}
+                              rowSpan={4}
+                           >
+                              Rp: {formData[0]?.data?.['AM9D.5.1']}
+                           </td>
+                           <td
+                              style={{
+                                 ...styles.generalText,
+                                 ...{ verticalAlign: 'top' }
+                              }}
+                              rowSpan={4}
+                           >
+                              <span>Тун: {formData[0]?.data?.['AM9D.5.2']}</span>
+                              <br />
+                              <span>Цаг:{formData[0]?.data?.['AM9D.5.3']}</span>
+                              <br />
+                           </td>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                                 <NewCheckbox value={0} className="test">
+                                    <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                                 <NewCheckbox value={1} className="test">
+                                    <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                                 <NewCheckbox value={2} className="test">
+                                    <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style={styles.generalText}>
+                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                                 <NewCheckbox value={3} className="test">
+                                    <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
+                                 </NewCheckbox>
+                              </NewCheckboxGroup>
+                           </td>
                         </tr>
                      </thead>
-                  </table>
+                  </Table>
                   <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: _______________________</span>
+                     <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: {hospitalName}</span>
                      <br />
-                     <span style={{ fontSize: 12 }}>Эмчийн хувийн тэмдэглэл:_________________</span>
-                     <br />
+                     <span style={{ fontSize: 12 }}>Эмчийн хувийн тэмдэглэл: {formData[0]?.data?.['AM9D.6']}</span>
                      <br />
                   </div>
                   <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <span style={{ fontSize: 12 }}>Хаяг, харилцах утас: __________________________________</span>
-                     <br />
-                     <span style={{ fontSize: 12 }}>____________________________________________________________</span>
-                     <br />
+                     <span style={{ fontSize: 12 }}>Хаяг, харилцах утас: {formData[0]?.data?.['AM9D.7']}</span>
                      <br />
                   </div>
                </div>
