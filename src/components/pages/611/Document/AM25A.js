@@ -1,8 +1,15 @@
+import moment from 'moment';
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
 
 //маягт АМ-25А
-function AM25A() {
+function AM25A(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -40,7 +47,7 @@ function AM25A() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
+               <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-25А</span>
@@ -51,42 +58,55 @@ function AM25A() {
                <span style={{ fontWeight: 'bold', fontSize: 16 }}>СЭРГЭЭН ЗАСАХ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
-               <div>РД:</div>
+               <div>РД: {patientData?.registerNumber}</div>
                <div>ЭМД:</div>
             </div>
             <div style={styles.rowStyle}>
-               1. Эцэг /эх/-ийн нэр _______________________________
-               <span style={{ marginLeft: 50 }}>Нэр _______________________________</span>
+               1. Эцэг /эх/-ийн нэр {patientData?.lastName}
+               <span style={{ marginLeft: 50 }}>Нэр {patientData?.firstName}</span>
             </div>
             <div style={styles.rowStyle}>
-               2. Нас ______
-               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
+               2. Нас {patientData?.age}
+               <span style={{ marginLeft: 50 }}>
+                  Хүйс: /зур/
+                  <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+                  <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
+               </span>
             </div>
             <div style={styles.rowStyle}>
-               3. Эмчилгээ эхэлсэн _____ он ___ сар ___ өдөр,
-               <span style={{ marginLeft: 20 }}>Эмчилгээ дууссан он сар өдөр _____ он ___ сар ___ өдөр</span>
+               3. Эмчилгээ эхэлсэн {moment(formData[0]?.data?.['AM25.1']?.[0]).format('YYYY')} он{' '}
+               {moment(formData[0]?.data?.['AM25.1']?.[0]).format('MM')} сар{' '}
+               {moment(formData[0]?.data?.['AM25.1']?.[0]).format('DD')} өдөр,
+               <span style={{ marginLeft: 20 }}>
+                  Эмчилгээ дууссан {moment(formData[0]?.data?.['AM25.1']?.[1]).format('YYYY')} он{' '}
+                  {moment(formData[0]?.data?.['AM25.1']?.[1]).format('MM')} сар{' '}
+                  {moment(formData[0]?.data?.['AM25.1']?.[1]).format('DD')} өдөр,
+               </span>
             </div>
 
             <div style={styles.rowStyle}>
-               4. Ажлын газар, албан тушаал ___________________________________________________________________
+               4. Ажлын газар, албан тушаал {patientData?.organization}, {patientData?.jobPosition}
             </div>
             <div
                style={{
                   ...styles.rowStyle,
-                  ...{ display: 'flex', justifyContent: 'space-between' }
+                  ...{ display: 'flex' }
                }}
             >
                <div>
-                  <div>5. Үндсэн онош: ________________________________________</div>
+                  <div>5. Үндсэн онош: {formData[0]?.data?.['AM25.2']}</div>
                   <div style={styles.rowStyle}>
-                     6. Хэдэн удаа эмчилсэн ________
-                     <span style={{ marginLeft: 50 }}>Удаа</span>
-                     <span style={{ marginLeft: 20 }}>/зур/ анх, давтан</span>
+                     6. Хэдэн удаа эмчилсэн:{formData[0]?.data?.['AM25.3']}
+                     <span style={{ marginLeft: 50 }}>Удаа /зур/: </span>
+                     <span style={{ marginLeft: 20 }}>
+                        <span className={formData[0]?.data?.['AM25.4'] === 0 ? 'underline mr-1' : 'mr-1'}> анх, </span>
+                        <span className={formData[0]?.data?.['AM25.4'] === 1 ? 'underline mr-1' : 'mr-1'}>
+                           давтан
+                        </span>{' '}
+                     </span>
                   </div>
 
-                  <div style={styles.rowStyle}>
-                     7. Мэргэжлийн эмчийн заалт _______________________________________________
-                  </div>
+                  <div style={styles.rowStyle}>7. Мэргэжлийн эмчийн заалт {formData[0]?.data?.['AM25.18']}</div>
                </div>
                <div style={{ display: 'flex' }}>
                   <div
@@ -94,30 +114,30 @@ function AM25A() {
                         writingMode: 'vertical-rl',
                         textAlign: 'center',
                         verticalAlign: 'middle',
-                        rotate: '180deg'
+                        rotate: '180deg',
+                        marginLeft: 30
                      }}
                   >
                      Өвчний төгсгөл
                   </div>
-                  <div style={{ width: '100%', marginLeft: 10 }}>
-                     <div style={{ display: 'flex' }}>
-                        <div style={styles.rowCells}></div>
-                        <div style={{ textAlign: 'center', marginLeft: 10 }}>
-                           <span>Эдгэрсэн</span>
-                        </div>
-                     </div>
-                     <div style={{ display: 'flex', marginTop: 5 }}>
-                        <div style={styles.rowCells}></div>
-                        <span style={{ textAlign: 'center', marginLeft: 10 }}>Сайжирсан</span>
-                     </div>
-                     <div style={{ display: 'flex', marginTop: 5 }}>
-                        <div style={styles.rowCells}></div>
-                        <span style={{ textAlign: 'center', marginLeft: 10 }}>Хэвэндээ</span>
-                     </div>
-                     <div style={{ display: 'flex', marginTop: 5 }}>
-                        <div style={styles.rowCells}></div>
-                        <span style={{ textAlign: 'center', marginLeft: 10 }}>Дутуу</span>
-                     </div>
+                  <div style={{ width: '100%' }}>
+                     <NewCheckboxGroup value={formData[0]?.data?.['AM25.5']} className="dstory">
+                        <NewCheckbox value={0} className="test">
+                           <span style={{ fontSize: 12 }}>Эдгэрсэн</span>
+                        </NewCheckbox>
+                        <br />
+                        <NewCheckbox value={1} className="test">
+                           <span style={{ fontSize: 12 }}>Сайжирсан</span>
+                        </NewCheckbox>
+                        <br />
+                        <NewCheckbox value={2} className="test">
+                           <span style={{ fontSize: 12 }}>Хэвэндээ</span>
+                        </NewCheckbox>
+                        <br />
+                        <NewCheckbox value={3} className="test">
+                           <span style={{ fontSize: 12 }}>Дутуу</span>
+                        </NewCheckbox>
+                     </NewCheckboxGroup>
                   </div>
                </div>
             </div>
@@ -183,49 +203,31 @@ function AM25A() {
                      </td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{formData[0]?.data?.['AM25.6.1']}</td>
+                     <td>{formData[0]?.data?.['AM25.6.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.6.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.6.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.6.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.6.6']}</td>
+                     <td>{formData[0]?.data?.['AM25.6.7']}</td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{formData[0]?.data?.['AM25.7.1']}</td>
+                     <td>{formData[0]?.data?.['AM25.7.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.7.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.7.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.7.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.7.6']}</td>
+                     <td>{formData[0]?.data?.['AM25.7.7']}</td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{formData[0]?.data?.['AM25.8.1']}</td>
+                     <td>{formData[0]?.data?.['AM25.8.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.8.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.8.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.8.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.8.6']}</td>
+                     <td>{formData[0]?.data?.['AM25.8.7']}</td>
                   </tr>
                </thead>
             </Table>
@@ -236,18 +238,9 @@ function AM25A() {
                <div>Маягтын ар тал</div>
                <div>Б тал</div>
             </div>
-            <div style={styles.rowStyle}>
-               8. Илгээсэн эмч, кабинетийн нэр:
-               __________________________________________________________________________________________________________
-            </div>
-            <div style={styles.rowStyle}>
-               8. Сэргээн засах эмчилгээний эмч:
-               _________________________________________________________________________________________________________
-            </div>
-            <div style={styles.rowStyle}>
-               8. Зөвлөгөө өгсөн байдал:
-               __________________________________________________________________________________________________________________
-            </div>
+            <div style={styles.rowStyle}>8. Илгээсэн эмч, кабинетийн нэр: {formData[0]?.data?.['AM25.9']}</div>
+            <div style={styles.rowStyle}>8. Сэргээн засах эмчилгээний эмч: {formData[0]?.data?.['AM25.10']}</div>
+            <div style={styles.rowStyle}>8. Зөвлөгөө өгсөн байдал: {formData[0]?.data?.['AM25.11']}</div>
             <Table bordered style={{ marginTop: 20 }}>
                <thead>
                   <tr
@@ -310,75 +303,57 @@ function AM25A() {
                      </td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{moment(formData[0]?.data?.['AM25.12.1']).format('YYYY-MM-DD')}</td>
+                     <td>{formData[0]?.data?.['AM25.12.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.12.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.12.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.12.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.12.6']}</td>
                      <td></td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{moment(formData[0]?.data?.['AM25.13.1']).format('YYYY-MM-DD')}</td>
+                     <td>{formData[0]?.data?.['AM25.13.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.13.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.13.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.13.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.13.6']}</td>
                      <td></td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{moment(formData[0]?.data?.['AM25.14.1']).format('YYYY-MM-DD')}</td>
+                     <td>{formData[0]?.data?.['AM25.14.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.14.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.14.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.14.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.14.6']}</td>
                      <td></td>
                   </tr>
                   <tr style={{ height: 30 }}>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                     <td>{moment(formData[0]?.data?.['AM25.15.1']).format('YYYY-MM-DD')}</td>
+                     <td>{formData[0]?.data?.['AM25.15.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.15.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.15.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.15.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.15.6']}</td>
                      <td></td>
                   </tr>
                   <tr style={{ height: 30 }}>
+                     <td>{moment(formData[0]?.data?.['AM25.16.1']).format('YYYY-MM-DD')}</td>
+                     <td>{formData[0]?.data?.['AM25.16.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.16.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.16.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.16.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.16.6']}</td>
                      <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
+                  </tr>
+                  <tr style={{ height: 30 }}>
+                     <td>{moment(formData[0]?.data?.['AM25.17.1']).format('YYYY-MM-DD')}</td>
+                     <td>{formData[0]?.data?.['AM25.17.2']}</td>
+                     <td>{formData[0]?.data?.['AM25.17.3']}</td>
+                     <td>{formData[0]?.data?.['AM25.17.4']}</td>
+                     <td>{formData[0]?.data?.['AM25.17.5']}</td>
+                     <td>{formData[0]?.data?.['AM25.17.6']}</td>
                      <td></td>
                   </tr>
                </thead>
