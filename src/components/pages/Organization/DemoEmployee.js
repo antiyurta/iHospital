@@ -179,7 +179,7 @@ function DemoEmployee() {
       getRoles();
       //
       getPositions();
-      getMoblieStructure();
+      // getMoblieStructure();
       //
       ScrollRef(scrollRef);
    }, []);

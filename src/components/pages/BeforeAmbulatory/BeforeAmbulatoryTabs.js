@@ -104,7 +104,7 @@ export default function BeforeAmbulatoryTabs({ patientId, type, structureId, lis
             >
                <div className="flex flex-col gap-3">
                   <Segmented
-                     className="department-bed-segment"
+                     className="segmented-enr"
                      size="small"
                      options={documents?.map((document) => {
                         return {

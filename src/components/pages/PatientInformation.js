@@ -114,6 +114,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                            <img className="w-24" src={male} alt="patient" />
                            {OCS ? (
                               <NewRadioGroup
+                                 className="flex"
                                  size="small"
                                  onChange={handleTypeChangePatient}
                                  value={type}
@@ -150,22 +151,6 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                </div>
             </div>
          </NewCard>
-         {/* <Modal title="Өвчний түүх" open={isOpenHistory} onCancel={() => setIsOpenHistory(false)} width={'70%'}>
-            <div className="flex flex-wrap">
-               <div
-                  className="sm:w-full md:w-1/4 lg:w-1/4"
-                  style={{
-                     borderRight: '1px solid #f0f0f0'
-                  }}
-               >
-                  <div className="px-2">
-                     <Divider>Амбулатори</Divider>
-                     <Divider>Хэвтэн</Divider>
-                  </div>
-               </div>
-               <div className="sm:w-full md:w-3/4 lg:w-3/4"></div>
-            </div>
-         </Modal> */}
       </>
    );
 }

@@ -84,6 +84,7 @@ function index4({ options, namePanel, handleChange }) {
                                                       <Option value="textarea">TextArea</Option>
                                                       <Option value="rangepicker">RangePicker</Option>
                                                       <Option value="datepicker">DatePicker</Option>
+                                                      <Option value="table">Table</Option>
                                                    </Select>
                                                 </Form.Item>
                                                 <Form.Item

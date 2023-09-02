@@ -16,15 +16,12 @@ import DocumentFormServices from '../../../../services/organization/documentForm
 import DocumentOptionServices from '../../../../services/organization/documentOption';
 //
 function Index(props) {
-   const { usageType, documentValue, structureId, appointmentId, patientId } = props;
+   const { usageType, documentValue, structureId, appointmentId, patientId, onOk } = props;
    const hospitalName = useSelector(selectCurrentHospitalName);
    const printRef = useRef();
    const AppIds = useSelector(selectCurrentAppId);
    const [form] = Form.useForm();
    const [data, setData] = useState([]);
-   //
-   const [printData, setPrintData] = useState({});
-   //
    const [isLoading, setIsLoading] = useState(false);
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
@@ -33,12 +30,6 @@ function Index(props) {
    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
    //
    const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
-   //
-   const pageStyle = `
-  @page {
-    margin: 0px;
-  }
-`;
    const handlePrint = useReactToPrint({
       // onBeforeGetContent: () => setPrintLoading(true),
       // onBeforePrint: () => setPrintLoading(false),
@@ -59,7 +50,7 @@ function Index(props) {
    const getData = async () => {
       setIsLoading(true);
       await jwtInterceopter
-         .get('document-middleware', {
+         .get(documentForm.url, {
             params: {
                usageType: usageType,
                appointmentId: appointmentId,
@@ -167,7 +158,8 @@ function Index(props) {
             .post(documentForm.url, data)
             .then((response) => {
                if (response.status === 201) {
-                  setIsOpenFormModal(false);
+                  onOk(false);
+                  openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
             .catch((error) => {
@@ -207,11 +199,7 @@ function Index(props) {
       ];
    };
    const equalerNumber = (text, option) => {
-      return option.options?.map((itm) => {
-         if (parseInt(itm.keyWord) === text) {
-            return itm.label + ', ';
-         }
-      });
+      return option.options?.find((itm) => parseInt(itm.keyWord) === text)?.label;
    };
    const columnConfigure = () => {
       return documentForm?.documentForm?.map((item, index) => {
@@ -221,13 +209,26 @@ function Index(props) {
                   return (
                      <NewColumn
                         key={idx}
+                        align="left"
                         title={option.value}
                         dataIndex={['data', `${option.keyWord}`]}
                         render={(text) => {
                            if (option.isInteger) {
+                              console.log(text);
                               if (option.type === 'checkbox') {
                                  return text?.map((txt) => {
                                     return equalerNumber(txt, option);
+                                 });
+                              } else if (option.type === 'table') {
+                                 return text?.map((column, index) => {
+                                    return (
+                                       `${index + 1}.` +
+                                       Object.entries(column)?.map(([key, value]) => {
+                                          console.log(key, value);
+                                          return equalerNumber(parseInt(key), option) + ':' + value;
+                                       }) +
+                                       '\n'
+                                    );
                                  });
                               } else {
                                  return equalerNumber(text, option);
@@ -263,6 +264,7 @@ function Index(props) {
       if (documentValue != 0) {
          getDocumentForm();
          getDocumentOption();
+         form.resetFields();
       }
    }, [documentValue]);
    useEffect(() => {
@@ -275,93 +277,28 @@ function Index(props) {
    }
    return (
       <div className="flex flex-col gap-3">
-         <div className="flow-root">
-            <div className="float-left">
-               <div
-                  style={{
-                     display: 'flex',
-                     flexDirection: 'row',
-                     gap: '6px'
-                  }}
-               >
-                  <Button type="primary" onClick={() => setIsOpenSelectPositionModal(true)}>
-                     {documentForm.isMulti ? (data?.length > 0 ? 'Засах' : 'Бөглөх') : 'Бөглөх'}
-                  </Button>
-                  <Button
-                     icon={<PrinterOutlined />}
-                     onClick={() => {
-                        getPatientInfo();
-                     }}
-                  >
-                     Хэвлэх
-                  </Button>
-               </div>
-            </div>
-            <div className="float-right">
-               <Button onClick={() => getData()}>Сэргээх</Button>
-            </div>
-         </div>
-         <div>
-            <NewTable
-               prop={{
-                  rowKey: '_id',
-                  bordered: true,
-                  dataSource: data
+         <div className="w-full">
+            <p
+               style={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  textAlign: 'center'
                }}
-               meta={{
-                  page: 1,
-                  limit: data.length
-               }}
-               isLoading={isLoading}
-               isPagination={false}
             >
-               <NewColumn
-                  width={120}
-                  dataIndex={'createdAt'}
-                  title={'Огноо'}
-                  render={(text) => {
-                     return moment(text).format('YYYY-MM-DD HH:mm');
-                  }}
-               />
-               {columnConfigure()}
-            </NewTable>
+               {documentForm.name}
+            </p>
          </div>
-         <Modal
-            title="Маягт бөглөх"
-            open={isOpenFormModal}
-            onCancel={() => setIsOpenFormModal(false)}
-            onOk={() => form.validateFields().then((values) => onFinish(values))}
-         >
+         <div className="w-full h-[600px] overflow-auto">
             <Form form={form} layout="vertical">
                <FormRender form={documentForm} formOptionIds={documentOptions[selectedOptionId]?.formOptionIds} />
             </Form>
-         </Modal>
-         <Modal
-            title="Хэнээр бөглөх"
-            open={isOpenSelectPositionModal}
-            onCancel={() => setIsOpenSelectPositionModal(false)}
-            footer={null}
-         >
-            <div className="grid grid-cols-2 gap-6">
-               {documentOptions?.map((option, index) => {
-                  return (
-                     <Button
-                        key={index}
-                        type="primary"
-                        onClick={() => {
-                           setSelectedOptionId(index);
-                           setIsOpenSelectPositionModal(false);
-                           setIsOpenFormModal(true);
-                           form.resetFields();
-                        }}
-                     >
-                        {option.structure?.name}
-                     </Button>
-                  );
-               })}
-            </div>
-         </Modal>
-         <Modal
+         </div>
+         <div className="w-full">
+            <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
+               Хадлагах
+            </Button>
+         </div>
+         {/* <Modal
             title="Маягт хэвлэх хэсэг"
             open={isOpenPrintModal}
             onCancel={() => setIsOpenPrintModal(false)}
@@ -379,7 +316,7 @@ function Index(props) {
                   hospitalName={hospitalName}
                />
             </div>
-         </Modal>
+         </Modal> */}
       </div>
    );
 }

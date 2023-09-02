@@ -6,12 +6,22 @@ import PatientList from './Lists/PatientList';
 import PreOrder from './Lists/PreOrder';
 import Surgery from './Lists/Surgery';
 import { SnippetsOutlined } from '@ant-design/icons';
+import DocumentShow from '../611/DocumentShow';
 
 export default function BeforeAmbulatoryList() {
    const documents = (
-      <Button type="primary" icon={<SnippetsOutlined />}>
-         Маягт
-      </Button>
+      <>
+         <DocumentShow
+            props={{
+               appIds: null,
+               departmentId: null,
+               appointmentId: null,
+               usageType: 'OUT',
+               documentType: 1,
+               patientId: null
+            }}
+         />
+      </>
    );
    const items = [
       {
