@@ -131,7 +131,7 @@ function DocumentUpload() {
             setLoading(false);
          });
    };
-   const filteredForm = documentForms.filter((form) => {
+   const filteredForm = documentForms?.filter((form) => {
       return form.name?.toLowerCase().includes(searchField.toLowerCase());
    });
    const deleteForm = async (id) => {
