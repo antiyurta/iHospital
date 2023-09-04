@@ -17,6 +17,7 @@ import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { setEmrData } from '../../../features/emrReducer';
 import MonitorCriteria from '../Insurance/MonitorCriteria';
+import DocumentShow from '../611/DocumentShow';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 const { RangePicker } = DatePicker;
@@ -300,6 +301,20 @@ function IndexAfter({ type, params }) {
                   title={type === 1 ? 'EXO жагсаалт' : 'Оношилгооны жагсаалт'}
                   bordered={false}
                   className="header-solid max-h-max rounded-md"
+                  extra={
+                     <>
+                        <DocumentShow
+                           props={{
+                              appIds: null,
+                              departmentId: null,
+                              appointmentId: null,
+                              usageType: 'OUT',
+                              documentType: 1,
+                              patientId: null
+                           }}
+                        />
+                     </>
+                  }
                >
                   <div className="flex flex-wrap">
                      <div className="basis-1/3">
