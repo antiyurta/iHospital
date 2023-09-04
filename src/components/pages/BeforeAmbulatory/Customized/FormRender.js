@@ -20,11 +20,11 @@ import { MinusOutlined } from '@ant-design/icons';
 function FormRender({ form, formOptionIds }) {
    const message = 'Тань бөглөх эрх байхгүй';
    const Render = ({ questions }) => {
-      return questions?.map((data) => {
+      return questions?.map((data, index) => {
          const state = formOptionIds?.some((id) => id === data.keyWord);
          if (data.type === 'input') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex w-full p-1">
                      <Form.Item
                         label={data.value}
@@ -39,7 +39,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'inputNumber') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -58,7 +58,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'checkbox') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -93,7 +93,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'radio') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -119,7 +119,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'textarea') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -134,7 +134,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'rangepicker') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex w-full p-1">
                      <Form.Item
                         label={data.value}
@@ -156,7 +156,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'datepicker') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -178,7 +178,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'table') {
             return (
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.List name={data.keyWord}>
                         {(rows, { add, remove }) => {

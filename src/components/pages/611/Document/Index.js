@@ -90,6 +90,9 @@ import EIM5_2 from './../EIM/EIM5_2';
 //CT
 import CT1_2H2 from './CT_1_2H2';
 //
+//
+import EMT201_4_2 from '../EMT/EMT201_4_2';
+//
 
 // nemelt tushaal
 const C537M1 = React.lazy(() => import('../Command/537M1')); // tushaal maygt
@@ -533,6 +536,11 @@ const options = [
       value: 87,
       label: 'CT-1,2 Хавсралт 2',
       docName: 'Амин үзүүлэлтийг хянах'
+   },
+   {
+      value: 88,
+      label: 'ЭМТ- 201.4.2',
+      docName: 'Амбулаторын үзлэгт хамрагдсан хүний тоо насны бүлэг, хүйсээр'
    }
 ];
 
@@ -733,6 +741,9 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName }) {
       return <A293 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 87)
       return <CT1_2H2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   else if (id === 88) {
+      return <EMT201_4_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   }
 }
 
 export function ReturnAll() {

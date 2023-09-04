@@ -118,6 +118,7 @@ function DocumentShow({ props }) {
                         <Customized
                            usageType={'OUT'}
                            documentValue={documentId}
+                           documentType={props.documentType}
                            structureId={props.departmentId}
                            appointmentId={props.appointmentId}
                            patientId={props.patientId}

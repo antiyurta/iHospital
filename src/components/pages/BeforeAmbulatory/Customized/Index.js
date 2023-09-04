@@ -14,12 +14,14 @@ import jwtInterceopter from '../../../jwtInterceopter';
 import PmsPatientServices from '../../../../services/pms/patient';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
+import { NewRangePicker } from '../../../Input/Input';
 //
 function Index(props) {
-   const { usageType, documentValue, structureId, appointmentId, patientId, onOk } = props;
+   const { usageType, documentValue, documentType, structureId, appointmentId, patientId, onOk } = props;
    const hospitalName = useSelector(selectCurrentHospitalName);
    const printRef = useRef();
    const AppIds = useSelector(selectCurrentAppId);
+   const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
@@ -49,14 +51,25 @@ function Index(props) {
    //
    const getData = async () => {
       setIsLoading(true);
+      var params = {};
+      if (documentType === 1) {
+         const start = moment(new Date()).set({ hour: 0, minute: 0, second: 0 });
+         const end = moment(new Date()).set({ hour: 23, minute: 59, second: 59 });
+         params = {
+            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
+            endDate: moment(end).format('YYYY-MM-DD HH:mm')
+         };
+      } else {
+         params = {
+            usageType: usageType,
+            appointmentId: appointmentId,
+            documentId: documentValue,
+            patientId: patientId
+         };
+      }
       await jwtInterceopter
          .get(documentForm.url, {
-            params: {
-               usageType: usageType,
-               appointmentId: appointmentId,
-               documentId: documentValue,
-               patientId: patientId
-            }
+            params: params
          })
          .then((response) => {
             const data = response.data.response;
@@ -173,6 +186,26 @@ function Index(props) {
       }
       getData();
    };
+   const onFinishFilter = async (filters) => {
+      setIsLoading(true);
+      const start = moment(filters.date[0]).set({ hour: 0, minute: 0, second: 0 });
+      const end = moment(filters.date[1]).set({ hour: 23, minute: 59, second: 59 });
+      const params = {
+         startDate: moment(start).format('YYYY-MM-DD HH:mm'),
+         endDate: moment(end).format('YYYY-MM-DD HH:mm')
+      };
+      await jwtInterceopter
+         .get(documentForm.url, {
+            params: params
+         })
+         .then((response) => {
+            const data = response.data.response;
+            setData(data);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
+   };
    const findSupportColumns = (id) => {
       console.log(id);
       return [
@@ -262,8 +295,11 @@ function Index(props) {
    };
    useEffect(() => {
       if (documentValue != 0) {
+         console.log(documentType);
+         if (documentType != 1) {
+            getDocumentOption();
+         }
          getDocumentForm();
-         getDocumentOption();
          form.resetFields();
       }
    }, [documentValue]);
@@ -288,16 +324,57 @@ function Index(props) {
                {documentForm.name}
             </p>
          </div>
-         <div className="w-full h-[600px] overflow-auto">
-            <Form form={form} layout="vertical">
-               <FormRender form={documentForm} formOptionIds={documentOptions[selectedOptionId]?.formOptionIds} />
-            </Form>
-         </div>
-         <div className="w-full">
-            <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
-               Хадлагах
-            </Button>
-         </div>
+         {documentType === 1 ? (
+            <div className="flex flex-col gap-3">
+               <Form onFinish={onFinishFilter} form={filterForm} layout="vertical">
+                  <div className="flex flex-row gap-3">
+                     <Form.Item
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Өдөр заавал'
+                           }
+                        ]}
+                        label="Өдрөөр шүүх"
+                        name="date"
+                     >
+                        <NewRangePicker />
+                     </Form.Item>
+                     <Form.Item className="self-end">
+                        <Button type="primary" htmlType="submit">
+                           Шүүх
+                        </Button>
+                     </Form.Item>
+                  </div>
+               </Form>
+               <Button onClick={() => handlePrint()} type="primary">
+                  Хэвлэх
+               </Button>
+               <div ref={printRef}>
+                  <ReturnById
+                     type={usageType}
+                     id={documentValue}
+                     appointmentId={null}
+                     data={data}
+                     hospitalName={hospitalName}
+                  />
+               </div>
+            </div>
+         ) : (
+            <>
+               <div className="w-full h-[600px] overflow-auto">
+                  <Form form={form} layout="vertical">
+                     <FormRender form={documentForm} formOptionIds={documentOptions[selectedOptionId]?.formOptionIds} />
+                  </Form>
+               </div>
+               <div className="w-full">
+                  <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
+                     Хадлагах
+                  </Button>
+               </div>
+            </>
+         )}
+
          {/* <Modal
             title="Маягт хэвлэх хэсэг"
             open={isOpenPrintModal}
