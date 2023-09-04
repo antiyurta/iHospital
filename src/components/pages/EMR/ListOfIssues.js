@@ -38,7 +38,8 @@ function ListOfIssues({ patientId }) {
                bordered: true,
                dataSource: data,
                scroll: {
-                  y: 100
+                  y: 100,
+                  x: 400
                }
             }}
             meta={{
@@ -48,8 +49,36 @@ function ListOfIssues({ patientId }) {
             isLoading={isLoading}
             isPagination={false}
          >
-            <NewColumn dataIndex={'cabinetName'} title={'Кабинет'} />
-            <NewColumn dataIndex={'doctor'} title={'Эмч'} />
+            <NewColumn
+               dataIndex={'cabinetName'}
+               title={'Кабинет'}
+               render={(text) => {
+                  return (
+                     <span
+                        style={{
+                           whiteSpace: 'pre-wrap'
+                        }}
+                     >
+                        {text}
+                     </span>
+                  );
+               }}
+            />
+            <NewColumn
+               dataIndex={'doctor'}
+               title={'Эмч'}
+               render={(text) => {
+                  return (
+                     <span
+                        style={{
+                           whiteSpace: 'pre-wrap'
+                        }}
+                     >
+                        {text}
+                     </span>
+                  );
+               }}
+            />
             <NewColumn
                dataIndex={'diagnoses'}
                title={'Онош'}

@@ -61,7 +61,7 @@ function Employee() {
       getPosition();
       getDepartment();
       getRoles();
-      getMoblieStructure();
+      // getMoblieStructure();
    }, []);
    const column = [
       {

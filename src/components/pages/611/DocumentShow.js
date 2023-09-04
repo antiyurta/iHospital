@@ -20,7 +20,7 @@ function DocumentShow({ props }) {
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: props.appIds,
-            structureId: props.deparmentId,
+            structureId: props.departmentId,
             usageType: props.usageType,
             documentType: props.documentType
          }
@@ -62,7 +62,7 @@ function DocumentShow({ props }) {
             title="Маягт жагсаалт"
             open={isOpenAM}
             onCancel={() => setIsOpenAM(false)}
-            width={'70%'}
+            width={'90%'}
             bodyStyle={{
                paddingLeft: 0
             }}
@@ -112,15 +112,17 @@ function DocumentShow({ props }) {
                      </div>
                   </div>
                </div>
-               <div className="w-full">
+               <div className="w-full overflow-auto">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <Customized
                            usageType={'OUT'}
                            documentValue={documentId}
+                           documentType={props.documentType}
                            structureId={props.departmentId}
                            appointmentId={props.appointmentId}
                            patientId={props.patientId}
+                           onOk={(state) => setIsOpenAM(state)}
                         />
                      </div>
                   </div>

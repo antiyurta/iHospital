@@ -85,7 +85,7 @@ function DocumentUpload() {
    const HandleChangeTest = (panelName, optionName, name) => {
       const formData = form.getFieldsValue();
       const type = form.getFieldValue([panelName, optionName, 'options', name, 'type']);
-      if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
+      if (type === 'radio' || type === 'checkbox' || type === 'dropdown' || type === 'table') {
          formData[panelName][optionName].options[name] = {
             type: type,
             value: '',
