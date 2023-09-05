@@ -580,9 +580,19 @@ const NotFound = () => {
    return <div>NotFound</div>;
 };
 
-export function ReturnById({ type, id, appointmentId, data, hospitalName }) {
+export function ReturnById({ type, id, appointmentId, data, hospitalName, doctorName, cabinetName }) {
    //type ni maygt harulah esvel form harulah
-   if (id === 1) return <AM1B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   if (id === 1)
+      return (
+         <AM1B
+            type={type}
+            data={data}
+            appointmentId={appointmentId}
+            hospitalName={hospitalName}
+            doctorName={doctorName}
+            cabinetName={cabinetName}
+         />
+      );
    else if (id === 2)
       return <AM_1V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 3) return <AM2A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;

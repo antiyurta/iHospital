@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 
 //маягт АМ-1Б
-function AM1B() {
+function AM1B(props) {
+   console.log('props', props);
+   const { type, data, appointmentId, hospitalName, doctorName, cabinetName } = props;
+   const [list, setList] = useState({});
+
+   useEffect(() => {
+      if (data) {
+         const cloneData = { ...data };
+         delete cloneData['65-150'];
+         delete cloneData.Other;
+         cloneData['65+'] = data['65-150'];
+         setList(cloneData);
+      }
+   }, [data]);
    const textStyle = {
       verticalText: {
          writingMode: 'vertical-rl',
@@ -15,7 +28,18 @@ function AM1B() {
       },
       centerText: {
          textAlign: 'center',
-         verticalAlign: 'middle'
+         verticalAlign: 'middle',
+         padding: 5,
+         maxHeight: 130,
+         maxWidth: 50,
+         lineHeight: 1,
+         fontSize: 12
+      },
+      circle: {
+         borderRadius: 50,
+         borderWidth: 1,
+         padding: 5,
+         borderColor: '#000'
       }
    };
    return (
@@ -42,8 +66,8 @@ function AM1B() {
                      flexDirection: 'column'
                   }}
                >
-                  <span>Кабинетын нэр: </span>
-                  <span>Эмчийн нэр: </span>
+                  <span>Кабинетын нэр: {cabinetName}</span>
+                  <span>Эмчийн нэр: {doctorName}</span>
                </div>
             </div>
             <Table bordered className="document">
@@ -86,6 +110,7 @@ function AM1B() {
                            ...textStyle.centerText,
                            ...{ width: 100 }
                         }}
+                        colSpan={10}
                      >
                         Ажлын газар ЭМД-ын дугаар
                      </td>
@@ -181,7 +206,7 @@ function AM1B() {
                      <td>2</td>
                      <td>3</td>
                      <td>4</td>
-                     <td>5</td>
+                     <td colSpan={10}>5</td>
                      <td>6</td>
                      <td>7</td>
                      <td>8</td>
@@ -198,68 +223,77 @@ function AM1B() {
                      <td>19</td>
                      <td>20</td>
                      <td>21</td>
-                     <td>22 </td>
+                     <td>22</td>
                   </tr>
 
-                  <tr>
-                     <td rowSpan={2}>aa</td>
-                     <td rowSpan={2}>bb</td>
-                     <td colSpan={10}>cc</td>
-                     <td>2</td>
-                     <td>3</td>
-                     <td>4</td>
-                     <td>5</td>
-                     <td>6</td>
-                     <td>7</td>
-                     <td>8</td>
-                     <td>9</td>
-                     <td>10</td>
-                     <td>11</td>
-                     <td>12</td>
-                     <td>13</td>
-                     <td>14</td>
-                     <td>15</td>
-                     <td>16</td>
-                     <td>17</td>
-                     <td>18</td>
-                     <td>19</td>
-                     <td>20</td>
-                     <td>21</td>
-                     <td>22 </td>
-                  </tr>
-                  <tr>
-                     <td>aa</td>
-                     <td>bb</td>
-                     <td>bb</td>
-                     <td>bb</td>
-                     <td>bb</td>
-                     <td>bb</td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td> </td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                  </tr>
+                  {props.data?.map((el, index) => {
+                     return (
+                        <>
+                           <tr key={index}>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}>{index + 1}</td>
+                              <td colSpan={10}>
+                                 {el.lastName?.substr(0, 1)}. {el.firstName}
+                              </td>
+                              <td rowSpan={2}>{el.address}</td>
+                              <td rowSpan={2}>{el.jobPosition}</td>
+                              <td rowSpan={2}>{el.educationType}</td>
+                              <td colSpan={10}>{el.organization}</td>
+                              <td rowSpan={2}>{el.age}</td>
+                              <td rowSpan={2}>{el.genderType}</td>
+                              <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                                 <span style={el.inspectionType === '1' ? textStyle.circle : null}>1</span>
+                              </td>
+                              <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                                 <span style={el.inspectionType === '2' ? textStyle.circle : null}>2</span>
+                              </td>
+                              <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                                 <span style={el.inspectionType === '3' ? textStyle.circle : null}>3</span>
+                              </td>
+                              <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                                 <span style={el.inspectionType === '4' ? textStyle.circle : null}>4</span>
+                              </td>
+                              <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                                 <span style={el.inspectionType === '5' ? textStyle.circle : null}>5</span>
+                              </td>
+                              <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                                 <span style={el.inspectionType === '6' ? textStyle.circle : null}>6</span>
+                              </td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                              <td rowSpan={2}></td>
+                           </tr>
+                           <tr key={index + 1}>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[0]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[1]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[2]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[3]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[4]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[5]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[6]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[7]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[8]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[9]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[0]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[1]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[2]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[3]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[4]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[5]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[6]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[7]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[8]}</td>
+                              <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.cardNumber[9]}</td>
+                           </tr>
+                        </>
+                     );
+                  })}
                </tbody>
             </Table>
          </div>

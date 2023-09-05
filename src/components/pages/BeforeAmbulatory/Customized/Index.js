@@ -14,7 +14,9 @@ import jwtInterceopter from '../../../jwtInterceopter';
 import PmsPatientServices from '../../../../services/pms/patient';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
-import { NewRangePicker } from '../../../Input/Input';
+import { NewOption, NewRangePicker, NewSelect } from '../../../Input/Input';
+import OrganizationStructureService from '../../../../services/organization/structure';
+import OrganizationEmployeeService from '../../../../services/organization/employee';
 //
 function Index(props) {
    const { usageType, documentValue, documentType, structureId, appointmentId, patientId, onOk } = props;
@@ -30,6 +32,10 @@ function Index(props) {
    const [selectedOptionId, setSelectedOptionId] = useState(Number);
    const [isOpenSelectPositionModal, setIsOpenSelectPositionModal] = useState(false);
    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
+   const [cabinets, setCabinets] = useState([]);
+   const [employees, setEmployees] = useState([]);
+   const [selectedCabinet, setSelectedCabinet] = useState('');
+   const [selectedEmp, setSelectedEmp] = useState('');
    //
    const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
    const handlePrint = useReactToPrint({
@@ -39,6 +45,25 @@ function Index(props) {
       content: () => printRef.current
    });
    //
+   const getCabinets = async () => {
+      await OrganizationStructureService.get({
+         params: {
+            type: 2
+         }
+      }).then((response) => {
+         setCabinets(response.data.response.data);
+      });
+   };
+   const getEmployees = async (e) => {
+      await OrganizationEmployeeService.getEmployee({
+         params: {
+            depId: e
+         }
+      }).then((response) => {
+         console.log('res', response);
+         setEmployees(response.data.response.data);
+      });
+   };
    const getPatientInfo = async () => {
       await PmsPatientServices.getById(patientId).then((response) => {
          setPrintData({
@@ -306,6 +331,7 @@ function Index(props) {
    useEffect(() => {
       if (!isObjectEmpty(documentForm)) {
          getData();
+         getCabinets();
       }
    }, [documentForm]);
    if (documentValue === 0) {
@@ -340,6 +366,59 @@ function Index(props) {
                      >
                         <NewRangePicker />
                      </Form.Item>
+                     {documentValue === 1 ? (
+                        <Form.Item
+                           label="Тасаг"
+                           name="cabinetId"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Тасаг сонгоно уу'
+                              }
+                           ]}
+                        >
+                           <NewSelect
+                              style={{ width: 200 }}
+                              onChange={(e) => {
+                                 getEmployees(e);
+                              }}
+                              onSelect={(_id, info) => setSelectedCabinet(info.children)}
+                           >
+                              {cabinets?.map((document, index) => {
+                                 return (
+                                    <NewOption key={index} value={document.id}>
+                                       {document.name}
+                                    </NewOption>
+                                 );
+                              })}
+                           </NewSelect>
+                        </Form.Item>
+                     ) : null}
+                     {documentValue === 1 ? (
+                        <Form.Item
+                           label="Эмч"
+                           name="doctorId"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Эмч сонгоно уу'
+                              }
+                           ]}
+                        >
+                           <NewSelect
+                              style={{ width: 200 }}
+                              onSelect={(_id, info) => setSelectedEmp(info.children.join(''))}
+                           >
+                              {employees?.map((document, index) => {
+                                 return (
+                                    <NewOption key={index} value={document.id}>
+                                       {document.lastName?.substr(0, 1)}. {document.firstName}
+                                    </NewOption>
+                                 );
+                              })}
+                           </NewSelect>
+                        </Form.Item>
+                     ) : null}
                      <Form.Item className="self-end">
                         <Button type="primary" htmlType="submit">
                            Шүүх
@@ -357,6 +436,8 @@ function Index(props) {
                      appointmentId={null}
                      data={data}
                      hospitalName={hospitalName}
+                     doctorName={selectedEmp}
+                     cabinetName={selectedCabinet}
                   />
                </div>
             </div>
