@@ -763,6 +763,9 @@ export function ReturnAll() {
 export function ReturnByIdToName(id) {
    return options.find((e) => e.value === id)?.docName;
 }
+export function ReturnByIdToCode(id) {
+   return options.find((e) => e.value === id)?.label;
+}
 
 export function ReturnDetails({ type, oldDocuments, handleClick }) {
    // type = 0 bol list awah 1 bol select

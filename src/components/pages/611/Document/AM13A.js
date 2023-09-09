@@ -109,7 +109,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">ЦЕШ:</span>
-               <span>{formData[0]?.data?.['АМ13.1.1']}</span>
+               <span>{formData?.['АМ13.1.1']}</span>
             </div>
             <div
                style={{
@@ -118,7 +118,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">ШЕШ:</span>
-               <span>{formData[0]?.data?.['АМ13.1.2']}</span>
+               <span>{formData?.['АМ13.1.2']}</span>
             </div>
             <div
                style={{
@@ -127,7 +127,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">Биохими:</span>
-               <span>{formData[0]?.data?.['АМ13.1.3']}</span>
+               <span>{formData?.['АМ13.1.3']}</span>
             </div>
             <div
                style={{
@@ -136,7 +136,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">Рентген: </span>
-               <span>{formData[0]?.data?.['АМ13.1.4']}</span>
+               <span>{formData?.['АМ13.1.4']}</span>
             </div>
             <div
                style={{
@@ -145,7 +145,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">Бусад: </span>
-               <span> {formData[0]?.data?.['АМ13.1.5']}</span>
+               <span> {formData?.['АМ13.1.5']}</span>
             </div>
             <div
                style={{
@@ -157,7 +157,7 @@ function AM13A(props) {
             >
                6. Шилжүүлж буй эмнэлэгт хийгдсэн эмчилгээний үр дүн, өвчтөний биеийн байдал
             </div>
-            <div style={styles.blankSpaces}>{formData[0]?.data?.['АМ13.2']}</div>
+            <div style={styles.blankSpaces}>{formData?.['АМ13.2']}</div>
             <div
                style={{
                   ...styles.generalText,
@@ -170,11 +170,11 @@ function AM13A(props) {
             </div>
             <div style={styles.generalText}>
                Онош:
-               {formData[0]?.data?.['АМ13.3']}
+               {formData?.['АМ13.3']}
             </div>
             <div style={styles.generalText}>
                8. Дараагийн шатлалын эмнэлэгт явуулж буй үндэслэл: (зур)
-               <NewCheckboxGroup value={formData[0]?.data?.['АМ13.4']} className="dstory">
+               <NewCheckboxGroup value={formData?.['АМ13.4']} className="dstory">
                   <NewCheckbox value={0} className="test">
                      <span style={{ fontSize: 12 }}>1. онош тодруулах</span>
                   </NewCheckbox>
@@ -206,9 +206,8 @@ function AM13A(props) {
                </div>
             </div>
             <div style={{ ...styles.generalText, ...{ textAlign: 'right' } }}>
-               {moment(formData[0]?.data?.['АМ13.5']).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['АМ13.5']).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['АМ13.5']).format('DD')} өдөр
+               {moment(formData?.['АМ13.5']).format('YYYY')} оны {moment(formData?.['АМ13.5']).format('MM')} сарын{' '}
+               {moment(formData?.['АМ13.5']).format('DD')} өдөр
             </div>
             <div style={styles.generalText}>
                ....................................................................................................................................................................................................................................................................................

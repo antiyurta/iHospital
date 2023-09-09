@@ -192,7 +192,6 @@ function Index(props) {
             .post(documentForm.url, data)
             .then((response) => {
                if (response.status === 201) {
-                  onOk(false);
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
@@ -205,7 +204,8 @@ function Index(props) {
                setIsLoading(false);
             });
       }
-      getData();
+      onOk(false);
+      // getData();
    };
    const onFinishFilter = async (filters) => {
       setIsLoading(true);
@@ -359,7 +359,7 @@ function Index(props) {
                </div>
                <div className="w-full">
                   <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
-                     Хадлагах
+                     Хадгалах
                   </Button>
                </div>
             </>

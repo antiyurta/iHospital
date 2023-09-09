@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Divider, Modal, Table } from 'antd';
 
 import DocumentsFormPatientSerice from '../../../services/organization/document';
-import { ReturnById, ReturnByIdToName } from './Document/Index';
+import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from './Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
 import { useReactToPrint } from 'react-to-print';
@@ -70,7 +70,7 @@ function DocumentPrint(props) {
                               title: 'Нэр',
                               dataIndex: 'documentId',
                               render: (text) => {
-                                 return ReturnByIdToName(text);
+                                 return ReturnByIdToCode(text);
                               }
                            },
                            {
@@ -99,7 +99,7 @@ function DocumentPrint(props) {
                               title: 'Нэр',
                               dataIndex: 'documentId',
                               render: (text) => {
-                                 return ReturnByIdToName(text);
+                                 return ReturnByIdToCode(text);
                               }
                            },
                            {

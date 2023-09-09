@@ -87,9 +87,9 @@ function AM9B(props) {
                            >
                               Индекс: Хэвлэмэл дугаар байна
                               <span style={{ marginLeft: 30 }}>
-                                 {moment(formData[0]?.data?.['AM9B.1']).format('YYYY')} оны{' '}
-                                 {moment(formData[0]?.data?.['AM9B.1']).format('MM')} сарын{' '}
-                                 {moment(formData[0]?.data?.['AM9B.1']).format('DD')} өдөр
+                                 {moment(formData?.['AM9B.1']).format('YYYY')} оны{' '}
+                                 {moment(formData?.['AM9B.1']).format('MM')} сарын{' '}
+                                 {moment(formData?.['AM9B.1']).format('DD')} өдөр
                               </span>
                            </span>
                         </div>
@@ -100,27 +100,27 @@ function AM9B(props) {
                            {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
                         </span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Онош: {formData[0]?.data?.['AM9B.2']}</span>
+                        <span style={{ fontSize: 12 }}>Онош: {formData?.['AM9B.2']}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Регистрийн № {patientData?.registerNumber}</span>
                         <br />
-                        <span style={styles.blockContentLg}>Rp: {formData[0]?.data?.['AM9B.3.1']}</span>
+                        <span style={styles.blockContentLg}>Rp: {formData?.['AM9B.3.1']}</span>
                         <br />
-                        <span style={styles.blockContentLg}>S: {formData[0]?.data?.['AM9B.3.2']}</span>
+                        <span style={styles.blockContentLg}>S: {formData?.['AM9B.3.2']}</span>
                         <br />
                         <div style={{ textAlign: 'center' }}>
                            <span style={{ fontSize: 12 }}>#</span>
                         </div>
-                        <span style={styles.blockContentSm}>Rp: {formData[0]?.data?.['AM9B.5.1']}</span>
+                        <span style={styles.blockContentSm}>Rp: {formData?.['AM9B.5.1']}</span>
                         <br />
-                        <span style={styles.blockContentLg}>S: {formData[0]?.data?.['AM9B.5.2']}</span>
+                        <span style={styles.blockContentLg}>S: {formData?.['AM9B.5.2']}</span>
                         <div style={{ textAlign: 'center' }}>
                            <span style={{ fontSize: 12 }}>#</span>
                         </div>
                      </div>
                      <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
                         <span style={{ fontSize: 12 }}>
-                           Жор бичсэн эмчийн нэр, утас, тэмдэг: {formData[0]?.data?.['AM9B.4']}
+                           Жор бичсэн эмчийн нэр, утас, тэмдэг: {formData?.['AM9B.4']}
                         </span>
                         <br />
 

@@ -79,9 +79,8 @@ function AM9D(props) {
                      </div>
                      <div style={{ textAlign: 'right', marginRight: 20 }}>
                         <span style={{ fontSize: 12 }}>
-                           {moment(formData[0]?.data?.['AM9D.1']).format('YYYY')} оны{' '}
-                           {moment(formData[0]?.data?.['AM9D.1']).format('MM')} сарын{' '}
-                           {moment(formData[0]?.data?.['AM9D.1']).format('DD')} өдөр
+                           {moment(formData?.['AM9D.1']).format('YYYY')} оны {moment(formData?.['AM9D.1']).format('MM')}{' '}
+                           сарын {moment(formData?.['AM9D.1']).format('DD')} өдөр
                         </span>
                      </div>
                      <br />
@@ -93,7 +92,7 @@ function AM9D(props) {
                         Нас: {patientData?.age} Хүйс: {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
                      </span>
                      <br />
-                     <span style={{ fontSize: 12 }}>Уламжлалт анагаахын онош:{formData[0]?.data?.['AM9D.2']}</span>
+                     <span style={{ fontSize: 12 }}>Уламжлалт анагаахын онош:{formData?.['AM9D.2']}</span>
                      <br />
                   </div>
                   <Table bordered>
@@ -139,7 +138,7 @@ function AM9D(props) {
                               }}
                               rowSpan={4}
                            >
-                              Rp: {formData[0]?.data?.['AM9D.3.1']}
+                              Rp: {formData?.['AM9D.3.1']}
                            </td>
                            <td
                               style={{
@@ -148,13 +147,13 @@ function AM9D(props) {
                               }}
                               rowSpan={4}
                            >
-                              <span>Тун: {formData[0]?.data?.['AM9D.3.2']}</span>
+                              <span>Тун: {formData?.['AM9D.3.2']}</span>
                               <br />
-                              <span>Цаг:{formData[0]?.data?.['AM9D.3.3']}</span>
+                              <span>Цаг:{formData?.['AM9D.3.3']}</span>
                               <br />
                            </td>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
                                  <NewCheckbox value={0} className="test">
                                     <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
                                  </NewCheckbox>
@@ -163,7 +162,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
                                  <NewCheckbox value={1} className="test">
                                     <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
                                  </NewCheckbox>
@@ -172,7 +171,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
                                  <NewCheckbox value={2} className="test">
                                     <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
                                  </NewCheckbox>
@@ -181,7 +180,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.3.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
                                  <NewCheckbox value={3} className="test">
                                     <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
                                  </NewCheckbox>
@@ -196,7 +195,7 @@ function AM9D(props) {
                               }}
                               rowSpan={4}
                            >
-                              Rp: {formData[0]?.data?.['AM9D.4.1']}
+                              Rp: {formData?.['AM9D.4.1']}
                            </td>
                            <td
                               style={{
@@ -205,13 +204,13 @@ function AM9D(props) {
                               }}
                               rowSpan={4}
                            >
-                              <span>Тун: {formData[0]?.data?.['AM9D.4.2']}</span>
+                              <span>Тун: {formData?.['AM9D.4.2']}</span>
                               <br />
-                              <span>Цаг:{formData[0]?.data?.['AM9D.4.3']}</span>
+                              <span>Цаг:{formData?.['AM9D.4.3']}</span>
                               <br />
                            </td>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
                                  <NewCheckbox value={0} className="test">
                                     <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
                                  </NewCheckbox>
@@ -220,7 +219,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
                                  <NewCheckbox value={1} className="test">
                                     <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
                                  </NewCheckbox>
@@ -229,7 +228,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
                                  <NewCheckbox value={2} className="test">
                                     <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
                                  </NewCheckbox>
@@ -238,7 +237,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.4.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
                                  <NewCheckbox value={3} className="test">
                                     <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
                                  </NewCheckbox>
@@ -253,7 +252,7 @@ function AM9D(props) {
                               }}
                               rowSpan={4}
                            >
-                              Rp: {formData[0]?.data?.['AM9D.5.1']}
+                              Rp: {formData?.['AM9D.5.1']}
                            </td>
                            <td
                               style={{
@@ -262,13 +261,13 @@ function AM9D(props) {
                               }}
                               rowSpan={4}
                            >
-                              <span>Тун: {formData[0]?.data?.['AM9D.5.2']}</span>
+                              <span>Тун: {formData?.['AM9D.5.2']}</span>
                               <br />
-                              <span>Цаг:{formData[0]?.data?.['AM9D.5.3']}</span>
+                              <span>Цаг:{formData?.['AM9D.5.3']}</span>
                               <br />
                            </td>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
                                  <NewCheckbox value={0} className="test">
                                     <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
                                  </NewCheckbox>
@@ -277,7 +276,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
                                  <NewCheckbox value={1} className="test">
                                     <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
                                  </NewCheckbox>
@@ -286,7 +285,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
                                  <NewCheckbox value={2} className="test">
                                     <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
                                  </NewCheckbox>
@@ -295,7 +294,7 @@ function AM9D(props) {
                         </tr>
                         <tr>
                            <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData[0]?.data?.['AM9D.5.4']} className="dstory">
+                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
                                  <NewCheckbox value={3} className="test">
                                     <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
                                  </NewCheckbox>
@@ -307,11 +306,11 @@ function AM9D(props) {
                   <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
                      <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: {hospitalName}</span>
                      <br />
-                     <span style={{ fontSize: 12 }}>Эмчийн хувийн тэмдэглэл: {formData[0]?.data?.['AM9D.6']}</span>
+                     <span style={{ fontSize: 12 }}>Эмчийн хувийн тэмдэглэл: {formData?.['AM9D.6']}</span>
                      <br />
                   </div>
                   <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                     <span style={{ fontSize: 12 }}>Хаяг, харилцах утас: {formData[0]?.data?.['AM9D.7']}</span>
+                     <span style={{ fontSize: 12 }}>Хаяг, харилцах утас: {formData?.['AM9D.7']}</span>
                      <br />
                   </div>
                </div>
