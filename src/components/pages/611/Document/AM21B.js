@@ -100,9 +100,9 @@ function AM21B(props) {
                   <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
                   <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
                </div>
-               <div style={styles.rowStyle}>Онош: {formData[0]?.data?.['AM21.1']}</div>
+               <div style={styles.rowStyle}>Онош: {formData?.['AM21.1']}</div>
                <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>Cудасны цусны шинжилгээ</div>
-               <NewCheckboxGroup value={formData[0]?.data?.['AM21.2.1']} className="dstory">
+               <NewCheckboxGroup value={formData?.['AM21.2.1']} className="dstory">
                   <NewCheckbox value={0} className="test">
                      <span style={{ fontSize: 12 }}>
                         1. Элэгний үйл ажиллагаа (АЛАТ, АСАТ, Билирубин, тимол, сульма)
@@ -153,11 +153,11 @@ function AM21B(props) {
                <br />
                <NewCheckboxGroup value={null} className="dstory">
                   <NewCheckbox value={1} className="test">
-                     <span style={{ fontSize: 12 }}>12. Бусад {formData[0]?.data?.['AM21.2.2']}</span>
+                     <span style={{ fontSize: 12 }}>12. Бусад {formData?.['AM21.2.2']}</span>
                   </NewCheckbox>
                </NewCheckboxGroup>
                <div style={styles.rowStyle}>
-                  Эмчийн нэр {formData[0]?.data?.['AM21.3']}
+                  Эмчийн нэр {formData?.['AM21.3']}
                   <span style={{ marginLeft: 10 }}>/................................./</span>
                </div>
                <div
@@ -166,9 +166,8 @@ function AM21B(props) {
                      ...{ marginTop: 10 }
                   }}
                >
-                  {moment(formData[0]?.data?.['AM21.4']).format('YYYY')} оны{' '}
-                  {moment(formData[0]?.data?.['AM21.4']).format('MM')} сарын{' '}
-                  {moment(formData[0]?.data?.['AM21.4']).format('DD')} өдөр
+                  {moment(formData?.['AM21.4']).format('YYYY')} оны {moment(formData?.['AM21.4']).format('MM')} сарын{' '}
+                  {moment(formData?.['AM21.4']).format('DD')} өдөр
                </div>
                <div
                   style={{

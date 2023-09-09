@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Modal, Result } from 'antd';
+import { Button, Form, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentAppId, selectCurrentHospitalName } from '../../../../features/authReducer';
 import FormRender from './FormRender';
-import { PrinterOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
-import { NewColumn, NewColumnGroup, NewTable } from '../../../Table/Table';
 //
 import jwtInterceopter from '../../../jwtInterceopter';
-import PmsPatientServices from '../../../../services/pms/patient';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
 import { NewOption, NewRangePicker, NewSelect } from '../../../Input/Input';
@@ -30,7 +27,6 @@ function Index(props) {
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
    const [selectedOptionId, setSelectedOptionId] = useState(Number);
-   const [isOpenSelectPositionModal, setIsOpenSelectPositionModal] = useState(false);
    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
    const [cabinets, setCabinets] = useState([]);
    const [employees, setEmployees] = useState([]);
@@ -231,93 +227,6 @@ function Index(props) {
             setIsLoading(false);
          });
    };
-   const findSupportColumns = (id) => {
-      console.log(id);
-      return [
-         {
-            title: 'Үзлэгийн давтамж',
-            dataIndex: 'supportTime'
-         },
-         {
-            title: 'Өнгө',
-            dataIndex: 'color',
-            render: (text) => {
-               return (
-                  <p
-                     style={{
-                        backgroundColor: text,
-                        color: text
-                     }}
-                  >
-                     color
-                  </p>
-               );
-            }
-         }
-      ];
-   };
-   const equalerNumber = (text, option) => {
-      return option.options?.find((itm) => parseInt(itm.keyWord) === text)?.label;
-   };
-   const columnConfigure = () => {
-      return documentForm?.documentForm?.map((item, index) => {
-         return (
-            <NewColumnGroup key={index} title={item.label}>
-               {item?.options?.map((option, idx) => {
-                  return (
-                     <NewColumn
-                        key={idx}
-                        align="left"
-                        title={option.value}
-                        dataIndex={['data', `${option.keyWord}`]}
-                        render={(text) => {
-                           if (option.isInteger) {
-                              console.log(text);
-                              if (option.type === 'checkbox') {
-                                 return text?.map((txt) => {
-                                    return equalerNumber(txt, option);
-                                 });
-                              } else if (option.type === 'table') {
-                                 return text?.map((column, index) => {
-                                    return (
-                                       `${index + 1}.` +
-                                       Object.entries(column)?.map(([key, value]) => {
-                                          console.log(key, value);
-                                          return equalerNumber(parseInt(key), option) + ':' + value;
-                                       }) +
-                                       '\n'
-                                    );
-                                 });
-                              } else {
-                                 return equalerNumber(text, option);
-                              }
-                           } else {
-                              if (option.type === 'rangepicker') {
-                                 if (text) {
-                                    return (
-                                       moment(text[0]).format('YYYY/MM/DD') +
-                                       '->' +
-                                       moment(text[1]).format('YYYY/MM/DD')
-                                    );
-                                 }
-                                 return;
-                              } else if (option.type === 'datepicker') {
-                                 if (text) {
-                                    return moment(text).format('YYYY/MM/DD');
-                                 }
-                                 return;
-                              }
-                              return text;
-                           }
-                        }}
-                     />
-                  );
-               })}
-            </NewColumnGroup>
-         );
-      });
-      // columns.push(...findSupportColumns(1));
-   };
    useEffect(() => {
       if (documentValue != 0) {
          console.log(documentType);
@@ -455,26 +364,6 @@ function Index(props) {
                </div>
             </>
          )}
-
-         {/* <Modal
-            title="Маягт хэвлэх хэсэг"
-            open={isOpenPrintModal}
-            onCancel={() => setIsOpenPrintModal(false)}
-            onOk={() => handlePrint()}
-            style={{
-               width: 'max-content'
-            }}
-         >
-            <div ref={printRef}>
-               <ReturnById
-                  type={usageType}
-                  id={documentValue}
-                  appointmentId={appointmentId}
-                  data={printData}
-                  hospitalName={hospitalName}
-               />
-            </div>
-         </Modal> */}
       </div>
    );
 }

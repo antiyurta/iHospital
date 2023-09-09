@@ -243,15 +243,7 @@ function EmrSupports({ appointmentId, usageType, patient, patientId, departmentI
             <div className="flow-root">
                <div className="float-left">
                   <div className="flex justify-between gap-3">
-                     <DocumentPrint
-                        props={{
-                           appIds: AppIds,
-                           departmentId: departmentId,
-                           appointmentId: appointmentId,
-                           documentType: 0,
-                           patientId: patientId
-                        }}
-                     />
+                     <DocumentPrint usageType={''} patientId={patientId} />
                      <DocumentShow
                         props={{
                            appIds: AppIds,
