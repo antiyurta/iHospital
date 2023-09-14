@@ -11,7 +11,9 @@ import { useReactToPrint } from 'react-to-print';
 import jwtInterceopter from '../../../jwtInterceopter';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
-import { NewRangePicker } from '../../../Input/Input';
+import { NewOption, NewRangePicker, NewSelect } from '../../../Input/Input';
+import OrganizationStructureService from '../../../../services/organization/structure';
+import OrganizationEmployeeService from '../../../../services/organization/employee';
 //
 function Index(props) {
    const { usageType, documentValue, documentType, structureId, appointmentId, patientId, onOk } = props;
@@ -26,22 +28,29 @@ function Index(props) {
    const [documentOptions, setDocumentOptions] = useState([]);
    const [selectedOptionId, setSelectedOptionId] = useState(Number);
    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
-   const handlePrint = useReactToPrint({
-      // onBeforeGetContent: () => setPrintLoading(true),
-      // onBeforePrint: () => setPrintLoading(false),
-      // onPrintError: () => console.log('asda'),
-      content: () => printRef.current
-   });
-   //
-   // const getPatientInfo = async () => {
-   //    await PmsPatientServices.getById(patientId).then((response) => {
-   //       setPrintData({
-   //          patientData: response.data.response,
-   //          formData: data
-   //       });
-   //       setIsOpenPrintModal(true);
-   //    });
-   // };
+   const [cabinets, setCabinets] = useState([]);
+   const [employees, setEmployees] = useState([]);
+   const [selectedCabinet, setSelectedCabinet] = useState('');
+   const [selectedEmp, setSelectedEmp] = useState('');
+   const getCabinets = async () => {
+      await OrganizationStructureService.get({
+         params: {
+            type: 2
+         }
+      }).then((response) => {
+         setCabinets(response.data.response.data);
+      });
+   };
+   const getEmployees = async (e) => {
+      await OrganizationEmployeeService.getEmployee({
+         params: {
+            depId: e
+         }
+      }).then((response) => {
+         console.log('res', response);
+         setEmployees(response.data.response.data);
+      });
+   };
    //
    const getData = async () => {
       setIsLoading(true);
@@ -165,7 +174,6 @@ function Index(props) {
             .post(documentForm.url, data)
             .then((response) => {
                if (response.status === 201) {
-                  onOk(false);
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
@@ -178,7 +186,8 @@ function Index(props) {
                setIsLoading(false);
             });
       }
-      getData();
+      onOk(false);
+      // getData();
    };
    const onFinishFilter = async (filters) => {
       setIsLoading(true);
@@ -213,6 +222,7 @@ function Index(props) {
    useEffect(() => {
       if (!isObjectEmpty(documentForm)) {
          getData();
+         getCabinets();
       }
    }, [documentForm]);
    if (documentValue === 0) {
@@ -247,6 +257,59 @@ function Index(props) {
                      >
                         <NewRangePicker />
                      </Form.Item>
+                     {documentValue === 1 ? (
+                        <Form.Item
+                           label="Тасаг"
+                           name="cabinetId"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Тасаг сонгоно уу'
+                              }
+                           ]}
+                        >
+                           <NewSelect
+                              style={{ width: 200 }}
+                              onChange={(e) => {
+                                 getEmployees(e);
+                              }}
+                              onSelect={(_id, info) => setSelectedCabinet(info.children)}
+                           >
+                              {cabinets?.map((document, index) => {
+                                 return (
+                                    <NewOption key={index} value={document.id}>
+                                       {document.name}
+                                    </NewOption>
+                                 );
+                              })}
+                           </NewSelect>
+                        </Form.Item>
+                     ) : null}
+                     {documentValue === 1 ? (
+                        <Form.Item
+                           label="Эмч"
+                           name="doctorId"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Эмч сонгоно уу'
+                              }
+                           ]}
+                        >
+                           <NewSelect
+                              style={{ width: 200 }}
+                              onSelect={(_id, info) => setSelectedEmp(info.children.join(''))}
+                           >
+                              {employees?.map((document, index) => {
+                                 return (
+                                    <NewOption key={index} value={document.id}>
+                                       {document.lastName?.substr(0, 1)}. {document.firstName}
+                                    </NewOption>
+                                 );
+                              })}
+                           </NewSelect>
+                        </Form.Item>
+                     ) : null}
                      <Form.Item className="self-end">
                         <Button type="primary" htmlType="submit">
                            Шүүх
@@ -264,6 +327,8 @@ function Index(props) {
                      appointmentId={null}
                      data={data}
                      hospitalName={hospitalName}
+                     doctorName={selectedEmp}
+                     cabinetName={selectedCabinet}
                   />
                </div>
             </div>
@@ -276,7 +341,7 @@ function Index(props) {
                </div>
                <div className="w-full">
                   <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
-                     Хадлагах
+                     Хадгалах
                   </Button>
                </div>
             </>

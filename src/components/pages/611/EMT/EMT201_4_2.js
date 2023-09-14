@@ -128,36 +128,36 @@ function EMT201_4_2(props) {
                      })}
                   </tr>
                   <tr>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эрэгтэй</td>
-                     <td style={{ ...styles.verticalText, ...{ width: 30 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эрэгтэй</td>
+                     <td style={{ ...styles.verticalText, ...{ width: 18 } }}>Эмэгтэй</td>
                   </tr>
                   <tr>
                      <td style={styles.centerText}>А</td>

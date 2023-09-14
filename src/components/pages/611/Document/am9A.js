@@ -108,9 +108,9 @@ function am9A(props) {
                                        paddingTop: 10
                                     }}
                                  >
-                                    {moment(data?.formData[0]?.data?.['9A.1']).format('YYYY')} оны{' '}
-                                    {moment(data?.formData[0]?.data?.['9A.1']).format('MM')} сарын{' '}
-                                    {moment(data?.formData[0]?.data?.['9A.1']).format('DD')} өдөр
+                                    {moment(data?.formData?.['9A.1']).format('YYYY')} оны{' '}
+                                    {moment(data?.formData?.['9A.1']).format('MM')} сарын{' '}
+                                    {moment(data?.formData?.['9A.1']).format('DD')} өдөр
                                  </span>
                               </div>
                               <span style={{ fontSize: 13 }}>
@@ -133,22 +133,22 @@ function am9A(props) {
                               </span>
                               <br />
                               <div>
-                                 <span style={styles.blockContentLg}>Rp: {data?.formData[0]?.data?.['9A.3.1']}</span>
-                                 <span style={styles.blockContentLg}>S: {data?.formData[0]?.data?.['9A.3.2']}</span>
+                                 <span style={styles.blockContentLg}>Rp: {data?.formData?.['9A.3.1']}</span>
+                                 <span style={styles.blockContentLg}>S: {data?.formData?.['9A.3.2']}</span>
                                  <div style={{ textAlign: 'center' }}>
                                     <span style={{ fontSize: 13 }}>#</span>
                                  </div>
                               </div>
                               <div>
-                                 <span style={styles.blockContentLg}>Rp: {data?.formData[0]?.data?.['9A.4.1']}</span>
-                                 <span style={styles.blockContentLg}>S: {data?.formData[0]?.data?.['9A.4.2']}</span>
+                                 <span style={styles.blockContentLg}>Rp: {data?.formData?.['9A.4.1']}</span>
+                                 <span style={styles.blockContentLg}>S: {data?.formData?.['9A.4.2']}</span>
                                  <div style={{ textAlign: 'center' }}>
                                     <span style={{ fontSize: 13 }}>#</span>
                                  </div>
                               </div>
                               <div>
-                                 <span style={styles.blockContentLg}>Rp: {data?.formData[0]?.data?.['9A.5.1']}</span>
-                                 <span style={styles.blockContentLg}>S: {data?.formData[0]?.data?.['9A.5.2']}</span>
+                                 <span style={styles.blockContentLg}>Rp: {data?.formData?.['9A.5.1']}</span>
+                                 <span style={styles.blockContentLg}>S: {data?.formData?.['9A.5.2']}</span>
                                  <div style={{ textAlign: 'center' }}>
                                     <span style={{ fontSize: 13 }}>#</span>
                                  </div>

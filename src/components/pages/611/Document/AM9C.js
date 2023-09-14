@@ -87,9 +87,9 @@ function AM9C(props) {
                            >
                               Индекс: Хэвлэмэл дугаар байна
                               <span style={{ marginLeft: 30 }}>
-                                 {moment(formData[0]?.data?.['AM9C.1']).format('YYYY')} оны{' '}
-                                 {moment(formData[0]?.data?.['AM9C.1']).format('MM')} сарын{' '}
-                                 {moment(formData[0]?.data?.['AM9C.1']).format('DD')} өдөр
+                                 {moment(formData?.['AM9C.1']).format('YYYY')} оны{' '}
+                                 {moment(formData?.['AM9C.1']).format('MM')} сарын{' '}
+                                 {moment(formData?.['AM9C.1']).format('DD')} өдөр
                               </span>
                            </span>
                         </div>
@@ -100,13 +100,13 @@ function AM9C(props) {
                            {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
                         </span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Онош: {formData[0]?.data?.['AM9C.2']}</span>
+                        <span style={{ fontSize: 12 }}>Онош: {formData?.['AM9C.2']}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Регистрийн № {patientData?.registerNumber}</span>
                         <br />
-                        <span style={styles.blockContentSm}>Rp: {formData[0]?.data?.['AM9C.3.1']}</span>
+                        <span style={styles.blockContentSm}>Rp: {formData?.['AM9C.3.1']}</span>
                         <br />
-                        <span style={styles.blockContentLg}>S: {formData[0]?.data?.['AM9C.3.2']}</span>
+                        <span style={styles.blockContentLg}>S: {formData?.['AM9C.3.2']}</span>
                         <br />
                         <div style={{ textAlign: 'center' }}>
                            <span style={{ fontSize: 12 }}>#</span>
@@ -116,7 +116,7 @@ function AM9C(props) {
                         <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг: ___________________</span>
                         <br />
 
-                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: {formData[0]?.data?.['AM9C.4']}</span>
+                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: {formData?.['AM9C.4']}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: {hospitalName}</span>
                         <br />

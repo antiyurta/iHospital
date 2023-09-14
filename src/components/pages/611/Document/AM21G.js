@@ -73,7 +73,7 @@ function AM21D(props) {
                      <span style={{ marginRight: 5 }}>РД {patientData?.registerNumber}</span>
                   </div>
                </div>
-               <div style={styles.rowStyle}>Онош {formData[0]?.data?.['AM21.1']}</div>
+               <div style={styles.rowStyle}>Онош {formData?.['AM21.1']}</div>
                <div
                   style={{
                      ...styles.rowStyle,
@@ -82,7 +82,7 @@ function AM21D(props) {
                >
                   Нян судлалын шинжилгээний сорьц хийгдэх арга:
                </div>
-               <NewCheckboxGroup value={formData[0]?.data?.['AM21.2']} className="dstory">
+               <NewCheckboxGroup value={formData?.['AM21.2']} className="dstory">
                   <NewCheckbox value={0} className="test">
                      <span style={{ fontSize: 12 }}>1. Цусны ариун чанар \ бактер судлах\</span>
                   </NewCheckbox>
@@ -175,9 +175,8 @@ function AM21D(props) {
                      ...{ marginTop: 10 }
                   }}
                >
-                  {moment(formData[0]?.data?.['AM21.3']).format('YYYY')} оны{' '}
-                  {moment(formData[0]?.data?.['AM21.3']).format('MM')} сарын{' '}
-                  {moment(formData[0]?.data?.['AM21.3']).format('DD')} өдөр
+                  {moment(formData?.['AM21.3']).format('YYYY')} оны {moment(formData?.['AM21.3']).format('MM')} сарын{' '}
+                  {moment(formData?.['AM21.3']).format('DD')} өдөр
                </div>
                <div
                   style={{

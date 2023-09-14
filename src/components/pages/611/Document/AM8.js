@@ -96,7 +96,7 @@ function AM8(props) {
             </div>
             <div style={styles.rowStyle}>
                8. (зур)
-               <NewCheckboxGroup value={formData[0]?.data?.['AM8.8']} className="dstory">
+               <NewCheckboxGroup value={formData?.['AM8.8']} className="dstory">
                   <NewCheckbox value={0} className="test">
                      <span style={{ fontSize: 12 }}>өвчтэй байсан,</span>
                   </NewCheckbox>
@@ -119,29 +119,27 @@ function AM8(props) {
                      <span style={{ fontSize: 12 }}>протез</span>
                   </NewCheckbox>
                </NewCheckboxGroup>
-               хийлгэсэн {moment(formData[0]?.data?.['AM8.8.1']?.[0]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.8.1']?.[0]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.8.1']?.[0]).format('DD')} өдрөөс{' '}
-               {moment(formData[0]?.data?.['AM8.8.1']?.[1]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.8.1']?.[1]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.8.1']?.[1]).format('DD')} өдөр хүртэл (зур)
-               <span className={formData[0]?.data?.['AM8.8.2'] ? 'underline mr-1' : 'mr-1'}> ажлаас, </span>
-               <span className={!formData[0]?.data?.['AM8.8.2'] ? 'underline mr-1' : 'mr-1'}>хичээлээс </span>)
-               чөлөөлснийг магадлав.
+               хийлгэсэн {moment(formData?.['AM8.8.1']?.[0]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.8.1']?.[0]).format('MM')} сарын {moment(formData?.['AM8.8.1']?.[0]).format('DD')}{' '}
+               өдрөөс {moment(formData?.['AM8.8.1']?.[1]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.8.1']?.[1]).format('MM')} сарын {moment(formData?.['AM8.8.1']?.[1]).format('DD')}{' '}
+               өдөр хүртэл (зур)
+               <span className={formData?.['AM8.8.2'] ? 'underline mr-1' : 'mr-1'}> ажлаас, </span>
+               <span className={!formData?.['AM8.8.2'] ? 'underline mr-1' : 'mr-1'}>хичээлээс </span>) чөлөөлснийг
+               магадлав.
             </div>
             <div style={styles.rowStyle}>
-               9. Асрамжинд байсан хүний эцэг /эх/-ийн нэр, хэн болох: {formData[0]?.data?.['AM8.9']}
+               9. Асрамжинд байсан хүний эцэг /эх/-ийн нэр, хэн болох: {formData?.['AM8.9']}
             </div>
-            <div style={styles.rowStyle}>10. Үндсэн онош: {formData[0]?.data?.['AM8.10']}</div>
+            <div style={styles.rowStyle}>10. Үндсэн онош: {formData?.['AM8.10']}</div>
             <div style={styles.flexContainer}>
                <div style={styles.rowStyle}>
-                  Тэмдэг {moment(formData[0]?.data?.['AM8.10.1']).format('YYYY')} он{' '}
-                  {moment(formData[0]?.data?.['AM8.10.1']).format('MM')} сар{' '}
-                  {moment(formData[0]?.data?.['AM8.10.1']).format('DD')} өдөр
+                  Тэмдэг {moment(formData?.['AM8.10.1']).format('YYYY')} он{' '}
+                  {moment(formData?.['AM8.10.1']).format('MM')} сар {moment(formData?.['AM8.10.1']).format('DD')} өдөр
                </div>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div style={styles.rowStyle}>Ерөнхий эмч: {formData[0]?.data?.['AM8.10.2']}</div>
-                  <div style={styles.rowStyle}>Эмчлэгч эмч: {formData[0]?.data?.['AM8.10.3']}</div>
+                  <div style={styles.rowStyle}>Ерөнхий эмч: {formData?.['AM8.10.2']}</div>
+                  <div style={styles.rowStyle}>Эмчлэгч эмч: {formData?.['AM8.10.3']}</div>
                </div>
             </div>
             <div style={styles.rowStyle}>
@@ -150,39 +148,39 @@ function AM8(props) {
             <div style={{ ...styles.rowStyle, ...{ fontWeight: 'bold' } }}>Маягтын ар тал</div>
             <div style={{ ...styles.rowStyle, ...{ fontWeight: 'bold' } }}>СУНГАЛТ</div>
             <div style={styles.rowStyle}>
-               1. {moment(formData[0]?.data?.['AM8.SUNGALT.1.1']?.[0]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.1.1']?.[0]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.1.1']?.[0]).format('DD')} өдрөөс{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.1.1']?.[1]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.1.1']?.[1]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.1.1']?.[1]).format('DD')} өдөр хүртэл нийт{' '}
-               {formData[0]?.data?.['AM8.SUNGALT.1.2']} хоногоор сунгав
+               1. {moment(formData?.['AM8.SUNGALT.1.1']?.[0]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.SUNGALT.1.1']?.[0]).format('MM')} сарын{' '}
+               {moment(formData?.['AM8.SUNGALT.1.1']?.[0]).format('DD')} өдрөөс{' '}
+               {moment(formData?.['AM8.SUNGALT.1.1']?.[1]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.SUNGALT.1.1']?.[1]).format('MM')} сарын{' '}
+               {moment(formData?.['AM8.SUNGALT.1.1']?.[1]).format('DD')} өдөр хүртэл нийт{' '}
+               {formData?.['AM8.SUNGALT.1.2']} хоногоор сунгав
             </div>
             <div style={styles.flexContainer}>
                <div style={styles.rowStyle}>Тэмдэг</div>
                <div style={styles.rowStyle}>Эмчийн гарын үсэг___________________________________</div>
             </div>
             <div style={styles.rowStyle}>
-               1. {moment(formData[0]?.data?.['AM8.SUNGALT.2.1']?.[0]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.2.1']?.[0]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.2.1']?.[0]).format('DD')} өдрөөс{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.2.1']?.[1]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.2.1']?.[1]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.2.1']?.[1]).format('DD')} өдөр хүртэл нийт{' '}
-               {formData[0]?.data?.['AM8.SUNGALT.2.2']} хоногоор сунгав
+               1. {moment(formData?.['AM8.SUNGALT.2.1']?.[0]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.SUNGALT.2.1']?.[0]).format('MM')} сарын{' '}
+               {moment(formData?.['AM8.SUNGALT.2.1']?.[0]).format('DD')} өдрөөс{' '}
+               {moment(formData?.['AM8.SUNGALT.2.1']?.[1]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.SUNGALT.2.1']?.[1]).format('MM')} сарын{' '}
+               {moment(formData?.['AM8.SUNGALT.2.1']?.[1]).format('DD')} өдөр хүртэл нийт{' '}
+               {formData?.['AM8.SUNGALT.2.2']} хоногоор сунгав
             </div>
             <div style={styles.flexContainer}>
                <div style={styles.rowStyle}>Тэмдэг</div>
                <div style={styles.rowStyle}>Эмчийн гарын үсэг___________________________________</div>
             </div>
             <div style={styles.rowStyle}>
-               1. {moment(formData[0]?.data?.['AM8.SUNGALT.3.1']?.[0]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.3.1']?.[0]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.3.1']?.[0]).format('DD')} өдрөөс{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.3.1']?.[1]).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.3.1']?.[1]).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['AM8.SUNGALT.3.1']?.[1]).format('DD')} өдөр хүртэл нийт{' '}
-               {formData[0]?.data?.['AM8.SUNGALT.3.2']} хоногоор сунгав
+               1. {moment(formData?.['AM8.SUNGALT.3.1']?.[0]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.SUNGALT.3.1']?.[0]).format('MM')} сарын{' '}
+               {moment(formData?.['AM8.SUNGALT.3.1']?.[0]).format('DD')} өдрөөс{' '}
+               {moment(formData?.['AM8.SUNGALT.3.1']?.[1]).format('YYYY')} оны{' '}
+               {moment(formData?.['AM8.SUNGALT.3.1']?.[1]).format('MM')} сарын{' '}
+               {moment(formData?.['AM8.SUNGALT.3.1']?.[1]).format('DD')} өдөр хүртэл нийт{' '}
+               {formData?.['AM8.SUNGALT.3.2']} хоногоор сунгав
             </div>
             <div style={styles.flexContainer}>
                <div style={styles.rowStyle}>Тэмдэг</div>

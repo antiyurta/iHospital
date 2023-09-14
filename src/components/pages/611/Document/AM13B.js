@@ -86,29 +86,29 @@ function AM13B(props) {
             </div>
             <div style={styles.generalText}>
                Онош:
-               {formData[0]?.data?.['АМ13.1']}
+               {formData?.['АМ13.1']}
             </div>
             <div style={styles.generalText}>Хийгдсэн эмчилгээ:</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>1. {formData[0]?.data?.['АМ13.2.1']}</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>2. {formData[0]?.data?.['АМ13.2.2']}</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>3. {formData[0]?.data?.['АМ13.2.3']}</div>
-            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>4. {formData[0]?.data?.['АМ13.2.4']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>1. {formData?.['АМ13.2.1']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>2. {formData?.['АМ13.2.2']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>3. {formData?.['АМ13.2.3']}</div>
+            <div style={{ ...styles.blankSpaces, ...{ marginLeft: 60 } }}>4. {formData?.['АМ13.2.4']}</div>
             <div style={styles.generalText}>
                Эмнэлгээс гарах үеийн биеийн байдал:
-               {formData[0]?.data?.['АМ13.3']}
+               {formData?.['АМ13.3']}
             </div>
-            <div style={styles.generalText}>Өвчтөнд өгсөн зөвлөгөө :{formData[0]?.data?.['АМ13.4']}</div>
+            <div style={styles.generalText}>Өвчтөнд өгсөн зөвлөгөө :{formData?.['АМ13.4']}</div>
             <div style={styles.generalText}>
                Эмийн эмчилгээ:
-               {formData[0]?.data?.['АМ13.5']}
+               {formData?.['АМ13.5']}
             </div>
             <div style={styles.generalText}>
                Эмийн бус эмчилгээ:
-               {formData[0]?.data?.['АМ13.6']}
+               {formData?.['АМ13.6']}
             </div>
             <div style={styles.generalText}>
                Хүлээн авч буй эрүүл мэндийн байгууллагад өгөх зөвлөмж:
-               {formData[0]?.data?.['АМ13.7']}
+               {formData?.['АМ13.7']}
             </div>
             <div style={styles.generalText}>Шилжүүлж буй эмчийн нэр Хувийн тамга:</div>
             <div
@@ -117,9 +117,8 @@ function AM13B(props) {
                   ...{ textAlign: 'right', paddingRight: 40 }
                }}
             >
-               {moment(formData[0]?.data?.['АМ13.8']).format('YYYY')} оны{' '}
-               {moment(formData[0]?.data?.['АМ13.8']).format('MM')} сарын{' '}
-               {moment(formData[0]?.data?.['АМ13.8']).format('DD')} өдөр
+               {moment(formData?.['АМ13.8']).format('YYYY')} оны {moment(formData?.['АМ13.8']).format('MM')} сарын{' '}
+               {moment(formData?.['АМ13.8']).format('DD')} өдөр
             </div>
          </div>
       </div>
