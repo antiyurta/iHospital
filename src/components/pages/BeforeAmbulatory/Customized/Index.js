@@ -32,13 +32,6 @@ function Index(props) {
    const [employees, setEmployees] = useState([]);
    const [selectedCabinet, setSelectedCabinet] = useState('');
    const [selectedEmp, setSelectedEmp] = useState('');
-   const handlePrint = useReactToPrint({
-      // onBeforeGetContent: () => setPrintLoading(true),
-      // onBeforePrint: () => setPrintLoading(false),
-      // onPrintError: () => console.log('asda'),
-      content: () => printRef.current
-   });
-   //
    const getCabinets = async () => {
       await OrganizationStructureService.get({
          params: {

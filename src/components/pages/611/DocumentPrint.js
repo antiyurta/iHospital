@@ -4,6 +4,7 @@ import { Button, Divider, Modal, Table } from 'antd';
 import DocumentsFormPatientSerice from '../../../services/organization/document';
 import PmsPatientServices from '../../../services/pms/patient';
 import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from './Document/Index';
+import { ReturnById, ReturnByIdToName } from './Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
 import { useReactToPrint } from 'react-to-print';
@@ -43,12 +44,19 @@ function DocumentPrint(props) {
          setPatientData(response.data.response);
       });
    };
+   const handlePrint = useReactToPrint({
+      // onBeforeGetContent: () => setPrintLoading(true),
+      // onBeforePrint: () => setPrintLoading(false),
+      // onPrintError: () => console.log('asda'),
+      content: () => printRef.current
+   });
    useEffect(() => {
       getPatientInfo();
    }, [selectedDocument]);
-   useEffect(() => {
-      isOpenHistory && getDocumentsHistory();
-   }, [isOpenHistory]);
+//    useEffect(() => {
+// =======
+//       isOpenHistory && getDocumentsHistory();
+//    }, [isOpenHistory]);
    return (
       <>
          <Button type="primary" onClick={() => setIsOpenHistory(true)}>
