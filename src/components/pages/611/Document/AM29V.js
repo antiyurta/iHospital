@@ -1,8 +1,14 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
 
 //маягт АМ-29В
-function AM29V() {
+function AM29V(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -44,7 +50,7 @@ function AM29V() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
+               <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-29В</span>
@@ -68,19 +74,7 @@ function AM29V() {
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div>Өрөөний №</div>
                <div style={{ display: 'flex' }}>
-                  <span style={styles.generalText}>РД:</span>
-                  <div style={{ display: 'flex', marginLeft: 5 }}>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                  </div>
+                  <span style={styles.generalText}>РД: {patientData?.registerNumber}</span>
                </div>
                <div style={{ display: 'flex', marginTop: 5 }}>
                   <span style={styles.generalText}>ЭМД:</span>
@@ -96,42 +90,44 @@ function AM29V() {
                </div>
             </div>
             <div style={styles.rowStyle}>
-               1. Эцэг /эх/-ийн нэр __________________________
-               <span style={{ marginLeft: 50 }}>Нэр __________________________</span>
+               1. Эцэг /эх/-ийн нэр {patientData?.lastName}
+               <span style={{ marginLeft: 50 }}>Нэр {patientData?.firstName}</span>
             </div>
             <div style={styles.rowStyle}>
                2. Нас ______
-               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
+               <span style={{ marginLeft: 50 }}>
+                  Хүйс: /зур/
+                  <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+                  <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
+               </span>
             </div>
-            <div style={styles.rowStyle}>3. Үндсэн онош: ________________________________________</div>
-            <div style={styles.rowStyle}>4. Эмчилгээний төрөл, талбай, байрлал: ________</div>
+            <div style={styles.rowStyle}>3. Үндсэн онош: {formData?.['AM29.1']}</div>
+            <div style={styles.rowStyle}>4. Эмчилгээний төрөл, талбай, байрлал: {formData?.['AM29.2']}</div>
             <div style={styles.rowStyle}>
-               <span style={{ marginLeft: 50 }}>Ханасан судасны нэр: __________________________</span>
-            </div>
-            <div style={styles.rowStyle}>
-               <span style={{ marginLeft: 50 }}>Самнуур: _____________________________________</span>
-            </div>
-            <div style={styles.rowStyle}>
-               <span style={{ marginLeft: 50 }}>Шивүүр: ______________________________________</span>
+               <span style={{ marginLeft: 50 }}>Ханасан судасны нэр: {formData?.['AM29.3']}</span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ marginLeft: 50 }}>Түрэм: ______________________________________</span>
+               <span style={{ marginLeft: 50 }}>Самнуур: {formData?.['AM29.4']}</span>
             </div>
             <div style={styles.rowStyle}>
-               5. Эмчилгээний талаар зөвлөгөө өгсөн эсэх: ____________________ тийм ___________________ үгүй
+               <span style={{ marginLeft: 50 }}>Шивүүр: {formData?.['AM29.5']}</span>
             </div>
             <div style={styles.rowStyle}>
-               6. Гарсан хүндрэл: __________________________________________________________________________
+               <span style={{ marginLeft: 50 }}>Түрэм: {formData?.['AM29.6']}</span>
             </div>
             <div style={styles.rowStyle}>
-               7. Авсан арга хэмжээ: _______________________________________________________________________
+               5. Эмчилгээний талаар зөвлөгөө өгсөн эсэх:
+               <NewCheckboxGroup value={formData?.['AM29.7']} className="dstory">
+                  <NewCheckbox value={0} className="test">
+                     <span style={{ fontSize: 12 }}>Тийм</span>
+                  </NewCheckbox>
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>Үгүй</span>
+                  </NewCheckbox>
+               </NewCheckboxGroup>
             </div>
-            <div style={styles.rowStyle}>
-               ____________________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.rowStyle}>
-               ____________________________________________________________________________________________________________________________________
-            </div>
+            <div style={styles.rowStyle}>6. Гарсан хүндрэл: {formData?.['AM29.8']}</div>
+            <div style={styles.rowStyle}>7. Авсан арга хэмжээ: {formData?.['AM29.9']}</div>
             <div style={{ marginTop: 20, textAlign: 'center' }}>
                <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ___________________________</div>
                <div style={styles.rowStyle}>Хатгах засал хийхийг зөвшөөрсөн өвчтөний нэр: ______________________</div>

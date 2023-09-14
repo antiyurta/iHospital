@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Divider, Modal, Table } from 'antd';
 
 import DocumentsFormPatientSerice from '../../../services/organization/document';
+import PmsPatientServices from '../../../services/pms/patient';
 import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from './Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
@@ -15,6 +16,7 @@ function DocumentPrint(props) {
    const [isOpenHistory, setIsOpenHistory] = useState(false);
    const [result, setResult] = useState({});
    const [selectedDocument, setSelectedDocument] = useState();
+   const [patientData, setPatientData] = useState([]);
    const getDocumentsHistory = async () => {
       await DocumentsFormPatientSerice.getByDocument(patientId, {
          usageType: usageType
@@ -36,6 +38,14 @@ function DocumentPrint(props) {
       // onPrintError: () => console.log('asda'),
       content: () => printRef.current
    });
+   const getPatientInfo = async () => {
+      await PmsPatientServices.getById(patientId).then((response) => {
+         setPatientData(response.data.response);
+      });
+   };
+   useEffect(() => {
+      getPatientInfo();
+   }, [selectedDocument]);
    useEffect(() => {
       isOpenHistory && getDocumentsHistory();
    }, [isOpenHistory]);
@@ -129,7 +139,7 @@ function DocumentPrint(props) {
                                  appointmentId={selectedDocument.appointmentId}
                                  data={{
                                     formData: selectedDocument.data,
-                                    patientData: {}
+                                    patientData: patientData
                                  }}
                                  hospitalName={hospitalName}
                               />

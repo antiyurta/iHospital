@@ -32,8 +32,6 @@ function Index(props) {
    const [employees, setEmployees] = useState([]);
    const [selectedCabinet, setSelectedCabinet] = useState('');
    const [selectedEmp, setSelectedEmp] = useState('');
-   //
-   const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
    const handlePrint = useReactToPrint({
       // onBeforeGetContent: () => setPrintLoading(true),
       // onBeforePrint: () => setPrintLoading(false),
@@ -58,15 +56,6 @@ function Index(props) {
       }).then((response) => {
          console.log('res', response);
          setEmployees(response.data.response.data);
-      });
-   };
-   const getPatientInfo = async () => {
-      await PmsPatientServices.getById(patientId).then((response) => {
-         setPrintData({
-            patientData: response.data.response,
-            formData: data
-         });
-         setIsOpenPrintModal(true);
       });
    };
    //

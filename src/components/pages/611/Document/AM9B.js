@@ -104,19 +104,19 @@ function AM9B(props) {
                         <br />
                         <span style={{ fontSize: 12 }}>Регистрийн № {patientData?.registerNumber}</span>
                         <br />
-                        <span style={styles.blockContentLg}>Rp: {formData?.['AM9B.3.1']}</span>
-                        <br />
-                        <span style={styles.blockContentLg}>S: {formData?.['AM9B.3.2']}</span>
-                        <br />
-                        <div style={{ textAlign: 'center' }}>
-                           <span style={{ fontSize: 12 }}>#</span>
-                        </div>
-                        <span style={styles.blockContentSm}>Rp: {formData?.['AM9B.5.1']}</span>
-                        <br />
-                        <span style={styles.blockContentLg}>S: {formData?.['AM9B.5.2']}</span>
-                        <div style={{ textAlign: 'center' }}>
-                           <span style={{ fontSize: 12 }}>#</span>
-                        </div>
+                        {formData?.['AM9B.5']?.map((el, index) => {
+                           return (
+                              <div key={index}>
+                                 <span style={styles.blockContentLg}>Rp: {el[0]}</span>
+                                 <br />
+                                 <span style={styles.blockContentLg}>S: {el[1]}</span>
+                                 <br />
+                                 <div style={{ textAlign: 'center' }}>
+                                    <span style={{ fontSize: 12 }}>#</span>
+                                 </div>
+                              </div>
+                           );
+                        })}
                      </div>
                      <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
                         <span style={{ fontSize: 12 }}>

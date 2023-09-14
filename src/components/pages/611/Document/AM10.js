@@ -181,104 +181,17 @@ function AM10(props) {
                         <td style={styles.centerText}>Үзлэг</td>
                         <td style={styles.centerText}>Онош, дүгнэлт</td>
                      </tr>
-                     <tr>
-                        <td style={styles.centerText}>1</td>
-                        <td style={styles.centerText}>Дотор</td>
-                        <td style={styles.centerText}>{formData?.['AM10.4.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.4.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>2</td>
-                        <td style={styles.centerText}>Мэдрэл</td>
-                        <td style={styles.centerText}>{formData?.['AM10.5.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.5.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>3</td>
-                        <td style={styles.centerText}>Чих, хамар, хоолой</td>
-                        <td style={styles.centerText}>{formData?.['AM10.6.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.6.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>4</td>
-                        <td style={styles.centerText}>Нүд</td>
-                        <td style={styles.centerText}>{formData?.['AM10.7.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.7.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>5</td>
-                        <td style={styles.centerText}>Шүд</td>
-                        <td style={styles.centerText}>{formData?.['AM10.8.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.8.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>6</td>
-                        <td style={styles.centerText}>Мэс засал</td>
-                        <td style={styles.centerText}>{formData?.['AM10.9.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.9.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>7</td>
-                        <td style={styles.centerText}>Эмэгтэйчүүд</td>
-                        <td style={styles.centerText}>{formData?.['AM10.10.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.10.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>8</td>
-                        <td style={styles.centerText}>Зүрх, судас</td>
-                        <td style={styles.centerText}>{formData?.['AM10.11.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.11.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>9</td>
-                        <td style={styles.centerText}>Сүрьеэ</td>
-                        <td style={styles.centerText}>{formData?.['AM10.12.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.12.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>10</td>
-                        <td style={styles.centerText}>Арьс, харшил</td>
-                        <td style={styles.centerText}>{formData?.['AM10.13.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.13.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>11</td>
-                        <td style={styles.centerText}>Халдварт</td>
-                        <td style={styles.centerText}>{formData?.['AM10.14.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.14.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>12</td>
-                        <td style={styles.centerText}>Сэтгэц мэдрэл</td>
-                        <td style={styles.centerText}>{formData?.['AM10.15.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.15.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>13</td>
-                        <td style={styles.centerText}>Гэмтэл согог</td>
-                        <td style={styles.centerText}>{formData?.['AM10.16.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.16.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>14</td>
-                        <td style={styles.centerText}>БЗДХ</td>
-                        <td style={styles.centerText}>{formData?.['AM10.17.1']}</td>
-                        <td style={styles.centerText}>{moment(formData?.['AM10.17.2']).format('YYYY-MM-DD')}</td>
-                        <td style={styles.centerText}></td>
-                     </tr>
+                     {formData?.['AM10_TABLE']?.map((el, index) => {
+                        return (
+                           <tr key={index}>
+                              <td style={styles.centerText}>{index + 1}</td>
+                              <td style={styles.centerText}>{el[0]}</td>
+                              <td style={styles.centerText}>{el[1]}</td>
+                              <td style={styles.centerText}>{el[2]}</td>
+                              <td style={styles.centerText}></td>
+                           </tr>
+                        );
+                     })}
                   </tbody>
                </Table>
                <div style={styles.leftText}>Ерөнхий эмч (эмнэлэг эрхэлсэн орлогч)-ийн дүгнэлт шийдвэр:</div>

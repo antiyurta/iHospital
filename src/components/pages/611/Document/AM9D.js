@@ -130,177 +130,58 @@ function AM9D(props) {
                               <span>Эм уух арга</span>
                            </td>
                         </tr>
-                        <tr>
-                           <td
-                              style={{
-                                 ...styles.generalText,
-                                 ...{ verticalAlign: 'top' }
-                              }}
-                              rowSpan={4}
-                           >
-                              Rp: {formData?.['AM9D.3.1']}
-                           </td>
-                           <td
-                              style={{
-                                 ...styles.generalText,
-                                 ...{ verticalAlign: 'top' }
-                              }}
-                              rowSpan={4}
-                           >
-                              <span>Тун: {formData?.['AM9D.3.2']}</span>
-                              <br />
-                              <span>Цаг:{formData?.['AM9D.3.3']}</span>
-                              <br />
-                           </td>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
-                                 <NewCheckbox value={0} className="test">
-                                    <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
-                                 <NewCheckbox value={1} className="test">
-                                    <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
-                                 <NewCheckbox value={2} className="test">
-                                    <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.3.4']} className="dstory">
-                                 <NewCheckbox value={3} className="test">
-                                    <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td
-                              style={{
-                                 ...styles.generalText,
-                                 ...{ verticalAlign: 'top' }
-                              }}
-                              rowSpan={4}
-                           >
-                              Rp: {formData?.['AM9D.4.1']}
-                           </td>
-                           <td
-                              style={{
-                                 ...styles.generalText,
-                                 ...{ verticalAlign: 'top' }
-                              }}
-                              rowSpan={4}
-                           >
-                              <span>Тун: {formData?.['AM9D.4.2']}</span>
-                              <br />
-                              <span>Цаг:{formData?.['AM9D.4.3']}</span>
-                              <br />
-                           </td>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
-                                 <NewCheckbox value={0} className="test">
-                                    <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
-                                 <NewCheckbox value={1} className="test">
-                                    <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
-                                 <NewCheckbox value={2} className="test">
-                                    <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.4.4']} className="dstory">
-                                 <NewCheckbox value={3} className="test">
-                                    <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td
-                              style={{
-                                 ...styles.generalText,
-                                 ...{ verticalAlign: 'top' }
-                              }}
-                              rowSpan={4}
-                           >
-                              Rp: {formData?.['AM9D.5.1']}
-                           </td>
-                           <td
-                              style={{
-                                 ...styles.generalText,
-                                 ...{ verticalAlign: 'top' }
-                              }}
-                              rowSpan={4}
-                           >
-                              <span>Тун: {formData?.['AM9D.5.2']}</span>
-                              <br />
-                              <span>Цаг:{formData?.['AM9D.5.3']}</span>
-                              <br />
-                           </td>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
-                                 <NewCheckbox value={0} className="test">
-                                    <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
-                                 <NewCheckbox value={1} className="test">
-                                    <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
-                                 <NewCheckbox value={2} className="test">
-                                    <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td style={styles.generalText}>
-                              <NewCheckboxGroup value={formData?.['AM9D.5.4']} className="dstory">
-                                 <NewCheckbox value={3} className="test">
-                                    <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
-                                 </NewCheckbox>
-                              </NewCheckboxGroup>
-                           </td>
-                        </tr>
+                        {formData?.['AM9D_TABLE']?.map((el, index) => {
+                           return (
+                              <tr key={index} rowSpan={4}>
+                                 <td
+                                    style={{
+                                       ...styles.generalText,
+                                       ...{ verticalAlign: 'top' }
+                                    }}
+                                 >
+                                    Rp: {el[0]}
+                                 </td>
+                                 <td
+                                    style={{
+                                       ...styles.generalText,
+                                       ...{ verticalAlign: 'top' }
+                                    }}
+                                 >
+                                    <span>Тун: {el[1]}</span>
+                                    <br />
+                                    <span>Цаг: {el[2]}</span>
+                                    <br />
+                                 </td>
+                                 <td
+                                    style={{
+                                       ...styles.generalText,
+                                       ...{ verticalAlign: 'top', display: 'flex', flexDirection: 'column' }
+                                    }}
+                                 >
+                                    <NewCheckboxGroup value={el[3]} className="dstory">
+                                       <NewCheckbox value={0} className="test">
+                                          <span style={{ fontSize: 12 }}>1. Буцалгаж уух</span>
+                                       </NewCheckbox>
+                                    </NewCheckboxGroup>
+                                    <NewCheckboxGroup value={el[3]} className="dstory">
+                                       <NewCheckbox value={1} className="test">
+                                          <span style={{ fontSize: 12 }}>2. Буцалсан усаар уух</span>
+                                       </NewCheckbox>
+                                    </NewCheckboxGroup>
+                                    <NewCheckboxGroup value={el[3]} className="dstory">
+                                       <NewCheckbox value={2} className="test">
+                                          <span style={{ fontSize: 12 }}>3. Залгиж уух</span>
+                                       </NewCheckbox>
+                                    </NewCheckboxGroup>
+                                    <NewCheckboxGroup value={el[3]} className="dstory">
+                                       <NewCheckbox value={3} className="test">
+                                          <span style={{ fontSize: 12 }}>4. Бүрж уух</span>
+                                       </NewCheckbox>
+                                    </NewCheckboxGroup>
+                                 </td>
+                              </tr>
+                           );
+                        })}
                      </thead>
                   </Table>
                   <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
