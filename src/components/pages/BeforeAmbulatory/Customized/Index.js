@@ -32,15 +32,6 @@ function Index(props) {
    const [employees, setEmployees] = useState([]);
    const [selectedCabinet, setSelectedCabinet] = useState('');
    const [selectedEmp, setSelectedEmp] = useState('');
-   //
-   const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
-   const handlePrint = useReactToPrint({
-      // onBeforeGetContent: () => setPrintLoading(true),
-      // onBeforePrint: () => setPrintLoading(false),
-      // onPrintError: () => console.log('asda'),
-      content: () => printRef.current
-   });
-   //
    const getCabinets = async () => {
       await OrganizationStructureService.get({
          params: {
@@ -58,15 +49,6 @@ function Index(props) {
       }).then((response) => {
          console.log('res', response);
          setEmployees(response.data.response.data);
-      });
-   };
-   const getPatientInfo = async () => {
-      await PmsPatientServices.getById(patientId).then((response) => {
-         setPrintData({
-            patientData: response.data.response,
-            formData: data
-         });
-         setIsOpenPrintModal(true);
       });
    };
    //
@@ -192,7 +174,6 @@ function Index(props) {
             .post(documentForm.url, data)
             .then((response) => {
                if (response.status === 201) {
-                  onOk(false);
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
@@ -205,7 +186,8 @@ function Index(props) {
                setIsLoading(false);
             });
       }
-      getData();
+      onOk(false);
+      // getData();
    };
    const onFinishFilter = async (filters) => {
       setIsLoading(true);
@@ -359,7 +341,7 @@ function Index(props) {
                </div>
                <div className="w-full">
                   <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
-                     Хадлагах
+                     Хадгалах
                   </Button>
                </div>
             </>

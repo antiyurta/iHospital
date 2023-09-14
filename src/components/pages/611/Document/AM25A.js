@@ -74,13 +74,13 @@ function AM25A(props) {
                </span>
             </div>
             <div style={styles.rowStyle}>
-               3. Эмчилгээ эхэлсэн {moment(formData[0]?.data?.['AM25.1']?.[0]).format('YYYY')} он{' '}
-               {moment(formData[0]?.data?.['AM25.1']?.[0]).format('MM')} сар{' '}
-               {moment(formData[0]?.data?.['AM25.1']?.[0]).format('DD')} өдөр,
+               3. Эмчилгээ эхэлсэн {moment(formData?.['AM25.1']?.[0]).format('YYYY')} он{' '}
+               {moment(formData?.['AM25.1']?.[0]).format('MM')} сар {moment(formData?.['AM25.1']?.[0]).format('DD')}{' '}
+               өдөр,
                <span style={{ marginLeft: 20 }}>
-                  Эмчилгээ дууссан {moment(formData[0]?.data?.['AM25.1']?.[1]).format('YYYY')} он{' '}
-                  {moment(formData[0]?.data?.['AM25.1']?.[1]).format('MM')} сар{' '}
-                  {moment(formData[0]?.data?.['AM25.1']?.[1]).format('DD')} өдөр,
+                  Эмчилгээ дууссан {moment(formData?.['AM25.1']?.[1]).format('YYYY')} он{' '}
+                  {moment(formData?.['AM25.1']?.[1]).format('MM')} сар {moment(formData?.['AM25.1']?.[1]).format('DD')}{' '}
+                  өдөр,
                </span>
             </div>
 
@@ -94,19 +94,17 @@ function AM25A(props) {
                }}
             >
                <div>
-                  <div>5. Үндсэн онош: {formData[0]?.data?.['AM25.2']}</div>
+                  <div>5. Үндсэн онош: {formData?.['AM25.2']}</div>
                   <div style={styles.rowStyle}>
-                     6. Хэдэн удаа эмчилсэн:{formData[0]?.data?.['AM25.3']}
+                     6. Хэдэн удаа эмчилсэн:{formData?.['AM25.3']}
                      <span style={{ marginLeft: 50 }}>Удаа /зур/: </span>
                      <span style={{ marginLeft: 20 }}>
-                        <span className={formData[0]?.data?.['AM25.4'] === 0 ? 'underline mr-1' : 'mr-1'}> анх, </span>
-                        <span className={formData[0]?.data?.['AM25.4'] === 1 ? 'underline mr-1' : 'mr-1'}>
-                           давтан
-                        </span>{' '}
+                        <span className={formData?.['AM25.4'] === 0 ? 'underline mr-1' : 'mr-1'}> анх, </span>
+                        <span className={formData?.['AM25.4'] === 1 ? 'underline mr-1' : 'mr-1'}>давтан</span>{' '}
                      </span>
                   </div>
 
-                  <div style={styles.rowStyle}>7. Мэргэжлийн эмчийн заалт {formData[0]?.data?.['AM25.18']}</div>
+                  <div style={styles.rowStyle}>7. Мэргэжлийн эмчийн заалт {formData?.['AM25.18']}</div>
                </div>
                <div style={{ display: 'flex' }}>
                   <div
@@ -121,7 +119,7 @@ function AM25A(props) {
                      Өвчний төгсгөл
                   </div>
                   <div style={{ width: '100%' }}>
-                     <NewCheckboxGroup value={formData[0]?.data?.['AM25.5']} className="dstory">
+                     <NewCheckboxGroup value={formData?.['AM25.5']} className="dstory">
                         <NewCheckbox value={0} className="test">
                            <span style={{ fontSize: 12 }}>Эдгэрсэн</span>
                         </NewCheckbox>
@@ -202,33 +200,20 @@ function AM25A(props) {
                         <span>Хэдэн удаа</span>
                      </td>
                   </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{formData[0]?.data?.['AM25.6.1']}</td>
-                     <td>{formData[0]?.data?.['AM25.6.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.6.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.6.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.6.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.6.6']}</td>
-                     <td>{formData[0]?.data?.['AM25.6.7']}</td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{formData[0]?.data?.['AM25.7.1']}</td>
-                     <td>{formData[0]?.data?.['AM25.7.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.7.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.7.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.7.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.7.6']}</td>
-                     <td>{formData[0]?.data?.['AM25.7.7']}</td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{formData[0]?.data?.['AM25.8.1']}</td>
-                     <td>{formData[0]?.data?.['AM25.8.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.8.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.8.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.8.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.8.6']}</td>
-                     <td>{formData[0]?.data?.['AM25.8.7']}</td>
-                  </tr>
+
+                  {formData?.['AM25_TABLE1']?.map((el, index) => {
+                     return (
+                        <tr style={{ height: 30 }} key={index}>
+                           <td>{el[0]}</td>
+                           <td>{el[1]}</td>
+                           <td>{el[2]}</td>
+                           <td>{el[3]}</td>
+                           <td>{el[4]}</td>
+                           <td>{el[5]}</td>
+                           <td>{el[6]}</td>
+                        </tr>
+                     );
+                  })}
                </thead>
             </Table>
             <div style={styles.rowStyle}>
@@ -238,9 +223,9 @@ function AM25A(props) {
                <div>Маягтын ар тал</div>
                <div>Б тал</div>
             </div>
-            <div style={styles.rowStyle}>8. Илгээсэн эмч, кабинетийн нэр: {formData[0]?.data?.['AM25.9']}</div>
-            <div style={styles.rowStyle}>8. Сэргээн засах эмчилгээний эмч: {formData[0]?.data?.['AM25.10']}</div>
-            <div style={styles.rowStyle}>8. Зөвлөгөө өгсөн байдал: {formData[0]?.data?.['AM25.11']}</div>
+            <div style={styles.rowStyle}>8. Илгээсэн эмч, кабинетийн нэр: {formData?.['AM25.9']}</div>
+            <div style={styles.rowStyle}>8. Сэргээн засах эмчилгээний эмч: {formData?.['AM25.10']}</div>
+            <div style={styles.rowStyle}>8. Зөвлөгөө өгсөн байдал: {formData?.['AM25.11']}</div>
             <Table bordered style={{ marginTop: 20 }}>
                <thead>
                   <tr
@@ -302,60 +287,18 @@ function AM25A(props) {
                         <span> Гарын үсэг</span>
                      </td>
                   </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{moment(formData[0]?.data?.['AM25.12.1']).format('YYYY-MM-DD')}</td>
-                     <td>{formData[0]?.data?.['AM25.12.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.12.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.12.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.12.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.12.6']}</td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{moment(formData[0]?.data?.['AM25.13.1']).format('YYYY-MM-DD')}</td>
-                     <td>{formData[0]?.data?.['AM25.13.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.13.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.13.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.13.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.13.6']}</td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{moment(formData[0]?.data?.['AM25.14.1']).format('YYYY-MM-DD')}</td>
-                     <td>{formData[0]?.data?.['AM25.14.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.14.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.14.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.14.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.14.6']}</td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{moment(formData[0]?.data?.['AM25.15.1']).format('YYYY-MM-DD')}</td>
-                     <td>{formData[0]?.data?.['AM25.15.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.15.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.15.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.15.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.15.6']}</td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{moment(formData[0]?.data?.['AM25.16.1']).format('YYYY-MM-DD')}</td>
-                     <td>{formData[0]?.data?.['AM25.16.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.16.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.16.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.16.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.16.6']}</td>
-                     <td></td>
-                  </tr>
-                  <tr style={{ height: 30 }}>
-                     <td>{moment(formData[0]?.data?.['AM25.17.1']).format('YYYY-MM-DD')}</td>
-                     <td>{formData[0]?.data?.['AM25.17.2']}</td>
-                     <td>{formData[0]?.data?.['AM25.17.3']}</td>
-                     <td>{formData[0]?.data?.['AM25.17.4']}</td>
-                     <td>{formData[0]?.data?.['AM25.17.5']}</td>
-                     <td>{formData[0]?.data?.['AM25.17.6']}</td>
-                     <td></td>
-                  </tr>
+                  {formData?.['AM25_TABLE2']?.map((el, index) => {
+                     return (
+                        <tr style={{ height: 30 }} key={index}>
+                           <td>{el[0]}</td>
+                           <td>{el[1]}</td>
+                           <td>{el[2]}</td>
+                           <td>{el[3]}</td>
+                           <td>{el[4]}</td>
+                           <td>{el[5]}</td>
+                        </tr>
+                     );
+                  })}
                </thead>
             </Table>
          </div>
