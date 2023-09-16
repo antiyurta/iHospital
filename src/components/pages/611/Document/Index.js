@@ -89,6 +89,7 @@ import EIM5_2 from './../EIM/EIM5_2';
 
 //CT
 import CT1_2H2 from './CT_1_2H2';
+import CT1_2H11 from './CT_1_2H11';
 //
 //
 import EMT201_4_2 from '../EMT/EMT201_4_2';
@@ -541,6 +542,11 @@ const options = [
       value: 88,
       label: 'ЭМТ- 201.4.2',
       docName: 'Амбулаторын үзлэгт хамрагдсан хүний тоо насны бүлэг, хүйсээр'
+   },
+   {
+      value: 89,
+      label: 'CT-1,2 Хавсралт 11',
+      docName: 'СУВИЛАГЧ ЭМЧЛҮҮЛЭГЧИЙН БИЕИЙН БАЙДЛЫГ ҮНЭЛЭХ ХУУДАС'
    }
 ];
 
@@ -753,6 +759,8 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <CT1_2H2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 88) {
       return <EMT201_4_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 89) {
+      return <CT1_2H11 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    }
 }
 
@@ -927,8 +935,20 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   isLoading={false}
                   isPagination={false}
                >
-                  <NewColumn title="Баримт бичгийн нэр" dataIndex="docName" />
-                  <NewColumn title="Тушаал шийдвэрийн дугаар" dataIndex="label" />
+                  <NewColumn
+                     title="Баримт бичгийн нэр"
+                     dataIndex="docName"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="Тушаал шийдвэрийн дугаар"
+                     dataIndex="label"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
                   <NewColumn
                      title=""
                      width={40}

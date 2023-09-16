@@ -81,7 +81,7 @@ function am9A(props) {
    }, [appointmentId]);
    return (
       <>
-         {[...Array(length)].map((_page, index) => {
+         {[...Array(length)]?.map((_page, index) => {
             return (
                <div key={index}>
                   <div className="pageMNS5376">

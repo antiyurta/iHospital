@@ -370,8 +370,8 @@ export default function EarlyWarning({ PatientId, UsageType, ListId, patientData
                   <Line options={vsOptions} data={LineGraphVS} />
                   <div className="hidden">
                      <div ref={vsPrintRef}>
-                        <div className="page">
-                           <div className="subpage">
+                        <div className="">
+                           <div className="">
                               <div className="flow-root">
                                  <div className="float-right">
                                     <p>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>

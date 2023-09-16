@@ -752,7 +752,7 @@ function EarlyWarningPrint({ Data }) {
             </div>
             <div className="basis-2/3">
                <div className="flex flex-wrap">
-                  {data.map((item, index) => {
+                  {data?.map((item, index) => {
                      return (
                         <div key={index} className="basis-1/5">
                            <div className="w-full amaraDeer amaraBaruun">

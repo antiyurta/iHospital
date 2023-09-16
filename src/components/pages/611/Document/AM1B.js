@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-
 //маягт АМ-1Б
 function AM1B(props) {
    console.log('props', props);
@@ -43,8 +42,8 @@ function AM1B(props) {
       }
    };
    return (
-      <div className="page-landscape">
-         <div className="subpage-landscape">
+      <div className="">
+         {/* <div className="">
             <div>
                <div
                   style={{
@@ -229,7 +228,7 @@ function AM1B(props) {
                   {props.data?.map((el, index) => {
                      return (
                         <>
-                           <tr key={index}>
+                           <tr>
                               <td rowSpan={2}></td>
                               <td rowSpan={2}>{index + 1}</td>
                               <td colSpan={10}>
@@ -269,7 +268,7 @@ function AM1B(props) {
                               <td rowSpan={2}></td>
                               <td rowSpan={2}></td>
                            </tr>
-                           <tr key={index + 1}>
+                           <tr>
                               <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[0]}</td>
                               <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[1]}</td>
                               <td style={{ ...textStyle.centerText, ...{ width: 18 } }}>{el.registerNumber[2]}</td>
@@ -296,7 +295,7 @@ function AM1B(props) {
                   })}
                </tbody>
             </Table>
-         </div>
+         </div> */}
       </div>
    );
 }

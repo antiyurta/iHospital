@@ -209,6 +209,12 @@ function Index(props) {
             setIsLoading(false);
          });
    };
+   const handlePrint = useReactToPrint({
+      // onBeforeGetContent: () => setPrintLoading(true),
+      // onBeforePrint: () => setPrintLoading(false),
+      // onPrintError: () => console.log('asda'),
+      content: () => printRef.current
+   });
    useEffect(() => {
       if (documentValue != 0) {
          console.log(documentType);
@@ -334,7 +340,7 @@ function Index(props) {
             </div>
          ) : (
             <>
-               <div className="w-full h-[600px] overflow-auto">
+               <div className="w-full px-3 overflow-auto">
                   <Form form={form} layout="vertical">
                      <FormRender form={documentForm} formOptionIds={documentOptions[selectedOptionId]?.formOptionIds} />
                   </Form>

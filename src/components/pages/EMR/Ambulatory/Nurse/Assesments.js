@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import jwtInterceopter from '../../../../jwtInterceopter';
 import { Table } from 'antd';
+import moment from 'moment';
 
 function Assesments(props) {
    const { patientId } = props;
@@ -11,11 +12,13 @@ function Assesments(props) {
       await jwtInterceopter
          .get('document-middleware', {
             params: {
-               patientId: patientId
+               documentId: 87,
+               patientId: patientId,
+               usageType: 'OUT'
             }
          })
          .then((response) => {
-            setData(response.data.response.data);
+            setData(response.data.response);
             console.log(response);
          })
          .catch((error) => {
@@ -27,7 +30,11 @@ function Assesments(props) {
    };
    const columns = [
       {
-         title: 'Огноо'
+         title: 'Огноо',
+         dataIndex: 'createdAt',
+         render: (text) => {
+            return moment(text).format('YYYY/MM/DD HH:mm');
+         }
       },
       {
          title: 'Амин үзүүлэлт',
