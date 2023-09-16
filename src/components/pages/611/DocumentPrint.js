@@ -3,8 +3,7 @@ import { Button, Divider, Modal, Table } from 'antd';
 
 import DocumentsFormPatientSerice from '../../../services/organization/document';
 import PmsPatientServices from '../../../services/pms/patient';
-import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from './Document/Index';
-import { ReturnById, ReturnByIdToName } from './Document/Index';
+import { ReturnById, ReturnByIdToCode } from './Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
 import { useReactToPrint } from 'react-to-print';
@@ -33,12 +32,6 @@ function DocumentPrint(props) {
          }
       });
    };
-   const handlePrint = useReactToPrint({
-      // onBeforeGetContent: () => setPrintLoading(true),
-      // onBeforePrint: () => setPrintLoading(false),
-      // onPrintError: () => console.log('asda'),
-      content: () => printRef.current
-   });
    const getPatientInfo = async () => {
       await PmsPatientServices.getById(patientId).then((response) => {
          setPatientData(response.data.response);
@@ -53,10 +46,12 @@ function DocumentPrint(props) {
    useEffect(() => {
       getPatientInfo();
    }, [selectedDocument]);
-//    useEffect(() => {
-// =======
-//       isOpenHistory && getDocumentsHistory();
-//    }, [isOpenHistory]);
+   useEffect(() => {
+      isOpenHistory && getDocumentsHistory();
+   }, [isOpenHistory]);
+   //
+
+   //
    return (
       <>
          <Button type="primary" onClick={() => setIsOpenHistory(true)}>
@@ -73,6 +68,11 @@ function DocumentPrint(props) {
                   <div className="px-2">
                      <Divider>Амбулатори</Divider>
                      <Table
+                        rowKey={'_id'}
+                        bordered
+                        scroll={{
+                           y: 200
+                        }}
                         rowClassName="hover: cursor-pointer"
                         pagination={false}
                         dataSource={result?.['OUT']}
@@ -88,7 +88,7 @@ function DocumentPrint(props) {
                               title: 'Нэр',
                               dataIndex: 'documentId',
                               render: (text) => {
-                                 return ReturnByIdToCode(text);
+                                 return <span className="whitespace-pre-wrap">{ReturnByIdToCode(text)}</span>;
                               }
                            },
                            {
@@ -138,6 +138,7 @@ function DocumentPrint(props) {
                            <Button onClick={() => handlePrint()} type="primary">
                               Хэвлэх
                            </Button>
+                           <button onClick={() => generatePDF(printRef, options)}>Generate PDF</button>
                         </div>
                         <div className="rounded bg-white p-3">
                            <div ref={printRef}>

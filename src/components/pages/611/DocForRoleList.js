@@ -220,11 +220,11 @@ function DocForRoleList() {
          dataIndex: 'documents',
          render: (documents) => {
             return (
-               <ul className="mx-[2px] list-decimal list-inside text-start">
+               <div className="grid grid-cols-6 gap-1 justify-items-start">
                   {documents?.map((document, index) => {
                      return <li key={index}>{document.label}</li>;
                   })}
-               </ul>
+               </div>
             );
          }
       },
@@ -285,11 +285,11 @@ function DocForRoleList() {
          dataIndex: 'formOptionIds',
          render: (text) => {
             return (
-               <ul>
+               <div className="grid grid-cols-6 gap-1 justify-items-start">
                   {text?.map((item, index) => {
-                     return <li key={index}>{item}</li>;
+                     return <div key={index}>{item}</div>;
                   })}
-               </ul>
+               </div>
             );
          }
       },
@@ -375,12 +375,12 @@ function DocForRoleList() {
                         showSizeChanger: true,
                         pageSizeOptions: ['5', '10', '20', '50'],
                         showQuickJumper: true,
-                        onChange: (page, pageSize) => getList(page, pageSize, pValue, pIndex)
+                        onChange: (page, pageSize) => getList(page, pageSize)
                      }}
                   />
                </ConfigProvider>
             </Card>
-            <Card bordered={false} className="header-solid max-h-max rounded-md" title="asda">
+            <Card bordered={false} className="header-solid max-h-max rounded-md" title="Permission">
                <ConfigProvider locale={mnMN}>
                   <Table
                      rowKey={'id'}

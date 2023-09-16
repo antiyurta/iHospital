@@ -27,7 +27,7 @@ module.exports = (_env, argv) => {
          historyApiFallback: true,
          client: {
             logging: 'error',
-            overlay: true
+            overlay: false
          }
       },
       watch: true,
@@ -81,7 +81,9 @@ module.exports = (_env, argv) => {
          }
       },
       plugins: [
-         new ReactRefreshPlugin(),
+         new ReactRefreshPlugin({
+            overlay: false
+         }),
          new CompressionPlugin({
             algorithm: 'gzip',
             test: /.js$|.css$/

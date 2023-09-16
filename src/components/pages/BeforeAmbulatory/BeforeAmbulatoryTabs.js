@@ -73,7 +73,8 @@ export default function BeforeAmbulatoryTabs({ patientId, type, structureId, lis
                   data.push(document);
                })
             );
-            setDocuments([...documents, ...data]);
+            // setDocuments([...documents, ...data]);
+            setDocuments(data);
             // setIsOpenAM(true);
             setDocumentId(0);
          }
@@ -89,52 +90,51 @@ export default function BeforeAmbulatoryTabs({ patientId, type, structureId, lis
          documents.push({ docName: 'Түргэн тусламж', value: 'EMERGENCY' });
       }
    }, [reasonComming]);
-   if (type) {
-      return (
-         <>
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               bodyStyle={{
-                  paddingTop: 10,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  paddingBottom: 10
-               }}
-            >
-               <div className="flex flex-col gap-3">
-                  <Segmented
-                     className="segmented-enr"
-                     size="small"
-                     options={documents?.map((document) => {
-                        return {
-                           label: document.docName,
-                           value: document.value
-                        };
-                     })}
-                     onChange={(e) => setDocumentId(e)}
+   return (
+      <>
+         <Card
+            bordered={false}
+            className="header-solid max-h-max rounded-md"
+            bodyStyle={{
+               paddingTop: 10,
+               paddingLeft: 10,
+               paddingRight: 10,
+               paddingBottom: 10
+            }}
+         >
+            <div className="flex flex-col gap-3">
+               <Segmented
+                  className="segmented-enr"
+                  size="small"
+                  options={documents?.map((document) => {
+                     return {
+                        label: document.docName,
+                        value: document.value
+                     };
+                  })}
+                  onChange={(e) => setDocumentId(e)}
+               />
+               {typeof documentId != 'number' ? (
+                  <OtherCustomized
+                     usageType={'OUT'}
+                     documentValue={documentId}
+                     appointmentId={listId}
+                     patientId={patientId}
+                     reasonComming={reasonComming}
                   />
-                  {typeof documentId != 'number' ? (
-                     <OtherCustomized
-                        usageType={'OUT'}
-                        documentValue={documentId}
-                        appointmentId={listId}
-                        patientId={patientId}
-                        reasonComming={reasonComming}
-                     />
-                  ) : (
-                     <Customized
-                        usageType={'OUT'}
-                        documentValue={documentId}
-                        structureId={structureId}
-                        appointmentId={listId}
-                        patientId={patientId}
-                     />
-                  )}
-               </div>
-            </Card>
-            <Tabs type="card" size="small" items={items} />
-         </>
-      );
-   }
+               ) : (
+                  <Customized
+                     usageType={'OUT'}
+                     documentValue={documentId}
+                     structureId={structureId}
+                     appointmentId={listId}
+                     patientId={patientId}
+                     onOk={(state) => console.log(state)}
+                  />
+               )}
+            </div>
+         </Card>
+         <Tabs type="card" size="small" items={items} />
+      </>
+   );
 }

@@ -162,7 +162,7 @@ function Structure() {
    };
    useEffect(() => {
       getDepartments();
-      getFinanceDepartments();
+      // getFinanceDepartments();
    }, []);
    return (
       <div className="flex flex-wrap">

@@ -6,9 +6,11 @@ import {
    NewDatePicker,
    NewInput,
    NewInputNumber,
+   NewOption,
    NewRadio,
    NewRadioGroup,
    NewRangePicker,
+   NewSelect,
    NewTextArea
 } from '../../../Input/Input';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
@@ -24,7 +26,7 @@ function FormRender({ form, formOptionIds }) {
          const state = formOptionIds?.some((id) => id === data.keyWord);
          if (data.type === 'input') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex w-full p-1">
                      <Form.Item
                         label={data.value}
@@ -39,7 +41,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'inputNumber') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -56,9 +58,38 @@ function FormRender({ form, formOptionIds }) {
                   </div>
                </div>
             );
+         } else if (data.type === 'dropdown') {
+            return (
+               <div key={index} className="rounded-md bg-white w-[190px] inline-block m-1">
+                  <div className="inline-flex p-1 w-full">
+                     <Form.Item
+                        label={data.value}
+                        name={data.keyWord}
+                        tooltip={!state ? message : null}
+                        className="mb-0 w-full"
+                     >
+                        <NewSelect disabled={!state}>
+                           {data?.options?.map((option, index) => {
+                              return (
+                                 <NewOption
+                                    style={{
+                                       marginLeft: 8
+                                    }}
+                                    key={index}
+                                    value={data.isInteger ? parseInt(option.keyWord) : option.keyWord}
+                                 >
+                                    {option.label}
+                                 </NewOption>
+                              );
+                           })}
+                        </NewSelect>
+                     </Form.Item>
+                  </div>
+               </div>
+            );
          } else if (data.type === 'checkbox') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -93,7 +124,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'radio') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -119,7 +150,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'textarea') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -134,7 +165,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'rangepicker') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex w-full p-1">
                      <Form.Item
                         label={data.value}
@@ -156,7 +187,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'datepicker') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.Item
                         label={data.value}
@@ -178,7 +209,7 @@ function FormRender({ form, formOptionIds }) {
             );
          } else if (data.type === 'table') {
             return (
-               <div key={index} className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
                   <div className="inline-flex p-1 w-full">
                      <Form.List name={data.keyWord}>
                         {(rows, { add, remove }) => {

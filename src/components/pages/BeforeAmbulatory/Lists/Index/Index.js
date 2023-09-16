@@ -59,6 +59,7 @@ function Index({ type, isDoctor }) {
    //
    const [selectedRowPatientId, setSelectedRowPatientId] = useState(Number);
    const [selectedTags, setSelectedTags] = useState(0);
+   const [usageType, setUsageType] = useState('OUT');
    const getAppointment = async (page, pageSize, start, end, process) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -79,6 +80,7 @@ function Index({ type, isDoctor }) {
       var response = [];
       if (type === 0) {
          response = await Get('appointment', token, conf);
+         setUsageType('OUT');
       } else if (type === 1) {
          conf.params.doctorId = null;
          response = await Get('appointment/pre-order', token, conf);
@@ -88,6 +90,7 @@ function Index({ type, isDoctor }) {
          conf.params.process = process ? process.toString() : 0;
          response = await Get(`service/inpatient-request`, token, conf);
          conf.params.process = null;
+         setUsageType('IN');
       } else if (type === 3) {
          response = await Get(`tasks`, token, conf);
       }
@@ -173,42 +176,73 @@ function Index({ type, isDoctor }) {
          }
       }
    };
-   const getENR = (
-      row,
-      listId,
-      id,
-      structureId,
-      departmentId,
-      inspectionType,
-      isPayment,
-      isInsurance,
-      regNum,
-      roomNumber,
-      departmentName
-   ) => {
+   const getENR = (row) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
-      console.log(row);
-      const payment = isPayment || isInsurance;
-      if (row.type === 1 || payment) {
-         navigate(`/ambulatoryDetail`, {
-            state: {
-               appointmentId: listId,
-               patientId: id,
-               structureId: structureId,
-               dapartmentId: departmentId,
-               inspection: inspectionType,
-               regNum,
-               type: type,
-               appointmentType: row.type,
-               roomNumber: roomNumber,
-               departmentName: departmentName,
-               reasonComming: row.reasonComming
-            }
-         });
-      } else {
-         openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
+      if (usageType === 'IN') {
+         if (row.roomId === null) {
+            openNofi('warning', 'Алдаа', 'Өрөөнд хэвтээгүй байна');
+         } else {
+            console.log(row);
+            navigate('/ambulatoryDetail', {
+               state: {
+                  selectedPatient: row.patient,
+                  usageType: usageType,
+                  structureId: row.inDepartmentId,
+                  appointmentId: row.id
+               }
+            });
+         }
+      } else if (usageType === 'OUT') {
+         if (row.isPayment || row.isInsurance || row.type === 1) {
+            navigate('/ambulatoryDetail', {
+               state: {
+                  selectedPatient: row.patient,
+                  usageType: usageType,
+                  structureId: row.cabinet.parentId,
+                  appointmentId: row.id,
+                  reasonComming: row.reasonComming
+               }
+            });
+         } else {
+            openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
+         }
       }
+
+      // if (row.roomId === null) {
+      //    openNofi('warning', 'Алдаа', 'Өрөөнд хэвтээгүй байна');
+      // } else {
+      //    navigate(`/ambulatoryDetail`, {
+      //       state: {
+      //          appointmentId: row.appointmentId,
+      //          patientId: row.patientId,
+      //          structureId: row.orderDepartmentId,
+      //          dapartmentId: row.inDepartmentId,
+      //          roomNumber: row.rooms.roomNumber,
+      //          departmentName: row.structure.name,
+      //          reasonComming: row.reasonComming
+      //       }
+      //    });
+      // }
+      // console.log('=========>,', row);
+      // const payment = isPayment || isInsurance;
+      // if (payment) {
+      //    navigate(`/ambulatoryDetail`, {
+      //       state: {
+      //          appointmentId: listId,
+      //          patientId: id,
+      //          structureId: structureId,
+      //          dapartmentId: departmentId,
+      //          inspection: inspectionType,
+      //          regNum: regNum,
+      //          type: type,
+      //          appointmentType: 'PLAN',
+      //          roomNumber: roomNumber,
+      //          departmentName: departmentName,
+      //          reasonComming: row.reasonComming
+      //       }
+      //    });
+      // }
    };
    const getTypeInfo = (type, begin, end) => {
       //1 yaralta shuud
@@ -566,20 +600,7 @@ function Index({ type, isDoctor }) {
                         color: 'white'
                      }}
                      onClick={() => {
-                        isDoctor
-                           ? getEMR(row)
-                           : getENR(
-                                row,
-                                row.id,
-                                row.patientId,
-                                row.inDepartmentId,
-                                row.inspectionType,
-                                row.isPayment,
-                                row.isInsurance,
-                                row.patient?.registerNumber,
-                                row.rooms?.roomNumber,
-                                row.structure?.name
-                             );
+                        isDoctor ? getEMR(row) : getENR(row);
                      }}
                      icon={<PlusCircleOutlined />}
                   >
@@ -680,9 +701,21 @@ function Index({ type, isDoctor }) {
          dataIndex: 'isInsurance',
          render: (text) => {
             if (text) {
-               return 'YES';
+               return (
+                  <CheckOutlined
+                     style={{
+                        color: 'green'
+                     }}
+                  />
+               );
             }
-            return 'NO';
+            return (
+               <CloseOutlined
+                  style={{
+                     color: 'red'
+                  }}
+               />
+            );
          }
       },
       {
@@ -720,19 +753,7 @@ function Index({ type, isDoctor }) {
                      color: 'white'
                   }}
                   onClick={() => {
-                     isDoctor
-                        ? getEMR(row)
-                        : getENR(
-                             row.id,
-                             row.patientId,
-                             row.inDepartmentId,
-                             row.inspectionType,
-                             row.isPayment,
-                             row.isInsurance,
-                             row.patient?.registerNumber,
-                             row.rooms?.roomNumber,
-                             row.structure?.name
-                          );
+                     isDoctor ? getEMR(row) : getENR(row);
                   }}
                   icon={<PlusCircleOutlined />}
                >
@@ -842,19 +863,7 @@ function Index({ type, isDoctor }) {
                      color: 'white'
                   }}
                   onClick={() => {
-                     getENR(
-                        row,
-                        row.id,
-                        row.patientId,
-                        row.cabinet?.parentId,
-                        row.inDepartmentId,
-                        row.inspectionType,
-                        row.isPayment,
-                        row.isInsurance,
-                        row.patient?.registerNumber,
-                        row.rooms?.roomNumber,
-                        row.structure?.name
-                     );
+                     getENR(row);
                   }}
                   icon={<PlusCircleOutlined />}
                >

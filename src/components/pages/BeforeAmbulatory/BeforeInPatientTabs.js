@@ -14,10 +14,12 @@ import Acting from './BeforeInPatientTabs/Acting';
 import NursingLog from './BeforeInPatientTabs/NursingLog';
 import { Get } from '../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentAppId, selectCurrentToken } from '../../../features/authReducer';
 const { CheckableTag } = Tag;
 import Customized from './Customized/Index';
+import jwtInterceopter from '../../jwtInterceopter';
 function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, departmentId }) {
+   const AppIds = useSelector(selectCurrentAppId);
    const token = useSelector(selectCurrentToken);
    const [documents, setDocuments] = useState([]);
    const [pageId, setPageId] = useState(Number);
@@ -27,13 +29,26 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
       const conf = {
          headers: {},
          params: {
-            usageType: 'IN',
-            documentType: 0,
-            structureId: departmentId
+            employeePositionIds: AppIds,
+            structureId: departmentId,
+            usageType: 'OUT',
+            documentType: 0
          }
       };
-      const response = await Get('organization/document-role/show', token, conf);
-      setDocuments(response);
+      await jwtInterceopter.get('organization/document-role/show', conf).then((response) => {
+         if (response.data.response?.length === 0) {
+            openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
+         } else {
+            var data = [];
+            response.data.response?.map((item) =>
+               item?.documents?.map((document) => {
+                  data.push(document);
+               })
+            );
+            // setDocuments([...documents, ...data]);
+            setDocuments(data);
+         }
+      });
    };
    useEffect(() => {
       getDocuments();
