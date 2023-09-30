@@ -25,6 +25,7 @@ import Marquee from 'react-fast-marquee';
 import { setNote } from '../../../../../features/noteReducer';
 import jwtInterceopter from '../../../../jwtInterceopter';
 import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
+import { setPatient } from '../../../../../features/patientReducer';
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -175,6 +176,7 @@ function Index({ type, isDoctor }) {
             });
          }
       }
+      dispatch(setPatient(row.patient));
    };
    const getENR = (row) => {
       // status heregteii anhan dawtan
