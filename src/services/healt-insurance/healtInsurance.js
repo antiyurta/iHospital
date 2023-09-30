@@ -24,5 +24,8 @@ class HealtInsurance {
    async saveHics(data) {
       return await jwtInterceopter.post('/health-insurance/hics-service', data);
    }
+   async getApprovalList(regno) {
+      return await jwtInterceopter.post(`/health-insurance/approval-list/${regno}`);
+   }
 }
 export default new HealtInsurance();

@@ -7,8 +7,8 @@ import healthInsuranceService from '../../../../services/healt-insurance/healtIn
 
 const GetPatientSheet = () => {
    const patient = useSelector(selectPatient);
-   
-   const [patientSheets, setPatientSheet] = useState([]);
+
+   const [patientSheets, setPatientSheets] = useState([]);
    const columns = [
       {
          title: 'Хүсэлтийн дугаар',
@@ -28,19 +28,15 @@ const GetPatientSheet = () => {
    ];
    useEffect(() => {
       healthInsuranceService
-            .getPatientSheet(patient.registerNumber)
-            .then(({data}) => {
-               message.success(data.description);
-               setPatientSheet(response.result);
-            })
-            .catch((error) => {
-               message.error(error);
-            });
-   }, [])
-   return (
-      <>
-         <Table columns={columns} dataSource={patientSheets} />
-      </>
-   );
+         .getPatientSheet(patient.registerNumber)
+         .then(({ data }) => {
+            message.success(data.description);
+            setPatientSheets(data.result);
+         })
+         .catch((error) => {
+            message.error(error);
+         });
+   }, []);
+   return <Table rowKey={'requestNo'} columns={columns} dataSource={patientSheets} />;
 };
 export default GetPatientSheet;

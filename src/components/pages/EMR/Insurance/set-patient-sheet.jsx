@@ -2,43 +2,35 @@ import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React from 'react';
 import { useEffect } from 'react';
-import patient from '../../../../services/pms/patient';
 import insurance from '../../../../services/healt-insurance/insurance';
 import { useState } from 'react';
 import { localMn } from '../../../comman';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
 import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
+import { useSelector } from 'react-redux';
+import { selectPatient } from '../../../../features/patientReducer';
 
 const SetPatientSheet = (props) => {
-   const { form, patientId } = props;
+   const { form } = props;
    const [hicsServices, setHicsServices] = useState([]);
    const [diagnosis, setDiagnosis] = useState([]);
    const [sentReasons, setSentReasons] = useState([]);
-   const getPatient = async () => {
-      await patient.getById(patientId).then(({ data }) => {
-         if (data.success) {
-            form.setFieldsValue({
-               patientRegno: data.response.registerNumber,
-               patientFirstname: data.response.firstName,
-               patientLastname: data.response.lastName,
-               age: data.response.age,
-               gender: data.response.genderType,
-               phone: data.response.phoneNo,
-               email: data.response.email,
-               address: data.response.address,
-               trusteeName: data.response.contacts[0].name,
-               trusteePhone: data.response.contacts[0].contactPhoneNo,
-               trusteeEmail: data.response.contacts[0].email
-            });
-         }
-      });
-      return patient;
-   };
+   const patient = useSelector(selectPatient);
    useEffect(() => {
-      if (patientId) {
-         getPatient();
-      }
-   }, [patientId]);
+      form.setFieldsValue({
+         patientRegno: patient.registerNumber,
+         patientFirstname: patient.firstName,
+         patientLastname: patient.lastName,
+         age: patient.age,
+         gender: patient.genderType,
+         phone: patient.phoneNo,
+         email: patient.email,
+         address: patient.address,
+         trusteeName: patient.contacts[0].name,
+         trusteePhone: patient.contacts[0].contactPhoneNo,
+         trusteeEmail: patient.contacts[0].email
+      });
+   }, []);
    const gender = (value) => {
       if (value == 'WOMAN') return 'эм';
       else if (value == 'MAN') return 'эр';
@@ -58,7 +50,7 @@ const SetPatientSheet = (props) => {
       });
    };
    const getPatientDiagnosis = async () => {
-      await patientDiagnose.getByPageFilter({ page: 1, limit: 10, patientId: patientId }).then(({ data }) => {
+      await patientDiagnose.getByPageFilter({ page: 1, limit: 10, patientId: patient.id }).then(({ data }) => {
          if (data.success) {
             setDiagnosis(data.response.data.map((patientDiagnose) => patientDiagnose.diagnose));
          }
