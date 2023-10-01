@@ -7,6 +7,8 @@ import healthInsuranceService from '../../../../services/healt-insurance/healtIn
 import SetPatientSheet from './set-patient-sheet';
 import Search from 'antd/lib/input/Search';
 import SaveHics from './save-hics';
+import SetApproval from './set-approval';
+import SetPatientReturn from './set-patient-return';
 
 const SentService = () => {
    const [insuranceForm] = Form.useForm();
@@ -28,7 +30,10 @@ const SentService = () => {
    };
    const sentService = async (values) => {
       if (chooseService == HEALTH_SERVICES_TITLE.getPatientSheet) {
-         
+      } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
+         healthInsuranceService.postApproval(values).then((response) => {
+            console.log(response);
+         });
       } else if (chooseService == HEALTH_SERVICES_TITLE.setPatientSheet) {
          healthInsuranceService
             .setPatientSheet(values)
@@ -47,15 +52,23 @@ const SentService = () => {
             .catch((error) => {
                message.error(error);
             });
+      } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
+         healthInsuranceService.postPatientReturn(values).then((response) => {
+            console.log(response);
+         });
       }
    };
    const getFormFields = () => {
       if (chooseService === HEALTH_SERVICES_TITLE.getPatientSheet) {
          return <GetPatientSheet />;
+      } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
+         return <SetApproval form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientSheet) {
          return <SetPatientSheet form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.saveHics) {
          return <SaveHics form={insuranceForm} />;
+      } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
+         return <SetPatientReturn form={insuranceForm} />;
       } else {
          return 'ali ch nohtsol biyleegui bn';
       }
