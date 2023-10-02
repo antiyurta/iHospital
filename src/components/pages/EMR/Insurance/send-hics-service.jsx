@@ -5,6 +5,7 @@ import { selectPatient } from '../../../../features/patientReducer';
 import { useSelector } from 'react-redux';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
+import moment from 'moment';
 const SendHics = (props) => {
    const { form } = props;
    const [sealServices, setSealServices] = useState([]);
@@ -31,22 +32,26 @@ const SendHics = (props) => {
    };
    const fieldService = (paymentIndex, serviceIndex, serviceNumber) => {
       const service = sealServices.find((sealService) => sealService.serviceNumber == serviceNumber);
-      const updatedValues = {
-         [`payments[${paymentIndex}].serviceList[${serviceIndex}]`]: {
-            startDate: service.inDateStr,
-            endDate: service.outDateStr,
-            hicsServiceId: service.serviceId,
-            pregnantWeek: service.pregnantWeek,
-            diagnosis: {
-                icdCode: service.icdCode,
-                icdCodeName: service.icdCodeName,
-                icd9Code: service.icd9Code,
-                drgCode: service.drgCode,
+      form.setFieldsValue({
+         ['payments']: {
+            [`${paymentIndex}`]: {
+               ['serviceList']: {
+                  [`${serviceIndex}`]: {
+                     startDate: moment(service.inDateStr),
+                     endDate: moment(service.outDateStr),
+                     hicsServiceId: service.serviceId,
+                     pregnantWeek: service.pregnantWeek,
+                     diagnosis: {
+                        icdCode: service.icdCode,
+                        icdCodeName: service.icdCodeName,
+                        icd9Code: service.icd9Code,
+                        drgCode: service.drgCode
+                     }
+                  }
+               }
             }
          }
-      };
-      console.log('updatedValues =======>', updatedValues);
-      form.setFieldsValue(updatedValues);
+      });
    };
    useEffect(() => {
       formInsurance();

@@ -60,7 +60,7 @@ const SentService = () => {
    };
    const getForms = () => {
       if (chooseService === HEALTH_SERVICES_TITLE.sendHics) {
-         return <SendHics />;
+         return <SendHics form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
          return <SetApproval form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientSheet) {
