@@ -1,4 +1,5 @@
 export const HEALTH_SERVICES_TITLE = {
+   savePrescription: 'SAVE_PRESCRIPTION',
    saveHics: 'SAVE_HICS',
    setApproval: 'SET_APPROVAL',
    sendHics: 'SEND_HICS',
@@ -9,6 +10,8 @@ export const HEALTH_SERVICES_TITLE = {
 
 export const HEALTH_SERVCES_DESCRIPTION = (title) => {
    switch (title) {
+      case HEALTH_SERVICES_TITLE.savePrescription:
+         return '4.6 Цахим жор үүсгэх сервис';
       case HEALTH_SERVICES_TITLE.cancelService:
          return '4.17 Эрүүл мэндийн тусламж үйлчилгээг цуцлах';
       case HEALTH_SERVICES_TITLE.saveHics:

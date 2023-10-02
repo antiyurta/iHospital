@@ -10,6 +10,7 @@ import SetApproval from './set-approval';
 import SetPatientReturn from './set-patient-return';
 import SendHics from './send-hics-service';
 import CancelHics from './cancel-hics';
+import Prescription from './prescription';
 
 const SentService = () => {
    const [insuranceForm] = Form.useForm();
@@ -30,10 +31,18 @@ const SentService = () => {
       setInsuranceServiceItems(filter);
    };
    const sentService = async (values) => {
-      if (chooseService == HEALTH_SERVICES_TITLE.sendHics) {
-         healthInsuranceService.sendHicsService(values).then(({ data}) => {
+      if (chooseService == HEALTH_SERVICES_TITLE.savePrescription) {
+         healthInsuranceService.savePrescription(values).then(({ data }) => {
+            if (data.respMsgCode == 200) {
+               message.success(data.respMsg);
+            } else {
+               message.warn(data.respMsg);
+            }
+         });
+      } else if (chooseService == HEALTH_SERVICES_TITLE.sendHics) {
+         healthInsuranceService.sendHicsService(values).then(({ data }) => {
             if (data.code == 200) {
-               message.success(data.description)
+               message.success(data.description);
             } else {
                message.warn(data.description);
             }
@@ -65,9 +74,9 @@ const SentService = () => {
             console.log(response);
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.cancelService) {
-         healthInsuranceService.cancelService(values).then(({ data}) => {
+         healthInsuranceService.cancelService(values).then(({ data }) => {
             if (data.code == 200) {
-               message.success(data.description)
+               message.success(data.description);
             } else {
                message.warn(data.description);
             }
@@ -75,7 +84,9 @@ const SentService = () => {
       }
    };
    const getForms = () => {
-      if (chooseService === HEALTH_SERVICES_TITLE.sendHics) {
+      if (chooseService === HEALTH_SERVICES_TITLE.savePrescription) {
+         return <Prescription form={insuranceForm} />;
+      } else if (chooseService === HEALTH_SERVICES_TITLE.sendHics) {
          return <SendHics form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
          return <SetApproval form={insuranceForm} />;

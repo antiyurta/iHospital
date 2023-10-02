@@ -1,8 +1,16 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
-class HealtInsurance {
+class HealthInsurance {
+   /** 4.4 Эмийн жагсаалтыг олон улсын нэршлээр авах сервис */
+   async getTabletByGroups() {
+      return await jwtInterceopter.get('health-insurance/tablet-groups');
+   }
    /** 4.5 Иргэний мэдээлэл харах сервис */
    async postCitizenInfo(data) {
       return await jwtInterceopter.post('health-insurance/citizen-info', data);
+   }
+   /** 4.6 Цахим жор үүсгэх сервис */
+   async savePrescription(data) {
+      return await jwtInterceopter.post('health-insurance/save-prescription', data);
    }
    /** 4.17 Эрүүл мэндийн тусламж үйлчилгээг цуцлах */
    async cancelService(data) {
@@ -69,4 +77,4 @@ class HealtInsurance {
       return await jwtInterceopter.post('health-insurance/start-hics-service', data);
    }
 }
-export default new HealtInsurance();
+export default new HealthInsurance();
