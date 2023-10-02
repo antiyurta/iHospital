@@ -22,7 +22,7 @@ const SetPatientSheet = (props) => {
          patientFirstname: patient.firstName,
          patientLastname: patient.lastName,
          age: patient.age,
-         gender: patient.genderType,
+         gender: gender(patient.genderType),
          phone: patient.phoneNo,
          email: patient.email,
          address: patient.address,
@@ -52,7 +52,12 @@ const SetPatientSheet = (props) => {
    const getPatientDiagnosis = async () => {
       await patientDiagnose.getByPageFilter({ page: 1, limit: 10, patientId: patient.id }).then(({ data }) => {
          if (data.success) {
-            setDiagnosis(data.response.data.map((patientDiagnose) => patientDiagnose.diagnose));
+            const diagnosis = data.response.data.map((patientDiagnose) => patientDiagnose.diagnose);
+            const uniqueDiagnosis = diagnosis.filter((item, index, self) => {
+               const currentIndex = self.findIndex((el) => el.code === item.code);
+               return currentIndex === index;
+            });
+            setDiagnosis(uniqueDiagnosis);
          }
       });
    };

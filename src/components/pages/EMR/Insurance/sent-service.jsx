@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SendOutlined } from '@ant-design/icons';
 import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE } from './enum-utils';
-import GetPatientSheet from './get-patient-sheet';
 import { Button, Drawer, Form, List, Divider, message, Space } from 'antd';
 import healthInsuranceService from '../../../../services/healt-insurance/healtInsurance';
 import SetPatientSheet from './set-patient-sheet';
@@ -9,10 +8,11 @@ import Search from 'antd/lib/input/Search';
 import SaveHics from './save-hics';
 import SetApproval from './set-approval';
 import SetPatientReturn from './set-patient-return';
+import SendHics from './send-hics-service';
 
 const SentService = () => {
    const [insuranceForm] = Form.useForm();
-   const [chooseService, setChooseService] = useState(HEALTH_SERVICES_TITLE.getPatientSheet);
+   const [chooseService, setChooseService] = useState(HEALTH_SERVICES_TITLE.saveHics);
    const [open, setOpen] = useState(false);
    const [insuranceServiceItems, setInsuranceServiceItems] = useState([]);
    const onClose = () => {
@@ -58,9 +58,9 @@ const SentService = () => {
          });
       }
    };
-   const getFormFields = () => {
-      if (chooseService === HEALTH_SERVICES_TITLE.getPatientSheet) {
-         return <GetPatientSheet />;
+   const getForms = () => {
+      if (chooseService === HEALTH_SERVICES_TITLE.sendHics) {
+         return <SendHics />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
          return <SetApproval form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientSheet) {
@@ -127,7 +127,7 @@ const SentService = () => {
             }
          >
             <Form layout="vertical" form={insuranceForm}>
-               {getFormFields()}
+               {getForms()}
             </Form>
          </Drawer>
       </>
