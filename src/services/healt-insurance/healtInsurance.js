@@ -64,6 +64,22 @@ class HealthInsurance {
    async getHicsCostByField(serviceId, icdCode) {
       return await jwtInterceopter.get('health-insurance/hics-cost-by-field', { params: { serviceId, icdCode } });
    }
+   /** 4.38 Төр хариуцах иргэний төрөл татах сервис */
+   async getFreeType() {
+      return await jwtInterceopter.get('health-insurance/free-type');
+   }
+   /** 4.40 Тусламж үйлчилгээг дуусгавар болгох сервис – Зөвхөн Амбулаторийн үзлэг оношилгоо, шинжилгээний багц */
+   async confirmHicsService(data) {
+      return await jwtInterceopter.post('health-insurance/confirm-hics-service', data);
+   }
+   /** 4.41 Дахин баталгаажуулах сервис */
+   async reConfirmService(data) {
+      return await jwtInterceopter.post('health-insurance/re-confirm-service', data);
+   }
+   /** 4.43 Хурууны хээ танихгүй иргэнийг бүртгэх сервис */
+   async fingerRequest(data) {
+      return await jwtInterceopter.post('health-insurance/finger-request', data);
+   }
    /** 4.44 Регистрийн дугаар болон оношийн мэдээлэл буруу илгээгдсэн гүйцэтгэлийг засварлах сервис */
    async postRepair(data) {
       return await jwtInterceopter.post('health-insurance/repair', data);

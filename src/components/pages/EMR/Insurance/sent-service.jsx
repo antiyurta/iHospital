@@ -9,8 +9,12 @@ import SaveHics from './save-hics';
 import SetApproval from './set-approval';
 import SetPatientReturn from './set-patient-return';
 import SendHics from './send-hics-service';
-import CancelHics from './cancel-hics';
 import Prescription from './prescription';
+import CancelHics from './cancel-hics';
+import ConfirmHics from './confirm-hics';
+import ReConfirmHics from './reconfirm-hics';
+import FingerRequest from './finger-request';
+import RepairHics from './repair-hics';
 
 const SentService = () => {
    const [insuranceForm] = Form.useForm();
@@ -81,25 +85,66 @@ const SentService = () => {
                message.warn(data.description);
             }
          });
+      } else if (chooseService == HEALTH_SERVICES_TITLE.confirmHics) {
+         healthInsuranceService.confirmHicsService(values).then(({ data }) => {
+            if (data.code == 200) {
+               message.success(data.description);
+            } else {
+               message.warn(data.description);
+            }
+         });
+      } else if (chooseService == HEALTH_SERVICES_TITLE.reConfirmHics) {
+         healthInsuranceService.reConfirmService(values).then(({ data }) => {
+            if (data.code == 200) {
+               message.success(data.description);
+            } else {
+               message.warn(data.description);
+            }
+         });
+      } else if (chooseService == HEALTH_SERVICES_TITLE.fingerRequest) {
+         healthInsuranceService.fingerRequest(values).then(({ data }) => {
+            if (data.code == 200) {
+               message.success(data.description);
+            } else {
+               message.warn(data.description);
+            }
+         })
+      } else if (chooseService == HEALTH_SERVICES_TITLE.repairHics) {
+         healthInsuranceService.postRepair(values).then(({ data }) => {
+            if (data.code == 200) {
+               message.success(data.description);
+            } else {
+               message.warn(data.description);
+            }
+         })
       }
    };
    const getForms = () => {
-      if (chooseService === HEALTH_SERVICES_TITLE.savePrescription) {
-         return <Prescription form={insuranceForm} />;
-      } else if (chooseService === HEALTH_SERVICES_TITLE.sendHics) {
-         return <SendHics form={insuranceForm} />;
-      } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
-         return <SetApproval form={insuranceForm} />;
-      } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientSheet) {
-         return <SetPatientSheet form={insuranceForm} />;
-      } else if (chooseService === HEALTH_SERVICES_TITLE.saveHics) {
-         return <SaveHics form={insuranceForm} />;
-      } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
-         return <SetPatientReturn form={insuranceForm} />;
-      } else if (chooseService === HEALTH_SERVICES_TITLE.cancelService) {
-         return <CancelHics form={insuranceForm} />;
-      } else {
-         return 'ali ch nohtsol biyleegui bn';
+      switch (chooseService) {
+         case HEALTH_SERVICES_TITLE.savePrescription:
+            return <Prescription form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.sendHics:
+            return <SendHics form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.setApproval:
+            return <SetApproval form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.setPatientSheet:
+            return <SetPatientSheet form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.saveHics:
+            return <SaveHics form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.setPatientReturn:
+            return <SetPatientReturn form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.cancelService:
+            return <CancelHics form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.confirmHics:
+            return <ConfirmHics form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.reConfirmHics:
+            return <ReConfirmHics form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.fingerRequest:
+            return <FingerRequest form={insuranceForm} />;
+         case HEALTH_SERVICES_TITLE.repairHics:
+            return <RepairHics form={insuranceForm} />;
+         default:
+            break;
       }
    };
    useEffect(() => {

@@ -10,6 +10,7 @@ const SendHics = (props) => {
    const { form } = props;
    const [sealServices, setSealServices] = useState([]);
    const [drgCodes, setDrgCodes] = useState([]);
+   const [diagnosis, setDiagnosis] = useState([]);
    const patient = useSelector(selectPatient);
    const formInsurance = () => {
       form.setFieldsValue({
@@ -35,6 +36,18 @@ const SendHics = (props) => {
       await healthInsurance.drgCode().then(({ data }) => {
          if (data.code == 200) {
             setDrgCodes(data.result);
+         }
+      });
+   };
+   const getPatientDiagnosis = async () => {
+      await patientDiagnose.getByPageFilter({ patientId: patient.id }).then(({ data }) => {
+         if (data.success) {
+            const diagnosis = data.response.data.map((patientDiagnose) => patientDiagnose.diagnose);
+            const uniqueDiagnosis = diagnosis.filter((item, index, self) => {
+               const currentIndex = self.findIndex((el) => el.code === item.code);
+               return currentIndex === index;
+            });
+            setDiagnosis(uniqueDiagnosis);
          }
       });
    };
@@ -290,7 +303,17 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item label="Оношийн код" name={[name, 'diagnosis', 'icdCode']}>
-                                                <Input />
+                                                <Select
+                                                   allowClear
+                                                   showSearch
+                                                   filterOption={(input, option) =>
+                                                      option.label.toLowerCase().includes(input.toLowerCase())
+                                                   }
+                                                   options={diagnosis.map((diagnose) => ({
+                                                      value: diagnose.code,
+                                                      label: `${diagnose.code}-${diagnose.nameMn}`
+                                                   }))}
+                                                />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
@@ -357,6 +380,11 @@ const SendHics = (props) => {
                                                 name={[name, 'diagnosis', 'drgCode']}
                                              >
                                                 <Select
+                                                   allowClear
+                                                   showSearch
+                                                   filterOption={(input, option) =>
+                                                      option.label.toLowerCase().includes(input.toLowerCase())
+                                                   }
                                                    options={drgCodes.map((drgCode) => ({
                                                       value: drgCode.drgCode,
                                                       label: drgCode.drgName
