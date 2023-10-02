@@ -9,6 +9,7 @@ import SaveHics from './save-hics';
 import SetApproval from './set-approval';
 import SetPatientReturn from './set-patient-return';
 import SendHics from './send-hics-service';
+import CancelHics from './cancel-hics';
 
 const SentService = () => {
    const [insuranceForm] = Form.useForm();
@@ -29,7 +30,14 @@ const SentService = () => {
       setInsuranceServiceItems(filter);
    };
    const sentService = async (values) => {
-      if (chooseService == HEALTH_SERVICES_TITLE.getPatientSheet) {
+      if (chooseService == HEALTH_SERVICES_TITLE.sendHics) {
+         healthInsuranceService.sendHicsService(values).then(({ data}) => {
+            if (data.code == 200) {
+               message.success(data.description)
+            } else {
+               message.warn(data.description);
+            }
+         });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
          healthInsuranceService.postApproval(values).then((response) => {
             console.log(response);
@@ -56,6 +64,14 @@ const SentService = () => {
          healthInsuranceService.postPatientReturn(values).then((response) => {
             console.log(response);
          });
+      } else if (chooseService == HEALTH_SERVICES_TITLE.cancelService) {
+         healthInsuranceService.cancelService(values).then(({ data}) => {
+            if (data.code == 200) {
+               message.success(data.description)
+            } else {
+               message.warn(data.description);
+            }
+         });
       }
    };
    const getForms = () => {
@@ -69,6 +85,8 @@ const SentService = () => {
          return <SaveHics form={insuranceForm} />;
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
          return <SetPatientReturn form={insuranceForm} />;
+      } else if (chooseService === HEALTH_SERVICES_TITLE.cancelService) {
+         return <CancelHics form={insuranceForm} />;
       } else {
          return 'ali ch nohtsol biyleegui bn';
       }

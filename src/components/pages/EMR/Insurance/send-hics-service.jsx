@@ -9,6 +9,7 @@ import moment from 'moment';
 const SendHics = (props) => {
    const { form } = props;
    const [sealServices, setSealServices] = useState([]);
+   const [drgCodes, setDrgCodes] = useState([]);
    const patient = useSelector(selectPatient);
    const formInsurance = () => {
       form.setFieldsValue({
@@ -27,6 +28,13 @@ const SendHics = (props) => {
          if (data.code == 200) {
             const details = data.result.details;
             setSealServices(details.filter((detail) => detail.statusCode == 5));
+         }
+      });
+   };
+   const getDrgCodes = async () => {
+      await healthInsurance.drgCode().then(({ data }) => {
+         if (data.code == 200) {
+            setDrgCodes(data.result);
          }
       });
    };
@@ -56,6 +64,7 @@ const SendHics = (props) => {
    useEffect(() => {
       formInsurance();
       getPatientData();
+      getDrgCodes();
    }, []);
    return (
       <>
@@ -110,7 +119,7 @@ const SendHics = (props) => {
                   rules={[
                      {
                         required: true,
-                        message: 'Регистр оруулна уу'
+                        message: 'Хурууны хээ оруулна уу'
                      }
                   ]}
                >
@@ -136,30 +145,12 @@ const SendHics = (props) => {
                            Төлбөрийн мэдээлэл устгах
                         </Button>
                         <Col span={11} offset={1}>
-                           <Form.Item
-                              label="Ибаримтын ДДТД"
-                              name={[name, 'posRno']}
-                              rules={[
-                                 {
-                                    required: true,
-                                    message: 'Ибаримтын ДДТД'
-                                 }
-                              ]}
-                           >
+                           <Form.Item label="Ибаримтын ДДТД" name={[name, 'posRno']}>
                               <InputNumber />
                            </Form.Item>
                         </Col>
                         <Col span={11} offset={1}>
-                           <Form.Item
-                              label="Ибаримтын нийт дүн"
-                              name={[name, 'totalAmount']}
-                              rules={[
-                                 {
-                                    required: true,
-                                    message: 'Ибаримтын нийт дүн'
-                                 }
-                              ]}
-                           >
+                           <Form.Item label="Ибаримтын нийт дүн" name={[name, 'totalAmount']}>
                               <InputNumber />
                            </Form.Item>
                         </Col>
@@ -365,7 +356,12 @@ const SendHics = (props) => {
                                                 label="Оношийн хамааралтай бүлэг"
                                                 name={[name, 'diagnosis', 'drgCode']}
                                              >
-                                                <Input />
+                                                <Select
+                                                   options={drgCodes.map((drgCode) => ({
+                                                      value: drgCode.drgCode,
+                                                      label: drgCode.drgName
+                                                   }))}
+                                                />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>

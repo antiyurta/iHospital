@@ -3,11 +3,14 @@ export const HEALTH_SERVICES_TITLE = {
    setApproval: 'SET_APPROVAL',
    sendHics: 'SEND_HICS',
    setPatientSheet: 'SET_PATIENT_SHEET',
-   setPatientReturn: 'SET_PATIENT_RETURN'
+   setPatientReturn: 'SET_PATIENT_RETURN',
+   cancelService: 'CANCEL_SERVICE'
 };
 
 export const HEALTH_SERVCES_DESCRIPTION = (title) => {
    switch (title) {
+      case HEALTH_SERVICES_TITLE.cancelService:
+         return '4.17 Эрүүл мэндийн тусламж үйлчилгээг цуцлах';
       case HEALTH_SERVICES_TITLE.saveHics:
          return '4.29 Битүүмж үүсгэх сервис';
       case HEALTH_SERVICES_TITLE.sendHics:
