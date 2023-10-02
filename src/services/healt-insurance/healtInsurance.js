@@ -20,6 +20,11 @@ class HealtInsurance {
    async saveHics(data) {
       return await jwtInterceopter.post('/health-insurance/hics-service', data);
    }
+   //** */
+   async postStartHics(data) {
+      return await jwtInterceopter.post('health-insurance/start-hics-service', data);
+   }
+   //
    /** 4.30 Төлбөрийн мэдээлэл илгээх сервис */
    async sendHicsService(data) {
       return await jwtInterceopter.post('/health-insurance/send-hics-service', data);
@@ -47,6 +52,16 @@ class HealtInsurance {
    /** 4.44 Регистрийн дугаар болон оношийн мэдээлэл буруу илгээгдсэн гүйцэтгэлийг засварлах сервис */
    async postRepair(data) {
       return await jwtInterceopter.post('health-insurance/repair', data);
+   }
+   //** */
+   async postApproval(data) {
+      return await jwtInterceopter.post(`/health-insurance/set-approval`, data);
+   }
+   async getHospitalList() {
+      return await jwtInterceopter.get('health-insurance/hospital-list');
+   }
+   async postPatientReturn(data) {
+      return await jwtInterceopter.post(`/health-insurance/set-patient-return`, data);
    }
 }
 export default new HealtInsurance();
