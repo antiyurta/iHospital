@@ -1,21 +1,18 @@
-import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd';
+import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
 import { selectPatient } from '../../../../features/patientReducer';
 import { useSelector } from 'react-redux';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import { openNofi } from '../../../comman';
-const { Option } = Select;
+import patientDiagnose from '../../../../services/emr/patientDiagnose';
+import TextArea from 'antd/lib/input/TextArea';
 const SendHics = (props) => {
    const { form } = props;
-   const [costForm] = Form.useForm();
    const [sealServices, setSealServices] = useState([]);
    const [drgCodes, setDrgCodes] = useState([]);
    const [diagnosis, setDiagnosis] = useState([]);
-   const [costs, setCosts] = useState([]);
-   const [isOpenCostModal, setIsOpenCostModal] = useState(false);
+   const [exams, setExams] = useState([]);
    const patient = useSelector(selectPatient);
    const formInsurance = () => {
       form.setFieldsValue({
@@ -56,7 +53,17 @@ const SendHics = (props) => {
          }
       });
    };
-   const setIsBold = (paymentIndex, serviceIndex, value) => {
+   const getExams = async () => {
+      await healthInsurance.getHicsExam().then(({ data }) => {
+         if (data.code == 200) {
+            setExams(data.result.filter((result) => result.serviceId == 20120));
+         }
+      });
+   };
+   const getCosts = async (serviceId, icdCode) => {
+      return await healthInsurance.getHicsCostByField(serviceId, icdCode).then(({ data }) => data.result);
+   };
+   const setIsBold = async (paymentIndex, serviceIndex, value) => {
       const hicsServiceId = form.getFieldValue([
          'payments',
          `${paymentIndex}`,
@@ -64,43 +71,40 @@ const SendHics = (props) => {
          `${serviceIndex}`,
          'hicsServiceId'
       ]);
+      const icdCode = form.getFieldValue([
+         'payments',
+         `${paymentIndex}`,
+         'serviceList',
+         `${serviceIndex}`,
+         'diagnosis',
+         'icdCode'
+      ]);
+      const costs = await getCosts(hicsServiceId, icdCode);
+      const discountAmount = 0;
+      const totalAmount = 0;
       if (value == 1 && hicsServiceId == 20200) {
-         const icdCode = form.getFieldValue([
-            'payments',
-            `${paymentIndex}`,
-            'serviceList',
-            `${serviceIndex}`,
-            'diagnosis',
-            'icdCode'
-         ]);
-         console.log('--------->', icdCode);
-         form.setFieldsValue({
-            ['payments']: {
-               [`${paymentIndex}`]: {
-                  ['serviceList']: {
-                     [`${serviceIndex}`]: {
-                        discountAmount: discountAmount + 50000,
-                        totalAmount: totalAmount + 50000
-                     }
+         discountAmount += costs[0].amountHi + 50000;
+         totalAmount += costs[0].amountTotal + 50000;
+      } else {
+         discountAmount += costs[0].amountHi;
+         totalAmount += costs[0].amountTotal;
+      }
+      form.setFieldsValue({
+         ['payments']: {
+            [`${paymentIndex}`]: {
+               ['serviceList']: {
+                  [`${serviceIndex}`]: {
+                     discountAmount: costs[0].amountHi + 50000,
+                     totalAmount: costs[0].amountTotal + 50000
                   }
                }
             }
-         });
-      }
-   };
-   const getCost = async (serviceId, icdCode) => {
-      await healthInsurance.getHicsCostByField(serviceId, icdCode).then(({ data }) => {
-         if (data.code == 200) {
-            setIsOpenCostModal(true);
-            setCosts(data.result);
-         } else {
-            openNofi('error', 'Алдаа', data.description);
          }
       });
    };
    const fieldService = async (paymentIndex, serviceIndex, serviceNumber) => {
       const service = sealServices.find((sealService) => sealService.serviceNumber == serviceNumber);
-      const costs = await getCost(service.serviceId, service.icdCode);
+      const costs = await getCosts(service.serviceId, service.icdCode);
       form.setFieldsValue({
          ['payments']: {
             [`${paymentIndex}`]: {
@@ -115,10 +119,10 @@ const SendHics = (props) => {
                         icdCodeName: service.icdCodeName,
                         icd9Code: service.icd9Code,
                         drgCode: service.drgCode
-                     }
-                     // payedAmount: cost.amountCit,
-                     // discountAmount: cost.amountHi,
-                     // totalAmount: cost.amountTotal
+                     },
+                     payedAmount: costs[0].amountCit,
+                     discountAmount: costs[0].amountHi,
+                     totalAmount: costs[0].amountTotal
                   }
                }
             }
@@ -129,6 +133,8 @@ const SendHics = (props) => {
       formInsurance();
       getPatientData();
       getDrgCodes();
+      getPatientDiagnosis();
+      getExams();
    }, []);
    return (
       <>
@@ -208,41 +214,6 @@ const SendHics = (props) => {
                         >
                            Төлбөрийн мэдээлэл устгах
                         </Button>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Ибаримтын ДДТД" name={[name, 'posRno']}>
-                              <InputNumber />
-                           </Form.Item>
-                        </Col>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Ибаримтын нийт дүн" name={[name, 'totalAmount']}>
-                              <InputNumber />
-                           </Form.Item>
-                        </Col>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Ибаримтын даатгалаас төлөх дүн" name={[name, 'discountAmount']}>
-                              <InputNumber />
-                           </Form.Item>
-                        </Col>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Ибаримтын иргэн төлөх дүн" name={[name, 'payedAmount']}>
-                              <InputNumber />
-                           </Form.Item>
-                        </Col>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Үйлчилгээний нэр" name={[name, 'salesName']}>
-                              <InputNumber />
-                           </Form.Item>
-                        </Col>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Ибаримтын борлуулалт хийсэн огноо" name={[name, 'salesDate']}>
-                              <DatePicker />
-                           </Form.Item>
-                        </Col>
-                        <Col span={11} offset={1}>
-                           <Form.Item label="Ибаримтын НӨАТ-ын дүн" name={[name, 'vatAmount']}>
-                              <InputNumber />
-                           </Form.Item>
-                        </Col>
                         <Col span={23} offset={1}>
                            <Form.List name={[name, 'serviceList']}>
                               {(fields, { add, remove }) => (
@@ -482,7 +453,12 @@ const SendHics = (props) => {
                                                                label="ICD-10 код"
                                                                name={[name, 'packages', 'icd10']}
                                                             >
-                                                               <Input />
+                                                               <Select
+                                                                  options={diagnosis.map((diagnose) => ({
+                                                                     value: diagnose.code,
+                                                                     label: `${diagnose.code}-${diagnose.nameMn}`
+                                                                  }))}
+                                                               />
                                                             </Form.Item>
                                                          </Col>
                                                          <Col span={11} offset={1}>
@@ -498,7 +474,13 @@ const SendHics = (props) => {
                                                                label="Багцийн дугаар"
                                                                name={[name, 'packages', 'packId']}
                                                             >
-                                                               <Input />
+                                                               <Select
+                                                                  options={[
+                                                                     { value: 1, label: 'Анхан үзлэг' },
+                                                                     { value: 2, label: 'Оношилгоо шинжилгээ' },
+                                                                     { value: 3, label: 'Давтан үзлэг' }
+                                                                  ]}
+                                                               />
                                                             </Form.Item>
                                                          </Col>
                                                          <Col span={11} offset={1}>
@@ -506,7 +488,19 @@ const SendHics = (props) => {
                                                                label="Оношилгоо, шинжилгээний код"
                                                                name={[name, 'packages', 'examCode']}
                                                             >
-                                                               <Input />
+                                                               <Select
+                                                                  allowClear
+                                                                  showSearch
+                                                                  filterOption={(input, option) =>
+                                                                     option.label
+                                                                        .toLowerCase()
+                                                                        .includes(input.toLowerCase())
+                                                                  }
+                                                                  options={exams.map((exam) => ({
+                                                                     value: exam.examCode,
+                                                                     label: exam.examName
+                                                                  }))}
+                                                               />
                                                             </Form.Item>
                                                          </Col>
                                                          <Col span={11} offset={1}>
@@ -583,27 +577,6 @@ const SendHics = (props) => {
                </>
             )}
          </Form.List>
-         <Modal title="Cost sonsoh" open={isOpenCostModal} onCancel={() => setIsOpenCostModal(false)}>
-            <Form form={costForm}>
-               <Form.Item name="cost" label="zaawal">
-                  <Select onSelect={(e) => console.log(e)}>
-                     {costs?.map((cost, index) => (
-                        <Option
-                           key={index}
-                           value={[
-                              cost.amountCit,
-                              cost.amountHi,
-                              cost.amountTotal,
-                              cost.icd9Code,
-                              cost.icd10Code,
-                              cost.drgCode
-                           ]}
-                        >{`${cost.icd10Code} -> ${cost.icd9Code} -> ${cost.drgName}`}</Option>
-                     ))}
-                  </Select>
-               </Form.Item>
-            </Form>
-         </Modal>
       </>
    );
 };

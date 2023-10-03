@@ -20,6 +20,10 @@ class HealthInsurance {
    async getHicsServiceGroup() {
       return await jwtInterceopter.get('insurance/hics-service-group');
    }
+   /** 4.24 Оношилгоо, шинжилгээний кодын сан татах сервис */
+   async getHicsExam() {
+      return await jwtInterceopter.get('health-insurance/hics-exam');
+   }
    /** 4.27 Оношийн хамааралтай бүлгийн жагсаалт татах сервис */
    async drgCode() {
       return await jwtInterceopter.get('health-insurance/drg-codes');
