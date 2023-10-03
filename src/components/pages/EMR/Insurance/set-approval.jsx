@@ -1,4 +1,4 @@
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectPatient } from '../../../../features/patientReducer';
@@ -16,7 +16,8 @@ const SetApproval = (props) => {
       form.setFieldsValue({
          patientRegno: patient.registerNumber,
          patientFirstname: patient.firstName,
-         patientLastname: patient.lastName
+         patientLastname: patient.lastName,
+         toHospitalId: 1892298
       });
    }, []);
    const getHicsServices = async () => {
@@ -159,17 +160,18 @@ const SetApproval = (props) => {
                      }
                   ]}
                >
-                  <Select
+                  <InputNumber />
+                  {/* <Select
                      virtual={false}
                      allowClear
                      showSearch
                      optionFilterProp="children"
                      filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
                      options={hospitals?.map((hospital) => ({
-                        label: hospital.hospitalName,
-                        value: hospital.id
+                        label: hospital.hospitalName + '->' + hospital.hospitalRegno,
+                        value: hospital.hospitalRegno
                      }))}
-                  />
+                  /> */}
                </Form.Item>
             </Col>
          </Row>

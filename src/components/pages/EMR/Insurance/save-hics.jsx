@@ -7,6 +7,7 @@ import { selectPatient } from '../../../../features/patientReducer';
 import { useSelector } from 'react-redux';
 import TextArea from 'antd/lib/input/TextArea';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
+import moment from 'moment';
 const SaveHics = (props) => {
    const { form } = props;
    const [hicsServices, setHicsServices] = useState([]);
@@ -21,7 +22,8 @@ const SaveHics = (props) => {
          patientFirstname: patient.firstName,
          patientLastname: patient.lastName,
          isForeign: patient.isLocal ? 0 : 1,
-         phoneNo: patient.phoneNo
+         phoneNo: patient.phoneNo,
+         startDate: moment(new Date())
       });
    };
    const getHicsServices = async () => {
@@ -60,7 +62,7 @@ const SaveHics = (props) => {
    };
    const getDoctorServiceNumber = (value) => {
       const approval = hicsApprovals.find((approval) => approval.approvalCode === value);
-      form.setFieldValue('doctorServiceNumber', approval.fromServiceId);
+      form.setFieldValue('doctorServiceNumber', `${approval.fromServiceId}`);
    };
    const getIcdFormField = (value) => {
       healthInsurance.getHicsCostByField(form.getFieldValue('hicsServiceId'), value).then(({ data }) => {
@@ -191,7 +193,7 @@ const SaveHics = (props) => {
                      }
                   ]}
                >
-                  <DatePicker locale={localMn} />
+                  <DatePicker locale={localMn} disabled />
                </Form.Item>
             </Col>
             <Col span={11} offset={1}>
@@ -209,7 +211,16 @@ const SaveHics = (props) => {
                </Form.Item>
             </Col>
             <Col span={11} offset={1}>
-               <Form.Item label="Өвчний түүхийн дугаар" name="historyCode">
+               <Form.Item
+                  label="Өвчний түүхийн дугаар"
+                  name="historyCode"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Өвчний түүхийн дугаар'
+                     }
+                  ]}
+               >
                   <Input />
                </Form.Item>
             </Col>
@@ -232,7 +243,7 @@ const SaveHics = (props) => {
                   />
                </Form.Item>
             </Col>
-            <Col span={11} offset={1}>
+            <Col span={23} offset={1}>
                <Form.Item label="Эцэг үйлчилгээний дугаар" name="parentServiceNumber">
                   <Select
                      allowClear
@@ -240,7 +251,12 @@ const SaveHics = (props) => {
                      filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                      options={hicsApprovals.map((hicsApproval) => ({
                         value: hicsApproval.approvalCode,
-                        label: hicsApproval.toServiceName
+                        label:
+                           moment(hicsApproval.approvalDate).format('YYYY-MM-DD') +
+                           '->' +
+                           hicsApproval.fromServiceName +
+                           '->' +
+                           hicsApproval.toServiceName
                      }))}
                      onSelect={getDoctorServiceNumber}
                   />
@@ -248,7 +264,7 @@ const SaveHics = (props) => {
             </Col>
             <Col span={11} offset={1}>
                <Form.Item label="Эмчийн үзлэгийн дугаар" name="doctorServiceNumber">
-                  <Input />
+                  <Input disabled />
                </Form.Item>
             </Col>
             <Col span={11} offset={1}>
