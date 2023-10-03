@@ -52,8 +52,12 @@ const SentService = () => {
             }
          });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
-         healthInsuranceService.postApproval(values).then((response) => {
-            console.log(response);
+         healthInsuranceService.postApproval(values).then(({ data }) => {
+            if (data.code == 200) {
+               message.success(data.description);
+            } else {
+               message.warn(data.description);
+            }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.setPatientSheet) {
          healthInsuranceService
@@ -108,7 +112,7 @@ const SentService = () => {
             } else {
                message.warn(data.description);
             }
-         })
+         });
       } else if (chooseService == HEALTH_SERVICES_TITLE.repairHics) {
          healthInsuranceService.postRepair(values).then(({ data }) => {
             if (data.code == 200) {
@@ -116,7 +120,7 @@ const SentService = () => {
             } else {
                message.warn(data.description);
             }
-         })
+         });
       }
    };
    const getForms = () => {

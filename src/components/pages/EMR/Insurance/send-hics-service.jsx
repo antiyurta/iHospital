@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select, Space } from 'antd';
+import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
 import { selectPatient } from '../../../../features/patientReducer';
@@ -6,11 +6,16 @@ import { useSelector } from 'react-redux';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import { openNofi } from '../../../comman';
+const { Option } = Select;
 const SendHics = (props) => {
    const { form } = props;
+   const [costForm] = Form.useForm();
    const [sealServices, setSealServices] = useState([]);
    const [drgCodes, setDrgCodes] = useState([]);
    const [diagnosis, setDiagnosis] = useState([]);
+   const [costs, setCosts] = useState([]);
+   const [isOpenCostModal, setIsOpenCostModal] = useState(false);
    const patient = useSelector(selectPatient);
    const formInsurance = () => {
       form.setFieldsValue({
@@ -51,8 +56,51 @@ const SendHics = (props) => {
          }
       });
    };
-   const fieldService = (paymentIndex, serviceIndex, serviceNumber) => {
+   const setIsBold = (paymentIndex, serviceIndex, value) => {
+      const hicsServiceId = form.getFieldValue([
+         'payments',
+         `${paymentIndex}`,
+         'serviceList',
+         `${serviceIndex}`,
+         'hicsServiceId'
+      ]);
+      if (value == 1 && hicsServiceId == 20200) {
+         const icdCode = form.getFieldValue([
+            'payments',
+            `${paymentIndex}`,
+            'serviceList',
+            `${serviceIndex}`,
+            'diagnosis',
+            'icdCode'
+         ]);
+         console.log('--------->', icdCode);
+         form.setFieldsValue({
+            ['payments']: {
+               [`${paymentIndex}`]: {
+                  ['serviceList']: {
+                     [`${serviceIndex}`]: {
+                        discountAmount: discountAmount + 50000,
+                        totalAmount: totalAmount + 50000
+                     }
+                  }
+               }
+            }
+         });
+      }
+   };
+   const getCost = async (serviceId, icdCode) => {
+      await healthInsurance.getHicsCostByField(serviceId, icdCode).then(({ data }) => {
+         if (data.code == 200) {
+            setIsOpenCostModal(true);
+            setCosts(data.result);
+         } else {
+            openNofi('error', 'Алдаа', data.description);
+         }
+      });
+   };
+   const fieldService = async (paymentIndex, serviceIndex, serviceNumber) => {
       const service = sealServices.find((sealService) => sealService.serviceNumber == serviceNumber);
+      const costs = await getCost(service.serviceId, service.icdCode);
       form.setFieldsValue({
          ['payments']: {
             [`${paymentIndex}`]: {
@@ -68,6 +116,9 @@ const SendHics = (props) => {
                         icd9Code: service.icd9Code,
                         drgCode: service.drgCode
                      }
+                     // payedAmount: cost.amountCit,
+                     // discountAmount: cost.amountHi,
+                     // totalAmount: cost.amountTotal
                   }
                }
             }
@@ -289,9 +340,10 @@ const SendHics = (props) => {
                                                 tooltip="Энэхүү талбар нь зөвхөн өндөр өртөгт CT, MRI дээр тодосгогч ашигласан эсэх дээр ашиглагдана."
                                              >
                                                 <Select
+                                                   onSelect={(value) => setIsBold(paymentIndex, serviceIndex, value)}
                                                    options={[
-                                                      { value: 0, label: 'Тийм' },
-                                                      { value: 1, label: 'Үгүй' }
+                                                      { value: 1, label: 'Тийм' },
+                                                      { value: 0, label: 'Үгүй' }
                                                    ]}
                                                 />
                                              </Form.Item>
@@ -531,6 +583,27 @@ const SendHics = (props) => {
                </>
             )}
          </Form.List>
+         <Modal title="Cost sonsoh" open={isOpenCostModal} onCancel={() => setIsOpenCostModal(false)}>
+            <Form form={costForm}>
+               <Form.Item name="cost" label="zaawal">
+                  <Select onSelect={(e) => console.log(e)}>
+                     {costs?.map((cost, index) => (
+                        <Option
+                           key={index}
+                           value={[
+                              cost.amountCit,
+                              cost.amountHi,
+                              cost.amountTotal,
+                              cost.icd9Code,
+                              cost.icd10Code,
+                              cost.drgCode
+                           ]}
+                        >{`${cost.icd10Code} -> ${cost.icd9Code} -> ${cost.drgName}`}</Option>
+                     ))}
+                  </Select>
+               </Form.Item>
+            </Form>
+         </Modal>
       </>
    );
 };

@@ -4,14 +4,17 @@ import React from 'react';
 import { useEffect } from 'react';
 import insurance from '../../../../services/healt-insurance/insurance';
 import { useState } from 'react';
-import { localMn } from '../../../comman';
+import { getAge, localMn } from '../../../comman';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
 import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
 import { useSelector } from 'react-redux';
 import { selectPatient } from '../../../../features/patientReducer';
+import moment from 'moment';
+import { selectCurrentFirstName } from '../../../../features/authReducer';
 
 const SetPatientSheet = (props) => {
    const { form } = props;
+   const doctor = useSelector(selectCurrentFirstName);
    const [hicsServices, setHicsServices] = useState([]);
    const [diagnosis, setDiagnosis] = useState([]);
    const [sentReasons, setSentReasons] = useState([]);
@@ -21,14 +24,16 @@ const SetPatientSheet = (props) => {
          patientRegno: patient.registerNumber,
          patientFirstname: patient.firstName,
          patientLastname: patient.lastName,
-         age: patient.age,
+         age: getAge(patient.registerNumber),
          gender: gender(patient.genderType),
          phone: patient.phoneNo,
          email: patient.email,
          address: patient.address,
          trusteeName: patient.contacts[0].name,
          trusteePhone: patient.contacts[0].contactPhoneNo,
-         trusteeEmail: patient.contacts[0].email
+         trusteeEmail: patient.contacts[0].email,
+         sentDate: moment(new Date()),
+         doctor: doctor
       });
    }, []);
    const gender = (value) => {
@@ -265,7 +270,7 @@ const SetPatientSheet = (props) => {
                      }
                   ]}
                >
-                  <DatePicker locale={localMn} />
+                  <DatePicker locale={localMn} disabled />
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
