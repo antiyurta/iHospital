@@ -378,9 +378,7 @@ const SaveHics = (props) => {
                      }
                   ]}
                >
-                  <Select
-                     options={drgCodes.map((drgCode) => ({ value: `${drgCode.drgTypeCode}`, label: drgCode.drgName }))}
-                  />
+                  <Select options={drgCodes.map((drgCode) => ({ value: drgCode.drgCode, label: drgCode.drgName }))} />
                </Form.Item>
             </Col>
          </Row>
