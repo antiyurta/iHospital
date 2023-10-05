@@ -216,16 +216,16 @@ const SendHics = (props) => {
                         </Button>
                         <Col span={23} offset={1}>
                            <Form.List name={[name, 'serviceList']}>
-                              {(fields, { add, remove }) => (
+                              {(fieldds, actions) => (
                                  <>
-                                    {fields.map(({ key, name }, serviceIndex) => (
+                                    {fieldds.map(({ key, name }, serviceIndex) => (
                                        <Row key={key} style={customeBorderStyle}>
                                           <Button
                                              type="dashed"
                                              danger
                                              icon={<MinusCircleOutlined />}
                                              onClick={() => {
-                                                remove(name);
+                                                actions.remove(name);
                                              }}
                                              style={{ width: '100%' }}
                                           >
@@ -425,16 +425,16 @@ const SendHics = (props) => {
                                           </Col>
                                           <p>Багцийн мэдээлэл</p>
                                           <Form.List name="packages">
-                                             {(fields, { add, remove }) => (
+                                             {(fielddds, actionsss) => (
                                                 <>
-                                                   {fields.map(({ key, name }) => (
+                                                   {fielddds.map(({ key, name }) => (
                                                       <Row key={key} style={customeBorderStyle}>
                                                          <Button
                                                             type="dashed"
                                                             danger
                                                             icon={<MinusCircleOutlined />}
                                                             onClick={() => {
-                                                               remove(name);
+                                                               actionsss.remove(name);
                                                             }}
                                                             style={{ width: '100%' }}
                                                          >
@@ -530,7 +530,7 @@ const SendHics = (props) => {
                                                       <Button
                                                          type="dashed"
                                                          onClick={() => {
-                                                            add();
+                                                            actionsss.add();
                                                          }}
                                                          icon={<PlusOutlined />}
                                                          style={{ width: '100%' }}
@@ -547,7 +547,7 @@ const SendHics = (props) => {
                                        <Button
                                           type="dashed"
                                           onClick={() => {
-                                             add();
+                                             actions.add();
                                           }}
                                           icon={<PlusOutlined />}
                                           style={{ width: '100%' }}
