@@ -7,6 +7,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
 import TextArea from 'antd/lib/input/TextArea';
+import Finger from '../../../../features/finger';
 const SendHics = (props) => {
    const { form } = props;
    const [sealServices, setSealServices] = useState([]);
@@ -210,6 +211,22 @@ const SendHics = (props) => {
                </Form.Item>
             </Col>
             <Col span={23} offset={1}>
+               <Finger
+                  text="Хурууний хээ"
+                  isFinger={true}
+                  steps={[
+                     {
+                        title: 'Эмчийн',
+                        path: 'fingerPrint'
+                     }
+                  ]}
+                  isPatientSheet={false}
+                  handleClick={(values) => {
+                     form.setFieldsValue({
+                        patientFingerprint: values.fingerPrint
+                     });
+                  }}
+               />
                <Form.Item
                   label="Хурууны хээ"
                   name="patientFingerprint"

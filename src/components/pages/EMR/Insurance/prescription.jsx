@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectPatient } from '../../../../features/patientReducer';
 import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
+import Finger from '../../../../features/finger';
 
 const { TextArea } = Input;
 
@@ -153,6 +154,24 @@ const Prescription = (props) => {
                </Form.Item>
             </Col>
             <Col span={11} offset={1}>
+               <Finger
+                  text="Хурууний хээ"
+                  isFinger={true}
+                  steps={[
+                     {
+                        title: 'Өвтний',
+                        path: 'fingerPrint'
+                     }
+                  ]}
+                  isPatientSheet={false}
+                  handleClick={(values) => {
+                     form.setFieldsValue({
+                        patient: {
+                           fingerImage: values.fingerPrint
+                        }
+                     });
+                  }}
+               />
                <Form.Item
                   label="Хурууны хээ"
                   name={['patient', 'fingerImage']}
@@ -184,6 +203,24 @@ const Prescription = (props) => {
                </Form.Item>
             </Col>
             <Col span={11} offset={1}>
+               <Finger
+                  text="Хурууний хээ"
+                  isFinger={true}
+                  steps={[
+                     {
+                        title: 'Эмчийн',
+                        path: 'fingerPrint'
+                     }
+                  ]}
+                  isPatientSheet={false}
+                  handleClick={(values) => {
+                     form.setFieldsValue({
+                        doctor: {
+                           fingerImage: values.fingerPrint
+                        }
+                     });
+                  }}
+               />
                <Form.Item
                   label="Хурууны хээ"
                   name={['doctor', 'fingerImage']}

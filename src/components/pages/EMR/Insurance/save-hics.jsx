@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import TextArea from 'antd/lib/input/TextArea';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
 import moment from 'moment';
+import Finger from '../../../../features/finger';
 const SaveHics = (props) => {
    const { form } = props;
    const [hicsServices, setHicsServices] = useState([]);
@@ -108,6 +109,22 @@ const SaveHics = (props) => {
                </Form.Item>
             </Col>
             <Col span={23} offset={1}>
+               <Finger
+                  text="Хурууний хээ"
+                  isFinger={true}
+                  steps={[
+                     {
+                        title: 'Өвчтний',
+                        path: 'fingerPrint'
+                     }
+                  ]}
+                  isPatientSheet={false}
+                  handleClick={(values) => {
+                     form.setFieldsValue({
+                        patientFingerprint: values.fingerPrint
+                     });
+                  }}
+               />
                <Form.Item
                   label="Хурууны хээ"
                   name="patientFingerprint"
