@@ -106,30 +106,41 @@ const SendHics = (props) => {
       const service = sealServices.find((sealService) => sealService.serviceNumber == serviceNumber);
       const costs = await getCosts(service.serviceId, service.icdCode);
       form.setFieldsValue({
-         ['payments']: {
-            [`${paymentIndex}`]: {
-               ['serviceList']: {
-                  [`${serviceIndex}`]: {
-                     startDate: moment(service.inDateStr),
-                     endDate: moment(service.outDateStr),
-                     hicsServiceId: service.serviceId,
-                     pregnantWeek: service.pregnantWeek,
-                     parentServiceNumber: serviceNumber,
-                     diagnosis: {
-                        icdCode: service.icdCode,
-                        icdCodeName: service.icdCodeName,
-                        icd9Code: service.icd9Code,
-                        drgCode: service.drgCode
-                     },
-                     payedAmount: costs[0].amountCit,
-                     discountAmount: costs[0].amountHi,
-                     totalAmount: costs[0].amountTotal
+         payments: {
+            0: {
+               serviceList: {
+                  0: {
+                     hicsServiceId: service.serviceId
                   }
                }
             }
          }
       });
-      console.log(form.getFieldsValue());
+      // form.setFieldsValue({
+      //    ['payments']: {
+      //       [`${paymentIndex}`]: {
+      //          ['serviceList']: {
+      //             [`${serviceIndex}`]: {
+      //                startDate: moment(service.inDateStr),
+      //                endDate: moment(service.outDateStr),
+      //                hicsServiceId: service.serviceId,
+      //                pregnantWeek: service.pregnantWeek,
+      //                parentServiceNumber: serviceNumber,
+      //                diagnosis: {
+      //                   icdCode: service.icdCode,
+      //                   icdCodeName: service.icdCodeName,
+      //                   icd9Code: service.icd9Code,
+      //                   drgCode: service.drgCode
+      //                },
+      //                payedAmount: costs[0].amountCit,
+      //                discountAmount: costs[0].amountHi,
+      //                totalAmount: costs[0].amountTotal
+      //             }
+      //          }
+      //       }
+      //    }
+      // });
+      // console.log(form.getFieldsValue());
    };
    useEffect(() => {
       formInsurance();
