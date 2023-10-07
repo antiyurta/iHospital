@@ -125,33 +125,36 @@ const SendHics = (props) => {
          {
             name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'parentServiceNumber'],
             value: serviceNumber
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'diagnosis', 'icdCode'],
+            value: service.icdCode
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'diagnosis', 'icdCodeName'],
+            value: service.icdCodeName
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'diagnosis', 'icd9Code'],
+            value: service.icd9Code
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'diagnosis', 'drgCode'],
+            value: service.drgCode
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'payedAmount'],
+            value: costs[0].amountCit
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'discountAmount'],
+            value: costs[0].discountAmount
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'totalAmount'],
+            value: costs[0].amountTotal
          }
       ]);
-      // form.setFieldsValue({
-      //    ['payments']: {
-      //       [`${paymentIndex}`]: {
-      //          ['serviceList']: {
-      //             [`${serviceIndex}`]: {
-      //                startDate: moment(service.inDateStr),
-      //                endDate: moment(service.outDateStr),
-      //                hicsServiceId: service.serviceId,
-      //                pregnantWeek: service.pregnantWeek,
-      //                parentServiceNumber: serviceNumber,
-      //                diagnosis: {
-      //                   icdCode: service.icdCode,
-      //                   icdCodeName: service.icdCodeName,
-      //                   icd9Code: service.icd9Code,
-      //                   drgCode: service.drgCode
-      //                },
-      //                payedAmount: costs[0].amountCit,
-      //                discountAmount: costs[0].amountHi,
-      //                totalAmount: costs[0].amountTotal
-      //             }
-      //          }
-      //       }
-      //    }
-      // });
-      // console.log(form.getFieldsValue());
    };
    useEffect(() => {
       formInsurance();
