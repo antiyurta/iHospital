@@ -203,7 +203,7 @@ const SendHics = (props) => {
          <Form.List name="payments">
             {(payments, paymentOpt) => (
                <>
-                  {payments.map((payment, paymentIndex) => (
+                  {payments.map((payment) => (
                      <Row key={payment.key} style={customeBorderStyle}>
                         <Button
                            type="dashed"
@@ -220,7 +220,7 @@ const SendHics = (props) => {
                            <Form.List name={[payment.name, 'serviceList']}>
                               {(serviceList, serviceListOpt) => (
                                  <>
-                                    {serviceList.map((list, serviceIndex) => (
+                                    {serviceList.map((list) => (
                                        <Row key={list.key} style={customeBorderStyle}>
                                           <Button
                                              type="dashed"
@@ -234,6 +234,7 @@ const SendHics = (props) => {
                                              Үйлчилгээний мэдээлэл устгах
                                           </Button>
                                           <Form.Item
+                                             {...list}
                                              label="Битүүмжит үйлчилгээ"
                                              name={[list.name, 'service']}
                                              style={{ width: '100%' }}
@@ -244,27 +245,32 @@ const SendHics = (props) => {
                                                    label: `${service.inDateStr} - ${service.serviceName} - ${service.icdCode}`
                                                 }))}
                                                 onSelect={(value) => {
-                                                   fieldService(paymentIndex, serviceIndex, value);
+                                                   fieldService(payment.name, list.name, value);
                                                 }}
                                              />
                                           </Form.Item>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Эхлэх огноо" name={[list.name, 'startDate']}>
+                                             <Form.Item {...list} label="Эхлэх огноо" name={[list.name, 'startDate']}>
                                                 <DatePicker />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Дуусах огноо" name={[list.name, 'endDate']}>
+                                             <Form.Item {...list} label="Дуусах огноо" name={[list.name, 'endDate']}>
                                                 <DatePicker />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Үйлчилгээний дугаар" name={[list.name, 'hicsServiceId']}>
+                                             <Form.Item
+                                                {...list}
+                                                label="Үйлчилгээний дугаар"
+                                                name={[list.name, 'hicsServiceId']}
+                                             >
                                                 <Input />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Эцэг үйлчилгээний дугаар"
                                                 name={[list.name, 'parentServiceNumber']}
                                                 tooltip="/Энэхүү дугаар нь үйлчилгээг хадгалсны дараа өмнө дугаарыг эцэг болгож, child бичлэг илгээх үед ашиглагдана/"
@@ -274,6 +280,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Эмчийн үзлэгийн дугаар"
                                                 name={[list.name, 'doctorServiceNumber']}
                                                 tooltip="/Эмч үзлэг хийж илгээх бүртгэл хийсэн үед ашиглагдана. Энэхүү дугаарыг одоогоор явуулахгүй байж болно/"
@@ -282,32 +289,41 @@ const SendHics = (props) => {
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Кабинет дугаар" name={[list.name, 'departNo']}>
+                                             <Form.Item {...list} label="Кабинет дугаар" name={[list.name, 'departNo']}>
                                                 <InputNumber />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Кабинет нэр" name={[list.name, 'departName']}>
+                                             <Form.Item {...list} label="Кабинет нэр" name={[list.name, 'departName']}>
                                                 <Input />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Хөнгөлсөн дүн" name={[list.name, 'discountAmount']}>
-                                                <InputNumber />
-                                             </Form.Item>
-                                          </Col>
-                                          <Col span={11} offset={1}>
-                                             <Form.Item label="Иргэн төлсөн дүн" name={[list.name, 'payedAmount']}>
-                                                <InputNumber />
-                                             </Form.Item>
-                                          </Col>
-                                          <Col span={11} offset={1}>
-                                             <Form.Item label="Нийт дүн" name={[list.name, 'totalAmount']}>
+                                             <Form.Item
+                                                {...list}
+                                                label="Хөнгөлсөн дүн"
+                                                name={[list.name, 'discountAmount']}
+                                             >
                                                 <InputNumber />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
+                                                label="Иргэн төлсөн дүн"
+                                                name={[list.name, 'payedAmount']}
+                                             >
+                                                <InputNumber />
+                                             </Form.Item>
+                                          </Col>
+                                          <Col span={11} offset={1}>
+                                             <Form.Item {...list} label="Нийт дүн" name={[list.name, 'totalAmount']}>
+                                                <InputNumber />
+                                             </Form.Item>
+                                          </Col>
+                                          <Col span={11} offset={1}>
+                                             <Form.Item
+                                                {...list}
                                                 label="Тодосгогч ашигласан эсэх"
                                                 name={[list.name, 'isBold']}
                                                 tooltip="Энэхүү талбар нь зөвхөн өндөр өртөгт CT, MRI дээр тодосгогч ашигласан эсэх дээр ашиглагдана."
@@ -323,6 +339,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Жирэмсний 7 хоногийн тоо"
                                                 name={[list.name, 'pregnantWeek']}
                                              >
@@ -330,7 +347,11 @@ const SendHics = (props) => {
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="Оношийн код" name={[list.name, 'diagnosis', 'icdCode']}>
+                                             <Form.Item
+                                                {...list}
+                                                label="Оношийн код"
+                                                name={[list.name, 'diagnosis', 'icdCode']}
+                                             >
                                                 <Select
                                                    allowClear
                                                    showSearch
@@ -346,6 +367,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Оношийн нэр"
                                                 name={[list.name, 'diagnosis', 'icdCodeName']}
                                              >
@@ -354,6 +376,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Оношийн код-2"
                                                 name={[list.name, 'diagnosis', 'icdCode1']}
                                                 tooltip="/хос онош илгээх Т.Ү дээр/"
@@ -363,6 +386,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Оношийн бүлэг"
                                                 name={[list.name, 'diagnosis', 'icdGroup']}
                                              >
@@ -371,6 +395,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Оношийн бүлгийн нэр"
                                                 name={[list.name, 'diagnosis', 'icdGroupName']}
                                              >
@@ -379,6 +404,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Хавсарсан оношийн код"
                                                 name={[list.name, 'diagnosis', 'icdAddCode']}
                                              >
@@ -387,6 +413,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Хавсарсан оношийн нэр"
                                                 name={[list.name, 'diagnosis', 'icdAddName']}
                                              >
@@ -394,17 +421,26 @@ const SendHics = (props) => {
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
-                                             <Form.Item label="ICD-9 код" name={[list.name, 'diagnosis', 'icd9Code']}>
-                                                <Input />
-                                             </Form.Item>
-                                          </Col>
-                                          <Col span={11} offset={1}>
-                                             <Form.Item label="ICD-9 нэр" name={[list.name, 'diagnosis', 'icd9Name']}>
+                                             <Form.Item
+                                                {...list}
+                                                label="ICD-9 код"
+                                                name={[list.name, 'diagnosis', 'icd9Code']}
+                                             >
                                                 <Input />
                                              </Form.Item>
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
+                                                label="ICD-9 нэр"
+                                                name={[list.name, 'diagnosis', 'icd9Name']}
+                                             >
+                                                <Input />
+                                             </Form.Item>
+                                          </Col>
+                                          <Col span={11} offset={1}>
+                                             <Form.Item
+                                                {...list}
                                                 label="Хүндрэлийн зэрэг"
                                                 name={[list.name, 'diagnosis', 'abcType']}
                                              >
@@ -413,6 +449,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Оношийн хамааралтай бүлэг"
                                                 name={[list.name, 'diagnosis', 'drgCode']}
                                              >
@@ -431,6 +468,7 @@ const SendHics = (props) => {
                                           </Col>
                                           <Col span={11} offset={1}>
                                              <Form.Item
+                                                {...list}
                                                 label="Үзлэгийн тэмдэглэл"
                                                 name={[list.name, 'diagnosis', 'description']}
                                              >
@@ -456,6 +494,7 @@ const SendHics = (props) => {
                                                          </Button>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="Огноо"
                                                                name={[packge.name, 'packages', 'inDate']}
                                                             >
@@ -464,6 +503,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="ICD-10 код"
                                                                name={[packge.name, 'packages', 'icd10']}
                                                             >
@@ -477,6 +517,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="ICD-9 код"
                                                                name={[packge.name, 'packages', 'icd9']}
                                                             >
@@ -485,6 +526,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="Багцийн дугаар"
                                                                name={[packge.name, 'packages', 'packId']}
                                                             >
@@ -499,6 +541,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="Оношилгоо, шинжилгээний код"
                                                                name={[packge.name, 'packages', 'examCode']}
                                                             >
@@ -519,6 +562,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="Тайлбар"
                                                                name={[packge.name, 'packages', 'descr']}
                                                             >
@@ -527,6 +571,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="Дүн"
                                                                name={[packge.name, 'packages', 'amount']}
                                                             >
@@ -535,6 +580,7 @@ const SendHics = (props) => {
                                                          </Col>
                                                          <Col span={11} offset={1}>
                                                             <Form.Item
+                                                               {...packge}
                                                                label="Шинжилгээний хариу тайлбар"
                                                                name={[packge.name, 'packages', 'examResult']}
                                                             >
