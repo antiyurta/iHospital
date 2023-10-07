@@ -105,17 +105,28 @@ const SendHics = (props) => {
    const fieldService = async (paymentIndex, serviceIndex, serviceNumber) => {
       const service = sealServices.find((sealService) => sealService.serviceNumber == serviceNumber);
       const costs = await getCosts(service.serviceId, service.icdCode);
-      form.setFieldsValue({
-         payments: {
-            0: {
-               serviceList: {
-                  0: {
-                     hicsServiceId: service.serviceId
-                  }
-               }
-            }
+      form.setFields([
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'startDate'],
+            value: moment(service.inDateStr)
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'endDate'],
+            value: moment(service.outDateStr)
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'hicsServiceId'],
+            value: service.serviceId
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'pregnantWeek'],
+            value: service.pregnantWeek
+         },
+         {
+            name: ['payments', paymentIndex, 'serviceList', serviceIndex, 'parentServiceNumber'],
+            value: serviceNumber
          }
-      });
+      ]);
       // form.setFieldsValue({
       //    ['payments']: {
       //       [`${paymentIndex}`]: {
