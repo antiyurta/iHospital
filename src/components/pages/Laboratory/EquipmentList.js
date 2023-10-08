@@ -4,14 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, Patch, Post } from '../../comman';
-import {
-   EditOutlined,
-   EllipsisOutlined,
-   LoadingOutlined,
-   MinusCircleOutlined,
-   PlusOutlined,
-   SettingOutlined
-} from '@ant-design/icons';
+import { EditOutlined, LoadingOutlined, MinusCircleOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;

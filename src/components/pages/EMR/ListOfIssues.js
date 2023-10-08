@@ -1,31 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import AppointmentServices from '../../../services/appointment/appointment';
 import NewCard from '../../Card/Card';
 import { NewColumn, NewTable } from '../../Table/Table';
 import { newMoment } from '../../comman';
+import PatientDiagnoseSerivce from '../../../services/emr/patientDiagnose';
 
 function ListOfIssues({ patientId }) {
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const getProblems = async () => {
       setIsLoading(true);
-      await AppointmentServices.getByPageFilter({
+      await PatientDiagnoseSerivce.getByPageFilter({
          params: {
             patientId: patientId
          }
       }).then((response) => {
-         const data = response.data.response?.data?.map((appointment, index) => {
+         const data = response.data.response?.data?.map((diagnose, index) => {
             return {
                id: index,
-               cabinetName: appointment.cabinet?.name,
-               doctor: appointment.employee?.lastName.substring(0, 1) + '.' + appointment.employee?.firstName,
-               diagnoses: appointment.patientDiagnosis,
-               inspectionDate: appointment.createdAt
+               // cabinetName: diagnose,
+               doctor: diagnose?.createdLastname?.substring(0, 1) + '.' + diagnose.createdFirstname,
+               diagnose: diagnose.diagnose,
+               inspectionDate: diagnose.createdAt
             };
          });
          setData(data);
          setIsLoading(false);
       });
+      // await AppointmentServices.getByPageFilter({
+      //    params: {
+      //       patientId: patientId
+      //    }
+      // }).then((response) => {
+      //    const data = response.data.response?.data?.map((appointment, index) => {
+      //       return {
+      //          id: index,
+      //          cabinetName: appointment.cabinet?.name,
+      //          doctor: appointment.employee?.lastName.substring(0, 1) + '.' + appointment.employee?.firstName,
+      //          diagnoses: appointment.patientDiagnosis,
+      //          inspectionDate: appointment.createdAt
+      //       };
+      //    });
+      //    setData(data);
+      //    setIsLoading(false);
+      // });
    };
    useEffect(() => {
       getProblems();
@@ -79,26 +96,7 @@ function ListOfIssues({ patientId }) {
                   );
                }}
             />
-            <NewColumn
-               dataIndex={'diagnoses'}
-               title={'Онош'}
-               render={(text) => {
-                  return (
-                     <ul
-                        className="list-disc list-inside"
-                        style={{
-                           paddingLeft: '4px',
-                           textAlign: 'start',
-                           whiteSpace: 'normal'
-                        }}
-                     >
-                        {text.map((item, index) => {
-                           return <li key={index}>{item.diagnose.code}</li>;
-                        })}
-                     </ul>
-                  );
-               }}
-            />
+            <NewColumn dataIndex={['diagnose', 'code']} title={'Онош'} />
             <NewColumn
                dataIndex={'inspectionDate'}
                title={'Огноо'}

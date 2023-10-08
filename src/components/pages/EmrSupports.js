@@ -15,12 +15,13 @@ import jwtInterceopter from '../jwtInterceopter';
 import Finger from '../../features/finger';
 import DocumentShow from './611/DocumentShow';
 import DocumentPrint from './611/DocumentPrint';
+import Check13A from './Insurance/Check13A';
 //
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function EmrSupports({ appointmentId, usageType, patient, patientId, departmentId }) {
+function EmrSupports({ appointmentId, hicsServiceId, usageType, patient, patientId, departmentId }) {
    const AppIds = useSelector(selectCurrentAppId);
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
@@ -176,11 +177,15 @@ function EmrSupports({ appointmentId, usageType, patient, patientId, departmentI
          headers: {},
          params: {}
       };
-      values['appointmentId'] = appointmentId;
+      if (isInsurance && hicsServiceId) {
+         values['doctorFinger'] = 'test';
+         values['patientFinger'] = 'test2';
+         values['appointmentId'] = appointmentId;
+      }
       var data = {
          appointmentId: appointmentId
       };
-      if (isInsurance) {
+      if (isInsurance && hicsServiceId) {
          await jwtInterceopter
             .post('insurance/appointment-seal', values)
             .then((response) => {
@@ -254,10 +259,11 @@ function EmrSupports({ appointmentId, usageType, patient, patientId, departmentI
                            patientId: patientId
                         }}
                      />
+                     <Check13A hicsServiceId={hicsServiceId} />
                   </div>
                </div>
                <div className="float-right">
-                  {isInsurance ? (
+                  {isInsurance && hicsServiceId ? (
                      <Finger
                         text={'Үзлэг дуусгах'}
                         isDanger={true}

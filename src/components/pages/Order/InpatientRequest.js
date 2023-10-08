@@ -206,6 +206,7 @@ function InpatientRequest({ handleClick }) {
                         >
                            <Select
                               showSearch
+                              virtual={false}
                               optionFilterProp="children"
                               filterOption={(input, option) =>
                                  (option?.children ?? '').toLowerCase().includes(input.toLowerCase())

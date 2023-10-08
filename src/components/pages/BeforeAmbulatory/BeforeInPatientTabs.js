@@ -55,7 +55,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
    }, []);
    return (
       <>
-         <div>
+         {/* <div>
             <Card
                bordered={false}
                className="header-solid max-h-max rounded-md"
@@ -99,7 +99,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
             >
                <Customized usageType={'IN'} selectedTag={selectedTag} structureId={departmentId} />
             </Card>
-         </div>
+         </div> */}
          <div className="flex flex-wrap">
             <div className="w-full pb-1">
                <Card

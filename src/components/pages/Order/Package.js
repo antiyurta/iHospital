@@ -34,6 +34,7 @@ function Package({ registerNumber, handleclick }) {
          });
    };
    const add = (packge) => {
+      console.log(packge);
       if (packge && registerNumber) {
          const age = getAge(registerNumber);
          console.log(age);
@@ -48,6 +49,8 @@ function Package({ registerNumber, handleclick }) {
          } else {
             openNofi('warning', 'Анхааруулга', 'Багцын насны ангилалд багтахгүй');
          }
+      } else if (!registerNumber) {
+         openNofi('warning', 'Анхааруулга', 'Өвчтөн сонгоно уу');
       }
    };
    const remove = (index) => {

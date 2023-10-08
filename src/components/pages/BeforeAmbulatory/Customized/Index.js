@@ -3,7 +3,12 @@ import { Button, Form, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentHospitalName } from '../../../../features/authReducer';
+import {
+   selectCurrentAppId,
+   selectCurrentFirstName,
+   selectCurrentHospitalName,
+   selectCurrentLastName
+} from '../../../../features/authReducer';
 import FormRender from './FormRender';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
@@ -14,10 +19,13 @@ import DocumentOptionServices from '../../../../services/organization/documentOp
 import { NewOption, NewRangePicker, NewSelect } from '../../../Input/Input';
 import OrganizationStructureService from '../../../../services/organization/structure';
 import OrganizationEmployeeService from '../../../../services/organization/employee';
+import { totalCalculator } from '../../../injection';
 //
 function Index(props) {
    const { usageType, documentValue, documentType, structureId, appointmentId, patientId, onOk } = props;
    const hospitalName = useSelector(selectCurrentHospitalName);
+   const lastName = useSelector(selectCurrentLastName);
+   const firstName = useSelector(selectCurrentFirstName);
    const printRef = useRef();
    const AppIds = useSelector(selectCurrentAppId);
    const [filterForm] = Form.useForm();
@@ -115,80 +123,144 @@ function Index(props) {
          });
    };
    const onFinish = async (values) => {
-      setIsLoading(true);
-      const data = {
-         isDoctorWrite: true,
-         appointmentId: appointmentId,
-         usageType: usageType,
-         documentId: documentValue,
-         patientId: patientId,
-         data: values
-      };
-      if (documentForm.isMulti) {
-         await jwtInterceopter
-            .get(documentForm.url, {
-               params: {
+      await jwtInterceopter
+         .get(documentForm.url, {
+            params: {
+               appointmentId: appointmentId,
+               patientId: patientId,
+               documentId: documentValue,
+               usageType: usageType
+            }
+         })
+         .then(async (response) => {
+            const data = response.data.response;
+            if (data.length > 0) {
+               await jwtInterceopter
+                  .patch(documentForm.url + '/' + data[0]._id, {
+                     data: [
+                        ...data[0].data,
+                        {
+                           ...values,
+                           createdAt: new Date(),
+                           createdByName: {
+                              lastName: lastName,
+                              firstName: firstName
+                           }
+                        }
+                     ]
+                  })
+                  .then((res) => {
+                     if (res.data.response.success) {
+                        openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+                     }
+                  });
+            } else {
+               const data = {
                   appointmentId: appointmentId,
                   usageType: usageType,
                   documentId: documentValue,
-                  patientId: patientId
-               }
-            })
-            .then(async (response) => {
-               const incomeData = response.data.response;
-               if (incomeData?.length > 0) {
-                  console.log(incomeData[0].data);
-                  console.log(values);
-                  await jwtInterceopter
-                     .patch(documentForm.url + '/' + incomeData[0]._id, {
-                        data: {
-                           ...incomeData[0].data,
-                           ...values
+                  patientId: patientId,
+                  data: [
+                     {
+                        ...values,
+                        createdAt: new Date(),
+                        createdByName: {
+                           lastName: lastName,
+                           firstName: firstName
                         }
-                     })
-                     .then((res) => {
-                        if (res.status === 200) {
-                           setIsOpenFormModal(false);
-                        }
-                     });
-               } else {
-                  await jwtInterceopter
-                     .post(documentForm.url, data)
-                     .then((response) => {
-                        if (response.status === 201) {
-                           setIsOpenFormModal(false);
-                        }
-                     })
-                     .catch((error) => {
-                        if (error.response.status === 409) {
-                           openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
-                        }
-                     })
-                     .finally(() => {
-                        setIsLoading(false);
-                     });
-               }
-            });
-      } else {
-         await jwtInterceopter
-            .post(documentForm.url, data)
-            .then((response) => {
-               if (response.status === 201) {
-                  openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-               }
-            })
-            .catch((error) => {
-               if (error.response.status === 409) {
-                  openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
-               }
-            })
-            .finally(() => {
-               setIsLoading(false);
-            });
-      }
+                     }
+                  ]
+               };
+               await jwtInterceopter.post(documentForm.url, data).then((res) => {
+                  if (res.data.response.success) {
+                     openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+                  }
+               });
+            }
+         });
       onOk(false);
-      // getData();
    };
+   // const onFinish = async (values) => {
+   //    setIsLoading(true);
+   //    // tusga nohtsoluud
+   //    if (documentValue === 87) {
+   //       const { total, message } = totalCalculator(values);
+   //       if (message) {
+   //          openNofi('error', 'Анхааруулга', message);
+   //       }
+   //    }
+   //    const data = {
+   //       appointmentId: appointmentId,
+   //       usageType: usageType,
+   //       documentId: documentValue,
+   //       patientId: patientId,
+   //       data: values
+   //    };
+   //    if (documentForm.isMulti) {
+   //       await jwtInterceopter
+   //          .get(documentForm.url, {
+   //             params: {
+   //                appointmentId: appointmentId,
+   //                usageType: usageType,
+   //                documentId: documentValue,
+   //                patientId: patientId
+   //             }
+   //          })
+   //          .then(async (response) => {
+   //             const incomeData = response.data.response;
+   //             if (incomeData?.length > 0) {
+   //                console.log(incomeData[0].data);
+   //                console.log(values);
+   //                await jwtInterceopter
+   //                   .patch(documentForm.url + '/' + incomeData[0]._id, {
+   //                      data: {
+   //                         ...incomeData[0].data,
+   //                         ...values
+   //                      }
+   //                   })
+   //                   .then((res) => {
+   //                      if (res.status === 200) {
+   //                         setIsOpenFormModal(false);
+   //                      }
+   //                   });
+   //             } else {
+   //                await jwtInterceopter
+   //                   .post(documentForm.url, data)
+   //                   .then((response) => {
+   //                      if (response.status === 201) {
+   //                         setIsOpenFormModal(false);
+   //                      }
+   //                   })
+   //                   .catch((error) => {
+   //                      if (error.response.status === 409) {
+   //                         openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+   //                      }
+   //                   })
+   //                   .finally(() => {
+   //                      setIsLoading(false);
+   //                   });
+   //             }
+   //          });
+   //    } else {
+   //       await jwtInterceopter
+   //          .post(documentForm.url, data)
+   //          .then((response) => {
+   //             if (response.status === 201) {
+   //                openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+   //             }
+   //          })
+   //          .catch((error) => {
+   //             if (error.response.status === 409) {
+   //                openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+   //             }
+   //          })
+   //          .finally(() => {
+   //             setIsLoading(false);
+   //          });
+   //    }
+   //    onOk(false);
+   //    // getData();
+   // };
    const onFinishFilter = async (filters) => {
       setIsLoading(true);
       const start = moment(filters.date[0]).set({ hour: 0, minute: 0, second: 0 });
