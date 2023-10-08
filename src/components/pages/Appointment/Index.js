@@ -101,7 +101,8 @@ function Index(props) {
       await HealtInsuranceService.postCitizenInfo({
          regNo: selectedPatient.registerNumber,
          isChild: selectedPatient.isChild,
-         fingerPrint: values.fingerPrint
+         // fingerPrint: values.fingerPrint
+         fingerPrint: 'test'
       })
          .then((response) => {
             if (response.data?.isChance) {
