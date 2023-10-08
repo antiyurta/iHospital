@@ -18,5 +18,8 @@ class Schedule {
    async postChangeSlot(data) {
       return await jwtInterceopter.post('appoinment/return/change', data);
    }
+   async patchSlot(id, data) {
+      return await jwtInterceopter.patch('slot/' + id, data);
+   }
 }
 export default new Schedule();

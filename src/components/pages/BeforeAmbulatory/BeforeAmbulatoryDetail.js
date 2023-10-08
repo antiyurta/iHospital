@@ -29,6 +29,7 @@ function BeforeAmbulatoryDetail() {
                {usageType === 'OUT' ? (
                   <BeforeAmbulatoryTabs
                      patientId={selectedPatient?.id}
+                     patientData={selectedPatient}
                      structureId={structureId}
                      listId={appointmentId}
                      reasonComming={reasonComming}

@@ -9,6 +9,8 @@ import { selectCurrentHospitalName } from '../../../features/authReducer';
 import { useReactToPrint } from 'react-to-print';
 import moment from 'moment';
 
+import Demo from './demo';
+
 function DocumentPrint(props) {
    const { usageType, patientId } = props;
    const printRef = useRef();
@@ -28,6 +30,12 @@ function DocumentPrint(props) {
                r[a.usageType].push(a);
                return r;
             }, Object.create(null));
+            const OutDocuments = result['OUT'];
+            console.log(OutDocuments);
+            const groupByCategory = Object.groupBy(OutDocuments, (product) => {
+               return product.documentId;
+            });
+            console.log('=========>', groupByCategory);
             setResult(result);
          }
       });
@@ -50,7 +58,25 @@ function DocumentPrint(props) {
       isOpenHistory && getDocumentsHistory();
    }, [isOpenHistory]);
    //
-
+   const MyDoc = () => (
+      <Document>
+         <Page size="A4">
+            <View>
+               <table
+                  style={{
+                     border: '1px solid black'
+                  }}
+               >
+                  <thead>
+                     <tr>
+                        <th>asdas</th>
+                     </tr>
+                  </thead>
+               </table>
+            </View>
+         </Page>
+      </Document>
+   );
    //
    return (
       <>
@@ -138,7 +164,7 @@ function DocumentPrint(props) {
                            <Button onClick={() => handlePrint()} type="primary">
                               Хэвлэх
                            </Button>
-                           <button onClick={() => generatePDF(printRef, options)}>Generate PDF</button>
+                           <Demo />
                         </div>
                         <div className="rounded bg-white p-3">
                            <div ref={printRef}>
@@ -147,7 +173,7 @@ function DocumentPrint(props) {
                                  id={selectedDocument.documentId}
                                  appointmentId={selectedDocument.appointmentId}
                                  data={{
-                                    formData: selectedDocument.data,
+                                    formData: { ...selectedDocument.data, createdAt: selectedDocument.createdAt },
                                     patientData: patientData
                                  }}
                                  hospitalName={hospitalName}

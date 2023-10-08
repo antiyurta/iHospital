@@ -6,28 +6,19 @@ import { localMn, numberToCurrency, openNofi } from '../../comman';
 import jwtInterceopter from '../../jwtInterceopter';
 import EditableFormItem from '../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
-import { useDispatch } from 'react-redux';
-import { setHicsService } from '../../../features/emrReducer';
 const { Search } = Input;
-const { Option, OptGroup } = Select;
+const { Option } = Select;
 const { Column } = Table;
-function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appointmentType }) {
-   const dispatch = useDispatch();
+function Diagnose({ handleClick, types, hicsServiceId }) {
    const [diagnosesForm] = Form.useForm();
-   const [hicsServiceIdForm] = Form.useForm();
    const [diagnoses, setDiagnoses] = useState([]);
    const [hicsCost, setHicsCost] = useState([]);
    const [meta, setMeta] = useState({});
    const [loading, setLoading] = useState(false);
    const [isLoadingHicsCost, setIsLoadingHicsCost] = useState(false);
    const [selectedCost, setSelectedCost] = useState([]);
-   //
    const [param, setParam] = useState('');
    const [paramValue, setParamValue] = useState('');
-   //
-   const [insuranceService, setInsuranceService] = useState([]);
-   const [hicsServiceId, setHicsServiceId] = useState(null);
-   //
    const [isOpenDiagnoseModal, setIsOpenDiagnoseModal] = useState(false);
    const [editingIndex, setEditingIndex] = useState(undefined);
    const [isNewUser, setNewUser] = useState(false);
@@ -103,22 +94,22 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
             console.log(error.errorFields);
          });
    };
-   const getInsuranceService = async () => {
-      const conf = {
-         params: {
-            usageType: null
-         }
-      };
-      if (appointmentType === 1) {
-         conf.params['usageType'] = 'EMERGENCY';
-      } else {
-         conf.params['usageType'] = 'OUT';
-      }
-      await jwtInterceopter.get('insurance/hics-service-group', conf).then((response) => {
-         console.log(response);
-         setInsuranceService(response.data.data);
-      });
-   };
+   // const getInsuranceService = async () => {
+   //    const conf = {
+   //       params: {
+   //          usageType: null
+   //       }
+   //    };
+   //    if (appointmentType === 1) {
+   //       conf.params['usageType'] = 'EMERGENCY';
+   //    } else {
+   //       conf.params['usageType'] = 'OUT';
+   //    }
+   //    await jwtInterceopter.get('insurance/hics-service-group', conf).then((response) => {
+   //       console.log(response);
+   //       setInsuranceService(response.data.data);
+   //    });
+   // };
 
    const getHicsCost = async (index) => {
       setIsLoadingHicsCost(true);
@@ -263,26 +254,8 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
    };
    //
    useEffect(() => {
-      insuranceService?.map((service) => {
-         service.hicsServices.find((e) => {
-            if (e.id === hicsServiceId) {
-               dispatch(setHicsService(e));
-            }
-         });
-      });
-   }, [hicsServiceId]);
-   //
-   useEffect(() => {
       getDiagnoses(1, 10, paramValue, param);
    }, []);
-   useEffect(() => {
-      if (appointmentHasInsurance) {
-         getInsuranceService();
-      }
-      if (serviceId) {
-         setHicsServiceId(serviceId);
-      }
-   }, [appointmentHasInsurance]);
    return (
       <>
          <div>
@@ -291,7 +264,6 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
                onClick={() => {
                   setIsOpenDiagnoseModal(true);
                   diagnosesForm.resetFields();
-                  hicsServiceIdForm.resetFields();
                   setHicsCost([]);
                   setSelectedCost([]);
                }}
@@ -306,10 +278,10 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
                }}
                onOk={() => {
                   diagnosesForm.validateFields().then(async (value) => {
-                     if (selectedCost?.length === 0 && appointmentHasInsurance) {
+                     if (selectedCost?.length === 0 && hicsServiceId) {
                         openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
                      } else {
-                        handleClick(value.diagnoses, hicsServiceIdForm.getFieldsValue(), selectedCost);
+                        handleClick(value.diagnoses, selectedCost);
                         setIsOpenDiagnoseModal(false);
                      }
                   });
@@ -420,24 +392,25 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
                                                       />
                                                    }
                                                    onClick={() => {
-                                                      hicsServiceIdForm
-                                                         .validateFields()
-                                                         .then(() => {
-                                                            diagnosesForm
-                                                               .validateFields()
-                                                               .then(() => add(row))
-                                                               .catch((err) => {
-                                                                  console.log(err);
-                                                               });
-                                                         })
-                                                         .catch((error) => {
-                                                            console.log(error);
-                                                            openNofi(
-                                                               'warning',
-                                                               'Анхааруулга',
-                                                               'Үйлчилгээний төрөл заавал сонгох'
-                                                            );
-                                                         });
+                                                      add(row);
+                                                      // hicsServiceIdForm
+                                                      //    .validateFields()
+                                                      //    .then(() => {
+                                                      //       diagnosesForm
+                                                      //          .validateFields()
+                                                      //          .then(() => )
+                                                      //          .catch((err) => {
+                                                      //             console.log(err);
+                                                      //          });
+                                                      //    })
+                                                      //    .catch((error) => {
+                                                      //       console.log(error);
+                                                      //       openNofi(
+                                                      //          'warning',
+                                                      //          'Анхааруулга',
+                                                      //          'Үйлчилгээний төрөл заавал сонгох'
+                                                      //       );
+                                                      //    });
                                                    }}
                                                 />
                                              );
@@ -463,60 +436,6 @@ function Diagnose({ handleClick, types, appointmentHasInsurance, serviceId, appo
                         </div>
                      </div>
                      <div className="flex flex-col gap-3">
-                        {appointmentHasInsurance ? (
-                           <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                              <div className="p-3">
-                                 <p
-                                    className="pb-3"
-                                    style={{
-                                       fontWeight: '600'
-                                    }}
-                                 >
-                                    Үйлчилгээний төрөл
-                                 </p>
-                                 {appointmentHasInsurance && (
-                                    <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                                       <div className="p-1">
-                                          <Form form={hicsServiceIdForm}>
-                                             <Form.Item
-                                                name="hicsServiceId"
-                                                rules={[
-                                                   { required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }
-                                                ]}
-                                                style={{
-                                                   width: '100%'
-                                                }}
-                                                className="mb-0"
-                                             >
-                                                <Select
-                                                   placeholder="Үйлчилгээний төрөл сонгох"
-                                                   onChange={(e) => {
-                                                      console.log(e);
-                                                      setHicsServiceId(e);
-                                                   }}
-                                                >
-                                                   {insuranceService?.map((group, index) => {
-                                                      return (
-                                                         <OptGroup key={index} label={group.name}>
-                                                            {group?.hicsServices?.map((service, idx) => {
-                                                               return (
-                                                                  <Option key={`${index}-${idx}`} value={service.id}>
-                                                                     {service.name}
-                                                                  </Option>
-                                                               );
-                                                            })}
-                                                         </OptGroup>
-                                                      );
-                                                   })}
-                                                </Select>
-                                             </Form.Item>
-                                          </Form>
-                                       </div>
-                                    </div>
-                                 )}
-                              </div>
-                           </div>
-                        ) : null}
                         <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                            <div className="p-3">
                               <p

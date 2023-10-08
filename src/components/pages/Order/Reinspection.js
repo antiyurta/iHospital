@@ -29,7 +29,16 @@ function Reinspection({ selectedPatient, appointmentId }) {
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <Appointment selectedPatient={selectedPatient} type={1} prevAppointmentId={appointmentId} />
+            <Appointment
+               selectedPatient={selectedPatient}
+               type={1}
+               prevAppointmentId={appointmentId}
+               isExtraGrud={{
+                  isCreate: true,
+                  isChange: true,
+                  isDelete: true
+               }}
+            />
          </Modal>
       </>
    );

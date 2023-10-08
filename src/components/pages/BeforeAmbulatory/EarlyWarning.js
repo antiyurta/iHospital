@@ -1,10 +1,10 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт -> Эрт сэрэмжлүүлэх үнэлгээ
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Col, Input, Row, Select, Modal, List } from 'antd';
+import { Button, Col, Input, Row, Select, Modal, List, Table, Form, Card } from 'antd';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Table } from 'react-bootstrap';
-import { DefaultPost, Get, getAge } from '../../comman';
+import { selectCurrentHospitalName, selectCurrentToken } from '../../../features/authReducer';
+// import { Table } from 'react-bootstrap';
+import { DefaultPost, Get, getAge, openNofi } from '../../comman';
 //
 import {
    Chart as ChartJS,
@@ -18,38 +18,39 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import moment from 'moment';
-import { PrinterOutlined } from '@ant-design/icons';
+import { PlusOutlined, PlusSquareOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useReactToPrint } from 'react-to-print';
 import { useLocation } from 'react-router-dom';
 import EarlyWarningPrint from './EarlyWarningPrint';
 //
+///
+import {
+   colorMindews,
+   colorPulsews,
+   colorRespiratoryews,
+   colorSpoews,
+   colorSystolews,
+   colorTempews,
+   colorTotal,
+   highPressureRightCalculator,
+   mindCalculator,
+   pulseCalculator,
+   respiratoryRateCalculator,
+   spO2Calculator,
+   tempCalculator,
+   totalCalculator
+} from '../../injection';
+import Customized from '../BeforeAmbulatory/Customized/Index';
+import jwtInterceopter from '../../jwtInterceopter';
+import NewCard from '../../Card/Card';
+import NewModal from '../../Modal/Modal';
+import { ReturnById } from '../611/Document/Index';
+//
 
-export default function EarlyWarning({ PatientId, UsageType, ListId, patientData, isDoctor }) {
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
-   let location = useLocation();
-   const { Option } = Select;
-   const vsPrintRef = useRef();
-   const dPrintRef = useRef();
-   const vsCanvas = useRef();
-   const [formValues, setFormValues] = useState({
-      patientId: null,
-      highPressureRight: 0, //Систол
-      lowPressureRight: 0, //Диастол
-      weight: 0,
-      height: 0,
-      temp: 0, //Биеийн халуун
-      respiratoryRate: 0, //Амьсгал
-      spO2: 0, //SpO`2
-      pulse: 0,
-      mind: 'choose', //Ухаан санаа
-      nurse: null
-   });
-   const [patientAssesments, setPatientAssesments] = useState([]); //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД
-   const [patientAssesmentsResult, setPatientAssesmentsResult] = useState([]); //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД Ард харагдах нь
+export default function EarlyWarning({ PatientId, StructureId, PatientData, UsageType, ListId, isDoctor }) {
+   const [data, setData] = useState([]);
+   const hospitalName = useSelector(selectCurrentHospitalName);
+   const printRef = useRef();
    const [lineLabels, setLineLabels] = useState([]);
    const [breathData, setBreathData] = useState([]);
    const [spo2Data, setSpo2Data] = useState([]);
@@ -58,204 +59,12 @@ export default function EarlyWarning({ PatientId, UsageType, ListId, patientData
    const [LowPressureRightData, setLowPressureRightData] = useState([]);
    const [tempData, setTempData] = useState([]);
    const [printLoading, setPrintLoading] = useState(false);
-   const [reportAssesments, setReportAssesments] = useState([]);
-   let handleChange = (e, p) => {
-      if (p === 'mind') {
-         //Зөвхөн SELECT үед
-         setFormValues({ ...formValues, ['mind']: e });
-      } else {
-         const { name, value } = e.target;
-         setFormValues({ ...formValues, [name]: parseFloat(value) });
-      }
-   };
-   let resetFormFields = () => {
-      setFormValues({
-         patientId: null,
-         highPressureRight: null, //Систол
-         lowPressureRight: null, //Диастол
-         weight: null,
-         height: null,
-         temp: null, //Биеийн халуун
-         respiratoryRate: null, //Амьсгал
-         spO2: null, //SpO`2
-         pulse: null,
-         mind: null, //Ухаан санаа
-         nurse: null
-      });
-   };
-   //
-   let ctx = null;
-   const oneLine = 12;
-   const drawLine = (info, style = {}) => {
-      const { x, y, x1, y1 } = info;
-      const { color = 'black', width = 0 } = style;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x1, y1);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = width;
-      ctx.stroke();
-   };
-   const calcDrawers = (datas) => {
-      // drawLine({ x: 0, y: 748, x1: 150, y1: 233.51 }, { color: 'red' });
-      var startXP = 0;
-      var startYP = 692;
-      var startXR = 80;
-      var startYR = 692;
-      var startXT = 160;
-      var startYT = 692;
-      datas.map((data, index) => {
-         // pulse
-         const pulse = data.pulse - 40;
-         const pulseLines = (pulse * 58) / 116;
-         const totalPulseLinew = 692 - pulseLines * oneLine;
-         // amisgal
-         const respiratoryRate = data.respiratoryRate;
-         const totalRespiratoryRate = 692 - respiratoryRate * oneLine;
-         // haluun
-         const temp = data.temp - 35;
-         const tempLines = (temp * 58) / 5.8;
-         const totalTemp = 692 - tempLines * oneLine;
-         //
-         drawLine(
-            {
-               x: startXP,
-               y: startYP,
-               x1: 250 + 24 * index,
-               y1: totalPulseLinew
-            },
-            { color: 'red' }
-         );
-         drawLine(
-            {
-               x: startXR,
-               y: startYR,
-               x1: 250 + 24 * index,
-               y1: totalRespiratoryRate
-            },
-            { color: 'blue' }
-         );
-         drawLine(
-            {
-               x: startXT,
-               y: startYT,
-               x1: 250 + 24 * index,
-               y1: totalTemp
-            },
-            { color: 'black' }
-         );
-         startXP = 250 + 24 * index;
-         startYP = totalPulseLinew;
-         startXR = 250 + 24 * index;
-         startYR = totalRespiratoryRate;
-         startXT = 250 + 24 * index;
-         startYT = totalTemp;
-      });
-   };
-   //
-   const getAssesment = async (type) => {
-      //Тухайн өвчтөн дээрх ЭМЧИЙН ТЭМДЭГЛЭЛҮҮД авах
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      if (UsageType === 'OUT') {
-         conf.params.patientId = PatientId;
-      } else {
-         conf.params.inpatientRequestId = ListId;
-      }
-      const response = await Get('assesment', token, conf);
-      if (response.data.length > 0) {
-         setPatientAssesments(response.data);
-         setPatientAssesmentsResult(response.data);
-         if (UsageType === 'IN') {
-            calcDrawers(response.data);
-         }
-         if (response.data.length <= 7) {
-            var demoLineLabels = [];
-            var demoBreathData = [];
-            var demoSpo2Data = [];
-            var demoPulseData = [];
-            var demoHighPressureRight = [];
-            var demoLowPressureRight = [];
-            var demoTempData = [];
-            response.data.map((data) => {
-               demoLineLabels.push(moment(data.createdAt).format('YYYY-MM-DD HH:mm'));
-               demoBreathData.push(data.respiratoryRate);
-               demoSpo2Data.push(data.spO2);
-               demoPulseData.push(data.pulse);
-               demoHighPressureRight.push(data.highPressureRight);
-               demoLowPressureRight.push(data.lowPressureRight);
-               demoTempData.push(data.temp);
-            });
-            setLineLabels(demoLineLabels);
-            setBreathData(demoBreathData);
-            setSpo2Data(demoSpo2Data);
-            setPulseData(demoPulseData);
-            setHighPressureRightData(demoHighPressureRight);
-            setLowPressureRightData(demoLowPressureRight);
-            setTempData(demoTempData);
-         } else {
-            var demoLineLabels = [];
-            var demoBreathData = [];
-            var demoSpo2Data = [];
-            var demoPulseData = [];
-            var demoHighPressureRight = [];
-            var demoLowPressureRight = [];
-            var demoTempData = [];
-            for (let index = response.data.length - 7; index < response.data.length; index++) {
-               demoLineLabels.push(moment(response.data[index].createdAt).format('YYYY-MM-DD HH:mm'));
-               demoBreathData.push(response.data[index].respiratoryRate);
-               demoSpo2Data.push(response.data[index].spO2);
-               demoPulseData.push(response.data[index].pulse);
-               demoHighPressureRight.push(response.data[index].highPressureRight);
-               demoLowPressureRight.push(response.data[index].lowPressureRight);
-               demoTempData.push(response.data[index].temp);
-            }
-            setLineLabels(demoLineLabels);
-            setBreathData(demoBreathData);
-            setSpo2Data(demoSpo2Data);
-            setPulseData(demoPulseData);
-            setHighPressureRightData(demoHighPressureRight);
-            setLowPressureRightData(demoLowPressureRight);
-            setTempData(demoTempData);
-         }
-      }
-      if (type === 'save') {
-         Modal.warning({
-            title: 'Анхааруулга',
-            content: response.data.slice(-1)[0].message //Сүүлд хадгалагдсан тэмдэглэлийн message харуулах
-         });
-      }
-   };
-   const get = async () => {
-      const conf = {
-         headers: {},
-         params: {
-            inpatientRequestId: ListId
-         }
-      };
-      const response = await Get('report/assesment', token, conf);
-      setReportAssesments(response);
-   };
-   const createAssesment = async () => {
-      formValues.patientId = PatientId;
-      if (UsageType === 'IN') {
-         formValues.inpatientRequestId = ListId;
-      }
-      // const response = await Post('assesment', token, config, formValues);
-      const response = await DefaultPost('assesment', token, config, formValues);
-      resetFormFields();
-      getAssesment('save');
-      if (UsageType === 'IN') {
-         get();
-      }
-   };
+
    const handlePrint = useReactToPrint({
       onBeforeGetContent: () => setPrintLoading(true),
       onBeforePrint: () => setPrintLoading(false),
       onPrintError: () => console.log('asda'),
-      content: () => vsPrintRef.current
+      content: () => printRef.current
    });
    //
    ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -339,481 +148,249 @@ export default function EarlyWarning({ PatientId, UsageType, ListId, patientData
          }
       ]
    };
-   //
-   useEffect(() => {
-      if (PatientId) {
-         getAssesment();
+   // shineer ehlew
+   const [isOpenModal, setIsOpenModal] = useState(false);
+   const columns = [
+      {
+         title: 'Огноо',
+         dataIndex: 'createdAt',
+         render: (text) => {
+            return moment(text).format('YYYY/MM/DD HH:mm');
+         }
+      },
+      {
+         title: 'Амин үзүүлэлт',
+         children: [
+            {
+               title: 'Систол',
+               dataIndex: 'highPressureRight',
+               render: (text) => {
+                  return {
+                     props: {
+                        style: { background: colorSystolews(text) }
+                     },
+                     children: <div title={text}>{highPressureRightCalculator(text)}</div>
+                  };
+               }
+            },
+            {
+               title: 'Халуун',
+               dataIndex: 'temp',
+               render: (text) => {
+                  return {
+                     props: {
+                        style: { background: colorTempews(text) }
+                     },
+                     children: <div title={text}>{tempCalculator(text)}</div>
+                  };
+               }
+            },
+            {
+               title: 'Амьсгал',
+               dataIndex: 'respiratoryRate',
+               render: (text) => {
+                  return {
+                     props: {
+                        style: { background: colorRespiratoryews(text) }
+                     },
+                     children: <div title={text}>{respiratoryRateCalculator(text)}</div>
+                  };
+               }
+            },
+            {
+               title: `SpO'2`,
+               dataIndex: 'spO2',
+               render: (text) => {
+                  return {
+                     props: {
+                        style: { background: colorSpoews(text) }
+                     },
+                     children: <div title={text}>{spO2Calculator(text)}</div>
+                  };
+               }
+            },
+            {
+               title: `Пульс`,
+               dataIndex: 'pulse',
+               render: (text) => {
+                  return {
+                     props: {
+                        style: { background: colorPulsews(text) }
+                     },
+                     children: <div title={text}>{pulseCalculator(text)}</div>
+                  };
+               }
+            },
+            {
+               title: 'Ухаан санаа',
+               dataIndex: 'mind',
+               render: (text) => {
+                  return {
+                     props: {
+                        style: { background: colorMindews(text) }
+                     },
+                     children: <div title={text}>{mindCalculator(text)}</div>
+                  };
+               }
+            },
+            {
+               title: 'Нийт',
+               render: (_, record) => {
+                  return {
+                     props: {
+                        style: { background: colorTotal(record) }
+                     },
+                     children: <div title={totalCalculator(record)?.message}>{totalCalculator(record)?.total}</div>
+                  };
+               }
+            }
+         ]
+      },
+      {
+         title: 'Сувилагч',
+         dataIndex: 'createdByName',
+         render: (text) => {
+            return {
+               props: {
+                  style: { whiteSpace: 'pre-line' }
+               },
+               children: text.lastName + '.' + text.firstName
+            };
+         }
       }
-      if (UsageType === 'IN') {
-         get();
-      }
-   }, [PatientId]);
-   // initialize the canvas context
+   ];
+   const getData = async () => {
+      await jwtInterceopter
+         .get('document-middleware', {
+            params: {
+               appointmentId: ListId,
+               patientId: PatientId,
+               documentId: 87,
+               usageType: UsageType
+            }
+         })
+         .then((response) => {
+            let data = [];
+            response.data.response?.map((item) => item.data?.map((subData) => data.push(subData)));
+            setData(data);
+         });
+   };
+   const getDataForGraph = async () => {
+      await jwtInterceopter
+         .get('document-middleware', {
+            params: {
+               limit: 7,
+               appointmentId: ListId,
+               patientId: PatientId,
+               documentId: 87,
+               usageType: UsageType
+            }
+         })
+         .then((response) => {
+            let data = [];
+            response.data.response?.map((item) => item.data?.map((subData) => data.push(subData)));
+            var demoLineLabels = [];
+            var demoBreathData = [];
+            var demoSpo2Data = [];
+            var demoPulseData = [];
+            var demoHighPressureRight = [];
+            var demoLowPressureRight = [];
+            var demoTempData = [];
+            data?.map((item) => {
+               demoLineLabels.push(moment(item.createdAt).format('YYYY-MM-DD HH:mm'));
+               demoBreathData.push(item?.respiratoryRate);
+               demoSpo2Data.push(item?.spO2);
+               demoPulseData.push(item?.pulse);
+               demoHighPressureRight.push(item?.highPressureRight);
+               demoLowPressureRight.push(item?.lowPressureRight);
+               demoTempData.push(item?.temp);
+            });
+            setLineLabels(demoLineLabels);
+            setBreathData(demoBreathData);
+            setSpo2Data(demoSpo2Data);
+            setPulseData(demoPulseData);
+            setHighPressureRightData(demoHighPressureRight);
+            setLowPressureRightData(demoLowPressureRight);
+            setTempData(demoTempData);
+         });
+   };
    useEffect(() => {
-      // dynamically assign the width and height to canvas
-      const canvasEle = vsCanvas.current;
-      canvasEle.width = 716.13;
-      canvasEle.height = 692;
-
-      // get context of the canvas
-      ctx = canvasEle.getContext('2d');
+      getData();
+      getDataForGraph();
    }, []);
    //
    return (
       <>
-         <div className="flex flex-wrap">
-            <div className="w-full md:w-full xl:w-1/2">
-               <div className="p-4">
-                  <Button className="ml-2" icon={<PrinterOutlined />} onClick={handlePrint} loading={printLoading}>
-                     Хэвлэх
-                  </Button>
+         <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
+            <div className="flex flex-col gap-3">
+               <NewCard>
                   <Line options={vsOptions} data={LineGraphVS} />
-                  <div className="hidden">
-                     <div ref={vsPrintRef}>
-                        <div className="">
-                           <div className="">
-                              <div className="flow-root">
-                                 <div className="float-right">
-                                    <p>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>
-                                    <p>өдрийн A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
-                                    <p className="font-bold">Эрүүд мэндийн бүртгэлийн маягт CT-1,2 Хавсралт 2</p>
-                                 </div>
-                              </div>
-                              <p className="font-bold text-center" style={{ fontSize: 16 }}>
-                                 ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС
-                              </p>
-                              <div className="flow-root py-1">
-                                 <div className="float-left inline-flex">
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       Эмчлүүлэгчийн овог, нэр:
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       {patientData?.lastName.substring(0, 1) + '.' + patientData?.firstName}
-                                    </p>
-                                 </div>
-                                 <div className="float-right inline-flex">
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       Нас:
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       {getAge(patientData?.registerNumber)}
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                       className="pl-1"
-                                    >
-                                       Хүйс:
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       {patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                       className="pl-1"
-                                    >
-                                       Тасаг:
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       {location?.state?.departmentName}
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                       className="pl-1"
-                                    >
-                                       Өрөө:
-                                    </p>
-                                    <p
-                                       style={{
-                                          fontSize: 10,
-                                          fontWeight: 'bold'
-                                       }}
-                                    >
-                                       {location?.state?.roomNumber}
-                                    </p>
-                                 </div>
-                              </div>
-                              <canvas
-                                 className="absolute border-none p-0"
-                                 style={{
-                                    marginTop: 99.2
-                                 }}
-                                 ref={vsCanvas}
-                              ></canvas>
-                              <EarlyWarningPrint Data={reportAssesments} />
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div className="w-full md:w-full xl:w-1/2">
-               <div className="p-4">
+               </NewCard>
+               <NewCard>
                   <Line options={CDOptions} data={LineGraphCD} />
-               </div>
+               </NewCard>
             </div>
-         </div>
-         <div className="flex flex-wrap">
-            {!isDoctor && (
-               <div className="w-full md:w-full xl:w-1/2">
-                  <div className="table-responsive p-4" id="style-8">
-                     <Table className="ant-border-space" style={{ width: '100%' }}>
-                        <thead className="ant-table-thead bg-slate-200">
-                           <tr>
-                              <th className="font-medium text-x">Систол</th>
-                              <th className="font-medium text-x border-x">Диастол</th>
-                              <th className="font-medium text-x border-x">Жин</th>
-                              <th className="font-medium text-x border-x">Өндөр</th>
-                              <th className="font-medium text-x border-x">Халуун</th>
-                              <th className="font-medium text-x border-x">Амьсгал</th>
-                              <th className="font-medium text-x border-x">SpO'2</th>
-                              <th className="font-medium text-x border-x">Пульс</th>
-                              <th className="font-medium text-x">
-                                 <div className="whitespace-normal">Ухаан санаа</div>
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           {patientAssesments &&
-                              patientAssesments.map((element, index) => (
-                                 <tr key={index}>
-                                    <td className="text-center px-0">
-                                       <Input
-                                          value={element.highPressureRight || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="highPressureRight"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.lowPressureRight || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="lowPressureRight"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.weight || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="weight"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.height || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="height"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.temp || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="temp"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.respiratoryRate || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="respiratoryRate"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.spO2 || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="spO2"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Input
-                                          value={element.pulse || ''}
-                                          className="p-1 h-7 rounded-md text-center"
-                                          name="pulse"
-                                          disabled
-                                       />
-                                    </td>
-                                    <td className="text-center">
-                                       <Select
-                                          defaultValue="lucy"
-                                          style={{
-                                             width: 120
-                                          }}
-                                          value={element.mind}
-                                          className="p-1 h-7 inline-table"
-                                          name="mind"
-                                          disabled
-                                       >
-                                          <Option value="A">A</Option>
-                                          <Option value="V,P,U">V,P,U</Option>
-                                       </Select>
-                                    </td>
-                                 </tr>
-                              ))}
-                           <tr className="">
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.highPressureRight || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="highPressureRight"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.lowPressureRight || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="lowPressureRight"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.weight || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="weight"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.height || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="height"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.temp || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="temp"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.respiratoryRate || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="respiratoryRate"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.spO2 || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="spO2"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Input
-                                    value={formValues.pulse || ''}
-                                    onChange={(e) => handleChange(e)}
-                                    className="p-1 h-7 rounded-md text-center"
-                                    name="pulse"
-                                    type="number"
-                                 />
-                              </td>
-                              <td className="text-center">
-                                 <Select
-                                    defaultValue="choose"
-                                    style={{
-                                       width: 120
-                                    }}
-                                    onChange={(e) => handleChange(e, 'mind')}
-                                    value={formValues.mind}
-                                    className="p-1 h-7 inline-table"
-                                    name="mind"
-                                 >
-                                    <Option value="choose">Сонгох</Option>
-                                    <Option value="A">A</Option>
-                                    <Option value="V,P,U">V,P,U</Option>
-                                 </Select>
-                              </td>
-                           </tr>
-                        </tbody>
-                     </Table>
+            <Card
+               className="header-solid max-h-max rounded-md"
+               title="Түүх"
+               bodyStyle={{
+                  height: 700,
+                  overflow: 'auto'
+               }}
+               extra={
+                  <div className="flex flex-row gap-1">
+                     <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => {
+                           setIsOpenModal(true);
+                        }}
+                     >
+                        Нэмэх
+                     </Button>
+                     {UsageType === 'IN' ? (
+                        <Button
+                           className="ml-2"
+                           icon={<PrinterOutlined />}
+                           onClick={handlePrint}
+                           loading={printLoading}
+                        >
+                           Хэвлэх
+                        </Button>
+                     ) : null}
                   </div>
-               </div>
-            )}
-            <div className={isDoctor ? 'w-full' : 'w-full md:w-full xl:w-1/2'}>
-               <div className="table-responsive p-4" id="style-8">
-                  <Table className="ant-border-space" style={{ width: '100%' }}>
-                     <thead className="ant-table-thead bg-slate-200">
-                        <tr>
-                           <th className="font-medium text-xs text-black text-center">Огноо/цаг/</th>
-                           <th className="font-medium text-xs text-black text-center border-x">Систол</th>
-                           <th className="font-medium text-xs text-black text-center border-x">Халуун</th>
-                           <th className="font-medium text-xs text-black text-center border-x">Амьсгал</th>
-                           <th className="font-medium text-xs text-black text-center border-x">SpO'2</th>
-                           <th className="font-medium text-xs text-black text-center border-x">Пульс</th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              <div className="whitespace-normal">Ухаан санаа</div>
-                           </th>
-                           <th className="font-medium text-xs text-black text-center border-x">
-                              <div className="whitespace-normal">Нийт</div>
-                           </th>
-                           <th className="font-medium text-xs text-black text-center">Сувилагч</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {patientAssesmentsResult &&
-                           patientAssesmentsResult.map((element, index) => (
-                              <tr key={index} className="">
-                                 <td className="text-center ">
-                                    <p className="border rounded-md p-1 h-7">
-                                       {moment(element.createdAt).format('YYYY-MM-DD HH:mm')}
-                                    </p>
-                                 </td>
-                                 <td className="text-center ">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorSystolews ?? '#fff'
-                                       }}
-                                    >
-                                       {element.systolEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorTempews ?? '#fff'
-                                       }}
-                                    >
-                                       {element.temEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorRespiratoryews ?? '#fff'
-                                       }}
-                                    >
-                                       {element.respiratoryEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorSpoews ?? '#fff'
-                                       }}
-                                    >
-                                       {element.spoEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorPulsews ?? '#fff'
-                                       }}
-                                    >
-                                       {element.pulsEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorMindews ?? '#fff'
-                                       }}
-                                    >
-                                       {element.mindEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p
-                                       className="border rounded-md p-1 h-7"
-                                       style={{
-                                          backgroundColor: element.colorTotal ?? '#fff'
-                                       }}
-                                    >
-                                       {element.totalEWS}
-                                    </p>
-                                 </td>
-                                 <td className="text-center">
-                                    <p>{`${element.createdLastName?.substr(0, 1)}. ${element.createdFirstName}`}</p>
-                                 </td>
-                              </tr>
-                           ))}
-                     </tbody>
-                  </Table>
-               </div>
-            </div>
+               }
+            >
+               <Table rowKey={'_id'} bordered columns={columns} dataSource={data} pagination={false} />
+            </Card>
          </div>
-         {!isDoctor && (
-            <Row gutter={[8, 8]}>
-               <Col span={12} className="border-r-4">
-                  <Button
-                     type="primary"
-                     htmlType="submit"
-                     onClick={() => createAssesment()}
-                     className="float-right mt-2"
-                  >
-                     Хадгалах
-                  </Button>
-               </Col>
-            </Row>
-         )}
+         <div ref={printRef}>
+            <ReturnById
+               type={UsageType}
+               id={87}
+               appointmentId={ListId}
+               data={{
+                  formData: data,
+                  patientData: PatientData
+               }}
+               hospitalName={hospitalName}
+            />
+         </div>
+         <NewModal title=" " open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={false}>
+            <Customized
+               usageType={UsageType}
+               documentValue={87}
+               documentType={0}
+               structureId={StructureId}
+               appointmentId={ListId}
+               patientId={PatientId}
+               onOk={(state) => {
+                  setIsOpenModal(state);
+                  getData();
+                  getDataForGraph();
+               }}
+            />
+         </NewModal>
       </>
    );
 }

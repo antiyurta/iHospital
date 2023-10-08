@@ -17,24 +17,21 @@ function DynamicContent({
    handleClick,
    editForm,
    editForOUT = true,
-   appointmentHasInsurance,
+   hicsServiceId,
    appointmentType
 }) {
    const [form] = Form.useForm();
    const notes = useSelector(selectCurrentNote);
-   //
    const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(Number);
    const [editModeInspectionNote, setEditModeInspectionNote] = useState(false);
-   //
    const [selectedDiagnoseIds, setSelectedDiagnoseIds] = useState([]);
    const [editModeDiagnosis, setEditModeDiagnosis] = useState(false);
-   //
    const [loading, setLoading] = useState(false);
-   const DiagnoseHandleClick = (diagnosis, hicsServiceData, cost) => {
+   const DiagnoseHandleClick = (diagnosis, cost) => {
       if (incomeData.usageType === 'OUT') {
          if (cost?.length > 0) {
             var data = {
-               hicsServiceId: hicsServiceData.hicsServiceId,
+               hicsServiceId: hicsServiceId,
                serviceId: incomeData.appointmentId,
                serviceType: 5,
                icdCode: cost[0]?.icd10Code,
@@ -130,12 +127,15 @@ function DynamicContent({
                         xrayProcess: 2
                      });
                   } else {
-                     handleClick({ target: { value: 'OCS' } });
+                     if (editForOUT) {
+                        handleClick({ target: { value: 'OCS' } });
+                     }
                   }
                }
                console.log(response);
             })
             .catch((error) => {
+               console.log('Asdaa', error);
                if (error.response.status === 409) {
                   openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
                }
@@ -151,7 +151,6 @@ function DynamicContent({
       setValidStep(false);
    };
    useEffect(() => {
-      console.log('=========>', editForm, editForOUT);
       if (editForm != undefined && editForm != null) {
          if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
             form.setFieldsValue(editForm);
@@ -372,7 +371,8 @@ function DynamicContent({
                            <Diagnose
                               handleClick={DiagnoseHandleClick}
                               types={[0, 1, 2]}
-                              appointmentHasInsurance={appointmentHasInsurance}
+                              hicsServiceId={hicsServiceId}
+                              // type ene heregte bji OUT deer
                               appointmentType={appointmentType}
                            />
                            <Form.List name="diagnose">

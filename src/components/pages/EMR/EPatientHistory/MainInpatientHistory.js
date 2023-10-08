@@ -68,7 +68,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
          )
       }
    ];
-   
+
    const getStory = async () => {
       const conf = {
          headers: {},
@@ -246,7 +246,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
             open={isInsuranceModal}
             onCancel={() => setIsInsuranceModal(false)}
          >
-            <SentService/>
+            <SentService />
          </Modal>
       </div>
    );

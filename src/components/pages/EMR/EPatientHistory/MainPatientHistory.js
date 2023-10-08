@@ -16,13 +16,12 @@ function MainPatientHistory({
    DeparmentId,
    Inspection,
    UsageType,
-   AppointmentHasInsurance,
+   HicsServiceId,
    AppointmentType,
    ServiceId,
    handleClick
 }) {
-   // const [form] = Form.useForm();
-   // const editNote = useSelector(selectCurrentNote);
+   console.log('=============>', HicsServiceId);
    const userId = useSelector(selectCurrentUserId);
    const config = {
       headers: {},
@@ -54,7 +53,7 @@ function MainPatientHistory({
                inspection: Inspection
             }}
             handleClick={handleClick}
-            appointmentHasInsurance={AppointmentHasInsurance}
+            hicsServiceId={HicsServiceId}
             appointmentType={AppointmentType}
          />
       );
@@ -294,7 +293,7 @@ function MainPatientHistory({
                patientId={PatientId}
                inpatientRequestId={InpatientRequestId}
                deparmentId={DeparmentId}
-               serviceId={ServiceId}
+               hicsServiceId={HicsServiceId}
             />
          )}
          <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>
