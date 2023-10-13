@@ -496,6 +496,7 @@ function Patient() {
                <Descriptions.Item label="Утас">{view.phoneNo}</Descriptions.Item>
                <Descriptions.Item label="Гэрийн утас">{view.homePhoneNo}</Descriptions.Item>
                <Descriptions.Item label="И-мэйл">{view.email}</Descriptions.Item>
+               <Descriptions.Item label="Цусны бүлэг">{view.bloodType}</Descriptions.Item>
                <Descriptions.Item label="Аймаг/Дүүрэг">{view.countries?.name}</Descriptions.Item>
             </Descriptions>
          </Modal>

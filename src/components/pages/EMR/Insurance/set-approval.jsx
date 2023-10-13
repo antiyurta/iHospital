@@ -2,7 +2,6 @@ import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectPatient } from '../../../../features/patientReducer';
-import insurance from '../../../../services/healt-insurance/insurance';
 import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
 
 const { TextArea } = Input;
@@ -11,7 +10,6 @@ const SetApproval = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);
-   const [hospitals, setHospitals] = useState([]);
    useEffect(() => {
       form.setFieldsValue({
          patientRegno: patient.registerNumber,
@@ -21,23 +19,14 @@ const SetApproval = (props) => {
       });
    }, []);
    const getHicsServices = async () => {
-      await insurance.getHicsService().then((response) => {
-         if (response.status == 200) {
-            setHicsServices(response.data.data);
-         }
-      });
-   };
-   const getHospitalList = async () => {
-      await healtInsurance.getHospitalList().then((response) => {
-         if (response.status == 200) {
-            console.log(response);
-            setHospitals(response.data.result);
+      await healtInsurance.getHicsService().then(({ data}) => {
+         if (data.code == 200) {
+            setHicsServices(data.result);
          }
       });
    };
    useEffect(() => {
       getHicsServices();
-      getHospitalList();
    }, []);
    return (
       <>

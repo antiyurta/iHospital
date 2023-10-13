@@ -21,7 +21,8 @@ function InspectionHistory(props) {
             paddingRight: 10,
             paddingBottom: 10,
             minHeight: 500,
-            maxHeight: 500
+            maxHeight: 500,
+            overflow: 'auto'
          }}
       >
          {isUsageType === 'OUT' ? (

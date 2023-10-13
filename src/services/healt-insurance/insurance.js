@@ -1,13 +1,30 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
-class Insurance {
+class ApiInsurance {
    async getInsuranceServiceIdName(id) {
       return await jwtInterceopter.get('insurance/hics-service' + id);
-   }
-   async getHicsService() {
-      return await jwtInterceopter.get('insurance/hics-service');
    }
    async getInsuranceService(params) {
       return await jwtInterceopter.get('insurance/hics-service-group', params);
    }
+   /** 4.47 Тусламж үйлчилгээг эхлүүлэх сервис */
+   async hicsAmbulatoryStart(fingerprint, patientId, hicsServiceId) {
+      return await jwtInterceopter.post('hics-ambulatory-start', { fingerprint, patientId, hicsServiceId });
+   }
+   /** Битүүмжлэх үйлчилгээ эхлүүлэх үед */
+   async createHicsSeal(data) {
+      return await jwtInterceopter.post('hics-seal', data);
+   }
+   /** Битүүмж илгээх */
+   async requestHicsSeal(id, data) {
+      return await jwtInterceopter.patch(`hics-seal/${id}`, data);
+   }
+   /** Эмнэлэг доторх битүүмжүүд дуудах */
+   async getAllHicsSeals(params) {
+      return await jwtInterceopter.get('hics-seal', { params });
+   }
+   /** Төлбөрийн мэдээлэл даатгалруу илгээх */
+   async createHicsPayment(data) {
+      return await jwtInterceopter.post('hics-payment', data);
+   }
 }
-export default new Insurance();
+export default new ApiInsurance();

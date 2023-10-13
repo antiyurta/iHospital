@@ -15,7 +15,6 @@ import jwtInterceopter from '../jwtInterceopter';
 import Finger from '../../features/finger';
 import DocumentShow from './611/DocumentShow';
 import DocumentPrint from './611/DocumentPrint';
-import Check13A from './Insurance/Check13A';
 //
 
 const { Option } = Select;
@@ -97,18 +96,6 @@ function EmrSupports({ appointmentId, hicsServiceId, usageType, patient, patient
          setSentReason([]);
       }
    };
-   const getHicsService = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await DefualtGet('health-insurance/hics-service', token, conf);
-      if (response.code === 200) {
-         setHicsServices(response.result);
-      } else {
-         setHicsServices([]);
-      }
-   };
    const sentCitizen = async (values) => {
       const conf = {
          headers: {},
@@ -154,24 +141,9 @@ function EmrSupports({ appointmentId, hicsServiceId, usageType, patient, patient
       values['patientId'] = patientId;
       const response = await Post('health-insurance/hics-service', token, conf, values);
    };
-   //
    const DiagnoseHandleClick = (diagnoses) => {
       sealForm.setFieldValue('diagnose', diagnoses);
    };
-   //
-   //
-   const getPaymentService = async () => {
-      const conf = {
-         headers: {},
-         params: {
-            type: 201
-         }
-      };
-      const response = await DefualtGet('insurance/hics-service', token, conf);
-      // console.log(response);
-      setPaymendServices(response.data);
-   };
-   //
    const endInspection = async (values) => {
       const conf = {
          headers: {},
@@ -227,9 +199,7 @@ function EmrSupports({ appointmentId, hicsServiceId, usageType, patient, patient
    useEffect(() => {
       if (isInsurance) {
          getInsuranceHospitalList(); // emlegin jagsaalt,
-         getHicsService(); // uilcilgeenuud
          getSentReason(); // ilgeeh shaltgaan
-         getPaymentService(); // tolbin medeelel
       }
    }, []); //
    return (
@@ -259,7 +229,6 @@ function EmrSupports({ appointmentId, hicsServiceId, usageType, patient, patient
                            patientId: patientId
                         }}
                      />
-                     <Check13A hicsServiceId={hicsServiceId} />
                   </div>
                </div>
                <div className="float-right">

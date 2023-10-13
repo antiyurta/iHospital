@@ -278,12 +278,14 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                }}
                onOk={() => {
                   diagnosesForm.validateFields().then(async (value) => {
-                     if (selectedCost?.length === 0 && hicsServiceId) {
-                        openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
-                     } else {
-                        handleClick(value.diagnoses, selectedCost);
-                        setIsOpenDiagnoseModal(false);
-                     }
+                     handleClick(value.diagnoses, selectedCost);
+                     setIsOpenDiagnoseModal(false);
+                     // if (selectedCost?.length === 0 && hicsServiceId) {
+                     //    openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
+                     // } else {
+                     //    handleClick(value.diagnoses, selectedCost);
+                     //    setIsOpenDiagnoseModal(false);
+                     // }
                   });
                }}
                width={'90%'}
@@ -299,49 +301,6 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                            onSearch={(e) => getDiagnoses(1, 10, e, 'filter')}
                            enterButton={'Хайх'}
                         />
-                     </div>
-                  </div>
-                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <div className="p-3">
-                        <p
-                           className="pb-3"
-                           style={{
-                              fontWeight: '600'
-                           }}
-                        >
-                           Өртгийн жин
-                        </p>
-                        <ConfigProvider locale={localMn()}>
-                           <Table
-                              rowKey={'drgCode'}
-                              loading={isLoadingHicsCost}
-                              rowSelection={rowSelection}
-                              bordered
-                              columns={[
-                                 {
-                                    title: 'ICD 10 Код',
-                                    dataIndex: 'icd10Code'
-                                 },
-                                 {
-                                    title: 'ICD 9 Код',
-                                    dataIndex: 'icd9Code'
-                                 },
-                                 {
-                                    title: 'Үйлчилгээний нэр',
-                                    dataIndex: 'drgName'
-                                 },
-                                 {
-                                    title: 'Даатгалаас төлөх',
-                                    dataIndex: 'amountHi',
-                                    render: (text) => {
-                                       return numberToCurrency(text);
-                                    }
-                                 }
-                              ]}
-                              dataSource={hicsCost}
-                              pagination={false}
-                           />
-                        </ConfigProvider>
                      </div>
                   </div>
                   <div className="grid sm:grid-rows-2 xl:grid-rows-1 xl:grid-cols-3 gap-3">

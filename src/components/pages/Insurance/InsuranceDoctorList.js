@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table } from 'antd';
+import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table, message } from 'antd';
 import { localMn, numberToCurrency, openNofi } from '../../comman';
 import { EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
@@ -8,6 +8,7 @@ import moment from 'moment';
 //request service uud
 import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';
 import healtInsuranceService from '../../../services/healt-insurance/healtInsurance';
+import apiInsurance from '../../../services/healt-insurance/insurance';
 //request service uud
 
 const { RangePicker } = DatePicker;
@@ -55,17 +56,29 @@ function InsuranceDocterList() {
          conf.params.process = filterValues.process;
          conf.params.resCode = filterValues.resCode;
       }
-      await InsuranceSealService.getByPageFilter(conf)
-         .then((response) => {
-            setData(response.data.response.data);
-            setMeta(response.data.response.meta);
+      await apiInsurance
+         .getAllHicsSeals({
+            page,
+            limit: pageSize
          })
-         .catch((error) => {
-            console.log(error);
+         .then(({ data }) => {
+            if (data.success) {
+               setData(data.response.data);
+               setMeta(data.response.meta);
+            }
          })
-         .finally(() => {
-            setIsLoading(false);
-         });
+         .finally(setIsLoading(false));
+      // await InsuranceSealService.getByPageFilter(conf)
+      //    .then((response) => {
+      //       setData(response.data.response.data);
+      //       setMeta(response.data.response.meta);
+      //    })
+      //    .catch((error) => {
+      //       console.log(error);
+      //    })
+      //    .finally(() => {
+      //       setIsLoading(false);
+      //    });
    };
    const getById = async (id) => {
       await InsuranceSealService.getById(id).then((response) => {
@@ -119,8 +132,12 @@ function InsuranceDocterList() {
    const getIcdGroup = async () => {
       await healtInsuranceService
          .getHicsServiceGroup()
-         .then((response) => {
-            setIcdGroup(response.data.data);
+         .then(({ data }) => {
+            if (data.code == 200) {
+               setIcdGroup(data.result);
+            } else {
+               message.warn(data.description);
+            }
          })
          .catch((error) => {
             console.log(error);
@@ -141,53 +158,38 @@ function InsuranceDocterList() {
    };
    const columns = [
       {
-         title: 'Огноо',
-         dataIndex: 'createdAt',
+         title: 'Эхэлсэн огноо',
+         dataIndex: 'startAt',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return moment(text).format('YYYY-MM-DD hh:mm:ss');
+         }
+      },
+      {
+         title: 'Дууссан огноо',
+         dataIndex: 'endAt',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD hh:mm:ss');
          }
       },
       {
          title: 'Тасаг',
-         dataIndex: 'departName'
+         dataIndex: ['department', 'name']
       },
       {
          title: 'Овог',
-         dataIndex: 'patientLastname'
+         dataIndex: ['patient', 'lastName']
       },
       {
          title: 'Нэр',
-         dataIndex: 'patientFirstname'
+         dataIndex: ['patient', 'firstName']
       },
       {
          title: 'Регистр',
-         dataIndex: 'patientRegno'
-      },
-      {
-         title: 'Хувь',
-         dataIndex: 'gpa',
-         width: 120,
-         render: (text) => {
-            return (
-               <div className="m-1 flex">
-                  <Progress
-                     style={{
-                        wordBreak: 'normal',
-                        width: '90px'
-                     }}
-                     strokeColor={{
-                        '0%': 'yellow',
-                        '100%': 'green'
-                     }}
-                     percent={text}
-                  />
-               </div>
-            );
-         }
+         dataIndex: ['patient', 'registerNumber']
       },
       {
          title: 'Хугацаа',
-         dataIndex: 'createdAt',
+         dataIndex: 'startAt',
          render: (text) => {
             const date1 = new Date(text);
             const date2 = new Date();
@@ -206,21 +208,7 @@ function InsuranceDocterList() {
       },
       {
          title: 'Үйлчилгээний нэр',
-         dataIndex: 'icdGroupName'
-      },
-      {
-         title: 'Хөнгөлөлт үнэ',
-         dataIndex: 'discountAmount',
-         render: (text) => {
-            return numberToCurrency(text);
-         }
-      },
-      {
-         title: 'Нийт үнэ',
-         dataIndex: 'totalAmount',
-         render: (text) => {
-            return numberToCurrency(text);
-         }
+         dataIndex: 'groupId'
       },
       {
          title: 'Урсгал',

@@ -44,6 +44,14 @@ function Insurance({ form }) {
                   })}
                </Select>
             </Form.Item>
+            <Form.Item label="Харьяа хороо эсэх:" name="isLiver" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+               <Select
+                  options={[
+                     { value: true, label: 'Тийм' },
+                     { value: false, label: 'Үгүй' }
+                  ]}
+               />
+            </Form.Item>
          </div>
       </div>
    );

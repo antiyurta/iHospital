@@ -8,7 +8,6 @@ import { Get, Patch, getAge, getGender, numberToCurrency } from '../../../comman
 import orderType from '../orderType.json';
 import { localMn } from '../../../comman';
 import PatientInformation from '../../PatientInformation';
-import { SearchOutlined } from '@ant-design/icons';
 const { CheckableTag } = Tag;
 const { Option } = Select;
 const { Search } = Input;
@@ -73,9 +72,11 @@ function InpatientRequests() {
    const filteredRooms = rooms?.filter((room) => room.structureId === selectedDepartment);
    const filteredBed = rooms?.find((room) => room.id === selectedRoom)?.beds;
    //
-   const openModal = (process, state, patient, rowId) => {
+   const openModal = (process, state, patient, row) => {
       form.resetFields();
-      setSelectedInpatientRequest(rowId);
+      form.setFieldsValue({ depId: row.inDepartmentId });
+      setSelectedDepartment(row.inDepartmentId);
+      setSelectedInpatientRequest(row.id);
       setSelectedPatient(patient);
       if (process === 0) {
          setIsOpenBedModal(state);
@@ -250,7 +251,7 @@ function InpatientRequests() {
          render: (patient, row) => {
             if (row?.process === 0) {
                return (
-                  <Button type="primary" onClick={() => openModal(0, true, patient, row.id)}>
+                  <Button type="primary" onClick={() => openModal(0, true, patient, row)}>
                      Хэвтүүлэх
                   </Button>
                );

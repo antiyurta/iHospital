@@ -23,6 +23,7 @@ import PackageTable from './PackageTable/PackageTable';
 import ExaminationService from '../../../services/service/examination';
 import TreatmentService from '../../../services/service/treatment';
 import XrayService from '../../../services/service/xray';
+import apiInsurance from '../../../services/healt-insurance/insurance';
 //
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, appointmentHasInsurance, save }) {
    const token = useSelector(selectCurrentToken);
@@ -173,7 +174,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
       values.patientId = IncomePatientId;
       values.cabinetId = IncomeCabinetId;
       values.appointmentId = IncomeAppointmentId;
-      values.isInsurance = appointmentHasInsurance;
       const response = await DefaultPost('service/inpatient-request', token, config, values);
       if (response) {
          setInPatientId(response.id);

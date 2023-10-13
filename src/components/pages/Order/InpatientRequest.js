@@ -1,19 +1,12 @@
 import { Button, Form, InputNumber, Modal, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentInsurance } from '../../../features/authReducer';
 import jwtInterceopter from '../../jwtInterceopter';
-const { Option, OptGroup } = Select;
 
 function InpatientRequest({ handleClick }) {
-   const isInsurance = useSelector(selectCurrentInsurance);
    const [InpatientRequestForm] = Form.useForm();
    const [isDuration, setIsDuration] = useState(true);
    const [doctors, setDoctors] = useState([]);
    const [structures, setStructures] = useState([]);
-   const [selectedDep, setSelectedDep] = useState();
-   const [selectedDoctor, setSelectedDoctor] = useState();
-   const [insuranceServices, setInsurranceServices] = useState([]);
    const [isOpenModal, setIsOpenModal] = useState(false);
 
    const checkDuration = (e) => {
@@ -38,7 +31,6 @@ function InpatientRequest({ handleClick }) {
          });
    };
    const getDoctor = async (value) => {
-      setSelectedDep(structures.filter((e) => e['id'] === value));
       await jwtInterceopter
          .get('organization/employee', {
             params: {
@@ -52,23 +44,8 @@ function InpatientRequest({ handleClick }) {
             console.log(error);
          });
    };
-   const selectDoctor = (value) => {
-      const selectedDoctor = doctors.filter((e) => e.id === value);
-      setSelectedDoctor(selectedDoctor[0]);
-   };
-   const getInsuranceServices = async () => {
-      await jwtInterceopter
-         .get('insurance/hics-service-group')
-         .then((response) => {
-            setInsurranceServices(response.data.data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-   };
    useEffect(() => {
       getStructures();
-      getInsuranceServices();
    }, []);
 
    return (
@@ -77,8 +54,6 @@ function InpatientRequest({ handleClick }) {
             type="primary"
             onClick={() => {
                setIsOpenModal(true);
-               // setSelectedExaminationId(null);
-               // setSelectedExaminations([]);
             }}
          >
             Хэвтүүлэх
@@ -111,15 +86,12 @@ function InpatientRequest({ handleClick }) {
                            }
                         ]}
                      >
-                        <Select allowClear onChange={getDoctor} placeholder="Тасаг сонгох">
-                           {structures.map((structure, index) => {
-                              return (
-                                 <Option key={index} value={structure.id}>
-                                    {structure.name}
-                                 </Option>
-                              );
-                           })}
-                        </Select>
+                        <Select
+                           allowClear
+                           onChange={getDoctor}
+                           placeholder="Тасаг сонгох"
+                           options={structures.map((structure) => ({ value: structure.id, label: structure.name }))}
+                        />
                      </Form.Item>
                      <Form.Item
                         label="Эмч"
@@ -131,15 +103,11 @@ function InpatientRequest({ handleClick }) {
                            }
                         ]}
                      >
-                        <Select allowClear onChange={selectDoctor} placeholder="Эмч сонгох">
-                           {doctors.map((doctor, index) => {
-                              return (
-                                 <Option key={index} value={doctor.id}>
-                                    {doctor.firstName}
-                                 </Option>
-                              );
-                           })}
-                        </Select>
+                        <Select
+                           allowClear
+                           placeholder="Эмч сонгох"
+                           options={doctors.map((doctor) => ({ value: doctor.id, label: doctor.firstName }))}
+                        />
                      </Form.Item>
                      <Form.Item
                         label="Хүндийн зэрэг"
@@ -151,13 +119,15 @@ function InpatientRequest({ handleClick }) {
                            }
                         ]}
                      >
-                        <Select>
-                           <Option value={0}>Маш хүнд</Option>
-                           <Option value={1}>Хүнд</Option>
-                           <Option value={2}>Хүндэвтэр</Option>
-                           <Option value={3}>Дунд</Option>
-                           <Option value={4}>Хөнгөн</Option>
-                        </Select>
+                        <Select
+                           options={[
+                              { value: 0, label: 'Маш хүнд' },
+                              { value: 1, label: 'Хүнд' },
+                              { value: 2, label: 'Хүндэвтэр' },
+                              { value: 3, label: 'Дунд' },
+                              { value: 4, label: 'Хөнгөн' }
+                           ]}
+                        ></Select>
                      </Form.Item>
                   </div>
 
@@ -172,10 +142,13 @@ function InpatientRequest({ handleClick }) {
                            }
                         ]}
                      >
-                        <Select onChange={(e) => checkDuration(e)}>
-                           <Option value="EMERGENCY">Яаралтай</Option>
-                           <Option value="PLAN">Төлөвлөгөөт</Option>
-                        </Select>
+                        <Select
+                           onChange={(e) => checkDuration(e)}
+                           options={[
+                              { value: 'EMERGENCY', label: 'Яаралтай' },
+                              { value: 'PLAN', label: 'Төлөвлөгөөт' }
+                           ]}
+                        />
                      </Form.Item>
                   </div>
                   <div className="w-full">
@@ -192,43 +165,6 @@ function InpatientRequest({ handleClick }) {
                         <InputNumber disabled={isDuration} />
                      </Form.Item>
                   </div>
-                  {isInsurance && (
-                     <div className="w-full">
-                        <Form.Item
-                           label="Эмнэлэгт хэвтэх шалтгаан"
-                           name="insuranceServiceId"
-                           rules={[
-                              {
-                                 required: true,
-                                 message: 'Заавал'
-                              }
-                           ]}
-                        >
-                           <Select
-                              showSearch
-                              virtual={false}
-                              optionFilterProp="children"
-                              filterOption={(input, option) =>
-                                 (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                              }
-                           >
-                              {insuranceServices?.map((service, index) => {
-                                 return (
-                                    <OptGroup key={index} label={service.name}>
-                                       {service?.hicsServices?.map((item, idx) => {
-                                          return (
-                                             <Option key={`${index - idx}`} value={item.id}>
-                                                {item.name}
-                                             </Option>
-                                          );
-                                       })}
-                                    </OptGroup>
-                                 );
-                              })}
-                           </Select>
-                        </Form.Item>
-                     </div>
-                  )}
                </div>
             </Form>
          </Modal>

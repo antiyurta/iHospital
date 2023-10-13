@@ -9,9 +9,15 @@ export const HEALTH_SERVICES_TITLE = {
    reConfirmHics: 'RE_CONFIRM_HICS',
    fingerRequest: 'FINGER_REQUEST',
    repairHics: 'REPAIR_HICS_SERVICE',
-   setPatientReturn: 'SET_PATIENT_RETURN',
+   setPatientReturn: 'SET_PATIENT_RETURN'
 };
-
+export const HICS_PROCESS = {
+   SEAL_PENDING: 0, // Битүүмж хүлээгдэж байгаа.
+   SEAL_CONFIRM: 1, // Битүүмж амжилттай үүссэн байна.
+   PAYMENT_FAILED: 2, // Төлбөрийн мэдээлэл илгээгүй байна.
+   PAYMENT_CONFIRM: 3, // Төлбөрийн мэдээлэл илгээсэн байна.
+   REFUND_SERVICE: 4 // Буцаалт хийсэн байна.
+};
 export const HEALTH_SERVCES_DESCRIPTION = (title) => {
    switch (title) {
       case HEALTH_SERVICES_TITLE.savePrescription:
@@ -38,6 +44,26 @@ export const HEALTH_SERVCES_DESCRIPTION = (title) => {
          return '4.46 Эмнэлгээс өвчтөн илгээх хуудас үүсгэх сервис';
       default:
          break;
-         
    }
 };
+/** Амбулторийн тусламж үйлчилгээний DRGCODE */
+const SUPPORT_AMBULATORY_CODE = '300011';
+/** Амбулторийн жирэмсэний хяналтийн hicsId багцтай үзлэг */
+const SUPPORT_PREGNANT = { hicsId: 20160, isPack: true, isRequired: true };
+/** Амбулторийн хяналтийн үзлэг hicsId багцтай үзлэг */
+const SUPPORT_CONTROL = { hicsId: 20150, isPack: true, isRequired: false };
+/** Багцийн мэдээлэл */
+const HICS_PACKAGE = {
+   packId: 1, // эмчийн үзлэг
+   packId: 2 // оношилгоо шинжилгээний мэдээлэл
+};
+/** Хос онош шаардах хорт хавдрын тусламж, үйлчилгээн дээр заавал дамжуулна. icdCode1 нь хорт хавдрын С-тэй онош байх ёстой. */
+const SUPPORT_CARE = [
+   { hicsId: 20320, isRequired: true },
+   { hicsId: 20330, isRequired: true },
+   { hicsId: 20550, isRequired: true },
+   { hicsId: 20150, isRequired: false }
+];
+const SUPPORT_CARE_DIAGNOSE = 'C';
+/** Эрхтэн шилжүүлэх тусламж, үйлчилгээ дээр заавал secondRegno дамжуулна. */
+export const SUPPORT_ORGAN_TRANSPLANT = 20540;
