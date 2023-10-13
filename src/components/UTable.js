@@ -264,11 +264,6 @@ function UTable(props) {
                               Даатгал Дата
                            </th>
                         ) : null}
-                        {props.isHospital ? (
-                           <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
-                              Санхүү
-                           </th>
-                        ) : null}
                      </tr>
                      <tr>
                         {props.column.map((element, index) => {
@@ -537,9 +532,9 @@ function UTable(props) {
                                     showSearch
                                     placeholder={element.label}
                                     optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                       (option?.value ?? '').toLowerCase().includes(input?.toLowerCase())
-                                    }
+                                    filterOption={(input, option) => {
+                                       return (option?.children ?? '').toLowerCase().includes(input?.toLowerCase());
+                                    }}
                                  >
                                     {element.inputData?.map((data, index) => {
                                        return (

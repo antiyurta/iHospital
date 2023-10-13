@@ -6,6 +6,14 @@ class ApiInsurance {
    async getInsuranceService(params) {
       return await jwtInterceopter.get('insurance/hics-service-group', params);
    }
+   /** 4.24 Оношилгоо, шинжилгээний кодын сан дуудах */
+   async getAllHicsExams() {
+      return await jwtInterceopter.get('hics-exam');
+   }
+   /** 4.24 Оношилгоо, шинжилгээний кодын сан хадгалах */
+   async createHicsExams() {
+      return await jwtInterceopter.post('hics-exam');
+   }
    /** 4.47 Тусламж үйлчилгээг эхлүүлэх сервис */
    async hicsAmbulatoryStart(fingerprint, patientId, hicsServiceId) {
       return await jwtInterceopter.post('hics-ambulatory-start', { fingerprint, patientId, hicsServiceId });

@@ -4,11 +4,13 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get } from '../../comman';
 import UTable from '../../UTable';
+import apiInsuranceService from '../../../services/healt-insurance/insurance';
 
 function Xray() {
    const token = useSelector(selectCurrentToken);
    const [xrayTypeData, setXrayTypeData] = useState([]);
    const [devices, setDevices] = useState([]);
+   const [hicsExams, setHicsExams] = useState([]);
 
    const config = {
       headers: {},
@@ -31,10 +33,18 @@ function Xray() {
       });
       setDevices(response.data);
    };
+   const getHicsExams = async () => {
+      await apiInsuranceService.getAllHicsExams().then(({ data }) => {
+         if (data.success) {
+            setHicsExams(data.response);
+         }
+      });
+   };
 
    useEffect(() => {
       getDevices();
       getXrayTypeData();
+      getHicsExams();
    }, []);
    const column = [
       {
@@ -111,6 +121,16 @@ function Xray() {
          isView: true,
          isSearch: false,
          input: 'inputNumber',
+         col: 12
+      },
+      {
+         index: 'hicsExamId',
+         label: 'ЭМД үйлчилгээ',
+         isView: true,
+         isSearch: false,
+         input: 'select',
+         inputData: hicsExams,
+         relIndex: 'name',
          col: 12
       }
    ];
