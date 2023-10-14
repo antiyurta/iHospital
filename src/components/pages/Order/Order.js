@@ -38,6 +38,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
    const [total, setTotal] = useState(Number);
 
    const handleclick = async (value) => {
+      console.log('zahialsan uilchilgee', value);
       setIsLoadingOrderTable(true);
       if (isPackage) {
          var services = [];

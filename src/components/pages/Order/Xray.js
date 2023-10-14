@@ -3,6 +3,8 @@ import { Button, ConfigProvider, Empty, Input, Modal, Select, Table } from 'antd
 import React, { useEffect, useState } from 'react';
 import { localMn, numberToCurrency, openNofi } from '../../comman';
 import jwtInterceopter from '../../jwtInterceopter';
+import { selectCurrentEmrData } from '../../../features/emrReducer';
+import { useSelector } from 'react-redux';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -11,6 +13,8 @@ function Xray({ handleclick }) {
    const [isLoading, setIsLoading] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [selectedXrayId, setSelectedXrayId] = useState(null);
+   const currentEmrData = useSelector(selectCurrentEmrData);
+   console.log('currentEmrData =======>', currentEmrData);
    const [xrays, setXrays] = useState([]);
    const [xray, setXray] = useState([]);
    const [metaXray, setMetaXray] = useState({});
@@ -63,7 +67,7 @@ function Xray({ handleclick }) {
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Оношилгоо сонгогдсон байна');
       } else {
-         xray.type = xray.types.type;
+         xray.type = xray.type.type;
          setSelectedXrays([...selectedXrays, xray]);
       }
    };

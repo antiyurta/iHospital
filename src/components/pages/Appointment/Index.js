@@ -20,7 +20,7 @@ import OrganizationEmployeeService from '../../../services/organization/employee
 import OrganizationStructureService from '../../../services/organization/structure';
 import ScheduleService from '../../../services/schedule';
 import HealtInsuranceService from '../../../services/healt-insurance/healtInsurance';
-import AppointmentService from '../../../services/appointment/appointment';
+import AppointmentService from '../../../services/appointment/api-appointment-service';
 import serviceRequest from '../../../services/serviceRequest';
 
 function Index(props) {

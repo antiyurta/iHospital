@@ -14,7 +14,7 @@ import InspectionHistory from './InspectionHistory';
 import ListOfIssues from './ListOfIssues';
 //
 import PmsPatientServices from '../../../services/pms/patient';
-import AppointmentService from '../../../services/appointment/appointment';
+import AppointmentService from '../../../services/appointment/api-appointment-service';
 import ServiceRequestService from '../../../services/serviceRequest';
 import PaymentService from '../../../services/payment/payment';
 import NewCard from '../../Card/Card';

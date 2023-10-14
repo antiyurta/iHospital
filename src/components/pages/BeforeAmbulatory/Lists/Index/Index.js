@@ -42,7 +42,7 @@ import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
 import { setPatient } from '../../../../../features/patientReducer';
 //
 import Finger from '../../../../../features/finger';
-import AppointmentService from '../../../../../services/appointment/appointment';
+import AppointmentService from '../../../../../services/appointment/api-appointment-service';
 import healthInsuranceService from '../../../../../services/healt-insurance/healtInsurance';
 import apiInsuranceService from '../../../../../services/healt-insurance/insurance';
 import ScheduleService from '../../../../../services/schedule';
@@ -133,7 +133,6 @@ function Index({ type, isDoctor }) {
       // status heregteii anhan dawtan
       // tolbor shalgah
       setSelectedRow(row);
-      console.log('row =======>', row);
       if (row.process != 2 && row.process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else if (row.process === 2) {
@@ -191,8 +190,8 @@ function Index({ type, isDoctor }) {
       const data = {
          patientId: row.patientId,
          inspection: inspectionType === undefined ? 1 : inspectionType,
-         hicsServiceId: row.hicsServiceId ? row.hicsServiceId : startFormHics.getFieldValue('hicsServiceId'),
-         type: row.type
+         type: row.type,
+         hicsSeal: row.hicsSeal
       };
       if (type === 0) {
          data['usageType'] = 'OUT';
@@ -241,12 +240,13 @@ function Index({ type, isDoctor }) {
             } else if (data.code === 200) {
                await apiInsuranceService
                   .createHicsSeal({
+                     appointmentId: selectedRow.id,
                      patientId: selectedRow.patientId,
                      departmentId: selectedRow.cabinetId,
                      startAt: data.result.createdDate,
                      hicsAmbulatoryStartId: data.result.id,
                      hicsServiceId: data.result.hicsServiceId,
-                     groupId: 201,
+                     groupId: 201
                   })
                   .then((response) => {
                      if (response.status != 200) {

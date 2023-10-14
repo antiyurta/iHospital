@@ -287,8 +287,10 @@ function Index() {
          headers: {},
          params: {}
       };
-      const response = await Get('reference/measurement', token, conf);
+      const response = await Get('reference-measurement', token, conf);
+      console.log('response =======>', response.data);
       setMeasurements(response.data);
+      console.log('measurements =======>', measurements);
    };
    const rowSelection = {
       selectedRowKeys: selectedRowKeys,
@@ -635,7 +637,10 @@ function Index() {
                                           title: 'Хэмжих нэгж',
                                           dataIndex: 'measurementId',
                                           render: (text) => {
-                                             return measurements.find((e) => e.id === text).name;
+                                             return measurements.find((e) => {
+                                                console.log('value =====>', text);
+                                                return e.id === text;
+                                             });
                                           }
                                        },
                                        {

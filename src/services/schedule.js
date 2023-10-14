@@ -12,12 +12,6 @@ class Schedule {
    async getDoctorSlot(conf) {
       return await jwtInterceopter.get('slot', conf);
    }
-   async postReturnSlot(data) {
-      return await jwtInterceopter.post('appoinment/return', data);
-   }
-   async postChangeSlot(data) {
-      return await jwtInterceopter.post('appoinment/return/change', data);
-   }
    async patchSlot(id, data) {
       return await jwtInterceopter.patch('slot/' + id, data);
    }
