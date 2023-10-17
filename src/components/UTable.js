@@ -189,7 +189,7 @@ function UTable(props) {
    const getTypesDatas = async (type) => {
       setType(type);
       config.params.type = type;
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setTypesData(response.data);
    };
    useEffect(() => {
@@ -614,7 +614,7 @@ function UTable(props) {
                         }
                      });
                      values.type = type;
-                     const response = await Post('service/type', token, config, values);
+                     const response = await Post('reference-care-type', token, config, values);
                      if (response.length != 0) {
                         props.refresh();
                         setIsSubModalVisible(false);

@@ -15,7 +15,7 @@ function Surgery() {
       }
    };
    const getSurguryTypeData = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setSurgeryTypeData(response.data);
    };
 

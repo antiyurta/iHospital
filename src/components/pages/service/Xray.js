@@ -20,7 +20,7 @@ function Xray() {
    };
 
    const getXrayTypeData = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setXrayTypeData(response.data);
    };
 

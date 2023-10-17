@@ -3,6 +3,9 @@ import { Button, ConfigProvider, Empty, Input, Modal, Form, Table, Select } from
 import jwtInterceopter from '../../jwtInterceopter';
 import { localMn, numberToCurrency, openNofi } from '../../comman';
 import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { ListCareType } from './list-type';
+import { CARE_TYPE } from './care-enum';
+import { ListSupport } from './list-support';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -12,28 +15,13 @@ function Surgery(props) {
    const [form] = Form.useForm();
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isOpenSubModal, setIsOpenSubModal] = useState(false);
-   const [surgeries, setSurgeries] = useState([]);
    const [surgery, setSurgery] = useState([]);
    const [diagnosis, setDiagnosis] = useState([]);
    const [metaSurgery, setMetaSurgery] = useState({});
    const [selectedSurgeries, setSelectedSurgeries] = useState([]);
-   const [selectedSurgeryId, setSelectedSurgeryId] = useState(Number);
+   const [selectedTypeId, setSelectedTypeId] = useState(Number);
    const [surgeryId, setSurgeryId] = useState(Number);
    const [isLoading, setIsLoading] = useState(false);
-   const getSurgeries = async () => {
-      await jwtInterceopter
-         .get('service/type', {
-            params: {
-               type: 3
-            }
-         })
-         .then((response) => {
-            setSurgeries(response.data.response?.data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-   };
    const getPatientDiagnosis = async () => {
       await jwtInterceopter
          .get('emr/patient-diagnose', {
@@ -48,28 +36,6 @@ function Surgery(props) {
                return diagnose.diagnose;
             });
             setDiagnosis(diagnose);
-         });
-   };
-   const getTypeById = async (id, page, pageSize) => {
-      setIsLoading(true);
-      await jwtInterceopter
-         .get('service/surgery', {
-            params: {
-               surgeryTypeId: id,
-               page: page,
-               limit: pageSize
-            }
-         })
-         .then((response) => {
-            setSelectedSurgeryId(id);
-            setSurgery(response.data.response.data);
-            setMetaSurgery(response.data.response.meta);
-         })
-         .catch((error) => {
-            console.log(error);
-         })
-         .finally(() => {
-            setIsLoading(false);
          });
    };
    const onFinishSub = (values) => {
@@ -94,7 +60,6 @@ function Surgery(props) {
       setSelectedSurgeries(arr);
    };
    useEffect(() => {
-      getSurgeries();
       getPatientDiagnosis();
    }, []);
    return (
@@ -136,112 +101,13 @@ function Surgery(props) {
                      }}
                   >
                      <div className="flex flex-col gap-2">
-                        {surgeries.map((surgery, index) => {
-                           return (
-                              <Button
-                                 onClick={() => getTypeById(surgery.id, 1, 10)}
-                                 className="w-full bg-[#3d9970] text-white rounded-lg"
-                                 key={index}
-                              >
-                                 {surgery.name}
-                              </Button>
-                           );
-                        })}
+                        <ListCareType type={CARE_TYPE.Surgery} getTypeById={setSelectedTypeId} />
                      </div>
                   </div>
                </div>
                <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <div className="p-3">
-                        <Search
-                           className="mb-3"
-                           placeholder="Хайх"
-                           allowClear
-                           enterButton={
-                              <SearchOutlined
-                                 style={{
-                                    fontSize: 16,
-                                    color: 'white'
-                                 }}
-                              />
-                           }
-                           // onSearch={(e) => {
-                           //    if (selectedTreatmentId === null) {
-                           //       openNofi('warning', 'Анхааруулга', 'Төрөл сонгоно уу');
-                           //    } else {
-                           //       getTypeById(selectedTreatmentId, 1, 10, e);
-                           //    }
-                           // }}
-                        />
-                        <ConfigProvider locale={localMn()}>
-                           <Table
-                              rowKey={'id'}
-                              bordered
-                              scroll={{
-                                 y: 400
-                              }}
-                              loading={isLoading}
-                              locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                              columns={[
-                                 {
-                                    title: 'Нэр',
-                                    dataIndex: 'name',
-                                    render: (text) => {
-                                       return (
-                                          <p
-                                             style={{
-                                                whiteSpace: 'normal',
-                                                color: 'black'
-                                             }}
-                                          >
-                                             {text}
-                                          </p>
-                                       );
-                                    }
-                                 },
-                                 {
-                                    title: 'Үнэ',
-                                    dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
-                                    width: 100,
-                                    render: (text) => {
-                                       return numberToCurrency(text);
-                                    }
-                                 },
-                                 {
-                                    title: '',
-                                    width: 40,
-                                    render: (_text, row) => {
-                                       return (
-                                          <Button
-                                             onClick={() => add(row)}
-                                             icon={
-                                                <PlusCircleOutlined
-                                                   style={{
-                                                      color: 'green'
-                                                   }}
-                                                />
-                                             }
-                                          />
-                                       );
-                                    }
-                                 }
-                              ]}
-                              dataSource={surgery}
-                              pagination={{
-                                 position: ['bottomCenter'],
-                                 size: 'small',
-                                 current: metaSurgery.page,
-                                 total: metaSurgery.itemCount,
-                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                                 pageSize: metaSurgery.limit,
-                                 showSizeChanger: true,
-                                 pageSizeOptions: ['5', '10', '20', '50'],
-                                 showQuickJumper: true,
-                                 onChange: (page, pageSize) => getTypeById(selectedSurgeryId, page, pageSize)
-                              }}
-                           />
-                        </ConfigProvider>
-                     </div>
+                     <ListSupport careType={CARE_TYPE.Surgery} careTypeId={selectedTypeId} add={add} />
                   </div>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">

@@ -10,7 +10,12 @@ class ApiAppointmentService {
       return await jwtInterceopter.post('appointment', data);
    }
    async patchAppointment(id, data) {
-      return await jwtInterceopter.patch('appointment/' + id, data);
+      return await jwtInterceopter.patch(`appointment/${id}`, data);
+   }
+   async getAllStatusHistories(params) {
+      return await jwtInterceopter.get('appointment-status-history/', {
+         params
+      });
    }
 }
 export default new ApiAppointmentService();

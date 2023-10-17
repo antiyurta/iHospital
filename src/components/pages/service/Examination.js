@@ -18,12 +18,12 @@ function Examination() {
       }
    };
    const getExaminationTypeData = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setExaminationTypeData(response.data);
    };
 
    const getServicesType = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setTypes(response.data);
    };
    const getHicsExams = async () => {

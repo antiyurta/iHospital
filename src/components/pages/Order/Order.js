@@ -2,7 +2,7 @@ import { Button, Form } from 'antd';
 import RecentRecipe from './RecentRecipe';
 import SetOrder from './SetOrder';
 import Medicine from './Medicine';
-import Examination from './Examination';
+import { Examination } from './Examination';
 import Xray from './Xray';
 import Treatment from './Treatment';
 import Surgery from './Surgery';
@@ -20,10 +20,9 @@ import Reinspection from './Reinspection';
 import OrderTable from './OrderTable/OrderTable';
 import PackageTable from './PackageTable/PackageTable';
 ///
-import ExaminationService from '../../../services/service/examination';
-import TreatmentService from '../../../services/service/treatment';
-import XrayService from '../../../services/service/xray';
-import apiInsurance from '../../../services/healt-insurance/insurance';
+import ExaminationService from '../../../services/service/examination.api';
+import TreatmentService from '../../../services/service/treatment.api';
+import XrayService from '../../../services/service/xray.api';
 //
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, appointmentHasInsurance, save }) {
    const token = useSelector(selectCurrentToken);

@@ -17,12 +17,12 @@ function Index({ PatientId, RegisterNumber }) {
       {
          key: 1,
          label: 'Үзлэгийн түүх',
-         children: <PaymentHistory patientId={PatientId} />
+         children: <InspectionHistory patientId={PatientId} />
       },
       {
          key: 2,
          label: 'Төлбөрийн мэдээлэл',
-         children: <InspectionHistory patientId={PatientId} />
+         children: <PaymentHistory patientId={PatientId} />
       }
    ];
    const FullScreen = () => (
