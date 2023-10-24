@@ -950,7 +950,9 @@ table .formTable tr > td {
 .steps-action {
    margin-top: 24px;
 }
-
+.ant-checkbox + span {
+   line-height: 8px !important;
+}
 table.new-table {
    /* width: 100%; */
 }

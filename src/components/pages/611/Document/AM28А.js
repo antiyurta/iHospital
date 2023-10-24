@@ -1,8 +1,14 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
 
 //маягт АМ-28А
-function AM28А() {
+function AM28А(props) {
+   console.log('ASD', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -44,7 +50,7 @@ function AM28А() {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>Эмнэлгийн нэр ____________________</span>
+               <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-28А</span>
@@ -68,19 +74,7 @@ function AM28А() {
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div>Өрөөний №</div>
                <div style={{ display: 'flex' }}>
-                  <span style={styles.generalText}>РД:</span>
-                  <div style={{ display: 'flex', marginLeft: 5 }}>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                  </div>
+                  <span style={styles.generalText}>РД: {patientData?.registerNumber}</span>
                </div>
                <div style={{ display: 'flex', marginTop: 5 }}>
                   <span style={styles.generalText}>ЭМД:</span>
@@ -96,44 +90,53 @@ function AM28А() {
                </div>
             </div>
             <div style={styles.rowStyle}>
-               1. Эцэг /эх/-ийн нэр __________________________
-               <span style={{ marginLeft: 50 }}>Нэр __________________________</span>
+               1. Эцэг /эх/-ийн нэр {patientData?.lastName}
+               <span style={{ marginLeft: 50 }}>Нэр {patientData?.firstName}</span>
             </div>
             <div style={styles.rowStyle}>
-               2. Нас ______
-               <span style={{ marginLeft: 50 }}>Хүйс: /зур/ эрэгтэй, эмэгтэй</span>
+               2. Нас {patientData?.age}
+               <span style={{ marginLeft: 50 }}>
+                  Хүйс: /зур/
+                  <span style={{ marginLeft: 30 }}>
+                     <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
+                     <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
+                  </span>
+               </span>
             </div>
-            <div style={styles.rowStyle}>3. Үндсэн онош: ________________________________________</div>
+            <div style={styles.rowStyle}>3. Үндсэн онош: {formData?.['AM28.1']}</div>
+            <div style={styles.rowStyle}>4. Эмчилгээний зарчим {formData?.['AM28.2']}</div>
             <div style={styles.rowStyle}>
-               4. Эмчилгээний зарчим____________________________________
-               <span style={{ marginLeft: 50 }}>5. Зүү эмчилгээний төрөл:/зур/</span>
-            </div>
-            <div style={styles.rowStyle}>
-               ______________________________________________________________
-               <span style={{ marginLeft: 50 }}>Их биеийн зүү</span>
-            </div>
-            <div style={styles.rowStyle}>
-               ______________________________________________________________
-               <span style={{ marginLeft: 50 }}>Цахилгаан зүү</span>
-            </div>
-            <div style={styles.rowStyle}>
-               ______________________________________________________________
-               <span style={{ marginLeft: 50 }}>Усан зүү _______________ Эмийн бодис</span>
-            </div>
-            <div style={styles.rowStyle}>
-               ______________________________________________________________
-               <span style={{ marginLeft: 50 }}>Гарын зүү</span>
-            </div>
-            <div style={styles.rowStyle}>
-               ______________________________________________________________
-               <span style={{ marginLeft: 50 }}>Чихний зүү</span>
+               <NewCheckboxGroup value={formData?.['AM28.3']} className="dstory">
+                  5. Зүү эмчилгээний төрөл:/зур/
+                  <br />
+                  <NewCheckbox value={0} className="test">
+                     <span style={{ fontSize: 12 }}>Их биеийн зүү</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={1} className="test">
+                     <span style={{ fontSize: 12 }}>Цахилгаан зүү</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={2} className="test">
+                     <span style={{ fontSize: 12 }}>Усан зүү</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={3} className="test">
+                     <span style={{ fontSize: 12 }}>Гарын зүү</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={4} className="test">
+                     <span style={{ fontSize: 12 }}>Чихний зүү</span>
+                  </NewCheckbox>
+                  <br />
+                  <NewCheckbox value={5} className="test">
+                     <span style={{ fontSize: 12 }}> Эмийн бодис</span>
+                  </NewCheckbox>
+               </NewCheckboxGroup>
             </div>
             <div style={styles.rowStyle}>
                6. Жор:
-               ___________________________________________________________________________________________________________________________
-            </div>
-            <div style={styles.rowStyle}>
-               ____________________________________________________________________________________________________________________________________
+               {formData?.['AM28.4']}
             </div>
             <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ________________________________</div>
             <div style={styles.rowStyle}>Зүү эмчилгээ хийлгэхийг зөвшөөрсөн гарын үсэг:</div>
@@ -151,76 +154,17 @@ function AM28А() {
                      <td style={styles.centerText}>Хавсран хийгдэх эмчилгээ</td>
                      <td style={styles.centerText}>Засал хийсэн эмчийн нэр</td>
                   </tr>
-                  <tr>
-                     <td style={styles.centerText}>1</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>2</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>3</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>4</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>5</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>6</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>7</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>8</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>9</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
-                  <tr>
-                     <td style={styles.centerText}>10</td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                     <td style={styles.centerText}></td>
-                  </tr>
+                  {formData?.['AM28.5']?.map((el, index) => {
+                     return (
+                        <tr key={index}>
+                           <td style={styles.centerText}>{index + 1}</td>
+                           <td style={styles.centerText}>{el[0]}</td>
+                           <td style={styles.centerText}>{el[1]}</td>
+                           <td style={styles.centerText}>{el[2]}</td>
+                           <td style={styles.centerText}>{el[3]}</td>
+                        </tr>
+                     );
+                  })}
                </tbody>
             </Table>
          </div>
