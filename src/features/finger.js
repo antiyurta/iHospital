@@ -28,6 +28,7 @@ function Finger(props) {
          socket.addEventListener('close', handleClose);
          socket.addEventListener('message', async (event) => {
             const message = JSON.parse(event.data);
+            console.log(message);
             setReceivedData(message.result.image);
             setIsLoadingFetchData(false);
          });
@@ -69,7 +70,7 @@ function Finger(props) {
       if (socket && socket.readyState === WebSocket.OPEN) {
          const message = {
             deviceId: 123456789,
-            command: 'Read',
+            command: 'ReadFinger',
             Parameters: null
          };
          socket.send(JSON.stringify(message));
@@ -185,7 +186,7 @@ function Finger(props) {
                                     name={step.path}
                                     rules={[
                                        {
-                                          required: true,
+                                          required: false,
                                           message: `${step.title} Заавал`
                                        }
                                     ]}

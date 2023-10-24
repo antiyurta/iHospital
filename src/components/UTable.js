@@ -400,7 +400,7 @@ function UTable(props) {
                                              type="text"
                                              className="text-sky-500 font-semibold"
                                           >
-                                             Async Хийх
+                                             Async
                                           </Button>
                                           <Button
                                              onClick={() => {

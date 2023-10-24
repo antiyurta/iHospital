@@ -5,6 +5,7 @@
    "dependencies": {
       "@ant-design/icons": "^4.7.0",
       "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+      "@react-pdf/renderer": "^3.1.12",
       "@reduxjs/toolkit": "^1.9.5",
       "@testing-library/jest-dom": "^5.16.5",
       "@testing-library/react": "^14.0.0",
@@ -71,6 +72,7 @@
       ]
    },
    "devDependencies": {
+      "@ag-media/react-pdf-table": "^1.0.1",
       "@babel/preset-env": "^7.22.4",
       "@babel/preset-react": "^7.22.3",
       "babel-loader": "^9.1.2",

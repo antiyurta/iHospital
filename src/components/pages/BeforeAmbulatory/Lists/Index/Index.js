@@ -9,7 +9,7 @@ import {
    PlusOutlined,
    ReloadOutlined
 } from '@ant-design/icons';
-import { Alert, Button, Card, ConfigProvider, DatePicker, Empty, Form, Input, Modal, Table, Tag } from 'antd';
+import { Alert, Button, Card, ConfigProvider, DatePicker, Empty, Form, Input, Modal, Select, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
@@ -25,10 +25,18 @@ import Marquee from 'react-fast-marquee';
 import { setNote } from '../../../../../features/noteReducer';
 import jwtInterceopter from '../../../../jwtInterceopter';
 import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
-
+import { setPatient } from '../../../../../features/patientReducer';
+//
+import Finger from '../../../../../features/finger';
+import AppointmentService from '../../../../../services/appointment/appointment';
+import healtInsuranceService from '../../../../../services/healt-insurance/healtInsurance';
+import insuranceServiceApi from '../../../../../services/healt-insurance/insurance';
+import ScheduleService from '../../../../../services/schedule';
+import { NewInput } from '../../../../Input/Input';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
+const { OptGroup, Option } = Select;
 
 function Index({ type, isDoctor }) {
    //type 0 bol ambultor
@@ -38,6 +46,7 @@ function Index({ type, isDoctor }) {
    const scrollRef = useRef();
    const today = new Date();
    const [editFormDesc] = Form.useForm();
+   const [startFormHics] = Form.useForm();
    const token = useSelector(selectCurrentToken);
    const employeeId = useSelector(selectCurrentUserId);
    const depIds = useSelector(selectCurrentDepId);
@@ -60,6 +69,11 @@ function Index({ type, isDoctor }) {
    const [selectedRowPatientId, setSelectedRowPatientId] = useState(Number);
    const [selectedTags, setSelectedTags] = useState(0);
    const [usageType, setUsageType] = useState('OUT');
+   // suul newew 8.1
+   const [selectedRow, setSelectedRow] = useState();
+   const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
+   const [insuranceService, setInsuranceService] = useState([]);
+   //
    const getAppointment = async (page, pageSize, start, end, process) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -101,9 +115,10 @@ function Index({ type, isDoctor }) {
       config.params.limit = null;
       setSpinner(false);
    };
-   const getEMR = (row) => {
+   const getEMR = async (row) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
+      setSelectedRow(row);
       if (row.process != 2 && row.process != undefined) {
          openNofi('warning', 'Хэвтэх', 'Эмнэлэгт хэвтээгүй байна');
       } else if (row.process === 2) {
@@ -122,60 +137,107 @@ function Index({ type, isDoctor }) {
          });
       } else {
          const payment = row.isPayment || row.isInsurance;
-         if (!payment && type != 1 && row.type != 1) {
+         console.log(payment, type, row.type);
+         if (!payment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
-         } else {
-            const inspectionType = type === 2 ? 1 : row.inspectionType;
-            const data = {
-               patientId: row.patientId,
-               inspection: inspectionType === undefined ? 1 : inspectionType,
-               isInsurance: row.isInsurance,
-               type: row.type
-            };
-            if (row.startDate === null) {
-               const conf = {
-                  headers: {},
-                  params: {}
-               };
-               // uzleg ehleh tsag
-               Patch('appointment/' + row.id, token, conf, {
-                  startDate: new Date()
-               });
-               // incomeDate // irsent tsag
-               // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
-               Patch('slot/' + row.slots?.id, token, conf, {
-                  incomeDate: new Date(),
-                  slotStatus: 1
-               });
+         }
+         // if (!payment && type != 1 && row.type != 1) {
+         //    openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
+         // }
+         else {
+            console.log('end', row);
+            if (row.startDate === null || row.startHicsCode === null) {
+               if (row.isInsurance) {
+                  startFormHics.setFieldsValue({
+                     patientRegno: row.patient.registerNumber
+                  });
+                  await insuranceServiceApi
+                     .getInsuranceService({
+                        usageType: 'OUT'
+                     })
+                     .then((response) => {
+                        setInsuranceService(response.data.data);
+                        setIsOpenModalStartService(true);
+                     })
+                     .catch(() => {
+                        openNofi('error', 'Алдаа', 'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу');
+                     });
+               } else {
+                  hrefEMR(row);
+               }
+            } else {
+               hrefEMR(row);
             }
-            if (type === 0) {
-               data['usageType'] = 'OUT';
-               data['appointmentId'] = row.id;
-               data['cabinetId'] = row.cabinetId;
-               data['departmentId'] = row.cabinet?.parentId;
-            } else if (type === 1) {
-               data['usageType'] = 'OUT';
-               data['appointmentId'] = row.id;
-               data['cabinetId'] = row.cabinetId;
-               data['EWSColor'] = row.emergencySorter?.color;
-            } else if (type === 2) {
-               data['usageType'] = 'IN';
-               data['inpatientRequestId'] = row.id;
-               data['departmentId'] = row.inDepartmentId;
-            }
-            dispatch(
-               setNote({
-                  inspectionNotes: row.inspectionNotes,
-                  diagnosis: row.patientDiagnosis
-               })
-            );
-            dispatch(setEmrData(data));
-            navigate(`/emr`, {
-               state: data
-            });
          }
       }
    };
+   // 8.1
+   const hrefEMR = (sRow) => {
+      var row;
+      if (sRow) {
+         row = sRow;
+      } else {
+         row = selectedRow;
+      }
+      const inspectionType = type === 2 ? 1 : row.inspectionType;
+      const data = {
+         patientId: row.patientId,
+         inspection: inspectionType === undefined ? 1 : inspectionType,
+         hicsServiceId: row.hicsServiceId ? row.hicsServiceId : startFormHics.getFieldValue('hicsServiceId'),
+         type: row.type
+      };
+      if (type === 0) {
+         data['usageType'] = 'OUT';
+         data['appointmentId'] = row.id;
+         data['cabinetId'] = row.cabinetId;
+         data['departmentId'] = row.cabinet?.parentId;
+      } else if (type === 1) {
+         data['usageType'] = 'OUT';
+         data['appointmentId'] = row.id;
+         data['cabinetId'] = row.cabinetId;
+         data['EWSColor'] = row.emergencySorter?.color;
+      } else if (type === 2) {
+         data['usageType'] = 'IN';
+         data['inpatientRequestId'] = row.id;
+         data['departmentId'] = row.inDepartmentId;
+      }
+      // uzleg ehleh tsag
+      AppointmentService.patchAppointment(row.id, {
+         startDate: new Date()
+      });
+      // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
+      if (type != 1) {
+         ScheduleService.patchSlot(row.slots?.id, {
+            incomeDate: new Date(),
+            slotStatus: 1
+         });
+      }
+      dispatch(
+         setNote({
+            inspectionNotes: row.inspectionNotes,
+            diagnosis: row.patientDiagnosis
+         })
+      );
+      dispatch(setEmrData(data));
+      navigate(`/emr`, {
+         state: data
+      });
+      dispatch(setPatient(row.patient));
+   };
+   const startHics = async (values) => {
+      values['appointmentId'] = selectedRow.id;
+      await healtInsuranceService.postStartHics(values).then(async (response) => {
+         if (response.data.code === 400) {
+            openNofi('error', 'Амжилтгүй', response.data.description);
+            //end neg ym bmar bn 400
+         } else if (response.data.code === 200) {
+            openNofi('success', 'Амжилттай', response.data.description);
+            hrefEMR(null);
+         }
+      });
+   };
+   //
+
    const getENR = (row) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
@@ -1097,6 +1159,106 @@ function Index({ type, isDoctor }) {
                >
                   <TextArea />
                </Form.Item>
+            </Form>
+         </Modal>
+         <Modal
+            title="Тусламж үйлчилгээг эхлүүлэх"
+            open={isOpenModalStartService}
+            onCancel={() => setIsOpenModalStartService(false)}
+            onOk={() =>
+               startFormHics
+                  .validateFields()
+                  .then((values) => {
+                     startHics(values);
+                  })
+                  .catch(({ errorFields }) => {
+                     errorFields?.map((error) => message.error(error.errors[0]));
+                  })
+            }
+         >
+            <Form form={startFormHics} layout="vertical">
+               <div
+                  style={{
+                     width: '100%',
+                     display: 'flex',
+                     flexDirection: 'column',
+                     gap: 12
+                  }}
+               >
+                  <Finger
+                     text="Иргэний хурууний хээ"
+                     isFinger={true}
+                     steps={[
+                        {
+                           title: 'Өвтний',
+                           path: 'patientFingerprint'
+                        }
+                     ]}
+                     isPatientSheet={false}
+                     handleClick={(values) => {
+                        startFormHics.setFieldsValue({
+                           patientFingerprint: values.patientFingerprint
+                        });
+                     }}
+                  />
+                  <div className="hidden">
+                     <Form.Item
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Иргэний регистр заавал'
+                           }
+                        ]}
+                        name="patientRegno"
+                     >
+                        <NewInput />
+                     </Form.Item>
+                  </div>
+                  <div className="hidden">
+                     <Form.Item
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Иргэний хурууны хээ заавал'
+                           }
+                        ]}
+                        name="patientFingerprint"
+                     >
+                        <NewInput />
+                     </Form.Item>
+                  </div>
+                  <Form.Item
+                     label="Т.Ү-ний дугаар"
+                     name="hicsServiceId"
+                     rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
+                     style={{
+                        width: '100%'
+                     }}
+                     className="mb-0"
+                  >
+                     <Select
+                        placeholder="Үйлчилгээний төрөл сонгох"
+                        // onChange={(e) => {
+                        //    console.log(e);
+                        //    setHicsServiceId(e);
+                        // }}
+                     >
+                        {insuranceService?.map((group, index) => {
+                           return (
+                              <OptGroup key={index} label={group.name}>
+                                 {group?.hicsServices?.map((service, idx) => {
+                                    return (
+                                       <Option key={`${index}-${idx}`} value={service.id}>
+                                          {service.name}
+                                       </Option>
+                                    );
+                                 })}
+                              </OptGroup>
+                           );
+                        })}
+                     </Select>
+                  </Form.Item>
+               </div>
             </Form>
          </Modal>
       </>

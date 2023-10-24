@@ -617,44 +617,6 @@ input::-webkit-inner-spin-button {
    white-space: pre-wrap !important;
 }
 
-@media print {
-   p {
-      /* font-family: 'Times New Roman', Times, serif; */
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 100;
-      font-size: small;
-      color: black;
-      white-space: normal;
-   }
-
-   .printBody {
-      padding-left: 10px;
-      padding-right: 10px;
-   }
-
-   .magadlagaa {
-      padding: 1.5cm;
-   }
-
-   .magadlagaa .ant-input {
-      border-style: none;
-   }
-
-   .magadlagaa .ant-picker {
-      border-style: none;
-      text-decoration: underline;
-   }
-
-   .magadlagaa .ant-picker .ant-picker-suffix {
-      display: none;
-   }
-
-   .amara {
-      /* margin-left: 1cm; */
-      /* margin-right: 1cm; */
-   }
-}
-
 .magadlagaa {
    padding: 1.5cm;
 }
@@ -990,4 +952,13 @@ table .formTable tr > td {
 }
 .ant-checkbox + span {
    line-height: 8px !important;
+}
+table.new-table {
+   /* width: 100%; */
+}
+
+table.new-table > thead > tr > th,
+table.new-table > tbody > tr > td {
+   border: 1px solid black;
+   font-size: 6px;
 }

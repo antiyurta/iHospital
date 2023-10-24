@@ -58,11 +58,7 @@ function InpatientRequest({ handleClick }) {
    };
    const getInsuranceServices = async () => {
       await jwtInterceopter
-         .get('insurance/hics-service-group', {
-            params: {
-               usageType: 'IN'
-            }
-         })
+         .get('insurance/hics-service-group')
          .then((response) => {
             setInsurranceServices(response.data.data);
          })
@@ -208,7 +204,14 @@ function InpatientRequest({ handleClick }) {
                               }
                            ]}
                         >
-                           <Select>
+                           <Select
+                              showSearch
+                              virtual={false}
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                 (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                              }
+                           >
                               {insuranceServices?.map((service, index) => {
                                  return (
                                     <OptGroup key={index} label={service.name}>

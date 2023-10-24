@@ -6,8 +6,6 @@ import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import { Alert, Collapse, Select } from 'antd';
 import Marquee from 'react-fast-marquee';
-import MainAmbulatory from './Ambulatory/MainAmbulatory';
-import MainInPatient from './InPatient/MainInPatient';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
 import Schedule from '../OCS/Schedule';
 import { delEmrData } from '../../../features/emrReducer';
@@ -135,6 +133,7 @@ class NewEmr extends React.Component {
                      />
                      <EmrSupports
                         appointmentId={this.props.IncomeEMRData.appointmentId}
+                        hicsServiceId={this.props.IncomeEMRData.hicsServiceId}
                         usageType={this.props.IncomeEMRData.usageType}
                         patient={this.state.selectedPatient}
                         patientId={this.props.IncomeEMRData.patientId}
@@ -250,9 +249,8 @@ class NewEmr extends React.Component {
                               DeparmentId={this.props.IncomeEMRData.departmentId}
                               Inspection={this.props.IncomeEMRData.inspection}
                               UsageType={this.props.IncomeEMRData.usageType}
-                              AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                              HicsServiceId={this.props.IncomeEMRData.hicsServiceId}
                               AppointmentType={this.props.IncomeEMRData.type}
-                              ServiceId={this.props.IncomeEMRData.serviceId}
                               handleClick={this.handleTypeChange}
                            />
                         </NewCard>
@@ -261,7 +259,7 @@ class NewEmr extends React.Component {
                            <Ocs
                               selectedPatient={this.state.selectedPatient}
                               UsageType={this.props.IncomeEMRData.usageType}
-                              AppointmentHasInsurance={this.props.IncomeEMRData.isInsurance}
+                              AppointmentHasInsurance={this.props.IncomeEMRData.hicsServiceId ? true : false}
                               handleClick={this.saveOrder}
                            />
                         </NewCard>

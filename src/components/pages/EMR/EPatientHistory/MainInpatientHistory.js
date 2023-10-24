@@ -1,10 +1,9 @@
-import { Button, Collapse, Dropdown, Form, Input, Menu, Modal, Spin, Tabs, Tag } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Dropdown, Form, Input, Menu, Modal, Tabs, Tag, message, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentAppId, selectCurrentToken } from '../../../../features/authReducer';
 import { Get, Post } from '../../../comman';
 import Epicriz from '../../BeforeAmbulatory/Lists/Epicriz';
-import Diagnose from '../../service/Diagnose';
 import Index from '../InPatient/document/Index';
 import StoryGeneral from './StoryGeneral';
 //
@@ -14,11 +13,13 @@ import Epicrisis from './MainInpatient/Epicrisis';
 import { SnippetsOutlined } from '@ant-design/icons';
 import jwtInterceopter from '../../../jwtInterceopter';
 import DocumentShow from '../../611/DocumentShow';
+import SentService from '../Insurance/sent-service';
 //
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
 function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
    console.log('-------------->', serviceId);
+   console.log('main inpatient story patientId =========>', patientId);
    const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
    const [checkedKey, setCheckedKey] = useState(0);
@@ -28,7 +29,8 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
    const [dailyNotes, setDailyNotes] = useState([]);
    //
    const [documents, setDocuments] = useState([]);
-   //
+   /** @description insurance connection start => */
+   const [isInsuranceModal, setIsInsuranceModal] = useState(false);
    const testItems = [
       {
          key: '1',
@@ -66,6 +68,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
          )
       }
    ];
+
    const getStory = async () => {
       const conf = {
          headers: {},
@@ -196,6 +199,9 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
          >
             Маягт
          </Button>
+         <Button type="ghost" onClick={() => setIsInsuranceModal(true)}>
+            Даатгал
+         </Button>
          <Dropdown
             overlay={documentsMenu}
             trigger={['click']}
@@ -211,7 +217,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                className="ant-dropdown-link"
                onClick={(e) => e.preventDefault()}
             >
-               asdasd
+               Маягтийн жагсаалт
             </Button>
          </Dropdown>
          <DocumentShow
@@ -233,6 +239,14 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                id={story.id}
                doctorInspection={story.doctorInspection}
             />
+         </Modal>
+         <Modal
+            title="Даатгалын сервисүүд"
+            width={1000}
+            open={isInsuranceModal}
+            onCancel={() => setIsInsuranceModal(false)}
+         >
+            <SentService />
          </Modal>
       </div>
    );

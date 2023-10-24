@@ -296,6 +296,7 @@ function List(props) {
                                           title="Цаг солих"
                                           dataIndex={'isActive'}
                                           render={(text, row) => {
+                                             console.log(row);
                                              if (!text && row.slotStatus === 0) {
                                                 return (
                                                    <Button

@@ -90,7 +90,7 @@ function InsuranceDocterList() {
    };
    const getReturnInsurance = async (values) => {
       await healtInsuranceService
-         .postCancelService(values)
+         .cancelService(values)
          .then((response) => {
             console.log(response);
             if (response.data.code === 201 || response.data.code === 200) {

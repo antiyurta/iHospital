@@ -144,10 +144,14 @@ function Hospital() {
          }
       };
       const response = await DefualtGet('health-insurance/hics-exam', token, conf);
+      const response1 = await DefualtGet('health-insurance/hics-service-group', token, conf);
+      const response2 = await DefualtGet('health-insurance/hics-service', token, conf);
       console.log(response);
+      console.log(response1);
+      console.log(response2);
    };
    useEffect(() => {
-      getFinanceClient();
+      // getFinanceClient();
    }, [selectedRow]);
    return (
       <>
