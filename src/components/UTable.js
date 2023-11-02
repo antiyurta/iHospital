@@ -189,7 +189,7 @@ function UTable(props) {
    const getTypesDatas = async (type) => {
       setType(type);
       config.params.type = type;
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setTypesData(response.data);
    };
    useEffect(() => {
@@ -262,11 +262,6 @@ function UTable(props) {
                         {props.insuranceSync ? (
                            <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
                               Даатгал Дата
-                           </th>
-                        ) : null}
-                        {props.isHospital ? (
-                           <th className="w-3 font-bold text-sm align-middle" rowSpan={2}>
-                              Санхүү
                            </th>
                         ) : null}
                      </tr>
@@ -537,9 +532,9 @@ function UTable(props) {
                                     showSearch
                                     placeholder={element.label}
                                     optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                       (option?.value ?? '').toLowerCase().includes(input?.toLowerCase())
-                                    }
+                                    filterOption={(input, option) => {
+                                       return (option?.children ?? '').toLowerCase().includes(input?.toLowerCase());
+                                    }}
                                  >
                                     {element.inputData?.map((data, index) => {
                                        return (
@@ -619,7 +614,7 @@ function UTable(props) {
                         }
                      });
                      values.type = type;
-                     const response = await Post('service/type', token, config, values);
+                     const response = await Post('reference-care-type', token, config, values);
                      if (response.length != 0) {
                         props.refresh();
                         setIsSubModalVisible(false);

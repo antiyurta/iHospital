@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table } from 'antd';
+import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table, message } from 'antd';
 import { localMn, numberToCurrency, openNofi } from '../../comman';
 import { EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
@@ -8,6 +8,7 @@ import moment from 'moment';
 //request service uud
 import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';
 import healtInsuranceService from '../../../services/healt-insurance/healtInsurance';
+import apiInsurance from '../../../services/healt-insurance/insurance';
 //request service uud
 
 const { RangePicker } = DatePicker;
@@ -28,59 +29,46 @@ function InsuranceDocterList() {
    const [meta, setMeta] = useState({});
    const [filterForm] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
-   const [icdGroup, setIcdGroup] = useState([]);
+   const [hicsGroups, setHicsGroups] = useState([]);
    const [isOpenReturnModal, setIsOpenReturnModal] = useState(false);
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    //
    const getList = async (page, pageSize, filterValues) => {
       setIsLoading(true);
-      const conf = {
-         params: {
-            page: page,
-            limit: pageSize
-         }
+      const params = {
+         page: page,
+         limit: pageSize
       };
       if (filterValues) {
          if (filterValues.date) {
             const start = moment(filterValues.date[0]).set({ hour: 0, minute: 0, second: 0 });
             const end = moment(filterValues.date[1]).set({ hour: 23, minute: 59, second: 59 });
-            conf.params.startDate = moment(start).format('YYYY-MM-DD HH:mm');
-            conf.params.endDate = moment(end).format('YYYY-MM-DD HH:mm');
+            params.fromAt = moment(start).format('YYYY-MM-DD HH:mm');
+            params.endAt = moment(end).format('YYYY-MM-DD HH:mm');
          }
-         conf.params.icdGroup = filterValues.icdGroup;
-         conf.params.serviceType = filterValues.serviceType;
-         conf.params.firstname = filterValues.firstname;
-         conf.params.lastname = filterValues.lastname;
-         conf.params.regno = filterValues.regno;
-         conf.params.process = filterValues.process;
-         conf.params.resCode = filterValues.resCode;
+         params.groupId = filterValues.groupId;
+         params.serviceType = filterValues.serviceType;
+         params.patient = filterValues.patient;
+         params.process = filterValues.process;
       }
-      await InsuranceSealService.getByPageFilter(conf)
-         .then((response) => {
-            setData(response.data.response.data);
-            setMeta(response.data.response.meta);
+      await apiInsurance
+         .getAllHicsSeals(params)
+         .then(({ data }) => {
+            if (data.success) {
+               setData(data.response.data);
+               setMeta(data.response.meta);
+            }
          })
-         .catch((error) => {
-            console.log(error);
-         })
-         .finally(() => {
-            setIsLoading(false);
-         });
+         .finally(setIsLoading(false));
    };
-   const getById = async (id) => {
-      await InsuranceSealService.getById(id).then((response) => {
-         const data = {
-            serviceNumber: response.data.response.hicsServiceNo,
-            patientRegno: response.data.response.patientRegno,
-            drgCode: response.data.response.drgCode,
-            icdCode: response.data.response.icdCode,
-            icdCodeName: response.data.response.icdCodeName,
-            icd9Code: response.data.response.icd9Code,
-            repairDesc: ''
-         };
-         editForm.setFieldsValue(data);
-         setIsOpenEditModal(true);
+   const getById = async (data) => {
+      editForm.setFieldsValue({
+         patientRegno: data.patient.registerNumber,
+         serviceNumber: data.hicsSealCode,
+         icdCode: data.icdCode,
+         icd9Code: data.icd9Code,
       });
+      setIsOpenEditModal(true);
    };
    const returnInsurance = (serviceNumber) => {
       returnForm.setFieldsValue({
@@ -116,11 +104,15 @@ function InsuranceDocterList() {
          }
       });
    };
-   const getIcdGroup = async () => {
+   const getHicsGroups = async () => {
       await healtInsuranceService
          .getHicsServiceGroup()
-         .then((response) => {
-            setIcdGroup(response.data.data);
+         .then(({ data }) => {
+            if (data.code == 200) {
+               setHicsGroups(data.result);
+            } else {
+               message.warn(data.description);
+            }
          })
          .catch((error) => {
             console.log(error);
@@ -141,53 +133,38 @@ function InsuranceDocterList() {
    };
    const columns = [
       {
-         title: 'Огноо',
-         dataIndex: 'createdAt',
+         title: 'Эхэлсэн огноо',
+         dataIndex: 'startAt',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return moment(text).format('YYYY-MM-DD hh:mm:ss');
+         }
+      },
+      {
+         title: 'Дууссан огноо',
+         dataIndex: 'endAt',
+         render: (text) => {
+            return moment(text).format('YYYY-MM-DD hh:mm:ss');
          }
       },
       {
          title: 'Тасаг',
-         dataIndex: 'departName'
+         dataIndex: ['department', 'name']
       },
       {
          title: 'Овог',
-         dataIndex: 'patientLastname'
+         dataIndex: ['patient', 'lastName']
       },
       {
          title: 'Нэр',
-         dataIndex: 'patientFirstname'
+         dataIndex: ['patient', 'firstName']
       },
       {
          title: 'Регистр',
-         dataIndex: 'patientRegno'
-      },
-      {
-         title: 'Хувь',
-         dataIndex: 'gpa',
-         width: 120,
-         render: (text) => {
-            return (
-               <div className="m-1 flex">
-                  <Progress
-                     style={{
-                        wordBreak: 'normal',
-                        width: '90px'
-                     }}
-                     strokeColor={{
-                        '0%': 'yellow',
-                        '100%': 'green'
-                     }}
-                     percent={text}
-                  />
-               </div>
-            );
-         }
+         dataIndex: ['patient', 'registerNumber']
       },
       {
          title: 'Хугацаа',
-         dataIndex: 'createdAt',
+         dataIndex: 'startAt',
          render: (text) => {
             const date1 = new Date(text);
             const date2 = new Date();
@@ -206,21 +183,7 @@ function InsuranceDocterList() {
       },
       {
          title: 'Үйлчилгээний нэр',
-         dataIndex: 'icdGroupName'
-      },
-      {
-         title: 'Хөнгөлөлт үнэ',
-         dataIndex: 'discountAmount',
-         render: (text) => {
-            return numberToCurrency(text);
-         }
-      },
-      {
-         title: 'Нийт үнэ',
-         dataIndex: 'totalAmount',
-         render: (text) => {
-            return numberToCurrency(text);
-         }
+         dataIndex: 'groupId'
       },
       {
          title: 'Урсгал',
@@ -240,7 +203,7 @@ function InsuranceDocterList() {
          dataIndex: 'process',
          render: (text, row) => {
             if (text === 3) {
-               return <Button onClick={() => getById(row.id)} icon={<EditOutlined style={{ color: 'blue' }} />} />;
+               return <Button onClick={() => getById(row)} icon={<EditOutlined style={{ color: 'blue' }} />} />;
             }
          }
       },
@@ -251,7 +214,7 @@ function InsuranceDocterList() {
             if (text === 1 || text === 2 || text === 3) {
                return (
                   <Button
-                     onClick={() => returnInsurance(row.hicsServiceNo)}
+                     onClick={() => returnInsurance(row.hicsSealCode)}
                      icon={<RollbackOutlined style={{ color: 'red' }} />}
                   />
                );
@@ -261,7 +224,7 @@ function InsuranceDocterList() {
    ];
    useEffect(() => {
       getList(1, 10, null);
-      getIcdGroup();
+      getHicsGroups();
    }, []);
    return (
       <>
@@ -273,55 +236,26 @@ function InsuranceDocterList() {
                         <Form.Item label="Огноо" name="date">
                            <RangePicker locale={mnMN} />
                         </Form.Item>
-                        <Form.Item label="Бүлэг" name="icdGroup" className="mb-0">
-                           <Select allowClear>
-                              {icdGroup?.map((group, index) => {
-                                 return (
-                                    <Option key={index} value={group.id}>
-                                       {group.name}
-                                    </Option>
-                                 );
-                              })}
-                           </Select>
+                        <Form.Item label="Бүлэг" name="groupId" className="mb-0">
+                           <Select
+                              allowClear
+                              options={hicsGroups.map((hicsGroup) => ({ value: hicsGroup.id, label: hicsGroup.name }))}
+                           />
                         </Form.Item>
-                        <Form.Item label="Төрөл" name="serviceType" className="mb-0">
-                           <Select allowClear>
-                              <Option value={0}>Шинжилгээ</Option>
-                              <Option value={1}>Оношилгоо</Option>
-                              <Option value={2}>Эмчилгээ</Option>
-                              <Option value={3}>Мэс засал</Option>
-                              <Option value={4}>Дуран</Option>
-                              <Option value={5}>Үзлэг</Option>
-                              <Option value={6}>Хэвтэн</Option>
-                              <Option value={7}>Багц</Option>
-                              <Option value={8}>Эм</Option>
-                              <Option value={9}>Өрөө</Option>
-                              <Option value={10}>Утаснаас</Option>
-                           </Select>
-                        </Form.Item>
-                        <Form.Item label="РД Дугаар" name="regno" className="mb-0">
+                        <Form.Item label="Өвчтөн" tooltip="Регистр, Овог, Нэр-р хайх" name="patient" className="mb-0">
                            <Input />
                         </Form.Item>
-                        <Form.Item label="Овог" name="lastname" className="mb-0">
-                           <Input allowClear />
-                        </Form.Item>
-                        <Form.Item label="Нэр" name="firstname" className="mb-0">
-                           <Input allowClear />
-                        </Form.Item>
                         <Form.Item label="Урсгал" name="process" className="mb-0">
-                           <Select allowClear>
-                              <Option value={0}>Битүүмж үүсээгүй байна.</Option>
-                              <Option value={1}>Битүүмж амжилттай үүссэн байна.</Option>
-                              <Option value={2}>Төлбөрийн мэдээлэл илгээгүй байна.</Option>
-                              <Option value={3}>Төлбөрийн мэдээлэл илгээсэн байна.</Option>
-                              <Option value={4}>Буцаалт хийгдсэн.</Option>
-                           </Select>
-                        </Form.Item>
-                        <Form.Item label="RКод" name="resCode" className="mb-0">
-                           <Select allowClear>
-                              <Option value={200}>Амжиллтай</Option>
-                              <Option value={400}>Амжилтгүй</Option>
-                           </Select>
+                           <Select
+                              allowClear
+                              options={[
+                                 { value: 0, label: 'Битүүмж үүсээгүй байна.' },
+                                 { value: 1, label: 'Битүүмж амжилттай үүссэн байна.' },
+                                 { value: 2, label: 'Төлбөрийн мэдээлэл илгээгүй байна.' },
+                                 { value: 3, label: 'Төлбөрийн мэдээлэл илгээсэн байна.' },
+                                 { value: 4, label: 'Буцаалт хийгдсэн.' }
+                              ]}
+                           />
                         </Form.Item>
                      </div>
                   </Form>
@@ -459,13 +393,7 @@ function InsuranceDocterList() {
                      </div>
                   </div>
                </div>
-               <Form.Item className="hidden" name="serviceNumber">
-                  <Input />
-               </Form.Item>
                <Form.Item label="ICD 10 Код:" name="icdCode" rules={basicRule}>
-                  <Input />
-               </Form.Item>
-               <Form.Item label="ICD 10 Нэр:" name="icdCodeName" rules={basicRule}>
                   <Input />
                </Form.Item>
                <Form.Item label="ICD 9 Код:" name="icd9Code" rules={basicRule}>

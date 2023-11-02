@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
 import apiInsurance from '../../../../services/healt-insurance/insurance';
@@ -74,11 +74,15 @@ const SendHics = (props) => {
       const costs = await getCosts(seal.hicsServiceId, seal.icdCode);
       form.setFields([
          {
-            name: ['paymentCares', index, 'discountAmount'],
+            name: 'patientId',
+            value: patient.id,
+         },
+         {
+            name: ['paymentCares', index, 'hicsAmount'],
             value: costs[0].amountHi
          },
          {
-            name: ['paymentCares', index, 'payedAmount'],
+            name: ['paymentCares', index, 'citizenAmount'],
             value: costs[0].amountCit
          },
          {
@@ -131,12 +135,15 @@ const SendHics = (props) => {
             >
                <Input />
             </Form.Item>
+            <Form.Item label="Өвчтөний id" name="patientId" hidden>
+               <Input />
+            </Form.Item>
          </Col>
          <p>Төлбөрийн мэдээлэл</p>
          <Form.List name="paymentCares">
             {(paymentCares, { add: addPaymentCare, remove: removePaymentCare }) => (
                <>
-                  {paymentCares.map((paymentCare, paymentCareIndex) => (
+                  {paymentCares.map((paymentCare) => (
                      <Row key={paymentCare.key} style={customeBorderStyle}>
                         <Button
                            type="dashed"
@@ -151,7 +158,7 @@ const SendHics = (props) => {
                         </Button>
                         <Form.Item
                            label="Битүүмжит үйлчилгээ"
-                           name={[paymentCare.name, 'sealId']}
+                           name={[paymentCare.name, 'hicsSealId']}
                            style={{ width: '100%' }}
                         >
                            <Select
@@ -167,12 +174,12 @@ const SendHics = (props) => {
                            />
                         </Form.Item>
                         <Col span={7} offset={1}>
-                           <Form.Item label="Хөнгөлсөн дүн" name={[paymentCare.name, 'discountAmount']}>
+                           <Form.Item label="Хөнгөлсөн дүн" name={[paymentCare.name, 'hicsAmount']}>
                               <InputNumber disabled />
                            </Form.Item>
                         </Col>
                         <Col span={7} offset={1}>
-                           <Form.Item label="Иргэн төлсөн дүн" name={[paymentCare.name, 'payedAmount']}>
+                           <Form.Item label="Иргэн төлсөн дүн" name={[paymentCare.name, 'citizenAmount']}>
                               <InputNumber disabled />
                            </Form.Item>
                         </Col>
@@ -201,7 +208,7 @@ const SendHics = (props) => {
                            </Form.Item>
                         </Col>
                         <p>Багцийн мэдээлэл</p>
-                        <Form.List name={['paymentCares', paymentCareIndex, 'carePackages']}>
+                        <Form.List name={[paymentCare.name, 'carePackages']}>
                            {(carePackages, { add: addCarePackage, remove: removeCarePackage }) => (
                               <>
                                  {carePackages.map((carePack) => (

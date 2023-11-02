@@ -73,9 +73,9 @@ function PatientListBedd() {
    const filteredRooms = rooms?.filter((room) => room.structureId === selectedDepartment);
    const filteredBed = rooms?.find((room) => room.id === selectedRoom)?.beds;
    //
-   const openModal = (process, state, patient, rowId) => {
+   const openModal = (process, state, patient, row) => {
       form.resetFields();
-      setSelectedInpatientRequest(rowId);
+      setSelectedInpatientRequest(row.id);
       setSelectedPatient(patient);
       if (process === 0) {
          setIsOpenBedModal(state);
@@ -263,7 +263,7 @@ function PatientListBedd() {
          render: (patient, row) => {
             if (row?.process === 0) {
                return (
-                  <Button type="primary" onClick={() => openModal(0, true, patient, row.id)}>
+                  <Button type="primary" onClick={() => openModal(0, true, patient, row)}>
                      Хэвтүүлэх
                   </Button>
                );

@@ -3,6 +3,7 @@ import { SendOutlined } from '@ant-design/icons';
 import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE } from './enum-utils';
 import { Button, Drawer, Form, List, Divider, message, Space } from 'antd';
 import healthInsuranceService from '../../../../services/healt-insurance/healtInsurance';
+import apiInsuranceService from '../../../../services/healt-insurance/insurance';
 import SetPatientSheet from './set-patient-sheet';
 import Search from 'antd/lib/input/Search';
 import SaveHics from './save-hics';
@@ -44,13 +45,20 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.sendHics) {
-         healthInsuranceService.sendHicsService(values).then(({ data }) => {
+         apiInsuranceService.createHicsPayment(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
                message.warn(data.description);
             }
          });
+         // healthInsuranceService.sendHicsService(values).then(({ data }) => {
+         //    if (data.code == 200) {
+         //       message.success(data.description);
+         //    } else {
+         //       message.warn(data.description);
+         //    }
+         // });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
          healthInsuranceService.postApproval(values).then(({ data }) => {
             if (data.code == 200) {
@@ -69,14 +77,30 @@ const SentService = () => {
                message.error(error);
             });
       } else if (chooseService == HEALTH_SERVICES_TITLE.saveHics) {
-         healthInsuranceService
-            .saveHics(values)
-            .then((response) => {
-               message.success(response.data.description);
+         apiInsuranceService
+            .requestHicsSeal(values.id, values)
+            .then(({ data }) => {
+               if (data.code == 200) {
+                  message.success(data.description);
+               } else {
+                  message.warn(data.description);
+               }
             })
             .catch((error) => {
                message.error(error);
             });
+         // healthInsuranceService
+         //    .saveHics(values)
+         //    .then(({ data }) => {
+         //       if (data.code == 200) {
+         //          message.success(data.description);
+         //       } else {
+         //          message.warn(data.description);
+         //       }
+         //    })
+         //    .catch((error) => {
+         //       message.error(error);
+         //    });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
          healthInsuranceService.postPatientReturn(values).then((response) => {
             console.log(response);

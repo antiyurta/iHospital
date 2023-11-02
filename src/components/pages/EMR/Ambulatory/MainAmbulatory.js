@@ -7,6 +7,7 @@ import Xray from '../Xray';
 
 //
 import Assesments from './Nurse/Assesments';
+import SentService from '../Insurance/sent-service';
 //
 
 export default function MainAmbulatory({ patientId, appointments }) {
@@ -18,7 +19,7 @@ export default function MainAmbulatory({ patientId, appointments }) {
       },
       {
          label: 'Амьдралын түүх',
-         key: 'item-7',
+         key: 'item-2',
          children: <ProgressCheck PatientId={patientId} />
       },
       {
@@ -33,8 +34,13 @@ export default function MainAmbulatory({ patientId, appointments }) {
       // },
       {
          label: 'Оношилгоо',
-         key: 'item-2',
+         key: 'item-4',
          children: <Xray PatientId={patientId} />
+      },
+      {
+         label: 'ЭМД',
+         key: 'item-5',
+         children: <SentService PatientId={patientId} />
       }
       // {
       //   label: "Эмийн эмчилгээ",

@@ -18,7 +18,7 @@ function Treatment() {
    };
 
    const getTreatmentTypeData = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setTreatmentTypeData(response.data);
    };
    const getInsuranceService = async () => {

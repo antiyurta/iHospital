@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get } from '../../comman';
 import UTable from '../../UTable';
+import apiInsuranceService from '../../../services/healt-insurance/insurance';
 
 function Examination() {
    const token = useSelector(selectCurrentToken);
    const [examinationTypeData, setExaminationTypeData] = useState([]);
    const [types, setTypes] = useState([]);
+   const [hicsExams, setHicsExams] = useState([]);
 
    const config = {
       headers: {},
@@ -16,18 +18,26 @@ function Examination() {
       }
    };
    const getExaminationTypeData = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setExaminationTypeData(response.data);
    };
 
    const getServicesType = async () => {
-      const response = await Get('service/type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setTypes(response.data);
+   };
+   const getHicsExams = async () => {
+      await apiInsuranceService.getAllHicsExams().then(({ data }) => {
+         if (data.success) {
+            setHicsExams(data.response);
+         }
+      });
    };
 
    useEffect(() => {
       getExaminationTypeData();
       getServicesType();
+      getHicsExams();
    }, []);
    const column = [
       {
@@ -87,6 +97,16 @@ function Examination() {
          isView: true,
          isSearch: false,
          input: 'inputNumber',
+         col: 12
+      },
+      {
+         index: 'hicsExamId',
+         label: 'ЭМД үйлчилгээ',
+         isView: true,
+         isSearch: false,
+         input: 'select',
+         inputData: hicsExams,
+         relIndex: 'name',
          col: 12
       }
    ];

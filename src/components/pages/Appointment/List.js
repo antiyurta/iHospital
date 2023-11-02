@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Button, Collapse, Empty, Form } from 'antd';
+import { Button, Collapse, Empty, Form, message } from 'antd';
 import { ClockCircleOutlined, DeleteOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import mn from 'antd/es/calendar/locale/mn_MN';
 // components
@@ -13,71 +13,80 @@ const { Panel } = Collapse;
 
 //service uud
 import ScheduleService from '../../../services/schedule';
+import apiAppointmentService from '../../../services/appointment/api-appointment-service';
+import { AppointmentStatus } from './appointment-enum';
 
 function List(props) {
    const { schedules, type, selectedPatient, orderAppointment, isGetSlots, isExtraGrud } = props;
    const [changeForm] = Form.useForm();
-   const [selectedDoctorId, setSelectedDoctorId] = useState(Number);
    const [cancalForm] = Form.useForm();
    const [slots, setSlots] = useState([]);
    const [filteredSchedules, setFilteredSchedules] = useState([]);
    const [filteredSlots, setFilteredSlots] = useState([]);
    const [selectedScheduleId, setSelectedScheduleId] = useState(Number);
-   const [selectedSlotId, setSelectedSlotId] = useState(Number);
-   const [selectedAppointmentId, setSelectedAppointmentId] = useState(Number);
+   const [selectedSlot, setSelectedSlot] = useState();
    const [isOpenChangeModal, setIsOpenChangeModal] = useState(false);
    const [isLoadingChangeLoading, setIsLoadingChangeLoading] = useState(false);
    const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
    const [isLoadingCancelLoading, setIsLoadingCancelLoading] = useState(false);
-   //
-   // functions
-   // slot change hiih button click
-   const changeSlot = (id, appointmentId, doctorId) => {
+   /** Цагаа солих form нээх */
+   const changeSlot = (row) => {
+      console.log(row);
       changeForm.resetFields();
       setFilteredSchedules([]);
       setFilteredSlots([]);
-      setSelectedSlotId(id);
-      setSelectedAppointmentId(appointmentId);
-      setSelectedDoctorId(doctorId);
+      setSelectedSlot(row);
       setIsOpenChangeModal(true);
    };
-   // slot cancel hiih button click
-   const cancelSlot = (id) => {
-      cancalForm.resetFields();
-      setSelectedSlotId(id);
-      setIsOpenCancelModal(true);
-   };
-   // slot solih uildel
+   /** Цагаа солих */
    const onFinishChangeSlot = async (values) => {
       setIsLoadingChangeLoading(true);
-      await ScheduleService.postChangeSlot({
-         type: type,
-         slotId: selectedSlotId,
-         newSlotId: values.newSlotId,
-         appointmentId: selectedAppointmentId,
-         appointmentWorkDate: moment(values.date)
-      }).then((response) => {
-         if (response.status === 201) {
+      await apiAppointmentService
+         .patchAppointment(selectedSlot.appointment.id, {
+            status: AppointmentStatus.Revalide,
+            slotId: values.newSlotId,
+            description: `${selectedSlot.startTime} цагаас өөрчлөв.`
+         })
+         .then((response) => {
+            if (response.status === 200) {
+               message.success('Амжилттай цаг солилоо.');
+            } else {
+               message.warn('Алдаатай хүсэлт');
+            }
+         })
+         .finally(() => {
             setIsOpenChangeModal(false);
             getSlots(selectedScheduleId, 0);
             setIsLoadingChangeLoading(false);
-         }
-      });
+         });
    };
-   //slot ustgah
+   /** Захиалсан цагаа устгах form нээх */
+   const cancelSlot = (row) => {
+      cancalForm.resetFields();
+      setSelectedSlot(row);
+      setIsOpenCancelModal(true);
+   };
+   /** Захиалсан цагаа устгах */
    const onFinishCancelSlot = async (values) => {
       setIsLoadingCancelLoading(true);
-      await ScheduleService.postReturnSlot({
-         type: type,
-         description: values.desc,
-         slotId: selectedSlotId
-      }).then((response) => {
-         if (response.status === 201) {
-            setIsOpenCancelModal(false);
+      await apiAppointmentService
+         .patchAppointment(selectedSlot.appointment.id, {
+            status: AppointmentStatus.SystemRefund,
+            description: values.desc,
+            slotId: null,
+         })
+         .then((response) => {
+            if (response.status === 200) {
+               message.success('Амжилттай буцаалт хийлээ.');
+            } else {
+               message.warn('Алдаатай хүсэлт');
+            }
+         })
+         .finally(() => {
             getSlots(selectedScheduleId, 0);
             setIsLoadingCancelLoading(false);
-         }
-      });
+            setIsOpenCancelModal(false);
+         });
    };
    // solih schedule awcirah
    const getScheduleOnChange = async (date) => {
@@ -85,7 +94,7 @@ function List(props) {
          await ScheduleService.get({
             params: {
                findOneDate: moment(date).format('YYYY-MM-DD'),
-               doctorId: selectedDoctorId,
+               doctorId: selectedSlot.appointment.doctorId,
                type: type
             }
          }).then((response) => {
@@ -197,24 +206,24 @@ function List(props) {
                                     }}
                                  />
                                  <NewColumnGroup title="Үйлчлүүлэгчийн мэдээлэл">
-                                    <NewColumn title="Овог" dataIndex={['patient', 'lastName']} />
-                                    <NewColumn title="Нэр" dataIndex={['patient', 'firstName']} />
+                                    <NewColumn title="Овог" dataIndex={['appointment', 'patient', 'lastName']} />
+                                    <NewColumn title="Нэр" dataIndex={['appointment', 'patient', 'firstName']} />
                                     <NewColumn
                                        title="Нас"
-                                       dataIndex={['patient', 'registerNumber']}
+                                       dataIndex={['appointment', 'patient', 'registerNumber']}
                                        render={(text) => {
                                           return getAge(text);
                                        }}
                                     />
                                     <NewColumn
                                        title="Хүйс"
-                                       dataIndex={['patient', 'registerNumber']}
+                                       dataIndex={['appointment', 'patient', 'registerNumber']}
                                        render={(text) => {
                                           return getGender(text);
                                        }}
                                     />
-                                    <NewColumn title="Регистрийн №" dataIndex={['patient', 'registerNumber']} />
-                                    <NewColumn title="Утас" dataIndex={['patient', 'phoneNo']} />
+                                    <NewColumn title="Регистрийн №" dataIndex={['appointment', 'patient', 'registerNumber']} />
+                                    <NewColumn title="Утас" dataIndex={['appointment', 'patient', 'phoneNo']} />
                                  </NewColumnGroup>
                                  <NewColumn
                                     title="Статус"
@@ -233,7 +242,7 @@ function List(props) {
                                  />
                                  <NewColumn
                                     title="Захиалсан огноо"
-                                    dataIndex={'updatedAt'}
+                                    dataIndex={['appointment', 'createdAt']}
                                     render={(text, row) => {
                                        if (!row.isActive) {
                                           return moment(text).format('YYYY/MM/DD HH:mm');
@@ -296,13 +305,10 @@ function List(props) {
                                           title="Цаг солих"
                                           dataIndex={'isActive'}
                                           render={(text, row) => {
-                                             console.log(row);
-                                             if (!text && row.slotStatus === 0) {
+                                             if (!text && row.appointment) {
                                                 return (
                                                    <Button
-                                                      onClick={() =>
-                                                         changeSlot(row.id, row.appointmentId, row.schedule.doctorId)
-                                                      }
+                                                      onClick={() => changeSlot(row)}
                                                       icon={<SwapOutlined />}
                                                       className="bg-yellow-500 text-black"
                                                    />
@@ -316,10 +322,10 @@ function List(props) {
                                           title="Цаг\n устгах"
                                           dataIndex={'isActive'}
                                           render={(text, row) => {
-                                             if (!text && row.slotStatus === 0) {
+                                             if (!text && row.appointment) {
                                                 return (
                                                    <Button
-                                                      onClick={() => cancelSlot(row.id)}
+                                                      onClick={() => cancelSlot(row)}
                                                       icon={<DeleteOutlined />}
                                                       className="bg-red-500 text-white"
                                                    />

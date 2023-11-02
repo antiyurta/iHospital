@@ -1,62 +1,17 @@
-import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Empty, Input, Modal, Select, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { localMn, numberToCurrency, openNofi } from '../../comman';
-import jwtInterceopter from '../../jwtInterceopter';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import { Button, Empty, Modal, Table } from 'antd';
+import React, { useState } from 'react';
+import { numberToCurrency, openNofi } from '../../comman';
 
-const { Search } = Input;
-const { Option } = Select;
+import { ListCareType } from './list-type';
+import { CARE_TYPE } from './care-enum';
+import { ListSupport } from './list-support';
 
-function Examination({ handleclick }) {
-   const [isLoading, setIsLoading] = useState(false);
+export const Examination = ({ handleclick }) => {
    const [isOpenModal, setIsOpenModal] = useState(false);
-   const [selectedExaminationId, setSelectedExaminationId] = useState(null);
-   const [examinations, setExaminations] = useState([]);
-   const [examination, setExamination] = useState([]);
-   const [metaExamination, setMetaExamination] = useState({});
+   const [selectedTypeId, setSelectedTypeId] = useState(null);
    const [selectedExaminations, setSelectedExaminations] = useState([]);
-   const [filterValue, setFilterValue] = useState('');
-   const [filterDrgCode, setFilterDrgCode] = useState(null);
-   const getExamination = async () => {
-      await jwtInterceopter
-         .get('service/type', {
-            params: {
-               type: 0
-            }
-         })
-         .then((response) => {
-            setExaminations(response.data.response?.data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-   };
 
-   const getTypeById = async (id, page, pageSize, filterValue, drgCode) => {
-      setIsLoading(true);
-      setFilterValue(filterValue);
-      await jwtInterceopter
-         .get('service/examination', {
-            params: {
-               examinationTypeId: id,
-               page: page,
-               limit: pageSize,
-               name: filterValue ? filterValue : null,
-               drgCode: filterDrgCode
-            }
-         })
-         .then((response) => {
-            setSelectedExaminationId(id);
-            setExamination(response.data.response.data);
-            setMetaExamination(response.data.response.meta);
-         })
-         .catch((error) => {
-            console.log(error);
-         })
-         .finally(() => {
-            setIsLoading(false);
-         });
-   };
    const add = (examination) => {
       const state = selectedExaminations.includes(examination);
       if (state) {
@@ -71,16 +26,12 @@ function Examination({ handleclick }) {
       arr.splice(index, 1);
       setSelectedExaminations(arr);
    };
-   useEffect(() => {
-      getExamination();
-   }, []);
    return (
       <>
          <Button
             type="primary"
             onClick={() => {
                setIsOpenModal(true);
-               setSelectedExaminationId(null);
                setSelectedExaminations([]);
             }}
          >
@@ -113,128 +64,13 @@ function Examination({ handleclick }) {
                      }}
                   >
                      <div className="flex flex-col gap-2">
-                        {examinations.map((examination, index) => {
-                           return (
-                              <button
-                                 onClick={() => getTypeById(examination.id, 1, 10)}
-                                 className="w-full bg-[#3d9970] text-white rounded-lg"
-                                 key={index}
-                              >
-                                 {examination.name}
-                              </button>
-                           );
-                        })}
+                        <ListCareType type={CARE_TYPE.Examination} getTypeById={setSelectedTypeId} />
                      </div>
                   </div>
                </div>
                <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <div className="p-3">
-                        <div className="mb-3">
-                           <label>Төрөл сонгох</label>
-                           <Select
-                              onChange={(e) => {
-                                 console.log(e);
-                                 setFilterDrgCode(e);
-                              }}
-                              allowClear
-                              className="w-full"
-                           >
-                              <Option value="300040">Өндөр өртөгтэй</Option>
-                              <Option value="300011">Амбулатори тусламж үйлчилгээ</Option>
-                           </Select>
-                        </div>
-                        <Search
-                           className="mb-3"
-                           placeholder="Хайх"
-                           allowClear
-                           enterButton={
-                              <SearchOutlined
-                                 style={{
-                                    fontSize: 16,
-                                    color: 'white'
-                                 }}
-                              />
-                           }
-                           onSearch={(e) => {
-                              if (selectedExaminationId === null) {
-                                 openNofi('warning', 'Анхааруулга', 'Төрөл сонгоно уу');
-                              } else {
-                                 getTypeById(selectedExaminationId, 1, 10, e);
-                              }
-                           }}
-                        />
-
-                        <ConfigProvider locale={localMn()}>
-                           <Table
-                              rowKey={'id'}
-                              bordered
-                              scroll={{
-                                 y: 400
-                              }}
-                              loading={isLoading}
-                              locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                              columns={[
-                                 {
-                                    title: 'Нэр',
-                                    dataIndex: 'name',
-                                    render: (text) => {
-                                       return (
-                                          <p
-                                             style={{
-                                                whiteSpace: 'normal',
-                                                color: 'black'
-                                             }}
-                                          >
-                                             {text}
-                                          </p>
-                                       );
-                                    }
-                                 },
-                                 {
-                                    title: 'Үнэ',
-                                    dataIndex: 'price',
-                                    width: 100,
-                                    render: (text) => {
-                                       return numberToCurrency(text);
-                                    }
-                                 },
-                                 {
-                                    title: '',
-                                    width: 40,
-                                    render: (_text, row) => {
-                                       return (
-                                          <Button
-                                             onClick={() => add(row)}
-                                             icon={
-                                                <PlusCircleOutlined
-                                                   style={{
-                                                      color: 'green'
-                                                   }}
-                                                />
-                                             }
-                                          />
-                                       );
-                                    }
-                                 }
-                              ]}
-                              dataSource={examination}
-                              pagination={{
-                                 position: ['bottomCenter'],
-                                 size: 'small',
-                                 current: metaExamination.page,
-                                 total: metaExamination.itemCount,
-                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                                 pageSize: metaExamination.limit,
-                                 showSizeChanger: true,
-                                 pageSizeOptions: ['5', '10', '20', '50'],
-                                 showQuickJumper: true,
-                                 onChange: (page, pageSize) =>
-                                    getTypeById(selectedExaminationId, page, pageSize, filterValue)
-                              }}
-                           />
-                        </ConfigProvider>
-                     </div>
+                     <ListSupport careType={CARE_TYPE.Examination} careTypeId={selectedTypeId} add={add} />
                   </div>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
@@ -299,5 +135,4 @@ function Examination({ handleclick }) {
          </Modal>
       </>
    );
-}
-export default Examination;
+};

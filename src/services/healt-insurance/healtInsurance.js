@@ -18,7 +18,15 @@ class HealthInsurance {
    }
    /** 4.20 Үндсэн үйлчилгээний код, нэрийн лавлах сервис */
    async getHicsServiceGroup() {
-      return await jwtInterceopter.get('insurance/hics-service-group');
+      return await jwtInterceopter.get('health-insurance/hics-service-group');
+   }
+   /** 4.21 Дэд үйлчилгээний код, нэрийн лавлах сервис */
+   async getHicsService() {
+      return await jwtInterceopter.get('health-insurance/hics-service');
+   }
+   /** 4.23 Үндсэн болон дэд үйлчилгээний мэдээллийг лавлах сервис */
+   async getHicsServiceAll() {
+      return await jwtInterceopter.get('health-insurance/hics-service-all');
    }
    /** 4.24 Оношилгоо, шинжилгээний кодын сан татах сервис */
    async getHicsExam() {

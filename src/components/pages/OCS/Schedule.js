@@ -55,22 +55,22 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       const response = await Get('payment/discount', token, config);
       setDiscounts(response.data);
    };
-   const getFilterPayments = (payments) => {
-      setTotalAmount(payments.reduce((a, v) => (a = a + v.amount), 0));
+   const getFilterInvoices = (invoices) => {
+      setTotalAmount(invoices.reduce((totalAmount, invoice) => (totalAmount += invoice.amount), 0));
       var noTime = [];
       var time = [];
-      payments?.map((payment) => {
-         if (payment.type === 2 && payment.treatmentRequest?.slotId === null && payment.treatment?.isSlot) {
-            time.push(payment);
-         } else if (
-            payment.type === 1 &&
-            payment.xrayRequest?.slotId === null &&
-            payment.xrayRequest?.usageType === 'OUT'
-         ) {
-            time.push(payment);
-         } else {
-            noTime.push(payment);
-         }
+      invoices?.map((invoice) => {
+         // if (payment.type === 2 && payment.treatmentRequest?.slotId === null && payment.treatment?.isSlot) {
+         //    time.push(payment);
+         // } else if (
+         //    payment.type === 1 &&
+         //    payment.xrayRequest?.slotId === null &&
+         //    payment.xrayRequest?.usageType === 'OUT'
+         // ) {
+         //    time.push(payment);
+         // } else {
+            noTime.push(invoice);
+         // }
       });
       setNoTimeRequirePayments(noTime);
       setTimeRequirePayments(time);
@@ -191,7 +191,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    };
    //
    useEffect(() => {
-      getFilterPayments(incomeData);
+      getFilterInvoices(incomeData);
       getDiscounts();
       getPaymentType();
    }, [incomeData]);
@@ -378,9 +378,9 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                                        title: 'Үйлчилгээ',
                                        render: (_, record) => {
                                           if (record.treatmentRequest?.qty) {
-                                             return <p>{record.name + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
+                                             return <p>{record.serviceName + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
                                           } else {
-                                             return record.name;
+                                             return record.serviceName;
                                           }
                                        }
                                        // dataIndex: 'name'

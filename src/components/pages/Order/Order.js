@@ -2,7 +2,7 @@ import { Button, Form } from 'antd';
 import RecentRecipe from './RecentRecipe';
 import SetOrder from './SetOrder';
 import Medicine from './Medicine';
-import Examination from './Examination';
+import { Examination } from './Examination';
 import Xray from './Xray';
 import Treatment from './Treatment';
 import Surgery from './Surgery';
@@ -20,9 +20,9 @@ import Reinspection from './Reinspection';
 import OrderTable from './OrderTable/OrderTable';
 import PackageTable from './PackageTable/PackageTable';
 ///
-import ExaminationService from '../../../services/service/examination';
-import TreatmentService from '../../../services/service/treatment';
-import XrayService from '../../../services/service/xray';
+import ExaminationService from '../../../services/service/examination.api';
+import TreatmentService from '../../../services/service/treatment.api';
+import XrayService from '../../../services/service/xray.api';
 //
 function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, appointmentHasInsurance, save }) {
    const token = useSelector(selectCurrentToken);
@@ -37,6 +37,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
    const [total, setTotal] = useState(Number);
 
    const handleclick = async (value) => {
+      console.log('zahialsan uilchilgee', value);
       setIsLoadingOrderTable(true);
       if (isPackage) {
          var services = [];
@@ -173,7 +174,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
       values.patientId = IncomePatientId;
       values.cabinetId = IncomeCabinetId;
       values.appointmentId = IncomeAppointmentId;
-      values.isInsurance = appointmentHasInsurance;
       const response = await DefaultPost('service/inpatient-request', token, config, values);
       if (response) {
          setInPatientId(response.id);

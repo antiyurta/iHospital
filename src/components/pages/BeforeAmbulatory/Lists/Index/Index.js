@@ -9,7 +9,21 @@ import {
    PlusOutlined,
    ReloadOutlined
 } from '@ant-design/icons';
-import { Alert, Button, Card, ConfigProvider, DatePicker, Empty, Form, Input, Modal, Select, Table, Tag } from 'antd';
+import {
+   Alert,
+   Button,
+   Card,
+   ConfigProvider,
+   DatePicker,
+   Empty,
+   Form,
+   Input,
+   Modal,
+   Select,
+   Table,
+   Tag,
+   message
+} from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
@@ -28,9 +42,9 @@ import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
 import { setPatient } from '../../../../../features/patientReducer';
 //
 import Finger from '../../../../../features/finger';
-import AppointmentService from '../../../../../services/appointment/appointment';
-import healtInsuranceService from '../../../../../services/healt-insurance/healtInsurance';
-import insuranceServiceApi from '../../../../../services/healt-insurance/insurance';
+import AppointmentService from '../../../../../services/appointment/api-appointment-service';
+import healthInsuranceService from '../../../../../services/healt-insurance/healtInsurance';
+import apiInsuranceService from '../../../../../services/healt-insurance/insurance';
 import ScheduleService from '../../../../../services/schedule';
 import { NewInput } from '../../../../Input/Input';
 const { RangePicker } = DatePicker;
@@ -72,7 +86,7 @@ function Index({ type, isDoctor }) {
    // suul newew 8.1
    const [selectedRow, setSelectedRow] = useState();
    const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
-   const [insuranceService, setInsuranceService] = useState([]);
+   const [hicsSupports, setHicsSupports] = useState([]);
    //
    const getAppointment = async (page, pageSize, start, end, process) => {
       setSpinner(true);
@@ -137,7 +151,6 @@ function Index({ type, isDoctor }) {
          });
       } else {
          const payment = row.isPayment || row.isInsurance;
-         console.log(payment, type, row.type);
          if (!payment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          }
@@ -145,23 +158,17 @@ function Index({ type, isDoctor }) {
          //    openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          // }
          else {
-            console.log('end', row);
-            if (row.startDate === null || row.startHicsCode === null) {
+            if (row.startDate === null) {
                if (row.isInsurance) {
-                  startFormHics.setFieldsValue({
-                     patientRegno: row.patient.registerNumber
-                  });
-                  await insuranceServiceApi
-                     .getInsuranceService({
-                        usageType: 'OUT'
-                     })
-                     .then((response) => {
-                        setInsuranceService(response.data.data);
-                        setIsOpenModalStartService(true);
-                     })
+                  await healthInsuranceService
+                     .getHicsService()
+                     .then(({ data }) =>
+                        setHicsSupports(data.result.filter((hicsService) => hicsService.groupId == 201))
+                     )
                      .catch(() => {
                         openNofi('error', 'Алдаа', 'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу');
                      });
+                  setIsOpenModalStartService(true);
                } else {
                   hrefEMR(row);
                }
@@ -183,8 +190,8 @@ function Index({ type, isDoctor }) {
       const data = {
          patientId: row.patientId,
          inspection: inspectionType === undefined ? 1 : inspectionType,
-         hicsServiceId: row.hicsServiceId ? row.hicsServiceId : startFormHics.getFieldValue('hicsServiceId'),
-         type: row.type
+         type: row.type,
+         hicsSeal: row.hicsSeal
       };
       if (type === 0) {
          data['usageType'] = 'OUT';
@@ -225,16 +232,30 @@ function Index({ type, isDoctor }) {
       dispatch(setPatient(row.patient));
    };
    const startHics = async (values) => {
-      values['appointmentId'] = selectedRow.id;
-      await healtInsuranceService.postStartHics(values).then(async (response) => {
-         if (response.data.code === 400) {
-            openNofi('error', 'Амжилтгүй', response.data.description);
-            //end neg ym bmar bn 400
-         } else if (response.data.code === 200) {
-            openNofi('success', 'Амжилттай', response.data.description);
-            hrefEMR(null);
-         }
-      });
+      await apiInsuranceService
+         .hicsAmbulatoryStart(values.fingerprint, selectedRow.patientId, values.hicsServiceId)
+         .then(async ({ data }) => {
+            if (data.code === 400) {
+               openNofi('error', 'Амжилтгүй', data.description);
+            } else if (data.code === 200) {
+               await apiInsuranceService
+                  .createHicsSeal({
+                     appointmentId: selectedRow.id,
+                     patientId: selectedRow.patientId,
+                     departmentId: selectedRow.cabinetId,
+                     startAt: data.result.createdDate,
+                     hicsAmbulatoryStartId: data.result.id,
+                     hicsServiceId: data.result.hicsServiceId,
+                     groupId: 201
+                  })
+                  .then((response) => {
+                     if (response.status != 200) {
+                        openNofi('error', 'Амжилтгүй', response);
+                     }
+                  });
+               hrefEMR(null);
+            }
+         });
    };
    //
 
@@ -1191,13 +1212,13 @@ function Index({ type, isDoctor }) {
                      steps={[
                         {
                            title: 'Өвтний',
-                           path: 'patientFingerprint'
+                           path: 'fingerprint'
                         }
                      ]}
                      isPatientSheet={false}
                      handleClick={(values) => {
                         startFormHics.setFieldsValue({
-                           patientFingerprint: values.patientFingerprint
+                           fingerprint: values.fingerprint
                         });
                      }}
                   />
@@ -1206,23 +1227,10 @@ function Index({ type, isDoctor }) {
                         rules={[
                            {
                               required: true,
-                              message: 'Иргэний регистр заавал'
-                           }
-                        ]}
-                        name="patientRegno"
-                     >
-                        <NewInput />
-                     </Form.Item>
-                  </div>
-                  <div className="hidden">
-                     <Form.Item
-                        rules={[
-                           {
-                              required: true,
                               message: 'Иргэний хурууны хээ заавал'
                            }
                         ]}
-                        name="patientFingerprint"
+                        name="fingerprint"
                      >
                         <NewInput />
                      </Form.Item>
@@ -1238,25 +1246,11 @@ function Index({ type, isDoctor }) {
                   >
                      <Select
                         placeholder="Үйлчилгээний төрөл сонгох"
-                        // onChange={(e) => {
-                        //    console.log(e);
-                        //    setHicsServiceId(e);
-                        // }}
-                     >
-                        {insuranceService?.map((group, index) => {
-                           return (
-                              <OptGroup key={index} label={group.name}>
-                                 {group?.hicsServices?.map((service, idx) => {
-                                    return (
-                                       <Option key={`${index}-${idx}`} value={service.id}>
-                                          {service.name}
-                                       </Option>
-                                    );
-                                 })}
-                              </OptGroup>
-                           );
-                        })}
-                     </Select>
+                        options={hicsSupports.map((hicsSupport) => ({
+                           label: hicsSupport.name,
+                           value: hicsSupport.id
+                        }))}
+                     />
                   </Form.Item>
                </div>
             </Form>

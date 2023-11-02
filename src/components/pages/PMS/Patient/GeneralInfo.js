@@ -295,6 +295,11 @@ function GeneralInfo({ form, gbase }) {
                <Input />
             </Form.Item>
          </div>
+         <div className="p-1">
+            <Form.Item label="Цусны бүлэг" name="bloodType" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+               <Select options={[{ value: 'A' }, { value: 'B' }, { value: 'AB' }, { value: 'O' }]} />
+            </Form.Item>
+         </div>
       </div>
    );
 }
