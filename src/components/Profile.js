@@ -43,7 +43,8 @@ function Profile() {
                   isInsurance: response.data.response.hospital?.isInsurance,
                   roleId: response.data.response?.roleId,
                   phoneNo: response.data.response?.employee?.phoneNo,
-                  hospitalName: response.data.response.hospital?.name
+                  hospitalName: response.data.response.hospital?.name,
+                  hospitalId: response.data.response.hospital?.id
                })
             );
             setUser(response.data.response);

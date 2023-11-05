@@ -501,6 +501,7 @@ function UTable(props) {
             <Form
                form={form}
                wrapperCol={{ span: 14 }}
+               initialValues={props.initialValues}
                // onValuesChange={handleFormValuesChange}
             >
                <Row gutter={[24, 6]}>
@@ -580,8 +581,20 @@ function UTable(props) {
                                  <Input placeholder={element.label} />
                               </Form.Item>
                            ) : null}
-                           {element.input === 'inputNumber' ? (
+                           {element.input === 'input' ? (
                               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                                 <Input placeholder={element.label} />
+                              </Form.Item>
+                           ) : null}
+                           {element.input === 'inputDefValueHide' ? (
+                              <Form.Item
+                                 style={{
+                                    display: 'none'
+                                 }}
+                                 label={element.label}
+                                 name={element.index}
+                                 rules={element.rules}
+                              >
                                  <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
                               </Form.Item>
                            ) : null}
