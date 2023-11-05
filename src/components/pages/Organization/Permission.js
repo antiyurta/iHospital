@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentHospitalId, selectCurrentToken } from '../../../features/authReducer';
 import { Get } from '../../comman';
 import UTable from '../../UTable';
 
 function Permission() {
    const token = useSelector(selectCurrentToken);
+   const hospitalId = useSelector(selectCurrentHospitalId);
    const config = {
       headers: {},
       params: {}
@@ -35,6 +36,14 @@ function Permission() {
    };
    const column = [
       {
+         index: 'hospitalId',
+         label: 'hospitalId',
+         isView: false,
+         input: 'inputDefValueHide',
+         value: hospitalId,
+         col: 24
+      },
+      {
          index: 'roleId',
          label: 'ROLE',
          isView: true,
@@ -49,7 +58,7 @@ function Permission() {
          isView: true,
          input: 'select',
          inputData: menus,
-         relIndex: 'name',
+         relIndex: 'title',
          col: 24
       },
       {
@@ -94,6 +103,9 @@ function Permission() {
                   title={'Permission'}
                   url={'organization/permission'}
                   column={column}
+                  initialValues={{
+                     hospitalId: hospitalId
+                  }}
                   isCreate={true}
                   isRead={true}
                   isUpdate={true}

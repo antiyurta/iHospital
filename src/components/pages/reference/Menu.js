@@ -1,70 +1,84 @@
-import { Delete, Get, Patch, Post } from '../../comman';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentHospitalId } from '../../../features/authReducer';
 import { Button, Card, Form, Input, InputNumber, Modal, Pagination, Select, Switch } from 'antd';
 import { Table } from 'react-bootstrap';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import { PublicRoutes, ProtectedRoutes } from '../../../Routes';
 
+import MenuService from '../../../services/reference/menu';
+
 const { Option } = Select;
 const { TextArea } = Input;
 
 function Menu() {
    let Routes = [...PublicRoutes, ...ProtectedRoutes];
-   console.log('=>', Routes);
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
+   const hospitalId = useSelector(selectCurrentHospitalId);
    const [form] = Form.useForm();
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [editMode, setEditMode] = useState(false);
    const [id, setId] = useState([]);
    const [isSubMenu, setIsSubMenu] = useState(false);
-   //
    const [menus, setMenus] = useState([]);
    const [isSubMenus, setIsSubMenus] = useState([]);
    const [meta, setMeta] = useState([]);
-   //
    const showModal = () => {
+      form.resetFields();
       setIsOpenModal(true);
       setEditMode(false);
    };
    const getMenus = async (page, pageSize) => {
-      config.params.page = page;
-      config.params.limit = pageSize;
-      const response = await Get('reference/menu', token, config);
-      if (response.data.length != 0) {
-         setMenus(response.data);
-         setMeta(response.meta);
-      }
+      await MenuService.get({
+         params: { page: page, limit: pageSize }
+      }).then((response) => {
+         setMenus(response.data.response.data);
+         setMeta(response.data.response.meta);
+      });
    };
 
    const getIsSubMenu = async () => {
-      config.params.isSubMenu = true;
-      const response = await Get('reference/menu', token, config);
-      if (response.data.length != 0) {
-         setIsSubMenus(response.data);
-      }
-      config.params.isSubMenu = null;
+      await MenuService.get({
+         params: {
+            isSubMenu: true
+         }
+      }).then((response) => {
+         setIsSubMenus(response.data.response.data);
+      });
    };
 
-   const onFinish = async (value) => {
+   const onFinish = async (values) => {
       if (editMode) {
-         const response = await Patch('reference/menu/' + id, token, config, value);
-         if (response === 200) {
-            setIsOpenModal(false);
-            getMenus();
-         }
+         await MenuService.patch(id, values)
+            .then((response) => {
+               if (response.data.success) {
+                  setIsOpenModal(false);
+               }
+            })
+            .finally(() => {
+               getMenus();
+            });
       } else {
-         const response = await Post('reference/menu', token, config, value);
-         if (response === 201) {
-            setIsOpenModal(false);
-            getMenus();
-         }
+         const route = Routes.find((route) => route.url === values.url);
+         var data = {
+            hospitalId: hospitalId,
+            position: values.position,
+            icon: values.icon,
+            parentId: values.parentId,
+            isSubMenu: values.isSubMenu,
+            url: route.url,
+            title: route.mnName,
+            name: route.name
+         };
+         await MenuService.post(data)
+            .then((response) => {
+               if (response.data.success) {
+                  setIsOpenModal(false);
+               }
+            })
+            .finally(() => {
+               getMenus();
+            });
       }
    };
    const deleteModal = (id) => {
@@ -74,7 +88,7 @@ function Menu() {
          closable: true,
          content: <div>Устгасан тохиолдолд дахин сэргээгдэхгүй болно</div>,
          async onOk() {
-            await Delete('reference/menu/' + id, token, config);
+            await MenuService.remove(id);
             getMenus();
          }
       });
@@ -83,11 +97,12 @@ function Menu() {
    const editModal = async (id) => {
       setEditMode(true);
       setId(id);
-      const response = await Get('reference/menu/show/' + id, token, config);
-      if (response.length != 0) {
-         form.setFieldsValue(response);
-         setIsOpenModal(true);
-      }
+      await MenuService.getShow(id).then((response) => {
+         if (response.data.success) {
+            form.setFieldsValue(response.data.response);
+            setIsOpenModal(true);
+         }
+      });
    };
 
    useEffect(() => {
@@ -178,13 +193,13 @@ function Menu() {
             okText="Хадгалах"
             cancelText="Болих"
          >
-            <Form form={form}>
-               <Form.Item
-                  label={'Туслах цэстэй эсэх'}
-                  name="isSubMenu"
-                  valuePropName="checked"
-                  initialValue={isSubMenu}
-               >
+            <Form
+               form={form}
+               initialValues={{
+                  isSubMenu: false
+               }}
+            >
+               <Form.Item label={'Туслах цэс эсэх'} name="isSubMenu" valuePropName="checked" initialValue={isSubMenu}>
                   <Switch
                      className="bg-[#4a7fc1]"
                      checkedChildren="Тийм"
@@ -192,7 +207,7 @@ function Menu() {
                      onChange={() => setIsSubMenu(!isSubMenu)}
                   />
                </Form.Item>
-               {!isSubMenu && (
+               {isSubMenu && (
                   <Form.Item label="Дэд цэс" name="parentId">
                      <Select>
                         {isSubMenus.map((menu, index) => {
@@ -205,28 +220,23 @@ function Menu() {
                      </Select>
                   </Form.Item>
                )}
-               <Form.Item label="Route" name="route">
+               <Form.Item label="Route" name="url">
                   <Select>
                      {Routes?.map((route, index) => {
-                        return <Option key={index}>{route.mnName}</Option>;
+                        return (
+                           <Option key={index} value={route.url}>
+                              {route.mnName}
+                           </Option>
+                        );
                      })}
                   </Select>
-               </Form.Item>
-               {/* <Form.Item label="Нэр mongol" name="title">
-                  <Input />
-               </Form.Item>
-               <Form.Item label="Нэр angli" name="name">
-                  <Input />
-               </Form.Item>
-               <Form.Item label="Хаяг" name="url">
-                  <Input />
                </Form.Item>
                <Form.Item label="Байрлал" name="position">
                   <InputNumber />
                </Form.Item>
                <Form.Item label="ICON" name="icon">
                   <TextArea />
-               </Form.Item> */}
+               </Form.Item>
             </Form>
          </Modal>
       </div>
