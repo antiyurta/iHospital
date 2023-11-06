@@ -78,7 +78,7 @@ function CountryDictionary() {
          index: 'position',
          label: 'Байрлал',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -123,7 +123,7 @@ function CountryDictionary() {
          index: 'position',
          label: 'Байрлал',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -168,7 +168,7 @@ function CountryDictionary() {
          index: 'position',
          label: 'Байрлал',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {

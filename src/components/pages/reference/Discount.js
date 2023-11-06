@@ -7,7 +7,7 @@ function Discount() {
          index: 'percent',
          label: 'percent',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {

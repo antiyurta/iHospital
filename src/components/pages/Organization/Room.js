@@ -107,7 +107,7 @@ function Room() {
          index: 'price',
          label: 'Өрөөны үнэ',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12,
          isDepend: true
       },

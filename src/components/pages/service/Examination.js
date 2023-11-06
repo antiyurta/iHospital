@@ -88,7 +88,7 @@ function Examination() {
          label: 'Үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       },
       {
@@ -96,7 +96,7 @@ function Examination() {
          label: 'Хэвтэн үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       },
       {

@@ -13,7 +13,7 @@ function Finance() {
          index: 'b_id',
          label: 'байгууллага ID',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -76,14 +76,14 @@ function Finance() {
          index: 'atype_id',
          label: 'барааны төрөл',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'agroup_id',
          label: 'барааны бүлэг',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -104,14 +104,14 @@ function Finance() {
          index: 'salepercent',
          label: 'хөнгөлөлтийн хувь',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'mincount',
          label: 'Нөөцийн доод хэмжээ',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -132,35 +132,35 @@ function Finance() {
          index: 'm_cost',
          label: 'нэгжийн өртөг дундаж',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'price_low',
          label: 'үнэ',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'price_big',
          label: 'бөөний үнэ',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'price_lowV',
          label: 'үнэ валютаар',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'price_bigV',
          label: 'бөөний үнэ валютаар',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -174,21 +174,21 @@ function Finance() {
          index: 'm_mass',
          label: 'барааны жин',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'pcount',
          label: 'бөөний тоо',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'pcount_n',
          label: 'багцын тоо',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -237,21 +237,21 @@ function Finance() {
          index: 'clid',
          label: 'нийлүүлэгчийн ДДД',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'm_id2',
          label: 'өмнөх бүртгэлийн барааны ДДД',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'ct_per',
          label: 'НХАТ-н хувь',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {

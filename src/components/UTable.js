@@ -267,7 +267,7 @@ function UTable(props) {
                   <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                </Form.Item>
             );
-         case 'inputNumber':
+         case 'numberInput':
             return (
                <Form.Item label={element.label} name={element.index} rules={element.rules}>
                   <InputNumber placeholder={element.label} onKeyPress={checkNumber} />

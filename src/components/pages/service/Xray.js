@@ -88,7 +88,7 @@ function Xray() {
          label: 'Үргэлжлэх хугацаа(МИН)',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -112,7 +112,7 @@ function Xray() {
          label: 'Үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       },
       {
@@ -120,7 +120,7 @@ function Xray() {
          label: 'Хэвтэн үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       },
       {

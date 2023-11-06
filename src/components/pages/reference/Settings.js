@@ -6,7 +6,7 @@ function Settings() {
          index: 'inspectionTime',
          label: 'Үзлэгийн минут',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          rules: [
             {
                required: true,
