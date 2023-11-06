@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalId } from '../../../features/authReducer';
-import {
-   Button,
-   Card,
-   Checkbox,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Pagination,
-   Popconfirm,
-   Select,
-   Switch,
-   Table
-} from 'antd';
+import { Button, Card, Form, Input, InputNumber, Modal, Popconfirm, Select, Switch, Table } from 'antd';
 // import { Table } from 'react-bootstrap';
 import {
    DeleteOutlined,
@@ -43,10 +30,8 @@ function Menu() {
    const [editModeSub, setEditModeSub] = useState(false);
    const [id, setId] = useState([]);
    const [isSubMenu, setIsSubMenu] = useState(false);
-   const [allMenus, setAllMenus] = useState([]);
    const [menus, setMenus] = useState([]);
    const [isSubMenus, setIsSubMenus] = useState([]);
-   const [meta, setMeta] = useState([]);
    //
    const [idParent, setIdParent] = useState(undefined);
    //
@@ -77,12 +62,10 @@ function Menu() {
       setMenus(root);
       console.log(root);
    };
-   const getMenus = async (page, pageSize) => {
-      await MenuService.get({
-         params: { page: page, limit: pageSize }
-      }).then((response) => {
+   const getMenus = async () => {
+      await MenuService.get().then((response) => {
+         console.log(response.data);
          generateData(response.data.response.data);
-         setAllMenus(response.data.response.data);
          // setMeta(response.data.response.meta);
       });
    };
@@ -173,7 +156,7 @@ function Menu() {
    };
 
    useEffect(() => {
-      getMenus(1, 10);
+      getMenus();
       getIsSubMenu();
    }, []);
 
@@ -200,7 +183,7 @@ function Menu() {
                      };
                      await MenuService.post(data).then((response) => {
                         if (response.data.success) {
-                           getMenus(1, 10);
+                           getMenus();
                         }
                      });
                   } else {
@@ -212,9 +195,8 @@ function Menu() {
                      };
                      const childId = subForm.getFieldValue(['menus', editingIndex, 'id']);
                      await MenuService.patch(childId, data).then((response) => {
-                        console.log(response);
                         if (response.data.success) {
-                           getMenus(1, 10);
+                           getMenus();
                         }
                      });
                   }
@@ -244,7 +226,7 @@ function Menu() {
          await MenuService.remove(childId).then((response) => {
             if (response.data.success) {
                remove(index);
-               getMenus(1, 10);
+               getMenus();
             }
          });
       };
@@ -508,17 +490,20 @@ function Menu() {
                ]}
                dataSource={menus}
                pagination={{
-                  position: ['topCenter', 'bottomCenter'],
-                  size: 'small',
-                  current: meta.page,
-                  total: meta.itemCount,
-                  showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                  pageSize: meta.limit,
-                  showSizeChanger: true,
-                  pageSizeOptions: ['5', '10', '20', '50'],
-                  showQuickJumper: true,
-                  onChange: (page, pageSize) => getMenus(page, pageSize)
+                  position: ['bottomCenter']
                }}
+               // pagination={{
+               //    position: ['topCenter', 'bottomCenter'],
+               //    size: 'small',
+               //    current: meta.page,
+               //    total: meta.itemCount,
+               //    showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+               //    pageSize: meta.limit,
+               //    showSizeChanger: true,
+               //    pageSizeOptions: ['5', '10', '20', '50'],
+               //    showQuickJumper: true,
+               //    onChange: (page, pageSize) => getMenus(page, pageSize)
+               // }}
             />
          </Card>
          <Modal
