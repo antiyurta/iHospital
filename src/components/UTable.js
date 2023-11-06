@@ -576,6 +576,11 @@ function UTable(props) {
                                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                               </Form.Item>
                            ) : null}
+                           {element.input === 'inputNumber' ? (
+                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                                 <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
+                              </Form.Item>
+                           ) : null}
                            {element.input === 'input' ? (
                               <Form.Item label={element.label} name={element.index} rules={element.rules}>
                                  <Input placeholder={element.label} />
