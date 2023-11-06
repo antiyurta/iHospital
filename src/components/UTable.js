@@ -581,11 +581,6 @@ function UTable(props) {
                                  <Input placeholder={element.label} />
                               </Form.Item>
                            ) : null}
-                           {element.input === 'input' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <Input placeholder={element.label} />
-                              </Form.Item>
-                           ) : null}
                            {element.input === 'inputDefValueHide' ? (
                               <Form.Item
                                  style={{
