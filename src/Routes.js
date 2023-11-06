@@ -115,7 +115,7 @@ export const ProtectedRoutes = [
    },
    {
       name: 'bed_management',
-      mnName: 'Оношилгооны өмнөх жагсаалт',
+      mnName: 'Орны менежмент',
       url: '/bed_management/*',
       element: MainBed
    },

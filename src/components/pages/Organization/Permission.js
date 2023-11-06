@@ -32,7 +32,7 @@ function Permission() {
          params: {}
       };
       const response = await Get('reference/menu', token, conf);
-      setMenus(response.data);
+      setMenus(response.data.filter((item) => item.parentId === null));
    };
    const column = [
       {
