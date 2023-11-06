@@ -102,6 +102,7 @@ function Menu() {
          hospitalId: hospitalId,
          name: values.name,
          title: values.name,
+         icon: values.icon,
          url: '/'
       };
       await MenuService.post(data)
