@@ -211,6 +211,98 @@ function UTable(props) {
       }
    };
 
+   const getInputs = (element, inputType) => {
+      switch (inputType) {
+         case 'select':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                  <Select
+                     allowClear
+                     showSearch
+                     placeholder={element.label}
+                     optionFilterProp="children"
+                     filterOption={(input, option) => {
+                        return (option?.children ?? '').toLowerCase().includes(input?.toLowerCase());
+                     }}
+                  >
+                     {element.inputData?.map((data, index) => {
+                        return (
+                           <Option
+                              key={index}
+                              value={element.relValueIndex ? data[`${element.relValueIndex}`] : data.id}
+                           >
+                              {data[`${element.relIndex}`]}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+            );
+         case 'multipleSelect':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                  <Select mode="multiple" allowClear placeholder={element.label}>
+                     {element.inputData?.map((data, index) => {
+                        return (
+                           <Option
+                              key={index}
+                              value={element.relValueIndex ? data[`${element.relValueIndex}`] : data.id}
+                           >
+                              {data[`${element.relIndex}`]}
+                           </Option>
+                        );
+                     })}
+                  </Select>
+               </Form.Item>
+            );
+         case 'input':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                  <Input placeholder={element.label} />
+               </Form.Item>
+            );
+         case 'switch':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules} valuePropName="checked">
+                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+               </Form.Item>
+            );
+         case 'inputNumber':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                  <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
+               </Form.Item>
+            );
+         case 'textarea':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                  <TextArea />
+               </Form.Item>
+            );
+         case 'date':
+            return (
+               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+                  <DatePicker locale={mn} />
+               </Form.Item>
+            );
+         case 'inputDefValueHide':
+            return (
+               <Form.Item
+                  style={{
+                     display: 'none'
+                  }}
+                  label={element.label}
+                  name={element.index}
+                  rules={element.rules}
+               >
+                  <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
+               </Form.Item>
+            );
+         default:
+            return;
+      }
+   };
+
    return (
       <>
          <Card
@@ -526,7 +618,8 @@ function UTable(props) {
                                  />
                               </Button>
                            )}
-                           {element.input === 'select' ? (
+                           {getInputs(element, element.input)}
+                           {/* {element.input === 'select' ? (
                               <Form.Item label={element.label} name={element.index} rules={element.rules}>
                                  <Select
                                     allowClear
@@ -607,7 +700,7 @@ function UTable(props) {
                               <Form.Item label={element.label} name={element.index} rules={element.rules}>
                                  <DatePicker locale={mn} />
                               </Form.Item>
-                           ) : null}
+                           ) : null} */}
                         </Col>
                      );
                   })}
