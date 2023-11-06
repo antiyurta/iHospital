@@ -71,7 +71,7 @@ function Surgery() {
          label: 'Үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       },
       {
@@ -79,7 +79,7 @@ function Surgery() {
          label: 'Хэвтэн үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       }
    ];

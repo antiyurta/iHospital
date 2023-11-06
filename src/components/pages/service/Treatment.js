@@ -103,7 +103,7 @@ function Treatment() {
          label: 'Үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       },
       {
@@ -111,7 +111,7 @@ function Treatment() {
          label: 'Хэвтэн үнэ',
          isView: true,
          isSearch: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 12
       }
    ];

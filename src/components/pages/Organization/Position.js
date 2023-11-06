@@ -47,7 +47,7 @@ function Position() {
          index: 'salary',
          label: 'Цалин',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
@@ -68,14 +68,14 @@ function Position() {
          index: 'position',
          label: 'Байрлал',
          isView: false,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       },
       {
          index: 'workingHoursPerMonth',
          label: 'Сард ажиллах цаг',
          isView: true,
-         input: 'inputNumber',
+         input: 'numberInput',
          col: 24
       }
    ];

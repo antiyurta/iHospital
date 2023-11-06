@@ -19,7 +19,7 @@ const column = [
       index: 'inspectionPrice',
       label: 'Үзлэгийн үнэ',
       isView: true,
-      input: 'inputNumber',
+      input: 'numberInput',
       rules: [
          {
             required: true,
@@ -32,7 +32,7 @@ const column = [
       index: 'inspectionTwicePrice',
       label: 'Үзлэгийн үнэ давтан',
       isView: true,
-      input: 'inputNumber',
+      input: 'numberInput',
       rules: [
          {
             required: true,
@@ -45,7 +45,7 @@ const column = [
       index: 'emergencyPrice',
       label: 'Үзлэгийн үнэ яаралтай',
       isView: true,
-      input: 'inputNumber',
+      input: 'numberInput',
       rules: [
          {
             required: true,
