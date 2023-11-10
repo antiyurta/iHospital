@@ -951,7 +951,7 @@ table .formTable tr > td {
    margin-top: 24px;
 }
 .ant-checkbox + span {
-   line-height: 8px !important;
+   line-height: 1.1 !important;
 }
 table.new-table {
    /* width: 100%; */

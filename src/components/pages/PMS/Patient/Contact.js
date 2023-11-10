@@ -33,23 +33,23 @@ function Contact({ form }) {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'registerNumber']}
-                              rules={[
-                                 {
-                                    required: true,
-                                    message: 'Холбоо барих хүний Регистр дугаар оруулна уу'
-                                 },
-                                 {
-                                    validator: async (_, registerNumber) => {
-                                       if (registerNumber === undefined) {
-                                          return Promise.reject(new Error(''));
-                                       } else {
-                                          if (registerNumber.length < 10) {
-                                             return Promise.reject(new Error('Хамгийн багадаа 10 үсэг'));
-                                          }
-                                       }
-                                    }
-                                 }
-                              ]}
+                              // rules={[
+                              //    {
+                              //       required: true,
+                              //       message: 'Холбоо барих хүний Регистр дугаар оруулна уу'
+                              //    },
+                              //    {
+                              //       validator: async (_, registerNumber) => {
+                              //          if (registerNumber === undefined) {
+                              //             return Promise.reject(new Error(''));
+                              //          } else {
+                              //             if (registerNumber.length < 10) {
+                              //                return Promise.reject(new Error('Хамгийн багадаа 10 үсэг'));
+                              //             }
+                              //          }
+                              //       }
+                              //    }
+                              // ]}
                            >
                               <Input />
                            </Form.Item>
@@ -59,12 +59,12 @@ function Contact({ form }) {
                               labelCol={{ span: 8 }}
                               wrapperCol={{ span: 16 }}
                               name={[name, 'email']}
-                              rules={[
-                                 {
-                                    required: true,
-                                    message: 'Холбоо барих хүний имэйл'
-                                 }
-                              ]}
+                              // rules={[
+                              //    {
+                              //       required: true,
+                              //       message: 'Холбоо барих хүний имэйл'
+                              //    }
+                              // ]}
                            >
                               <Input />
                            </Form.Item>

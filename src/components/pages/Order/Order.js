@@ -37,7 +37,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
    const [total, setTotal] = useState(Number);
 
    const handleclick = async (value) => {
-      console.log('zahialsan uilchilgee', value);
       setIsLoadingOrderTable(true);
       if (isPackage) {
          var services = [];
@@ -65,6 +64,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             service.unikey = index;
             service.id = item.id;
             service.name = item.name;
+            // service.type = item.type?.type; // oorclow 2023/11/10
             service.type = item.types?.type;
             if (usageType === 'IN') {
                service.price = item.inpatientPrice;

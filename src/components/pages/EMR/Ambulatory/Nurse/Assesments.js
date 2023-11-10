@@ -18,8 +18,11 @@ function Assesments(props) {
             }
          })
          .then((response) => {
-            setData(response.data.response);
-            console.log(response);
+            let data = [];
+            response.data.response?.map((item) => {
+               data = item.data;
+            });
+            setData(data);
          })
          .catch((error) => {
             console.log(error);
@@ -41,44 +44,48 @@ function Assesments(props) {
          children: [
             {
                title: 'Систол',
-               dataIndex: ['data', 'highPressureRight']
+               dataIndex: ['highPressureRight']
             },
             {
                title: 'Диастол',
-               dataIndex: ['data', 'lowPressureRight']
+               dataIndex: ['lowPressureRight']
             },
             {
                title: 'Жин',
-               dataIndex: ['data', 'weight']
+               dataIndex: ['weight']
             },
             {
                title: 'Өндөр',
-               dataIndex: ['data', 'height']
+               dataIndex: ['height']
             },
             {
                title: 'Халуун',
-               dataIndex: ['data', 'temp']
+               dataIndex: ['temp']
             },
             {
                title: 'Амьсгал',
-               dataIndex: ['data', 'respiratoryRate']
+               dataIndex: ['respiratoryRate']
             },
             {
                title: `SpO'2`,
-               dataIndex: ['data', 'spO2']
+               dataIndex: ['spO2']
             },
             {
                title: `Пульс`,
-               dataIndex: ['data', 'pulse']
+               dataIndex: ['pulse']
             },
             {
                title: 'Ухаан санаа',
-               dataIndex: ['data', 'mind']
+               dataIndex: ['mind']
             }
          ]
       },
       {
-         title: 'Сувилагч'
+         title: 'Сувилагч',
+         dataIndex: 'createdByName',
+         render: (text) => {
+            return `${text.lastName?.substring(0, 1)}.${text.firstName}`;
+         }
       }
    ];
    useEffect(() => {

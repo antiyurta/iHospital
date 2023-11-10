@@ -317,7 +317,7 @@ function NursingNote({ PatientId, ListId, PatientData }) {
                                        <Checkbox value={'#26'}>#26. Шээс хаагдсан</Checkbox>
                                        <Checkbox value={'#27'}>#27. Шээс ялгаруулалт саатсан</Checkbox>
                                        <Checkbox value={'#28'}>#28. Цус алдах эрсдэл</Checkbox>
-                                       <Checkbox value={'#29'}>#29. Хялдварын эрсдэл</Checkbox>
+                                       <Checkbox value={'#29'}>#29. Хaлдварын эрсдэл</Checkbox>
                                        <Checkbox value={'#30'}>#30. Арьсны бүрэн бүтэн байдал алдагдал</Checkbox>
                                     </div>
                                     <div className="basis-1/5">

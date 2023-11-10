@@ -105,7 +105,7 @@ class NewEmr extends React.Component {
             }
          });
       } else {
-         openNofi('warning', 'Анхааруулга', 'OTS Захилах');
+         openNofi('warning', 'Анхааруулга', 'OTS Захиалах');
       }
    };
    async componentDidMount() {
