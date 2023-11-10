@@ -64,8 +64,8 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             service.unikey = index;
             service.id = item.id;
             service.name = item.name;
-            // service.type = item.type?.type; // oorclow 2023/11/10
-            service.type = item.types?.type;
+            // service.type = item.types?.type; // oorclow 2023/11/10
+            service.type = item.type?.type;
             if (usageType === 'IN') {
                service.price = item.inpatientPrice;
                service.oPrice = item.inpatientPrice;
