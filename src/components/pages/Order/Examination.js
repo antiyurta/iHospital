@@ -17,8 +17,9 @@ export const Examination = ({ handleclick }) => {
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
-         examination.type = examination.types.type;
-         setSelectedExaminations([...selectedExaminations, examination]);
+         var clone = { ...examination };
+         clone.type = examination.type?.type;
+         setSelectedExaminations([...selectedExaminations, clone]);
       }
    };
    const remove = (index) => {

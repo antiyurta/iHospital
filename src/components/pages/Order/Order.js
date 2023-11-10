@@ -64,8 +64,9 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
             service.unikey = index;
             service.id = item.id;
             service.name = item.name;
+            // console.log(item);
             // service.type = item.types?.type; // oorclow 2023/11/10
-            service.type = item.type?.type;
+            service.type = item.type;
             if (usageType === 'IN') {
                service.price = item.inpatientPrice;
                service.oPrice = item.inpatientPrice;
@@ -125,6 +126,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
          } else {
             data = datas.services.concat(services);
          }
+         console.log('==========>', data);
          orderForm.setFieldsValue({ services: data });
          setTotal(total + subTotal);
       }

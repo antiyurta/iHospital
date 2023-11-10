@@ -17,8 +17,9 @@ function Xray({ handleclick }) {
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Оношилгоо сонгогдсон байна');
       } else {
-         xray.type = xray.type.type;
-         setSelectedXrays([...selectedXrays, xray]);
+         var clone = { ...xray };
+         clone.type = xray.type?.type;
+         setSelectedXrays([...selectedXrays, clone]);
       }
    };
    const remove = (index) => {
