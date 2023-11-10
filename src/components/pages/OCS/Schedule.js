@@ -56,21 +56,21 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       setDiscounts(response.data);
    };
    const getFilterInvoices = (invoices) => {
-      setTotalAmount(invoices.reduce((totalAmount, invoice) => (totalAmount += invoice.amount), 0));
+      setTotalAmount(invoices?.reduce((totalAmount, invoice) => (totalAmount += invoice.amount), 0));
       var noTime = [];
       var time = [];
       invoices?.map((invoice) => {
-         // if (payment.type === 2 && payment.treatmentRequest?.slotId === null && payment.treatment?.isSlot) {
-         //    time.push(payment);
-         // } else if (
-         //    payment.type === 1 &&
-         //    payment.xrayRequest?.slotId === null &&
-         //    payment.xrayRequest?.usageType === 'OUT'
-         // ) {
-         //    time.push(payment);
-         // } else {
+         if (invoice.type === 2 && invoice.treatmentRequest?.slotId === null && invoice.treatment?.isSlot) {
+            time.push(payment);
+         } else if (
+            invoice.type === 1 &&
+            invoice.xrayRequest?.slotId === null &&
+            invoice.xrayRequest?.usageType === 'OUT'
+         ) {
+            time.push(invoice);
+         } else {
             noTime.push(invoice);
-         // }
+         }
       });
       setNoTimeRequirePayments(noTime);
       setTimeRequirePayments(time);
@@ -191,7 +191,9 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    };
    //
    useEffect(() => {
-      getFilterInvoices(incomeData);
+      if (incomeData.data) {
+         getFilterInvoices(incomeData.data);
+      }
       getDiscounts();
       getPaymentType();
    }, [incomeData]);
@@ -378,11 +380,12 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                                        title: 'Үйлчилгээ',
                                        render: (_, record) => {
                                           if (record.treatmentRequest?.qty) {
-                                             return <p>{record.serviceName + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
+                                             return <p>{record.name + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
                                           } else {
-                                             return record.serviceName;
+                                             return record.name;
                                           }
                                        }
+                                       // service name iig name bolgow 2023/11/10
                                        // dataIndex: 'name'
                                     },
                                     {

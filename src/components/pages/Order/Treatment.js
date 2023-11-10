@@ -1,13 +1,10 @@
-import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Empty, Input, Modal, Table } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import { Button, Empty, Input, Modal, Table } from 'antd';
 import React, { useState } from 'react';
-import { localMn, numberToCurrency, openNofi } from '../../comman';
-import jwtInterceopter from '../../jwtInterceopter';
+import { numberToCurrency, openNofi } from '../../comman';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
-
-const { Search } = Input;
 
 function Treatment({ handleclick }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -19,8 +16,9 @@ function Treatment({ handleclick }) {
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
-         treatment.type = treatment.types.type;
-         setSelectedTreatments([...selectedTreatments, treatment]);
+         var clone = { ...treatment };
+         clone.type = treatment.type?.type;
+         setSelectedTreatments([...selectedTreatments, clone]);
       }
    };
    const remove = (index) => {

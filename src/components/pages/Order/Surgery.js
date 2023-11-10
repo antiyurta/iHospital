@@ -49,8 +49,9 @@ function Surgery(props) {
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
-         surgery.type = surgery.types.type;
-         setSurgeryId(surgery.id);
+         const clone = { ...surgery };
+         clone.type = surgery.types.type;
+         setSurgeryId(clone.id);
          setIsOpenSubModal(true);
       }
    };
