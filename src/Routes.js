@@ -307,7 +307,7 @@ export const ProtectedRoutes = [
    },
    {
       name: 'dailyIncome',
-      mnName: 'Өдрийн орлогийн тайлан',
+      mnName: 'Өдрийн орлогын тайлан',
       url: '/dailyIncome',
       element: DailyIncome
    },

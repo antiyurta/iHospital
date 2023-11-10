@@ -584,7 +584,7 @@ function BodyConditionSheet({ PatientId, ListId, PatientData }) {
                            <div className="basis-1/2 p-1">
                               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
                                  <Form.Item
-                                    label="Бүр биеийн угаалга хийх"
+                                    label="Бүх биеийн угаалга хийх"
                                     className="p-1"
                                     name={['skin', 'bodyWash']}
                                     rules={[{ required: true, message: 'Заавал' }]}

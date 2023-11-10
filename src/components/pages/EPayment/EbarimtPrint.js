@@ -40,8 +40,8 @@ function EbarimtPrint(props) {
                   <p>Картын №:{props?.props?.patient?.cardNumber}</p>
                </div>
                <div className="flow-root">
-                  <p className="float-left">Овог:{props?.props?.patient?.lastName}</p>
-                  <p className="float-right">Нэр:{props?.props?.patient?.firstName}</p>
+                  <p className="float-left">Овог: {props?.props?.patient?.lastName}</p>
+                  <p className="float-right">Нэр: {props?.props?.patient?.firstName}</p>
                </div>
                <p style={{ fontSize: 17, textAlign: 'center' }}>Жагсаалт</p>
                {props?.props?.invoices?.map((invoice, index) => {

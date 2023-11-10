@@ -60,25 +60,6 @@ function Bed() {
       getRooms();
    }, []);
 
-   const column = [
-      {
-         index: 'bedNumber',
-         label: 'Ор дугаар',
-         isView: true,
-         input: 'numberInput',
-         col: 24
-      },
-      {
-         index: 'roomId',
-         label: 'Өрөөны дугаар',
-         isView: true,
-         input: 'select',
-         inputData: rooms,
-         relIndex: 'roomNumber',
-         col: 24
-      }
-   ];
-
    return (
       <>
          <div className="flex flex-wrap">
@@ -105,7 +86,7 @@ function Bed() {
                   >
                      <NewColumn
                         dataIndex={'roomId'}
-                        title="Өрөөны дугаар"
+                        title="Өрөөний дугаар"
                         render={(value) => {
                            return rooms?.find((e) => e.id === value)?.roomNumber;
                         }}
@@ -147,7 +128,7 @@ function Bed() {
                      {rooms.map((room, index) => {
                         return (
                            <Option key={index} value={room.id}>
-                              {room.name}
+                              {room.roomNumber}
                            </Option>
                         );
                      })}

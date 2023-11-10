@@ -66,7 +66,7 @@ function index4({ options, namePanel, handleChange }) {
                                           }}
                                        >
                                           <div className="w-full">
-                                             <div className="grid grid-cols-3 gap-[6px]">
+                                             <div className="grid grid-cols-4 gap-[6px]">
                                                 <Form.Item
                                                    {...restField}
                                                    label="Төрөл"
@@ -76,15 +76,15 @@ function index4({ options, namePanel, handleChange }) {
                                                    <Select
                                                       onChange={(e) => handleChange(namePanel, name, optionField.name)}
                                                    >
-                                                      <Option value="checkbox">Checkbox</Option>
-                                                      <Option value="radio">Radio</Option>
+                                                      <Option value="checkbox">Олон сонголтод</Option>
+                                                      <Option value="radio">Нэг сонголт</Option>
                                                       <Option value="dropdown">Dropdown</Option>
-                                                      <Option value="input">Input</Option>
-                                                      <Option value="inputNumber">InputNumber</Option>
-                                                      <Option value="textarea">TextArea</Option>
-                                                      <Option value="rangepicker">RangePicker</Option>
-                                                      <Option value="datepicker">DatePicker</Option>
-                                                      <Option value="table">Table</Option>
+                                                      <Option value="input">Текст бичих</Option>
+                                                      <Option value="inputNumber">Тоо оруулах</Option>
+                                                      <Option value="textarea">Их текст бичих</Option>
+                                                      <Option value="rangepicker">Тэднээс тэдэн хугацаа</Option>
+                                                      <Option value="datepicker">Нэг хугацаа</Option>
+                                                      <Option value="table">Хүснэгт</Option>
                                                    </Select>
                                                 </Form.Item>
                                                 <Form.Item
@@ -105,7 +105,24 @@ function index4({ options, namePanel, handleChange }) {
                                                 </Form.Item>
                                                 <Form.Item
                                                    {...restField}
-                                                   label="Too?"
+                                                   label={
+                                                      <div>
+                                                         <p
+                                                            style={{
+                                                               fontWeight: 400
+                                                            }}
+                                                         >
+                                                            Энэ асуултын хариулт тоо?
+                                                         </p>
+                                                         <p
+                                                            style={{
+                                                               fontWeight: 400
+                                                            }}
+                                                         >
+                                                            Анхааруулга та сайн лавлаж асууна уу !!!
+                                                         </p>
+                                                      </div>
+                                                   }
                                                    name={[optionField.name, 'isInteger']}
                                                    style={{
                                                       marginBottom: 0

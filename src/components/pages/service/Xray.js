@@ -49,7 +49,7 @@ function Xray() {
    const column = [
       {
          index: 'xrayTypeId',
-         label: 'Оншилгооны төрөл',
+         label: 'Оношилгооны төрөл',
          isView: false,
          input: 'select',
          inputData: xrayTypeData,

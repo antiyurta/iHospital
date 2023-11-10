@@ -6,14 +6,12 @@ import PmsPatientServices from '../../../services/pms/patient';
 import { ReturnById, ReturnByIdToCode } from './Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
-import { useReactToPrint } from 'react-to-print';
+import ReactToPrint from 'react-to-print';
 import moment from 'moment';
-
-import Demo from './demo';
 
 function DocumentPrint(props) {
    const { usageType, patientId } = props;
-   const printRef = useRef();
+   const elementsRef = useRef([]);
    const hospitalName = useSelector(selectCurrentHospitalName);
    const [isOpenHistory, setIsOpenHistory] = useState(false);
    const [result, setResult] = useState({});
@@ -30,12 +28,6 @@ function DocumentPrint(props) {
                r[a.usageType].push(a);
                return r;
             }, Object.create(null));
-            const OutDocuments = result['OUT'];
-            console.log(OutDocuments);
-            const groupByCategory = Object.groupBy(OutDocuments, (product) => {
-               return product.documentId;
-            });
-            console.log('=========>', groupByCategory);
             setResult(result);
          }
       });
@@ -45,39 +37,13 @@ function DocumentPrint(props) {
          setPatientData(response.data.response);
       });
    };
-   const handlePrint = useReactToPrint({
-      // onBeforeGetContent: () => setPrintLoading(true),
-      // onBeforePrint: () => setPrintLoading(false),
-      // onPrintError: () => console.log('asda'),
-      content: () => printRef.current
-   });
    useEffect(() => {
       getPatientInfo();
    }, [selectedDocument]);
    useEffect(() => {
       isOpenHistory && getDocumentsHistory();
    }, [isOpenHistory]);
-   //
-   const MyDoc = () => (
-      <Document>
-         <Page size="A4">
-            <View>
-               <table
-                  style={{
-                     border: '1px solid black'
-                  }}
-               >
-                  <thead>
-                     <tr>
-                        <th>asdas</th>
-                     </tr>
-                  </thead>
-               </table>
-            </View>
-         </Page>
-      </Document>
-   );
-   //
+
    return (
       <>
          <Button type="primary" onClick={() => setIsOpenHistory(true)}>
@@ -128,6 +94,7 @@ function DocumentPrint(props) {
                      />
                      <Divider>Хэвтэн</Divider>
                      <Table
+                        rowKey={'_id'}
                         rowClassName="hover: cursor-pointer"
                         pagination={false}
                         dataSource={result?.['IN']}
@@ -157,31 +124,64 @@ function DocumentPrint(props) {
                      />
                   </div>
                </div>
-               <div className="sm:w-full md:w-3/4 lg:w-3/4 bg-gray-50">
-                  {selectedDocument && (
-                     <div className="flex flex-column gap-3 p-3">
-                        <div>
-                           <Button onClick={() => handlePrint()} type="primary">
-                              Хэвлэх
-                           </Button>
-                           <Demo />
-                        </div>
-                        <div className="rounded bg-white p-3">
-                           <div ref={printRef}>
-                              <ReturnById
-                                 type={usageType}
-                                 id={selectedDocument.documentId}
-                                 appointmentId={selectedDocument.appointmentId}
-                                 data={{
-                                    formData: { ...selectedDocument.data, createdAt: selectedDocument.createdAt },
-                                    patientData: patientData
-                                 }}
-                                 hospitalName={hospitalName}
-                              />
-                           </div>
-                        </div>
-                     </div>
-                  )}
+
+               <div
+                  style={{
+                     height: 800,
+                     overflow: 'auto'
+                  }}
+                  className="sm:w-full md:w-3/4 lg:w-3/4 bg-gray-50"
+               >
+                  {selectedDocument ? (
+                     <>
+                        {selectedDocument.data?.map((data, index) => {
+                           return (
+                              <div key={index} className="flex flex-column gap-3 p-3">
+                                 <div
+                                    style={{
+                                       display: 'flex',
+                                       flexDirection: 'row',
+                                       gap: 12
+                                    }}
+                                 >
+                                    <ReactToPrint
+                                       trigger={() => {
+                                          return <Button type="primary">Хэвлэх</Button>;
+                                       }}
+                                       content={() => elementsRef.current[index]}
+                                    />
+                                    <p
+                                       style={{
+                                          fontWeight: 500
+                                       }}
+                                    >
+                                       {moment(data.createdAt).format('YYYY/MM/DD HH:mm')}
+                                    </p>
+                                 </div>
+                                 <div className="rounded bg-white p-3">
+                                    <div
+                                       ref={(ref) => {
+                                          elementsRef.current[index] = ref;
+                                       }}
+                                    >
+                                       <ReturnById
+                                          type={usageType}
+                                          id={selectedDocument.documentId}
+                                          appointmentId={selectedDocument.appointmentId}
+                                          data={{
+                                             // formData: selectedDocument.data,
+                                             formData: data,
+                                             patientData: patientData
+                                          }}
+                                          hospitalName={hospitalName}
+                                       />
+                                    </div>
+                                 </div>
+                              </div>
+                           );
+                        })}
+                     </>
+                  ) : null}
                </div>
             </div>
          </Modal>

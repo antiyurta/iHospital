@@ -33,8 +33,8 @@ function AM28А(props) {
       }
    };
    return (
-      <div className="page">
-         <div className="subpage">
+      <div>
+         <div>
             <span
                style={{
                   ...styles.generalText,
@@ -104,7 +104,7 @@ function AM28А(props) {
                </span>
             </div>
             <div style={styles.rowStyle}>3. Үндсэн онош: {formData?.['AM28.1']}</div>
-            <div style={styles.rowStyle}>4. Эмчилгээний зарчим {formData?.['AM28.2']}</div>
+            <div style={styles.rowStyle}>4. Эмчилгээний зарчим: {formData?.['AM28.2']}</div>
             <div style={styles.rowStyle}>
                <NewCheckboxGroup value={formData?.['AM28.3']} className="dstory">
                   5. Зүү эмчилгээний төрөл:/зур/
@@ -138,7 +138,12 @@ function AM28А(props) {
                6. Жор:
                {formData?.['AM28.4']}
             </div>
-            <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ________________________________</div>
+            <div style={styles.rowStyle}>
+               Эмчилгээ хийсэн эмчийн нэр:{' '}
+               <span className="underline">
+                  {formData?.createdByName?.lastName.substring(0, 1) + '.' + formData?.createdByName?.firstName}
+               </span>
+            </div>
             <div style={styles.rowStyle}>Зүү эмчилгээ хийлгэхийг зөвшөөрсөн гарын үсэг:</div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>Маягтын ар тал</span>

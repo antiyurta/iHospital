@@ -6,7 +6,6 @@ import { ReturnAll } from './Index';
 // components
 import Index4 from '../../FormBuilder/FBuilder/index4';
 import NewModal from '../../../Modal/Modal';
-import NewCard from '../../../Card/Card';
 import { NewInput, NewOption, NewSelect, NewSwitch } from '../../../Input/Input';
 // services
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
@@ -176,44 +175,68 @@ function DocumentUpload() {
             <div className="grid grid-cols-4 gap-3 m-3">
                {filteredForm?.map((form, index) => {
                   return (
-                     <NewCard
+                     <div
                         key={index}
-                        className="custom-card"
-                        title={
-                           <>
-                              <p>{form?.name}</p>
-                           </>
-                        }
-                        size="small"
-                        extra={
-                           <div className="inline-flex">
-                              <div className="px-2">
+                        style={{
+                           width: '100%',
+                           backgroundColor: 'white',
+                           padding: '8px 12px',
+                           borderRadius: 12,
+                           border: '1px solid #e3e2e1',
+                           display: 'flex',
+                           flexDirection: 'column',
+                           gap: 8
+                        }}
+                     >
+                        <p
+                           style={{
+                              fontWeight: 500
+                           }}
+                        >
+                           {form?.name}
+                        </p>
+                        <div
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              justifyContent: 'space-between'
+                           }}
+                        >
+                           <Button
+                              icon={
                                  <EditOutlined
                                     style={{
                                        color: 'blue',
-                                       fontSize: '18px'
+                                       fontSize: '14px'
                                     }}
-                                    onClick={() => openModal(true, form)}
                                  />
-                              </div>
-                              <div className="px-2">
-                                 <Popconfirm
-                                    title="Устгасан тохиолдолд сэргээх боломжгүй"
-                                    onConfirm={() => deleteForm(form.id)}
-                                    okText="Тийм"
-                                    cancelText="Үгүй"
-                                 >
+                              }
+                              onClick={() => openModal(true, form)}
+                           >
+                              Засах
+                           </Button>
+                           <Popconfirm
+                              title="Устгасан тохиолдолд сэргээх боломжгүй"
+                              onConfirm={() => deleteForm(form.id)}
+                              okText="Тийм"
+                              cancelText="Үгүй"
+                           >
+                              <Button
+                                 danger
+                                 icon={
                                     <DeleteOutlined
                                        style={{
                                           color: 'red',
-                                          fontSize: '18px'
+                                          fontSize: '14px'
                                        }}
                                     />
-                                 </Popconfirm>
-                              </div>
-                           </div>
-                        }
-                     />
+                                 }
+                              >
+                                 Устгах
+                              </Button>
+                           </Popconfirm>
+                        </div>
+                     </div>
                   );
                })}
             </div>

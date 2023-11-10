@@ -84,7 +84,7 @@ function DailyIncome() {
    return (
       <>
          <NewCard
-            title="Өдрийн орлогийн тайлан"
+            title="Өдрийн орлогын тайлан"
             extra={
                <>
                   <Button type="primary" onClick={() => setPrintOneDay(true)}>
@@ -224,7 +224,7 @@ function DailyIncome() {
                   <NewColumn
                      width={40}
                      dataIndex={'discountPercentId'}
-                     title="Хөнгөлөлтын утга"
+                     title="Хөнгөлөлтийн утга"
                      render={(text) => {
                         return checkDiscount(text);
                      }}

@@ -212,8 +212,8 @@ function DemoEmployee() {
                               <th className="font-bold text-sm align-middle">Овог</th>
                               <th className="font-bold text-sm align-middle">Нэр</th>
                               <th className="font-bold text-sm align-middle">Регистр №</th>
-                              <th rowSpan={2} className="font-bold text-sm align-middle">
-                                 Ажилж байгаа эсэх
+                              <th rowSpan={2} className="font-bold text-sm align-middle whitespace-pre-line">
+                                 Ажиллаж байгаа эсэх
                               </th>
                               <th rowSpan={2} className="font-bold text-sm align-middle">
                                  Гэрийн хаяг

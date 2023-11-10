@@ -194,7 +194,7 @@ function Index({ type, PatientData, ListId }) {
       };
       const response = await Get('inpatient/vascular-tube', token, conf);
       if (response.length != 0) {
-         setVascularList(response);
+         // setVascularList(response.data);
       }
       setIsLoading(false);
    };

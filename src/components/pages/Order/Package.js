@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, getAge, localMn, openNofi } from '../../comman';
-import { CloseCircleOutlined, CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { getAge, localMn, openNofi } from '../../comman';
+import { CloseCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Table } from 'antd';
 import jwtInterceopter from '../../jwtInterceopter';
+import { NewSearch } from '../../Input/Input';
 
 function Package({ registerNumber, handleclick }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -12,17 +11,21 @@ function Package({ registerNumber, handleclick }) {
    const [packages, setPackages] = useState([]);
    const [metaPackages, setMetaPackages] = useState([]);
    const [selectedPackages, setSelectedPackages] = useState([]);
-
-   const getPackages = async (page, pageSize) => {
+   // suuld nemew 2023/11/7
+   const [searchValue, setSearchValue] = useState('');
+   //
+   const getPackages = async (page, pageSize, value) => {
       setIsLoading(true);
       await jwtInterceopter
          .get('service/package', {
             params: {
                page: page,
-               limit: pageSize
+               limit: pageSize,
+               name: value
             }
          })
          .then((response) => {
+            setSearchValue(value);
             setPackages(response.data.response.data);
             setMetaPackages(response.data.response.meta);
          })
@@ -144,6 +147,22 @@ function Package({ registerNumber, handleclick }) {
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <p className="font-bold mb-3">Жагсаалт</p>
+                     <div
+                        style={{
+                           marginTop: 8,
+                           marginBottom: 8
+                        }}
+                     >
+                        <NewSearch
+                           style={{
+                              background: 'white'
+                           }}
+                           onSearch={(value) => {
+                              getPackages(1, 10, value);
+                           }}
+                           placeholder="Хайх"
+                        />
+                     </div>
                      <ConfigProvider locale={localMn()}>
                         <Table
                            rowKey={'id'}
@@ -162,7 +181,7 @@ function Package({ registerNumber, handleclick }) {
                               showSizeChanger: true,
                               pageSizeOptions: ['5', '10', '20', '50'],
                               showQuickJumper: true,
-                              onChange: (page, pageSize) => getPackages(page, pageSize)
+                              onChange: (page, pageSize) => getPackages(page, pageSize, searchValue)
                            }}
                         />
                      </ConfigProvider>

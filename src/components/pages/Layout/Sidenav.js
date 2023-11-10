@@ -6,7 +6,7 @@ function Sidenav({ menus }) {
       <div
          style={{
             paddingTop: '1px',
-            height: '93vh',
+            height: 'calc(100% - 64px)',
             overflow: 'auto'
          }}
       >

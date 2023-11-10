@@ -220,6 +220,7 @@ const BedInformation = (props) => {
                                  <p style={styles.total}>Орны тоо: {el.beds.length}</p>
                               </div>
                               <div style={styles.statusRowContainer}>
+                                 йыбйы
                                  <Tag color="success" className="rounded-xl">
                                     Сул:{' '}
                                     <span>
@@ -554,7 +555,7 @@ const BedInformation = (props) => {
                                     />
                                  </div>
                                  <span style={styles.bedText}>
-                                    {el.bedNumber} -{' '}
+                                    № {el.bedNumber} -{' '}
                                     {statusList.map((i) => {
                                        return i.id === el.status ? i.label : '';
                                     })}

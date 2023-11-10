@@ -58,7 +58,7 @@ function Dashboard() {
          });
    };
    useEffect(() => {
-      getStructures();
+      // getStructures();
       getAllBed();
       console.log('sadsadsa');
    }, []);

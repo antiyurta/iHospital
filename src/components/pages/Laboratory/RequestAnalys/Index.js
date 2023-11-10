@@ -426,29 +426,38 @@ function Index() {
                            form={searchForm}
                            layout="vertical"
                         >
-                           <div className="flex flex-wrap">
-                              <div className="md:w-1/3 xl:w-1/4 p-1">
-                                 <Form.Item label="Өдөрөөр:" name="date">
-                                    <RangePicker format="YYYY-MM-DD" locale={mnMN} />
-                                 </Form.Item>
-                              </div>
-                              <div className="md:w-1/3 xl:w-1/4 p-1">
-                                 <Form.Item label="Регистрийн дугаар:" name="registerNumber">
-                                    <Input />
-                                 </Form.Item>
-                              </div>
-                              <div className="md:w-1/3 xl:w-1/4 p-1">
-                                 <Form.Item label="Нэрээр:" name="firstName">
-                                    <Input />
-                                 </Form.Item>
-                              </div>
-                              <div className="md:w-2/12 xl:w-1/12">
-                                 <Form.Item>
-                                    <Button type="primary" icon={<SearchOutlined />} htmlType="submit">
-                                       Хайх
-                                    </Button>
-                                 </Form.Item>
-                              </div>
+                           <div
+                              style={{
+                                 display: 'flex',
+                                 flexDirection: 'row',
+                                 gap: 12,
+                                 alignItems: 'flex-end'
+                              }}
+                           >
+                              <Form.Item label="Өдөр:" name="date">
+                                 <RangePicker format="YYYY-MM-DD" locale={mnMN} />
+                              </Form.Item>
+                              <Form.Item label="Регистрийн №:" name="registerNumber">
+                                 <Input />
+                              </Form.Item>
+                              <Form.Item label="Нэр:" name="firstName">
+                                 <Input />
+                              </Form.Item>
+                              <Form.Item>
+                                 <Button
+                                    type="primary"
+                                    style={{
+                                       display: 'flex',
+                                       flexDirection: 'row',
+                                       gap: 4,
+                                       alignItems: 'center'
+                                    }}
+                                    icon={<SearchOutlined />}
+                                    htmlType="submit"
+                                 >
+                                    Хайх
+                                 </Button>
+                              </Form.Item>
                            </div>
                         </Form>
                      </Card>

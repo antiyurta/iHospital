@@ -419,7 +419,9 @@ function Index({ type }) {
                      </Col>
                      {editMode && (
                         <Col span={24} className="p-1">
-                           <Button onClick={() => setSchedule(editWorkDate)}>ЗАсах</Button>
+                           <Button type="primary" icon={<EditOutlined />} onClick={() => setSchedule(editWorkDate)}>
+                              Засах
+                           </Button>
                         </Col>
                      )}
                   </Row>
