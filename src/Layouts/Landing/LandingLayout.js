@@ -9,7 +9,6 @@ const LandingLayout = () => {
    const { user } = useContext(AuthContext);
    const { pathname } = useLocation();
    useEffect(() => {
-      console.log('pathname', pathname);
       const canControlScrollRestoration = 'scrollRestoration' in window.history;
       if (canControlScrollRestoration) {
          window.history.scrollRestoration = 'manual';
@@ -17,7 +16,8 @@ const LandingLayout = () => {
       window.scrollTo(0, 0);
    }, [pathname]);
    useEffect(() => {
-      if (pathname != '/privacy' || pathname != '/') {
+      console.log(pathname);
+      if (pathname != '/privacy') {
          navigate('/login');
       }
    }, [user]);
