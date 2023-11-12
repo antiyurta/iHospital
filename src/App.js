@@ -46,7 +46,7 @@ function App() {
                <Route path="/" element={<LandingLayout />}>
                   <Route index element={<Home />} />
                   {PublicRoutes.map((route, index) => {
-                     return <Route key={index} path={route.path} element={<route.element />} />;
+                     return <Route key={index} path={route.url} element={<route.element />} />;
                   })}
                </Route>
                <Route element={<MainLayout />}>
