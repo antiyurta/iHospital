@@ -24,7 +24,7 @@ function Header() {
                      }}
                   >
                      <Navbar.Brand>
-                        <NavLink to="/">
+                        {/* <NavLink to="/"> */}
                            <img
                               style={{
                                  height: 48
@@ -32,7 +32,7 @@ function Header() {
                               src={logo}
                               alt="logo"
                            />
-                        </NavLink>
+                        {/* </NavLink> */}
                      </Navbar.Brand>
                      <Navbar.Toggle className="border-[#2D8CFF]" aria-controls="offcanvasNavbar-expand-sm" />
                      <Navbar.Offcanvas
