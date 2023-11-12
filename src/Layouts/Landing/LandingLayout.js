@@ -9,6 +9,7 @@ const LandingLayout = () => {
    const { user } = useContext(AuthContext);
    const { pathname } = useLocation();
    useEffect(() => {
+      console.log('pathname', pathname);
       const canControlScrollRestoration = 'scrollRestoration' in window.history;
       if (canControlScrollRestoration) {
          window.history.scrollRestoration = 'manual';
@@ -16,9 +17,10 @@ const LandingLayout = () => {
       window.scrollTo(0, 0);
    }, [pathname]);
    useEffect(() => {
-      navigate('/login');
+      if (pathname != '/privacy' || pathname != '/') {
+         navigate('/login');
+      }
    }, [user]);
-   return <p>Redirecting...</p>;
    return (
       <div className="bg-[#F7F9FF]">
          <Header />
