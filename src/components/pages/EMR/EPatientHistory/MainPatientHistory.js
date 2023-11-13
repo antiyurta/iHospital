@@ -1,12 +1,18 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Tabs, Button, Form, Modal, Result, Spin } from 'antd';
+import { Tabs, Button, Form, Modal, Result, Spin, Divider } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
-import { selectCurrentUserId } from '../../../../features/authReducer';
+import { selectCurrentFirstName, selectCurrentLastName, selectCurrentUserId } from '../../../../features/authReducer';
 import HistoryTab from './HistoryTab';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
 import jwtInterceopter from '../../../jwtInterceopter';
+
+//
+import DocumentFormServices from '../../../../services/organization/documentForm';
+import { useLocation } from 'react-router-dom';
+import FormRender from '../../BeforeAmbulatory/Customized/FormRender';
+//
 function MainPatientHistory({
    AppointmentId,
    XrayRequestId,
@@ -22,11 +28,11 @@ function MainPatientHistory({
    handleClick
 }) {
    console.log('=============>', HicsServiceId);
+   let location = useLocation();
    const userId = useSelector(selectCurrentUserId);
-   const config = {
-      headers: {},
-      params: {}
-   };
+   const lastName = useSelector(selectCurrentLastName);
+   const firstName = useSelector(selectCurrentFirstName);
+   const [xrayForm] = Form.useForm();
    const patientId = PatientId;
    const inspection = Inspection;
    const cabinetId = CabinetId;
@@ -58,6 +64,49 @@ function MainPatientHistory({
          />
       );
    }, []);
+   const onFinishXray = async (values, { data }) => {
+      const body = {
+         appointmentId: XrayRequestId,
+         usageType: UsageType,
+         documentId: data.documentValue,
+         patientId: patientId,
+         type: 'XRAY',
+         data: {
+            ...values,
+            cabinetId: cabinetId,
+            createdAt: new Date(),
+            createdByName: {
+               lastName: lastName,
+               firstName: firstName
+            }
+         }
+      };
+      await jwtInterceopter.post(data.url, body).then((response) => {
+         console.log(response);
+      });
+   };
+   const XrayDocumentShow = (props) => (
+      <Form form={xrayForm} layout="vertical" onFinish={(values) => onFinishXray(values, props)}>
+         <div
+            style={{
+               display: 'flex',
+               flexDirection: 'column',
+               gap: 12
+            }}
+         >
+            <FormRender form={props.data} formOptionIds={[]} isCheck={false} />
+            <Form.Item
+               style={{
+                  textAlign: 'right'
+               }}
+            >
+               <Button type="primary" htmlType="submit">
+                  Хадгалах
+               </Button>
+            </Form.Item>
+         </div>
+      </Form>
+   );
    const [items, setItems] = useState([
       {
          label: 'Амьдралын түүх',
@@ -72,38 +121,57 @@ function MainPatientHistory({
    ]);
    const getExoInspectionTabs = async () => {
       setLoading(true);
-      config.params.cabinetId = cabinetId;
-      await jwtInterceopter
-         .get('emr/inspection-form', {
-            params: {
-               cabinetId: cabinetId
-            }
-         })
+      DocumentFormServices.getByPageFilter({
+         params: {
+            type: 'XRAY',
+            serviceId: location?.state?.xrayId
+         }
+      })
          .then((response) => {
-            setItems([]);
-            response.data.response.data?.map((el) => {
-               setItems((items) => [
-                  ...items,
-                  {
-                     label: el.name,
-                     key: `item-ex-${el.id}`,
-                     children: (
-                        <DynamicTabContent
-                           data={el.formItem}
-                           formKey={el.formId != null ? el.formId : el.id}
-                           formName={el.name}
-                        />
-                     )
-                  }
-               ]);
-            });
-         })
-         .catch((error) => {
-            console.log(error);
+            console.log(response);
+            setItems([
+               {
+                  key: 0,
+                  label: response.data.response[0]?.name,
+                  children: <XrayDocumentShow data={response.data.response[0]} />
+               }
+            ]);
          })
          .finally(() => {
             setLoading(false);
          });
+      // config.params.cabinetId = cabinetId;
+      // await jwtInterceopter
+      //    .get('emr/inspection-form', {
+      //       params: {
+      //          cabinetId: cabinetId
+      //       }
+      //    })
+      //    .then((response) => {
+      //       setItems([]);
+      //       response.data.response.data?.map((el) => {
+      //          setItems((items) => [
+      //             ...items,
+      //             {
+      //                label: el.name,
+      //                key: `item-ex-${el.id}`,
+      //                children: (
+      //                   <DynamicTabContent
+      //                      data={el.formItem}
+      //                      formKey={el.formId != null ? el.formId : el.id}
+      //                      formName={el.name}
+      //                   />
+      //                )
+      //             }
+      //          ]);
+      //       });
+      //    })
+      //    .catch((error) => {
+      //       console.log(error);
+      //    })
+      //    .finally(() => {
+      //       setLoading(false);
+      //    });
    };
    const getInspectionTabs = async () => {
       setLoading(true);

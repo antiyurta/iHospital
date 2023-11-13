@@ -59,7 +59,6 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
          if (!selectedDiagnoses) {
             selectedDiagnoses = [];
          }
-         console.log(diagnose);
          selectedDiagnoses.push(diagnose);
          diagnosesForm.setFieldsValue({ diagnoses: selectedDiagnoses });
       }
@@ -183,7 +182,12 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                         name={[index, 'diagnoseType']}
                         editing={index === editingIndex}
                      >
-                        <Select style={{ width: '100%' }}>
+                        <Select
+                           style={{ width: '100%' }}
+                           onChange={() => {
+                              setEditingIndex(undefined);
+                           }}
+                        >
                            <Option value={0}>Үндсэн</Option>
                            <Option value={1}>Урьдчилсан</Option>
                            <Option value={2}>Хавсрах онош</Option>

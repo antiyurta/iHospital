@@ -144,7 +144,8 @@ function IndexAfter({ type, params }) {
       deviceType,
       usageType,
       isPayment,
-      confirmedDate
+      confirmedDate,
+      xrayId
    ) => {
       // status heregteii anhan dawtan
       // tolbor shalgah
@@ -168,7 +169,8 @@ function IndexAfter({ type, params }) {
             xrayRequestId: listId,
             patientId: id,
             cabinetId: cabinetId,
-            inspection: inspectionType
+            inspection: inspectionType,
+            xrayId: xrayId
          };
          dispatch(setEmrData(data));
          navigate(`/emr`, {
@@ -374,7 +376,8 @@ function IndexAfter({ type, params }) {
                                           row?.deviceType,
                                           row?.usageType,
                                           row?.isPayment || row?.isInsurance,
-                                          row?.confirmedDate
+                                          row?.confirmedDate,
+                                          row.xrayId
                                        );
                                     }
                                  };
