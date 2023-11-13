@@ -160,6 +160,7 @@ function Index(props) {
                   usageType: usageType,
                   documentId: documentValue,
                   patientId: patientId,
+                  type: 'FORM',
                   data: [
                      {
                         ...values,
@@ -414,7 +415,11 @@ function Index(props) {
             <>
                <div className="w-full px-3 overflow-auto">
                   <Form form={form} layout="vertical">
-                     <FormRender form={documentForm} formOptionIds={documentOptions[selectedOptionId]?.formOptionIds} />
+                     <FormRender
+                        form={documentForm}
+                        formOptionIds={documentOptions[selectedOptionId]?.formOptionIds}
+                        isCheck={true}
+                     />
                   </Form>
                </div>
                <div className="w-full">

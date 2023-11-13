@@ -1,7 +1,7 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
-class Country {
+class Diagnose {
    async get(conf) {
       return await jwtInterceopter.get('reference/diagnose', conf);
    }
 }
-export default new Country();
+export default new Diagnose();

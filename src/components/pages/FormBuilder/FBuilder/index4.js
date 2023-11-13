@@ -1,12 +1,9 @@
 import React from 'react';
-import { DeleteOutlined, PlusCircleOutlined, PlusOutlined, RightCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Radio, Select } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
-function index4({ options, namePanel, handleChange }) {
-   const addOptions = (namePanel, name) => {
-      console.log(namePanel, name);
-   };
+function index4({ form, namePanel, handleChange }) {
    return (
       <div className="p-3">
          <Form.List name={namePanel}>
@@ -76,6 +73,7 @@ function index4({ options, namePanel, handleChange }) {
                                                    <Select
                                                       onChange={(e) => handleChange(namePanel, name, optionField.name)}
                                                    >
+                                                      <Option value="diagnose">ICD Онош</Option>
                                                       <Option value="checkbox">Олон сонголтод</Option>
                                                       <Option value="radio">Нэг сонголт</Option>
                                                       <Option value="dropdown">Dropdown</Option>
@@ -161,6 +159,46 @@ function index4({ options, namePanel, handleChange }) {
                                                                   return (
                                                                      <div className="inline-flex p-1 w-full">
                                                                         <div className="p-1 grid grid-cols-2 gap-1">
+                                                                           <Form.Item shouldUpdate>
+                                                                              {() => {
+                                                                                 const type = form.getFieldValue([
+                                                                                    'documentForm',
+                                                                                    name,
+                                                                                    'options',
+                                                                                    optionField.name,
+                                                                                    'type'
+                                                                                 ]);
+                                                                                 if (type === 'table') {
+                                                                                    return (
+                                                                                       <Form.Item
+                                                                                          label="Мөрийн төрөл"
+                                                                                          name={[
+                                                                                             optionFields.name,
+                                                                                             'type'
+                                                                                          ]}
+                                                                                       >
+                                                                                          <Select>
+                                                                                             <Option value="input">
+                                                                                                Текст бичих
+                                                                                             </Option>
+                                                                                             <Option value="inputNumber">
+                                                                                                Тоо оруулах
+                                                                                             </Option>
+                                                                                             <Option value="textarea">
+                                                                                                Их текст бичих
+                                                                                             </Option>
+                                                                                             <Option value="rangepicker">
+                                                                                                Тэднээс тэдэн хугацаа
+                                                                                             </Option>
+                                                                                             <Option value="datepicker">
+                                                                                                Нэг хугацаа
+                                                                                             </Option>
+                                                                                          </Select>
+                                                                                       </Form.Item>
+                                                                                    );
+                                                                                 }
+                                                                              }}
+                                                                           </Form.Item>
                                                                            <Form.Item
                                                                               label="Хариулт"
                                                                               name={[optionFields.name, 'label']}

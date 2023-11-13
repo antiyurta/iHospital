@@ -1,11 +1,24 @@
-import { Tree, Image, Modal, Spin, Card, Result } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Tree, Image, Modal, Spin, Card, Result, Tabs, Button } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import { dataToTree } from '../../comman';
 import FormXray from './FormPrint/Xray';
 import XrayImg from './FormPrint/XrayImg';
 import jwtInterceopter from '../../jwtInterceopter';
+
+//
+import * as XrayDocumentIndex from '../Xray/Document/Index';
+import { selectCurrentHospitalId } from '../../../features/authReducer';
+import { useSelector } from 'react-redux';
+//
+import PmsPatientServices from '../../../services/pms/patient';
+import DocumentsFormPatientServices from '../../../services/organization/document';
+import ReactToPrint from 'react-to-print';
+//
+
 const { DirectoryTree } = Tree;
 function Xrays({ PatientId }) {
+   const [patient, setPatient] = useState({});
+   const hospitalId = useSelector(selectCurrentHospitalId);
    const [testData, setTestData] = useState([]);
    const [spinerInfo, setSpinnerInfo] = useState(false);
    const [appointment, setAppointment] = useState([]);
@@ -95,10 +108,20 @@ function Xrays({ PatientId }) {
             });
       }
    };
+   const getByIdPatient = async () => {
+      await PmsPatientServices.getById(PatientId).then((response) => {
+         setPatient(response.data?.response);
+      });
+   };
    useEffect(() => {
       getXrays();
    }, []);
-   return (
+   useEffect(() => {
+      getByIdPatient();
+   }, [PatientId]);
+
+   //rentgen
+   const Rentgen = () => (
       <>
          <div className="grid grid-cols-3 gap-3">
             <Spin wrapperClassName="h-[440px]" spinning={spinner}>
@@ -157,6 +180,139 @@ function Xrays({ PatientId }) {
          <Modal open={isOpenModalImg} onCancel={() => setIsOpenModalImg(false)} width="60%" footer={null}>
             <XrayImg printImage={printImg} type={isSizeType} />
          </Modal>
+      </>
+   );
+   //EXO
+   const Exo = () => {
+      const printRef = useRef();
+      const [spinner, setSpinner] = useState(false);
+      const [spinerInfo, setSpinnerInfo] = useState(false);
+      const [document, setDocument] = useState();
+      const [test, setTest] = useState({});
+      const getDocumentData = async (id) => {
+         setSpinnerInfo(true);
+         await DocumentsFormPatientServices.getById(id)
+            .then((response) => {
+               setDocument(response.data.response.response);
+            })
+            .finally(() => {
+               setSpinnerInfo(false);
+            });
+      };
+      const getExos = async () => {
+         setSpinner(true);
+         await jwtInterceopter
+            .get('document-middleware', {
+               params: {
+                  patientId: PatientId,
+                  type: 'XRAY'
+               }
+            })
+            .then((response) => {
+               const treeData = [];
+               const data = response.data.response;
+               data?.map((item) => {
+                  const id = item._id;
+                  const date = new Date(item.createdAt);
+                  const year = date.getFullYear().toString();
+                  const month = (date.getMonth() + 1).toString(); // Months are zero-indexed in JavaScript
+                  const day = date.getDate().toString();
+                  const name = XrayDocumentIndex.ReturnByIdToName(hospitalId, item.documentId);
+
+                  treeData[year] = treeData[year] || {};
+                  treeData[year][month] = treeData[year][month] || {};
+                  treeData[year][month][day] = treeData[year][month][day] || { children: [] };
+                  treeData[year][month][day].children.push({
+                     key: id,
+                     title: name,
+                     isLeaf: true
+                  });
+               });
+               setTest(treeData);
+            })
+            .finally(() => {
+               setSpinner(false);
+            });
+      };
+      const renderTreeNodes = (data) => {
+         return Object.keys(data).map((key) => {
+            if (Array.isArray(data[key])) {
+               return data[key].map((leaf) => <Tree.TreeNode key={leaf.key} title={leaf.title} isLeaf={leaf.isLeaf} />);
+            }
+
+            return (
+               <Tree.TreeNode key={key} title={key}>
+                  {renderTreeNodes(data[key])}
+               </Tree.TreeNode>
+            );
+         });
+      };
+      useEffect(() => {
+         getExos();
+      }, []);
+      return (
+         <div>
+            <div className="grid grid-cols-3 gap-3">
+               <Spin wrapperClassName="h-[440px]" spinning={spinner}>
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
+                     <div className="p-3">
+                        <DirectoryTree
+                           className="bg-transparent"
+                           onSelect={(selectedKeys, info) => {
+                              if (info?.node?.isLeaf) {
+                                 getDocumentData(selectedKeys?.[0]);
+                              }
+                           }}
+                        >
+                           {renderTreeNodes(test)}
+                        </DirectoryTree>
+                     </div>
+                  </div>
+               </Spin>
+               <div className="col-span-2">
+                  <Spin wrapperClassName="h-[440px]" spinning={spinerInfo}>
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
+                        <div className="p-3 m-3 bg-white">
+                           {document ? (
+                              <div>
+                                 <ReactToPrint
+                                    trigger={() => {
+                                       return <Button type="primary">Хэвлэх</Button>;
+                                    }}
+                                    content={() => printRef.current}
+                                 />
+                                 <div ref={printRef}>{XrayDocumentIndex.ReturnById(hospitalId, document, patient)}</div>
+                              </div>
+                           ) : (
+                              <Result title={'Хугацаа сонгох'} />
+                           )}
+                        </div>
+                     </div>
+                  </Spin>
+               </div>
+            </div>
+         </div>
+      );
+   };
+
+   return (
+      <>
+         <Tabs
+            type="card"
+            destroyInactiveTabPane
+            items={[
+               {
+                  key: 0,
+                  label: 'Рентген',
+                  children: <Rentgen />
+               },
+               {
+                  key: 1,
+                  label: 'EXO',
+                  children: <Exo />
+               }
+            ]}
+         />
       </>
    );
 }

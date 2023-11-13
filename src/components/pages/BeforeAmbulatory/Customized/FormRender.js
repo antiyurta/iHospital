@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Divider, Form, Input, Table } from 'antd';
+import React, { useState } from 'react';
+import { AutoComplete, Button, Divider, Form, Input, Table } from 'antd';
 import {
    NewCheckbox,
    NewCheckboxGroup,
@@ -16,14 +16,59 @@ import {
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { NewColumn } from '../../../Table/Table';
-import EditableFormItem from '../../611/Support/EditableFormItem';
 import { MinusOutlined } from '@ant-design/icons';
 
-function FormRender({ form, formOptionIds }) {
+import DiagnoseService from '../../../../services/reference/diagnose';
+
+function FormRender({ form, formOptionIds, isCheck }) {
    const message = 'Тань бөглөх эрх байхгүй';
+   const [loadingDiagnose, setLoadingDiagnose] = useState(false);
+   const [diagnosis, setDiagnosis] = useState([]);
+
    const Render = ({ questions }) => {
+      const getDiagnoses = async (code) => {
+         setLoadingDiagnose(true);
+         await DiagnoseService.get({
+            params: {
+               filter: code,
+               types: [0, 1, 2]
+            }
+         })
+            .then((response) => {
+               setDiagnosis(
+                  response.data.response.data?.map((diagnose) => ({
+                     label: diagnose.code,
+                     value: diagnose.code
+                  }))
+               );
+            })
+            .finally(() => {
+               setLoadingDiagnose(false);
+            });
+      };
       return questions?.map((data, index) => {
-         const state = formOptionIds?.some((id) => id === data.keyWord);
+         var state = true;
+         if (isCheck) {
+            state = formOptionIds?.some((id) => id === data.keyWord);
+         }
+         if (data.type === 'diagnose') {
+            return (
+               <div key={index} className="rounded-md bg-white w-full inline-block m-1">
+                  <div className="inline-flex w-full p-1">
+                     <Form.Item
+                        label={data.value}
+                        name={data.keyWord}
+                        tooltip={!state ? message : null}
+                        className="mb-0 w-full"
+                     >
+                        <AutoComplete onChange={getDiagnoses} options={diagnosis}>
+                           <Input disabled={loadingDiagnose} />
+                        </AutoComplete>
+                     </Form.Item>
+                  </div>
+               </div>
+            );
+         }
          if (data.type === 'input') {
             return (
                <div key={index} className="rounded-md bg-white w-full inline-block m-1">
@@ -248,11 +293,58 @@ function FormRender({ form, formOptionIds }) {
                      title={column.label}
                      dataIndex={column.keyWord}
                      render={(value, row, index) => {
-                        return (
-                           <EditableFormItem editing={true} name={[index, column.keyWord]}>
-                              <Input />
-                           </EditableFormItem>
-                        );
+                        if (column.type === 'input') {
+                           return (
+                              <Form.Item name={[index, column.keyWord]}>
+                                 <NewInput />
+                              </Form.Item>
+                           );
+                        }
+                        if (column.type === 'inputNumber') {
+                           <Form.Item name={[index, column.keyWord]}>
+                              <NewInputNumber
+                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                              />
+                           </Form.Item>;
+                        }
+                        if (column.type === 'textarea') {
+                           <Form.Item name={[index, column.keyWord]}>
+                              <NewTextArea />
+                           </Form.Item>;
+                        }
+                        if (column.type === 'datepicker') {
+                           return (
+                              <Form.Item
+                                 name={[index, column.keyWord]}
+                                 getValueProps={(i) => {
+                                    if (i) {
+                                       return { value: moment(i) };
+                                    } else {
+                                       return;
+                                    }
+                                 }}
+                              >
+                                 <NewDatePicker format={'YYYY/MM/DD'} locale={mnMN} />
+                              </Form.Item>
+                           );
+                        }
+                        if (column.type === 'rangepicker') {
+                           return (
+                              <Form.Item
+                                 name={[index, column.keyWord]}
+                                 getValueProps={(i) => {
+                                    if (i) {
+                                       return { value: [moment(i[0]), moment(i[1])] };
+                                    } else {
+                                       return;
+                                    }
+                                 }}
+                              >
+                                 <NewRangePicker format={'YYYY/MM/DD'} locale={mnMN} />
+                              </Form.Item>
+                           );
+                        }
                      }}
                   />
                );

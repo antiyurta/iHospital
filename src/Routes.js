@@ -6,7 +6,10 @@ const Privacy = React.lazy(() => import('./privacy/Index'));
 const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
-const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/DocumentUpload'));
+//
+const DocumentUpload = React.lazy(() => import('./components/pages/Document/index'));
+// const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/DocumentUpload'));
+//
 const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
 const InsuranceDoctorList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
 const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
