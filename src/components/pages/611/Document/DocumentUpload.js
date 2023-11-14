@@ -61,6 +61,7 @@ function DocumentUpload({ type }) {
          await OrganizationDocumentFormService.patch(selectedId, values).then((response) => {
             if (response.status === 200) {
                form.resetFields();
+               getDocumentForms();
                setIsOpenEditModal(false);
             }
          });
@@ -109,6 +110,9 @@ function DocumentUpload({ type }) {
          })
          .catch((error) => {
             console.log(error);
+         })
+         .finally(() => {
+            getDocumentForms();
          });
    };
    useEffect(() => {
