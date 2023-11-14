@@ -29,8 +29,8 @@ function AM29B(props) {
       }
    };
    return (
-      <div className="page">
-         <div className="subpage">
+      <div>
+         <div>
             <span
                style={{
                   ...styles.generalText,
@@ -47,7 +47,7 @@ function AM29B(props) {
                }}
             >
                <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
-               <div style={{ display: 'flex', flexDirection: 'column' }}>
+               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-29Б</span>
                </div>
@@ -110,7 +110,7 @@ function AM29B(props) {
                3. Үндсэн онош:
                {formData?.['AM29.1']}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                <div style={styles.generalText}>4. Барианы төрөл</div>
                <div
                   style={{
@@ -192,10 +192,18 @@ function AM29B(props) {
                </div>
             </div>
             <div style={styles.rowStyle}>5. Анхаарах зүйл:{formData?.['AM29.4']}</div>
-            <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>Эмчийн нэр: __________________________</div>
-            <div style={styles.rowStyle}>
-               ...................................................................................................................................................................................................................................................................................
+            <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
+               Эмчийн нэр: <span className="underline">{formData?.createdByName?.firstName}</span>
             </div>
+            <div
+               style={{
+                  width: '100%',
+                  height: 2,
+                  border: '1px dotted black',
+                  marginTop: 12,
+                  marginBottom: 12
+               }}
+            />
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div>Маягтын ар тал</div>
                <div>Б тал</div>
@@ -262,7 +270,7 @@ function AM29B(props) {
                            >
                               {index + 1}
                            </td>
-                           <td>{el[0]}</td>
+                           <td>{moment(el[0]).format('YYYY/MM/DD')}</td>
                            <td>{el[1]}</td>
                            <td>{el[2]}</td>
                            <td>{el[3]}</td>
