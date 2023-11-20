@@ -115,6 +115,7 @@ function Invoice() {
          });
    };
    const saveOrder = async (value) => {
+      console.log('it is working save order =======>', value);
       if (selectedPatient && selectedPatient.length === 0) {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       } else if (value.length > 0) {

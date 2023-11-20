@@ -178,6 +178,9 @@ function Finger(props) {
                      </div>
                      <div>
                         <Form form={fingerForm} layout="vertical" className="flex flex-col gap-3">
+                           <Form.Item label="Иргэний регистр" name={'regno'}>
+                              <Input />
+                           </Form.Item>
                            {steps?.map((step, index) => {
                               return (
                                  <FormItemImg

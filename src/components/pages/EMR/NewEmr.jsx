@@ -13,7 +13,7 @@ import { delNote } from '../../../features/noteReducer';
 import InspectionHistory from './InspectionHistory';
 import ListOfIssues from './ListOfIssues';
 //
-import PmsPatientServices from '../../../services/pms/patient';
+import PmsPatientServices from '../../../services/pms/patient.api';
 import AppointmentService from '../../../services/appointment/api-appointment-service';
 import ServiceRequestService from '../../../services/serviceRequest';
 import PaymentService from '../../../services/payment/payment';
