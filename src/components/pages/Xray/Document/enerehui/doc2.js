@@ -5,7 +5,8 @@ import fb from './assets/fb.png';
 import route from './assets/route.png';
 import dayjs from 'dayjs';
 
-const Test = (props) => {
+//ЭМЭГТЭЙЧҮҮДИЙН ХЭТ АВИАН ОНОШИЛГОО
+const Doc2 = (props) => {
    const { data, patient } = props;
    console.log('XXX', props);
    return (
@@ -57,7 +58,7 @@ const Test = (props) => {
             </div>
             <div className="border-2 border-black"></div>
             <div className="text-center">
-               <span className="font-bold">ТҮРҮҮ БУЛЧИРХАЙН ХЭТ АВИАН ОНОШИЛГОО</span>
+               <span className="font-bold">ЭМЭГТЭЙЧҮҮДИЙН ХЭТ АВИАН ОНОШИЛГОО</span>
             </div>
             <span className="font-bold">Хэмжээ: өргөн , урт , зузаан ,</span>
             <span className="font-bold">Эзэлхүүн: (коефф 0,523) см3,</span>
@@ -83,5 +84,5 @@ const Test = (props) => {
       </div>
    );
 };
-export default Test;
+export default Doc2;
 

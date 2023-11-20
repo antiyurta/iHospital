@@ -10,8 +10,17 @@ const options = [
    }
 ];
 
-export function ReturnById({ id }) {
-   //    if (id === 1) {
-   //       return <Test />;
-   //    }
+export function ReturnAll() {
+   return options;
 }
+export function ReturnByIdToName(id) {
+   return options.find((option) => option.value === id)?.label;
+}
+
+export function ReturnById(document, patient) {
+   if (document.documentId === 1) {
+      return <Test data={document.data} patient={patient} />;
+   }
+   return;
+}
+
