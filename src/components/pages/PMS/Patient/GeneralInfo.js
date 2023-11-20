@@ -6,6 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get, openNofi } from '../../../comman';
+import { selectHospitalIsXyp } from '../../../../features/hospitalReducer';
+import Finger from '../../../../features/finger';
+import xypApi from '../../../../services/xyp/xyp.api';
 
 function GeneralInfo({ form, gbase }) {
    const token = useSelector(selectCurrentToken);
@@ -13,6 +16,7 @@ function GeneralInfo({ form, gbase }) {
    const [loading, setLoading] = useState(false);
    const [citizens, setCitizens] = useState([]);
    const [towns, setTowns] = useState([]);
+   const isXyp = useSelector(selectHospitalIsXyp);
    const { Title } = Typography;
    const { Option } = Select;
    const beforeUpload = (file) => {
@@ -93,6 +97,25 @@ function GeneralInfo({ form, gbase }) {
       const response = await Get('reference/country', token, conf);
       setTowns(response.data);
    };
+   const end = async (value) => {
+      const res = await xypApi.post(
+         '123',
+         { citizenFingerprint: value.citizenFinger, citizenRegnum: value.regno },
+         { operatorFingerprint: value.operatorFinger, operatorRegnum: value.regno }
+      );
+      if (res.data.response.return.resultCode !== 0) {
+         openNofi('warning', res.data.response.return.resultMessage);
+      } else {
+         const { response } = res.data.response.return;
+         form.setFieldsValue({
+            familyName: response.surname,
+            lastName: response.lastname,
+            firstName: response.firstname,
+            registerNumber: response.regnum,
+            committee: response.passportAddress,
+         });
+      }
+   };
    useEffect(() => {
       getCitizens();
    }, []);
@@ -133,6 +156,24 @@ function GeneralInfo({ form, gbase }) {
                   value={form.getFieldValue('cardNumber')}
                   className="antiStatis"
                />
+
+               {isXyp ? (
+                  <Finger
+                     isFinger={true}
+                     text={'Хуруу уншуулах'}
+                     steps={[
+                        {
+                           title: 'Иргэн',
+                           path: 'citizenFinger'
+                        },
+                        {
+                           title: 'Ажилтан',
+                           path: 'operatorFinger'
+                        }
+                     ]}
+                     handleClick={end}
+                  />
+               ) : null}
                <div className="flex flex-wrap">
                   <div className="basis-1/2">
                      <Statistic title="Нас" value={form.getFieldValue('age')} className="antiStatis" />

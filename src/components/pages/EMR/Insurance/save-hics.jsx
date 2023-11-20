@@ -43,7 +43,6 @@ const SaveHics = (props) => {
       await healthInsurance.getHicsService().then(({ data }) => {
          if (data.code == 200) {
             setDefaultHics(data.result);
-            console.log('it is working =>', defaultHics);
          }
       });
    };
@@ -60,7 +59,7 @@ const SaveHics = (props) => {
    };
    const getHicsApprovals = async () => {
       await healthInsurance.getApprovalList(patient.registerNumber).then(({ data }) => {
-         if (data.code == 200) {
+         if (data.code == 200 && Array.isArray(data.result)) {
             const sortedApproval = data.result.sort((a, b) => a.approvalDate - b.approvalDate);
             setApprovals(sortedApproval);
          }
@@ -68,7 +67,7 @@ const SaveHics = (props) => {
    };
    const getPatientSheets = async () => {
       await healthInsurance.getPatientSheet(patient.registerNumber).then(({ data }) => {
-         if (data.code == 200) {
+         if (data.code == 200 && Array.isArray(data.result)) {
             setPatientSheets(data.result);
          }
       });

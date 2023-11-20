@@ -59,10 +59,6 @@ export const AuthContextProvider = ({ children }) => {
       await jwtInterceopter
          .post('authentication/logout')
          .then((response) => {
-            console.log(response);
-            // localStorage.removeItem('tokens');
-            // setUser(null);
-            // navigate('/');
          })
          .catch((error) => {
             console.log(error);

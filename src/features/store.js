@@ -4,12 +4,14 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import authReducer from './authReducer';
+import hospitalReducer from './hospitalReducer';
 import emrReducer from './emrReducer';
 import noteReducer from './noteReducer';
 import patientReducer from './patientReducer';
 
 const reducers = combineReducers({
    authReducer,
+   hospitalReducer,
    emrReducer,
    noteReducer,
    patientReducer

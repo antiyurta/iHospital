@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentToken, selectCurrentInsurance, set } from '../features/authReducer';
+import { selectCurrentToken, selectCurrentInsurance, set as setAuth } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
@@ -9,7 +9,8 @@ import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
-import jwtInterceopter from './jwtInterceopter';
+import authenticationApi from '../services/authentication/authentication.api';
+import { set as setHospital } from '../features/hospitalReducer';
 
 function Profile() {
    const token = useSelector(selectCurrentToken);
@@ -29,12 +30,12 @@ function Profile() {
       params: {}
    };
    const getProfile = async () => {
-      await jwtInterceopter
-         .get('authentication')
+      await authenticationApi
+         .get()
          .then((response) => {
             profileForm.setFieldsValue(response.data.response);
             dispatch(
-               set({
+               setAuth({
                   firstName: response.data.response.employee?.firstName,
                   lastName: response.data.response.employee?.lastName,
                   depId: response.data.response.employee?.depIds,
@@ -47,6 +48,7 @@ function Profile() {
                   hospitalId: response.data.response.hospital?.id
                })
             );
+            dispatch(setHospital(response.data.response.hospital));
             setUser(response.data.response);
          })
          .catch((error) => {

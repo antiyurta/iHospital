@@ -14,7 +14,8 @@ import Insurance from './Patient/Insurance';
 import Contact from './Patient/Contact';
 import mnMN from 'antd/es/locale/mn_MN';
 import UPatient from './Urgent/UPatient';
-import jwtInterceopter from '../../jwtInterceopter';
+import patientApi from '../../../services/pms/patient.api';
+import { selectHospitalIsXyp } from '../../../features/hospitalReducer';
 const { Search } = Input;
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -118,8 +119,8 @@ function Patient() {
       setUrgentEditMode(false);
    };
    const viewModal = async (id) => {
-      await axios
-         .get(DEV_URL + 'pms/patient/' + id, config)
+      await patientApi
+         .getById(id)
          .then((response) => {
             setView(response.data.response);
          })
@@ -129,8 +130,8 @@ function Patient() {
       setIsViewModalVisible(true);
    };
    const editModal = async (id) => {
-      await axios
-         .get(DEV_URL + 'pms/patient/' + id, config)
+      await patientApi
+         .getById(id)
          .then((response) => {
             response.data.response['birthDay'] = moment(response.data.response['birthDay']);
             filterTowns(response.data.response.aimagId);
@@ -149,7 +150,7 @@ function Patient() {
    const onFinishUrgent = async (data) => {
       data['isEmergency'] = true;
       data['isGlobalDb'] = false;
-      await jwtInterceopter.post('pms/patient', data).then((response) => {
+      await patientApi.post(data).then((response) => {
          console.log(response);
          if (response.status === 201) {
             setIsOpenUrgent(false);

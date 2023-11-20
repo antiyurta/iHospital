@@ -10,7 +10,7 @@ import * as XrayDocumentIndex from '../Xray/Document/Index';
 import { selectCurrentHospitalId } from '../../../features/authReducer';
 import { useSelector } from 'react-redux';
 //
-import PmsPatientServices from '../../../services/pms/patient';
+import PmsPatientServices from '../../../services/pms/patient.api';
 import DocumentsFormPatientServices from '../../../services/organization/document';
 import ReactToPrint from 'react-to-print';
 //

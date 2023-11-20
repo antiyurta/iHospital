@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Divider, Modal, Table } from 'antd';
 
 import DocumentsFormPatientSerice from '../../../services/organization/document';
-import PmsPatientServices from '../../../services/pms/patient';
+import PmsPatientServices from '../../../services/pms/patient.api';
 import { ReturnById, ReturnByIdToCode } from './Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
