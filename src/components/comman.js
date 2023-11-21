@@ -330,7 +330,7 @@ export const dataToTree = (data) => {
       if (treeData.length > 0) {
          treeData.map((tree, index) => {
             if (tree.title === year) {
-               console.log('asdasdasd', !!tree.children.find((e) => e.title === `${month}-${day}`));
+               console.log('asdasdasds1111', !!tree.children.find((e) => e.title === `${month}-${day}`));
                if (!!tree.children.find((e) => e.title === `${month}-${day}`)) {
                   const index = tree.children.findIndex((e) => e.title === `${month}-${day}`);
                   tree.children[index].children.push({
