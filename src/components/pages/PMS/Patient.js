@@ -474,7 +474,7 @@ function Patient() {
                   contacts: [{}]
                }}
             >
-               <Tabs tabPosition="left" items={items} />
+               <Tabs tabPosition="left" destroyInactiveTabPane items={items} />
             </Form>
          </Modal>
          <Modal
