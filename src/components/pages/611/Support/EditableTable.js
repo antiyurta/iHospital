@@ -67,7 +67,8 @@ function EditableTable(props) {
       const conf = {
          headers: {},
          params: {
-            documentValue: documentValue
+            documentValue: documentValue,
+            type: 'FORM'
          }
       };
       const response = await Get('organization/document-form', token, conf);

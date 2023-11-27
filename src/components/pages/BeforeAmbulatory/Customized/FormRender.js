@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AutoComplete, Button, Divider, Form, Input, Table } from 'antd';
+import { AutoComplete, Button, Divider, Form, Input, Radio, Table } from 'antd';
 import {
    NewCheckbox,
    NewCheckboxGroup,
@@ -20,10 +20,12 @@ import { MinusOutlined } from '@ant-design/icons';
 
 import DiagnoseService from '../../../../services/reference/diagnose';
 
-function FormRender({ form, formOptionIds, isCheck }) {
+function FormRender({ useForm, form, formOptionIds, isCheck }) {
    const message = 'Тань бөглөх эрх байхгүй';
    const [loadingDiagnose, setLoadingDiagnose] = useState(false);
    const [diagnosis, setDiagnosis] = useState([]);
+
+   const [radioKey, setRadioKey] = useState();
 
    const Render = ({ questions }) => {
       const getDiagnoses = async (code) => {
@@ -46,11 +48,69 @@ function FormRender({ form, formOptionIds, isCheck }) {
                setLoadingDiagnose(false);
             });
       };
+      const removeOther = (state, name) => {
+         if (state) {
+            useForm.resetFields([`otherFor${name}`]);
+         }
+      };
+      const RenderOther = (props) => {
+         const { type, name, tooltip, disabled, length } = props;
+         const typecheck = () => {
+            if (type === 'radio' && useForm.getFieldValue(name)) {
+               console.log(useForm.getFieldsValue());
+               console.log(name);
+               useForm.resetFields([name]);
+               useForm.resetFields(['expandValue']);
+            }
+         };
+         return (
+            <div
+               style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 8
+               }}
+            >
+               <label
+                  style={{
+                     marginLeft: 8
+                  }}
+               >
+                  Бусад:
+               </label>
+               <Form.Item name={`otherFor${name}`} tooltip={tooltip} className="mb-0 w-full">
+                  <NewInput onChange={typecheck} disabled={disabled} />
+               </Form.Item>
+            </div>
+         );
+      };
+      const RenderExpand = (props) => {
+         const { options } = props;
+         const expanded = options.find(
+            (option) => option.keyWord === radioKey?.toString() || option.keyWord === radioKey
+         );
+         if (expanded) {
+            return (
+               <Form.Item label={'sadsad'} name={'expandValue'}>
+                  <Radio.Group>
+                     {expanded.expands?.map((expand, index) => {
+                        return (
+                           <Radio key={index} value={expand.keyWord}>
+                              {expand.label}
+                           </Radio>
+                        );
+                     })}
+                  </Radio.Group>
+               </Form.Item>
+            );
+         }
+      };
       return questions?.map((data, index) => {
          var state = true;
          if (isCheck) {
             state = formOptionIds?.some((id) => id === data.keyWord);
          }
+         console.log('========>', data);
          if (data.type === 'diagnose') {
             return (
                <div key={index} className="rounded-md bg-white w-full inline-block m-1">
@@ -135,7 +195,12 @@ function FormRender({ form, formOptionIds, isCheck }) {
          } else if (data.type === 'checkbox') {
             return (
                <div key={index} className="rounded-md bg-white w-full inline-block m-1">
-                  <div className="inline-flex p-1 w-full">
+                  <div
+                     className="p-1 w-full"
+                     style={{
+                        flexDirection: data.isOther ? 'row' : 'column'
+                     }}
+                  >
                      <Form.Item
                         label={data.value}
                         name={data.keyWord}
@@ -146,7 +211,8 @@ function FormRender({ form, formOptionIds, isCheck }) {
                            disabled={!state}
                            style={{
                               display: 'flex',
-                              flexWrap: 'wrap'
+                              flexWrap: 'wrap',
+                              flexDirection: 'column'
                            }}
                         >
                            {data?.options?.map((option, index) => {
@@ -164,20 +230,49 @@ function FormRender({ form, formOptionIds, isCheck }) {
                            })}
                         </NewCheckboxGroup>
                      </Form.Item>
+                     {data.isOther ? (
+                        <RenderOther
+                           name={data.keyWord}
+                           tooltip={!state ? message : null}
+                           disabled={!state}
+                           length={data.options.length}
+                        />
+                     ) : null}
                   </div>
                </div>
             );
          } else if (data.type === 'radio') {
             return (
                <div key={index} className="rounded-md bg-white w-full inline-block m-1">
-                  <div className="inline-flex p-1 w-full">
+                  <div
+                     className="p-1 w-full"
+                     style={{
+                        flexDirection: data.isOther ? 'row' : 'column'
+                     }}
+                  >
                      <Form.Item
                         label={data.value}
                         name={data.keyWord}
                         tooltip={!state ? message : null}
                         className="mb-0 w-full"
                      >
-                        <NewRadioGroup disabled={!state}>
+                        <NewRadioGroup
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'column'
+                           }}
+                           disabled={!state}
+                           onChange={({ target: { value } }) => {
+                              console.log(value);
+                              setRadioKey(value);
+                              if (data.isOther) {
+                                 removeOther(data.isOther, data.keyWord);
+                              }
+                              if (data.options?.filter((option) => option.isExpand)?.length > 0) {
+                                 console.log('data', data);
+                              }
+                           }}
+                        >
                            {data?.options?.map((option, index) => {
                               return (
                                  <NewRadio
@@ -190,6 +285,16 @@ function FormRender({ form, formOptionIds, isCheck }) {
                            })}
                         </NewRadioGroup>
                      </Form.Item>
+                     <RenderExpand options={data.options} />
+                     {data.isOther ? (
+                        <RenderOther
+                           type={data.type}
+                           name={data.keyWord}
+                           tooltip={!state ? message : null}
+                           disabled={!state}
+                           length={data.options.length}
+                        />
+                     ) : null}
                   </div>
                </div>
             );

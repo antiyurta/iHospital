@@ -263,10 +263,13 @@ function Index(props) {
    //    // getData();
    // };
    const onFinishFilter = async (filters) => {
+      console.log(filters);
       setIsLoading(true);
       const start = moment(filters.date[0]).set({ hour: 0, minute: 0, second: 0 });
       const end = moment(filters.date[1]).set({ hour: 23, minute: 59, second: 59 });
       const params = {
+         structureId: filters.cabinetId,
+         doctorId: filters.doctorId,
          startDate: moment(start).format('YYYY-MM-DD HH:mm'),
          endDate: moment(end).format('YYYY-MM-DD HH:mm')
       };
@@ -355,6 +358,7 @@ function Index(props) {
                               onSelect={(_id, info) => setSelectedCabinet(info.children)}
                            >
                               {cabinets?.map((document, index) => {
+                                 console.log(cabinets);
                                  return (
                                     <NewOption key={index} value={document.id}>
                                        {document.name}
@@ -416,6 +420,7 @@ function Index(props) {
                <div className="w-full px-3 overflow-auto">
                   <Form form={form} layout="vertical">
                      <FormRender
+                        useForm={form}
                         form={documentForm}
                         formOptionIds={documentOptions[selectedOptionId]?.formOptionIds}
                         isCheck={true}

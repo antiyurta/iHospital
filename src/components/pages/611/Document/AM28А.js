@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import moment from 'moment';
 
 //маягт АМ-28А
 function AM28А(props) {
@@ -163,7 +164,7 @@ function AM28А(props) {
                      return (
                         <tr key={index}>
                            <td style={styles.centerText}>{index + 1}</td>
-                           <td style={styles.centerText}>{el[0]}</td>
+                           <td style={styles.centerText}>{moment(el[0]).format('YYYY/MM/DD')}</td>
                            <td style={styles.centerText}>{el[1]}</td>
                            <td style={styles.centerText}>{el[2]}</td>
                            <td style={styles.centerText}>{el[3]}</td>

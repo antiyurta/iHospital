@@ -94,7 +94,7 @@ function MainPatientHistory({
                gap: 12
             }}
          >
-            <FormRender form={props.data} formOptionIds={[]} isCheck={false} />
+            <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
             <Form.Item
                style={{
                   textAlign: 'right'
@@ -120,6 +120,7 @@ function MainPatientHistory({
       }
    ]);
    const getExoInspectionTabs = async () => {
+      console.log('end guioe', location);
       setLoading(true);
       DocumentFormServices.getByPageFilter({
          params: {
