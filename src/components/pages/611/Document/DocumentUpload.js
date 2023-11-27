@@ -40,6 +40,7 @@ function DocumentUpload({ type }) {
       setIsOpenEditModal(true);
    };
    const HandleChangeTest = (panelName, optionName, name) => {
+      console.log(panelName, optionName, name);
       const formData = form.getFieldsValue();
       const type = form.getFieldValue([panelName, optionName, 'options', name, 'type']);
       if (type === 'radio' || type === 'checkbox' || type === 'dropdown' || type === 'table') {
@@ -312,7 +313,7 @@ function DocumentUpload({ type }) {
                   </Form.Item>
                </div>
                <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
-                  <Index4 form={form} namePanel={'documentForm'} handleChange={HandleChangeTest} />
+                  <Index4 form={form} titlePanel={'documentForm'} handleChange={HandleChangeTest} />
                </div>
             </Form>
          </NewModal>

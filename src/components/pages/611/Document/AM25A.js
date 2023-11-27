@@ -290,7 +290,7 @@ function AM25A(props) {
                   {formData?.['AM25_TABLE2']?.map((el, index) => {
                      return (
                         <tr style={{ height: 30 }} key={index}>
-                           <td>{el[0]}</td>
+                           <td>{moment(el[0]).format('YYYY/MM/DD')}</td>
                            <td>{el[1]}</td>
                            <td>{el[2]}</td>
                            <td>{el[3]}</td>

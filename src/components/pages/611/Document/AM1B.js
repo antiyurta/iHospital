@@ -43,7 +43,7 @@ function AM1B(props) {
    };
    return (
       <div className="">
-         {/* <div className="">
+         <div className="">
             <div>
                <div
                   style={{
@@ -295,7 +295,7 @@ function AM1B(props) {
                   })}
                </tbody>
             </Table>
-         </div> */}
+         </div>
       </div>
    );
 }

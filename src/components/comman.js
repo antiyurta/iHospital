@@ -7,10 +7,20 @@ import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.json';
 import moment from 'moment';
 import { NumericFormat } from 'react-number-format';
 
-import EbarimtService from '../services/ebarimt/ebarimt';
-
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
+
+export function formatNameForDoc(lastName, firstName) {
+   if (lastName && firstName) {
+      return `${lastName.substring(0, 1).toUpperCase()}.${firstName}`;
+   } else if (lastName) {
+      return lastName;
+   } else if (firstName) {
+      return firstName.substring(0, 1);
+   } else {
+      return;
+   }
+}
 
 export function localMn() {
    return mnMn;

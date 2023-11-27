@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import { formatNameForDoc } from '../../../comman';
 
 //маягт АМ-29В
 function AM29V(props) {
@@ -94,7 +95,7 @@ function AM29V(props) {
                <span style={{ marginLeft: 50 }}>Нэр {patientData?.firstName}</span>
             </div>
             <div style={styles.rowStyle}>
-               2. Нас ______
+               2. Нас <span className="underline">{patientData?.age}</span>
                <span style={{ marginLeft: 50 }}>
                   Хүйс: /зур/
                   <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
@@ -129,7 +130,12 @@ function AM29V(props) {
             <div style={styles.rowStyle}>6. Гарсан хүндрэл: {formData?.['AM29.8']}</div>
             <div style={styles.rowStyle}>7. Авсан арга хэмжээ: {formData?.['AM29.9']}</div>
             <div style={{ marginTop: 20, textAlign: 'center' }}>
-               <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ___________________________</div>
+               <div style={styles.rowStyle}>
+                  Эмчилгээ хийсэн эмчийн нэр:
+                  <span className="underline">
+                     {formatNameForDoc(formData?.createdByName?.lastName, formData?.createdByName?.firstName)}
+                  </span>
+               </div>
                <div style={styles.rowStyle}>Хатгах засал хийхийг зөвшөөрсөн өвчтөний нэр: ______________________</div>
             </div>
          </div>

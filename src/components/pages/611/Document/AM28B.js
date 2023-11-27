@@ -1,6 +1,8 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import { formatNameForDoc } from '../../../comman';
+import moment from 'moment';
 
 //маягт АМ-28Б
 function AM28B(props) {
@@ -103,7 +105,7 @@ function AM28B(props) {
                   </span>
                </span>
             </div>
-            <div style={styles.rowStyle}>3. Үндсэн онош: ________________________________________</div>
+            <div style={styles.rowStyle}>3. Үндсэн онош: {formData?.['AM28.1']}</div>
             <div style={styles.rowStyle}>4. Төөнө заслын төрөл: /зур/</div>
             <div style={styles.rowStyle}>
                <NewCheckboxGroup value={formData?.['AM28.2']} className="dstory">
@@ -135,7 +137,12 @@ function AM28B(props) {
                </NewCheckboxGroup>
             </div>
             <div style={styles.rowStyle}>5. Төөнө хийх бэлчир орон:{formData?.['AM28.3']}</div>
-            <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: ________________________________</div>
+            <div style={styles.rowStyle}>
+               Эмчилгээ хийсэн эмчийн нэр:{' '}
+               <span className="underline">
+                  {formatNameForDoc(formData?.createdByName?.lastName, formData?.createdByName?.firstName)}
+               </span>
+            </div>
             <div style={styles.rowStyle}>Төөнө эмчилгээ хийлгэхийг зөвшөөрсөн гарын үсэг:</div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>Маягтын ар тал</span>
@@ -154,7 +161,7 @@ function AM28B(props) {
                      return (
                         <tr key={index}>
                            <td style={styles.centerText}>{index + 1}</td>
-                           <td style={styles.centerText}>{el[0]}</td>
+                           <td style={styles.centerText}>{moment(el[0]).format('YYYY/MM/DD')}</td>
                            <td style={styles.centerText}>{el[1]}</td>
                            <td style={styles.centerText}>{el[2]}</td>
                         </tr>

@@ -1,16 +1,30 @@
 import React from 'react';
 import { DeleteOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Radio, Select } from 'antd';
+import { Button, Checkbox, Form, Input, Radio, Select } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
-function index4({ form, namePanel, handleChange }) {
+function index4({ form, titlePanel, handleChange }) {
+   const handeExpand = (panel, option, subOption) => {
+      const formData = form.getFieldsValue();
+      const isExpand = form.getFieldValue(['documentForm', panel, 'options', option, 'options', subOption, 'isExpand']);
+      if (isExpand) {
+         formData['documentForm'][panel]['options'][option]['options'][subOption].expands = [
+            {
+               label: '',
+               keyWord: ''
+            }
+         ];
+      } else {
+         formData['documentForm'][panel]['options'][option]['options'][subOption].expands = [];
+      }
+   };
    return (
       <div className="p-3">
-         <Form.List name={namePanel}>
-            {(fields, { add, remove }) => (
+         <Form.List name={titlePanel}>
+            {(namePanels, { add: addNamePanels, remove: removeNamePanels }) => (
                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                     <div key={key} className="rounded-md m-2" style={{ backgroundColor: '#fafafa' }}>
+                  {namePanels.map((namePanel) => (
+                     <div key={namePanel.key} className="rounded-md m-2" style={{ backgroundColor: '#fafafa' }}>
                         <div className="p-2">
                            <div
                               style={{
@@ -21,9 +35,8 @@ function index4({ form, namePanel, handleChange }) {
                            >
                               <div className="w-full">
                                  <Form.Item
-                                    {...restField}
                                     label="Гарчиг"
-                                    name={[name, 'label']}
+                                    name={[namePanel.name, 'label']}
                                     rules={[
                                        {
                                           required: true,
@@ -41,16 +54,21 @@ function index4({ form, namePanel, handleChange }) {
                                     alignItems: 'end'
                                  }}
                               >
-                                 <Button danger title="Устгах" icon={<DeleteOutlined />} onClick={() => remove(name)} />
+                                 <Button
+                                    danger
+                                    title="Устгах"
+                                    icon={<DeleteOutlined />}
+                                    onClick={() => removeNamePanels(namePanel.name)}
+                                 />
                               </div>
                            </div>
                         </div>
-                        <Form.List name={[name, 'options']}>
-                           {(optionFields, { add, remove }) => (
+                        <Form.List name={[namePanel.name, 'options']}>
+                           {(options, { add: addOptions, remove: removeOptions }) => (
                               <>
-                                 {optionFields.map((optionField) => (
+                                 {options.map((option) => (
                                     <div
-                                       key={optionField.key}
+                                       key={option.key}
                                        className="rounded-md m-2"
                                        style={{ backgroundColor: '#d1d1d1' }}
                                     >
@@ -65,13 +83,15 @@ function index4({ form, namePanel, handleChange }) {
                                           <div className="w-full">
                                              <div className="grid grid-cols-4 gap-[6px]">
                                                 <Form.Item
-                                                   {...restField}
                                                    label="Төрөл"
-                                                   name={[optionField.name, 'type']}
+                                                   name={[option.name, 'type']}
                                                    style={{ marginBottom: 0 }}
                                                 >
                                                    <Select
-                                                      onChange={(e) => handleChange(namePanel, name, optionField.name)}
+                                                      onChange={(e) =>
+                                                         // ender anhaarna
+                                                         handleChange(titlePanel, namePanel.name, option.name)
+                                                      }
                                                    >
                                                       <Option value="diagnose">ICD Онош</Option>
                                                       <Option value="checkbox">Олон сонголтод</Option>
@@ -86,23 +106,20 @@ function index4({ form, namePanel, handleChange }) {
                                                    </Select>
                                                 </Form.Item>
                                                 <Form.Item
-                                                   {...restField}
                                                    label="Түлхүүр"
-                                                   name={[optionField.name, 'keyWord']}
+                                                   name={[option.name, 'keyWord']}
                                                    style={{ marginBottom: 0 }}
                                                 >
                                                    <TextArea />
                                                 </Form.Item>
                                                 <Form.Item
-                                                   {...restField}
                                                    label="Асуулт"
-                                                   name={[optionField.name, 'value']}
+                                                   name={[option.name, 'value']}
                                                    style={{ marginBottom: 0 }}
                                                 >
                                                    <TextArea />
                                                 </Form.Item>
                                                 <Form.Item
-                                                   {...restField}
                                                    label={
                                                       <div>
                                                          <p
@@ -121,7 +138,7 @@ function index4({ form, namePanel, handleChange }) {
                                                          </p>
                                                       </div>
                                                    }
-                                                   name={[optionField.name, 'isInteger']}
+                                                   name={[option.name, 'isInteger']}
                                                    style={{
                                                       marginBottom: 0
                                                    }}
@@ -130,6 +147,14 @@ function index4({ form, namePanel, handleChange }) {
                                                       <Radio value={true}>Тийм</Radio>
                                                       <Radio value={false}>Үгүй</Radio>
                                                    </Radio.Group>
+                                                </Form.Item>
+                                                <Form.Item
+                                                   label="Бусад байгаа эсэх"
+                                                   name={[option.name, 'isOther']}
+                                                   style={{ marginBottom: 0 }}
+                                                   valuePropName="checked"
+                                                >
+                                                   <Checkbox />
                                                 </Form.Item>
                                              </div>
                                           </div>
@@ -143,29 +168,29 @@ function index4({ form, namePanel, handleChange }) {
                                                 danger
                                                 title="Устгах"
                                                 icon={<DeleteOutlined />}
-                                                onClick={() => remove(optionField.name)}
+                                                onClick={() => removeOptions(option.name)}
                                              />
                                           </div>
                                        </div>
-                                       <Form.List name={[optionField.name, 'options']}>
-                                          {(optionFieldss, { add, remove }) => (
+                                       <Form.List name={[option.name, 'options']}>
+                                          {(subOptions, { add: addSubOptions, remove: removeSubOptions }) => (
                                              <>
                                                 <div className="flex flex-wrap">
-                                                   {optionFieldss.map((optionFields) => (
-                                                      <div className="w-full md:w-1/2 lg:w-1/3" key={optionFields.key}>
+                                                   {subOptions.map((subOption) => (
+                                                      <div className="w-full md:w-1/2 lg:w-1/3" key={subOption.key}>
                                                          <div className="rounded-md bg-white m-1">
                                                             <Form.Item noStyle shouldUpdate>
                                                                {() => {
                                                                   return (
                                                                      <div className="inline-flex p-1 w-full">
                                                                         <div className="p-1 grid grid-cols-2 gap-1">
-                                                                           <Form.Item shouldUpdate>
+                                                                           <Form.Item noStyle shouldUpdate>
                                                                               {() => {
                                                                                  const type = form.getFieldValue([
                                                                                     'documentForm',
-                                                                                    name,
+                                                                                    namePanel.name,
                                                                                     'options',
-                                                                                    optionField.name,
+                                                                                    subOption.name,
                                                                                     'type'
                                                                                  ]);
                                                                                  if (type === 'table') {
@@ -173,7 +198,7 @@ function index4({ form, namePanel, handleChange }) {
                                                                                        <Form.Item
                                                                                           label="Мөрийн төрөл"
                                                                                           name={[
-                                                                                             optionFields.name,
+                                                                                             subOption.name,
                                                                                              'type'
                                                                                           ]}
                                                                                        >
@@ -201,7 +226,7 @@ function index4({ form, namePanel, handleChange }) {
                                                                            </Form.Item>
                                                                            <Form.Item
                                                                               label="Хариулт"
-                                                                              name={[optionFields.name, 'label']}
+                                                                              name={[subOption.name, 'label']}
                                                                               style={{
                                                                                  marginBottom: 0
                                                                               }}
@@ -210,13 +235,99 @@ function index4({ form, namePanel, handleChange }) {
                                                                            </Form.Item>
                                                                            <Form.Item
                                                                               label="Түлхүүр"
-                                                                              name={[optionFields.name, 'keyWord']}
+                                                                              name={[subOption.name, 'keyWord']}
                                                                               style={{
                                                                                  marginBottom: 0
                                                                               }}
                                                                            >
                                                                               <Input />
                                                                            </Form.Item>
+                                                                           <Form.Item
+                                                                              label="Задрах эсэх"
+                                                                              name={[subOption.name, 'isExpand']}
+                                                                              valuePropName="checked"
+                                                                              style={{
+                                                                                 marginBottom: 0
+                                                                              }}
+                                                                           >
+                                                                              <Checkbox
+                                                                                 onChange={() =>
+                                                                                    handeExpand(
+                                                                                       namePanel.name,
+                                                                                       option.name,
+                                                                                       subOption.name
+                                                                                    )
+                                                                                 }
+                                                                              />
+                                                                           </Form.Item>
+                                                                           <Form.List
+                                                                              name={[subOption.name, 'expands']}
+                                                                           >
+                                                                              {(
+                                                                                 expands,
+                                                                                 {
+                                                                                    add: addExpands,
+                                                                                    remove: removeExpands
+                                                                                 }
+                                                                              ) => (
+                                                                                 <div
+                                                                                    style={{
+                                                                                       backgroundColor: '#cbd5e1',
+                                                                                       padding: 3
+                                                                                    }}
+                                                                                 >
+                                                                                    {expands.map((expand) => (
+                                                                                       <div key={expand.key}>
+                                                                                          <Form.Item
+                                                                                             label="Хариулт"
+                                                                                             name={[
+                                                                                                expand.name,
+                                                                                                'label'
+                                                                                             ]}
+                                                                                             style={{
+                                                                                                marginBottom: 0
+                                                                                             }}
+                                                                                          >
+                                                                                             <Input />
+                                                                                          </Form.Item>
+                                                                                          <Form.Item
+                                                                                             label="Түлхүүр"
+                                                                                             name={[
+                                                                                                expand.name,
+                                                                                                'keyWord'
+                                                                                             ]}
+                                                                                             style={{
+                                                                                                marginBottom: 0
+                                                                                             }}
+                                                                                          >
+                                                                                             <Input />
+                                                                                          </Form.Item>
+                                                                                          <PlusCircleOutlined
+                                                                                             style={{
+                                                                                                color: 'green',
+                                                                                                fontSize: '18px',
+                                                                                                paddingRight: '6px'
+                                                                                             }}
+                                                                                             onClick={() =>
+                                                                                                addExpands()
+                                                                                             }
+                                                                                          />
+                                                                                          <DeleteOutlined
+                                                                                             style={{
+                                                                                                color: 'red',
+                                                                                                fontSize: '18px'
+                                                                                             }}
+                                                                                             onClick={() =>
+                                                                                                removeExpands(
+                                                                                                   option.name
+                                                                                                )
+                                                                                             }
+                                                                                          />
+                                                                                       </div>
+                                                                                    ))}
+                                                                                 </div>
+                                                                              )}
+                                                                           </Form.List>
                                                                         </div>
                                                                         <div className="inline-flex p-1 text-center items-center">
                                                                            <PlusCircleOutlined
@@ -225,14 +336,16 @@ function index4({ form, namePanel, handleChange }) {
                                                                                  fontSize: '18px',
                                                                                  paddingRight: '6px'
                                                                               }}
-                                                                              onClick={() => add()}
+                                                                              onClick={() => addSubOptions()}
                                                                            />
                                                                            <DeleteOutlined
                                                                               style={{
                                                                                  color: 'red',
                                                                                  fontSize: '18px'
                                                                               }}
-                                                                              onClick={() => remove(optionFields.name)}
+                                                                              onClick={() =>
+                                                                                 removeSubOptions(option.name)
+                                                                              }
                                                                            />
                                                                         </div>
                                                                      </div>
@@ -252,7 +365,7 @@ function index4({ form, namePanel, handleChange }) {
                                     <Button
                                        className="bg-green-400"
                                        type="dashed"
-                                       onClick={() => add()}
+                                       onClick={() => addOptions()}
                                        block
                                        icon={<PlusOutlined />}
                                     >
@@ -265,7 +378,13 @@ function index4({ form, namePanel, handleChange }) {
                      </div>
                   ))}
                   <Form.Item>
-                     <Button className="bg-green-400" type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                     <Button
+                        className="bg-green-400"
+                        type="dashed"
+                        onClick={() => addNamePanels()}
+                        block
+                        icon={<PlusOutlined />}
+                     >
                         Талбар нэмэх
                      </Button>
                   </Form.Item>

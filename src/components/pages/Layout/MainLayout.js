@@ -5,7 +5,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo/iHospital.svg';
 import collapsedLogo from '../../../assets/logo/iHospitalCollapsed.svg';
 import male from '../../../assets/images/maleAvatar.svg';
-import { Button, Dropdown, Menu, Layout, Drawer } from 'antd';
+import { Button, Dropdown, Menu, Layout, Drawer, Badge } from 'antd';
 import {
    MenuFoldOutlined,
    MenuUnfoldOutlined,
@@ -20,6 +20,7 @@ import jwtInterceopter from '../../jwtInterceopter';
 import FullScreenLoader from '../../FullScreenLoader';
 //
 import Chat from '../../../chat/List';
+import { io } from 'socket.io-client';
 //
 const { Content, Sider } = Layout;
 function MainLayout() {
@@ -30,8 +31,17 @@ function MainLayout() {
    const RoleId = useSelector(selectCurrentRoleId);
    const [collapsed, setCollapsed] = useState(false);
    const [menus, setMenus] = useState([]);
-   //
+   // chat
+   const [isConnectedChat, setIsConnectedChat] = useState(false);
    const [isOpenTenChatModal, setIsOpenTenChatModal] = useState(false);
+   //
+   let tokens = JSON.parse(localStorage.getItem('tokens'));
+   const socket = io.connect('http://192.168.5.105:8989', {
+      auth: {
+         token: `${tokens?.accessToken}`
+      },
+      transports: ['websocket', 'polling']
+   });
    //
    const handleMenuClick = async (e) => {
       if (e.key == 2) {
@@ -132,9 +142,32 @@ function MainLayout() {
          ]}
       />
    );
+   const reConnectSocket = () => {
+      console.log(socket);
+      socket.on('connect', () => {
+         setIsConnectedChat(true);
+         console.log('Connected to Socket.IO server', socket);
+      });
+      socket.on('disconnect', () => {
+         setIsConnectedChat(false);
+         console.log('Disconnected from Socket.IO server');
+      });
+   };
    useEffect(() => {
-      console.log(user);
+      // Listen for messages from the server
+      socket.on('receive', (roomId) => {
+         console.log(roomId);
+      });
+
+      // Clean up the socket connection on component unmount
+      return () => {
+         socket.disconnect();
+      };
+   }, []);
+
+   useEffect(() => {
       if (user != null && RoleId) {
+         reConnectSocket();
          getMenus();
       }
    }, [UserId, RoleId]);
@@ -266,13 +299,54 @@ function MainLayout() {
                   </div>
                   <Drawer
                      open={isOpenTenChatModal}
-                     title="Messenger"
+                     title={
+                        <div
+                           style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center'
+                           }}
+                        >
+                           <p>IChat</p>
+                           <div
+                              style={{
+                                 padding: 8,
+                                 backgroundColor: isConnectedChat ? '#a0ed34' : '#d6d4d4',
+                                 borderRadius: 12
+                              }}
+                           >
+                              {isConnectedChat ? (
+                                 <div
+                                    style={{
+                                       display: 'flex',
+                                       flexDirection: 'row',
+                                       gap: 12
+                                    }}
+                                 >
+                                    <p>Идэвхтэй</p>
+                                    <Badge color="green" />
+                                 </div>
+                              ) : (
+                                 <div
+                                    style={{
+                                       display: 'flex',
+                                       flexDirection: 'row',
+                                       gap: 12
+                                    }}
+                                 >
+                                    <p>Идэвхгүй</p>
+                                    <Badge color="red" />
+                                 </div>
+                              )}
+                           </div>
+                        </div>
+                     }
                      onClose={() => setIsOpenTenChatModal(false)}
                      bodyStyle={{
                         padding: 0
                      }}
                   >
-                     <Chat isRender={isOpenTenChatModal} />
+                     <Chat isRender={isOpenTenChatModal} isConnected={isConnectedChat} refresh={reConnectSocket} />
                   </Drawer>
                </Content>
             </Layout>
