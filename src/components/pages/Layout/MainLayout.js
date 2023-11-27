@@ -22,7 +22,7 @@ import FullScreenLoader from '../../FullScreenLoader';
 import Chat from '../../../chat/List';
 import { io } from 'socket.io-client';
 //
-const CHAT_URL = process.env.REACT_APP_DEV_CHAT_URL;
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL;
 
 const { Content, Sider } = Layout;
 function MainLayout() {
@@ -38,7 +38,7 @@ function MainLayout() {
    const [isOpenTenChatModal, setIsOpenTenChatModal] = useState(false);
    //
    let tokens = JSON.parse(localStorage.getItem('tokens'));
-   const socket = io.connect(CHAT_URL, {
+   const socket = io.connect(SOCKET_URL, {
       auth: {
          token: `${tokens?.accessToken}`
       },

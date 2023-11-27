@@ -7,7 +7,9 @@ import { Avatar, Badge, Button } from 'antd';
 import { CloseOutlined, MinusOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 
-const CHAT_URL = process.env.REACT_APP_DEV_CHAT_URL;
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL;
+
+import Taudio from './xaxa.mp3';
 
 const Room = (props) => {
    const { room, findUserInfo, getRooms } = props;
@@ -16,7 +18,7 @@ const Room = (props) => {
    const [messages, setMessages] = useState([]);
    const [inputValue, setInputValue] = useState('');
    const playSound = () => {
-      const audio = new Audio('./xaxa.mp3');
+      const audio = new Audio(Taudio);
       audio.play();
    };
    const getCurrentRoomMessage = async (roomId) => {
@@ -115,7 +117,7 @@ const Room = (props) => {
    };
    const sendMessage = (message, to) => {
       let tokens = JSON.parse(localStorage.getItem('tokens'));
-      const socket = io.connect(CHAT_URL, {
+      const socket = io.connect(SOCKET_URL, {
          auth: {
             token: `${tokens.accessToken}`
          },
@@ -130,7 +132,7 @@ const Room = (props) => {
    };
    useEffect(() => {
       let tokens = JSON.parse(localStorage.getItem('tokens'));
-      const socket = io.connect(CHAT_URL, {
+      const socket = io.connect(SOCKET_URL, {
          auth: {
             token: `${tokens.accessToken}`
          },
