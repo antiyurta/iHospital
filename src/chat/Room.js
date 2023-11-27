@@ -7,6 +7,8 @@ import { Avatar, Badge, Button } from 'antd';
 import { CloseOutlined, MinusOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 
+const CHAT_URL = process.env.REACT_APP_DEV_CHAT_URL;
+
 const Room = (props) => {
    const { room, findUserInfo, getRooms } = props;
    const { user } = useContext(AuthContext);
@@ -113,7 +115,7 @@ const Room = (props) => {
    };
    const sendMessage = (message, to) => {
       let tokens = JSON.parse(localStorage.getItem('tokens'));
-      const socket = io.connect('http://192.168.5.105:8989', {
+      const socket = io.connect(CHAT_URL, {
          auth: {
             token: `${tokens.accessToken}`
          },
@@ -128,7 +130,7 @@ const Room = (props) => {
    };
    useEffect(() => {
       let tokens = JSON.parse(localStorage.getItem('tokens'));
-      const socket = io.connect('http://192.168.5.105:8989', {
+      const socket = io.connect(CHAT_URL, {
          auth: {
             token: `${tokens.accessToken}`
          },
