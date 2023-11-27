@@ -2,6 +2,9 @@ import React from 'react';
 
 import Test from './test';
 
+// ТҮРҮҮ БУЛЧИРХАЙН ХЭТ АВИАН ОНОШИЛГОО
+import Doc4 from './doc4';
+
 const options = [
    {
       value: 1,
@@ -65,6 +68,8 @@ export function ReturnByIdToName(id) {
 export function ReturnById(document, patient) {
    if (document.documentId === 1) {
       return <Test data={document.data} patient={patient} />;
+   } else if (document.documentId === 4) {
+      return <Doc4 data={document.data} patient={patient} />;
    }
    return;
 }

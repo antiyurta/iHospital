@@ -73,14 +73,21 @@ const column = [
       label: 'Идэвхтэй эсэх',
       isView: false,
       input: 'switch',
-      col: 12
+      col: 8
    },
    {
       index: 'isInsurance',
       label: 'Даатгалтай эсэх',
       isView: false,
       input: 'switch',
-      col: 12
+      col: 8
+   },
+   {
+      index: 'isAfterPay',
+      label: 'Дараа төлбөрт эсэх',
+      isView: true,
+      input: 'switch',
+      col: 8
    }
 ];
 function Hospital() {

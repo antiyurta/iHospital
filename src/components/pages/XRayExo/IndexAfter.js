@@ -154,7 +154,6 @@ function IndexAfter({ type, params }) {
       } else if (!isPayment && usageType === 'OUT') {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
-         console.log(listId, id, cabinetId, inspectionType);
          if (confirmedDate === null) {
             const conf = {
                headers: {},

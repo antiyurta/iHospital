@@ -57,8 +57,6 @@ function FormRender({ useForm, form, formOptionIds, isCheck }) {
          const { type, name, tooltip, disabled, length } = props;
          const typecheck = () => {
             if (type === 'radio' && useForm.getFieldValue(name)) {
-               console.log(useForm.getFieldsValue());
-               console.log(name);
                useForm.resetFields([name]);
                useForm.resetFields(['expandValue']);
             }
@@ -110,7 +108,6 @@ function FormRender({ useForm, form, formOptionIds, isCheck }) {
          if (isCheck) {
             state = formOptionIds?.some((id) => id === data.keyWord);
          }
-         console.log('========>', data);
          if (data.type === 'diagnose') {
             return (
                <div key={index} className="rounded-md bg-white w-full inline-block m-1">
@@ -263,7 +260,6 @@ function FormRender({ useForm, form, formOptionIds, isCheck }) {
                            }}
                            disabled={!state}
                            onChange={({ target: { value } }) => {
-                              console.log(value);
                               setRadioKey(value);
                               if (data.isOther) {
                                  removeOther(data.isOther, data.keyWord);
