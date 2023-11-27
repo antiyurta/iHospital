@@ -12,6 +12,7 @@ import jwtInterceopter from '../../../jwtInterceopter';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import { useLocation } from 'react-router-dom';
 import FormRender from '../../BeforeAmbulatory/Customized/FormRender';
+import { Patch } from '../../../comman';
 //
 function MainPatientHistory({
    AppointmentId,
@@ -24,10 +25,8 @@ function MainPatientHistory({
    UsageType,
    HicsServiceId,
    AppointmentType,
-   ServiceId,
    handleClick
 }) {
-   console.log('=============>', HicsServiceId);
    let location = useLocation();
    const userId = useSelector(selectCurrentUserId);
    const lastName = useSelector(selectCurrentLastName);
@@ -81,9 +80,16 @@ function MainPatientHistory({
             }
          }
       };
-      await jwtInterceopter.post(data.url, body).then((response) => {
-         console.log(response);
-      });
+      await jwtInterceopter
+         .post(data.url, body)
+         .then((response) => {
+            console.log(response);
+         })
+         .then(() => {
+            jwtInterceopter.patch('service/xrayRequest/' + XrayRequestId, {
+               xrayProcess: 2
+            });
+         });
    };
    const XrayDocumentShow = (props) => (
       <Form form={xrayForm} layout="vertical" onFinish={(values) => onFinishXray(values, props)}>
@@ -91,7 +97,9 @@ function MainPatientHistory({
             style={{
                display: 'flex',
                flexDirection: 'column',
-               gap: 12
+               gap: 12,
+               overflow: 'auto',
+               height: 500
             }}
          >
             <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
@@ -120,7 +128,6 @@ function MainPatientHistory({
       }
    ]);
    const getExoInspectionTabs = async () => {
-      console.log('end guioe', location);
       setLoading(true);
       DocumentFormServices.getByPageFilter({
          params: {
@@ -129,7 +136,6 @@ function MainPatientHistory({
          }
       })
          .then((response) => {
-            console.log(response);
             setItems([
                {
                   key: 0,
@@ -141,38 +147,6 @@ function MainPatientHistory({
          .finally(() => {
             setLoading(false);
          });
-      // config.params.cabinetId = cabinetId;
-      // await jwtInterceopter
-      //    .get('emr/inspection-form', {
-      //       params: {
-      //          cabinetId: cabinetId
-      //       }
-      //    })
-      //    .then((response) => {
-      //       setItems([]);
-      //       response.data.response.data?.map((el) => {
-      //          setItems((items) => [
-      //             ...items,
-      //             {
-      //                label: el.name,
-      //                key: `item-ex-${el.id}`,
-      //                children: (
-      //                   <DynamicTabContent
-      //                      data={el.formItem}
-      //                      formKey={el.formId != null ? el.formId : el.id}
-      //                      formName={el.name}
-      //                   />
-      //                )
-      //             }
-      //          ]);
-      //       });
-      //    })
-      //    .catch((error) => {
-      //       console.log(error);
-      //    })
-      //    .finally(() => {
-      //       setLoading(false);
-      //    });
    };
    const getInspectionTabs = async () => {
       setLoading(true);

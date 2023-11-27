@@ -32,4 +32,3 @@ function ReturnById(hospitalId, document, patient) {
 }
 
 export { ReturnAll, ReturnByIdToName, ReturnById };
-

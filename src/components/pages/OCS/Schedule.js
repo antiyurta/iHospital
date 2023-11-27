@@ -2,7 +2,7 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentIsAfterPay, selectCurrentToken } from '../../../features/authReducer';
 import { Get, numberToCurrency, openNofi } from '../../comman';
 import Appointment from '../Appointment/Index';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
@@ -18,6 +18,7 @@ const { Search } = Input;
 function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSuccess }) {
    // isOCS = true bol emch OSC false bol burgel tolbor awah ued
    const token = useSelector(selectCurrentToken);
+   const hospitalIsAfterPay = useSelector(selectCurrentIsAfterPay);
    const config = {
       headers: {},
       params: {}
@@ -60,16 +61,21 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       var noTime = [];
       var time = [];
       invoices?.map((invoice) => {
-         if (invoice.type === 2 && invoice.treatmentRequest?.slotId === null && invoice.treatment?.isSlot) {
-            time.push(payment);
-         } else if (
-            invoice.type === 1 &&
-            invoice.xrayRequest?.slotId === null &&
-            invoice.xrayRequest?.usageType === 'OUT'
-         ) {
-            time.push(invoice);
-         } else {
+         if (hospitalIsAfterPay) {
+            console.log('======>hospitalIsAfterPay', hospitalIsAfterPay);
             noTime.push(invoice);
+         } else {
+            if (invoice.type === 2 && invoice.treatmentRequest?.slotId === null && invoice.treatment?.isSlot) {
+               time.push(payment);
+            } else if (
+               invoice.type === 1 &&
+               invoice.xrayRequest?.slotId === null &&
+               invoice.xrayRequest?.usageType === 'OUT'
+            ) {
+               time.push(invoice);
+            } else {
+               noTime.push(invoice);
+            }
          }
       });
       setNoTimeRequirePayments(noTime);

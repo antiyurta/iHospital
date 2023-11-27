@@ -18,15 +18,12 @@ import SentService from '../Insurance/sent-service';
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
 function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
-   console.log('-------------->', serviceId);
-   console.log('main inpatient story patientId =========>', patientId);
    const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
    const [checkedKey, setCheckedKey] = useState(0);
    const [doctorDailyForm] = Form.useForm();
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
    const [story, setStory] = useState({});
-   const [dailyNotes, setDailyNotes] = useState([]);
    //
    const [documents, setDocuments] = useState([]);
    /** @description insurance connection start => */
@@ -191,18 +188,36 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
    }, []);
    return (
       <div>
-         <Button
+         {/* <Button
             type="primary"
             onClick={() => getDocuments()}
             // loading={isLoadingGetDocuments}
             icon={<SnippetsOutlined />}
          >
             Маягт
-         </Button>
-         <Button type="ghost" onClick={() => setIsInsuranceModal(true)}>
-            Даатгал
-         </Button>
-         <Dropdown
+         </Button> */}
+         <div
+            style={{
+               display: 'flex',
+               flexDirection: 'row',
+               gap: 6,
+               padding: 6
+            }}
+         >
+            <Button type="ghost" onClick={() => setIsInsuranceModal(true)}>
+               Даатгал
+            </Button>
+            <DocumentShow
+               props={{
+                  appIds: AppIds,
+                  deparmentId: deparmentId,
+                  usageType: 'IN',
+                  documentType: 0
+               }}
+            />
+         </div>
+
+         {/* <Dropdown
             overlay={documentsMenu}
             trigger={['click']}
             arrow={{
@@ -219,15 +234,8 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
             >
                Маягтийн жагсаалт
             </Button>
-         </Dropdown>
-         <DocumentShow
-            props={{
-               appIds: AppIds,
-               deparmentId: deparmentId,
-               usageType: 'IN',
-               documentType: 0
-            }}
-         />
+         </Dropdown> */}
+
          <div>
             <Tabs type="card" items={testItems} />
          </div>
