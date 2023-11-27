@@ -22,6 +22,8 @@ import FullScreenLoader from '../../FullScreenLoader';
 import Chat from '../../../chat/List';
 import { io } from 'socket.io-client';
 //
+const CHAT_URL = process.env.REACT_APP_DEV_CHAT_URL;
+
 const { Content, Sider } = Layout;
 function MainLayout() {
    const { user, logoutt } = useContext(AuthContext);
@@ -36,7 +38,7 @@ function MainLayout() {
    const [isOpenTenChatModal, setIsOpenTenChatModal] = useState(false);
    //
    let tokens = JSON.parse(localStorage.getItem('tokens'));
-   const socket = io.connect('http://192.168.5.105:8989', {
+   const socket = io.connect(CHAT_URL, {
       auth: {
          token: `${tokens?.accessToken}`
       },
@@ -153,18 +155,6 @@ function MainLayout() {
          console.log('Disconnected from Socket.IO server');
       });
    };
-   useEffect(() => {
-      // Listen for messages from the server
-      socket.on('receive', (roomId) => {
-         console.log(roomId);
-      });
-
-      // Clean up the socket connection on component unmount
-      return () => {
-         socket.disconnect();
-      };
-   }, []);
-
    useEffect(() => {
       if (user != null && RoleId) {
          reConnectSocket();
