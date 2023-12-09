@@ -3,6 +3,8 @@ import { Button, Empty, Modal, Table } from 'antd';
 import React, { useState } from 'react';
 import { numberToCurrency, openNofi } from '../../comman';
 
+import examIcon from './NewOrder/examIcon.svg';
+
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
@@ -29,15 +31,16 @@ export const Examination = ({ handleclick }) => {
    };
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedExaminations([]);
             }}
          >
+            <img src={examIcon} />
             Шинжилгээ
-         </Button>
+         </button>
          <Modal
             title="Шинжилгээ сонгох"
             width={'80%'}

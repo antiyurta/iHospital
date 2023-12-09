@@ -1,7 +1,7 @@
 import React from 'react';
 import { NewCheckbox, NewCheckboxGroup } from '../../../../Input/Input';
 import enerehui_logo from './assets/enerehui_logo.png';
-import fb from './assets/fb.png';
+import fb from '../../../../../../src/assets/landing/fb.png';
 import route from './assets/route.png';
 import dayjs from 'dayjs';
 
@@ -84,4 +84,3 @@ const Test = (props) => {
    );
 };
 export default Test;
-

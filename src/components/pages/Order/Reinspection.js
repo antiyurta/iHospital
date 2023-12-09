@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import Appointment from '../Appointment/Index';
 
+import reInspectionIcon from './NewOrder/reinspectionIcon.svg';
+
 function Reinspection({ selectedPatient, appointmentId }) {
    const [isOpenMOdal, setIsOpenModal] = useState(false);
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
             }}
          >
+            <img src={reInspectionIcon} />
             Давтан үзлэг
-         </Button>
+         </button>
          <Modal
             title="Давтан үзлэгын цаг"
             width={'80%'}

@@ -13,6 +13,9 @@ import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get, Post } from '../../../comman';
 import moment from 'moment';
 
+import patientHistoryService from '../../../../services/emr/patientHistory';
+import dayjs from 'dayjs';
+
 export default function HistoryTab({ patientId, inspection }) {
    const { Panel } = Collapse;
    const token = useSelector(selectCurrentToken);
@@ -25,28 +28,45 @@ export default function HistoryTab({ patientId, inspection }) {
       config.params.patientId = null;
       historyForm.validateFields().then(async (values) => {
          values['patientId'] = patientId;
-         const response = await Post('emr/patient-history', token, config, values);
-         if (response === 201) {
-            getPatientHistory(patientId);
-         }
+         await patientHistoryService.postPatientHistory(values).then((response) => {
+            console.log(response);
+         });
+         // const response = await Post('emr/patient-history', token, config, values);
+         // if (response === 201) {
+         //    getPatientHistory(patientId);
+         // }
       });
    };
    const getPatientHistory = async (id) => {
       config.params.patientId = id;
-      var response = await Get('emr/patient-history', token, config);
-      if (Object.keys(response)?.length > 0) {
-         response['birth'].birthDate = moment(response.birth?.birthDate);
-      }
-      historyForm.setFieldsValue(response);
-      config.params.patientId = null;
+      await patientHistoryService
+         .getPatientHistory({
+            params: {
+               patientId: id
+            }
+         })
+         .then(({ data: { response } }) => {
+            console.log(response);
+            if (Object.keys(response)?.length > 0) {
+               response['birth'].birthDate = dayjs(response.birth?.birthDate);
+            }
+            historyForm.setFieldsValue(response);
+         });
    };
    useEffect(() => {
       getPatientHistory(patientId);
    }, [inspection]);
 
    return (
-      <Form form={historyForm} autoComplete="off" labelAlign="left" scrollToFirstError layout="vertical">
-         <div className="flex flex-col gap-3">
+      <Form
+         form={historyForm}
+         autoComplete="off"
+         labelAlign="left"
+         scrollToFirstError
+         layout="vertical"
+         className="h-full"
+      >
+         <div className="flex flex-col gap-3 h-full justify-between">
             <Collapse accordion>
                <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
                   <Step1 />
@@ -73,7 +93,7 @@ export default function HistoryTab({ patientId, inspection }) {
                   <Step8 />
                </Panel>
             </Collapse>
-            <Form.Item>
+            <Form.Item noStyle>
                <Button type="primary" htmlType="submit" onClick={() => saveHistory()}>
                   Амьдралын түүх xадгалах
                </Button>

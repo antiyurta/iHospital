@@ -6,6 +6,9 @@ class Service {
    async postSetOrder(data) {
       return await jwtInterceopter.post('service/setorder', data);
    }
+   async postInpatientRequest(data) {
+      return await jwtInterceopter.post('service/inpatient-request', data);
+   }
    async patchSetOrder(id, data) {
       return await jwtInterceopter.patch('service/setorder/' + id, data);
    }

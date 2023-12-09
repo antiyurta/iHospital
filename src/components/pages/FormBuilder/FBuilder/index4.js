@@ -18,6 +18,18 @@ function index4({ form, titlePanel, handleChange }) {
          formData['documentForm'][panel]['options'][option]['options'][subOption].expands = [];
       }
    };
+   const handleChangeExpandOptions = (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) => {
+      const type = form.getFieldValue([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, 'type']);
+      if (type === 'radio') {
+         const formData = form.getFieldsValue();
+         console.log(form.getFieldValue([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8]));
+         formData[arg1][arg2][arg3][arg4][arg5][arg6][arg7][arg8]['options'] = [
+            {
+               label: ''
+            }
+         ];
+      }
+   };
    return (
       <div className="p-3">
          <Form.List name={titlePanel}>
@@ -77,17 +89,20 @@ function index4({ form, titlePanel, handleChange }) {
                                              display: 'flex',
                                              flexDirection: 'row',
                                              padding: 6,
-                                             gap: '6px'
+                                             gap: 8
                                           }}
                                        >
                                           <div className="w-full">
-                                             <div className="grid grid-cols-4 gap-[6px]">
+                                             <div className="flex flex-row gap-3">
                                                 <Form.Item
                                                    label="Төрөл"
                                                    name={[option.name, 'type']}
-                                                   style={{ marginBottom: 0 }}
+                                                   style={{ marginBottom: 0, width: '100%' }}
                                                 >
                                                    <Select
+                                                      style={{
+                                                         width: '100%'
+                                                      }}
                                                       onChange={(e) =>
                                                          // ender anhaarna
                                                          handleChange(titlePanel, namePanel.name, option.name)
@@ -108,53 +123,46 @@ function index4({ form, titlePanel, handleChange }) {
                                                 <Form.Item
                                                    label="Түлхүүр"
                                                    name={[option.name, 'keyWord']}
-                                                   style={{ marginBottom: 0 }}
+                                                   style={{ marginBottom: 0, width: '100%' }}
                                                 >
                                                    <TextArea />
                                                 </Form.Item>
                                                 <Form.Item
                                                    label="Асуулт"
                                                    name={[option.name, 'value']}
-                                                   style={{ marginBottom: 0 }}
+                                                   style={{ marginBottom: 0, width: '100%' }}
                                                 >
                                                    <TextArea />
                                                 </Form.Item>
                                                 <Form.Item
-                                                   label={
-                                                      <div>
-                                                         <p
-                                                            style={{
-                                                               fontWeight: 400
-                                                            }}
-                                                         >
-                                                            Энэ асуултын хариулт тоо?
-                                                         </p>
-                                                         <p
-                                                            style={{
-                                                               fontWeight: 400
-                                                            }}
-                                                         >
-                                                            Анхааруулга та сайн лавлаж асууна уу !!!
-                                                         </p>
-                                                      </div>
-                                                   }
+                                                   label="Тоо эсэх"
                                                    name={[option.name, 'isInteger']}
                                                    style={{
                                                       marginBottom: 0
                                                    }}
                                                 >
-                                                   <Radio.Group>
+                                                   <Radio.Group
+                                                      style={{
+                                                         display: 'flex',
+                                                         flexDirection: 'column',
+                                                         gap: 3
+                                                      }}
+                                                   >
                                                       <Radio value={true}>Тийм</Radio>
                                                       <Radio value={false}>Үгүй</Radio>
                                                    </Radio.Group>
                                                 </Form.Item>
                                                 <Form.Item
-                                                   label="Бусад байгаа эсэх"
+                                                   label="Бусад?"
                                                    name={[option.name, 'isOther']}
                                                    style={{ marginBottom: 0 }}
                                                    valuePropName="checked"
                                                 >
-                                                   <Checkbox />
+                                                   <Checkbox
+                                                      style={{
+                                                         paddingLeft: 3
+                                                      }}
+                                                   />
                                                 </Form.Item>
                                              </div>
                                           </div>
@@ -183,14 +191,14 @@ function index4({ form, titlePanel, handleChange }) {
                                                                {() => {
                                                                   return (
                                                                      <div className="inline-flex p-1 w-full">
-                                                                        <div className="p-1 grid grid-cols-2 gap-1">
+                                                                        <div className="p-1 grid grid-cols-2 gap-3">
                                                                            <Form.Item noStyle shouldUpdate>
                                                                               {() => {
                                                                                  const type = form.getFieldValue([
                                                                                     'documentForm',
                                                                                     namePanel.name,
                                                                                     'options',
-                                                                                    subOption.name,
+                                                                                    option.name,
                                                                                     'type'
                                                                                  ]);
                                                                                  if (type === 'table') {
@@ -222,6 +230,7 @@ function index4({ form, titlePanel, handleChange }) {
                                                                                        </Form.Item>
                                                                                     );
                                                                                  }
+                                                                                 return;
                                                                               }}
                                                                            </Form.Item>
                                                                            <Form.Item
@@ -231,7 +240,7 @@ function index4({ form, titlePanel, handleChange }) {
                                                                                  marginBottom: 0
                                                                               }}
                                                                            >
-                                                                              <Input />
+                                                                              <TextArea />
                                                                            </Form.Item>
                                                                            <Form.Item
                                                                               label="Түлхүүр"
@@ -270,14 +279,49 @@ function index4({ form, titlePanel, handleChange }) {
                                                                                     remove: removeExpands
                                                                                  }
                                                                               ) => (
-                                                                                 <div
-                                                                                    style={{
-                                                                                       backgroundColor: '#cbd5e1',
-                                                                                       padding: 3
-                                                                                    }}
-                                                                                 >
+                                                                                 <>
                                                                                     {expands.map((expand) => (
-                                                                                       <div key={expand.key}>
+                                                                                       <div
+                                                                                          key={expand.key}
+                                                                                          style={{
+                                                                                             backgroundColor: '#cbd5e1',
+                                                                                             margin: 3,
+                                                                                             padding: 3,
+                                                                                             borderRadius: 8
+                                                                                          }}
+                                                                                       >
+                                                                                          <Form.Item
+                                                                                             label="Төрөл"
+                                                                                             name={[
+                                                                                                expand.name,
+                                                                                                'type'
+                                                                                             ]}
+                                                                                          >
+                                                                                             <Select
+                                                                                                onChange={() => {
+                                                                                                   handleChangeExpandOptions(
+                                                                                                      'documentForm',
+                                                                                                      namePanel.name,
+                                                                                                      'options',
+                                                                                                      option.name,
+                                                                                                      'options',
+                                                                                                      subOption.name,
+                                                                                                      'expands',
+                                                                                                      expand.name
+                                                                                                   );
+                                                                                                }}
+                                                                                             >
+                                                                                                <Option value="input">
+                                                                                                   Текст бичих
+                                                                                                </Option>
+                                                                                                <Option value="inputNumber">
+                                                                                                   Тоо оруулах
+                                                                                                </Option>
+                                                                                                <Option value="radio">
+                                                                                                   Нэр сонголтод
+                                                                                                </Option>
+                                                                                             </Select>
+                                                                                          </Form.Item>
                                                                                           <Form.Item
                                                                                              label="Хариулт"
                                                                                              name={[
@@ -302,6 +346,46 @@ function index4({ form, titlePanel, handleChange }) {
                                                                                           >
                                                                                              <Input />
                                                                                           </Form.Item>
+                                                                                          <Form.List
+                                                                                             name={[
+                                                                                                expand.name,
+                                                                                                'options'
+                                                                                             ]}
+                                                                                          >
+                                                                                             {(
+                                                                                                expandOptions,
+                                                                                                {
+                                                                                                   add: addExpandOptions,
+                                                                                                   remove:
+                                                                                                      removeExpandOptions
+                                                                                                }
+                                                                                             ) => (
+                                                                                                <>
+                                                                                                   {expandOptions.map(
+                                                                                                      (
+                                                                                                         expandOption
+                                                                                                      ) => (
+                                                                                                         <div
+                                                                                                            style={{
+                                                                                                               background:
+                                                                                                                  'red'
+                                                                                                            }}
+                                                                                                         >
+                                                                                                            <Form.Item
+                                                                                                               label="sdas"
+                                                                                                               name={[
+                                                                                                                  expandOption.name,
+                                                                                                                  'options'
+                                                                                                               ]}
+                                                                                                            >
+                                                                                                               <Input />
+                                                                                                            </Form.Item>
+                                                                                                         </div>
+                                                                                                      )
+                                                                                                   )}
+                                                                                                </>
+                                                                                             )}
+                                                                                          </Form.List>
                                                                                           <PlusCircleOutlined
                                                                                              style={{
                                                                                                 color: 'green',
@@ -325,16 +409,23 @@ function index4({ form, titlePanel, handleChange }) {
                                                                                           />
                                                                                        </div>
                                                                                     ))}
-                                                                                 </div>
+                                                                                 </>
                                                                               )}
                                                                            </Form.List>
                                                                         </div>
-                                                                        <div className="inline-flex p-1 text-center items-center">
+                                                                        <div
+                                                                           className="flex flex-col self-center gap-3"
+                                                                           style={{
+                                                                              border: '1px dotted grey',
+                                                                              borderRadius: 8,
+                                                                              padding: 3,
+                                                                              alignItems: 'center'
+                                                                           }}
+                                                                        >
                                                                            <PlusCircleOutlined
                                                                               style={{
                                                                                  color: 'green',
-                                                                                 fontSize: '18px',
-                                                                                 paddingRight: '6px'
+                                                                                 fontSize: '18px'
                                                                               }}
                                                                               onClick={() => addSubOptions()}
                                                                            />

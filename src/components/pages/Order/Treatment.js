@@ -1,10 +1,12 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, Input, Modal, Table } from 'antd';
+import { Button, Empty, Modal, Table } from 'antd';
 import React, { useState } from 'react';
 import { numberToCurrency, openNofi } from '../../comman';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
+
+import treatmentIcon from './NewOrder/treatmentIcon.svg';
 
 function Treatment({ handleclick }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -28,16 +30,17 @@ function Treatment({ handleclick }) {
    };
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedTreatmentId(null);
                setSelectedTreatments([]);
             }}
          >
+            <img src={treatmentIcon} />
             Эмчилгээ
-         </Button>
+         </button>
          <Modal
             title="Эмчилгээ сонгох"
             width={'80%'}

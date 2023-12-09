@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { openNofi } from '../../comman';
 import { Button, Form, Input } from 'antd';
-import { CloseOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { CloseOutlined, HeartOutlined, PlusCircleFilled } from '@ant-design/icons';
 
 //components
 import OrderTable from '../Order/Order';
@@ -202,14 +202,15 @@ function SetOrder({ handleclick }) {
 
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="green-order"
             onClick={() => {
                setIsOpenModal(true);
             }}
          >
+            <HeartOutlined />
             Сэт-Ордер
-         </Button>
+         </button>
          <NewModal
             title="Сэт-Ордер"
             width={'80%'}

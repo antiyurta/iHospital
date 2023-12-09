@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ConfigProvider, Empty, Input, Modal, Form, Table, Select } from 'antd';
+import { Button, Empty, Input, Modal, Form, Table, Select } from 'antd';
 import jwtInterceopter from '../../jwtInterceopter';
-import { localMn, numberToCurrency, openNofi } from '../../comman';
-import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { numberToCurrency, openNofi } from '../../comman';
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
+
+import surgeryIcon from './NewOrder/surgeryIcon.svg';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -65,16 +67,17 @@ function Surgery(props) {
    }, []);
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedSurgeryId(null);
                setSelectedSurgeries([]);
             }}
          >
+            <img src={surgeryIcon} />
             Мэс засал
-         </Button>
+         </button>
          <Modal
             title="Мэс засал сонгох"
             width={'80%'}

@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get, localMn, openNofi } from '../../comman';
+
+import medicineIcon from './NewOrder/medicineIcon.svg';
+
 const { Search } = Input;
 function Medicine({ usageType, handleclick }) {
    const token = useSelector(selectCurrentToken);
@@ -151,15 +154,16 @@ function Medicine({ usageType, handleclick }) {
 
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedMedicines([]);
             }}
          >
+            <img src={medicineIcon} />
             Эм
-         </Button>
+         </button>
          <Modal
             title="Эм сонгох"
             width={'70%'}

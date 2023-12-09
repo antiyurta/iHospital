@@ -2,6 +2,8 @@ import { Button, Form, InputNumber, Modal, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 
+import inpatientIcon from './NewOrder/inpatientIcon.svg';
+
 function InpatientRequest({ handleClick }) {
    const [InpatientRequestForm] = Form.useForm();
    const [isDuration, setIsDuration] = useState(true);
@@ -50,14 +52,15 @@ function InpatientRequest({ handleClick }) {
 
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
             }}
          >
+            <img src={inpatientIcon} />
             Хэвтүүлэх
-         </Button>
+         </button>
          <Modal
             title="Хэвтүүлэх хүсэлт"
             open={isOpenModal}
