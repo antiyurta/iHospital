@@ -417,9 +417,11 @@ function InpatientRequests() {
                         {rooms?.map((room, index) => {
                            return (
                               <Option key={index} value={room.id}>
-                                 {`${room.roomNumber} -> ${numberToCurrency(room.price)} -> ${checkGenderType(
-                                    room.genderType
-                                 )} -> ${roomType[room.roomType]?.label}`}
+                                 <span>
+                                    {room.roomNumber}--{numberToCurrency(room.price)}--
+                                    {checkGenderType(room.genderType)}
+                                    --{roomType[room.roomType]?.label}
+                                 </span>
                               </Option>
                            );
                         })}
