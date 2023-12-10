@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { openNofi } from '../../comman';
-import { Button, Form, Input } from 'antd';
+import { formatNameForDoc, openNofi } from '../../comman';
+import { Button, Checkbox, Form, Input, Modal, Table } from 'antd';
 import { CloseOutlined, HeartOutlined, PlusCircleFilled } from '@ant-design/icons';
 
 //components
@@ -14,15 +14,15 @@ import ServiceService from '../../../services/service/service';
 import AuthContext from '../../../features/AuthContext';
 
 function SetOrder({ handleclick }) {
-   // ooroo
    const { user } = useContext(AuthContext);
-   //
    const [form] = Form.useForm();
+   const [packForm] = Form.useForm();
    const [editMode, setEditMode] = useState(false);
    const [searchValue, setSearchValue] = useState('');
    const [isLoading, setIsLoading] = useState(false);
    const [isLoadingConfirm, setIsLoadingConfirm] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [isOpenPackageModal, setIsOpenPackageModal] = useState(false);
    const [isOpenAddModal, setIsOpenAddModal] = useState(false);
    const [orders, setOrders] = useState([]);
    const [meta, setMeta] = useState({});
@@ -75,7 +75,7 @@ function SetOrder({ handleclick }) {
    };
 
    useEffect(() => {
-      getSetOrders(1, 10);
+      // getSetOrders(1, 10);
    }, []);
 
    const SerivceTable = (props) => {
@@ -211,15 +211,39 @@ function SetOrder({ handleclick }) {
             <HeartOutlined />
             Сэт-Ордер
          </button>
-         <NewModal
-            title="Сэт-Ордер"
-            width={'80%'}
+         <Modal title="Багц үүсгэх" width={400} open={isOpenPackageModal} onCancel={() => setIsOpenPackageModal(false)}>
+            <Form form={packForm} layout="vertical">
+               <Form.Item className="mb-0" label="Багцын нэр:">
+                  <Input />
+               </Form.Item>
+               <Form.Item className="mb-0" label="Тасаг сонгох:">
+                  <Input />
+               </Form.Item>
+               <Form.Item className="mb-0" label="Код:">
+                  <Input />
+               </Form.Item>
+               <Form.Item className="mb-0" label="Онош:">
+                  <Input />
+               </Form.Item>
+               <Form.Item className="mb-0" label="Загвар болгож хадгалах">
+                  <Checkbox />
+               </Form.Item>
+            </Form>
+         </Modal>
+         <Modal
+            title="Сэт-Ордер сонгох"
+            width={1500}
             open={isOpenModal}
             onCancel={() => setIsOpenModal(false)}
-            footer={null}
+            okText="Хадгалах"
          >
-            <div className="flex flex-col gap-3">
-               <div className="flex justify-between gap-3">
+            <div className="internal-order-set-order">
+               <div className="left">
+                  <Input placeholder="Хайх ..." />
+                  <div>1</div>
+                  <Button onClick={() => setIsOpenPackageModal(true)}>Багц үүсгэх</Button>
+               </div>
+               <div className="right">
                   <NewSearch
                      style={{
                         width: 300
@@ -228,81 +252,100 @@ function SetOrder({ handleclick }) {
                      enterButton="Хайх"
                      onSearch={(value) => getSetOrders(1, 10, value)}
                   />
-                  <Button type="primary" onClick={() => openOrCloseModal(false, true)}>
-                     Нэмэх
-                  </Button>
-               </div>
-               <NewTable
-                  prop={{
-                     rowKey: 'id',
-                     bordered: true,
-                     dataSource: orders
-                  }}
-                  meta={meta}
-                  isLoading={isLoading}
-                  onChange={(page, pageSize) => getSetOrders(page, pageSize, searchValue)}
-                  isPagination={true}
-               >
-                  <NewColumn title="Код" dataIndex={'code'} />
-                  <NewColumn title="Тайлбар" dataIndex={'description'} />
-                  <NewColumn
-                     title="Үйлчилгээ"
-                     dataIndex={'services'}
-                     render={(text) => {
-                        return (
-                           <ul>
-                              {text?.map((service, index) => {
-                                 return (
-                                    <li
-                                       key={index}
-                                       style={{
-                                          display: 'flex',
-                                          alignItems: 'start'
+                  <Table
+                     rowKey="id"
+                     bordered
+                     loading={{
+                        spinning: isLoading,
+                        tip: 'Уншиж байна....'
+                     }}
+                     columns={[
+                        {
+                           title: 'Код',
+                           dataIndex: 'code'
+                        },
+                        {
+                           title: 'Тайлбар',
+                           dataIndex: 'description'
+                        },
+                        {
+                           title: 'Үйлчилгээ',
+                           dataIndex: 'services',
+                           render: (text) => {
+                              return (
+                                 <ul>
+                                    {text?.map((service, index) => {
+                                       return (
+                                          <li
+                                             key={index}
+                                             style={{
+                                                display: 'flex',
+                                                alignItems: 'start'
+                                             }}
+                                          >
+                                             -{service.serviceName}
+                                          </li>
+                                       );
+                                    })}
+                                 </ul>
+                              );
+                           }
+                        },
+                        {
+                           title: 'Үүсгэсэн эмч',
+                           render: (_, row) => {
+                              return formatNameForDoc(row.createdLastName, row.createdFirstName);
+                           }
+                        },
+                        {
+                           title: 'Үйлдэл',
+                           render: (_, row) => {
+                              return (
+                                 <div className="flex flex-row justify-center gap-3">
+                                    <div>
+                                       {user.userId === row.createdBy ? (
+                                          <Button onClick={() => openOrCloseModal(true, true, row)}>Засах</Button>
+                                       ) : null}
+                                    </div>
+                                    <Button
+                                       type="primary"
+                                       onClick={() => {
+                                          handleclick(row.services);
+                                          setIsOpenModal(false);
                                        }}
                                     >
-                                       -{service.serviceName}
-                                    </li>
-                                 );
-                              })}
-                           </ul>
-                        );
+                                       Aшиглах
+                                    </Button>
+                                 </div>
+                              );
+                           }
+                        }
+                     ]}
+                     dataSource={orders}
+                     pagination={{
+                        position: ['bottomCenter'],
+                        size: 'small',
+                        current: meta.page,
+                        total: meta.itemCount,
+                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                        pageSize: meta.limit,
+                        showSizeChanger: true,
+                        pageSizeOptions: ['5', '10', '20', '50'],
+                        showQuickJumper: true,
+                        onChange: (page, pageSize) => getSetOrders(page, pageSize, searchValue)
                      }}
+                     footer={() => (
+                        <div>
+                           <Button type="primary" onClick={() => openOrCloseModal(false, true)}>
+                              Нэмэх
+                           </Button>
+                        </div>
+                     )}
                   />
-                  <NewColumn
-                     title="Үүсгэсэн эмч"
-                     width={120}
-                     render={(_, row) => {
-                        return row.createdLastName?.substring(0, 1) + '.' + row.createdFirstName;
-                     }}
-                  />
-                  <NewColumn
-                     title="Үйлдэл"
-                     width={230}
-                     render={(_, row) => {
-                        return (
-                           <div className="flex flex-row justify-center gap-3">
-                              <div>
-                                 {user.userId === row.createdBy ? (
-                                    <Button onClick={() => openOrCloseModal(true, true, row)}>Засах</Button>
-                                 ) : null}
-                              </div>
-                              <Button
-                                 type="primary"
-                                 onClick={() => {
-                                    handleclick(row.services);
-                                    setIsOpenModal(false);
-                                 }}
-                              >
-                                 Aшиглах
-                              </Button>
-                           </div>
-                        );
-                     }}
-                  />
-               </NewTable>
+               </div>
             </div>
-         </NewModal>
-         <NewModal
+         </Modal>
+         <Modal
             title={editMode ? 'Сэт-Ордер засах' : 'Сэт-Ордер нэмэх'}
             open={isOpenAddModal}
             onCancel={() => openOrCloseModal(false, false)}
@@ -348,7 +391,7 @@ function SetOrder({ handleclick }) {
                   }}
                </Form.List>
             </Form>
-         </NewModal>
+         </Modal>
       </>
    );
 }

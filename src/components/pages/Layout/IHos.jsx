@@ -1,4 +1,4 @@
-import { Menu } from 'antd';
+import { Button, Menu } from 'antd';
 import React, { Fragment, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
@@ -7,9 +7,11 @@ import { selectCurrentRoleId, selectCurrentUserId } from '../../../features/auth
 //
 import PermissionServices from '../../../services/organization/permission';
 import FullScreenLoader from '../../FullScreenLoader';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 const IHos = () => {
    const [userMenu, setMenus] = useState([]);
+   const [collapsed, setCollapsed] = useState(true);
    const UserId = useSelector(selectCurrentUserId);
    const RoleId = useSelector(selectCurrentRoleId);
    const getMenus = async () => {
@@ -100,20 +102,28 @@ const IHos = () => {
          style={{
             display: 'flex',
             flexDirection: 'row',
-            gap: 12
+            gap: 8
          }}
       >
-         <div className="ihospital-menu">
+         <div
+            className="ihospital-menu"
+            style={{
+               minWidth: collapsed ? 'auto' : 230
+            }}
+         >
+            <Button title={collapsed ? 'Нээх' : 'Хаах'} type="primary" onClick={() => setCollapsed(!collapsed)}>
+               {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            </Button>
             <div className="menu-body">
-               <Menu theme="light" mode="inline" items={userMenu} inlineIndent={10} />
+               <Menu theme="light" mode="inline" inlineCollapsed={collapsed} items={userMenu} />
             </div>
          </div>
          <div
             style={{
-               padding: 24,
+               padding: 12,
                backgroundColor: '#eff4fa',
-               width: 'calc(100% - 277px)',
                height: '100vh',
+               width: '100%',
                overflow: 'auto'
             }}
          >

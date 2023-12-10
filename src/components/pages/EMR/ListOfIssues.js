@@ -7,9 +7,7 @@ import { selectCurrentEmrData } from '../../../features/emrReducer';
 function ListOfIssues() {
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const [data, setData] = useState([]);
-   const [isLoading, setIsLoading] = useState(false);
    const getProblems = async (patientId) => {
-      setIsLoading(true);
       await PatientDiagnoseSerivce.getByPageFilter({
          params: {
             patientId: patientId
@@ -25,80 +23,17 @@ function ListOfIssues() {
             };
          });
          setData(data);
-         console.log(data);
-         setIsLoading(false);
       });
    };
    useEffect(() => {
-      getProblems();
-      // getProblems(incomeEmrData.patientId);
+      getProblems(incomeEmrData.patientId);
    }, []);
    return (
-      <>
-         <div className="list-of-issues">
-            {data.map((diagnose, index) => {
-               return <Diagnose key={index} diagnose={diagnose} index={index} />;
-            })}
-         </div>
-         {/* <NewCard title="Асуудлын жагсаалт">
-            <NewTable
-               prop={{
-                  rowKey: 'id',
-                  bordered: true,
-                  dataSource: data,
-                  scroll: {
-                     y: 100,
-                     x: 400
-                  }
-               }}
-               meta={{
-                  page: 1,
-                  limit: data?.length
-               }}
-               isLoading={isLoading}
-               isPagination={false}
-            >
-               <NewColumn
-                  dataIndex={'cabinetName'}
-                  title={'Кабинет'}
-                  render={(text) => {
-                     return (
-                        <span
-                           style={{
-                              whiteSpace: 'pre-wrap'
-                           }}
-                        >
-                           {text}
-                        </span>
-                     );
-                  }}
-               />
-               <NewColumn
-                  dataIndex={'doctor'}
-                  title={'Эмч'}
-                  render={(text) => {
-                     return (
-                        <span
-                           style={{
-                              whiteSpace: 'pre-wrap'
-                           }}
-                        >
-                           {text}
-                        </span>
-                     );
-                  }}
-               />
-               <NewColumn dataIndex={['diagnose', 'code']} title={'Онош'} />
-               <NewColumn
-                  dataIndex={'inspectionDate'}
-                  title={'Огноо'}
-                  render={(text) => {
-                     return newMoment(text);
-                  }}
-               />
-            </NewTable>
-         </NewCard> */}
-      </>
+      <div className="list-of-issues">
+         {data.map((diagnose, index) => {
+            return <Diagnose key={index} diagnose={diagnose} index={index} />;
+         })}
+      </div>
    );
 }
 export default ListOfIssues;

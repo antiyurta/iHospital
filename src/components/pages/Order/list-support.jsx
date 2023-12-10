@@ -1,8 +1,8 @@
-import { Button, ConfigProvider, Empty, Input, Table } from 'antd';
+import { Button, ConfigProvider, Empty, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
 import React from 'react';
 import { localMn, numberToCurrency } from '../../comman';
-import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { CARE_TYPE } from './care-enum';
 import { useState } from 'react';
 import examinationApi from '../../../services/service/examination.api';
@@ -10,6 +10,9 @@ import { useEffect } from 'react';
 import xrayApi from '../../../services/service/xray.api';
 import treatmentApi from '../../../services/service/treatment.api';
 import surgeryApi from '../../../services/service/surgery.api';
+
+import addButtonIcon from './addButton.svg';
+
 /** Захиалгын тусламж үйлчилгээний  */
 export const ListSupport = ({ careType, careTypeId, add }) => {
    const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +81,6 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
          <ConfigProvider locale={localMn()}>
             <Table
                rowKey={'id'}
-               bordered
                scroll={{
                   y: 400
                }}
@@ -86,19 +88,19 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
                locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                columns={[
                   {
+                     title: '№',
+                     width: 50,
+                     className: 'font-bold',
+                     render: (_text, _row, index) => {
+                        return supMeta.page * supMeta.limit - (supMeta.limit - index - 1);
+                     }
+                  },
+                  {
                      title: 'Нэр',
                      dataIndex: 'name',
+                     align: 'left',
                      render: (text) => {
-                        return (
-                           <p
-                              style={{
-                                 whiteSpace: 'normal',
-                                 color: 'black'
-                              }}
-                           >
-                              {text}
-                           </p>
-                        );
+                        return <p className="whitespace-pre-wrap text-black">{text}</p>;
                      }
                   },
                   {
@@ -114,16 +116,9 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
                      width: 40,
                      render: (_text, row) => {
                         return (
-                           <Button
-                              onClick={() => add(row)}
-                              icon={
-                                 <PlusCircleOutlined
-                                    style={{
-                                       color: 'green'
-                                    }}
-                                 />
-                              }
-                           />
+                           <div onClick={() => add(row)} className="flex justify-center hover:cursor-pointer">
+                              <img src={addButtonIcon} />
+                           </div>
                         );
                      }
                   }
