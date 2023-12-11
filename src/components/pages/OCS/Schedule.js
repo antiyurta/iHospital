@@ -66,7 +66,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
             noTime.push(invoice);
          } else {
             if (invoice.type === 2 && invoice.treatmentRequest?.slotId === null && invoice.treatment?.isSlot) {
-               time.push(payment);
+               time.push(invoice);
             } else if (
                invoice.type === 1 &&
                invoice.xrayRequest?.slotId === null &&
