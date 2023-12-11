@@ -24,11 +24,7 @@ const LandingLayout = () => {
    return (
       <div className="bg-[#F7F9FF]">
          <Header />
-         <Fragment>
-            <Suspense fallback={<FullScreenLoader full={true} />}>
-               <Outlet />
-            </Suspense>
-         </Fragment>
+         <Outlet />
          <Footer />
       </div>
    );

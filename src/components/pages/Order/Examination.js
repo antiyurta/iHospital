@@ -3,6 +3,9 @@ import { Button, Empty, Modal, Table } from 'antd';
 import React, { useState } from 'react';
 import { numberToCurrency, openNofi } from '../../comman';
 
+import examIcon from './NewOrder/examIcon.svg';
+import removeButtonIcon from './removeButton.svg';
+
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
@@ -13,7 +16,7 @@ export const Examination = ({ handleclick }) => {
    const [selectedExaminations, setSelectedExaminations] = useState([]);
 
    const add = (examination) => {
-      const state = selectedExaminations.includes(examination);
+      const state = selectedExaminations.some((exam) => exam.id === examination.id);
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
@@ -29,21 +32,22 @@ export const Examination = ({ handleclick }) => {
    };
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedExaminations([]);
             }}
          >
+            <img src={examIcon} />
             Шинжилгээ
-         </Button>
+         </button>
          <Modal
             title="Шинжилгээ сонгох"
             width={'80%'}
             open={isOpenModal}
             bodyStyle={{
-               height: 600,
+               height: 552,
                maxHeight: 600,
                overflow: 'auto'
             }}
@@ -55,26 +59,24 @@ export const Examination = ({ handleclick }) => {
             okText={'Хадгалах'}
             cancelText={'Болих'}
          >
-            <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-2">
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div
-                     className="p-3"
+                     className="p-2"
                      style={{
                         height: 552,
                         overflow: 'auto'
                      }}
                   >
-                     <div className="flex flex-col gap-2">
-                        <ListCareType type={CARE_TYPE.Examination} getTypeById={setSelectedTypeId} />
-                     </div>
+                     <ListCareType type={CARE_TYPE.Examination} getTypeById={setSelectedTypeId} />
                   </div>
                </div>
-               <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-3">
+               <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-2">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <ListSupport careType={CARE_TYPE.Examination} careTypeId={selectedTypeId} add={add} />
                   </div>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <div className="p-3">
+                     <div className="p-2">
                         <Table
                            rowKey={'id'}
                            bordered
@@ -86,17 +88,9 @@ export const Examination = ({ handleclick }) => {
                               {
                                  title: 'Нэр',
                                  dataIndex: 'name',
+                                 align: 'left',
                                  render: (text) => {
-                                    return (
-                                       <p
-                                          style={{
-                                             whiteSpace: 'normal',
-                                             color: 'black'
-                                          }}
-                                       >
-                                          {text}
-                                       </p>
-                                    );
+                                    return <p className="whitespace-pre-wrap text-black">{text}</p>;
                                  }
                               },
                               {
@@ -112,16 +106,12 @@ export const Examination = ({ handleclick }) => {
                                  width: 40,
                                  render: (_text, _row, index) => {
                                     return (
-                                       <Button
+                                       <div
+                                          className="flex justify-center hover:cursor-pointer"
                                           onClick={() => remove(index)}
-                                          icon={
-                                             <CloseCircleOutlined
-                                                style={{
-                                                   color: 'red'
-                                                }}
-                                             />
-                                          }
-                                       />
+                                       >
+                                          <img src={removeButtonIcon} />
+                                       </div>
                                     );
                                  }
                               }

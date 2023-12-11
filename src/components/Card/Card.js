@@ -9,6 +9,7 @@ function NewCard(props) {
          className="header-solid max-h-max rounded-md"
          {...props}
          bodyStyle={{
+            ...props.bodyStyle,
             paddingTop: 0,
             paddingLeft: 10,
             paddingRight: 10,

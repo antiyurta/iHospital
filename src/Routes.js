@@ -1,7 +1,8 @@
 import React from 'react';
 //
 const Home = React.lazy(() => import('./components/Home'));
-const Privacy = React.lazy(() => import('./privacy/Index'));
+// const Privacy = React.lazy(() => import('./privacy/Index'));
+import Privacy from './privacy/Index';
 //
 const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 

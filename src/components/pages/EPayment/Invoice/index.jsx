@@ -298,14 +298,10 @@ function Invoice() {
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                   <div className="p-3">
                      <div className="grid sm:grid-cols-1 xl:grid-cols-2 gap-3">
-                        <Button className="bg-[#4a7fc1]" type="primary" onClick={() => setOrderModal(true)}>
+                        <Button type="primary" onClick={() => setOrderModal(true)}>
                            Оношилгоо шинжилгээ захиалах
                         </Button>
-                        <Button
-                           className="bg-[#4a7fc1]"
-                           type="primary"
-                           onClick={() => setIsOpenBeforePaymentModal(true)}
-                        >
+                        <Button type="primary" onClick={() => setIsOpenBeforePaymentModal(true)}>
                            Урьдчилгаа төлбөр
                         </Button>
                      </div>

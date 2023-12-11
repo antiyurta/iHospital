@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Form, Popconfirm, Spin } from 'antd';
+import { Button, Form, Input, Popconfirm, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { openNofi } from '../../../comman';
 import { ReturnAll } from './Index';
@@ -16,11 +16,14 @@ import * as XrayDocumentIndex from '../../Xray/Document/Index';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalId } from '../../../../features/authReducer';
 
+import NewIndex from '../../FormBuilder/newFBuilder/index';
+
 function DocumentUpload({ type }) {
    // Form = 'FORM', // 611 Маягт
    // Xray = 'XRAY', // ЭХО, Оншилгоо
    const hospitalId = useSelector(selectCurrentHospitalId);
    const [form] = Form.useForm();
+   const [newForm] = Form.useForm();
    const documents = ReturnAll();
    const XrayDocuments = XrayDocumentIndex.ReturnAll(hospitalId);
    const [selectedId, setSelectedId] = useState(Number);
@@ -40,7 +43,6 @@ function DocumentUpload({ type }) {
       setIsOpenEditModal(true);
    };
    const HandleChangeTest = (panelName, optionName, name) => {
-      console.log(panelName, optionName, name);
       const formData = form.getFieldsValue();
       const type = form.getFieldValue([panelName, optionName, 'options', name, 'type']);
       if (type === 'radio' || type === 'checkbox' || type === 'dropdown' || type === 'table') {
@@ -220,6 +222,7 @@ function DocumentUpload({ type }) {
             onOk={() =>
                form.validateFields().then((values) => {
                   onFinish(values);
+                  console.log(values);
                })
             }
             width="70%"
@@ -312,9 +315,15 @@ function DocumentUpload({ type }) {
                      <NewSwitch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                   </Form.Item>
                </div>
-               <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
-                  <Index4 form={form} titlePanel={'documentForm'} handleChange={HandleChangeTest} />
+               <div className="rounded-md">
+                  <Form.Item name="documentForm">
+                     <Input />
+                  </Form.Item>
+                  <NewIndex form={form} data={form.getFieldValue('documentForm')} />
                </div>
+               {/* <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
+                  <Index4 form={form} titlePanel={'documentForm'} handleChange={HandleChangeTest} />
+               </div> */}
             </Form>
          </NewModal>
       </>

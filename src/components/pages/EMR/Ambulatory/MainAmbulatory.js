@@ -58,5 +58,5 @@ export default function MainAmbulatory({ patientId, appointments }) {
       //   // children: <ProgressNotes />,
       // },
    ];
-   return <Tabs type="card" size="small" items={items} />;
+   return <Tabs size="small" items={items} />;
 }
