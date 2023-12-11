@@ -2,17 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (_env, argv) => {
    const isDevelopment = argv.mode !== 'production';
    return {
       mode: isDevelopment,
-      devtool: isDevelopment ? 'eval' : 'source-map',
+      // devtool: isDevelopment ? 'eval' : 'source-map',
       context: __dirname,
       entry: './src/index.js',
       output: {
@@ -64,21 +63,8 @@ module.exports = (_env, argv) => {
          ]
       },
       optimization: {
-         runtimeChunk: 'single',
-         splitChunks: {
-            cacheGroups: {
-               reactVender: {
-                  test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
-                  name: 'vendor-react',
-                  chunks: 'all'
-               },
-               corejsVendor: {
-                  test: /[\\/]node_modules[\\/](core-js)[\\/]/,
-                  name: 'vendor-corejs',
-                  chunks: 'all'
-               }
-            }
-         }
+         minimize: true,
+         minimizer: [new TerserPlugin()]
       },
       plugins: [
          new ReactRefreshPlugin({
