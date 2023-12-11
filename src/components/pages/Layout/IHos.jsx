@@ -11,7 +11,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 const IHos = () => {
    const [userMenu, setMenus] = useState([]);
-   const [collapsed, setCollapsed] = useState(true);
+   const [collapsed, setCollapsed] = useState(false);
    const UserId = useSelector(selectCurrentUserId);
    const RoleId = useSelector(selectCurrentRoleId);
    const getMenus = async () => {

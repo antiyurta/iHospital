@@ -23,8 +23,16 @@ import ServiceService from '../../../../services/service/service';
 import moment from 'moment';
 
 const InternalOrder = (props) => {
-   const { isPackage, usageType, selectedPatient, categories, IncomeAppointmentId, IncomePatientId, IncomeCabinetId } =
-      props;
+   const {
+      isPackage,
+      usageType,
+      selectedPatient,
+      categories,
+      IncomeAppointmentId,
+      IncomePatientId,
+      IncomeCabinetId,
+      save
+   } = props;
    const [total, setTotal] = useState(0);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();

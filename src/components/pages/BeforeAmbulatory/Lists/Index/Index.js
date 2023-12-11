@@ -4,31 +4,14 @@ import {
    CloseOutlined,
    EditOutlined,
    ExclamationOutlined,
-   InfoCircleOutlined,
    MinusOutlined,
    PlusCircleOutlined,
    PlusOutlined
 } from '@ant-design/icons';
-import {
-   Alert,
-   Avatar,
-   Badge,
-   Button,
-   Card,
-   ConfigProvider,
-   DatePicker,
-   Empty,
-   Form,
-   Input,
-   Modal,
-   Select,
-   Table,
-   message
-} from 'antd';
-import locale from 'antd/es/locale/mn_MN';
+import { Alert, Avatar, Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import 'moment/locale/mn';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentDepId, selectCurrentUserId } from '../../../../../features/authReducer';
@@ -43,14 +26,15 @@ import jwtInterceopter from '../../../../jwtInterceopter';
 import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
 import { setPatient } from '../../../../../features/patientReducer';
 //
-import Pagination from './pagination';
 import Finger from '../../../../../features/finger';
 import AppointmentService from '../../../../../services/appointment/api-appointment-service';
 import healthInsuranceService from '../../../../../services/healt-insurance/healtInsurance';
 import apiInsuranceService from '../../../../../services/healt-insurance/insurance';
 import ScheduleService from '../../../../../services/schedule';
+import ServiceService from '../../../../../services/service/service';
 import { NewInput } from '../../../../Input/Input';
-const { RangePicker } = DatePicker;
+import ScheduleTypeInfo from './scheduleTypeInfo';
+import ListFilter from './listFilter';
 const { TextArea } = Input;
 
 function Index({ type, isDoctor }) {
@@ -58,24 +42,18 @@ function Index({ type, isDoctor }) {
    //1 bol urdcilsan sergiileh
    //2 bol hewten
    //3 bol mes zasal
-   const today = new Date();
    const [editFormDesc] = Form.useForm();
    const [startFormHics] = Form.useForm();
    const employeeId = useSelector(selectCurrentUserId);
    const depIds = useSelector(selectCurrentDepId);
    const navigate = useNavigate();
    const dispatch = useDispatch();
-   const [currentPage, setCurrentPage] = useState(1);
-   const [currentLimit, setCurrentLimit] = useState(10);
    const [appointments, setAppointments] = useState([]);
    const [meta, setMeta] = useState({
-      page: currentPage,
-      limit: currentLimit
+      page: 1,
+      limit: 10
    });
    const [spinner, setSpinner] = useState(false);
-   const [start, setStart] = useState(new Date().toString());
-   const [end, setEnd] = useState(new Date().toString());
-   const [rangePickerValue, setRangePickerValue] = useState([]);
    const [isOpenEditForm, setIsOpenEditForm] = useState(false); // uzleg zasah ued
    const [isOpenEditFormDesc, setIsOpenEditFormDesc] = useState(false); // uzleg zasagdhin omnoh desc
    const [formStyle, setFormStyle] = useState({});
@@ -89,17 +67,13 @@ function Index({ type, isDoctor }) {
    const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
    const [hicsSupports, setHicsSupports] = useState([]);
    //
-   const getAppointment = async (start, end, process) => {
+   const getAppointment = async (page, limit, start, end, process) => {
       setSpinner(true);
-      start = dayjs(start).set({ hour: 0, minute: 0, second: 0 });
-      end = dayjs(end).set({ hour: 23, minute: 59, second: 59 });
-      setStart(start);
-      setEnd(end);
       if (type === 0) {
          await AppointmentService.getByPageFilter({
             params: {
-               page: currentPage,
-               limit: currentLimit,
+               page: page,
+               limit: limit,
                doctorId: isDoctor ? employeeId : null,
                startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
                endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
@@ -116,8 +90,8 @@ function Index({ type, isDoctor }) {
       } else if (type === 1) {
          await AppointmentService.getPreOrder({
             params: {
-               page: currentPage,
-               limit: currentLimit,
+               page: page,
+               limit: limit,
                startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
                endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
             }
@@ -135,21 +109,27 @@ function Index({ type, isDoctor }) {
                setSpinner(false);
             });
       } else if (type === 2) {
-         // conf.params.doctorId = null;
-         // conf.params.depIds = depIds?.toString();
-         // conf.params.process = process ? process.toString() : 0;
-         // response = await Get(`service/inpatient-request`, token, conf);
-         // conf.params.process = null;
-         // setUsageType('IN');
+         await ServiceService.getInpatientRequest({
+            params: {
+               page: page,
+               limit: limit,
+               depIds: depIds?.toString(),
+               process: process ? process.toString() : 0,
+               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+            }
+         })
+            .then(({ data: { response } }) => {
+               setAppointments(response.data);
+               setMeta(response.meta);
+            })
+            .finally(() => {
+               setUsageType('IN');
+               setSpinner(false);
+            });
       } else if (type === 3) {
          // response = await Get(`tasks`, token, conf);
       }
-      // setAppointments(response.data);
-      // setMeta(response.meta);
-      // config.params.employeeId = null;
-      // config.params.page = null;
-      // config.params.limit = null;
-      // setSpinner(false);
    };
    const getEMR = async (row) => {
       // status heregteii anhan dawtan
@@ -1024,112 +1004,41 @@ function Index({ type, isDoctor }) {
       }
    };
 
-   useEffect(() => {
-      getAppointment(start, end, selectedTags);
-   }, [currentPage, currentLimit]);
-
    return (
       <>
          <div className="flex flex-wrap gap-4">
-            <div className="ambo-list">
-               <Badge count={<InfoCircleOutlined />} />
-               <p>Тайлбар: Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-               <Badge count="Яаралтай" />
-               <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, </p>
-               <Badge color="#F09833" count="Шууд" />
-               <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, </p>
-               <Badge color="#22A06B" count="Урьдчилсан захиалга" />
-               <p>
-                  It has survived not only five centuries, but also the leap into electronic typesetting, remaining
-                  essentially unchanged.
-               </p>
-            </div>
-            <div className="ambo-list-filter">
-               <div className="left">
-                  <button
-                     onClick={() => {
-                        setRangePickerValue([]);
-                        getAppointment(today, today, selectedTags);
-                     }}
-                  >
-                     Өнөөдөр
-                  </button>
-                  <button
-                     onClick={() => {
-                        const last = new Date();
-                        last.setDate(last.getDate() - 7);
-                        setRangePickerValue([]);
-                        getAppointment(last, today, selectedTags);
-                     }}
-                  >
-                     Долоо хоног
-                  </button>
-                  <button
-                     onClick={() => {
-                        const last = new Date();
-                        last.setMonth(last.getMonth() - 1);
-                        setRangePickerValue([]);
-                        getAppointment(last, today, selectedTags);
-                     }}
-                  >
-                     Сар
-                  </button>
-                  <ConfigProvider locale={locale}>
-                     <RangePicker
-                        style={{
-                           width: 250
-                        }}
-                        onChange={(e) => {
-                           if (e != null) {
-                              setRangePickerValue(e);
-                              getAppointment(e[0], e[1], selectedTags);
-                           } else {
-                              setRangePickerValue([]);
-                           }
-                        }}
-                        value={rangePickerValue}
-                     />
-                  </ConfigProvider>
-               </div>
-               <div className="right">
-                  <Input placeholder="Хайх" />
-                  <Pagination
-                     meta={meta}
-                     page={meta.page}
-                     setPage={(page) => {
-                        setCurrentPage(page);
-                     }}
-                     displayTotal={appointments?.length}
-                     limit={meta?.limit}
-                     setLimit={(limit) => {
-                        setCurrentLimit(Number(limit));
-                     }}
-                  />
-               </div>
-            </div>
+            <ScheduleTypeInfo />
+            <ListFilter
+               meta={meta}
+               appointmentsLength={appointments?.length || 0}
+               selectedTags={selectedTags}
+               getList={getAppointment}
+            />
             <div className="w-full">
-               <Card bordered={false} className="header-solid max-h-max rounded-md">
-                  <div className="flex flex-wrap">
-                     <div className="w-full py-2">
-                        <Table
-                           rowKey={'id'}
-                           rowClassName="hover: cursor-pointer"
-                           locale={{
-                              emptyText: <Empty description={'Хоосон'} />
-                           }}
-                           loading={{
-                              spinning: spinner,
-                              tip: 'Уншиж байна....'
-                           }}
-                           columns={CurrentColumn()}
-                           dataSource={appointments}
-                           scroll={{
-                              x: 1000
-                           }}
-                           pagination={false}
-                        />
-                     </div>
-                  </div>
+               <Card
+                  bordered={false}
+                  className="header-solid max-h-max rounded-md"
+                  bodyStyle={{
+                     padding: 8
+                  }}
+               >
+                  <Table
+                     rowKey={'id'}
+                     rowClassName="hover: cursor-pointer"
+                     locale={{
+                        emptyText: <Empty description={'Хоосон'} />
+                     }}
+                     loading={{
+                        spinning: spinner,
+                        tip: 'Уншиж байна....'
+                     }}
+                     columns={CurrentColumn()}
+                     dataSource={appointments}
+                     scroll={{
+                        x: 1000
+                     }}
+                     pagination={false}
+                  />
                </Card>
             </div>
          </div>

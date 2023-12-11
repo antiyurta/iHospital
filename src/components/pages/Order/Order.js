@@ -17,6 +17,7 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
          IncomeAppointmentId={IncomeAppointmentId}
          IncomePatientId={IncomePatientId}
          IncomeCabinetId={IncomeCabinetId}
+         save={save}
       />,
       <PartnerOrder />
    ];

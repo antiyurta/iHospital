@@ -178,8 +178,8 @@ const NewFormRender = (props) => {
    }, [indexes]);
 
    useEffect(() => {
-      const firstIndexes = form.documentForm
-         .map((item) => {
+      const firstIndexes = form?.documentForm
+         ?.map((item) => {
             if (item.parentIndex === null) {
                return item.index;
             }
@@ -188,6 +188,6 @@ const NewFormRender = (props) => {
       setIndexes(firstIndexes);
    }, [form]);
 
-   return tree.map(renderHTML);
+   return tree?.map(renderHTML);
 };
 export default NewFormRender;
