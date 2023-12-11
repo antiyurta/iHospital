@@ -8,7 +8,7 @@ import { NewInput, NewOption, NewSearch, NewSelect, NewTextArea } from '../../In
 import RecentRecipeService from '../../../services/service/prescription';
 import DiagnoseService from '../../../services/reference/diagnose';
 import { NewColumn, NewTable } from '../../Table/Table';
-import { CloseOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { CloseOutlined, PlusCircleFilled, RedoOutlined } from '@ant-design/icons';
 import OrderForm from './OrderTable/OrderForm';
 
 function RecentRecipe() {
@@ -126,14 +126,15 @@ function RecentRecipe() {
    }, [isOpenModal]);
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="green-order"
             onClick={() => {
                setIsOpenModal(true);
             }}
          >
+            <RedoOutlined />
             Өмнөх жор
-         </Button>
+         </button>
          <NewModal title="Өмнөх жор" open={isOpenModal} onCancel={() => setIsOpenModal(false)}>
             <Form form={form} layout="vertical">
                <div className="flex flex-col gap-3">

@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
@@ -18,7 +17,8 @@ module.exports = (_env, argv) => {
       output: {
          filename: '[name].js',
          chunkFilename: '[name].bundle.js',
-         path: path.resolve(__dirname, './build')
+         path: path.resolve(__dirname, '..', 'dist'),
+         publicPath: '/'
       },
       devServer: {
          compress: true,
@@ -57,9 +57,8 @@ module.exports = (_env, argv) => {
                use: ['style-loader', 'css-loader', 'less-loader']
             },
             {
-               test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|mp3)(\?[a-z0-9=.]+)?$/,
-               loader: 'url-loader',
-               options: { limit: 100000, esModule: false }
+               test: /\.(jpg|jpeg|png|svg|gif)$/,
+               type: 'asset/resource'
             }
          ]
       },

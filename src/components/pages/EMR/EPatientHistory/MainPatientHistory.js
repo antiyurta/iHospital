@@ -12,6 +12,7 @@ import jwtInterceopter from '../../../jwtInterceopter';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import { useLocation } from 'react-router-dom';
 import FormRender from '../../BeforeAmbulatory/Customized/FormRender';
+import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import { Patch } from '../../../comman';
 //
 function MainPatientHistory({
@@ -80,16 +81,17 @@ function MainPatientHistory({
             }
          }
       };
-      await jwtInterceopter
-         .post(data.url, body)
-         .then((response) => {
-            console.log(response);
-         })
-         .then(() => {
-            jwtInterceopter.patch('service/xrayRequest/' + XrayRequestId, {
-               xrayProcess: 2
-            });
-         });
+      console.log(body);
+      // await jwtInterceopter
+      //    .post(data.url, body)
+      //    .then((response) => {
+      //       console.log(response);
+      //    })
+      //    .then(() => {
+      //       jwtInterceopter.patch('service/xrayRequest/' + XrayRequestId, {
+      //          xrayProcess: 2
+      //       });
+      //    });
    };
    const XrayDocumentShow = (props) => (
       <Form form={xrayForm} layout="vertical" onFinish={(values) => onFinishXray(values, props)}>
@@ -102,7 +104,8 @@ function MainPatientHistory({
                height: 500
             }}
          >
-            <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
+            <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
+            {/* <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} /> */}
             <Form.Item
                style={{
                   textAlign: 'right'
@@ -327,8 +330,15 @@ function MainPatientHistory({
    return (
       <>
          {UsageType === 'OUT' && (
-            <Spin spinning={loading} tip="Уншиж байна ...">
-               <Tabs type="card" destroyInactiveTabPane defaultActiveKey={activeKey} items={items} />
+            <Spin wrapperClassName="h-full" spinning={loading} tip="Уншиж байна ...">
+               <Tabs
+                  style={{
+                     height: '100%'
+                  }}
+                  destroyInactiveTabPane
+                  defaultActiveKey={activeKey}
+                  items={items}
+               />
             </Spin>
          )}
          {UsageType === 'IN' && (

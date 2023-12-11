@@ -6,32 +6,17 @@ import {
    ExclamationOutlined,
    MinusOutlined,
    PlusCircleOutlined,
-   PlusOutlined,
-   ReloadOutlined
+   PlusOutlined
 } from '@ant-design/icons';
-import {
-   Alert,
-   Button,
-   Card,
-   ConfigProvider,
-   DatePicker,
-   Empty,
-   Form,
-   Input,
-   Modal,
-   Select,
-   Table,
-   Tag,
-   message
-} from 'antd';
-import mnMN from 'antd/es/calendar/locale/mn_MN';
-import moment from 'moment';
-import { useEffect, useRef, useState } from 'react';
+import { Alert, Avatar, Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
+import 'moment/locale/mn';
+import dayjs from 'dayjs';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectCurrentDepId, selectCurrentToken, selectCurrentUserId } from '../../../../../features/authReducer';
+import { selectCurrentDepId, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import { Get, inspectionTOJSON, localMn, localMnC, openNofi, Patch, ScrollRef } from '../../../../comman';
+import { formatNameForDoc, getAge, getGender, inspectionTOJSON, openNofi } from '../../../../comman';
 import orderType from './orderType.json';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 import MonitorCriteria from '../../../Insurance/MonitorCriteria';
@@ -46,35 +31,29 @@ import AppointmentService from '../../../../../services/appointment/api-appointm
 import healthInsuranceService from '../../../../../services/healt-insurance/healtInsurance';
 import apiInsuranceService from '../../../../../services/healt-insurance/insurance';
 import ScheduleService from '../../../../../services/schedule';
+import ServiceService from '../../../../../services/service/service';
 import { NewInput } from '../../../../Input/Input';
-const { RangePicker } = DatePicker;
+import ScheduleTypeInfo from './scheduleTypeInfo';
+import ListFilter from './listFilter';
 const { TextArea } = Input;
-const { CheckableTag } = Tag;
-const { OptGroup, Option } = Select;
 
 function Index({ type, isDoctor }) {
    //type 0 bol ambultor
    //1 bol urdcilsan sergiileh
    //2 bol hewten
    //3 bol mes zasal
-   const scrollRef = useRef();
-   const today = new Date();
    const [editFormDesc] = Form.useForm();
    const [startFormHics] = Form.useForm();
-   const token = useSelector(selectCurrentToken);
    const employeeId = useSelector(selectCurrentUserId);
    const depIds = useSelector(selectCurrentDepId);
    const navigate = useNavigate();
    const dispatch = useDispatch();
-   const config = {
-      headers: {},
-      params: {}
-   };
    const [appointments, setAppointments] = useState([]);
-   const [meta, setMeta] = useState({});
+   const [meta, setMeta] = useState({
+      page: 1,
+      limit: 10
+   });
    const [spinner, setSpinner] = useState(false);
-   const [start, setStart] = useState('');
-   const [end, setEnd] = useState('');
    const [isOpenEditForm, setIsOpenEditForm] = useState(false); // uzleg zasah ued
    const [isOpenEditFormDesc, setIsOpenEditFormDesc] = useState(false); // uzleg zasagdhin omnoh desc
    const [formStyle, setFormStyle] = useState({});
@@ -88,46 +67,69 @@ function Index({ type, isDoctor }) {
    const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
    const [hicsSupports, setHicsSupports] = useState([]);
    //
-   const getAppointment = async (page, pageSize, start, end, process) => {
+   const getAppointment = async (page, limit, start, end, process) => {
       setSpinner(true);
-      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
-      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
-      const conf = {
-         headers: {},
-         params: {
-            doctorId: isDoctor ? employeeId : null,
-            process: process ? process : null,
-            page: page,
-            limit: pageSize,
-            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
-            endDate: moment(end).format('YYYY-MM-DD HH:mm')
-         }
-      };
-      setStart(start);
-      setEnd(end);
-      var response = [];
       if (type === 0) {
-         response = await Get('appointment', token, conf);
-         setUsageType('OUT');
+         await AppointmentService.getByPageFilter({
+            params: {
+               page: page,
+               limit: limit,
+               doctorId: isDoctor ? employeeId : null,
+               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+            }
+         })
+            .then(({ data: { response } }) => {
+               setAppointments(response.data);
+               setMeta(response.meta);
+            })
+            .finally(() => {
+               setSpinner(false);
+               setUsageType('OUT');
+            });
       } else if (type === 1) {
-         conf.params.doctorId = null;
-         response = await Get('appointment/pre-order', token, conf);
+         await AppointmentService.getPreOrder({
+            params: {
+               page: page,
+               limit: limit,
+               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+            }
+         })
+            .then(({ data: { response } }) => {
+               setAppointments(response.data);
+               setMeta(response.meta);
+            })
+            .catch((error) => {
+               if (error.response.status === 400) {
+                  openNofi('error', 'Алдаа', 'Админаар орсон байна');
+               }
+            })
+            .finally(() => {
+               setSpinner(false);
+            });
       } else if (type === 2) {
-         conf.params.doctorId = null;
-         conf.params.depIds = depIds?.toString();
-         conf.params.process = process ? process.toString() : 0;
-         response = await Get(`service/inpatient-request`, token, conf);
-         conf.params.process = null;
-         setUsageType('IN');
+         await ServiceService.getInpatientRequest({
+            params: {
+               page: page,
+               limit: limit,
+               depIds: depIds?.toString(),
+               process: process ? process.toString() : 0,
+               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+            }
+         })
+            .then(({ data: { response } }) => {
+               setAppointments(response.data);
+               setMeta(response.meta);
+            })
+            .finally(() => {
+               setUsageType('IN');
+               setSpinner(false);
+            });
       } else if (type === 3) {
-         response = await Get(`tasks`, token, conf);
+         // response = await Get(`tasks`, token, conf);
       }
-      setAppointments(response.data);
-      setMeta(response.meta);
-      config.params.employeeId = null;
-      config.params.page = null;
-      config.params.limit = null;
-      setSpinner(false);
    };
    const getEMR = async (row) => {
       // status heregteii anhan dawtan
@@ -191,7 +193,8 @@ function Index({ type, isDoctor }) {
          patientId: row.patientId,
          inspection: inspectionType === undefined ? 1 : inspectionType,
          type: row.type,
-         hicsSeal: row.hicsSeal
+         hicsSeal: row.hicsSeal,
+         startDate: row.startDate
       };
       if (type === 0) {
          data['usageType'] = 'OUT';
@@ -209,12 +212,15 @@ function Index({ type, isDoctor }) {
          data['departmentId'] = row.inDepartmentId;
       }
       // uzleg ehleh tsag
-      AppointmentService.patchAppointment(row.id, {
-         startDate: new Date()
-      });
+      if (row.startDate === null) {
+         data['startDate'] = new Date();
+         AppointmentService.patchAppointment(row.id, {
+            startDate: new Date()
+         });
+      }
       // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
-      if (type != 1) {
-         ScheduleService.patchSlot(row.slots?.id, {
+      if (type != 1 && row.slot.id) {
+         ScheduleService.patchSlot(row.slot.id, {
             incomeDate: new Date(),
             slotStatus: 1
          });
@@ -226,7 +232,7 @@ function Index({ type, isDoctor }) {
          })
       );
       dispatch(setEmrData(data));
-      navigate(`/emr`, {
+      navigate('/main/emr', {
          state: data
       });
       dispatch(setPatient(row.patient));
@@ -333,7 +339,17 @@ function Index({ type, isDoctor }) {
       //3 urdcilsan
       //4 uridcilsan sergiileh
       if (type === 1) {
-         return <p className="bg-red-500 text-white">Яаралтай</p>;
+         return (
+            <p
+               className="bg-red-500 text-white"
+               style={{
+                  padding: '4px 8px',
+                  borderRadius: 15
+               }}
+            >
+               Яаралтай
+            </p>
+         );
       } else if (type === 2) {
          return 'sadasd';
       } else if (type === 3) {
@@ -341,14 +357,30 @@ function Index({ type, isDoctor }) {
          const endTime = end?.split(':');
          if ((beginTime, endTime)) {
             return (
-               <p className="bg-[#5cb85c] text-white">
+               <p
+                  className="bg-[#5cb85c] text-white"
+                  style={{
+                     padding: '4px 8px',
+                     borderRadius: 15
+                  }}
+               >
                   {beginTime[0] + ':' + beginTime[1] + '-' + endTime[0] + ':' + endTime[1]}
                </p>
             );
          }
          return;
       } else {
-         return <p className="bg-[#5bc0de] text-white">Урьдчилан сэргийлэх</p>;
+         return (
+            <p
+               className="bg-[#5bc0de] text-white"
+               style={{
+                  padding: '4px 8px',
+                  borderRadius: 15
+               }}
+            >
+               Урьдчилан сэргийлэх
+            </p>
+         );
       }
    };
    const getEWSInfo = (color, totalEWS) => {
@@ -374,31 +406,6 @@ function Index({ type, isDoctor }) {
          return <p className="bg-red-500 text-white">Яаралтай</p>;
       } else {
          return <p className="bg-green-500 text-white">Төлөвлөгөөт</p>;
-      }
-   };
-   const getGenderInfo = (gender) => {
-      if (gender === 'MAN') {
-         return 'Эр';
-      } else {
-         return 'Эм';
-      }
-   };
-   const getAge = (registerNumber) => {
-      if (registerNumber != undefined) {
-         const date = new Date();
-         let year = parseInt(registerNumber.substring(2, 4));
-         let month = parseInt(registerNumber.substring(4, 6));
-         if (month > 20 && month < 33) {
-            year += 2000;
-            month -= 20;
-         } else {
-            year += 1900;
-         }
-         const currentYear = date.getFullYear();
-         const age = currentYear - year;
-         return age;
-      } else {
-         return null;
       }
    };
    const getInspectionInfo = (inspectionType) => {
@@ -452,10 +459,6 @@ function Index({ type, isDoctor }) {
          }
       }
    };
-   useEffect(() => {
-      getAppointment(1, 20, today, today, selectedTags);
-   }, [selectedTags]);
-   //
    // uzleg zasah ued uzleg er bhgu bol depId gar inspection awchrah uzleg baiwal formId gar formAwcirah
    const getInspectionFormDesc = async (inspectionNotes, patientId) => {
       // magadgu type aas hamaarch 0 element esvel bugdin
@@ -474,7 +477,6 @@ function Index({ type, isDoctor }) {
    };
    const createDescription = async (values) => {
       setIsOpenEditFormDesc(false);
-      console.log('=====>', formData);
       if (formData.formId !== undefined) {
          await jwtInterceopter.get('emr/inspection-form/' + formData.formId).then((response) => {
             setFormStyle(response.data.response);
@@ -497,20 +499,40 @@ function Index({ type, isDoctor }) {
          width: 40
       },
       {
+         title: 'Эмч',
+         dataIndex: 'employee',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
+      },
+      {
          title: 'Он сар',
-         dataIndex: ['slots', 'schedule', 'workDate'],
+         dataIndex: ['slot', 'schedule', 'workDate'],
          render: (text, row) => {
             if (text != null) {
-               return moment(text).format('YYYY-MM-DD');
+               return dayjs(text).format('YYYY-MM-DD');
             } else {
-               return moment(row.createdAt).format('YYYY-MM-DD');
+               return dayjs(row.createdAt).format('YYYY-MM-DD');
             }
          }
       },
       {
          title: 'Үзлэгийн цаг',
-         render: (_, row) => {
-            return getTypeInfo(row.type, row.slots?.startTime, row.slots?.endTime);
+         dataIndex: 'slot',
+         render: (slot, row) => {
+            return getTypeInfo(row.type, slot?.startTime, slot?.endTime);
          }
       },
       {
@@ -530,35 +552,29 @@ function Index({ type, isDoctor }) {
          }
       },
       {
-         title: 'Эмч',
-         children: [
-            {
-               title: 'Овог',
-               dataIndex: ['employee', 'lastName']
-            },
-            {
-               title: 'Нэр',
-               dataIndex: ['employee', 'firstName']
-            }
-         ]
-      },
-      {
          title: 'Үзлэг',
          render: (_, row) => {
             return getInspectionInfo(row.inspectionType);
          }
       },
       {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName']
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName']
-      },
-      {
-         title: 'Регистр №',
-         dataIndex: ['patient', 'registerNumber']
+         title: 'Овог, Нэр',
+         dataIndex: 'patient',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
       },
       {
          title: 'Нас',
@@ -573,14 +589,14 @@ function Index({ type, isDoctor }) {
          width: 40,
          dataIndex: ['patient', 'genderType'],
          render: (text) => {
-            return getGenderInfo(text);
+            return getGender(text);
          }
       },
       {
-         title: 'Захиалсан огноо',
+         title: 'Захиалгийн огноо',
          dataIndex: ['createdAt'],
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
+            return dayjs(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {
@@ -588,82 +604,85 @@ function Index({ type, isDoctor }) {
          dataIndex: 'status',
          render: (text) => {
             if (text === 1) {
-               return 'Цаг захиалсан';
+               return <div className="text-start">Цаг захиалсан</div>;
             } else if (text === 2) {
-               return 'Өдөр солисон, цаг солисон';
+               return (
+                  <div className="text-start">
+                     <p className="text-black">Өдөр солисон</p>
+                     <p className="text-black">цаг солисон</p>
+                  </div>
+               );
             } else if (text === 3) {
-               return 'Цаг цуцалсан';
+               return <div className="text-start">Цаг цуцалсан</div>;
             }
          }
       },
-      {
-         title: 'Эхэлсэн цаг',
-         dataIndex: 'startDate',
-         render: (text) => {
-            if (text) {
-               return moment(text).format('YYYY-MM-DD HH:mm');
-            }
-         }
-      },
-      {
-         title: 'Дууссан цаг',
-         dataIndex: 'endDate',
-         render: (text) => {
-            if (text) {
-               return moment(text).format('YYYY-MM-DD HH:mm');
-            }
-         }
-      },
-      {
-         title: 'Онош',
-         dataIndex: 'patientDiagnosis',
-         render: (text) => {
-            if (text?.length > 0) {
-               var string = '';
-               text.map((item) => {
-                  string += item.diagnose?.code + '|';
-               });
-               return string;
-            }
-            return;
-         }
-      },
-      {
-         title: 'Хяналт',
-         width: 60,
-         render: (_text, row) => {
-            return <MonitorCriteria props={{ serviceId: row.id, serviceType: 5 }} />;
-         }
-      },
-      {
-         title: 'Даатгал',
-         width: 60,
-         dataIndex: 'isInsurance',
-         render: (text) => {
-            return getPaymentInfo(text);
-         }
-      },
-      {
-         title: 'Төлбөр',
-         width: 60,
-         dataIndex: ['isPayment'],
-         render: (text) => {
-            return getPaymentInfo(text);
-         }
-      },
-      {
-         title: 'Үзлэг',
-         width: 60,
-         dataIndex: 'inspectionNotes',
-         render: (text) => {
-            return checkInspection(text);
-         }
-      },
+      // {
+      //    title: 'Эхэлсэн цаг',
+      //    dataIndex: 'startDate',
+      //    render: (text) => {
+      //       if (text) {
+      //          return dayjs(text).format('YYYY-MM-DD HH:mm');
+      //       }
+      //    }
+      // },
+      // {
+      //    title: 'Дууссан цаг',
+      //    dataIndex: 'endDate',
+      //    render: (text) => {
+      //       if (text) {
+      //          return dayjs(text).format('YYYY-MM-DD HH:mm');
+      //       }
+      //    }
+      // },
+      // {
+      //    title: 'Онош',
+      //    dataIndex: 'patientDiagnosis',
+      //    render: (text) => {
+      //       if (text?.length > 0) {
+      //          var string = '';
+      //          text.map((item) => {
+      //             string += item.diagnose?.code + '|';
+      //          });
+      //          return string;
+      //       }
+      //       return;
+      //    }
+      // },
+      // {
+      //    title: 'Хяналт',
+      //    width: 60,
+      //    render: (_text, row) => {
+      //       return <MonitorCriteria props={{ serviceId: row.id, serviceType: 5 }} />;
+      //    }
+      // },
+      // {
+      //    title: 'Даатгал',
+      //    width: 60,
+      //    dataIndex: 'isInsurance',
+      //    render: (text) => {
+      //       return getPaymentInfo(text);
+      //    }
+      // },
+      // {
+      //    title: 'Төлбөр',
+      //    width: 60,
+      //    dataIndex: ['isPayment'],
+      //    render: (text) => {
+      //       return getPaymentInfo(text);
+      //    }
+      // },
+      // {
+      //    title: 'Үзлэг',
+      //    width: 60,
+      //    dataIndex: 'inspectionNotes',
+      //    render: (text) => {
+      //       return checkInspection(text);
+      //    }
+      // },
       {
          title: 'Үйлдэл',
          dataIndex: 'endDate',
-         fixed: 'right',
-         width: 170,
          render: (text, row) => {
             if (text) {
                return (
@@ -677,10 +696,13 @@ function Index({ type, isDoctor }) {
             } else {
                return (
                   <Button
-                     className="hover:border-[#5cb85c]"
+                     className="hover:border-[#2D8CFF]"
                      style={{
-                        backgroundColor: '#5cb85c',
-                        color: 'white'
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: 'white',
+                        color: '#2D8CFF',
+                        border: '1px solid #2D8CFF'
                      }}
                      onClick={() => {
                         isDoctor ? getEMR(row) : getENR(row);
@@ -775,7 +797,7 @@ function Index({ type, isDoctor }) {
          title: 'Гарсан өдөр',
          key: 'outDate',
          render: (_, record, index) => {
-            // return moment(text).format('YYYY-MM-DD')
+            // return dayjs(text).format('YYYY-MM-DD')
             return <span key={index}>{record.outDate?.substr(0, 10)}</span>;
          }
       },
@@ -832,8 +854,8 @@ function Index({ type, isDoctor }) {
                <Button
                   className="hover:border-[#5cb85c]"
                   style={{
-                     backgroundColor: '#5cb85c',
-                     color: 'white'
+                     backgroundColor: 'white',
+                     color: '#2D8CFF'
                   }}
                   onClick={() => {
                      isDoctor ? getEMR(row) : getENR(row);
@@ -857,7 +879,7 @@ function Index({ type, isDoctor }) {
          title: 'Он сар',
          dataIndex: ['slots', 'schedule', 'workDate'],
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
+            return dayjs(text).format('YYYY-MM-DD');
          }
       },
       {
@@ -901,14 +923,14 @@ function Index({ type, isDoctor }) {
          title: 'Хүйс',
          dataIndex: ['patient', 'genderType'],
          render: (text) => {
-            return getGenderInfo(text);
+            return getGender(text);
          }
       },
       {
          title: 'Захиалсан огноо',
          dataIndex: ['createdAt'],
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
+            return dayjs(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {
@@ -963,75 +985,6 @@ function Index({ type, isDoctor }) {
       }
    ];
    // mes zaslin menu
-   // info configure
-   const CurrentInfo = () => {
-      if (type === 0) {
-         return (
-            <div className="flex float-left">
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">Яаралтай</span>
-               </div>
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">Шууд</span>
-               </div>
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">Урьдчилсан захиалга</span>
-               </div>
-            </div>
-         );
-      } else if (type === 1) {
-         return (
-            <div className="flex float-left">
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
-               </div>
-            </div>
-         );
-      } else if (type === 2) {
-         return (
-            <div className="w-full">
-               <div className="bg-[#1890ff] checkTag">
-                  {orderType.map((tag, index) => {
-                     return (
-                        <CheckableTag
-                           key={index}
-                           checked={selectedTags === tag.value}
-                           onChange={() => {
-                              setSelectedTags(tag.value);
-                           }}
-                           className="text-white m-1"
-                        >
-                           <div className="flex">
-                              <img src={require(`../../../../../assets/bed/${tag.img}`)} width="20" />
-                              {tag.label}
-                           </div>
-                        </CheckableTag>
-                     );
-                  })}
-               </div>
-            </div>
-         );
-      } else if (type === 3) {
-         if (isDoctor) {
-            return;
-         } else {
-            return;
-         }
-      }
-   };
-   // info configure
    // column configure
    const CurrentColumn = () => {
       if (type === 0 || type === 1) {
@@ -1050,80 +1003,42 @@ function Index({ type, isDoctor }) {
          }
       }
    };
-   // column configure
-   useEffect(() => {
-      // getAppointment(1, 20, today, today);
-      ScrollRef(scrollRef);
-   }, []);
+
    return (
       <>
-         <div className="flex flex-wrap">
+         <div className="flex flex-wrap gap-4">
+            <ScheduleTypeInfo />
+            <ListFilter
+               meta={meta}
+               appointmentsLength={appointments?.length || 0}
+               selectedTags={selectedTags}
+               getList={getAppointment}
+            />
             <div className="w-full">
-               <Card bordered={false} className="header-solid max-h-max rounded-md">
-                  <div className="flex flex-wrap">
-                     <div className="w-full">
-                        <div className="flex justify-between">
-                           <div>
-                              <ConfigProvider locale={localMnC()}>
-                                 <RangePicker
-                                    style={{
-                                       width: 500
-                                    }}
-                                    onChange={(e) => {
-                                       if (e != null) {
-                                          getAppointment(1, 20, e[0], e[1], selectedTags);
-                                       }
-                                    }}
-                                    locale={mnMN}
-                                 />
-                              </ConfigProvider>
-                           </div>
-                           <div>
-                              <Button
-                                 title="Сэргээх"
-                                 type="primary"
-                                 onClick={() => getAppointment(1, 20, start, end, selectedTags)}
-                              >
-                                 <ReloadOutlined spin={spinner} />
-                              </Button>
-                           </div>
-                        </div>
-                     </div>
-                     <div className="w-full py-2">{CurrentInfo()}</div>
-                     <div className="w-full py-2">
-                        <ConfigProvider locale={localMn()}>
-                           <Table
-                              rowKey={'id'}
-                              rowClassName="hover: cursor-pointer"
-                              locale={{
-                                 emptyText: <Empty description={'Хоосон'} />
-                              }}
-                              loading={{
-                                 spinning: spinner,
-                                 tip: 'Уншиж байна....'
-                              }}
-                              bordered
-                              columns={CurrentColumn()}
-                              dataSource={appointments}
-                              scroll={{
-                                 x: 1500
-                              }}
-                              pagination={{
-                                 position: ['topCenter', 'bottomCenter'],
-                                 size: 'small',
-                                 current: meta.page,
-                                 total: meta.itemCount,
-                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                                 pageSize: meta.limit,
-                                 showSizeChanger: true,
-                                 pageSizeOptions: ['5', '10', '20', '50'],
-                                 showQuickJumper: true,
-                                 onChange: (page, pageSize) => getAppointment(page, pageSize, start, end, selectedTags)
-                              }}
-                           />
-                        </ConfigProvider>
-                     </div>
-                  </div>
+               <Card
+                  bordered={false}
+                  className="header-solid max-h-max rounded-md"
+                  bodyStyle={{
+                     padding: 8
+                  }}
+               >
+                  <Table
+                     rowKey={'id'}
+                     rowClassName="hover: cursor-pointer"
+                     locale={{
+                        emptyText: <Empty description={'Хоосон'} />
+                     }}
+                     loading={{
+                        spinning: spinner,
+                        tip: 'Уншиж байна....'
+                     }}
+                     columns={CurrentColumn()}
+                     dataSource={appointments}
+                     scroll={{
+                        x: 1000
+                     }}
+                     pagination={false}
+                  />
                </Card>
             </div>
          </div>

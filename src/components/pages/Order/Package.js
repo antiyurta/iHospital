@@ -5,6 +5,8 @@ import { Button, ConfigProvider, Modal, Table } from 'antd';
 import jwtInterceopter from '../../jwtInterceopter';
 import { NewSearch } from '../../Input/Input';
 
+import packageIcon from './NewOrder/packageIcon.svg';
+
 function Package({ registerNumber, handleclick }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
@@ -123,14 +125,15 @@ function Package({ registerNumber, handleclick }) {
 
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="gray-order"
             onClick={() => {
                setIsOpenModal(true);
             }}
          >
+            <img src={packageIcon} />
             Багц
-         </Button>
+         </button>
          <Modal
             title="Багц сонгох"
             width={'80%'}

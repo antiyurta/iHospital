@@ -308,7 +308,7 @@ export const getAge = (registerNumber) => {
       const age = currentYear - year;
       return age;
    } else {
-      return null;
+      return '';
    }
 };
 export const getGender = (registerNumber) => {
@@ -322,6 +322,19 @@ export const getGender = (registerNumber) => {
       return null;
    }
 };
+
+export const getGenderFullName = (registerNumber) => {
+   if (registerNumber != undefined) {
+      if (registerNumber[registerNumber.length - 2] % 2 === 1) {
+         return 'Эрэгтэй';
+      } else {
+         return 'Эмэгтэй';
+      }
+   } else {
+      return '';
+   }
+};
+
 export const checkNumber = (event) => {
    var charCode = event.charCode;
    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {

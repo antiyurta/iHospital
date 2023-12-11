@@ -413,6 +413,7 @@ function PatientListBedd() {
                         })}
                      </Select>
                   </Form.Item>
+                  {JSON.stringify(rooms)}
                   <Form.Item
                      label="Өрөө"
                      name="roomId"
@@ -427,9 +428,9 @@ function PatientListBedd() {
                         {rooms?.map((room, index) => {
                            return (
                               <Option key={index} value={room.id}>
-                                 {`${room.roomNumber} -> ${numberToCurrency(room.price)} -> ${checkGenderType(
+                                 {/* {`${room.roomNumber} -> ${numberToCurrency(room.price)} -> ${checkGenderType(
                                     room.genderType
-                                 )} -> ${roomType[room.roomType]?.label}`}
+                                 )} -> ${roomType[room.roomType]?.label}`} */}
                               </Option>
                            );
                         })}

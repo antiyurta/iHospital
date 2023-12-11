@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Descriptions } from 'antd';
+
+import maleSymbol from '../../../src/assets/images/male.svg';
+import femaleSymbol from '../../../src/assets/images/female.svg';
+import addressSymbol from '../../../src/assets/images/address.svg';
+import mailSymbol from '../../../src/assets/images/mail.svg';
+import phoneSymbol from '../../../src/assets/images/phone.svg';
+import mapSymbol from '../../../src/assets/images/map.svg';
+
 import male from '../../assets/images/maleAvatar.svg';
 import NewCard from '../Card/Card';
 import CountryServices from '../../services/reference/country';
 import { NewSearch, NewRadioGroup, NewRadio } from '../Input/Input';
-import { getGender, getAge } from '../comman';
+import { getGender, getAge, getGenderFullName } from '../comman';
 
 function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type }) {
    const [citizens, setCitizens] = useState([]);
@@ -94,7 +102,84 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    return (
       <>
-         <NewCard title={'Өвчтөний мэдээлэл'}>
+         <div className="patient-info">
+            <div className="picture">
+               <img src={male} alt="pation" />
+            </div>
+            <div className="info">
+               {handlesearch ? (
+                  <div className="w-full">
+                     <NewSearch placeholder="Регистр/Нэрээр хайх" onSearch={onSearch} enterButton="Хайх" />
+                  </div>
+               ) : null}
+               <p className="names">{`Овог: ${patient?.lastName || ''} | Нэр: ${patient.firstName || ''}`}</p>
+               <div className="flex justify-between">
+                  <div className="flex flex-row gap-3">
+                     <img src={femaleSymbol} alt="symbol" />
+                     <p>{`${getGenderFullName(patient?.registerNumber || undefined)} | ${getAge(
+                        patient?.registerNumber || undefined
+                     )} Нас`}</p>
+                  </div>
+                  <div className="flex flex-row gap-3">
+                     <img src={addressSymbol} alt="Addres" />
+                     <p>{patient?.registerNumber}</p>
+                  </div>
+               </div>
+               <div className="flex justify-between">
+                  <div className="flex flex-row gap-3">
+                     <img src={mailSymbol} alt="symbolMail" />
+                     <p>{patient?.email}</p>
+                  </div>
+                  <div className="flex flex-row gap-3">
+                     <img src={phoneSymbol} alt="phone" />
+                     <p>{patient?.phoneNo}</p>
+                  </div>
+               </div>
+               <div className="flex flex-row gap-3">
+                  <img src={mapSymbol} alt="mapSymbol" />
+                  {getAddress(
+                     patient?.countryId,
+                     patient?.aimagId,
+                     patient?.soumId,
+                     patient?.committee,
+                     patient?.building,
+                     patient?.address
+                  )}
+               </div>
+               {OCS ? (
+                  <NewRadioGroup
+                     className="flex"
+                     size="small"
+                     onChange={handleTypeChangePatient}
+                     value={type}
+                     optionType="button"
+                     buttonStyle="solid"
+                  >
+                     <NewRadio
+                        style={{
+                           fontSize: 14,
+                           fontWeight: 700,
+                           color: '#2D8CFF'
+                        }}
+                        value="OCS"
+                     >
+                        OTS
+                     </NewRadio>
+                     <NewRadio
+                        style={{
+                           fontSize: 14,
+                           fontWeight: 700,
+                           color: '#2D8CFF'
+                        }}
+                        value="EMR"
+                     >
+                        EMR
+                     </NewRadio>
+                  </NewRadioGroup>
+               ) : null}
+            </div>
+         </div>
+         {/* <NewCard>
             <div
                style={{
                   display: 'flex',
@@ -150,7 +235,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                   </div>
                </div>
             </div>
-         </NewCard>
+         </NewCard> */}
       </>
    );
 }
