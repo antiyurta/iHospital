@@ -11,7 +11,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = (_env, argv) => {
    const isDevelopment = argv.mode !== 'production';
    return {
-      mode: isDevelopment,
+      mode: isDevelopment ? 'development' : 'production',
       // devtool: isDevelopment ? 'eval' : 'source-map',
       context: __dirname,
       entry: './src/index.js',
