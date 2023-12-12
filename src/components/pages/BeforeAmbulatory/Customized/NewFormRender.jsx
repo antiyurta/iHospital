@@ -1,6 +1,7 @@
 import { Form, Input, Radio, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import NewFormTable from './NewFormTable';
+import TextArea from 'antd/lib/input/TextArea';
 
 const NewFormRender = (props) => {
    const { useForm, form, formOptionIds, isCheck } = props;
@@ -85,6 +86,13 @@ const NewFormRender = (props) => {
                      onChange={(e) => {
                         handleChangeRadio(e.target.value, item?.options, item?.index);
                      }}
+                     style={{
+                        padding: 2,
+                        background: '#fafafa',
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column'
+                     }}
                   >
                      {options.map((option, index) => (
                         <Radio key={index} value={option.keyWord}>
@@ -101,12 +109,24 @@ const NewFormRender = (props) => {
             <div
                style={{
                   background: '#fafafa',
-                  padding: 6,
                   borderRadius: 6
                }}
             >
                <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
                   <Input placeholder={item.question} />
+               </Form.Item>
+            </div>
+         );
+      } else if (item.type === 'textarea') {
+         return (
+            <div
+               style={{
+                  background: '#fafafa',
+                  borderRadius: 6
+               }}
+            >
+               <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
+                  <TextArea placeholder={item.question} />
                </Form.Item>
             </div>
          );
@@ -125,6 +145,7 @@ const NewFormRender = (props) => {
          return (
             <p
                style={{
+                  paddingTop: 12,
                   fontSize: 15,
                   fontWeight: 'bold'
                }}
@@ -146,7 +167,6 @@ const NewFormRender = (props) => {
                flexDirection: 'column',
                gap: 6,
                background: '#fafafa',
-               padding: 12,
                borderRadius: 12
             }}
          >

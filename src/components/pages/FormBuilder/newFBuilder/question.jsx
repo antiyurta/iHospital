@@ -9,7 +9,6 @@ const Question = (props) => {
    const [question, setQuestion] = useState(item.question);
    const [isInteger, setIsInteger] = useState(item.isInteger);
    const [isOther, setIsOther] = useState(item.isOther);
-   console.log(item, isOther);
    useEffect(() => {
       handleChange({
          type: type,
@@ -63,6 +62,10 @@ const Question = (props) => {
                   {
                      label: 'Table',
                      value: 'table'
+                  },
+                  {
+                     label: 'Text',
+                     value: 'textarea'
                   }
                ]}
             />

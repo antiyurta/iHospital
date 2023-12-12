@@ -97,24 +97,24 @@ function MainPatientHistory({
       <Form form={xrayForm} layout="vertical" onFinish={(values) => onFinishXray(values, props)}>
          <div
             style={{
+               width: '100%',
                display: 'flex',
                flexDirection: 'column',
-               gap: 12,
-               overflow: 'auto',
-               height: 500
+               gap: 8
             }}
          >
-            <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
-            {/* <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} /> */}
-            <Form.Item
+            <div
                style={{
-                  textAlign: 'right'
+                  overflow: 'auto',
+                  height: 560
                }}
             >
-               <Button type="primary" htmlType="submit">
-                  Хадгалах
-               </Button>
-            </Form.Item>
+               <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
+               {/* <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} /> */}
+            </div>
+            <Button type="primary" htmlType="submit">
+               Хадгалах
+            </Button>
          </div>
       </Form>
    );
