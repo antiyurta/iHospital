@@ -105,7 +105,7 @@ const IHos = () => {
    };
 
    useEffect(() => {
-      getMenus();
+      // getMenus();
    }, [UserId, RoleId]);
    return (
       <>
