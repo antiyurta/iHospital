@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 
@@ -16,6 +16,25 @@ const FormRenderHtml = (props) => {
          });
    };
 
+   const convertTree = (data) => {
+      let root = [];
+      const cloneData = data.map((item) => ({
+         ...item
+      }));
+      const idMapping = cloneData.reduce((acc, el, i) => {
+         acc[el.index] = i;
+         return acc;
+      }, []);
+      cloneData?.forEach((el) => {
+         if (el.parentIndex === null) {
+            root.push(el);
+            return;
+         }
+         const parentEl = cloneData?.[idMapping[el.parentIndex]];
+         parentEl.options = [...(parentEl?.options || []), el];
+      });
+      return root;
+   };
    const Render = (props) => {
       const { keyWord, answer } = props;
       const form = documentForm.find((dform) => dform.keyWord === keyWord);
@@ -42,6 +61,10 @@ const FormRenderHtml = (props) => {
       }
       return;
    };
+
+   const testData = useMemo(() => {
+      convertTree(documentForm);
+   }, [formId]);
 
    useEffect(() => {
       formId && getDocumentForm();

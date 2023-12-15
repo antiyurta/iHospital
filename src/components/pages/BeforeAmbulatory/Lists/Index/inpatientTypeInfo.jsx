@@ -12,6 +12,7 @@ const InpatientTypeInfo = () => {
          <Badge color="#22c55e" count="Төлөвлөгөөт" />
          {orderType.map((item, index) => (
             <div
+               key={index}
                style={{
                   display: 'flex',
                   flexDirection: 'row',

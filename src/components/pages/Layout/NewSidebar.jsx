@@ -1,34 +1,29 @@
-import { Button, Layout, Menu, Spin } from 'antd';
-import React, { Fragment, Suspense, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, Outlet } from 'react-router-dom';
 import { selectCurrentRoleId, selectCurrentUserId } from '../../../features/authReducer';
-
-//
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import PermissionServices from '../../../services/organization/permission';
-import FullScreenLoader from '../../FullScreenLoader';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-
-const { Sider } = Layout;
-
-const IHos = () => {
+import MenuItem from './MenuItem';
+import { Link } from 'react-router-dom';
+import MenuItemChildren from './MenuItemChildren';
+import AuthContext from '../../../features/AuthContext';
+const Sidebar = ({ collapsed }) => {
+   const { user } = useContext(AuthContext);
+   console.log(user);
    const [userMenu, setMenus] = useState([]);
-   const [collapsed, setCollapsed] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const UserId = useSelector(selectCurrentUserId);
    const RoleId = useSelector(selectCurrentRoleId);
    const getMenus = async () => {
       setIsLoading(true);
-      console.log('end');
       await PermissionServices.getUserMenu({
          params: {
             roleId: RoleId,
-            userId: UserId,
-            dd: 'stest'
+            userId: UserId
          }
       })
          .then(({ data: { response } }) => {
-            console.log('menu', response);
             if (response?.length > 0) {
                var menus = [];
                response.map((menu, indx) => {
@@ -43,6 +38,7 @@ const IHos = () => {
                                  dangerouslySetInnerHTML={{ __html: subMenu.icon }}
                               ></p>
                            ),
+                           title: subMenu.title,
                            label: (
                               <Link
                                  to={`/main${subMenu.url}`}
@@ -66,6 +62,7 @@ const IHos = () => {
                               dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
                            ></p>
                         ),
+                        title: menu.menu.title,
                         label: menu.menu.title,
                         children: children
                      });
@@ -78,6 +75,7 @@ const IHos = () => {
                               dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
                            ></p>
                         ),
+                        title: menu.menu.title,
                         label: (
                            <Link
                               to={`/main${menu.menu.url}`}
@@ -98,43 +96,47 @@ const IHos = () => {
                setMenus(menus);
             }
          })
-         .catch(() => {})
+         .catch((err) => {
+            console.log(err);
+         })
          .finally(() => {
             setIsLoading(false);
          });
+   };
+
+   const renderMenuItem = (menuItem) => {
+      if (!menuItem.children) {
+         return <MenuItem key={menuItem.key} data={menuItem} />;
+      }
+      const renderedMenuItems = menuItem.children.map(renderMenuItem);
+      return (
+         <MenuItemChildren key={menuItem.key} data={menuItem} collapsed={collapsed}>
+            {renderedMenuItems}
+         </MenuItemChildren>
+      );
    };
 
    useEffect(() => {
       getMenus();
    }, [UserId, RoleId]);
    return (
-      <>
-         {/* <Sider theme="light" collapsedWidth={61} collapsed={collapsed} className="ihospital-menu">
-            <Button title={collapsed ? 'Нээх' : 'Хаах'} type="primary" onClick={() => setCollapsed(!collapsed)}>
-               {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            </Button>
-            <div className="menu-body">
-               <Spin spinning={isLoading}>
-                  <Menu theme="light" mode="inline" items={userMenu} inlineIndent={10} />
-               </Spin>
-            </div>
-         </Sider> */}
-         <div
-            style={{
-               padding: '12px 12px 12px 0px',
-               // backgroundColor: '#eff4fa',
-               // height: '100vh',
-               width: '100%',
-               overflow: 'auto'
-            }}
-         >
-            <Fragment>
-               <Suspense fallback={<FullScreenLoader full={true} />}>
-                  <Outlet />
-               </Suspense>
-            </Fragment>
-         </div>
-      </>
+      <div className={`sidebar-body ${isLoading ? 'loading' : ''}`}>
+         {isLoading ? (
+            <Spin
+               spinning={isLoading}
+               indicator={
+                  <LoadingOutlined
+                     style={{
+                        fontSize: 24
+                     }}
+                     spin
+                  />
+               }
+            />
+         ) : (
+            userMenu?.map(renderMenuItem)
+         )}
+      </div>
    );
 };
-export default IHos;
+export default Sidebar;

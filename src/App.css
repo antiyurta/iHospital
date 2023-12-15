@@ -503,8 +503,8 @@ input[type='number'] {
    border-top: 1px solid #0095ff !important;
    border-right: 1px solid #0095ff !important;
    border-left: 1px solid #0095ff !important;
-   background-color: #eff4fa;
-   border-bottom-color: #eff4fa !important;
+   background-color: #f5f6f7;
+   border-bottom-color: #f5f6f7 !important;
 }
 
 .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {

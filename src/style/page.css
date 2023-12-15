@@ -13,12 +13,6 @@
    height: 287mm;
    padding: 10mm;
 }
-body {
-   margin: 0;
-   padding: 0;
-   background-color: #fafafa;
-   /* font: 12pt "Arial"; */
-}
 
 * {
    box-sizing: border-box;

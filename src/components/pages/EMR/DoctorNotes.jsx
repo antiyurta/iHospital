@@ -7,7 +7,7 @@ const DoctorNotes = () => {
    const [isPublic, setIsPublic] = useState(true);
    return (
       <div className={isPublic ? 'emr-doctor-notes-public' : 'emr-doctor-notes-private'}>
-         <div className="content-notes">content</div>
+         <div className="content-notes">Хувийн тэмдэглэл</div>
          <div className="flex flex-row gap-3">
             <button onClick={() => setIsPublic(!isPublic)}>
                <img src={notePublic} />

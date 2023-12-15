@@ -12,7 +12,7 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 const ExaminationParams = React.lazy(() => import('./components/pages/service/ExaminationParams'));
 const Medicine = React.lazy(() => import('./components/pages/service/Medicine/Medicine'));
-const EMR = React.lazy(() => './components/pages/EMR/NewEmr');
+const EMR = React.lazy(() => import('./components/pages/EMR/NewEmr'));
 const BeforeAmbulatoryDetail = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail'));
 import Menu from './components/pages/reference/Menu';
 const RoomtDtl = React.lazy(() => import('./components/pages/Bed/RoomDtl'));
@@ -42,63 +42,61 @@ import PrivateRoute from './features/PrivateRoute';
 
 function App() {
    return (
-      <div className="App">
-         <AuthContextProvider>
-            <Routes>
-               <Route path="*" element={<NotFound />} />
-               <Route path="/" element={<LandingLayout />}>
-                  <Route index element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  {PublicRoutes.map((route, index) => {
-                     return <Route key={index} path={route.url} element={<route.element />} />;
-                  })}
-               </Route>
-               <Route element={<MainLayout />}>
-                  <Route path="/profile" element={<Profile />} />
-                  <Route element={<ProtectedRoute />}>
-                     <Route path="/main/" element={<IHos />}>
-                        <Route path="/main/emr" element={<EMR />} />
-                        <Route path="/main/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
-                        {ProtectedRoutes.map((route, index) => {
-                           return (
-                              <Route
-                                 key={index}
-                                 path={`/main${route.url}`}
-                                 element={
-                                    <PrivateRoute>
-                                       <route.element />
-                                    </PrivateRoute>
-                                 }
-                              />
-                           );
-                        })}
-                     </Route>
-                     <Route path="/notPermission" element={<NotPermission />} />
-                     <Route path="/role" element={<Role />} />
-                     <Route path="/permission" element={<Permission />} />
-                     <Route path="/menu" element={<Menu />} />
-                     <Route path="/hospital" element={<Hospital />} />
-                     {/* ene heregtei */}
-                     <Route path="/medicine" element={<Medicine />} />
-                     <Route path="/medicineSupport" element={<MedicineSupport />} />
-                     <Route path="/examinationParams" element={<ExaminationParams />} />
-                     <Route path="/acting" element={<Acting />} />
-                     <Route path="/depBalance" element={<DepBalance />} />
-                     <Route path="/finance" element={<Finance />} />
-                     <Route path="/financeMaterialExamination" element={<FinanceMaterialExamination />} />
-                     <Route path="/financeMaterialXray" element={<FinanceMaterialXray />} />
-                     <Route path="/financeMaterialTreatment" element={<FinanceMaterialTreatment />} />
-                     <Route path="/financeMaterialSurgery" element={<FinanceMaterialSurgery />} />
-                     <Route path="/report" element={<Report />} />
-                     <Route path="/formBuilder" element={<FormIndex />} />
-                     {/* yacij magad */}
-                     <Route path="/formBuilder2" element={<PatientForm />} />
-                     <Route path="/roomDtl" element={<RoomtDtl />} />
+      <AuthContextProvider>
+         <Routes>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<LandingLayout />}>
+               <Route index element={<Home />} />
+               <Route path="/login" element={<Login />} />
+               {PublicRoutes.map((route, index) => {
+                  return <Route key={index} path={route.url} element={<route.element />} />;
+               })}
+            </Route>
+            <Route element={<MainLayout />}>
+               <Route path="/profile" element={<Profile />} />
+               <Route element={<ProtectedRoute />}>
+                  <Route path="/main/" element={<IHos />}>
+                     <Route path="/main/emr" element={<EMR />} />
+                     <Route path="/main/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
+                     {ProtectedRoutes.map((route, index) => {
+                        return (
+                           <Route
+                              key={index}
+                              path={`/main${route.url}`}
+                              element={
+                                 <PrivateRoute>
+                                    <route.element />
+                                 </PrivateRoute>
+                              }
+                           />
+                        );
+                     })}
                   </Route>
+                  <Route path="/notPermission" element={<NotPermission />} />
+                  <Route path="/role" element={<Role />} />
+                  <Route path="/permission" element={<Permission />} />
+                  <Route path="/menu" element={<Menu />} />
+                  <Route path="/hospital" element={<Hospital />} />
+                  {/* ene heregtei */}
+                  <Route path="/medicine" element={<Medicine />} />
+                  <Route path="/medicineSupport" element={<MedicineSupport />} />
+                  <Route path="/examinationParams" element={<ExaminationParams />} />
+                  <Route path="/acting" element={<Acting />} />
+                  <Route path="/depBalance" element={<DepBalance />} />
+                  <Route path="/finance" element={<Finance />} />
+                  <Route path="/financeMaterialExamination" element={<FinanceMaterialExamination />} />
+                  <Route path="/financeMaterialXray" element={<FinanceMaterialXray />} />
+                  <Route path="/financeMaterialTreatment" element={<FinanceMaterialTreatment />} />
+                  <Route path="/financeMaterialSurgery" element={<FinanceMaterialSurgery />} />
+                  <Route path="/report" element={<Report />} />
+                  <Route path="/formBuilder" element={<FormIndex />} />
+                  {/* yacij magad */}
+                  <Route path="/formBuilder2" element={<PatientForm />} />
+                  <Route path="/roomDtl" element={<RoomtDtl />} />
                </Route>
-            </Routes>
-         </AuthContextProvider>
-      </div>
+            </Route>
+         </Routes>
+      </AuthContextProvider>
    );
 }
 export default App;

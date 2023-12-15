@@ -119,7 +119,7 @@ function Profile() {
       isValid ? setPasswordValid(true) : setPasswordValid(false);
    };
    return (
-      <div>
+      <div className="flex flex-col gap-2">
          <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + bg + ')' }}></div>
          <Card
             className="card-profile-head rounded-md h-28"
@@ -154,7 +154,7 @@ function Profile() {
          <Card
             bordered={false}
             title={<h6 className="font-semibold m-0">Профайл мэдээлэл</h6>}
-            className="header-solid h-full card-profile-information rounded-md"
+            className="header-solid card-profile-information rounded-md"
             extra={
                <>
                   <Button className="mx-1" type="primary" icon={<UserOutlined />} onClick={() => setProfileModal(true)}>
