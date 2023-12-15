@@ -9,9 +9,10 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (_env, argv) => {
    const isDevelopment = argv.mode !== 'production';
+   console.log('isDevelopment', isDevelopment);
    return {
       mode: isDevelopment,
-      // devtool: isDevelopment ? 'eval' : 'source-map',
+      devtool: isDevelopment ? 'eval' : 'source-map',
       context: __dirname,
       entry: './src/index.js',
       output: {
@@ -63,7 +64,8 @@ module.exports = (_env, argv) => {
          ]
       },
       optimization: {
-         minimize: true,
+         runtimeChunk: 'single',
+         minimize: !isDevelopment,
          minimizer: [new TerserPlugin()]
       },
       plugins: [

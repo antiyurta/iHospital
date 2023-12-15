@@ -123,16 +123,18 @@
    flex-direction: column;
    gap: 24px;
    padding: 24px 0px 100px 8px;
-   max-width: 230px;
    background-color: white;
+   .ant-layout-sider-children {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+   }
    .menu-body {
       padding: 8px;
       border-radius: 8px;
       background-color: #eff4fa;
+      height: 100%;
       overflow: auto;
-      .ant-menu.ant-menu-inline-collapsed {
-         width: 61px;
-      }
       .ant-menu-item-icon {
          svg {
             height: 20px;

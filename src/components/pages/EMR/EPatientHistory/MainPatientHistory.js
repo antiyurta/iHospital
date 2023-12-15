@@ -14,6 +14,8 @@ import { useLocation } from 'react-router-dom';
 import FormRender from '../../BeforeAmbulatory/Customized/FormRender';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import { Patch } from '../../../comman';
+import dayjs from 'dayjs';
+import TextArea from 'antd/lib/input/TextArea';
 //
 function MainPatientHistory({
    AppointmentId,
@@ -28,6 +30,7 @@ function MainPatientHistory({
    AppointmentType,
    handleClick
 }) {
+   console.log(XrayRequestId);
    let location = useLocation();
    const userId = useSelector(selectCurrentUserId);
    const lastName = useSelector(selectCurrentLastName);
@@ -65,33 +68,32 @@ function MainPatientHistory({
       );
    }, []);
    const onFinishXray = async (values, { data }) => {
+      console.log('data', data);
       const body = {
          appointmentId: XrayRequestId,
          usageType: UsageType,
+         formId: data.id,
          documentId: data.documentValue,
          patientId: patientId,
          type: 'XRAY',
          data: {
             ...values,
             cabinetId: cabinetId,
-            createdAt: new Date(),
-            createdByName: {
-               lastName: lastName,
-               firstName: firstName
-            }
+            createdAt: dayjs()
          }
       };
       console.log(body);
-      // await jwtInterceopter
-      //    .post(data.url, body)
-      //    .then((response) => {
-      //       console.log(response);
-      //    })
-      //    .then(() => {
-      //       jwtInterceopter.patch('service/xrayRequest/' + XrayRequestId, {
-      //          xrayProcess: 2
-      //       });
-      //    });
+      console.log(XrayRequestId);
+      await jwtInterceopter
+         .post(data.url, body)
+         .then((response) => {
+            console.log(response);
+         })
+         .then(() => {
+            jwtInterceopter.patch('service/xrayRequest/' + XrayRequestId, {
+               xrayProcess: 2
+            });
+         });
    };
    const XrayDocumentShow = (props) => (
       <Form form={xrayForm} layout="vertical" onFinish={(values) => onFinishXray(values, props)}>

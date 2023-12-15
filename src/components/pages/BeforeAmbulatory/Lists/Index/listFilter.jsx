@@ -17,14 +17,6 @@ const ListFilter = (props) => {
    const [end, setEnd] = useState(new Date().toString());
    const [currentPage, setCurrentPage] = useState(1);
    const [currentLimit, setCurrentLimit] = useState(10);
-   //    useEffect(() => {
-   //       const incomeStartDate = dayjs(start).set('hour', 0).set('minute', 0).set('second', 0);
-   //       const incomeEndDate = dayjs(end).set('hour', 23).set('minute', 59).set('second', 59);
-   //       setStart(incomeStartDate);
-   //       setEnd(incomeEndDate);
-   //       getList(currentPage, currentLimit, incomeStartDate, incomeEndDate, selectedTags);
-   //    }, [currentPage, currentLimit]);
-
    const get = (page, limit, start, end, proccess) => {
       const incomeStartDate = dayjs(start).set('hour', 0).set('minute', 0).set('second', 0);
       const incomeEndDate = dayjs(end).set('hour', 23).set('minute', 59).set('second', 59);

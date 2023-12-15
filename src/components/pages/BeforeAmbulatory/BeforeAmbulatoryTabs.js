@@ -56,15 +56,7 @@ export default function BeforeAmbulatoryTabs({ patientId, patientData, type, str
    }, [reasonComming]);
    return (
       <>
-         <Tabs
-            type="card"
-            size="small"
-            bodyStyle={{
-               backgroundColor: 'red'
-            }}
-            items={items}
-            destroyInactiveTabPane={true}
-         />
+         <Tabs size="small" items={items} destroyInactiveTabPane={true} />
       </>
    );
 }

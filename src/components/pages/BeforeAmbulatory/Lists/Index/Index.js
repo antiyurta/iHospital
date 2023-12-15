@@ -35,6 +35,7 @@ import ServiceService from '../../../../../services/service/service';
 import { NewInput } from '../../../../Input/Input';
 import ScheduleTypeInfo from './scheduleTypeInfo';
 import ListFilter from './listFilter';
+import InpatientTypeInfo from './inpatientTypeInfo';
 const { TextArea } = Input;
 
 function Index({ type, isDoctor }) {
@@ -114,7 +115,7 @@ function Index({ type, isDoctor }) {
                page: page,
                limit: limit,
                depIds: depIds?.toString(),
-               process: process ? process.toString() : 0,
+               // process: process ? process.toString() : 0,
                startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
                endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
             }
@@ -147,19 +148,21 @@ function Index({ type, isDoctor }) {
             data['departmentId'] = row.inDepartmentId;
             data['serviceId'] = row.insuranceServiceId;
          }
+         if (row.startDate === null) {
+            data['startDate'] = new Date();
+            AppointmentService.patchPreOrder(row.id, {
+               startDate: new Date()
+            });
+         }
          dispatch(setEmrData(data));
-         navigate(`/emr`, {
+         navigate(`/main/emr`, {
             state: data
          });
       } else {
          const payment = row.isPayment || row.isInsurance;
-         if (!payment) {
+         if (!payment && row.type != 4) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
-         }
-         // if (!payment && type != 1 && row.type != 1) {
-         //    openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
-         // }
-         else {
+         } else {
             if (row.startDate === null) {
                if (row.isInsurance) {
                   await healthInsuranceService
@@ -273,7 +276,7 @@ function Index({ type, isDoctor }) {
             openNofi('warning', 'Алдаа', 'Өрөөнд хэвтээгүй байна');
          } else {
             console.log(row);
-            navigate('/ambulatoryDetail', {
+            navigate('/main/ambulatoryDetail', {
                state: {
                   selectedPatient: row.patient,
                   usageType: usageType,
@@ -284,7 +287,7 @@ function Index({ type, isDoctor }) {
          }
       } else if (usageType === 'OUT') {
          if (row.isPayment || row.isInsurance || row.type === 1) {
-            navigate('/ambulatoryDetail', {
+            navigate('/main/ambulatoryDetail', {
                state: {
                   selectedPatient: row.patient,
                   usageType: usageType,
@@ -403,9 +406,29 @@ function Index({ type, isDoctor }) {
    };
    const getInPatientType = (type) => {
       if (type === 'EMERGENCY') {
-         return <p className="bg-red-500 text-white">Яаралтай</p>;
+         return (
+            <p
+               className="bg-red-500 text-white"
+               style={{
+                  padding: '4px 8px',
+                  borderRadius: 15
+               }}
+            >
+               Яаралтай
+            </p>
+         );
       } else {
-         return <p className="bg-green-500 text-white">Төлөвлөгөөт</p>;
+         return (
+            <p
+               className="bg-green-500 text-white"
+               style={{
+                  padding: '4px 8px',
+                  borderRadius: 15
+               }}
+            >
+               Төлөвлөгөөт
+            </p>
+         );
       }
    };
    const getInspectionInfo = (inspectionType) => {
@@ -510,7 +533,7 @@ function Index({ type, isDoctor }) {
                      }}
                   />
                   <div className="info">
-                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
+                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
                      <p>{object?.registerNumber}</p>
                   </div>
                </div>
@@ -721,7 +744,8 @@ function Index({ type, isDoctor }) {
          title: '№',
          render: (_, record, index) => {
             return meta.page * meta.limit - (meta.limit - index - 1);
-         }
+         },
+         width: 40
       },
       {
          title: 'Төрөл',
@@ -732,7 +756,10 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Тасаг',
-         dataIndex: ['structure', 'name']
+         dataIndex: ['structure', 'name'],
+         render: (text) => {
+            return <span className="whitespace-break-spaces">{text}</span>;
+         }
       },
       {
          title: 'Өрөө',
@@ -740,39 +767,45 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Эмч',
-         children: [
-            {
-               title: 'Овог',
-               dataIndex: ['employee', 'lastName']
-            },
-            {
-               title: 'Нэр',
-               dataIndex: ['employee', 'firstName']
-            }
-         ]
+         dataIndex: 'employee',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
       },
       {
-         title: 'Дугаар',
-         dataIndex: ['patient', 'cardNumber'],
-         key: 'requestId'
-      },
-      {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName'],
-         key: 'lastName'
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName'],
-         key: 'firstName'
-      },
-      {
-         title: 'Регистр',
-         dataIndex: ['patient', 'registerNumber'],
-         key: 'registerNumber'
+         title: 'Овог, Нэр',
+         dataIndex: 'patient',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
       },
       {
          title: 'Нас',
+         width: 40,
          dataIndex: ['patient', 'registerNumber'],
          render: (text) => {
             return getAge(text);
@@ -780,25 +813,40 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Хүйс',
-         key: 'gender',
-         render: (_, record, index) => <span key={index}>{record.patient?.genderType === 'WOMAN' ? 'Эм' : 'Эр'}</span>
+         width: 40,
+         dataIndex: ['patient', 'genderType'],
+         render: (text) => {
+            return getGender(text);
+         }
       },
       {
          title: 'Хэвтэх өдөр',
-         key: 'startDate',
-         render: (_, record, index) => <span key={index}>{record.startDate?.substr(0, 10)}</span>
+         dataIndex: 'startDate',
+         render: (text) => {
+            if (text) {
+               return dayjs(text).format('YYYY/MM/DD');
+            }
+            return;
+         }
       },
       {
          title: 'Гарах өдөр',
-         key: 'endDate',
-         render: (_, record, index) => <span key={index}>{record.endDate?.substr(0, 10)}</span>
+         dataIndex: 'endDate',
+         render: (text) => {
+            if (text) {
+               return dayjs(text).format('YYYY/MM/DD');
+            }
+            return;
+         }
       },
       {
          title: 'Гарсан өдөр',
-         key: 'outDate',
-         render: (_, record, index) => {
-            // return dayjs(text).format('YYYY-MM-DD')
-            return <span key={index}>{record.outDate?.substr(0, 10)}</span>;
+         dataIndex: 'outDate',
+         render: (text) => {
+            if (text) {
+               return dayjs(text).format('YYYY/MM/DD');
+            }
+            return;
          }
       },
       {
@@ -826,6 +874,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Захиалгын төрөл',
          key: 'type',
+         width: 60,
          render: (_, record, index) => {
             return (
                <div key={index}>
@@ -847,15 +896,16 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Үйлдэл',
-         fixed: 'right',
-         width: 170,
          render: (_text, row) => {
             return (
                <Button
-                  className="hover:border-[#5cb85c]"
+                  className="hover:border-[#2D8CFF]"
                   style={{
+                     display: 'flex',
+                     alignItems: 'center',
                      backgroundColor: 'white',
-                     color: '#2D8CFF'
+                     color: '#2D8CFF',
+                     border: '1px solid #2D8CFF'
                   }}
                   onClick={() => {
                      isDoctor ? getEMR(row) : getENR(row);
@@ -871,49 +921,77 @@ function Index({ type, isDoctor }) {
    const nurseColumns = [
       {
          title: '№',
+         width: 40,
          render: (_, record, index) => {
             return meta.page * meta.limit - (meta.limit - index - 1);
          }
       },
       {
+         title: 'Эмч',
+         dataIndex: 'employee',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
+      },
+      {
          title: 'Он сар',
-         dataIndex: ['slots', 'schedule', 'workDate'],
-         render: (text) => {
-            return dayjs(text).format('YYYY-MM-DD');
+         dataIndex: ['slot', 'schedule', 'workDate'],
+         render: (text, row) => {
+            if (text != null) {
+               return dayjs(text).format('YYYY-MM-DD');
+            } else {
+               return dayjs(row.createdAt).format('YYYY-MM-DD');
+            }
          }
       },
       {
          title: 'Үзлэгийн цаг',
-         render: (_, row) => {
-            return getTypeInfo(row.type, row.slots?.startTime, row.slots?.endTime);
+         dataIndex: 'slot',
+         render: (slot, row) => {
+            return getTypeInfo(row.type, slot?.startTime, slot?.endTime);
          }
       },
       {
          title: 'Үзлэг',
-         render: (_, row) => {
-            return getInspectionInfo(row.inspectionType);
+         dataIndex: 'inspectionType',
+         render: (inspectionType) => {
+            return getInspectionInfo(inspectionType);
          }
       },
       {
-         title: 'Эмч',
-         render: (_, row) => {
-            return `${row.employee?.lastName?.substr(0, 1)}.${row.employee?.firstName}`;
+         title: 'Овог, Нэр',
+         dataIndex: 'patient',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
          }
-      },
-      {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName']
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName']
-      },
-      {
-         title: 'Регистр №',
-         dataIndex: ['patient', 'registerNumber']
       },
       {
          title: 'Нас',
+         width: 40,
          dataIndex: ['patient', 'registerNumber'],
          render: (text) => {
             return getAge(text);
@@ -921,6 +999,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Хүйс',
+         width: 40,
          dataIndex: ['patient', 'genderType'],
          render: (text) => {
             return getGender(text);
@@ -957,18 +1036,19 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Үйлдэл',
-         fixed: 'right',
-         width: 170,
          render: (_text, row) => {
             return (
                <Button
-                  className="hover:border-[#5cb85c]"
+                  className="hover:border-[#2D8CFF]"
                   style={{
-                     backgroundColor: '#5cb85c',
-                     color: 'white'
+                     display: 'flex',
+                     alignItems: 'center',
+                     backgroundColor: 'white',
+                     color: '#2D8CFF',
+                     border: '1px solid #2D8CFF'
                   }}
                   onClick={() => {
-                     getENR(row);
+                     isDoctor ? getEMR(row) : getENR(row);
                   }}
                   icon={<PlusCircleOutlined />}
                >
@@ -1008,6 +1088,7 @@ function Index({ type, isDoctor }) {
       <>
          <div className="flex flex-wrap gap-4">
             <ScheduleTypeInfo />
+            {type === 2 ? <InpatientTypeInfo /> : null}
             <ListFilter
                meta={meta}
                appointmentsLength={appointments?.length || 0}

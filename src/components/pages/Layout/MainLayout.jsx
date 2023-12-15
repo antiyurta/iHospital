@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Sidebar from './Sidebar';
 import { Layout } from 'antd';
-import AuthContext from '../../../features/AuthContext';
 import { Outlet } from 'react-router-dom';
 
 const { Content } = Layout;
-
 const MainLayout = () => {
-   const { user, logoutt } = useContext(AuthContext);
    return (
       <Layout
          style={{

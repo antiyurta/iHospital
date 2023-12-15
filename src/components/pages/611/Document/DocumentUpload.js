@@ -159,7 +159,8 @@ function DocumentUpload({ type }) {
                            border: '1px solid #e3e2e1',
                            display: 'flex',
                            flexDirection: 'column',
-                           gap: 8
+                           gap: 8,
+                           justifyContent: 'space-between'
                         }}
                      >
                         <p

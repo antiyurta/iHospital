@@ -1,4 +1,4 @@
-import { Button, Menu } from 'antd';
+import { Button, Layout, Menu, Spin } from 'antd';
 import React, { Fragment, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
@@ -9,12 +9,16 @@ import PermissionServices from '../../../services/organization/permission';
 import FullScreenLoader from '../../FullScreenLoader';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
+const { Sider } = Layout;
+
 const IHos = () => {
    const [userMenu, setMenus] = useState([]);
    const [collapsed, setCollapsed] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
    const UserId = useSelector(selectCurrentUserId);
    const RoleId = useSelector(selectCurrentRoleId);
    const getMenus = async () => {
+      setIsLoading(true);
       await PermissionServices.getUserMenu({
          params: {
             roleId: RoleId,
@@ -22,6 +26,7 @@ const IHos = () => {
          }
       })
          .then(({ data: { response } }) => {
+            console.log('menu', response);
             if (response?.length > 0) {
                var menus = [];
                response.map((menu, indx) => {
@@ -91,7 +96,10 @@ const IHos = () => {
                setMenus(menus);
             }
          })
-         .catch(() => {});
+         .catch(() => {})
+         .finally(() => {
+            setIsLoading(false);
+         });
    };
 
    useEffect(() => {
@@ -105,19 +113,16 @@ const IHos = () => {
             gap: 8
          }}
       >
-         <div
-            className="ihospital-menu"
-            style={{
-               minWidth: collapsed ? 'auto' : 230
-            }}
-         >
+         <Sider theme="light" collapsedWidth={61} collapsed={collapsed} className="ihospital-menu">
             <Button title={collapsed ? 'Нээх' : 'Хаах'} type="primary" onClick={() => setCollapsed(!collapsed)}>
                {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </Button>
             <div className="menu-body">
-               <Menu theme="light" mode="inline" inlineCollapsed={collapsed} items={userMenu} />
+               <Spin spinning={isLoading}>
+                  <Menu theme="light" mode="inline" items={userMenu} inlineIndent={10} />
+               </Spin>
             </div>
-         </div>
+         </Sider>
          <div
             style={{
                padding: 12,

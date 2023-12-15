@@ -25,13 +25,13 @@ function Header() {
                   >
                      <Navbar.Brand>
                         {/* <NavLink to="/"> */}
-                           <img
-                              style={{
-                                 height: 48
-                              }}
-                              src={logo}
-                              alt="logo"
-                           />
+                        <img
+                           style={{
+                              height: 48
+                           }}
+                           src={logo}
+                           alt="logo"
+                        />
                         {/* </NavLink> */}
                      </Navbar.Brand>
                      <Navbar.Toggle className="border-[#2D8CFF]" aria-controls="offcanvasNavbar-expand-sm" />
@@ -59,7 +59,6 @@ function Header() {
                               <Nav.Link className="py-3 px-5 hover:bg-gray-100 cursor-pointer rounded-xl">
                                  <p
                                     style={{
-                                       fontFamily: 'Roboto',
                                        fontStyle: 'normal',
                                        fontWeight: 700,
                                        fontSize: 14,
@@ -73,7 +72,6 @@ function Header() {
                               <Nav.Link className="py-3 px-5 hover:bg-gray-100 cursor-pointer rounded-xl">
                                  <p
                                     style={{
-                                       fontFamily: 'Roboto',
                                        fontStyle: 'normal',
                                        fontWeight: 700,
                                        fontSize: 14,
@@ -87,7 +85,6 @@ function Header() {
                               <Nav.Link className="py-3 px-5 hover:bg-gray-100 cursor-pointer rounded-xl">
                                  <p
                                     style={{
-                                       fontFamily: 'Roboto',
                                        fontStyle: 'normal',
                                        fontWeight: 700,
                                        fontSize: 14,
@@ -101,7 +98,6 @@ function Header() {
                               <Nav.Link className="py-3 px-5 hover:bg-gray-100 cursor-pointer rounded-xl">
                                  <p
                                     style={{
-                                       fontFamily: 'Roboto',
                                        fontStyle: 'normal',
                                        fontWeight: 700,
                                        fontSize: 14,
@@ -122,7 +118,6 @@ function Header() {
                               >
                                  <p
                                     style={{
-                                       fontFamily: 'Roboto',
                                        fontStyle: 'normal',
                                        fontWeight: 400,
                                        fontSize: 14,

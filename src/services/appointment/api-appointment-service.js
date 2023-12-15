@@ -20,5 +20,8 @@ class ApiAppointmentService {
    async getPreOrder(conf) {
       return await jwtInterceopter.get('appointment/pre-order', conf);
    }
+   async patchPreOrder(id, data) {
+      return await jwtInterceopter.patch(`appointment/pre-order/${id}`, data);
+   }
 }
 export default new ApiAppointmentService();

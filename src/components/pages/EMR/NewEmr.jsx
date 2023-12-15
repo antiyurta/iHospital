@@ -162,7 +162,9 @@ class NewEmr extends React.Component {
                   />
                   <div className="flex flex-row gap-2">
                      <DoctorNotes />
-                     <EmrTimer startDate={this.props.IncomeEMRData.startDate} />
+                     {this.state.usageType === 'OUT' ? (
+                        <EmrTimer startDate={this.props.IncomeEMRData.startDate} />
+                     ) : null}
                   </div>
                </div>
                <div className={this.state.type === 'EMR' ? 'grid grid-cols-5 gap-3' : 'flex flex-col gap-3'}>

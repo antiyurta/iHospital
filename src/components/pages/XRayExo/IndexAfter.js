@@ -113,7 +113,7 @@ function IndexAfter({ type, params }) {
          }
          const data = {
             usageType: 'OUT',
-            xrayRequestId: row.Id,
+            xrayRequestId: row.id,
             patientId: row.patientId,
             cabinetId: row.cabinetId,
             inspection: row.deviceType === 0 ? 11 : 12,

@@ -12,19 +12,19 @@ function BeforeAmbulatoryDetail() {
    return (
       <div>
          <div className="flex flex-wrap">
-            <div className="w-full md:w-full xl:w-1/3 p-1">
+            <div className="w-full md:w-full xl:w-1/2 p-1">
                <PatientInformation handlesearch={false} patient={selectedPatient} />
             </div>
-            <div className="w-full md:w-full xl:w-1/3 p-1">
+            <div className="w-full md:w-full xl:w-1/2 p-1">
                <Card
                   bordered={false}
                   title={<h6 className="font-semibold m-0">Өвчтөний түүх</h6>}
                   className="header-solid h-full"
                ></Card>
             </div>
-            <div className="w-full md:w-full xl:w-1/3 p-1">
+            {/* <div className="w-full md:w-full xl:w-1/3 p-1">
                <ListOfIssues patientId={selectedPatient.id} />
-            </div>
+            </div> */}
             <div className="w-full p-1">
                {usageType === 'OUT' ? (
                   <BeforeAmbulatoryTabs

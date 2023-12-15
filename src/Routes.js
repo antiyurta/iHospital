@@ -96,6 +96,7 @@ const MainBed = React.lazy(() => import('./components/pages/Bed/MainBed'));
 const RequestAnalys = React.lazy(() => import('./components/pages/Laboratory/RequestAnalys'));
 // hynah sambar
 const Dashboard = React.lazy(() => import('./components/pages/Organization/Dashboard'));
+
 export const PublicRoutes = [
    {
       name: 'Privacy',

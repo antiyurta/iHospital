@@ -136,7 +136,7 @@ const Question = (props) => {
                }}
             />
          </div>
-         {type === 'radio' || type === 'table' ? (
+         {type === 'radio' || type === 'table' || type === 'checkbox' ? (
             <Button onClick={() => handleClick(item.index)} icon={<PlusOutlined />} />
          ) : null}
          {type === 'title' ? <Button onClick={() => handleClickTitle(item.index)} icon={<PlusOutlined />} /> : null}

@@ -2,8 +2,11 @@ import React from 'react';
 
 import Test from './test';
 
+// БАМБАЙ
+import Doc3 from './doc3';
 // ТҮРҮҮ БУЛЧИРХАЙН ХЭТ АВИАН ОНОШИЛГОО
 import Doc4 from './doc4';
+import Template from './Template';
 
 const options = [
    {
@@ -66,8 +69,15 @@ export function ReturnByIdToName(id) {
 }
 
 export function ReturnById(document, patient) {
+   console.log(document, patient);
    if (document.documentId === 1) {
       return <Test data={document.data} patient={patient} />;
+   } else if (document.documentId === 3) {
+      return (
+         <Template>
+            <Doc3 data={document.data} patient={patient} />
+         </Template>
+      );
    } else if (document.documentId === 4) {
       return <Doc4 data={document.data} patient={patient} />;
    }

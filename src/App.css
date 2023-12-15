@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,600;1,400;1,600&display=swap');
-@import url('https://fonts.cdnfonts.com/css/montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
 @import './style/main.css';
 @import './style/responsive.css';
 @import './style/Hospital.css';
@@ -14,7 +12,9 @@
    --primary-color: #0095ff;
    --second-color: #f3f4f6;
 }
-
+body {
+   font-family: 'Ubuntu', sans-serif;
+}
 /* new footer */
 footer {
    background: #2d8cff;
@@ -313,7 +313,7 @@ legend.scheduler-border {
 
 .ant-form-item-label label {
    height: 28px;
-   font-size: 12px;
+   font-size: 13px;
    font-weight: bold;
 }
 
@@ -478,8 +478,7 @@ input[type='number'] {
 }
 
 .ant-btn {
-   height: 28px !important;
-   line-height: 0 !important;
+   line-height: 1.1 !important;
    border-radius: 6px !important;
    white-space: normal;
 }

@@ -10,10 +10,10 @@ const Pagination = (props) => {
       cloneRange[0] = (page - 1) * limit + 1;
       cloneRange[1] = (page - 1) * limit + displayTotal;
       setRange(cloneRange);
-   }, [displayTotal]);
+   }, [meta]);
    return (
       <div className="pagi-list">
-         <p>{`${range[0]}-ээс ${range[1]} / Нийт ${meta?.itemCount}`}</p>
+         <p>{`${range[0]}-ээс ${range[1]} / Нийт ${meta?.itemCount || 0}`}</p>
          <div className="pager">
             <Button
                disabled={!meta?.hasPreviousPage}
@@ -45,7 +45,6 @@ const Pagination = (props) => {
             }}
             onSelect={(value) => {
                setLimit(value);
-               setPage(1);
             }}
             value={limit}
             options={[

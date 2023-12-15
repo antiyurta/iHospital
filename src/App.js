@@ -5,19 +5,16 @@ import '../src/style/page.css';
 import '../src/style/layout.scss';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContextProvider } from './features/AuthContext';
-// const Login = React.lazy(() => import('./components/Login'));
+
 import Login from './components/Login';
-// const Hospital = React.lazy(() => import('./components/pages/Organization/Hospital'));
 import Hospital from './components/pages/Organization/Hospital';
-// const Home = React.lazy(() => import('./components/Home'));
 import Home from './components/Home';
 import Profile from './components/Profile';
 const ExaminationParams = React.lazy(() => import('./components/pages/service/ExaminationParams'));
 const Medicine = React.lazy(() => import('./components/pages/service/Medicine/Medicine'));
-// const EMR = React.lazy(() => import('./components/pages/EMR/NewEmr'));
-import EMR from './components/pages/EMR/NewEmr';
+const EMR = React.lazy(() => './components/pages/EMR/NewEmr');
 const BeforeAmbulatoryDetail = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail'));
-const Menu = React.lazy(() => import('./components/pages/reference/Menu'));
+import Menu from './components/pages/reference/Menu';
 const RoomtDtl = React.lazy(() => import('./components/pages/Bed/RoomDtl'));
 const MedicineSupport = React.lazy(() => import('./components/pages/service/MedicineSupport'));
 const Finance = React.lazy(() => import('./components/pages/Finance/Finance'));
@@ -61,6 +58,7 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                      <Route path="/main/" element={<IHos />}>
                         <Route path="/main/emr" element={<EMR />} />
+                        <Route path="/main/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
                         {ProtectedRoutes.map((route, index) => {
                            return (
                               <Route
@@ -80,7 +78,6 @@ function App() {
                      <Route path="/permission" element={<Permission />} />
                      <Route path="/menu" element={<Menu />} />
                      <Route path="/hospital" element={<Hospital />} />
-                     <Route path="/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
                      {/* ene heregtei */}
                      <Route path="/medicine" element={<Medicine />} />
                      <Route path="/medicineSupport" element={<MedicineSupport />} />
