@@ -18,8 +18,7 @@ module.exports = (_env, argv) => {
       output: {
          filename: '[name].js',
          chunkFilename: '[name].bundle.js',
-         path: path.resolve(__dirname, '..', 'dist'),
-         publicPath: '/'
+         path: path.resolve(__dirname, './build')
       },
       devServer: {
          compress: true,
