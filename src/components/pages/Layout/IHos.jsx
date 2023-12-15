@@ -1,4 +1,3 @@
-import { Button, Layout, Menu, Spin } from 'antd';
 import React, { Fragment, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
@@ -7,9 +6,6 @@ import { selectCurrentRoleId, selectCurrentUserId } from '../../../features/auth
 //
 import PermissionServices from '../../../services/organization/permission';
 import FullScreenLoader from '../../FullScreenLoader';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-
-const { Sider } = Layout;
 
 const IHos = () => {
    const [userMenu, setMenus] = useState([]);

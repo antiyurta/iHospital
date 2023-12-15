@@ -1,7 +1,6 @@
 import React, { Fragment, Suspense, useContext, useState } from 'react';
 import companyLogo from '../../../assets/logo/iHospital.png';
 import profileImg from '../../../assets/images/test.jpg';
-import { Button, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';

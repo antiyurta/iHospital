@@ -72,6 +72,10 @@
                   }
                }
             }
+            .menu-item.active {
+               border-radius: 8px;
+               background-color: #dde0e5;
+            }
             .menu-item-sub {
                display: flex;
                flex-direction: column;

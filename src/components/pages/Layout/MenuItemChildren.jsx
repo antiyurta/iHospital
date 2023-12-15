@@ -1,5 +1,4 @@
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import React, { Children, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import downIcon from './down.svg';
 import upIcon from './up.svg';

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentRoleId, selectCurrentUserId } from '../../../features/authReducer';
 import { Spin } from 'antd';
@@ -7,9 +7,7 @@ import PermissionServices from '../../../services/organization/permission';
 import MenuItem from './MenuItem';
 import { Link } from 'react-router-dom';
 import MenuItemChildren from './MenuItemChildren';
-import AuthContext from '../../../features/AuthContext';
 const Sidebar = ({ collapsed }) => {
-   const { user } = useContext(AuthContext);
    const [userMenu, setMenus] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const UserId = useSelector(selectCurrentUserId);
