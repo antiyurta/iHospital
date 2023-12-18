@@ -97,11 +97,16 @@
                   }
                }
                .menu-item-sub-body {
-                  display: 'flex';
+                  display: flex;
+                  flex-direction: column;
                   padding-left: 6px;
-                  flex-direction: 'column';
                   gap: 3px;
                   height: auto;
+                  .before {
+                     display: flex;
+                     flex-direction: row;
+                     gap: 3px;
+                  }
                }
                p.label {
                   color: #a0aab3;
