@@ -25,7 +25,7 @@ const MenuItemChildren = ({ data, collapsed, children }) => {
          <div className="menu-item-sub-body">
             {expanded
                ? children.map((child, index) => (
-                    <div className="before">
+                    <div key={index} className="before">
                        {index === children?.length - 1 ? (
                           <img src={lastLine} alt="last" />
                        ) : (

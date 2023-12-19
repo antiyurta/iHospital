@@ -10,6 +10,7 @@ const Index = (props) => {
    const [items, setItems] = useState([]);
 
    useEffect(() => {
+      console.log(data);
       if (data != undefined) {
          setItems(data);
       } else {

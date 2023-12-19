@@ -3,8 +3,11 @@ import { selectCurrentHospitalId } from '../../../../features/authReducer';
 import { useEffect } from 'react';
 
 // uni med
+import React from 'react';
 import * as universalMed from './universalMed/index';
 import * as enerehui from './enerehui/index';
+const UniversalmedReturnById = universalMed.ReturnById;
+const EnerehuiReturnById = enerehui.ReturnById;
 
 function ReturnAll(hospitalId) {
    if (hospitalId === 1) {
@@ -22,11 +25,12 @@ function ReturnByIdToName(hospitalId, docId) {
    }
    return;
 }
-function ReturnById(hospitalId, document, patient) {
+function ReturnById(props) {
+   const { hospitalId, document, patient, body } = props;
    if (hospitalId === 1) {
-      return universalMed.ReturnById(document, patient);
+      return <UniversalmedReturnById document={document} patient={patient} />;
    } else if (hospitalId === 2) {
-      return enerehui.ReturnById(document, patient);
+      return <EnerehuiReturnById document={document} patient={patient} body={body} />;
    }
    return;
 }

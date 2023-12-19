@@ -20,6 +20,7 @@ import OneWindow from './OneWindow';
 import { FullscreenExitOutlined, FullscreenOutlined, PrinterOutlined } from '@ant-design/icons';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
+import NewEmrSupport from './NewEmrSupport';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -136,14 +137,7 @@ class NewEmr extends React.Component {
                      />
                   </div>
                )} */}
-               <div className="emr-navbar">
-                  <button>Гарын авлага</button>
-                  <button>Тайлан</button>
-                  <button>Скан EMR</button>
-                  <button>Үйлчлүүлэгчийн хүснэгт </button>
-                  <button>Эрүүл мэндийн даатгал </button>
-                  <button>Маягтын түүх</button>
-               </div>
+               <NewEmrSupport />
                <div className="w-full flex sm:flex-col xl:flex-row gap-3 justify-between p-2 bg-white">
                   <PatientInformation
                      patient={this.state.selectedPatient}

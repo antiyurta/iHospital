@@ -475,9 +475,6 @@ function FormRender({ useForm, form, formOptionIds, isCheck }) {
          {form?.documentForm?.map((form, index) => {
             return (
                <div key={index}>
-                  <Divider orientation="left" className="text-sm my-2">
-                     {form.label}
-                  </Divider>
                   <div className="flex flex-wrap gap-3">
                      <Render questions={form.options} />
                   </div>

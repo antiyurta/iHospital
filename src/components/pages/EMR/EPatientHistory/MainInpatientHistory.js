@@ -15,6 +15,11 @@ import jwtInterceopter from '../../../jwtInterceopter';
 import DocumentShow from '../../611/DocumentShow';
 import SentService from '../Insurance/sent-service';
 //
+//services
+import OrganizationDocumentRoleServices from '../../../../services/organization/documentRole';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
+//
+import Customized from '../../BeforeAmbulatory/Customized/Index';
 const { TextArea } = Input;
 const { CheckableTag } = Tag;
 function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
@@ -25,6 +30,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
    const [story, setStory] = useState({});
    //
+   const incomeEmrData = useSelector(selectCurrentEmrData);
    const [documents, setDocuments] = useState([]);
    /** @description insurance connection start => */
    const [isInsuranceModal, setIsInsuranceModal] = useState(false);
@@ -109,81 +115,92 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
    // const items = [
    //    { label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }
    // ];
-   const [items, setItems] = useState([{ label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }]);
-   const handleMenuClick = (e) => {
-      getStory();
-      if (e.key == 1) {
-         setItems([{ label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }]);
-      } else if (e.key == 2) {
-         setItems([
-            {
-               label: 'Ерөнхий мэдээлэл',
-               key: 1,
-               children: (
-                  <StoryGeneral
-                     id={story.id}
-                     patient={story.patient}
-                     diagnoses={story.diagnoses}
-                     anemis={story.anemis}
-                     general={story.general}
-                  />
-               )
-            }
-         ]);
-      } else if (e.key == 3) {
-         setIsOpenDocumentModal(true);
-      } else if (e.key == 6) {
-         setItems([
-            {
-               label: 'Гарах',
-               key: 1,
-               children: <Epicriz />
-            }
-         ]);
-      }
+   const [items, setItems] = useState([{ label: 'Өдрийн тэмдэглэл', key: 1, childre: <DoctorDaily /> }]);
+   const handleMenuClick = (key) => {
+      setItems([
+         {
+            label: documents.find((document) => document.key === Number(key))?.label,
+            key: key,
+            children: (
+               <Customized
+                  usageType={'IN'}
+                  documentValue={Number(key)}
+                  documentType={0}
+                  structureId={incomeEmrData.departmentId}
+                  appointmentId={incomeEmrData.appointmentId}
+                  patientId={incomeEmrData.patientId}
+                  onOk={(state) => console.log(state)}
+               />
+            )
+         }
+      ]);
+      // getStory();
+      // if (e.key == 1) {
+      //    setItems([{ label: 'Өдрийн тэмдэглэл', key: 1, children: <DoctorDaily /> }]);
+      // } else if (e.key == 2) {
+      //    setItems([
+      //       {
+      //          label: 'Ерөнхий мэдээлэл',
+      //          key: 1,
+      //          children: (
+      //             <StoryGeneral
+      //                id={story.id}
+      //                patient={story.patient}
+      //                diagnoses={story.diagnoses}
+      //                anemis={story.anemis}
+      //                general={story.general}
+      //             />
+      //          )
+      //       }
+      //    ]);
+      // } else if (e.key == 3) {
+      //    setIsOpenDocumentModal(true);
+      // } else if (e.key == 6) {
+      //    setItems([
+      //       {
+      //          label: 'Гарах',
+      //          key: 1,
+      //          children: <Epicriz />
+      //       }
+      //    ]);
+      // }
    };
    const documentHandleClick = (document) => {
       setItems([document]);
       setIsOpenDocumentModal(false);
    };
    const getDocuments = async () => {
-      // setIsLoadingGetDocuments(true);
-      const conf = {
-         headers: {},
+      await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
             structureId: deparmentId,
             usageType: 'IN',
             documentType: 0
          }
-      };
-      await jwtInterceopter
-         .get('organization/document-role/show', conf)
-         .then((response) => {
-            if (response.data.response?.length === 0) {
-               // openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
-            } else {
-               var data = [];
-               response.data.response?.map((item) =>
-                  item?.documents?.map((document) => {
-                     data.push(document);
-                  })
-               );
-               console.log(data);
-               setDocuments(data);
-               // setDocuments(data);
-               // setIsOpenAM(true);
-               // setDocumentId(0);
-            }
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-      // .finally(() => setIsLoadingGetDocuments(false));
+      }).then(({ data: { response } }) => {
+         if (response?.length === 0) {
+            openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
+         } else {
+            var data = [];
+            response?.map((item) =>
+               item?.documents?.map((document) => {
+                  data.push(document);
+               })
+            );
+            const sortedArray = data
+               .slice()
+               .sort((a, b) => a.value - b.value)
+               .map((sArray) => ({
+                  label: sArray.docName,
+                  key: sArray.value
+               }));
+            console.log(sortedArray);
+            setDocuments(sortedArray);
+         }
+      });
    };
-   const documentsMenu = <Menu onClick={(e) => console.log(e)} items={documents} />;
+   const menuddd = <Menu onClick={({ key }) => handleMenuClick(key)} items={documents} />;
    useEffect(() => {
-      // getStory();
       getDocuments();
    }, []);
    return (
@@ -217,27 +234,13 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
             />
          </div>
 
-         {/* <Dropdown
-            overlay={documentsMenu}
-            trigger={['click']}
-            arrow={{
-               pointAtCenter: true
-            }}
-         >
-            <Button
-               type="link"
-               style={{
-                  paddingTop: 0
-               }}
-               className="ant-dropdown-link"
-               onClick={(e) => e.preventDefault()}
-            >
-               Маягтийн жагсаалт
+         <Dropdown overlay={menuddd} trigger={['click']}>
+            <Button type="primary" onClick={(e) => e.preventDefault()}>
+               Маягт жагсаалт
             </Button>
-         </Dropdown> */}
-
+         </Dropdown>
          <div>
-            <Tabs type="card" items={testItems} />
+            <Tabs type="card" items={items} />
          </div>
          <Modal title="Маягт сонгох" open={isOpenDocumentModal} onCancel={() => setIsOpenDocumentModal(false)}>
             <Index

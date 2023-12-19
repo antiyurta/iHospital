@@ -61,6 +61,7 @@ function DocumentUpload({ type }) {
    };
    const onFinish = async (values) => {
       if (editMode) {
+         // values['documentForm'] = [];
          await OrganizationDocumentFormService.patch(selectedId, values).then((response) => {
             if (response.status === 200) {
                form.resetFields();

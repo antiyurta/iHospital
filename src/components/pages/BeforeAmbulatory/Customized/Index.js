@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Result } from 'antd';
+import { Button, Form, Input, Progress, Result } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import { NewOption, NewRangePicker, NewSelect } from '../../../Input/Input';
 import OrganizationStructureService from '../../../../services/organization/structure';
 import OrganizationEmployeeService from '../../../../services/organization/employee';
 import { totalCalculator } from '../../../injection';
+import NewFormRender from './NewFormRender';
 //
 function Index(props) {
    const { usageType, documentValue, documentType, structureId, appointmentId, patientId, onOk } = props;
@@ -34,8 +35,6 @@ function Index(props) {
    const [isLoading, setIsLoading] = useState(false);
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
-   const [selectedOptionId, setSelectedOptionId] = useState(Number);
-   const [isOpenFormModal, setIsOpenFormModal] = useState(false);
    const [cabinets, setCabinets] = useState([]);
    const [employees, setEmployees] = useState([]);
    const [selectedCabinet, setSelectedCabinet] = useState('');
@@ -106,15 +105,13 @@ function Index(props) {
          });
    };
    const getDocumentOption = async () => {
-      const conf = {
-         headers: {},
+      await DocumentOptionServices.getByPageFilter({
          params: {
             structureId: structureId,
             employeePositionIds: AppIds,
             documentValue: documentValue
          }
-      };
-      await DocumentOptionServices.getByPageFilter(conf)
+      })
          .then((response) => {
             setDocumentOptions(response.data.response?.data);
          })
@@ -123,145 +120,90 @@ function Index(props) {
          });
    };
    const onFinish = async (values) => {
-      await jwtInterceopter
-         .get(documentForm.url, {
-            params: {
-               appointmentId: appointmentId,
-               patientId: patientId,
-               documentId: documentValue,
-               usageType: usageType
-            }
-         })
-         .then(async (response) => {
-            const data = response.data.response;
-            if (data.length > 0) {
-               await jwtInterceopter
-                  .patch(documentForm.url + '/' + data[0]._id, {
-                     data: [
-                        ...data[0].data,
-                        {
-                           ...values,
-                           createdAt: new Date(),
-                           createdByName: {
-                              lastName: lastName,
-                              firstName: firstName
-                           }
-                        }
-                     ]
-                  })
-                  .then((res) => {
-                     if (res.data.response.success) {
-                        openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-                     }
-                  });
-            } else {
-               const data = {
+      setIsLoading(true);
+      if (documentValue === 87) {
+         const { total, message } = totalCalculator(values);
+         if (message) {
+            openNofi('error', 'Анхааруулга', message);
+         }
+      }
+      if (documentForm.isMulti) {
+         await jwtInterceopter
+            .get(documentForm.url, {
+               params: {
                   appointmentId: appointmentId,
-                  usageType: usageType,
-                  documentId: documentValue,
                   patientId: patientId,
-                  type: 'FORM',
-                  data: [
-                     {
-                        ...values,
-                        createdAt: new Date(),
-                        createdByName: {
-                           lastName: lastName,
-                           firstName: firstName
+                  documentId: documentValue,
+                  usageType: usageType
+               }
+            })
+            .then(async ({ data: { response } }) => {
+               if (response.length > 0) {
+                  const oldData = response[0].data;
+                  const mergedData = { ...values, ...oldData };
+                  console.log(mergedData);
+                  // await jwtInterceopter
+                  //    .patch(documentForm.url + '/' + response[0]._id, {
+                  //       data: {
+                  //          ...response[0].data,
+                  //          ...values
+                  //       }
+                  //    })
+                  //    .then((res) => {
+                  //       if (res.data.response.success) {
+                  //          openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+                  //       }
+                  //    });
+               } else {
+                  await jwtInterceopter
+                     .post(documentForm.url, {
+                        appointmentId: appointmentId,
+                        usageType: usageType,
+                        documentId: documentValue,
+                        patientId: patientId,
+                        type: 'FORM',
+                        data: values
+                     })
+                     .then((res) => {
+                        if (res.data.response.success) {
+                           openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                         }
-                     }
-                  ]
-               };
-               await jwtInterceopter.post(documentForm.url, data).then((res) => {
-                  if (res.data.response.success) {
-                     openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-                  }
-               });
-            }
-         });
-      onOk(false);
+                     })
+                     .finally(() => {
+                        onOk(false);
+                     });
+               }
+            })
+            .finally(() => {
+               setIsLoading(false);
+            });
+      } else {
+         await jwtInterceopter
+            .post(documentForm.url, {
+               appointmentId: appointmentId,
+               usageType: usageType,
+               documentId: documentValue,
+               patientId: patientId,
+               data: values,
+               type: 'FORM'
+            })
+            .then((response) => {
+               if (response.status === 201) {
+                  openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+                  onOk(false);
+               }
+            })
+            .catch((error) => {
+               if (error.response.status === 409) {
+                  openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
+               }
+            })
+            .finally(() => {
+               setIsLoading(false);
+            });
+      }
    };
-   // const onFinish = async (values) => {
-   //    setIsLoading(true);
-   //    // tusga nohtsoluud
-   //    if (documentValue === 87) {
-   //       const { total, message } = totalCalculator(values);
-   //       if (message) {
-   //          openNofi('error', 'Анхааруулга', message);
-   //       }
-   //    }
-   //    const data = {
-   //       appointmentId: appointmentId,
-   //       usageType: usageType,
-   //       documentId: documentValue,
-   //       patientId: patientId,
-   //       data: values
-   //    };
-   //    if (documentForm.isMulti) {
-   //       await jwtInterceopter
-   //          .get(documentForm.url, {
-   //             params: {
-   //                appointmentId: appointmentId,
-   //                usageType: usageType,
-   //                documentId: documentValue,
-   //                patientId: patientId
-   //             }
-   //          })
-   //          .then(async (response) => {
-   //             const incomeData = response.data.response;
-   //             if (incomeData?.length > 0) {
-   //                console.log(incomeData[0].data);
-   //                console.log(values);
-   //                await jwtInterceopter
-   //                   .patch(documentForm.url + '/' + incomeData[0]._id, {
-   //                      data: {
-   //                         ...incomeData[0].data,
-   //                         ...values
-   //                      }
-   //                   })
-   //                   .then((res) => {
-   //                      if (res.status === 200) {
-   //                         setIsOpenFormModal(false);
-   //                      }
-   //                   });
-   //             } else {
-   //                await jwtInterceopter
-   //                   .post(documentForm.url, data)
-   //                   .then((response) => {
-   //                      if (response.status === 201) {
-   //                         setIsOpenFormModal(false);
-   //                      }
-   //                   })
-   //                   .catch((error) => {
-   //                      if (error.response.status === 409) {
-   //                         openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
-   //                      }
-   //                   })
-   //                   .finally(() => {
-   //                      setIsLoading(false);
-   //                   });
-   //             }
-   //          });
-   //    } else {
-   //       await jwtInterceopter
-   //          .post(documentForm.url, data)
-   //          .then((response) => {
-   //             if (response.status === 201) {
-   //                openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-   //             }
-   //          })
-   //          .catch((error) => {
-   //             if (error.response.status === 409) {
-   //                openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
-   //             }
-   //          })
-   //          .finally(() => {
-   //             setIsLoading(false);
-   //          });
-   //    }
-   //    onOk(false);
-   //    // getData();
-   // };
+
    const onFinishFilter = async (filters) => {
       console.log(filters);
       setIsLoading(true);
@@ -307,22 +249,36 @@ function Index(props) {
          getCabinets();
       }
    }, [documentForm]);
+
+   const checkProgress = (_current, all) => {
+      const length = Object.keys(all)?.length - 1;
+      const selected = Object.entries(all)
+         ?.map(([key, value]) => {
+            if (key != 'documentPercent') {
+               return value;
+            }
+         })
+         .filter(Boolean).length;
+      return (selected / length) * 100;
+   };
+
+   const ProgressBar = (props) => {
+      const { ...rest } = props;
+      const Dummy = (props) => {
+         return <Progress percent={props.value?.toFixed(1)} />;
+      };
+      return (
+         <Form.Item {...rest}>
+            <Dummy />
+         </Form.Item>
+      );
+   };
+
    if (documentValue === 0) {
       return <Result title="Маягт сонгоно уу" />;
    }
    return (
       <div className="flex flex-col gap-3">
-         <div className="w-full">
-            <p
-               style={{
-                  fontSize: 16,
-                  fontWeight: 700,
-                  textAlign: 'center'
-               }}
-            >
-               {documentForm.name}
-            </p>
-         </div>
          {documentType === 1 ? (
             <div className="flex flex-col gap-3">
                <Form onFinish={onFinishFilter} form={filterForm} layout="vertical">
@@ -417,18 +373,32 @@ function Index(props) {
             </div>
          ) : (
             <>
-               <div className="w-full px-3 overflow-auto">
-                  <Form form={form} layout="vertical">
-                     <FormRender
+               <div className="flex flex-col gap-1 px-3 overflow-auto">
+                  <Form
+                     form={form}
+                     layout="vertical"
+                     onValuesChange={(c, a) => {
+                        form.setFieldValue('documentPercent', checkProgress(c, a));
+                     }}
+                     initialValues={{
+                        documentPercent: 0
+                     }}
+                  >
+                     <ProgressBar className="mb-0" name="documentPercent">
+                        <Input />
+                     </ProgressBar>
+                     <NewFormRender
                         useForm={form}
                         form={documentForm}
-                        formOptionIds={documentOptions[selectedOptionId]?.formOptionIds}
+                        formOptionIds={documentOptions[0]?.formOptionIds}
                         isCheck={true}
                      />
                   </Form>
-               </div>
-               <div className="w-full">
-                  <Button onClick={() => form.validateFields().then((values) => onFinish(values))} type="primary">
+                  <Button
+                     loading={isLoading}
+                     onClick={() => form.validateFields().then((values) => onFinish(values))}
+                     type="primary"
+                  >
                      Хадгалах
                   </Button>
                </div>

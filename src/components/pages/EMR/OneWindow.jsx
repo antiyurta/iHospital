@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useState } from 'react';
 import ListOfIssues from './ListOfIssues';
 import OrderHistory from './OrderHistory';
-import DocumentHistory from './DocumentHistory';
 
 const OneWindow = () => {
    const [activeKey, setActiveKey] = useState(0);
@@ -13,7 +12,7 @@ const OneWindow = () => {
       } else if (activeKey === 1) {
          return OrderHistory;
       } else if (activeKey === 2) {
-         return DocumentHistory;
+         return <div>1</div>;
       }
    }, [activeKey]);
    return (

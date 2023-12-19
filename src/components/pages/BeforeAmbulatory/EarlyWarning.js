@@ -1,10 +1,10 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт -> Эрт сэрэмжлүүлэх үнэлгээ
-import React, { useState, useEffect, useRef } from 'react';
-import { Button, Col, Input, Row, Select, Modal, List, Table, Form, Card } from 'antd';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Button, Table, Card } from 'antd';
 import { useSelector } from 'react-redux';
-import { selectCurrentHospitalName, selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentHospitalName } from '../../../features/authReducer';
 // import { Table } from 'react-bootstrap';
-import { DefaultPost, Get, getAge, openNofi } from '../../comman';
+import { formatNameForDoc } from '../../comman';
 //
 import {
    Chart as ChartJS,
@@ -17,10 +17,8 @@ import {
    Title
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import moment from 'moment';
-import { PlusOutlined, PlusSquareOutlined, PrinterOutlined } from '@ant-design/icons';
+import { PlusOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useReactToPrint } from 'react-to-print';
-import { useLocation } from 'react-router-dom';
 import EarlyWarningPrint from './EarlyWarningPrint';
 //
 ///
@@ -45,19 +43,15 @@ import jwtInterceopter from '../../jwtInterceopter';
 import NewCard from '../../Card/Card';
 import NewModal from '../../Modal/Modal';
 import { ReturnById } from '../611/Document/Index';
+import dayjs from 'dayjs';
 //
 
 export default function EarlyWarning({ PatientId, StructureId, PatientData, UsageType, ListId, isDoctor }) {
    const [data, setData] = useState([]);
+   const [isOpenModal, setIsOpenModal] = useState(false);
    const hospitalName = useSelector(selectCurrentHospitalName);
+   const [isLoading, setIsLoading] = useState(false);
    const printRef = useRef();
-   const [lineLabels, setLineLabels] = useState([]);
-   const [breathData, setBreathData] = useState([]);
-   const [spo2Data, setSpo2Data] = useState([]);
-   const [pulseData, setPulseData] = useState([]);
-   const [HighPressureRightData, setHighPressureRightData] = useState([]);
-   const [LowPressureRightData, setLowPressureRightData] = useState([]);
-   const [tempData, setTempData] = useState([]);
    const [printLoading, setPrintLoading] = useState(false);
 
    const handlePrint = useReactToPrint({
@@ -70,6 +64,7 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
    ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
    const vsOptions = {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
          legend: {
             display: true,
@@ -84,6 +79,7 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
    };
    const CDOptions = {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
          legend: {
             display: true,
@@ -96,170 +92,110 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
          }
       }
    };
-   const LineGraphVS = {
-      labels: lineLabels,
-      datasets: [
-         {
-            label: 'Амьсгал',
-            data: breathData,
-            borderColor: ['#2596be'],
-            backgroundColor: '#2596be',
-            borderWidth: 1
-         },
-         {
-            label: 'SPO2',
-            data: spo2Data,
-            borderColor: ['#21130d'],
-            backgroundColor: '#21130d',
-            borderWidth: 1
-         },
-         {
-            label: 'Пульс',
-            data: pulseData,
-            borderColor: ['#ff0000'],
-            backgroundColor: '#ff0000',
-            borderWidth: 2
-         }
-      ]
-   };
-   const LineGraphCD = {
-      labels: lineLabels,
-      datasets: [
-         {
-            label: 'Дээд даралт',
-            data: HighPressureRightData,
-            borderColor: ['#c51ceb'],
-            backgroundColor: '#c51ceb',
-            borderWidth: 1
-         },
-         {
-            label: 'Доод даралт',
-            data: LowPressureRightData,
-            borderColor: ['#2596be'],
-            backgroundColor: '#2596be',
-            borderWidth: 1
-         },
-         {
-            label: 'Халуун',
-            data: tempData,
-            borderColor: ['#000000'],
-            backgroundColor: '#000000',
-            borderWidth: 2
-         }
-      ]
-   };
+
    // shineer ehlew
-   const [isOpenModal, setIsOpenModal] = useState(false);
    const columns = [
       {
          title: 'Огноо',
          dataIndex: 'createdAt',
          render: (text) => {
-            return moment(text).format('YYYY/MM/DD HH:mm');
+            return dayjs(text).format('YYYY/MM/DD HH:mm');
          }
       },
       {
-         title: 'Амин үзүүлэлт',
-         children: [
-            {
-               title: 'Систол',
-               dataIndex: 'highPressureRight',
-               render: (text) => {
-                  return {
-                     props: {
-                        style: { background: colorSystolews(text) }
-                     },
-                     children: <div title={text}>{highPressureRightCalculator(text)}</div>
-                  };
-               }
-            },
-            {
-               title: 'Халуун',
-               dataIndex: 'temp',
-               render: (text) => {
-                  return {
-                     props: {
-                        style: { background: colorTempews(text) }
-                     },
-                     children: <div title={text}>{tempCalculator(text)}</div>
-                  };
-               }
-            },
-            {
-               title: 'Амьсгал',
-               dataIndex: 'respiratoryRate',
-               render: (text) => {
-                  return {
-                     props: {
-                        style: { background: colorRespiratoryews(text) }
-                     },
-                     children: <div title={text}>{respiratoryRateCalculator(text)}</div>
-                  };
-               }
-            },
-            {
-               title: `SpO'2`,
-               dataIndex: 'spO2',
-               render: (text) => {
-                  return {
-                     props: {
-                        style: { background: colorSpoews(text) }
-                     },
-                     children: <div title={text}>{spO2Calculator(text)}</div>
-                  };
-               }
-            },
-            {
-               title: `Пульс`,
-               dataIndex: 'pulse',
-               render: (text) => {
-                  return {
-                     props: {
-                        style: { background: colorPulsews(text) }
-                     },
-                     children: <div title={text}>{pulseCalculator(text)}</div>
-                  };
-               }
-            },
-            {
-               title: 'Ухаан санаа',
-               dataIndex: 'mind',
-               render: (text) => {
-                  return {
-                     props: {
-                        style: { background: colorMindews(text) }
-                     },
-                     children: <div title={text}>{mindCalculator(text)}</div>
-                  };
-               }
-            },
-            {
-               title: 'Нийт',
-               render: (_, record) => {
-                  return {
-                     props: {
-                        style: { background: colorTotal(record) }
-                     },
-                     children: <div title={totalCalculator(record)?.message}>{totalCalculator(record)?.total}</div>
-                  };
-               }
-            }
-         ]
-      },
-      {
-         title: 'Сувилагч',
-         dataIndex: 'createdByName',
+         title: 'Систол',
+         dataIndex: ['data', 'highPressureRight'],
          render: (text) => {
             return {
                props: {
-                  style: { whiteSpace: 'pre-line' }
+                  style: { background: colorSystolews(text) }
                },
-               children: text.lastName + '.' + text.firstName
+               children: <div title={text}>{highPressureRightCalculator(text)}</div>
             };
+         }
+      },
+      {
+         title: 'Халуун',
+         dataIndex: ['data', 'temp'],
+         render: (text) => {
+            return {
+               props: {
+                  style: { background: colorTempews(text) }
+               },
+               children: <div title={text}>{tempCalculator(text)}</div>
+            };
+         }
+      },
+      {
+         title: 'Амьсгал',
+         dataIndex: ['data', 'respiratoryRate'],
+         render: (text) => {
+            return {
+               props: {
+                  style: { background: colorRespiratoryews(text) }
+               },
+               children: <div title={text}>{respiratoryRateCalculator(text)}</div>
+            };
+         }
+      },
+      {
+         title: `SpO'2`,
+         dataIndex: ['data', 'spO2'],
+         render: (text) => {
+            return {
+               props: {
+                  style: { background: colorSpoews(text) }
+               },
+               children: <div title={text}>{spO2Calculator(text)}</div>
+            };
+         }
+      },
+      {
+         title: `Пульс`,
+         dataIndex: ['data', 'pulse'],
+         render: (text) => {
+            return {
+               props: {
+                  style: { background: colorPulsews(text) }
+               },
+               children: <div title={text}>{pulseCalculator(text)}</div>
+            };
+         }
+      },
+      {
+         title: 'Ухаан санаа',
+         dataIndex: ['data', 'mind'],
+         render: (text) => {
+            return {
+               props: {
+                  style: { background: colorMindews(text) }
+               },
+               children: <div title={text}>{mindCalculator(text)}</div>
+            };
+         }
+      },
+      {
+         title: 'Нийт',
+         dataIndex: 'data',
+         render: (record) => {
+            return {
+               props: {
+                  style: { background: colorTotal(record) }
+               },
+               children: <div title={totalCalculator(record)?.message}>{totalCalculator(record)?.total}</div>
+            };
+         }
+      },
+      {
+         title: 'Сувилагч',
+         dataIndex: 'createdBy',
+         render: (text) => {
+            return formatNameForDoc(text.lastName, text.firstName);
          }
       }
    ];
    const getData = async () => {
+      setIsLoading(true);
       await jwtInterceopter
          .get('document-middleware', {
             params: {
@@ -269,60 +205,78 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
                usageType: UsageType
             }
          })
-         .then((response) => {
-            let data = [];
-            response.data.response?.map((item) => item.data?.map((subData) => data.push(subData)));
-            setData(data);
-         });
-   };
-   const getDataForGraph = async () => {
-      await jwtInterceopter
-         .get('document-middleware', {
-            params: {
-               limit: 7,
-               appointmentId: ListId,
-               patientId: PatientId,
-               documentId: 87,
-               usageType: UsageType
-            }
+         .then(({ data: { response } }) => {
+            setData(response);
          })
-         .then((response) => {
-            let data = [];
-            response.data.response?.map((item) => item.data?.map((subData) => data.push(subData)));
-            var demoLineLabels = [];
-            var demoBreathData = [];
-            var demoSpo2Data = [];
-            var demoPulseData = [];
-            var demoHighPressureRight = [];
-            var demoLowPressureRight = [];
-            var demoTempData = [];
-            data?.map((item) => {
-               demoLineLabels.push(moment(item.createdAt).format('YYYY-MM-DD HH:mm'));
-               demoBreathData.push(item?.respiratoryRate);
-               demoSpo2Data.push(item?.spO2);
-               demoPulseData.push(item?.pulse);
-               demoHighPressureRight.push(item?.highPressureRight);
-               demoLowPressureRight.push(item?.lowPressureRight);
-               demoTempData.push(item?.temp);
-            });
-            setLineLabels(demoLineLabels);
-            setBreathData(demoBreathData);
-            setSpo2Data(demoSpo2Data);
-            setPulseData(demoPulseData);
-            setHighPressureRightData(demoHighPressureRight);
-            setLowPressureRightData(demoLowPressureRight);
-            setTempData(demoTempData);
+         .finally(() => {
+            setIsLoading(false);
          });
    };
+   const LineGraphVS = useMemo(() => {
+      return {
+         labels: data?.map((item) => dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')),
+         datasets: [
+            {
+               label: 'Амьсгал',
+               data: data?.slice(-7)?.map((item) => item.data?.respiratoryRate),
+               borderColor: ['#2596be'],
+               backgroundColor: '#2596be',
+               borderWidth: 1
+            },
+            {
+               label: 'SPO2',
+               data: data?.slice(-7)?.map((item) => item.data?.spO2),
+               borderColor: ['#21130d'],
+               backgroundColor: '#21130d',
+               borderWidth: 1
+            },
+            {
+               label: 'Пульс',
+               data: data?.slice(-7)?.map((item) => item.data?.pulse),
+               borderColor: ['#ff0000'],
+               backgroundColor: '#ff0000',
+               borderWidth: 1
+            }
+         ]
+      };
+   }, [data]);
+
+   const LineGraphCD = useMemo(() => {
+      return {
+         labels: data?.map((item) => dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')),
+         datasets: [
+            {
+               label: 'Дээд даралт',
+               data: data?.slice(-7)?.map((item) => item.data?.highPressureRight),
+               borderColor: ['#c51ceb'],
+               backgroundColor: '#c51ceb',
+               borderWidth: 1
+            },
+            {
+               label: 'Доод даралт',
+               data: data?.slice(-7)?.map((item) => item.data?.lowPressureRight),
+               borderColor: ['#2596be'],
+               backgroundColor: '#2596be',
+               borderWidth: 1
+            },
+            {
+               label: 'Халуун',
+               data: data?.slice(-7)?.map((item) => item.data?.temp),
+               borderColor: ['#000000'],
+               backgroundColor: '#000000',
+               borderWidth: 1
+            }
+         ]
+      };
+   }, [data]);
+
    useEffect(() => {
       getData();
-      getDataForGraph();
    }, []);
-   //
    return (
       <>
-         <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
-            <div className="flex flex-col gap-3">
+         <div className="grid sm:grid-cols-1 lg:grid-cols-5 gap-2">
+            <div className="flex flex-col lg:col-span-2 gap-2">
                <NewCard>
                   <Line options={vsOptions} data={LineGraphVS} />
                </NewCard>
@@ -330,41 +284,54 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
                   <Line options={CDOptions} data={LineGraphCD} />
                </NewCard>
             </div>
-            <Card
-               className="header-solid max-h-max rounded-md"
-               title="Түүх"
-               bodyStyle={{
-                  height: 700,
-                  overflow: 'auto'
-               }}
-               extra={
-                  <div className="flex flex-row gap-1">
-                     <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={() => {
-                           setIsOpenModal(true);
-                        }}
-                     >
-                        Нэмэх
-                     </Button>
-                     {UsageType === 'IN' ? (
+            <div className="lg:col-span-3">
+               <Card
+                  className="header-solid max-h-max rounded-md"
+                  title="Түүх"
+                  bodyStyle={{
+                     padding: 12
+                  }}
+                  extra={
+                     <div className="flex flex-row gap-1">
                         <Button
-                           className="ml-2"
-                           icon={<PrinterOutlined />}
-                           onClick={handlePrint}
-                           loading={printLoading}
+                           type="primary"
+                           icon={<PlusOutlined />}
+                           onClick={() => {
+                              setIsOpenModal(true);
+                           }}
                         >
-                           Хэвлэх
+                           Нэмэх
                         </Button>
-                     ) : null}
-                  </div>
-               }
-            >
-               <Table rowKey={'_id'} bordered columns={columns} dataSource={data} pagination={false} />
-            </Card>
+                        {UsageType === 'IN' ? (
+                           <Button
+                              className="ml-2"
+                              icon={<PrinterOutlined />}
+                              onClick={handlePrint}
+                              loading={printLoading}
+                           >
+                              Хэвлэх
+                           </Button>
+                        ) : null}
+                     </div>
+                  }
+               >
+                  <Table
+                     rowKey={'_id'}
+                     loading={{
+                        spinning: isLoading,
+                        tip: 'Уншиж байна'
+                     }}
+                     scroll={{
+                        x: 500
+                     }}
+                     columns={columns}
+                     dataSource={data}
+                     pagination={false}
+                  />
+               </Card>
+            </div>
          </div>
-         <div ref={printRef}>
+         {/* <div ref={printRef}>
             <ReturnById
                type={UsageType}
                id={87}
@@ -375,8 +342,13 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
                }}
                hospitalName={hospitalName}
             />
-         </div>
-         <NewModal title=" " open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={false}>
+         </div> */}
+         <NewModal
+            title="Амин үзүүлэлтийг хянах"
+            open={isOpenModal}
+            onCancel={() => setIsOpenModal(false)}
+            footer={false}
+         >
             <Customized
                usageType={UsageType}
                documentValue={87}
@@ -387,7 +359,6 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
                onOk={(state) => {
                   setIsOpenModal(state);
                   getData();
-                  getDataForGraph();
                }}
             />
          </NewModal>

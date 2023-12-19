@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Tabs, Button, Form, Modal, Result, Spin, Divider } from 'antd';
+import { Tabs, Button, Form, Modal, Result, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
 import { selectCurrentFirstName, selectCurrentLastName, selectCurrentUserId } from '../../../../features/authReducer';
@@ -13,9 +13,7 @@ import DocumentFormServices from '../../../../services/organization/documentForm
 import { useLocation } from 'react-router-dom';
 import FormRender from '../../BeforeAmbulatory/Customized/FormRender';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
-import { Patch } from '../../../comman';
 import dayjs from 'dayjs';
-import TextArea from 'antd/lib/input/TextArea';
 //
 function MainPatientHistory({
    AppointmentId,
@@ -112,7 +110,6 @@ function MainPatientHistory({
                }}
             >
                <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
-               {/* <FormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} /> */}
             </div>
             <Button type="primary" htmlType="submit">
                Хадгалах

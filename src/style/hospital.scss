@@ -302,6 +302,48 @@
    background: #e5e6eb;
 }
 
+.document-form {
+   display: flex;
+   flex-direction: row;
+   padding: 4px 0px;
+   .form-left {
+      width: 8px;
+      background: #c9cdd4;
+      border-radius: 8px 0px 0px 8px;
+   }
+   .form-inputs {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 12px;
+      background: #f7f8fa;
+      border-radius: 0px 8px 8px 0px;
+      .ant-radio-group {
+         background-color: #f7f8fa !important;
+      }
+   }
+   &:hover {
+      cursor: pointer;
+      .form-left {
+         background: #2d8cff;
+      }
+      .form-inputs {
+         background: #ecf5ff;
+         .ant-radio-group {
+            background-color: #ecf5ff !important;
+         }
+      }
+   }
+}
+.document-form.active {
+   .form-left {
+      background: #2d8cff;
+   }
+   .form-inputs {
+      background: #ecf5ff;
+   }
+}
+
 .ant-tabs-content {
    height: 100% !important;
    .ant-tabs-tabpane {

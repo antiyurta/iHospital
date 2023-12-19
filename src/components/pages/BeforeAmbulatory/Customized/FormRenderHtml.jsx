@@ -4,7 +4,6 @@ import OrganizationDocumentFormService from '../../../../services/organization/d
 
 const FormRenderHtml = (props) => {
    const { formId, documentData } = props;
-   console.log(documentData);
    const [documentForm, setDocumentForm] = useState([]);
    const getDocumentForm = async () => {
       await OrganizationDocumentFormService.getById(formId)
@@ -35,48 +34,101 @@ const FormRenderHtml = (props) => {
       });
       return root;
    };
-   const Render = (props) => {
-      const { keyWord, answer } = props;
-      const form = documentForm.find((dform) => dform.keyWord === keyWord);
-      if (form) {
-         if (form.type === 'input') {
+   const RenderOptions = ({ item }) => {
+      if (documentData.hasOwnProperty(item.keyWord)) {
+         const answer = Object.entries(documentData).find(([key, value]) => key === item.keyWord)?.[1];
+         if (item.type == 'other') {
+            return <span>Бусад: {answer}</span>;
+         } else if (item.type === 'input') {
             let pattern = /\.{1,}/g;
-            const text = form.question.replace(
-               pattern,
-               `<span style="text-decoration: underline; padding:0px 2px;">${answer}</span>`
+            const text = item.question.replace(pattern, `<span style="text-decoration: underline;"> ${answer} </span>`);
+            return (
+               <span
+                  dangerouslySetInnerHTML={{ __html: text }}
+                  style={{
+                     paddingRight: 3
+                  }}
+               />
             );
-            return <p dangerouslySetInnerHTML={{ __html: text }}></p>;
-         } else if (form.type === 'textarea') {
-            return <p>{`${form?.question}${answer}`}</p>;
-         } else if (form.type === 'checkbox' || form.type === 'radio') {
-            const childrens = documentForm.filter((dform) => dform.parentIndex === form.index);
-            const filtered = childrens.filter((children) => answer.includes(children.keyWord));
+         } else if (item.type === 'radio' || item.type === 'checkbox') {
+            var other;
+            if (item.isOther) {
+               other = (
+                  <RenderOptions
+                     item={{
+                        type: 'other',
+                        keyWord: `${item.keyWord}Other`
+                     }}
+                  />
+               );
+            }
+            const selectedAnswer = item.options.find((option) => option.keyWord === answer)?.question;
+            if (item.type === 'checkbox') {
+               const dd = item.options.filter((option) => answer.includes(option.keyWord));
+               const ched = dd.map((d, index) => (
+                  <span
+                     key={index}
+                     style={{
+                        paddingRight: 3
+                     }}
+                  >
+                     {d.question},
+                  </span>
+               ));
+               return (
+                  <span>
+                     {ched}
+                     <span>{other}</span>
+                  </span>
+               );
+            }
+            return (
+               <span>
+                  {selectedAnswer},<span>{other}</span>
+               </span>
+            );
+         } else if (item.type === 'textarea') {
             return (
                <p>
-                  <span className="font-semibold pr-1">{form.question}</span>
-                  <span>{filtered.map((filter) => filter.question)}</span>
+                  <span className="font-semibold pr-1">{item.question}</span>
+                  <span>{answer}</span>
                </p>
             );
          }
       }
       return;
    };
+   const RenderUnOptions = ({ item }) => {
+      if (item.isHead) {
+         return (
+            <>
+               <span className="font-semibold pr-1">{item.question}</span>
+               <RenderOptions item={item} />
+            </>
+         );
+      }
+      return;
+   };
+
+   const renderHTML = (item) => {
+      if (!item.options) {
+         return <RenderOptions key={item.index} item={item} />;
+      }
+      return (
+         <p className="flex flex-wrap" key={item.index}>
+            <RenderUnOptions key={item.index} item={item}></RenderUnOptions>
+            {item.options.map(renderHTML)}
+         </p>
+      );
+   };
 
    const testData = useMemo(() => {
-      convertTree(documentForm);
-   }, [formId]);
+      return convertTree(documentForm);
+   }, [documentForm]);
 
    useEffect(() => {
       formId && getDocumentForm();
    }, [formId]);
-   return (
-      <div>
-         {Object.entries(documentData)?.map(([key, value], index) => {
-            if (key != 'createdAt' && key != 'cabinetId') {
-               return <Render key={index} keyWord={key} answer={value} />;
-            }
-         })}
-      </div>
-   );
+   return <div>{testData?.map(renderHTML)}</div>;
 };
 export default FormRenderHtml;

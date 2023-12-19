@@ -8,6 +8,9 @@ import jwtInterceopter from '../../jwtInterceopter';
 
 //
 import * as XrayDocumentIndex from '../Xray/Document/Index';
+
+const XrayDocumentReturnById = XrayDocumentIndex.ReturnById;
+
 import { selectCurrentHospitalId } from '../../../features/authReducer';
 import { useSelector } from 'react-redux';
 //
@@ -189,6 +192,7 @@ function Xrays({ PatientId }) {
    //EXO
    const Exo = () => {
       const printRef = useRef();
+      const bodyRef = useRef();
       const [spinner, setSpinner] = useState(false);
       const [spinerInfo, setSpinnerInfo] = useState(false);
       const [document, setDocument] = useState();
@@ -264,9 +268,9 @@ function Xrays({ PatientId }) {
                      <div className="p-1">
                         <Tree
                            className="bg-white"
-                           onSelect={(selectedKeys, info) => {
+                           onSelect={(_selectedKeys, info) => {
                               if (info?.node?.isLeaf) {
-                                 getDocumentData(selectedKeys?.[0]);
+                                 getDocumentData(info?.node?.key);
                               }
                            }}
                            showLine
@@ -311,12 +315,14 @@ function Xrays({ PatientId }) {
                                     }}
                                     content={() => printRef.current}
                                  />
-                                 <div className="hidden">
-                                    <div ref={printRef}>
-                                       {XrayDocumentIndex.ReturnById(hospitalId, document, patient)}
-                                    </div>
+                                 <div ref={printRef}>
+                                    <XrayDocumentReturnById
+                                       hospitalId={hospitalId}
+                                       document={document}
+                                       patient={patient}
+                                       body={<FormRenderHtml formId={document.formId} documentData={document.data} />}
+                                    />
                                  </div>
-                                 <FormRenderHtml formId={document.formId} documentData={document.data} />
                               </div>
                            ) : (
                               <Result title={'Хугацаа сонгох'} />

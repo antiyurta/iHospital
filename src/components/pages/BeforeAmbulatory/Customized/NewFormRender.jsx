@@ -1,13 +1,13 @@
-import { Checkbox, Form, Input, Radio, Table } from 'antd';
+import { Checkbox, Form, Input, Progress, Radio, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import NewFormTable from './NewFormTable';
 import TextArea from 'antd/lib/input/TextArea';
-import { ContentState, Editor, EditorState, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
 const NewFormRender = (props) => {
    const { useForm, form, formOptionIds, isCheck } = props;
-   const [test, setTest] = useState('');
+   console.log('formOPt', formOptionIds);
+   const message = 'Тань бөглөх эрх байхгүй';
    const [indexes, setIndexes] = useState([]);
 
    const convertTree = (data) => {
@@ -40,20 +40,21 @@ const NewFormRender = (props) => {
       });
       return childrenIds;
    };
+
    const handleChangeInput = (value, question) => {
       let pattern = /\.{1,}/g;
       const text = question.replace(pattern, value);
-      const getCurrentContent = () => editorState.getCurrentContent();
-      const addHelloText = () => {
-         const currentContent = getCurrentContent();
-         const contentStateWithHello = ContentState.createFromText(text);
-         const newContentState = ContentState.createFromBlockArray(
-            currentContent.getBlockMap().toArray().concat(contentStateWithHello.getBlockMap().toArray())
-         );
-         return EditorState.push(editorState, newContentState, 'insert-characters');
-      };
-      const newEditorState = addHelloText();
-      setEditorState(newEditorState);
+      // const getCurrentContent = () => editorState.getCurrentContent();
+      // const addHelloText = () => {
+      //    const currentContent = getCurrentContent();
+      //    const contentStateWithHello = ContentState.createFromText(text);
+      //    const newContentState = ContentState.createFromBlockArray(
+      //       currentContent.getBlockMap().toArray().concat(contentStateWithHello.getBlockMap().toArray())
+      //    );
+      //    return EditorState.push(editorState, newContentState, 'insert-characters');
+      // };
+      // const newEditorState = addHelloText();
+      // setEditorState(newEditorState);
    };
    const handleChangeCheckbox = (keyWords, options, currentIndex) => {
       console.log(keyWords, options, currentIndex);
@@ -105,84 +106,92 @@ const NewFormRender = (props) => {
       if (item.type === 'radio') {
          const options = form.documentForm.filter((form) => form.parentIndex === item.index);
          return (
-            <>
-               <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
-                  <Radio.Group
-                     onChange={(e) => {
-                        handleChangeRadio(e.target.value, item?.options, item?.index);
-                     }}
-                     style={{
-                        padding: 2,
-                        background: '#fafafa',
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column'
-                     }}
-                  >
-                     {options.map((option, index) => (
-                        <Radio key={index} value={option.keyWord}>
-                           {option.question}
-                        </Radio>
-                     ))}
-                  </Radio.Group>
-               </Form.Item>
-               <CheckIsOther item={item} />
-            </>
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
+                     <Radio.Group
+                        onChange={(e) => {
+                           handleChangeRadio(e.target.value, item?.options, item?.index);
+                        }}
+                        style={{
+                           padding: 2,
+                           background: '#fafafa',
+                           width: '100%',
+                           display: 'flex',
+                           flexDirection: 'column'
+                        }}
+                     >
+                        {options.map((option, index) => (
+                           <Radio key={index} value={option.keyWord}>
+                              {option.question}
+                           </Radio>
+                        ))}
+                     </Radio.Group>
+                  </Form.Item>
+                  <CheckIsOther item={item} />
+               </div>
+            </div>
          );
       } else if (item.type === 'checkbox') {
          const options = form.documentForm.filter((form) => form.parentIndex === item.index);
          return (
-            <>
-               <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
-                  <Checkbox.Group
-                     onChange={(e) => {
-                        handleChangeCheckbox(e, item?.options, item?.index);
-                     }}
-                     style={{
-                        padding: 2,
-                        background: '#fafafa',
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column'
-                     }}
-                  >
-                     {options.map((option, index) => (
-                        <Checkbox className="ml-0" key={index} value={option.keyWord}>
-                           {option.question}
-                        </Checkbox>
-                     ))}
-                  </Checkbox.Group>
-               </Form.Item>
-               <CheckIsOther item={item} />
-            </>
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
+                     <Checkbox.Group
+                        onChange={(e) => {
+                           handleChangeCheckbox(e, item?.options, item?.index);
+                        }}
+                        className="bg-transparent"
+                        style={{
+                           padding: 2,
+                           width: '100%',
+                           display: 'flex',
+                           flexDirection: 'column'
+                        }}
+                     >
+                        {options.map((option, index) => (
+                           <Checkbox className="ml-0" key={index} value={option.keyWord}>
+                              {option.question}
+                           </Checkbox>
+                        ))}
+                     </Checkbox.Group>
+                  </Form.Item>
+                  <CheckIsOther item={item} />
+               </div>
+            </div>
          );
       } else if (item.type === 'input') {
+         var state = true;
+         if (isCheck) {
+            state = formOptionIds?.some((id) => id === item.keyWord);
+         }
          return (
-            <div
-               style={{
-                  background: '#fafafa',
-                  borderRadius: 6
-               }}
-            >
-               <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
-                  <Input
-                     // onChange={({ target: { value } }) => handleChangeInput(value, item.question)}
-                     placeholder={item.question || 'Бичих'}
-                  />
-               </Form.Item>
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item
+                     className="mb-0"
+                     label={item.question}
+                     name={item.keyWord}
+                     tooltip={!state ? message : null}
+                  >
+                     <Input disabled={!state} placeholder={item.question || 'Бичих'} />
+                  </Form.Item>
+               </div>
             </div>
          );
       } else if (item.type === 'textarea') {
          return (
-            <div
-               style={{
-                  background: '#fafafa',
-                  borderRadius: 6
-               }}
-            >
-               <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
-                  <TextArea placeholder={item.question} />
-               </Form.Item>
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
+                     <TextArea placeholder={item.question} />
+                  </Form.Item>
+               </div>
             </div>
          );
       } else if (item.type === 'table') {
@@ -215,16 +224,7 @@ const NewFormRender = (props) => {
          return item.isHead ? <RenderFormInType key={item.index} item={item} /> : null;
       }
       return (
-         <div
-            key={item.index}
-            style={{
-               display: 'flex',
-               flexDirection: 'column',
-               gap: 6,
-               background: '#fafafa',
-               borderRadius: 12
-            }}
-         >
+         <div key={item.index}>
             {item.isHead ? <RenderFormInType key={item.index} item={item} /> : null}
             {item.options.map(renderHTML)}
          </div>
@@ -263,26 +263,6 @@ const NewFormRender = (props) => {
       setIndexes(firstIndexes);
    }, [form]);
 
-   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-   return (
-      <>
-         {tree?.map(renderHTML)}
-         {/* <div
-            style={{
-               top: 0,
-               right: 0,
-               position: 'absolute'
-            }}
-         ></div>
-         <Editor
-            editorState={editorState}
-            onChange={(editorState) => {
-               const contentState = editorState.getCurrentContent();
-               console.log(JSON.stringify(convertToRaw(contentState).blocks));
-               setEditorState(editorState);
-            }}
-         /> */}
-      </>
-   );
+   return <div>{tree?.map(renderHTML)}</div>;
 };
 export default NewFormRender;
