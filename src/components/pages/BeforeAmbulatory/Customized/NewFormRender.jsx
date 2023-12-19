@@ -2,7 +2,6 @@ import { Checkbox, Form, Input, Progress, Radio, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import NewFormTable from './NewFormTable';
 import TextArea from 'antd/lib/input/TextArea';
-import 'draft-js/dist/Draft.css';
 
 const NewFormRender = (props) => {
    const { useForm, form, formOptionIds, isCheck } = props;
