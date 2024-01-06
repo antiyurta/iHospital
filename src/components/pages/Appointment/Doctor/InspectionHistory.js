@@ -84,7 +84,7 @@ function InspectionHistory({ patientId }) {
                tip: 'Уншиж байна...'
             }}
             scroll={{
-               y: 150
+               y: 100
             }}
             locale={{ emptyText: <Empty description={'Үзлэгийн түүх хоосон байна.'} /> }}
             columns={columns}

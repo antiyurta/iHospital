@@ -50,7 +50,7 @@ const ListFilter = (props) => {
                   get(1, currentLimit, last, today, selectedTags);
                }}
             >
-               Долоо хоног
+               7 хоног
             </button>
             <button
                onClick={() => {

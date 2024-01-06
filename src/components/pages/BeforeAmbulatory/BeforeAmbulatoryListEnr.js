@@ -17,7 +17,7 @@ function BeforeAmbulatoryListEnr() {
       }
    ];
    return (
-      <div className="p-3 bg-[#f5f6f7]">
+      <div className="p-3 w-full bg-[#f5f6f7]">
          <Tabs type="card" items={items} />
       </div>
    );

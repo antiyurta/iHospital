@@ -61,10 +61,7 @@ function Index({ PatientId, RegisterNumber }) {
       <Card
          bordered={false}
          bodyStyle={{
-            paddingTop: 10,
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingBottom: 10,
+            padding: 10,
             overflow: 'auto'
          }}
       >
@@ -120,7 +117,12 @@ function Index({ PatientId, RegisterNumber }) {
             paddingBottom: 10
          }}
       >
-         <Result title="Тун удахгүй" />
+         <Result
+            style={{
+               padding: 0
+            }}
+            title="Тун удахгүй"
+         />
       </Card>
    );
 }

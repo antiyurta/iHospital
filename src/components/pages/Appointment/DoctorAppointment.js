@@ -73,11 +73,6 @@ function DoctorAppointment() {
    });
    const notPatientsListColumn = [
       {
-         title: 'Картын №',
-         dataIndex: 'cardNumber',
-         ...getColumnSearchProps('cardNumber')
-      },
-      {
          title: 'Овог',
          dataIndex: 'lastName',
          ...getColumnSearchProps('lastName')
@@ -98,62 +93,54 @@ function DoctorAppointment() {
       ScrollRef(scrollRef);
    }, []);
    return (
-      <div className="flex flex-col">
+      <div className="w-full flex flex-col">
          <div
-            className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3"
+            className="flex flex-row gap-3 justify-between p-3"
             style={{
                borderBottom: '1px solid #e5e6eb'
             }}
          >
             <PatientInformation patient={selectedPatient} handlesearch={onSearchSchedule} />
-            <Card
-               bordered={false}
-               title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
-               className="header-solid max-h-max rounded-md"
-               bodyStyle={{
-                  paddingTop: 0,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  paddingBottom: 10
-               }}
-               extra={
-                  <>
-                     <Pagination
-                        simple
-                        current={notPatientsMeta.page}
-                        pageSize={notPatientsMeta.limit}
-                        total={notPatientsMeta.itemCount}
-                        onChange={(page, pageSize) => onSearchSchedule(page, pageSize, notPatientsValue)}
-                     />
-                  </>
-               }
-            >
-               <Table
-                  rowKey={'id'}
-                  loading={{
-                     spinning: notPatientsListLoading,
-                     tip: 'Уншиж байна...'
-                  }}
-                  scroll={{
-                     y: 150
-                  }}
-                  bordered
-                  onRow={(row) => {
-                     return {
-                        onClick: () => {
-                           getPatientById(row.id);
-                        }
-                     };
-                  }}
-                  rowClassName="hover:cursor-pointer"
-                  locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                  columns={notPatientsListColumn}
-                  dataSource={notPatientsList}
-                  pagination={false}
-               />
-            </Card>
-            <div className="lg:col-span-2 xl:col-span-1">
-               <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
+            <div className="flex flex-row gap-2">
+               <div className="bg-[#e5e6eb] max-w-[350px] rounded-xl p-2">
+                  <Table
+                     rowKey={'id'}
+                     loading={{
+                        spinning: notPatientsListLoading,
+                        tip: 'Уншиж байна...'
+                     }}
+                     scroll={{
+                        y: 100
+                     }}
+                     bordered
+                     onRow={(row) => {
+                        return {
+                           onClick: () => {
+                              getPatientById(row.id);
+                           }
+                        };
+                     }}
+                     rowClassName="hover:cursor-pointer"
+                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                     columns={notPatientsListColumn}
+                     dataSource={notPatientsList}
+                     pagination={{
+                        style: {
+                           margin: 0,
+                           paddingTop: 10
+                        },
+                        position: ['bottomCenter'],
+                        simple: true,
+                        current: notPatientsMeta.page,
+                        pageSize: notPatientsMeta.limit,
+                        total: notPatientsMeta.itemCount,
+                        onChange: (page, pageSize) => onSearchSchedule(page, pageSize, notPatientsValue)
+                     }}
+                  />
+               </div>
+               <div className="bg-[#e5e6eb] max-w-[300px] rounded-xl p-2">
+                  <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
+               </div>
             </div>
          </div>
          <div className="bg-[#f5f6f7] p-3">

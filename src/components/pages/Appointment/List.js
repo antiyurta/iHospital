@@ -1,20 +1,33 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
-import { Button, Card, Collapse, DatePicker, Divider, Empty, Form, Input, Modal, Radio, Select, message } from 'antd';
+import {
+   Avatar,
+   Button,
+   Card,
+   Collapse,
+   DatePicker,
+   Divider,
+   Empty,
+   Form,
+   Input,
+   Modal,
+   Radio,
+   Select,
+   Table,
+   message
+} from 'antd';
+import dayjs from 'dayjs';
 import { ClockCircleOutlined, DeleteOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import mn from 'antd/es/calendar/locale/mn_MN';
 // components
-import { NewColumn, NewColumnGroup, NewTable } from '../../Table/Table';
-import { getAge, getGender, openNofi } from '../../comman';
+import { formatNameForDoc, getAge, getGenderInType, openNofi } from '../../comman';
+import { AppointmentStatus } from './appointment-enum';
 const { Panel } = Collapse;
-const { Option } = Select;
 const { TextArea } = Input;
 
 //service uud
 import ScheduleService from '../../../services/schedule';
 import apiAppointmentService from '../../../services/appointment/api-appointment-service';
-import { AppointmentStatus } from './appointment-enum';
-import dayjs from 'dayjs';
 
 function List(props) {
    const { schedules, type, selectedPatient, orderAppointment, isGetSlots, isExtraGrud } = props;
@@ -179,128 +192,115 @@ function List(props) {
             bodyStyle={{
                padding: 10,
                overflow: 'auto',
-               height: 330
+               height: 278
             }}
          >
-            <div className="pt-[10px]">
-               {Object.entries(dd)?.map(([key, value], index) => (
-                  <div key={index}>
-                     <Divider orientation="left">{key}</Divider>
-                     {value?.length > 0 ? (
-                        <Collapse onChange={(id) => setSelectedScheduleId(id)} accordion>
-                           {value?.map((schedule) => {
-                              return (
-                                 <Panel
-                                    forceRender={false}
-                                    key={schedule.id}
-                                    header={
-                                       <div>
-                                          <b>Өрөө:</b> {schedule.room?.roomNumber}
-                                          <b className="ml-2">Тасаг:</b> {schedule.structure?.name}
-                                          <b className="ml-2">Кабинет:</b> {schedule.cabinet?.name}
-                                          <b className="ml-2">Эмч:</b> {schedule.doctor?.firstName}
-                                       </div>
-                                    }
-                                 >
-                                    <NewTable
-                                       prop={{
-                                          rowKey: 'id',
-                                          bordered: true,
-                                          dataSource: slots
-                                       }}
-                                       meta={{
-                                          page: 1,
-                                          limit: slots.length
-                                       }}
-                                       isLoading={false}
-                                       isPagination={false}
-                                    >
-                                       <NewColumn
-                                          width={110}
-                                          title="Цаг"
-                                          render={(_, row) => {
-                                             return (
-                                                <div className="inline-flex flex-row items-center">
-                                                   <span>{row.startTime?.substr(0, 5)}</span>
-                                                   <ClockCircleOutlined className="mx-1.5" />
-                                                   <span>{row.endTime?.substr(0, 5)}</span>
+            {Object.entries(dd)?.map(([key, value], index) => (
+               <div key={index}>
+                  <Divider orientation="left">{key}</Divider>
+                  {value?.length > 0 ? (
+                     <Collapse onChange={(id) => setSelectedScheduleId(id)} accordion>
+                        {value?.map((schedule) => {
+                           return (
+                              <Panel
+                                 forceRender={false}
+                                 key={schedule.id}
+                                 header={
+                                    <div>
+                                       <b>Өрөө:</b> {schedule.room?.roomNumber}
+                                       <b className="ml-2">Тасаг:</b> {schedule.structure?.name}
+                                       <b className="ml-2">Кабинет:</b> {schedule.cabinet?.name}
+                                       <b className="ml-2">Эмч:</b> {schedule.doctor?.firstName}
+                                    </div>
+                                 }
+                              >
+                                 <Table
+                                    rowKey="id"
+                                    bordered
+                                    columns={[
+                                       {
+                                          title: 'Цаг',
+                                          render: (_, row) => (
+                                             <div className="inline-flex flex-row gap-1 items-center">
+                                                <span>{row.startTime?.substr(0, 5)}</span>
+                                                <ClockCircleOutlined />
+                                                <span>{row.endTime?.substr(0, 5)}</span>
+                                             </div>
+                                          )
+                                       },
+                                       {
+                                          title: 'Өвчтөн',
+                                          dataIndex: ['appointment', 'patient'],
+                                          render: (patient) => (
+                                             <div className="ambo-list-user">
+                                                <Avatar
+                                                   style={{
+                                                      minWidth: 32
+                                                   }}
+                                                />
+                                                <div className="info">
+                                                   <p className="name">
+                                                      {formatNameForDoc(patient?.lastName, patient?.firstName)}
+                                                   </p>
+                                                   <p>{patient?.registerNumber}</p>
                                                 </div>
-                                             );
-                                          }}
-                                       />
-                                       <NewColumnGroup title="Үйлчлүүлэгчийн мэдээлэл">
-                                          <NewColumn title="Овог" dataIndex={['appointment', 'patient', 'lastName']} />
-                                          <NewColumn title="Нэр" dataIndex={['appointment', 'patient', 'firstName']} />
-                                          <NewColumn
-                                             title="Нас"
-                                             dataIndex={['appointment', 'patient', 'registerNumber']}
-                                             render={(text) => {
-                                                return getAge(text);
-                                             }}
-                                          />
-                                          <NewColumn
-                                             title="Хүйс"
-                                             dataIndex={['appointment', 'patient', 'registerNumber']}
-                                             render={(text) => {
-                                                return getGender(text);
-                                             }}
-                                          />
-                                          <NewColumn
-                                             title="Регистрийн №"
-                                             dataIndex={['appointment', 'patient', 'registerNumber']}
-                                          />
-                                          <NewColumn title="Утас" dataIndex={['appointment', 'patient', 'phoneNo']} />
-                                       </NewColumnGroup>
-                                       <NewColumn
-                                          title="Статус"
-                                          dataIndex={'slotStatus'}
-                                          render={(text, row) => {
+                                             </div>
+                                          )
+                                       },
+                                       {
+                                          title: 'Нас',
+                                          width: 40,
+                                          dataIndex: ['appointment', 'patient', 'registerNumber'],
+                                          render: (registerNumber) => {
+                                             return getAge(registerNumber);
+                                          }
+                                       },
+                                       {
+                                          title: 'Хүйс',
+                                          width: 40,
+                                          dataIndex: ['appointment', 'patient', 'genderType'],
+                                          render: (genderType) => {
+                                             return getGenderInType(genderType);
+                                          }
+                                       },
+                                       {
+                                          title: 'Статус',
+                                          dataIndex: 'slotStatus',
+                                          render: (slotStatus, row) => {
                                              if (!row.isActive) {
-                                                if (text === 0) {
+                                                if (slotStatus === 0) {
                                                    return 'Ирээгүй';
-                                                } else if (text === 1) {
+                                                } else if (slotStatus === 1) {
                                                    return 'Ирсэн';
-                                                } else if (text === 2) {
+                                                } else if (slotStatus === 2) {
                                                    return 'Үзлэгт орсон';
                                                 }
                                              }
-                                          }}
-                                       />
-                                       <NewColumn
-                                          title="Захиалсан огноо"
-                                          dataIndex={['appointment', 'createdAt']}
-                                          render={(text, row) => {
+                                             return;
+                                          }
+                                       },
+                                       {
+                                          title: 'Захиалсан огноо',
+                                          dataIndex: ['appointment', 'createdAt'],
+                                          render: (createdAt, row) => {
                                              if (!row.isActive) {
-                                                return moment(text).format('YYYY/MM/DD HH:mm');
+                                                return dayjs(createdAt).format('YYYY/MM/DD HH:mm');
                                              }
-                                          }}
-                                       />
-                                       <NewColumn
-                                          title="Ирсэн цаг"
-                                          dataIndex={'incomeDate'}
-                                          render={(text) => {
-                                             if (text) {
-                                                return moment(text).format('YYYY/MM/DD HH:mm');
-                                             }
-                                          }}
-                                       />
-                                       <NewColumn
-                                          title="Бүртгэсэн"
-                                          render={(_, row) => {
-                                             if (!row.isActive) {
-                                                return (
-                                                   row.createdLastName?.substring(0, 1) + '.' + row.createdFirstName
-                                                );
-                                             }
-                                          }}
-                                       />
-                                       <NewColumnGroup title="Үйлдэл">
-                                          {isExtraGrud.isCreate ? (
-                                             <NewColumn
-                                                title="Цаг захиалах"
-                                                dataIndex={'isActive'}
-                                                render={(text, row) => {
-                                                   if (text) {
+                                          }
+                                       },
+                                       {
+                                          title: 'Бүртгэсэн',
+                                          render: (_, row) =>
+                                             formatNameForDoc(row.createdLastName, row.createdFirstName)
+                                       },
+                                       {
+                                          title: 'Үйлдэл',
+                                          children: [
+                                             {
+                                                title: 'Цаг захиалах',
+                                                dataIndex: 'isActive',
+                                                render: (isActive, row) => {
+                                                   if (isExtraGrud.isCreate && isActive) {
                                                       return (
                                                          <Button
                                                             onClick={() => {
@@ -330,15 +330,19 @@ function List(props) {
                                                          />
                                                       );
                                                    }
-                                                }}
-                                             />
-                                          ) : null}
-                                          {isExtraGrud.isChange ? (
-                                             <NewColumn
-                                                title="Цаг солих"
-                                                dataIndex={'isActive'}
-                                                render={(text, row) => {
-                                                   if (!text && row.appointment && row.slotStatus === 0) {
+                                                   return;
+                                                }
+                                             },
+                                             {
+                                                title: 'Цаг солих',
+                                                dataIndex: 'isActive',
+                                                render: (isActive, row) => {
+                                                   if (
+                                                      isExtraGrud.isChange &&
+                                                      isActive &&
+                                                      row.appointment &&
+                                                      row.slotStatus === 0
+                                                   ) {
                                                       return (
                                                          <Button
                                                             onClick={() => changeSlot(row)}
@@ -347,15 +351,19 @@ function List(props) {
                                                          />
                                                       );
                                                    }
-                                                }}
-                                             />
-                                          ) : null}
-                                          {isExtraGrud.isDelete ? (
-                                             <NewColumn
-                                                title="Цаг\n устгах"
-                                                dataIndex={'isActive'}
-                                                render={(text, row) => {
-                                                   if (!text && row.appointment && row.slotStatus === 0) {
+                                                   return;
+                                                }
+                                             },
+                                             {
+                                                title: 'Цаг устгах',
+                                                dataIndex: 'isActive',
+                                                render: (isActive, row) => {
+                                                   if (
+                                                      isExtraGrud.isDelete &&
+                                                      !isActive &&
+                                                      row.appointment &&
+                                                      row.slotStatus === 0
+                                                   ) {
                                                       return (
                                                          <Button
                                                             onClick={() => cancelSlot(row)}
@@ -364,21 +372,27 @@ function List(props) {
                                                          />
                                                       );
                                                    }
-                                                }}
-                                             />
-                                          ) : null}
-                                       </NewColumnGroup>
-                                    </NewTable>
-                                 </Panel>
-                              );
-                           })}
-                        </Collapse>
-                     ) : (
-                        <Empty description="Цагийн хувиар ороогүй байна" />
-                     )}
-                  </div>
-               ))}
-            </div>
+                                                   return;
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    ]}
+                                    scroll={{
+                                       x: 1000
+                                    }}
+                                    dataSource={slots}
+                                    pagination={false}
+                                 />
+                              </Panel>
+                           );
+                        })}
+                     </Collapse>
+                  ) : (
+                     <Empty description="Цагийн хувиар ороогүй байна" />
+                  )}
+               </div>
+            ))}
          </Card>
          <Modal
             title="Цуцлах болсон шалтгаан"

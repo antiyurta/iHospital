@@ -3,7 +3,6 @@ import {
    CheckOutlined,
    CloseOutlined,
    EditOutlined,
-   ExclamationOutlined,
    MinusOutlined,
    PlusCircleOutlined,
    PlusOutlined
@@ -367,6 +366,7 @@ function Index({ type, isDoctor }) {
                className="bg-red-500 text-white"
                style={{
                   padding: '4px 8px',
+                  fontSize: 12,
                   borderRadius: 15
                }}
             >
@@ -379,6 +379,7 @@ function Index({ type, isDoctor }) {
                className="bg-green-500 text-white"
                style={{
                   padding: '4px 8px',
+                  fontSize: 12,
                   borderRadius: 15
                }}
             >
@@ -402,42 +403,7 @@ function Index({ type, isDoctor }) {
          return 'Дуудлагаа';
       }
    };
-   const checkInspection = (inspectionNotes) => {
-      if (inspectionNotes?.length === 0) {
-         return (
-            <p>
-               <CloseOutlined style={{ color: 'red', fontSize: '20px' }} />
-            </p>
-         );
-      } else {
-         var state = true;
-         inspectionNotes?.map((inspectionNote) => {
-            const data = inspectionTOJSON(inspectionNote);
-            if (data != null) {
-               Object.values(data)?.map((note) => {
-                  Object.values(note)?.map((item) => {
-                     if ((typeof item === 'object' && item?.length === 0) || (typeof item === 'string' && !item)) {
-                        state = false;
-                     }
-                  });
-               });
-            }
-         });
-         if (state) {
-            return (
-               <p>
-                  <CheckOutlined style={{ color: 'green', fontSize: '20px' }} />
-               </p>
-            );
-         } else {
-            return (
-               <p>
-                  <ExclamationOutlined style={{ color: 'yellowgreen', fontSize: '20px' }} />
-               </p>
-            );
-         }
-      }
-   };
+
    // uzleg zasah ued uzleg er bhgu bol depId gar inspection awchrah uzleg baiwal formId gar formAwcirah
    const getInspectionFormDesc = async (inspectionNote, patientId) => {
       if (inspectionNote) {
@@ -735,7 +701,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Өрөө',
-         dataIndex: ['rooms', 'roomNumber']
+         dataIndex: ['room', 'roomNumber']
       },
       {
          title: 'Эмч',
@@ -1058,8 +1024,13 @@ function Index({ type, isDoctor }) {
    };
 
    return (
-      <>
-         <div className="flex flex-wrap gap-4">
+      <div className="w-full">
+         <div
+            className="flex flex-col gap-3"
+            style={{
+               height: 'calc(100vh - 100px)'
+            }}
+         >
             <ScheduleTypeInfo />
             {type === 2 ? <InpatientTypeInfo /> : null}
             <ListFilter
@@ -1068,10 +1039,10 @@ function Index({ type, isDoctor }) {
                selectedTags={selectedTags}
                getList={getAppointment}
             />
-            <div className="w-full">
+            <div className="w-full overflow-auto">
                <Card
                   bordered={false}
-                  className="header-solid max-h-max rounded-md"
+                  className="header-solid rounded-md"
                   bodyStyle={{
                      padding: 8
                   }}
@@ -1218,7 +1189,7 @@ function Index({ type, isDoctor }) {
                </div>
             </Form>
          </Modal>
-      </>
+      </div>
    );
 }
 export default Index;
