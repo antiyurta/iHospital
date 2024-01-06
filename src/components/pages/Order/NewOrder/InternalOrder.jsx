@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { Button, Form } from 'antd';
 import PackageTable from '../PackageTable/PackageTable';
 import OrderTable from '../OrderTable/OrderTable';
-import { numberToCurrency } from '../../../comman';
+import { numberToCurrency, openNofi } from '../../../comman';
 import { useEffect } from 'react';
 import ExaminationService from '../../../../services/service/examination.api';
 import TreatmentService from '../../../../services/service/treatment.api';
@@ -167,19 +167,21 @@ const InternalOrder = (props) => {
          } else {
             data = datas.services.concat(services);
          }
-         console.log('==========>', data);
          orderForm.setFieldsValue({ services: data });
          setTotal(total + subTotal);
       }
       setIsLoadingOrderTable(false);
    };
    const inpatientRequestClick = async (values) => {
-      values.patientId = IncomePatientId;
-      values.cabinetId = IncomeCabinetId;
-      values.appointmentId = IncomeAppointmentId;
-      values.type = values.InType;
+      // values.patientId = IncomePatientId;
+      // values.cabinetId = IncomeCabinetId;
+      // values.appointmentId = IncomeAppointmentId;
+      // values.type = values.InType;
       await ServiceService.postInpatientRequest(values)
          .then((response) => {
+            if (response.status === 201) {
+               openNofi('success', 'Амжиллтай', 'Хэвтүүлэх хүсэлт амжилттай илгээгдлээ');
+            }
             // setInPatientId(response.id);
          })
          .catch((err) => {
@@ -243,7 +245,9 @@ const InternalOrder = (props) => {
                />
             )}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
-            {showInpatient && <InpatientRequest handleClick={inpatientRequestClick} />}
+            {showInpatient && (
+               <InpatientRequest selectedPatient={selectedPatient} handleClick={inpatientRequestClick} />
+            )}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
             {showReinspection && <Reinspection selectedPatient={selectedPatient} appointmentId={IncomeAppointmentId} />}
          </div>

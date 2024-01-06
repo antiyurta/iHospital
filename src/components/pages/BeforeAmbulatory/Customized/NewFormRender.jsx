@@ -1,13 +1,22 @@
-import { Checkbox, Form, Input, Progress, Radio, Table } from 'antd';
+import { Checkbox, DatePicker, Form, Input, InputNumber, Radio, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import NewFormTable from './NewFormTable';
 import TextArea from 'antd/lib/input/TextArea';
-
+import dayjs from 'dayjs';
+import mnMN from 'antd/es/calendar/locale/mn_MN';
+import DiagnoseWindow from '../../service/DiagnoseWindow';
+import moment from 'moment';
 const NewFormRender = (props) => {
-   const { useForm, form, formOptionIds, isCheck } = props;
-   console.log('formOPt', formOptionIds);
+   const { useForm, form, formOptionIds, isCheck, formName } = props;
    const message = 'Тань бөглөх эрх байхгүй';
    const [indexes, setIndexes] = useState([]);
+
+   const configNames = (name) => {
+      if (!isCheck) {
+         return [formName, name];
+      }
+      return name;
+   };
 
    const convertTree = (data) => {
       let root = [];
@@ -102,14 +111,24 @@ const NewFormRender = (props) => {
    };
    const RenderFormInType = (RFITProps) => {
       const { item } = RFITProps;
+      var state = true;
+      if (isCheck) {
+         state = formOptionIds?.some((id) => id === item.keyWord);
+      }
       if (item.type === 'radio') {
          const options = form.documentForm.filter((form) => form.parentIndex === item.index);
          return (
             <div key={item.index} className="document-form">
                <div className="form-left" />
                <div className="form-inputs">
-                  <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
+                  <Form.Item
+                     tooltip={!state ? message : null}
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                  >
                      <Radio.Group
+                        disabled={!state}
                         onChange={(e) => {
                            handleChangeRadio(e.target.value, item?.options, item?.index);
                         }}
@@ -138,11 +157,17 @@ const NewFormRender = (props) => {
             <div key={item.index} className="document-form">
                <div className="form-left" />
                <div className="form-inputs">
-                  <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
+                  <Form.Item
+                     tooltip={!state ? message : null}
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                  >
                      <Checkbox.Group
                         onChange={(e) => {
                            handleChangeCheckbox(e, item?.options, item?.index);
                         }}
+                        disabled={!state}
                         className="bg-transparent"
                         style={{
                            padding: 2,
@@ -163,10 +188,6 @@ const NewFormRender = (props) => {
             </div>
          );
       } else if (item.type === 'input') {
-         var state = true;
-         if (isCheck) {
-            state = formOptionIds?.some((id) => id === item.keyWord);
-         }
          return (
             <div key={item.index} className="document-form">
                <div className="form-left" />
@@ -174,10 +195,26 @@ const NewFormRender = (props) => {
                   <Form.Item
                      className="mb-0"
                      label={item.question}
-                     name={item.keyWord}
+                     name={configNames(item.keyWord)}
                      tooltip={!state ? message : null}
                   >
                      <Input disabled={!state} placeholder={item.question || 'Бичих'} />
+                  </Form.Item>
+               </div>
+            </div>
+         );
+      } else if (item.type === 'inputNumber') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                     tooltip={!state ? message : null}
+                  >
+                     <InputNumber disabled={!state} placeholder={item.question || 'Бичих'} />
                   </Form.Item>
                </div>
             </div>
@@ -187,8 +224,13 @@ const NewFormRender = (props) => {
             <div key={item.index} className="document-form">
                <div className="form-left" />
                <div className="form-inputs">
-                  <Form.Item className="mb-0" label={item.question} name={item.keyWord}>
-                     <TextArea placeholder={item.question} />
+                  <Form.Item
+                     tooltip={!state ? message : null}
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                  >
+                     <TextArea disabled={!state} placeholder={item.question} />
                   </Form.Item>
                </div>
             </div>
@@ -197,12 +239,40 @@ const NewFormRender = (props) => {
          return (
             <>
                <strong>{item.question}</strong>
-               <Form.List name={item.keyWord}>
+               <Form.List name={configNames(item.keyWord)}>
                   {(rows, { add, remove }) => {
                      return <NewFormTable data={rows} options={item.options} add={add} remove={remove} />;
                   }}
                </Form.List>
             </>
+         );
+      } else if (item.type === 'diagnose') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Form.Item
+                        tooltip={!state ? message : null}
+                        className="mb-0"
+                        label={item.question}
+                        name={configNames(item.keyWord)}
+                     >
+                        <Input disabled placeholder={item.question} />
+                     </Form.Item>
+                     <DiagnoseWindow
+                        handleClick={(diagnose) => {
+                           useForm.setFieldValue(configNames(item.keyWord), diagnose.code);
+                           useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
+                        }}
+                        disabled={!state}
+                     />
+                     <Form.Item className="hidden" label="sada" name={`${item.keyWord}CreatedAt`}>
+                        <Input />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
          );
       } else if (item.type === 'title') {
          return (
@@ -215,6 +285,58 @@ const NewFormRender = (props) => {
             >
                {item.question}
             </p>
+         );
+      } else if (item.type === 'datepicker') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item
+                     tooltip={!state ? message : null}
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                     getValueProps={(i) => {
+                        if (i) {
+                           return { value: moment(i) };
+                        } else {
+                           return;
+                        }
+                     }}
+                  >
+                     <DatePicker locale={mnMN} format={'YYYY/MM/DD'} disabled={!state} placeholder={item.question} />
+                  </Form.Item>
+               </div>
+            </div>
+         );
+      } else if (item.type === 'dateTime') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item
+                     tooltip={!state ? message : null}
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                     getValueProps={(i) => {
+                        if (i) {
+                           return { value: moment(i) };
+                        } else {
+                           return;
+                        }
+                     }}
+                  >
+                     <DatePicker
+                        showTime
+                        locale={mnMN}
+                        format={'YYYY/MM/DD HH:mm'}
+                        disabled={!state}
+                        placeholder={item.question}
+                     />
+                  </Form.Item>
+               </div>
+            </div>
          );
       }
    };
@@ -262,6 +384,6 @@ const NewFormRender = (props) => {
       setIndexes(firstIndexes);
    }, [form]);
 
-   return <div>{tree?.map(renderHTML)}</div>;
+   return tree?.map(renderHTML);
 };
 export default NewFormRender;

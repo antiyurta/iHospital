@@ -125,26 +125,22 @@ function Hospital() {
       });
    };
    return (
-      <>
-         <div className="flex flex-wrap">
-            <div className="w-full">
-               <UTable
-                  title={'Байгууллага'}
-                  url={'organization/hospital'}
-                  column={column}
-                  isCreate={true}
-                  isRead={true}
-                  isUpdate={true}
-                  isDelete={true}
-                  width="50%"
-                  isInsurance={true}
-                  insuranceSync={true}
-                  insuranceFunction={insuranceFunction}
-                  insuranceSyncFunction={insuranceSyncFunction}
-                  isRefresh={isRefresh}
-               />
-            </div>
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Байгууллага'}
+            url={'organization/hospital'}
+            column={column}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            width="50%"
+            isInsurance={true}
+            insuranceSync={true}
+            insuranceFunction={insuranceFunction}
+            insuranceSyncFunction={insuranceSyncFunction}
+            isRefresh={isRefresh}
+         />
          <Modal
             open={isOpenInsurance}
             onCancel={() => {
@@ -182,7 +178,7 @@ function Hospital() {
                </Form.Item>
             </Form>
          </Modal>
-      </>
+      </div>
    );
 }
 

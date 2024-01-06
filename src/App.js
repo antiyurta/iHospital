@@ -10,16 +10,25 @@ import Login from './components/Login';
 import Hospital from './components/pages/Organization/Hospital';
 import Home from './components/Home';
 import Profile from './components/Profile';
+import Menu from './components/pages/reference/Menu';
+import ProtectedRoute from './features/ProtectedRoute';
+import LandingLayout from './Layouts/Landing/LandingLayout';
+import MainLayout from './components/pages/Layout/MainLayout';
+import IHos from './components/pages/Layout/IHos';
+import PrivateRoute from './features/PrivateRoute';
+import CreateStory from './components/pages/Bed/MainBed/CreateStory';
+//
+import { PublicRoutes, ProtectedRoutes } from './Routes';
+//
+
 const ExaminationParams = React.lazy(() => import('./components/pages/service/ExaminationParams'));
 const Medicine = React.lazy(() => import('./components/pages/service/Medicine/Medicine'));
 const EMR = React.lazy(() => import('./components/pages/EMR/NewEmr'));
 const BeforeAmbulatoryDetail = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail'));
-import Menu from './components/pages/reference/Menu';
 const RoomtDtl = React.lazy(() => import('./components/pages/Bed/RoomDtl'));
 const MedicineSupport = React.lazy(() => import('./components/pages/service/MedicineSupport'));
 const Finance = React.lazy(() => import('./components/pages/Finance/Finance'));
 const FinanceMaterialExamination = React.lazy(() => import('./components/pages/Finance/FinanceMaterialExamination'));
-const PatientForm = React.lazy(() => import('./components/pages/FormBuilder/FBuilder/PatientForm'));
 const Role = React.lazy(() => import('./components/pages/Organization/Role'));
 const Permission = React.lazy(() => import('./components/pages/Organization/Permission'));
 const NotFound = React.lazy(() => import('./features/notFound'));
@@ -28,17 +37,8 @@ const FinanceMaterialXray = React.lazy(() => import('./components/pages/Finance/
 const FinanceMaterialTreatment = React.lazy(() => import('./components/pages/Finance/FinanceMaterialTreatment'));
 const FinanceMaterialSurgery = React.lazy(() => import('./components/pages/Finance/FinanceMaterialSurgery'));
 const Report = React.lazy(() => import('./components/pages/Report/Report'));
-const FormIndex = React.lazy(() => import('./components/pages/FormBuilder/FBuilder/FormIndex'));
 const Acting = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeInPatientTabs/Acting'));
 const DepBalance = React.lazy(() => import('./components/pages/EMR/InPatient/DepBalance'));
-import ProtectedRoute from './features/ProtectedRoute';
-
-import { PublicRoutes, ProtectedRoutes } from './Routes';
-
-import LandingLayout from './Layouts/Landing/LandingLayout';
-import MainLayout from './components/pages/Layout/MainLayout';
-import IHos from './components/pages/Layout/IHos';
-import PrivateRoute from './features/PrivateRoute';
 
 function App() {
    return (
@@ -56,6 +56,8 @@ function App() {
                <Route path="/profile" element={<Profile />} />
                <Route element={<ProtectedRoute />}>
                   <Route path="/main/" element={<IHos />}>
+                     <Route path="/main/hospital" element={<Hospital />} />
+                     <Route path="/main/role" element={<Role />} />
                      <Route path="/main/emr" element={<EMR />} />
                      <Route path="/main/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
                      {ProtectedRoutes.map((route, index) => {
@@ -71,12 +73,18 @@ function App() {
                            />
                         );
                      })}
+                     <Route
+                        path="/main/bed_management/create"
+                        element={
+                           <PrivateRoute>
+                              <CreateStory />
+                           </PrivateRoute>
+                        }
+                     />
                   </Route>
                   <Route path="/notPermission" element={<NotPermission />} />
-                  <Route path="/role" element={<Role />} />
                   <Route path="/permission" element={<Permission />} />
                   <Route path="/menu" element={<Menu />} />
-                  <Route path="/hospital" element={<Hospital />} />
                   {/* ene heregtei */}
                   <Route path="/medicine" element={<Medicine />} />
                   <Route path="/medicineSupport" element={<MedicineSupport />} />
@@ -89,9 +97,7 @@ function App() {
                   <Route path="/financeMaterialTreatment" element={<FinanceMaterialTreatment />} />
                   <Route path="/financeMaterialSurgery" element={<FinanceMaterialSurgery />} />
                   <Route path="/report" element={<Report />} />
-                  <Route path="/formBuilder" element={<FormIndex />} />
                   {/* yacij magad */}
-                  <Route path="/formBuilder2" element={<PatientForm />} />
                   <Route path="/roomDtl" element={<RoomtDtl />} />
                </Route>
             </Route>

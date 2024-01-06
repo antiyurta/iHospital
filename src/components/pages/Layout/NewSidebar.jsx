@@ -5,9 +5,8 @@ import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import PermissionServices from '../../../services/organization/permission';
 import MenuItem from './MenuItem';
-import { Link } from 'react-router-dom';
 import MenuItemChildren from './MenuItemChildren';
-const Sidebar = ({ collapsed }) => {
+const Sidebar = () => {
    const [userMenu, setMenus] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const UserId = useSelector(selectCurrentUserId);
@@ -36,19 +35,13 @@ const Sidebar = ({ collapsed }) => {
                               ></p>
                            ),
                            title: subMenu.title,
-                           label: (
-                              <Link
-                                 to={`/main${subMenu.url}`}
-                                 state={{
-                                    isCreate: menu.isCreate,
-                                    isRead: menu.isRead,
-                                    isUpdate: menu.isUpdate,
-                                    isDelete: menu.isDelete
-                                 }}
-                              >
-                                 {subMenu.title}
-                              </Link>
-                           )
+                           url: `/main${subMenu.url}`,
+                           state: {
+                              isCreate: menu.isCreate,
+                              isRead: menu.isRead,
+                              isUpdate: menu.isUpdate,
+                              isDelete: menu.isDelete
+                           }
                         });
                      });
                      menus.push({
@@ -60,7 +53,6 @@ const Sidebar = ({ collapsed }) => {
                            ></p>
                         ),
                         title: menu.menu.title,
-                        label: menu.menu.title,
                         children: children
                      });
                   } else {
@@ -73,19 +65,13 @@ const Sidebar = ({ collapsed }) => {
                            ></p>
                         ),
                         title: menu.menu.title,
-                        label: (
-                           <Link
-                              to={`/main${menu.menu.url}`}
-                              state={{
-                                 isCreate: menu.isCreate,
-                                 isRead: menu.isRead,
-                                 isUpdate: menu.isUpdate,
-                                 isDelete: menu.isDelete
-                              }}
-                           >
-                              {menu.menu.title}
-                           </Link>
-                        )
+                        url: `/main${menu.menu.url}`,
+                        state: {
+                           isCreate: menu.isCreate,
+                           isRead: menu.isRead,
+                           isUpdate: menu.isUpdate,
+                           isDelete: menu.isDelete
+                        }
                      };
                      menus.push(menu);
                   }
@@ -107,7 +93,7 @@ const Sidebar = ({ collapsed }) => {
       }
       const renderedMenuItems = menuItem.children.map(renderMenuItem);
       return (
-         <MenuItemChildren key={menuItem.key} data={menuItem} collapsed={collapsed}>
+         <MenuItemChildren key={menuItem.key} data={menuItem}>
             {renderedMenuItems}
          </MenuItemChildren>
       );

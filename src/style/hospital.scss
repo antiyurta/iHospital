@@ -1,3 +1,64 @@
+.new-form {
+   p,
+   span {
+      font-size: 13px;
+   }
+}
+
+.app-button-regular {
+   display: flex;
+   padding: 8px 12px;
+   justify-content: center;
+   align-items: center;
+   gap: 8px;
+   color: white;
+   border-radius: 4px;
+   background: #2d8cff;
+   &:hover {
+      color: white;
+   }
+}
+
+.attachment-12,
+.attachment-13 {
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+   .list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 8px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+      .head {
+         display: flex;
+         justify-content: space-between;
+         p {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7785;
+         }
+      }
+   }
+   .graph {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 8px;
+      .line {
+         padding: 8px;
+         width: 100%;
+         background: #fff;
+         border-radius: 6px;
+         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+      }
+      @media (min-width: 1025px) {
+         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+   }
+}
+
 .ambo-list {
    display: flex;
    flex-wrap: wrap;
@@ -238,19 +299,19 @@
       border-radius: 4px;
       background: #22a06b;
    }
-   .gray-order {
+   .yellow-order {
       display: flex;
       padding: 6px 10px;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      color: #6b7785;
+      color: #4e5969;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
       border-radius: 4px;
-      background: #f2f3f5;
+      background: #fbe3b9;
    }
 }
 
@@ -315,11 +376,21 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      padding: 12px;
+      padding: 8px;
       background: #f7f8fa;
       border-radius: 0px 8px 8px 0px;
       .ant-radio-group {
          background-color: #f7f8fa !important;
+      }
+      .ant-form-item-control-input-content {
+         background-color: #f7f8fa !important;
+      }
+      input,
+      textarea {
+         background-color: white;
+      }
+      input:disabled {
+         color: black;
       }
    }
    &:hover {
@@ -330,6 +401,9 @@
       .form-inputs {
          background: #ecf5ff;
          .ant-radio-group {
+            background-color: #ecf5ff !important;
+         }
+         .ant-form-item-control-input-content {
             background-color: #ecf5ff !important;
          }
       }
@@ -369,5 +443,47 @@
    }
    .ant-modal-footer {
       width: 100%;
+   }
+}
+
+.ambo-enr {
+   border-radius: 8px;
+   background-color: white;
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+   padding: 6px;
+   .ambo-enr-list {
+      display: flex;
+      flex-direction: row;
+      gap: 4px;
+      .line {
+         height: auto;
+         width: 1px;
+         background-color: #c9cdd4;
+      }
+      button {
+         display: flex;
+         padding: 8px 6px;
+         justify-content: center;
+         align-items: center;
+         gap: 8px;
+         color: #86909c;
+         font-size: 14px;
+         font-style: normal;
+         font-weight: 500;
+         line-height: normal;
+         border: 1px solid transparent;
+         &:hover {
+            color: #2d8cff;
+            border-bottom-width: 1px;
+            border-bottom-color: #2d8cff;
+         }
+      }
+      button.active {
+         color: #2d8cff;
+         border-bottom-width: 1px;
+         border-bottom-color: #2d8cff;
+      }
    }
 }

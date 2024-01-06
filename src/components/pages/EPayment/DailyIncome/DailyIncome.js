@@ -82,7 +82,7 @@ function DailyIncome() {
       getDiscount();
    }, []);
    return (
-      <>
+      <div className="w-full bg-[#f5f6f7] p-3">
          <NewCard
             title="Өдрийн орлогын тайлан"
             extra={
@@ -314,7 +314,7 @@ function DailyIncome() {
          >
             <PrintIndex />
          </Modal>
-      </>
+      </div>
    );
 }
 export default DailyIncome;

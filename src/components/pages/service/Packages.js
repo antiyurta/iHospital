@@ -131,11 +131,16 @@ function Packages() {
    }, []);
 
    return (
-      <div>
+      <div className="w-full bg-[#f5f6f7] p-3">
          <Card
             bordered={false}
             className="header-solid max-h-max rounded-md"
             title="Багц"
+            bodyStyle={{
+               padding: 10,
+               height: 'calc(100vh - 100px)',
+               overflow: 'auto'
+            }}
             extra={
                <Button onClick={showModal} className="bg-sky-700 rounded-md text-white">
                   Нэмэх

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Input, Row, Select, Spin, Table } from 'antd';
-import DynamicFormInspection from '../../DynamicFormInspection';
+import { Button, Collapse, Form, Input, Select, Spin, Table } from 'antd';
 import Diagnose from '../../service/Diagnose';
 import EditableFormItem from '../../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
@@ -8,17 +7,24 @@ import jwtInterceopter from '../../../jwtInterceopter';
 import { inspectionTOJSON, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentNote } from '../../../../features/noteReducer';
+import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
+
+import EmrPatientDiagnoseServices from '../../../../services/emr/patientDiagnose';
+import EmrInspectionNoteServices from '../../../../services/emr/inspectionNote';
+
 const { TextArea } = Input;
 const { Column } = Table;
 const { Option } = Select;
+const { Panel } = Collapse;
 function DynamicContent({
    props,
    incomeData,
    handleClick,
    editForm,
-   editForOUT = true,
+   isEditFromList = false,
    hicsServiceId,
-   appointmentType
+   appointmentType,
+   triggerForModal
 }) {
    const [form] = Form.useForm();
    const notes = useSelector(selectCurrentNote);
@@ -48,101 +54,96 @@ function DynamicContent({
             jwtInterceopter.patch('insurance-seal', data);
          }
       }
-      form.setFieldValue('diagnose', diagnosis);
+      form.setFieldValue('diagnosis', diagnosis);
    };
    const saveDynamicTab = async (values, key) => {
       setLoading(true);
-      const data = {
-         cabinetId: incomeData.cabinetId,
-         patientId: incomeData.patientId,
-         doctorId: incomeData.doctorId,
-         usageType: incomeData.usageType,
-         description: values.description
-      };
-      if (editForOUT) {
-         var diagnoseData = [];
-         values.diagnose?.map((diagnose) => {
-            diagnoseData.push({
-               patientId: incomeData.patientId,
-               type: diagnose.type,
-               usageType: incomeData.usageType,
-               diagnoseId: diagnose.id,
-               diagnoseType: diagnose.diagnoseType,
-               inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
-               appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+      if ((selectedInspectionNoteId && editModeInspectionNote) || isEditFromList) {
+         const diagnosis = values.diagnosis?.map((diagnose) => ({
+            patientId: incomeData.patientId,
+            type: diagnose.type,
+            usageType: incomeData.usageType,
+            diagnoseId: diagnose.id,
+            diagnoseType: diagnose.diagnoseType,
+            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
+            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+         }));
+         if (!isEditFromList) {
+            if (editModeDiagnosis && incomeData.inspection != 11 && incomeData.inspection != 12) {
+               selectedDiagnoseIds?.map((id) => {
+                  EmrPatientDiagnoseServices.delete(id);
+               });
+            }
+         }
+         const id = isEditFromList ? props.formKey : selectedInspectionNoteId;
+         await EmrInspectionNoteServices.patch(id, {
+            description: isEditFromList ? values['description'] : null,
+            pain: JSON.stringify(values['pain']),
+            question: JSON.stringify(values['question']),
+            inspection: JSON.stringify(values['inspection']),
+            plan: JSON.stringify(values['plan']),
+            diagnosis: !isEditFromList ? diagnosis : null
+         })
+            .then((response) => {
+               openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+               //gadnaas zassan ued modal iin haah uuregtei
+               if (isEditFromList) {
+                  triggerForModal(false);
+               } else {
+                  handleClick({ target: { value: 'OCS' } });
+               }
+            })
+            .finally(() => {
+               setLoading(false);
             });
-         });
-      }
-      if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-         data['xrayRequestId'] = incomeData.xrayRequestId;
-         data['conclusion'] = JSON.stringify(values['conclusion']);
-         data['advice'] = JSON.stringify(values['advice']);
       } else {
+         const data = {
+            cabinetId: incomeData.cabinetId,
+            patientId: incomeData.patientId,
+            doctorId: incomeData.doctorId,
+            description: values.description
+         };
+         data['formId'] = key;
+         data['diagnosis'] = values.diagnosis?.map((diagnose) => ({
+            patientId: incomeData.patientId,
+            type: diagnose.type,
+            usageType: incomeData.usageType,
+            diagnoseId: diagnose.id,
+            diagnoseType: diagnose.diagnoseType,
+            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
+            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
+         }));
+         data['appointmentId'] = incomeData.appointmentId;
          data['pain'] = JSON.stringify(values['pain']);
          data['question'] = JSON.stringify(values['question']);
          data['inspection'] = JSON.stringify(values['inspection']);
          data['plan'] = JSON.stringify(values['plan']);
-      }
-      if (incomeData.usageType === 'IN') {
-         data['inpatientRequestId'] = incomeData.appointmentId;
-      } else if (incomeData.usageType === 'OUT') {
-         data['appointmentId'] = incomeData.appointmentId;
-      }
-      data['formId'] = key;
-      data['diagnoses'] = diagnoseData;
-      if (editModeInspectionNote) {
-         await jwtInterceopter
-            .patch('emr/inspectionNote/' + selectedInspectionNoteId, data)
-            .then((response) => {
-               console.log(response);
-               if (response.status === 200) {
-                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
-                  handleClick({ target: { value: 'OCS' } });
-                  // if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-                  //    jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
-                  //       xrayProcess: 2
-                  //    });
-                  // } else {
-                  //    handleClick({ target: { value: 'OCS' } });
-                  // }
-               }
-            })
-            .finally(() => {
-               setLoading(false);
-            });
-      }
-      if (editModeDiagnosis && incomeData.inspection != 11 && incomeData.inspection != 12) {
-         selectedDiagnoseIds?.map((id) => {
-            jwtInterceopter.delete('emr/patient-diagnose/' + id);
-         });
-      }
-      if (!editModeDiagnosis && !editModeInspectionNote) {
-         await jwtInterceopter
-            .post('emr/inspectionNote', data)
-            .then((response) => {
-               if (response.status === 201) {
-                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
-                  if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-                     jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
-                        xrayProcess: 2
-                     });
-                  } else {
-                     if (editForOUT) {
-                        handleClick({ target: { value: 'OCS' } });
+         if (!editModeDiagnosis && !editModeInspectionNote) {
+            await EmrInspectionNoteServices.post(data)
+               .then((response) => {
+                  if (response.status === 201) {
+                     openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+                     if (incomeData.inspection === 11 || incomeData.inspection === 12) {
+                        jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
+                           xrayProcess: 2
+                        });
+                     } else {
+                        if (!isEditFromList) {
+                           handleClick({ target: { value: 'OCS' } });
+                        }
                      }
                   }
-               }
-               console.log(response);
-            })
-            .catch((error) => {
-               console.log('Asdaa', error);
-               if (error.response.status === 409) {
-                  openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
-               }
-            })
-            .finally(() => {
-               setLoading(false);
-            });
+               })
+               .catch((error) => {
+                  console.log('Asdaa', error);
+                  if (error.response.status === 409) {
+                     openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
+                  }
+               })
+               .finally(() => {
+                  setLoading(false);
+               });
+         }
       }
    };
 
@@ -160,10 +161,10 @@ function DynamicContent({
          }
       } else {
          let data = {};
-         if (notes.inspectionNotes?.length > 0) {
-            data = inspectionTOJSON(notes.inspectionNotes[0]);
+         if (notes.inspectionNote) {
+            data = inspectionTOJSON(notes.inspectionNote);
             setEditModeInspectionNote(true);
-            setSelectedInspectionNoteId(notes.inspectionNotes[0].id);
+            setSelectedInspectionNoteId(notes.inspectionNote.id);
          }
          if (notes.diagnosis?.length > 0) {
             var diagnoseIds = [];
@@ -179,7 +180,7 @@ function DynamicContent({
             });
             setEditModeDiagnosis(true);
             setSelectedDiagnoseIds(diagnoseIds);
-            data['diagnose'] = diagnosis;
+            data['diagnosis'] = diagnosis;
          }
          form.setFieldsValue(data);
       }
@@ -187,289 +188,175 @@ function DynamicContent({
    return (
       <Spin spinning={loading}>
          <Form
-            name="basic"
-            // initialValues={{ remember: true }}
-            onFinish={(e) => saveDynamicTab(e, props.formKey)}
-            onFinishFailed={onFinishFailed}
-            // autoComplete="off"
+            form={form}
+            layout={'vertical'}
             labelAlign="left"
             scrollToFirstError
-            className="overflow-auto"
-            layout={incomeData.usageType === 'OUT' ? '' : 'vertical'}
-            form={form}
+            onFinish={(e) => saveDynamicTab(e, props.formKey)}
+            onFinishFailed={onFinishFailed}
          >
-            <>
-               {incomeData.usageType === 'OUT' ? (
-                  <>
-                     <div className="hidden">
-                        <Form.Item name="description">
-                           <TextArea disabled={true} />
-                        </Form.Item>
-                     </div>
-                     {props.data.pain?.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Зовиур
-                           </Divider>
-                           {props.data['pain'].map((pain, index) => {
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{pain.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={pain.options}
-                                          forkey={pain.label}
-                                          unikey={pain.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'inspection' in props.data && props.data.inspection?.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Бодит үзлэг
-                           </Divider>
-                           {props.data['inspection'].map((inspection, index) => {
-                              console.log(props);
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{inspection.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={inspection.options}
-                                          forkey={inspection.label}
-                                          unikey={inspection.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'question' in props.data && props.data.question?.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Асуумж
-                           </Divider>
-                           {props.data['question'].map((question, index) => {
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{question.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={question.options}
-                                          forkey={question.label}
-                                          unikey={question.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'plan' in props.data && props.data.plan?.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Төлөвлөгөө
-                           </Divider>
-                           {props.data['plan'].map((plan, index) => {
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{plan.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={plan.options}
-                                          forkey={plan.label}
-                                          unikey={plan.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'conclusion' in props.data && props.data.conclusion?.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Дүгнэлт
-                           </Divider>
-                           {props.data['conclusion'].map((conclusion, index) => {
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{conclusion.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={conclusion.options}
-                                          forkey={conclusion.label}
-                                          unikey={conclusion.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {'advice' in props.data && props.data.advice?.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Зөвлөгөө
-                           </Divider>
-                           {props.data['advice'].map((advice, index) => {
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{advice.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
-                                    )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={advice.options}
-                                          forkey={advice.label}
-                                          unikey={advice.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
-                     ) : null}
-                     {props.data && editForOUT && incomeData.inspection != 11 && incomeData.usageType === 'OUT' ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Онош
-                           </Divider>
-                           <Diagnose
-                              handleClick={DiagnoseHandleClick}
-                              types={[0, 1, 2]}
-                              hicsServiceId={hicsServiceId}
-                              // type ene heregte bji OUT deer
-                              appointmentType={appointmentType}
+            <div className="flex flex-col gap-2">
+               <div
+                  style={{
+                     paddingRight: 10
+                  }}
+               >
+                  <div className="hidden">
+                     <Form.Item name="description">
+                        <TextArea disabled={true} />
+                     </Form.Item>
+                  </div>
+                  <Collapse accordion>
+                     <Panel key={1} forceRender header="Зовиур">
+                        <div
+                           style={{
+                              height: 358,
+                              overflow: 'auto'
+                           }}
+                        >
+                           <NewFormRender
+                              useForm={form}
+                              form={{
+                                 documentForm: props.data.pain
+                              }}
+                              formOptionIds={[]}
+                              isCheck={false}
+                              formName="pain"
                            />
-                           <Form.List name="diagnose">
-                              {(diagnose) => (
-                                 <Table bordered dataSource={diagnose} pagination={false}>
-                                    <Column
-                                       dataIndex={'code'}
-                                       title="Код"
-                                       render={(_value, _row, index) => {
-                                          return (
-                                             <EditableFormItem name={[index, 'code']}>
-                                                <Input />
-                                             </EditableFormItem>
-                                          );
-                                       }}
-                                    />
-                                    <Column
-                                       dataIndex={'nameMn'}
-                                       title="Монгол нэр"
-                                       render={(_value, _row, index) => {
-                                          return (
-                                             <EditableFormItem name={[index, 'nameMn']}>
-                                                <Input />
-                                             </EditableFormItem>
-                                          );
-                                       }}
-                                    />
-                                    <Column
-                                       dataIndex={'diagnoseType'}
-                                       title="Оношийн төрөл"
-                                       render={(_value, _row, index) => {
-                                          return (
-                                             <EditableFormItemSelect name={[index, 'diagnoseType']}>
-                                                <Select style={{ width: '100%' }}>
-                                                   <Option value={0}>Үндсэн</Option>
-                                                   <Option value={1}>Урьдчилсан</Option>
-                                                   <Option value={2}>Хавсрах онош</Option>
-                                                   <Option value={3}>Дагалдах</Option>
-                                                </Select>
-                                             </EditableFormItemSelect>
-                                          );
-                                       }}
-                                    />
-                                 </Table>
-                              )}
-                           </Form.List>
-                        </>
-                     ) : null}
-                  </>
-               ) : (
-                  <>
-                     {'pain' in props.data && props.data.pain.length > 0 ? (
-                        <>
-                           <Divider orientation="left" className="text-sm my-2">
-                              Зовиур
-                           </Divider>
-                           {props.data['pain'].map((pain, index) => {
-                              return (
-                                 <div key={index}>
-                                    {incomeData.inspection === 1 && (
-                                       <div>
-                                          <p className="mt-2 font-semibold">{pain.label}</p>
-                                          <hr className="m-2 h-px bg-gray-500 border-0 dark:bg-gray-700" />
-                                       </div>
+                        </div>
+                     </Panel>
+                     <Panel key={2} forceRender header="Асуумж">
+                        <div
+                           style={{
+                              height: 358,
+                              overflow: 'auto'
+                           }}
+                        >
+                           <NewFormRender
+                              useForm={form}
+                              form={{
+                                 documentForm: props.data.question
+                              }}
+                              formOptionIds={[]}
+                              isCheck={false}
+                              formName="question"
+                           />
+                        </div>
+                     </Panel>
+                     <Panel key={3} forceRender header="Бодит үзлэг">
+                        <div
+                           style={{
+                              height: 358,
+                              overflow: 'auto'
+                           }}
+                        >
+                           <NewFormRender
+                              useForm={form}
+                              form={{
+                                 documentForm: props.data.inspection
+                              }}
+                              formOptionIds={[]}
+                              isCheck={false}
+                              formName="inspection"
+                           />
+                        </div>
+                     </Panel>
+                     {!isEditFromList ? (
+                        <Panel key={4} header="Онош">
+                           <div
+                              style={{
+                                 height: 358,
+                                 overflow: 'auto'
+                              }}
+                           >
+                              <div className="flex flex-col gap-2">
+                                 <Diagnose
+                                    form={form}
+                                    handleClick={DiagnoseHandleClick}
+                                    types={[0, 1, 2]}
+                                    hicsServiceId={hicsServiceId}
+                                    // type ene heregte bji OUT deer
+                                    appointmentType={appointmentType}
+                                 />
+                                 <Form.List name="diagnosis">
+                                    {(diagnose) => (
+                                       <Table
+                                          bordered
+                                          locale={{
+                                             emptyText: 'Дата байхгүй'
+                                          }}
+                                          dataSource={diagnose}
+                                          pagination={false}
+                                       >
+                                          <Column
+                                             dataIndex={'code'}
+                                             title="Код"
+                                             render={(_value, _row, index) => {
+                                                return (
+                                                   <EditableFormItem name={[index, 'code']}>
+                                                      <Input />
+                                                   </EditableFormItem>
+                                                );
+                                             }}
+                                          />
+                                          <Column
+                                             dataIndex={'nameMn'}
+                                             title="Монгол нэр"
+                                             render={(_value, _row, index) => {
+                                                return (
+                                                   <EditableFormItem name={[index, 'nameMn']}>
+                                                      <Input />
+                                                   </EditableFormItem>
+                                                );
+                                             }}
+                                          />
+                                          <Column
+                                             dataIndex={'diagnoseType'}
+                                             title="Оношийн төрөл"
+                                             render={(_value, _row, index) => {
+                                                return (
+                                                   <EditableFormItemSelect name={[index, 'diagnoseType']}>
+                                                      <Select style={{ width: '100%' }}>
+                                                         <Option value={0}>Үндсэн</Option>
+                                                         <Option value={1}>Урьдчилсан</Option>
+                                                         <Option value={2}>Хавсрах онош</Option>
+                                                         <Option value={3}>Дагалдах</Option>
+                                                      </Select>
+                                                   </EditableFormItemSelect>
+                                                );
+                                             }}
+                                          />
+                                       </Table>
                                     )}
-                                    <div>
-                                       <DynamicFormInspection
-                                          data={pain.options}
-                                          forkey={pain.label}
-                                          unikey={pain.inspectionType}
-                                       />
-                                    </div>
-                                 </div>
-                              );
-                           })}
-                        </>
+                                 </Form.List>
+                              </div>
+                           </div>
+                        </Panel>
                      ) : null}
-                     {/* {<Index id={props.formKey} data={props.data} />} */}
-                  </>
-               )}
-            </>
-            <Form.Item
-               wrapperCol={{
-                  span: 16
-               }}
-            >
-               <Row className="mt-2">
-                  <Button
-                     type="primary"
-                     htmlType="submit"
-                     // onClick={() => validStep && saveDynamicTab()}
-                     loading={loading}
-                  >
-                     EMR хадгалах
-                  </Button>
-               </Row>
-            </Form.Item>
+                     <Panel key={5} forceRender header="Төлөвлөгөө">
+                        <div
+                           style={{
+                              height: 358,
+                              overflow: 'auto'
+                           }}
+                        >
+                           <NewFormRender
+                              useForm={form}
+                              form={{
+                                 documentForm: props.data.plan
+                              }}
+                              formOptionIds={[]}
+                              isCheck={false}
+                              formName="plan"
+                           />
+                        </div>
+                     </Panel>
+                  </Collapse>
+               </div>
+               <Button type="primary" htmlType="submit" loading={loading}>
+                  EMR хадгалах
+               </Button>
+            </div>
          </Form>
       </Spin>
    );

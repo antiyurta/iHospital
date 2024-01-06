@@ -273,8 +273,8 @@ function IndexAfter({ type, params }) {
       }
    ];
    return (
-      <>
-         <div className="flex flex-wrap gap-2">
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <div className="flex flex-col gap-2">
             <ScheduleTypeInfo />
             <InspectionTypeInfo />
             <ListFilter
@@ -343,7 +343,7 @@ function IndexAfter({ type, params }) {
                </Form.Item>
             </Form>
          </Modal>
-      </>
+      </div>
    );
 }
 export default IndexAfter;

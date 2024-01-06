@@ -1,10 +1,11 @@
 import React from 'react';
 import Ocs from '../OCS/Ocs';
 import { connect } from 'react-redux';
+import WarningIcon from '../../../assets/images/warning.svg';
 import { openNofi } from '../../comman';
 import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
-import { Button, Radio } from 'antd';
+import { Button, Modal, Radio } from 'antd';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
 import Schedule from '../OCS/Schedule';
 import { delEmrData } from '../../../features/emrReducer';
@@ -39,6 +40,8 @@ class NewEmr extends React.Component {
       super(props);
       this.state = {
          type: 'EMR',
+         temporarilyType: '',
+         isOpenWarningModal: false,
          selectedPatient: {},
          appointments: [],
          usageType: this.props.IncomeEMRData.usageType,
@@ -50,6 +53,7 @@ class NewEmr extends React.Component {
          colSpan: 2
       };
    }
+
    async getByIdPatient() {
       await PmsPatientServices.getById(this.props.IncomeEMRData.patientId).then((response) => {
          this.setState({ selectedPatient: response.data?.response });
@@ -57,7 +61,9 @@ class NewEmr extends React.Component {
    }
    async getInspectionNotes() {
       await AppointmentService.getByPageFilter({
-         patientId: this.props.IncomeEMRData.patientId
+         params: {
+            patientId: this.props.IncomeEMRData.patientId
+         }
       }).then((response) => {
          if (response.data.response?.data?.length > 0) {
             var result = response.data.response.data.reduce(function (r, a) {
@@ -77,7 +83,10 @@ class NewEmr extends React.Component {
    }
    handleTypeChange = ({ target: { value } }) => {
       this.setState({
-         type: value
+         isOpenWarningModal: true
+      });
+      this.setState({
+         temporarilyType: value
       });
    };
    saveOrder = async (value) => {
@@ -124,21 +133,14 @@ class NewEmr extends React.Component {
    render() {
       return (
          <>
-            <div className="flex flex-col gap-3">
-               {/* {this.props.IncomeEMRData.usageType === 'OUT' && (
-                  <div className="flex flex-col gap-3">
-                     <EmrSupports
-                        appointmentId={this.props.IncomeEMRData.appointmentId}
-                        hicsServiceId={this.props.IncomeEMRData.hicsServiceId}
-                        usageType={this.props.IncomeEMRData.usageType}
-                        patient={this.state.selectedPatient}
-                        patientId={this.props.IncomeEMRData.patientId}
-                        departmentId={this.props.IncomeEMRData.departmentId}
-                     />
-                  </div>
-               )} */}
+            <div className="w-full flex flex-col">
                <NewEmrSupport />
-               <div className="w-full flex sm:flex-col xl:flex-row gap-3 justify-between p-2 bg-white">
+               <div
+                  className="w-full flex sm:flex-col xl:flex-row gap-3 justify-between p-2 bg-white"
+                  style={{
+                     borderBottom: '1px solid #e5e6eb'
+                  }}
+               >
                   <PatientInformation
                      patient={this.state.selectedPatient}
                      handlesearch={false}
@@ -155,82 +157,24 @@ class NewEmr extends React.Component {
                      departmentId={this.props.IncomeEMRData.departmentId}
                   />
                   <div className="flex flex-row gap-2">
-                     <DoctorNotes />
+                     <DoctorNotes patientId={this.props.IncomeEMRData.patientId} />
                      {this.state.usageType === 'OUT' ? (
                         <EmrTimer startDate={this.props.IncomeEMRData.startDate} />
                      ) : null}
                   </div>
                </div>
-               <div className={this.state.type === 'EMR' ? 'grid grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
-                  {this.state.isExpandHistory && this.state.type === 'EMR' ? (
-                     <div
-                        className={this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-${this.state.colSpan}` : null}
-                     >
-                        <NewCard
-                           title="Түүх"
-                           style={{
-                              height: '100%'
-                           }}
-                           extra={
-                              <div className="flex flex-row gap-3">
-                                 <Button icon={<PrinterOutlined />} />
-                                 <Button
-                                    onClick={() => {
-                                       this.setState({
-                                          isExpandHistory: true,
-                                          isExpandInspection: !this.state.isExpandInspection,
-                                          isExpandOneWindow: !this.state.isExpandOneWindow,
-                                          colSpan:
-                                             this.state.isExpandHistory &&
-                                             !this.state.isExpandInspection &&
-                                             !this.isExpandOneWindow
-                                                ? 2
-                                                : 5
-                                       });
-                                    }}
-                                    icon={
-                                       this.state.isExpandHistory ? <FullscreenOutlined /> : <FullscreenExitOutlined />
-                                    }
-                                 />
-                              </div>
+               <div className="overflow-auto bg-[#f5f6f7] p-3">
+                  <div className={this.state.type === 'EMR' ? 'grid grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
+                     {this.state.isExpandHistory && this.state.type === 'EMR' ? (
+                        <div
+                           className={
+                              this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-${this.state.colSpan}` : null
                            }
                         >
-                           <div className="flex flex-col gap-3">
-                              <Radio.Group
-                                 defaultValue={this.state.usageType}
-                                 onChange={(e) =>
-                                    this.setState({
-                                       usageType: e.target.value
-                                    })
-                                 }
-                              >
-                                 <Radio value={'OUT'}>Амбулатори</Radio>
-                                 <Radio value={'IN'}>Хэвтэн</Radio>
-                              </Radio.Group>
-                              {this.state.usageType === 'OUT' ? (
-                                 <MainAmbulatory
-                                    appointments={this.state.appointments}
-                                    patientId={this.props.IncomeEMRData.patientId}
-                                 />
-                              ) : (
-                                 <MainInPatient patientId={this.props.IncomeEMRData.patientId} />
-                              )}
-                           </div>
-                        </NewCard>
-                     </div>
-                  ) : null}
-                  {this.state.isExpandInspection ? (
-                     <div
-                        className={this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-${this.state.colSpan}` : null}
-                     >
-                        {this.state.type === 'EMR' ? (
                            <NewCard
-                              title="Явцын үзлэг"
+                              title="Түүх"
                               style={{
                                  height: '100%'
-                              }}
-                              bodyStyle={{
-                                 height: 'calc(100% - 60px)'
                               }}
                               extra={
                                  <div className="flex flex-row gap-3">
@@ -238,19 +182,19 @@ class NewEmr extends React.Component {
                                     <Button
                                        onClick={() => {
                                           this.setState({
-                                             isExpandHistory: !this.state.isExpandHistory,
-                                             isExpandInspection: true,
+                                             isExpandHistory: true,
+                                             isExpandInspection: !this.state.isExpandInspection,
                                              isExpandOneWindow: !this.state.isExpandOneWindow,
                                              colSpan:
-                                                !this.state.isExpandHistory &&
-                                                this.state.isExpandInspection &&
+                                                this.state.isExpandHistory &&
+                                                !this.state.isExpandInspection &&
                                                 !this.isExpandOneWindow
                                                    ? 2
                                                    : 5
                                           });
                                        }}
                                        icon={
-                                          this.state.isExpandInspection ? (
+                                          this.state.isExpandHistory ? (
                                              <FullscreenOutlined />
                                           ) : (
                                              <FullscreenExitOutlined />
@@ -260,42 +204,98 @@ class NewEmr extends React.Component {
                                  </div>
                               }
                            >
-                              <MainPatientHistory
-                                 AppointmentId={this.props.IncomeEMRData.appointmentId}
-                                 XrayRequestId={this.props.IncomeEMRData.xrayRequestId}
-                                 InpatientRequestId={this.props.IncomeEMRData.inpatientRequestId}
-                                 PatientId={this.props.IncomeEMRData.patientId}
-                                 CabinetId={this.props.IncomeEMRData.cabinetId}
-                                 DeparmentId={this.props.IncomeEMRData.departmentId}
-                                 Inspection={this.props.IncomeEMRData.inspection}
-                                 UsageType={this.props.IncomeEMRData.usageType}
-                                 HicsServiceId={this.props.IncomeEMRData.hicsServiceId}
-                                 AppointmentType={this.props.IncomeEMRData.type}
-                                 handleClick={this.handleTypeChange}
-                              />
+                              <div className="flex flex-col gap-3">
+                                 <Radio.Group
+                                    defaultValue={this.state.usageType}
+                                    onChange={(e) =>
+                                       this.setState({
+                                          usageType: e.target.value
+                                       })
+                                    }
+                                 >
+                                    <Radio value={'OUT'}>Амбулатори</Radio>
+                                    <Radio value={'IN'}>Хэвтэн</Radio>
+                                 </Radio.Group>
+                                 {this.state.usageType === 'OUT' ? (
+                                    <MainAmbulatory
+                                       appointments={this.state.appointments}
+                                       patientId={this.props.IncomeEMRData.patientId}
+                                    />
+                                 ) : (
+                                    <MainInPatient patientId={this.props.IncomeEMRData.patientId} />
+                                 )}
+                              </div>
                            </NewCard>
-                        ) : (
-                           <NewCard
-                              title=""
-                              style={{
-                                 paddingTop: 10
-                              }}
-                           >
-                              <Ocs
-                                 selectedPatient={this.state.selectedPatient}
-                                 UsageType={this.props.IncomeEMRData.usageType}
-                                 AppointmentHasInsurance={this.props.IncomeEMRData.hicsServiceId ? true : false}
-                                 handleClick={this.saveOrder}
-                              />
-                           </NewCard>
-                        )}
-                     </div>
-                  ) : null}
-                  {this.state.isExpandOneWindow && this.state.type === 'EMR' ? (
-                     <div className={this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-1` : null}>
-                        <OneWindow />
-                     </div>
-                  ) : null}
+                        </div>
+                     ) : null}
+                     {this.state.isExpandInspection ? (
+                        <div
+                           className={
+                              this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-${this.state.colSpan}` : null
+                           }
+                        >
+                           {this.state.type === 'EMR' ? (
+                              <NewCard
+                                 title="Явцын үзлэг"
+                                 style={{
+                                    height: '100%'
+                                 }}
+                                 bodyStyle={{
+                                    height: 'calc(100% - 60px)'
+                                 }}
+                                 extra={
+                                    <div className="flex flex-row gap-3">
+                                       <Button icon={<PrinterOutlined />} />
+                                       <Button
+                                          onClick={() => {
+                                             this.setState({
+                                                isExpandHistory: !this.state.isExpandHistory,
+                                                isExpandInspection: true,
+                                                isExpandOneWindow: !this.state.isExpandOneWindow,
+                                                colSpan:
+                                                   !this.state.isExpandHistory &&
+                                                   this.state.isExpandInspection &&
+                                                   !this.isExpandOneWindow
+                                                      ? 2
+                                                      : 5
+                                             });
+                                          }}
+                                          icon={
+                                             this.state.isExpandInspection ? (
+                                                <FullscreenOutlined />
+                                             ) : (
+                                                <FullscreenExitOutlined />
+                                             )
+                                          }
+                                       />
+                                    </div>
+                                 }
+                              >
+                                 <MainPatientHistory handleClick={this.handleTypeChange} />
+                              </NewCard>
+                           ) : (
+                              <NewCard
+                                 title=""
+                                 style={{
+                                    paddingTop: 10
+                                 }}
+                              >
+                                 <Ocs
+                                    selectedPatient={this.state.selectedPatient}
+                                    UsageType={this.props.IncomeEMRData.usageType}
+                                    AppointmentHasInsurance={this.props.IncomeEMRData.hicsServiceId ? true : false}
+                                    handleClick={this.saveOrder}
+                                 />
+                              </NewCard>
+                           )}
+                        </div>
+                     ) : null}
+                     {this.state.isExpandOneWindow && this.state.type === 'EMR' ? (
+                        <div className={this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-1` : null}>
+                           <OneWindow />
+                        </div>
+                     ) : null}
+                  </div>
                </div>
             </div>
             <Schedule
@@ -305,6 +305,51 @@ class NewEmr extends React.Component {
                selectedPatient={this.state.selectedPatient}
                isClose={() => this.setState({ isOpen: false })}
             />
+            <Modal
+               title={<br />}
+               open={this.state.isOpenWarningModal}
+               onCancel={() => {
+                  this.setState({
+                     isOpenWarningModal: false
+                  });
+               }}
+               width={330}
+               footer={null}
+            >
+               <div className="flex flex-col gap-3 p-4 items-center">
+                  <img width={66} height={66} src={WarningIcon} alt="WarningIcon" />
+                  <p
+                     style={{
+                        color: '#181819E5',
+                        fontWeight: 500,
+                        fontSize: 16
+                     }}
+                  >
+                     {this.state.temporarilyType}-рүү шилжих гэж байна
+                  </p>
+                  <p
+                     style={{
+                        color: '#1818196B',
+                        fontWeight: 400,
+                        fontSize: 12
+                     }}
+                  >
+                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                     industry's standard dummy text ever since the
+                  </p>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        this.setState({
+                           type: this.state.temporarilyType,
+                           isOpenWarningModal: false
+                        });
+                     }}
+                  >
+                     Шилжих
+                  </Button>
+               </div>
+            </Modal>
          </>
       );
    }

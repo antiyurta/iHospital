@@ -1,13 +1,13 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 const MenuItem = ({ data }) => {
    const { pathname } = useLocation();
-   const { key, icon, label, title } = data;
+   const { key, icon, title, url, state } = data;
    return (
-      <div key={key} className={`menu-item ${pathname === label.props.to ? 'active' : ''}`} title={title}>
+      <Link key={key} to={url} state={state} className={`menu-item ${pathname === url ? 'active' : ''}`} title={title}>
          {icon}
-         {label}
-      </div>
+         {title}
+      </Link>
    );
 };
 export default MenuItem;

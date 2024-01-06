@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Form, Checkbox, Divider } from 'antd';
-import { localMn, numberToCurrency, openNofi } from '../../../comman';
+import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Form, Select, Radio, InputNumber } from 'antd';
+import { localMn, openNofi } from '../../../comman';
 import PatientInformation from '../../PatientInformation';
 import Order from '../../Order/Order';
 import Schedule from '../../OCS/Schedule';
@@ -11,9 +11,7 @@ import NewCard from '../../../Card/Card';
 
 //service uud
 import PaymentService from '../../../../services/payment/payment';
-import { NewInputNumber, NewOption, NewRadio, NewRadioGroup, NewSelect } from '../../../Input/Input';
 import EbarimtPrint from '../EbarimtPrint';
-import { NewTable } from '../../../Table/Table';
 
 function Invoice() {
    const [orderModal, setOrderModal] = useState(false);
@@ -115,7 +113,6 @@ function Invoice() {
          });
    };
    const saveOrder = async (value) => {
-      console.log('it is working save order =======>', value);
       if (selectedPatient && selectedPatient.length === 0) {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       } else if (value.length > 0) {
@@ -148,7 +145,6 @@ function Invoice() {
    };
    const sendData = async () => {
       await jwtInterceopter.get('ebarimt/sendData').then((response) => {
-         console.log('====>', response);
          if (response.data.response.status && response.status === 200) {
             openNofi('success', 'Амжиллтай', 'Амжилттай татлаа');
             getInformation();
@@ -193,6 +189,11 @@ function Invoice() {
          //bagts
          name: 'Package',
          label: 'Багц'
+      },
+      {
+         //hewtuuleh
+         name: 'Inpatient',
+         label: 'Хэвтэн эмчлүүлэх'
       }
    ];
    const notPatientColumn = [
@@ -402,7 +403,7 @@ function Invoice() {
                   <NewCard title="Төлбөр">
                      <Form form={beforePayForm} layout="vertical">
                         <Form.Item name="preAmount" label="Урьдчилсан төлбөр">
-                           <NewInputNumber
+                           <InputNumber
                               style={{
                                  width: '100%'
                               }}
@@ -412,21 +413,18 @@ function Invoice() {
                            />
                         </Form.Item>
                         <Form.Item name="paymentTypeId" label="Төлбөрийн хэлбэр">
-                           <NewSelect>
-                              {paymentShape?.map((paymentShape, index) => {
-                                 return (
-                                    <NewOption key={index} value={paymentShape.id}>
-                                       {paymentShape.name}
-                                    </NewOption>
-                                 );
-                              })}
-                           </NewSelect>
+                           <Select
+                              options={paymentShape?.map((paymentShape) => ({
+                                 label: paymentShape.name,
+                                 value: paymentShape.id
+                              }))}
+                           />
                         </Form.Item>
                         <Form.Item name={'isEbarimt'} label="И-Баримт өгөх эсэх">
-                           <NewRadioGroup>
-                              <NewRadio value={true}>Тийм</NewRadio>
-                              <NewRadio value={false}>Үгүй</NewRadio>
-                           </NewRadioGroup>
+                           <Radio.Group>
+                              <Radio value={true}>Тийм</Radio>
+                              <Radio value={false}>Үгүй</Radio>
+                           </Radio.Group>
                         </Form.Item>
                      </Form>
                   </NewCard>

@@ -12,16 +12,13 @@ function ListOfIssues() {
          params: {
             patientId: patientId
          }
-      }).then((response) => {
-         console.log(response);
-         const data = response.data.response?.data?.map((appointment, index) => {
-            return {
-               appointmentId: appointment.id,
-               doctor: appointment?.createdLastname?.substring(0, 1) + '.' + appointment.createdFirstname,
-               diagnose: appointment.diagnose,
-               inspectionDate: appointment.createdAt
-            };
-         });
+      }).then(({ data: { response } }) => {
+         const data = response?.data?.map((appointment) => ({
+            appointmentId: appointment.id,
+            doctor: appointment?.createdLastname?.substring(0, 1) + '.' + appointment.createdFirstname,
+            diagnose: appointment.diagnose,
+            inspectionDate: appointment.createdAt
+         }));
          setData(data);
       });
    };

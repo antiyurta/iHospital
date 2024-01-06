@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import DiagnoseTypes from '../../service/DiagnoseTypes.json';
+import DiagnoseTypes from '../../service/DiagnoseTypes.js';
 
 function EditableFormItemSelect(props) {
    const { editing, ...rest } = props;

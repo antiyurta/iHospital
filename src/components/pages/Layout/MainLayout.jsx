@@ -1,8 +1,8 @@
-import React, { Fragment, Suspense, useContext, useState } from 'react';
+import React, { Fragment, Suspense, useContext } from 'react';
 import companyLogo from '../../../assets/logo/iHospital.png';
-import profileImg from '../../../assets/images/test.jpg';
+import male from '../../../assets/images/maleAvatar.svg';
 import { Outlet } from 'react-router-dom';
-import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Delete, logout, selectCurrentFirstName, selectCurrentLastName } from '../../../features/authReducer';
 import Sidebar from './NewSidebar';
@@ -14,13 +14,8 @@ const MainLayout = () => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const { logoutt } = useContext(AuthContext);
-   const [collapsed, setCollapsed] = useState(false);
    const firstName = useSelector(selectCurrentFirstName);
    const lastName = useSelector(selectCurrentLastName);
-   const collapse = () => {
-      // setCollapsed(!collapsed);
-      setCollapsed(false);
-   };
    const handelLogOut = async () => {
       dispatch(Delete());
       dispatch(logout()); // tur bicew jwtBugdin ajilah ued ustagna
@@ -30,15 +25,14 @@ const MainLayout = () => {
    return (
       <div className="main-layout">
          <div className="main-body">
-            <div className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''}`}>
+            <div className="sidebar">
                <div className="sidebar-header">
-                  <p className="companyName">iHospital</p>
-                  {!collapsed ? <MenuFoldOutlined onClick={collapse} /> : <MenuUnfoldOutlined onClick={collapse} />}
+                  <img src={companyLogo} alt="logo" />
                </div>
-               <Sidebar collapsed={collapsed} />
+               <Sidebar />
                <div className="sidebar-footer">
                   <div className="image-cropper" onClick={() => navigate('/profile')}>
-                     <img src={profileImg} className="profile-pic" alt="profile" />
+                     <img src={male} className="profile-pic" alt="profile" />
                   </div>
                   <div className="profile-info">
                      <p className="profile-lastname">{lastName}</p>

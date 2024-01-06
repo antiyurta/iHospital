@@ -155,7 +155,7 @@ function Medicine({ usageType, handleclick }) {
    return (
       <>
          <button
-            className="gray-order"
+            className="yellow-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedMedicines([]);

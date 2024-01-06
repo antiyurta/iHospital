@@ -65,9 +65,7 @@ function Index({ PatientId, RegisterNumber }) {
             paddingLeft: 10,
             paddingRight: 10,
             paddingBottom: 10,
-            minHeight: 300,
-            maxHeight: 300,
-            overflowY: 'auto'
+            overflow: 'auto'
          }}
       >
          <Tabs type="card" items={items} tabBarExtraContent={<FullScreen />} />

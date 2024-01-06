@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { EditOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Collapse, Divider, Form, Input, Modal, Popconfirm, Table } from 'antd';
+import { Button, Checkbox, Collapse, Form, Input, Modal, Popconfirm, Table } from 'antd';
 
 import EditableFormItem from './EditableFormItem';
 import { ReturnDetails } from '../Document/Index';
-import { Get, Patch, Post, openNofi } from '../../../comman';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
+import { openNofi } from '../../../comman';
+
+import DocumentFormServices from '../../../../services/organization/documentForm';
+import DocumentOptionServices from '../../../../services/organization/documentOption';
 
 const { Column } = Table;
 const { Panel } = Collapse;
 
 function EditableTable(props) {
    const { documents, form, positions, add, remove } = props;
-   console.log(documents);
-   const token = useSelector(selectCurrentToken);
+   const [selectedIndex, setSelectedIndex] = useState();
    const [confForm] = Form.useForm();
    const [editModePosition, setEditModePosition] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -39,46 +39,41 @@ function EditableTable(props) {
       const documents = form.getFieldValue('documents');
       setOldDocuments(documents);
    };
-   const getDocumentOptions = async (documentValue, employeePositionIds, structureId) => {
-      const conf = {
-         headers: {},
+   const getDocumentOptions = async (documentValue, employeePositionIds, structureId, index) => {
+      await DocumentOptionServices.getByPageFilter({
          params: {
             employeePositionIds: employeePositionIds,
             documentValue: documentValue,
             structureId: structureId
          }
-      };
-      const response = await Get('organization/document-option', token, conf);
-      if (response.data?.length > 0) {
-         setEditModePosition(true);
-         response.data?.map((item) => {
-            confForm.setFieldValue(item.employeePositionId, item.formOptionIds);
-         });
-      }
+      }).then(
+         ({
+            data: {
+               response: { data }
+            }
+         }) => {
+            if (data.length > 0) {
+               setEditModePosition(true);
+               form.setFieldValue(['documents', index, 'optionId'], data[0].id);
+               console.log(form.getFieldsValue());
+               confForm.setFieldValue(data[0].employeePositionId, data[0].formOptionIds);
+            }
+         }
+      );
    };
    const getDocumentForm = async (index) => {
+      const formId = form.getFieldValue(['documents', index, 'formId']);
+      await DocumentFormServices.getById(formId).then(({ data: { response } }) => {
+         setDocumentForm(response);
+         setIsOpenConfModal(true);
+      });
       const documentValue = form.getFieldValue(['documents', index, 'value']);
       const employeePositionIds = form.getFieldValue('employeePositionIds');
       const structureId = form.getFieldValue('structureId');
-      getDocumentOptions(documentValue, employeePositionIds, structureId);
+      getDocumentOptions(documentValue, employeePositionIds, structureId, index);
       setSelectedStructureId(structureId);
       setSelectedEmployeeIds(employeePositionIds);
       setSelectDocumentValue(documentValue);
-      const conf = {
-         headers: {},
-         params: {
-            documentValue: documentValue,
-            type: 'FORM'
-         }
-      };
-      const response = await Get('organization/document-form', token, conf);
-      console.log('-=>', response);
-      if (response?.length === 0) {
-         openNofi('error', 'Алдаа', 'Маягт холбоотой FORM байхгүй байна');
-      } else {
-         setDocumentForm(response[0]);
-         setIsOpenConfModal(true);
-      }
    };
    const confOnFinish = async (values) => {
       const data = {
@@ -86,22 +81,19 @@ function EditableTable(props) {
          documentValue: selectedDocumentValue,
          items: values
       };
-      const conf = {
-         headers: {},
-         params: {}
-      };
       if (editModePosition) {
-         const response = await Patch('organization/document-option/update/custom', token, conf, data);
-         if (response === 200) {
-            confForm.resetFields();
-            setIsOpenConfModal(false);
-         }
+         await DocumentOptionServices.patch(data).then((response) => {
+            if (response.status === 200) {
+               confForm.resetFields();
+               setIsOpenConfModal(false);
+            }
+         });
       } else {
-         const response = await Post('organization/document-option/custom-all', token, conf, data);
-         if (response === 201) {
+         await DocumentOptionServices.post(data).then(({ data: { response } }) => {
+            form.setFieldValue(['documents', selectedIndex, 'optionId'], response.id);
             confForm.resetFields();
             setIsOpenConfModal(false);
-         }
+         });
       }
    };
    return (
@@ -189,7 +181,10 @@ function EditableTable(props) {
                   return (
                      <React.Fragment>
                         <Button
-                           onClick={() => getDocumentForm(index)}
+                           onClick={() => {
+                              setSelectedIndex(index);
+                              getDocumentForm(index);
+                           }}
                            icon={<EditOutlined />}
                            shape="circle"
                            type="primary"
@@ -225,20 +220,13 @@ function EditableTable(props) {
                         <Panel key={index} header={getPositionInfo(id)}>
                            <Form.Item name={id}>
                               <Checkbox.Group className="w-full">
-                                 {documentForm?.documentForm?.map((form, index) => {
-                                    return (
-                                       <div key={index}>
-                                          <Divider>{form.label}</Divider>
-                                          {form.options?.map((option, idx) => {
-                                             return (
-                                                <Checkbox key={idx} value={option.keyWord}>
-                                                   {option.value}
-                                                </Checkbox>
-                                             );
-                                          })}
-                                       </div>
-                                    );
-                                 })}
+                                 {documentForm?.documentForm
+                                    ?.filter((df) => df.isHead)
+                                    .map((form, index) => (
+                                       <Checkbox key={index} value={form.keyWord}>
+                                          {form.question}
+                                       </Checkbox>
+                                    ))}
                               </Checkbox.Group>
                            </Form.Item>
                         </Panel>

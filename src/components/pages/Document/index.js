@@ -14,8 +14,17 @@ const Index = () => {
          key: 1,
          label: 'Оношилгоо',
          children: <DocumentUpload type="XRAY" />
+      },
+      {
+         key: 2,
+         label: 'Үзлэг',
+         children: <DocumentUpload type="INSPECTION" />
       }
    ];
-   return <Tabs type="card" destroyInactiveTabPane items={items} />;
+   return (
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <Tabs type="card" destroyInactiveTabPane items={items} />
+      </div>
+   );
 };
 export default Index;

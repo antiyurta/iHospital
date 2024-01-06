@@ -1,44 +1,39 @@
 import { Form, Input, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+
+import ReferenceCountryApi from '../../../../services/reference/country';
 
 function ResidentialAddress({ form }) {
    const { Option } = Select;
-   const token = useSelector(selectCurrentToken);
    const [towns, setTowns] = useState([]);
    const [provices, setProvices] = useState([]);
    const filterTowns = async (value) => {
-      const conf = {
-         headers: {},
+      await ReferenceCountryApi.getByPageFilter({
          params: {
             type: 3,
             parentId: value
          }
-      };
-      const response = await Get('reference/country', token, conf);
-      setTowns(response.data);
+      }).then(({ data: { response } }) => {
+         setTowns(response.data);
+      });
    };
    const getProvices = async () => {
-      const conf = {
-         headers: {},
+      await ReferenceCountryApi.getByPageFilter({
          params: {
             type: 2
          }
-      };
-      const response = await Get('reference/country', token, conf);
-      setProvices(response.data);
+      }).then(({ data: { response } }) => {
+         setProvices(response.data);
+      });
    };
    const getTowns = async () => {
-      const conf = {
-         headers: {},
+      await ReferenceCountryApi.getByPageFilter({
          params: {
             type: 3
          }
-      };
-      const response = await Get('reference/country', token, conf);
-      setTowns(response.data);
+      }).then(({ data: { response } }) => {
+         setTowns(response.data);
+      });
    };
    useEffect(() => {
       getProvices();

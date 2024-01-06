@@ -1,9 +1,9 @@
 import { Form, Input, Select } from 'antd';
 import React, { useState } from 'react';
-import SocialStatus from '../socialStatus.json';
-import ChildStatus from '../childStatus.json';
-import serviceScopeStatus from '../serviceScopeStatus.json';
-import marriageStatus from '../marriageStatus.json';
+import SocialStatus from '../socialStatus.js';
+import ChildStatus from '../childStatus.js';
+import serviceScopeStatus from '../serviceScopeStatus.js';
+import marriageStatus from '../marriageStatus.js';
 function MoreInfo({ form }) {
    const { Option } = Select;
    const [isChild, setIsChild] = useState(true);

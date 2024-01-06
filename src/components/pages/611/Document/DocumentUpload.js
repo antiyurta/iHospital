@@ -1,15 +1,13 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Popconfirm, Spin } from 'antd';
+import { Button, Divider, Form, Input, InputNumber, Modal, Popconfirm, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { openNofi } from '../../../comman';
 import { ReturnAll } from './Index';
-// components
-import Index4 from '../../FormBuilder/FBuilder/index4';
-import NewModal from '../../../Modal/Modal';
-import { NewInput, NewOption, NewSelect, NewSwitch } from '../../../Input/Input';
 // services
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 import xrayApi from '../../../../services/service/xray.api';
+import OrganizationStructureServices from '../../../../services/organization/structure';
+import EmrInspectionFormServices from '../../../../services/emr/inspectionForm';
 //
 
 import * as XrayDocumentIndex from '../../Xray/Document/Index';
@@ -17,27 +15,43 @@ import { useSelector } from 'react-redux';
 import { selectCurrentHospitalId } from '../../../../features/authReducer';
 
 import NewIndex from '../../FormBuilder/newFBuilder/index';
+import TextArea from 'antd/lib/input/TextArea';
+
+const { Option } = Select;
+
+export const documentFormType = {
+   Form: 'FORM',
+   Xray: 'XRAY',
+   Inspection: 'INSPECTION'
+};
 
 function DocumentUpload({ type }) {
    // Form = 'FORM', // 611 Маягт
    // Xray = 'XRAY', // ЭХО, Оншилгоо
+   // Inspection = "INSPECTION" // Эмчийн үзлэг
    const hospitalId = useSelector(selectCurrentHospitalId);
    const [form] = Form.useForm();
-   const [newForm] = Form.useForm();
    const documents = ReturnAll();
    const XrayDocuments = XrayDocumentIndex.ReturnAll(hospitalId);
+   const [newIndexData, setNewIndexData] = useState([]);
    const [selectedId, setSelectedId] = useState(Number);
    const [editMode, setEditMode] = useState(false);
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    const [searchField, setSearchField] = useState('');
    const [documentForms, setDocumentForms] = useState([]);
    const [loading, setLoading] = useState(false);
+   // inspection
+   const [structures, setStructures] = useState([]);
+   const [cabinets, setCabinets] = useState([]);
+   const [cabinetFilterValue, setCabinetFilterValue] = useState(Number);
    // xray
    const [xrays, setXrays] = useState([]);
    const openModal = (state, row) => {
+      form.resetFields();
       if (row != null) {
          setSelectedId(row.id);
          form.setFieldsValue(row);
+         setNewIndexData(row.documentForm);
       }
       setEditMode(state);
       setIsOpenEditModal(true);
@@ -60,23 +74,29 @@ function DocumentUpload({ type }) {
       form.setFieldsValue(formData);
    };
    const onFinish = async (values) => {
-      if (editMode) {
-         // values['documentForm'] = [];
-         await OrganizationDocumentFormService.patch(selectedId, values).then((response) => {
-            if (response.status === 200) {
-               form.resetFields();
-               getDocumentForms();
-               setIsOpenEditModal(false);
-            }
+      if (type === documentFormType.Inspection) {
+         await EmrInspectionFormServices.post(values).then((response) => {
+            console.log(response);
          });
       } else {
-         await OrganizationDocumentFormService.post({ ...values, type: type }).then((response) => {
-            if (response.status === 201) {
-               form.resetFields();
-               getDocumentForms();
-               setIsOpenEditModal(false);
-            }
-         });
+         if (editMode) {
+            // values['documentForm'] = [];
+            await OrganizationDocumentFormService.patch(selectedId, values).then((response) => {
+               if (response.status === 200) {
+                  form.resetFields();
+                  getDocumentForms();
+                  setIsOpenEditModal(false);
+               }
+            });
+         } else {
+            await OrganizationDocumentFormService.post({ ...values, type: type }).then((response) => {
+               if (response.status === 201) {
+                  form.resetFields();
+                  getDocumentForms();
+                  setIsOpenEditModal(false);
+               }
+            });
+         }
       }
    };
    const getDocumentForms = async () => {
@@ -96,6 +116,19 @@ function DocumentUpload({ type }) {
             setLoading(false);
          });
    };
+   const getEmrInspectionForms = async () => {
+      setLoading(true);
+      await EmrInspectionFormServices.get()
+         .then((response) => {
+            setDocumentForms(response.data.response.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         })
+         .finally(() => {
+            setLoading(false);
+         });
+   };
    const getXrays = async () => {
       await xrayApi.get().then((response) => {
          setXrays(response.data.response.data);
@@ -105,30 +138,59 @@ function DocumentUpload({ type }) {
       return form.name?.toLowerCase().includes(searchField.toLowerCase());
    });
    const deleteForm = async (id) => {
-      await OrganizationDocumentFormService.delete(id)
-         .then((response) => {
-            if (response.status === 200) {
+      if (type === documentFormType.Inspection) {
+         await EmrInspectionFormServices.delete(id);
+      } else {
+         await OrganizationDocumentFormService.delete(id)
+            .then((response) => {
+               if (response.status === 200) {
+                  getDocumentForms();
+                  openNofi('success', 'Амжилттай', 'Устгагдсан');
+               }
+            })
+            .catch((error) => {
+               console.log(error);
+            })
+            .finally(() => {
                getDocumentForms();
-               openNofi('success', 'Амжилттай', 'Устгагдсан');
-            }
-         })
-         .catch((error) => {
-            console.log(error);
-         })
-         .finally(() => {
-            getDocumentForms();
-         });
+            });
+      }
    };
+   const getStructures = async () => {
+      await OrganizationStructureServices.get({
+         params: {
+            type: 2
+         }
+      }).then(({ data: { response } }) => {
+         setStructures(response.data);
+      });
+   };
+   const getCabinets = async () => {
+      await OrganizationStructureServices.get({
+         params: {
+            type: 3
+         }
+      }).then(({ data: { response } }) => {
+         setCabinets(response.data);
+      });
+   };
+   const filteredCabinets = cabinets.filter((cabinet) => cabinet.parentId === cabinetFilterValue);
    useEffect(() => {
-      getDocumentForms();
-      getXrays();
+      if (type === documentFormType.Inspection) {
+         getEmrInspectionForms();
+         getStructures();
+         getCabinets();
+      } else {
+         getDocumentForms();
+         getXrays();
+      }
    }, []);
    return (
       <>
          <div className="flex flex-wrap">
             <div className="w-full md:w-1/2">
                <div className="mx-3">
-                  <NewInput placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
+                  <Input placeholder="Хайх" allowClear onChange={(e) => setSearchField(e.target.value)} />
                </div>
             </div>
             <div className="w-full md:w-1/2">
@@ -217,9 +279,10 @@ function DocumentUpload({ type }) {
                })}
             </div>
          </Spin>
-         <NewModal
+         <Modal
             title="Маягтын асуумж"
             open={isOpenEditModal}
+            destroyOnClose={true}
             onCancel={() => setIsOpenEditModal(false)}
             onOk={() =>
                form.validateFields().then((values) => {
@@ -233,30 +296,54 @@ function DocumentUpload({ type }) {
                form={form}
                layout="vertical"
                initialValues={{
-                  url: 'document-middleware',
-                  isMulti: false
+                  url: type === documentFormType.Inspection ? 'emr/inpsection-form' : 'document-middleware',
+                  formType: 0
                }}
             >
                <div className="grid grid-cols-2 gap-3">
                   <Form.Item label="Маягтын нэр" name="name">
-                     <NewInput />
+                     <Input />
                   </Form.Item>
                   <Form.Item label="URL" name="url">
-                     <NewInput />
+                     <Input />
                   </Form.Item>
-                  {type === 'FORM' ? (
-                     <Form.Item label="Холбогдох маягт" name="documentValue">
-                        <NewSelect
-                           showSearch
-                           allowClear
-                           optionFilterProp="children"
-                           filterOption={(input, option) =>
-                              (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                           }
-                        >
-                           {documents?.map((document, index) => {
-                              return (
-                                 <NewOption
+                  {type === documentFormType.Inspection ? (
+                     <>
+                        <Form.Item label="Тасаг" name="structureId">
+                           <Select
+                              options={structures?.map((structure) => ({
+                                 label: structure.name,
+                                 value: structure.id
+                              }))}
+                              onChange={(e) => {
+                                 setCabinetFilterValue(e);
+                                 form.setFieldValue('cabinetId', null);
+                              }}
+                           />
+                        </Form.Item>
+                        <Form.Item label="Кабинет" name="cabinetId">
+                           <Select
+                              options={filteredCabinets?.map((cabinet) => ({
+                                 label: cabinet.name,
+                                 value: cabinet.id
+                              }))}
+                           />
+                        </Form.Item>
+                     </>
+                  ) : null}
+                  {type === documentFormType.Form ? (
+                     <>
+                        <Form.Item label="Холбогдох маягт" name="documentValue">
+                           <Select
+                              showSearch
+                              allowClear
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                 (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                              }
+                           >
+                              {documents?.map((document, index) => (
+                                 <Option
                                     disabled={
                                        documentForms.find((e) => e.documentValue === document.value) ? true : false
                                     }
@@ -264,17 +351,60 @@ function DocumentUpload({ type }) {
                                     value={document.value}
                                  >
                                     {document.label}
-                                 </NewOption>
-                              );
-                           })}
-                        </NewSelect>
-                     </Form.Item>
+                                 </Option>
+                              ))}
+                           </Select>
+                        </Form.Item>
+                        <Form.Item label="Маягтын төрөл" name="formType">
+                           <Select
+                              options={[
+                                 {
+                                    label: 'Энгийн',
+                                    value: 0
+                                 },
+                                 {
+                                    label: 'Энгийн бус',
+                                    value: 1
+                                 },
+                                 {
+                                    label: 'Карт',
+                                    value: 2
+                                 },
+                                 {
+                                    label: 'Хамтран',
+                                    value: 3
+                                 }
+                              ]}
+                           />
+                        </Form.Item>
+                        <Form.Item
+                           label="Байрлал"
+                           name="position"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Заавал'
+                              },
+                              ({ _getFieldValue }) => ({
+                                 validator(_, value) {
+                                    const isInclude = !!documentForms.find((form) => form.position === value);
+                                    if (isInclude && !editMode) {
+                                       return Promise.reject('position dawhtsaj baina');
+                                    }
+                                    return Promise.resolve();
+                                 }
+                              })
+                           ]}
+                        >
+                           <InputNumber />
+                        </Form.Item>
+                     </>
                   ) : null}
-                  {type === 'XRAY' ? (
-                     <Form.Item label="Холбогдох маягт" name="documentValue">
-                        <NewSelect>
-                           {XrayDocuments?.map((xrayDoc, index) => {
-                              return (
+                  {type === documentFormType.Xray ? (
+                     <>
+                        <Form.Item label="Холбогдох маягт" name="documentValue">
+                           <Select>
+                              {XrayDocuments?.map((xrayDoc, index) => (
                                  <Option
                                     disabled={
                                        documentForms.find((e) => e.documentValue === xrayDoc.value) ? true : false
@@ -284,50 +414,68 @@ function DocumentUpload({ type }) {
                                  >
                                     {xrayDoc.label}
                                  </Option>
-                              );
-                           })}
-                        </NewSelect>
-                     </Form.Item>
-                  ) : null}
-                  {type === 'XRAY' ? (
-                     <Form.Item label="Холбогдох үйлчилгээ" name="serviceId">
-                        <NewSelect
-                           showSearch
-                           allowClear
-                           optionFilterProp="children"
-                           filterOption={(input, option) =>
-                              (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
-                           }
-                        >
-                           {xrays?.map((xray, index) => {
-                              return (
-                                 <NewOption
+                              ))}
+                           </Select>
+                        </Form.Item>
+                        <Form.Item label="Холбогдох үйлчилгээ" name="serviceId">
+                           <Select
+                              showSearch
+                              allowClear
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                 (option?.children ?? '').toLowerCase().includes(input.toLowerCase())
+                              }
+                           >
+                              {xrays?.map((xray, index) => (
+                                 <Option
                                     disabled={documentForms.find((e) => e.serviceId === xray.id) ? true : false}
                                     key={index}
                                     value={xray.id}
                                  >
                                     {xray.name}
-                                 </NewOption>
-                              );
-                           })}
-                        </NewSelect>
-                     </Form.Item>
+                                 </Option>
+                              ))}
+                           </Select>
+                        </Form.Item>
+                     </>
                   ) : null}
-                  <Form.Item label="Олон талт эсэх" name="isMulti" valuePropName="checked">
-                     <NewSwitch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
-                  </Form.Item>
                </div>
                <div className="rounded-md">
-                  <Form.Item name="documentForm">
-                     <Input />
-                  </Form.Item>
-                  <NewIndex form={form} data={form.getFieldValue('documentForm')} />
+                  {type === documentFormType.Inspection ? (
+                     <>
+                        <Divider>Зовиур</Divider>
+                        <Form.Item shouldUpdate name={'inspection'}>
+                           <TextArea disabled />
+                        </Form.Item>
+                        <NewIndex type={type} form={form} data={newIndexData} formListName="inspection" />
+                        <Divider>Асуумж</Divider>
+                        <Form.Item shouldUpdate name={'question'}>
+                           <TextArea disabled />
+                        </Form.Item>
+                        <NewIndex type={type} form={form} data={newIndexData} formListName="question" />
+                        <Divider>Бодит үзлэг</Divider>
+                        <Form.Item shouldUpdate name={'pain'}>
+                           <TextArea disabled />
+                        </Form.Item>
+                        <NewIndex type={type} form={form} data={newIndexData} formListName="pain" />
+                        <Divider>Төлөвлөгөө</Divider>
+                        <Form.Item shouldUpdate name={'plan'}>
+                           <TextArea disabled />
+                        </Form.Item>
+                        <NewIndex type={type} form={form} data={newIndexData} formListName="plan" />
+                     </>
+                  ) : null}
+                  {type === documentFormType.Form || type === documentFormType.Xray ? (
+                     <>
+                        <Form.Item shouldUpdate name="documentForm">
+                           <TextArea disabled />
+                        </Form.Item>
+                        <NewIndex type={type} form={form} data={newIndexData} formListName="documentForm" />
+                     </>
+                  ) : null}
                </div>
-               {/* <div className="rounded-md" style={{ backgroundColor: '#fafafa' }}>
-                  <Index4 form={form} titlePanel={'documentForm'} handleChange={HandleChangeTest} />
-               </div> */}
             </Form>
-         </NewModal>
+         </Modal>
       </>
    );
 }

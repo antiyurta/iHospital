@@ -2,41 +2,36 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Tabs, Button, Form, Modal, Result, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
-import { selectCurrentFirstName, selectCurrentLastName, selectCurrentUserId } from '../../../../features/authReducer';
+import { selectCurrentUserId } from '../../../../features/authReducer';
 import HistoryTab from './HistoryTab';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
 import jwtInterceopter from '../../../jwtInterceopter';
 
 //
+import EmrInspectionFormServices from '../../../../services/emr/inspectionForm';
 import DocumentFormServices from '../../../../services/organization/documentForm';
-import { useLocation } from 'react-router-dom';
-import FormRender from '../../BeforeAmbulatory/Customized/FormRender';
+//
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
 //
-function MainPatientHistory({
-   AppointmentId,
-   XrayRequestId,
-   InpatientRequestId,
-   PatientId,
-   CabinetId,
-   DeparmentId,
-   Inspection,
-   UsageType,
-   HicsServiceId,
-   AppointmentType,
-   handleClick
-}) {
-   console.log(XrayRequestId);
-   let location = useLocation();
+function MainPatientHistory({ handleClick }) {
+   const {
+      appointmentId,
+      inpatientRequestId,
+      hicsServiceId,
+      departmentId,
+      xrayRequestId,
+      cabinetId,
+      inspection,
+      usageType,
+      patientId,
+      type,
+      xrayId
+   } = useSelector(selectCurrentEmrData);
    const userId = useSelector(selectCurrentUserId);
-   const lastName = useSelector(selectCurrentLastName);
-   const firstName = useSelector(selectCurrentFirstName);
    const [xrayForm] = Form.useForm();
-   const patientId = PatientId;
-   const inspection = Inspection;
-   const cabinetId = CabinetId;
    const [activeKey, setActiveKey] = useState('item-history');
    const [confirmModal, setConfirmModal] = useState(false);
    const [loading, setLoading] = useState(false);
@@ -51,25 +46,26 @@ function MainPatientHistory({
          <DynamicContent
             props={props}
             incomeData={{
-               appointmentId: AppointmentId,
+               appointmentId: appointmentId,
                cabinetId: cabinetId,
                patientId: patientId,
                doctorId: userId,
-               usageType: UsageType,
-               xrayRequestId: XrayRequestId,
-               inspection: Inspection
+               xrayRequestId: xrayRequestId,
+               inspection: inspection,
+               usageType: usageType
             }}
             handleClick={handleClick}
-            hicsServiceId={HicsServiceId}
-            appointmentType={AppointmentType}
+            hicsServiceId={hicsServiceId}
+            appointmentType={type}
+            triggerForModal={(state) => {}}
          />
       );
    }, []);
    const onFinishXray = async (values, { data }) => {
       console.log('data', data);
       const body = {
-         appointmentId: XrayRequestId,
-         usageType: UsageType,
+         appointmentId: xrayRequestId,
+         usageType: usageType,
          formId: data.id,
          documentId: data.documentValue,
          patientId: patientId,
@@ -81,14 +77,14 @@ function MainPatientHistory({
          }
       };
       console.log(body);
-      console.log(XrayRequestId);
+      console.log(xrayRequestId);
       await jwtInterceopter
          .post(data.url, body)
          .then((response) => {
             console.log(response);
          })
          .then(() => {
-            jwtInterceopter.patch('service/xrayRequest/' + XrayRequestId, {
+            jwtInterceopter.patch('service/xrayRequest/' + xrayRequestId, {
                xrayProcess: 2
             });
          });
@@ -134,7 +130,7 @@ function MainPatientHistory({
       DocumentFormServices.getByPageFilter({
          params: {
             type: 'XRAY',
-            serviceId: location?.state?.xrayId
+            serviceId: xrayId
          }
       })
          .then((response) => {
@@ -153,27 +149,13 @@ function MainPatientHistory({
    const getInspectionTabs = async () => {
       setLoading(true);
       //Тухайн эмчид харагдах TAB ууд
-      console.log('==========>', AppointmentType);
-      const conf = {
+      await EmrInspectionFormServices.get({
          params: {
-            usageType: UsageType,
-            structureId: null,
-            cabinetId: null
+            cabinetId: cabinetId
          }
-      };
-      if (AppointmentType === 1) {
-         conf.params['structureId'] = cabinetId;
-      } else {
-         if (UsageType === 'IN') {
-            conf.params['structureId'] = cabinetId;
-         } else {
-            conf.params['cabinetId'] = cabinetId;
-         }
-      }
-      await jwtInterceopter
-         .get('emr/inspection-form', conf)
-         .then((response) => {
-            response.data.response.data?.map((el) => {
+      })
+         .then(({ data: { response } }) => {
+            response.data?.map((el) => {
                setItems((items) => [
                   ...items,
                   {
@@ -181,7 +163,12 @@ function MainPatientHistory({
                      key: `item-${el.id}`,
                      children: (
                         <DynamicTabContent
-                           data={el.formItem}
+                           data={{
+                              inspection: el.inspection,
+                              pain: el.pain,
+                              plan: el.plan,
+                              question: el.question
+                           }}
                            formKey={el.formId != null ? el.formId : el.id}
                            formName={el.name}
                         />
@@ -190,9 +177,6 @@ function MainPatientHistory({
                ]);
             });
          })
-         .catch((error) => {
-            console.log(error);
-         })
          .finally(() => {
             setLoading(false);
          });
@@ -200,84 +184,83 @@ function MainPatientHistory({
    const defualtForm = {
       pain: [
          {
-            label: 'Зовиур',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Зовиур'
-               }
-            ],
-            inspectionType: 'pain'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Зовиур',
+            isNumber: false,
+            question: '',
+            parentIndex: null
          }
       ],
       question: [
          {
-            label: 'Асуумж',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Асуумж'
-               }
-            ],
-            inspectionType: 'question'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Асуумж',
+            isNumber: false,
+            question: '',
+            parentIndex: null
          }
       ],
       inspection: [
          {
-            label: 'Бодит үзлэг',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Бодит үзлэг'
-               }
-            ],
-            inspectionType: 'inspection'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Бодит үзлэг',
+            isNumber: false,
+            question: '',
+            parentIndex: null
          }
       ],
       plan: [
          {
-            label: 'Төлөвлөгөө',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Төлөвлөгөө'
-               }
-            ],
-            inspectionType: 'plan'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Төлөвлөгөө',
+            isNumber: false,
+            question: '',
+            parentIndex: null
          }
       ]
    };
    const xrayDefualtForm = {
       conclusion: [
          {
-            label: 'Дүгнэлт',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Дүгнэлт'
-               }
-            ],
-            inspectionType: 'conclusion'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Дүгнэлт',
+            isNumber: false,
+            question: 'Дүгнэлт',
+            parentIndex: null
          }
       ],
       advice: [
          {
-            label: 'Зөвлөгөө',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Зөвлөгөө'
-               }
-            ],
-            inspectionType: 'advice'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Зөвлөгөө',
+            isNumber: false,
+            question: 'Зөвлөгөө',
+            parentIndex: null
          }
       ]
    };
    const getDefualtTab = () => {
       setItems([
-         ...items,
          {
-            label: 'Асуумж',
+            label: 'Давтан үзлэгийн асуумж',
             key: `item-second`,
             children: <DynamicTabContent data={defualtForm} />
          }
@@ -293,7 +276,7 @@ function MainPatientHistory({
       ]);
    };
    useEffect(() => {
-      if (UsageType === 'OUT') {
+      if (usageType === 'OUT') {
          if (inspection === 1) {
             getInspectionTabs();
          } else if (inspection === 2) {
@@ -304,31 +287,10 @@ function MainPatientHistory({
             getExoInspectionTabs();
          }
       }
-   }, [UsageType]);
-   // const configure = () => {
-   //    if (editNote) {
-   //       const data = JSON.parse(editNote);
-   //       if (data) {
-   //          setActiveKey(`item-${data.formId}`);
-   //          data.diagnose?.map((diagnose, index) => {
-   //             data['diagnose'][index] = diagnose.diagnose;
-   //          });
-   //          data['inspection'] = JSON.parse(data.inspection);
-   //          data['pain'] = JSON.parse(data.pain);
-   //          data['plan'] = JSON.parse(data.plan);
-   //          data['question'] = JSON.parse(data.question);
-   //          form.setFieldsValue(data);
-   //       } else {
-   //          form.resetFields();
-   //       }
-   //    }
-   // };
-   // useEffect(() => {
-   //    configure();
-   // }, [editNote]);
+   }, [usageType]);
    return (
       <>
-         {UsageType === 'OUT' && (
+         {usageType === 'OUT' ? (
             <Spin wrapperClassName="h-full" spinning={loading} tip="Уншиж байна ...">
                <Tabs
                   style={{
@@ -339,15 +301,15 @@ function MainPatientHistory({
                   items={items}
                />
             </Spin>
-         )}
-         {UsageType === 'IN' && (
+         ) : null}
+         {usageType === 'IN' ? (
             <MainInpatientHistory
-               patientId={PatientId}
-               inpatientRequestId={InpatientRequestId}
-               deparmentId={DeparmentId}
-               hicsServiceId={HicsServiceId}
+               patientId={patientId}
+               inpatientRequestId={inpatientRequestId}
+               deparmentId={departmentId}
+               hicsServiceId={hicsServiceId}
             />
-         )}
+         ) : null}
          <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>
             <Result
                status="success"

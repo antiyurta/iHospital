@@ -305,22 +305,24 @@ export default function Dashboard() {
       );
    };
    return (
-      <Tabs
-         defaultActiveKey="1"
-         type="card"
-         items={[
-            {
-               label: `Амбулатори`,
-               key: '1',
-               children: <RenderAmbulatory />
-            },
-            {
-               label: `Хэвтэн`,
-               key: '2',
-               children: <RenderBed />
-            }
-         ]}
-      />
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <Tabs
+            defaultActiveKey="1"
+            type="card"
+            items={[
+               {
+                  label: `Амбулатори`,
+                  key: '1',
+                  children: <RenderAmbulatory />
+               },
+               {
+                  label: `Хэвтэн`,
+                  key: '2',
+                  children: <RenderBed />
+               }
+            ]}
+         />
+      </div>
    );
 }
 const styles = {

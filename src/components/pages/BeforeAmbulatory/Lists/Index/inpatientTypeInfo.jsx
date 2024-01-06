@@ -2,7 +2,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Badge } from 'antd';
 import React from 'react';
 
-import orderType from './orderType.json';
+import orderType from './orderType.js';
 
 const InpatientTypeInfo = () => {
    return (
@@ -10,7 +10,7 @@ const InpatientTypeInfo = () => {
          <Badge count={<InfoCircleOutlined />} />
          <p>Тайлбар:</p>
          <Badge color="#22c55e" count="Төлөвлөгөөт" />
-         {orderType.map((item, index) => (
+         {orderType?.map((item, index) => (
             <div
                key={index}
                style={{

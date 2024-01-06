@@ -12,8 +12,8 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { Get, numberToCurrency, Patch } from '../../../comman';
 import Spinner from 'react-bootstrap/Spinner';
-import orderType from '../orderType.json';
-import roomType from '../roomType.json';
+import orderType from '../orderType.js';
+import roomType from '../roomType.js';
 import { useLocation } from 'react-router-dom';
 
 const BedInformation = (props) => {

@@ -1,4 +1,3 @@
-import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
@@ -26,7 +25,7 @@ function Xray() {
 
    const getDevices = async () => {
       const response = await Get('device', token, {
-         headers: {},
+         headers: {}
          // params: {
          //    deviceType: 0
          // }
@@ -135,21 +134,19 @@ function Xray() {
       }
    ];
    return (
-      <Row gutter={[8, 8]}>
-         <Col span={24}>
-            <UTable
-               title={'Оношилгоо'}
-               url={'service/xray'}
-               column={column}
-               isCreate={true}
-               isRead={false}
-               isUpdate={true}
-               isDelete={true}
-               refresh={getXrayTypeData}
-               width="40%"
-            />
-         </Col>
-      </Row>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Оношилгоо'}
+            url={'service/xray'}
+            column={column}
+            isCreate={true}
+            isRead={false}
+            isUpdate={true}
+            isDelete={true}
+            refresh={getXrayTypeData}
+            width="40%"
+         />
+      </div>
    );
 }
 export default Xray;

@@ -20,7 +20,7 @@ const Index = () => {
    return (
       <>
          <button onClick={() => setIsOpen(true)}>Маягтын түүх</button>
-         <Modal title="Маягтын түүхүүд" open={isOpen} onCancel={() => setIsOpen(false)}>
+         <Modal title="Маягтын түүхүүд" open={isOpen} onCancel={() => setIsOpen(false)} footer={false}>
             <Tabs destroyInactiveTabPane type="card" items={items} />
          </Modal>
       </>

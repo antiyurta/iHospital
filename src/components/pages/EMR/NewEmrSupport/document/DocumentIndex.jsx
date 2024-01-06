@@ -103,15 +103,17 @@ const DocumentIndex = (props) => {
                simple: true
             }}
          />
-         <Modal title={selectedDocument?.docName} open={isOpenRenderModal} onCancel={() => setIsOpenRenderModal(false)}>
+         <Modal
+            title={selectedDocument?.docName}
+            open={isOpenRenderModal}
+            onCancel={() => setIsOpenRenderModal(false)}
+            width={800}
+         >
             <Customized
-               usageType={'OUT'}
+               document={selectedDocument}
                documentValue={selectedDocument?.value}
                documentType={0}
-               structureId={incomeEmrData.departmentId}
-               appointmentId={incomeEmrData.appointmentId}
-               patientId={incomeEmrData.patientId}
-               onOk={(state) => setIsOpenRenderModal(state)}
+               onOk={(state) => console.log(state)}
             />
          </Modal>
       </div>

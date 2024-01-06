@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
 import UTable from '../../UTable';
 
+import OrganizationStructureServices from '../../../services/organization/structure';
+
 function Position() {
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const position = {
       headers: {},
       params: {
@@ -18,9 +12,13 @@ function Position() {
    };
    const [departments, setDepartments] = useState([]);
    const getDepartment = async () => {
-      config.params.types = '2,0';
-      const response = await Get('organization/structure', token, config);
-      setDepartments(response.data);
+      await OrganizationStructureServices.get({
+         params: {
+            types: '2,0'
+         }
+      }).then((response) => {
+         setDepartments(response.data.response.data);
+      });
    };
 
    useEffect(() => {
@@ -80,20 +78,18 @@ function Position() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Албан тушаал'}
-               url={'organization/structure'}
-               params={position}
-               column={positionColumn}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               width="80%"
-            />
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Албан тушаал'}
+            url={'organization/structure'}
+            params={position}
+            column={positionColumn}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            width="80%"
+         />
       </div>
    );
 }

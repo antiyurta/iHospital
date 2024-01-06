@@ -11,19 +11,17 @@ function Block() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Блок'}
-               url={'organization/block'}
-               column={column}
-               width="20%"
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-            />
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Блок'}
+            url={'organization/block'}
+            column={column}
+            width="20%"
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+         />
       </div>
    );
 }

@@ -18,7 +18,8 @@ module.exports = (_env, argv) => {
       output: {
          filename: '[name].js',
          chunkFilename: '[name].bundle.js',
-         path: path.resolve(__dirname, './build')
+         path: path.resolve(__dirname, './build'),
+         publicPath: '/'
       },
       devServer: {
          compress: true,
@@ -57,7 +58,7 @@ module.exports = (_env, argv) => {
                use: ['style-loader', 'css-loader', 'less-loader']
             },
             {
-               test: /\.(jpg|jpeg|png|svg|gif)$/,
+               test: /\.(ico|png|jpg|jpeg|gif|svg|json)$/,
                type: 'asset/resource'
             }
          ]
@@ -65,7 +66,16 @@ module.exports = (_env, argv) => {
       optimization: {
          runtimeChunk: 'single',
          minimize: !isDevelopment,
-         minimizer: [new TerserPlugin()]
+         minimizer: [new TerserPlugin()],
+         splitChunks: {
+            cacheGroups: {
+               vendor: {
+                  test: /[\\/]node_modules[\\/]/,
+                  name: 'vendors',
+                  chunks: 'all'
+               }
+            }
+         }
       },
       plugins: [
          new ReactRefreshPlugin({
@@ -77,10 +87,10 @@ module.exports = (_env, argv) => {
          }),
          new webpack.HotModuleReplacementPlugin(),
          new FaviconsWebpackPlugin({
-            logo: './public/ihospital.png',
+            logo: './public/favicon-32x32.png',
             mode: 'webapp',
             manifest: './public/manifest.json',
-            publicPath: './public/'
+            publicPath: '/'
          }),
          new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './public/index.html'),

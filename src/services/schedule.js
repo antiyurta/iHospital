@@ -3,6 +3,12 @@ class Schedule {
    async get(conf) {
       return await jwtInterceopter.get('schedule', conf);
    }
+   async postSchedule(data) {
+      return await jwtInterceopter.post('schedule', data);
+   }
+   async patchSchedule(id, data) {
+      return await jwtInterceopter.patch('schedule/' + id, data);
+   }
    async getDeviceSlot(conf) {
       return await jwtInterceopter.get('device/slot', conf);
    }

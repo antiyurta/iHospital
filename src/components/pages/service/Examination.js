@@ -111,22 +111,18 @@ function Examination() {
       }
    ];
    return (
-      <div>
-         <div className="flex flex-wrap">
-            <div className="w-full">
-               <UTable
-                  title={'Шинжилгээ'}
-                  url={'service/examination'}
-                  column={column}
-                  isCreate={true}
-                  isRead={false}
-                  isUpdate={true}
-                  isDelete={true}
-                  refresh={getExaminationTypeData}
-                  width="40%"
-               />
-            </div>
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Шинжилгээ'}
+            url={'service/examination'}
+            column={column}
+            isCreate={true}
+            isRead={false}
+            isUpdate={true}
+            isDelete={true}
+            refresh={getExaminationTypeData}
+            width="40%"
+         />
       </div>
    );
 }

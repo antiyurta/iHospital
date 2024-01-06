@@ -68,7 +68,7 @@ function Surgery(props) {
    return (
       <>
          <button
-            className="gray-order"
+            className="yellow-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedSurgeryId(null);

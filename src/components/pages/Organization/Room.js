@@ -1,41 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
 import UTable from '../../UTable';
-import roomTypes from './roomTypes.json';
+import roomTypes from './roomTypes.js';
+
+import OrganizationFloorServices from '../../../services/organization/floor';
+import OrganizationBlockServices from '../../../services/organization/block';
+import OrganizationStructureServices from '../../../services/organization/structure';
 
 function Room() {
    const [blocks, setBlocks] = useState([]);
    const [roomData, setRoomData] = useState([]);
    const [structures, setStructures] = useState([]);
-   const token = useSelector(selectCurrentToken);
 
    const getBlocks = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('organization/block', token, conf);
-      setBlocks(response.data);
+      await OrganizationBlockServices.get({}).then((response) => {
+         setBlocks(response.data.response.data);
+      });
    };
    const getFloor = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('organization/floor', token, conf);
-      setRoomData(response.data);
+      await OrganizationFloorServices.get({}).then((response) => {
+         setRoomData(response.data.response.data);
+      });
    };
    const getStructures = async () => {
-      const conf = {
-         headers: {},
+      await OrganizationStructureServices.get({
          params: {
             type: 2
          }
-      };
-      const response = await Get('organization/structure', token, conf);
-      setStructures(response.data);
+      }).then((response) => {
+         setStructures(response.data.response.data);
+      });
    };
 
    useEffect(() => {
@@ -123,21 +116,19 @@ function Room() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Өрөө'}
-               url={'organization/room'}
-               column={column}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               width="30%"
-               dependCol="isInpatient" //Аль талбараас хамаарч hide/show хийгдэх
-               dependVal={true} //Хамааралтай талбарын утга
-            />
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Өрөө'}
+            url={'organization/room'}
+            column={column}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            width="30%"
+            dependCol="isInpatient" //Аль талбараас хамаарч hide/show хийгдэх
+            dependVal={true} //Хамааралтай талбарын утга
+         />
       </div>
    );
 }

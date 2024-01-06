@@ -1,16 +1,18 @@
 import { ArrowRightOutlined, CloseOutlined, EditOutlined, MinusOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Form, Input, Modal, Popconfirm, Select, Table } from 'antd';
+import { Button, ConfigProvider, Form, Input, Modal, Popconfirm, Select, Table, message } from 'antd';
 import React, { useState, useEffect } from 'react';
-// import { Table } from 'react-bootstrap';
-import { localMn, numberToCurrency, openNofi } from '../../comman';
-import jwtInterceopter from '../../jwtInterceopter';
+import { localMn, openNofi } from '../../comman';
 import EditableFormItem from '../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
+//
+import HealthInsuranceServices from '../../../services/healt-insurance/healtInsurance';
+import ReferenceDiagnoseServices from '../../../services/reference/diagnose';
+//
 const { Search } = Input;
 const { Option } = Select;
 const { Column } = Table;
-function Diagnose({ handleClick, types, hicsServiceId }) {
-   const [diagnosesForm] = Form.useForm();
+function Diagnose({ form, handleClick, types, hicsServiceId }) {
+   const [diagnosisForm] = Form.useForm();
    const [diagnoses, setDiagnoses] = useState([]);
    const [hicsCost, setHicsCost] = useState([]);
    const [meta, setMeta] = useState({});
@@ -37,21 +39,17 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
          setParamValue(e);
          conf.params[v] = e;
       }
-      await jwtInterceopter
-         .get('reference/diagnose', conf)
-         .then((response) => {
-            setDiagnoses(response.data.response.data);
-            setMeta(response.data.response.meta);
-         })
-         .catch((error) => {
-            console.log(error);
+      await ReferenceDiagnoseServices.get(conf)
+         .then(({ data: { response } }) => {
+            setDiagnoses(response.data);
+            setMeta(response.meta);
          })
          .finally(() => {
             setLoading(false);
          });
    };
    const add = async (diagnose) => {
-      var selectedDiagnoses = await diagnosesForm.getFieldValue('diagnoses');
+      var selectedDiagnoses = await diagnosisForm.getFieldValue('diagnosis');
       var state = selectedDiagnoses?.filter((e) => e.id === diagnose.id);
       if (state?.length > 0) {
          openNofi('warning', 'Анхааруулга', 'Онош сонгогдсон байна');
@@ -60,7 +58,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
             selectedDiagnoses = [];
          }
          selectedDiagnoses.push(diagnose);
-         diagnosesForm.setFieldsValue({ diagnoses: selectedDiagnoses });
+         diagnosisForm.setFieldsValue({ diagnosis: selectedDiagnoses });
       }
    };
    const remove = (index) => {
@@ -72,17 +70,16 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
       if (isNewUser) {
          remove(index);
       } else {
-         const data = diagnosesForm.getFieldValue('diagnoses');
-         console.log(data);
+         const data = diagnosisForm.getFieldValue('diagnosis');
          var arr = [...data];
          arr.splice(index, 1);
-         diagnosesForm.setFieldValue('diagnoses', arr);
+         diagnosisForm.setFieldValue('diagnosis', arr);
       }
       setNewUser(false);
       setEditingIndex(undefined);
    };
    const onSave = (index) => {
-      diagnosesForm
+      diagnosisForm
          .validateFields()
          .then(() => {
             setNewUser(false);
@@ -112,24 +109,16 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
 
    const getHicsCost = async (index) => {
       setIsLoadingHicsCost(true);
-      const diagnoeses = diagnosesForm.getFieldValue('diagnoses');
-      const selectedIcdCode = diagnosesForm.getFieldValue(['diagnoses', index, 'code']);
-      const selectedDiagnoseType = diagnosesForm.getFieldValue(['diagnoses', index, 'diagnoseType']);
+      const diagnoeses = diagnosisForm.getFieldValue('diagnoses');
+      const selectedIcdCode = diagnosisForm.getFieldValue(['diagnoses', index, 'code']);
+      const selectedDiagnoseType = diagnosisForm.getFieldValue(['diagnoses', index, 'diagnoseType']);
       const state = diagnoeses?.filter((e) => e.diagnoseType === 0);
       if (state?.length > 1) {
          openNofi('error', 'Алдаа', 'Үндсэн онош сонгогдсон байна');
-         diagnosesForm.resetFields([['diagnoses', index, 'diagnoseType']]);
+         diagnosisForm.resetFields([['diagnoses', index, 'diagnoseType']]);
       } else {
-         console.log(hicsServiceId, selectedDiagnoseType);
          if (hicsServiceId && selectedDiagnoseType === 0) {
-            const conf = {
-               params: {
-                  icdCode: selectedIcdCode,
-                  serviceId: hicsServiceId
-               }
-            };
-            await jwtInterceopter
-               .get('health-insurance/hics-cost-by-field', conf)
+            await HealthInsuranceServices.getHicsCostByField(hicsServiceId, selectedIcdCode)
                .then((response) => {
                   openNofi('success', 'Амжилттай', response.data.description);
                   setHicsCost(response.data.result);
@@ -198,48 +187,53 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                }}
             />
             <Column
-               title=""
+               title="Үйлдэл"
+               width={49}
                render={(_value, _row, index) => {
                   if (index === editingIndex) {
                      return (
                         <React.Fragment>
-                           <Button
-                              icon={<SaveOutlined />}
-                              shape={'circle'}
-                              type={'primary'}
-                              style={{ marginBottom: 8 }}
-                              onClick={() => onSave(index)}
-                           />
-                           <Button icon={<CloseOutlined />} shape={'circle'} onClick={() => onCancel(index)} />
+                           <div className="flex flex-row gap-2 mx-2">
+                              <Button
+                                 icon={<SaveOutlined />}
+                                 shape={'circle'}
+                                 type={'primary'}
+                                 style={{ marginBottom: 8 }}
+                                 onClick={() => onSave(index)}
+                              />
+                              <Button icon={<CloseOutlined />} shape={'circle'} onClick={() => onCancel(index)} />
+                           </div>
                         </React.Fragment>
                      );
                   } else {
                      return (
                         <React.Fragment>
-                           <Button
-                              title="Засах"
-                              icon={<EditOutlined />}
-                              shape={'circle'}
-                              style={{ marginBottom: 8 }}
-                              disabled={editingIndex !== undefined}
-                              onClick={() => setEditingIndex(index)}
-                           />
-                           <Popconfirm
-                              title="Are you sure？"
-                              okText="Yes"
-                              cancelText="No"
-                              onConfirm={() => remove(index)}
-                           >
+                           <div className="flex flex-row gap-2 mx-2">
                               <Button
-                                 style={{
-                                    background: 'red'
-                                 }}
-                                 icon={<MinusOutlined />}
+                                 title="Засах"
+                                 icon={<EditOutlined />}
                                  shape={'circle'}
-                                 type={'danger'}
+                                 style={{ marginBottom: 8 }}
                                  disabled={editingIndex !== undefined}
+                                 onClick={() => setEditingIndex(index)}
                               />
-                           </Popconfirm>
+                              <Popconfirm
+                                 title="Are you sure？"
+                                 okText="Yes"
+                                 cancelText="No"
+                                 onConfirm={() => remove(index)}
+                              >
+                                 <Button
+                                    style={{
+                                       background: 'red'
+                                    }}
+                                    icon={<MinusOutlined />}
+                                    shape={'circle'}
+                                    type={'danger'}
+                                    disabled={editingIndex !== undefined}
+                                 />
+                              </Popconfirm>
+                           </div>
                         </React.Fragment>
                      );
                   }
@@ -264,10 +258,11 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
       <>
          <div>
             <Button
-               className="btn-add"
+               type="primary"
                onClick={() => {
                   setIsOpenDiagnoseModal(true);
-                  diagnosesForm.resetFields();
+                  const diagnosis = form.getFieldValue('diagnosis');
+                  diagnosisForm.setFieldValue('diagnosis', diagnosis);
                   setHicsCost([]);
                   setSelectedCost([]);
                }}
@@ -281,16 +276,24 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                   setIsOpenDiagnoseModal(false);
                }}
                onOk={() => {
-                  diagnosesForm.validateFields().then(async (value) => {
-                     handleClick(value.diagnoses, selectedCost);
-                     setIsOpenDiagnoseModal(false);
-                     // if (selectedCost?.length === 0 && hicsServiceId) {
-                     //    openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
-                     // } else {
-                     //    handleClick(value.diagnoses, selectedCost);
-                     //    setIsOpenDiagnoseModal(false);
-                     // }
-                  });
+                  diagnosisForm
+                     .validateFields()
+                     .then(async (value) => {
+                        if (selectedCost?.length === 0 && hicsServiceId) {
+                           openNofi('warning', 'Анхааруулга', 'Өртгийн жин заавал сонгох');
+                        } else {
+                           handleClick(value.diagnosis, selectedCost);
+                           setIsOpenDiagnoseModal(false);
+                        }
+                     })
+                     .catch((err) => {
+                        err.errorFields?.map((errorField) =>
+                           message.error({
+                              content: errorField.errors
+                           })
+                        );
+                        console.log(err);
+                     });
                }}
                width={'90%'}
                okText="Хадгалах"
@@ -359,7 +362,7 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                                                       // hicsServiceIdForm
                                                       //    .validateFields()
                                                       //    .then(() => {
-                                                      //       diagnosesForm
+                                                      //       diagnosisForm
                                                       //          .validateFields()
                                                       //          .then(() => )
                                                       //          .catch((err) => {
@@ -409,8 +412,8 @@ function Diagnose({ handleClick, types, hicsServiceId }) {
                               >
                                  Сонгогдсон онош
                               </p>
-                              <Form form={diagnosesForm}>
-                                 <Form.List name="diagnoses">
+                              <Form form={diagnosisForm}>
+                                 <Form.List name="diagnosis">
                                     {(diagnoses, { add, remove }) => (
                                        <EditableTable diagnoses={diagnoses} remove={remove} />
                                     )}

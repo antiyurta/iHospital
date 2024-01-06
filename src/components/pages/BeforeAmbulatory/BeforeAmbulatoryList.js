@@ -46,8 +46,8 @@ export default function BeforeAmbulatoryList() {
       }
    ];
    return (
-      <>
+      <div className="p-3 bg-[#f5f6f7]">
          <Tabs type="card" tabBarExtraContent={documents} items={items} destroyInactiveTabPane={true} />
-      </>
+      </div>
    );
 }

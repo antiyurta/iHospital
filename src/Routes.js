@@ -20,9 +20,6 @@ const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryL
 const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
 const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
 // mes zasal
-// tsag zasah
-const AppointmentConfig = React.lazy(() => import('./components/pages/Appointment/ReConfig/Index'));
-// tsag zasah
 
 // tsagiin huwiar
 const Schedule = React.lazy(() => import('./components/pages/Appointment/Schedule/Schedule'));
@@ -49,7 +46,7 @@ const Structure = React.lazy(() => import('./components/pages/Organization/Struc
 // alban tushaal
 const Position = React.lazy(() => import('./components/pages/Organization/Position'));
 // ajiltan
-const DemoEmployee = React.lazy(() => import('./components/pages/Organization/DemoEmployee'));
+const Employee = React.lazy(() => import('./components/pages/Organization/Employee'));
 // dawhar
 const Floor = React.lazy(() => import('./components/pages/Organization/Floor'));
 // block
@@ -248,7 +245,7 @@ export const ProtectedRoutes = [
       name: 'employee',
       mnName: 'Ажилтан',
       url: '/employee',
-      element: DemoEmployee
+      element: Employee
    },
    {
       name: 'position',
@@ -381,11 +378,5 @@ export const ProtectedRoutes = [
       mnName: 'Мэс засал Дарга',
       url: '/SurgeryListStatus',
       element: SurgeryListStatus
-   },
-   {
-      name: 'AppointmentConfig',
-      mnName: 'Цаг захиалга засах',
-      url: '/AppointmentConfig',
-      element: AppointmentConfig
    }
 ];

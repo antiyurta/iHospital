@@ -1,34 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, Progress, Result } from 'antd';
+import { Button, DatePicker, Form, Input, Progress, Result, Select } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
-import { isObjectEmpty, openNofi } from '../../../comman';
+import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
-import {
-   selectCurrentAppId,
-   selectCurrentFirstName,
-   selectCurrentHospitalName,
-   selectCurrentLastName
-} from '../../../../features/authReducer';
-import FormRender from './FormRender';
+import { selectCurrentHospitalName } from '../../../../features/authReducer';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 //
 import jwtInterceopter from '../../../jwtInterceopter';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';
-import { NewOption, NewRangePicker, NewSelect } from '../../../Input/Input';
 import OrganizationStructureService from '../../../../services/organization/structure';
 import OrganizationEmployeeService from '../../../../services/organization/employee';
-import { totalCalculator } from '../../../injection';
+import { colorTotal, totalCalculator } from '../../../injection';
 import NewFormRender from './NewFormRender';
 //
+import { FormType } from './enum-utils';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
+import apiAppointmentService from '../../../../services/appointment/api-appointment-service';
+import { useLocation } from 'react-router-dom';
+//
+const { RangePicker } = DatePicker;
+
 function Index(props) {
-   const { usageType, documentValue, documentType, structureId, appointmentId, patientId, onOk } = props;
+   const {
+      state: { slotId }
+   } = useLocation();
+   // slotId ni appointment ruu patchlah ued heregtei
+   const { isEdit, editId, document, documentValue, documentType, onOk } = props;
+   const { appointmentType, usageType, patientId, appointmentId, inpatientRequestId } =
+      useSelector(selectCurrentEmrData);
    const hospitalName = useSelector(selectCurrentHospitalName);
-   const lastName = useSelector(selectCurrentLastName);
-   const firstName = useSelector(selectCurrentFirstName);
    const printRef = useRef();
-   const AppIds = useSelector(selectCurrentAppId);
    const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
    const [data, setData] = useState([]);
@@ -54,7 +57,6 @@ function Index(props) {
             depId: e
          }
       }).then((response) => {
-         console.log('res', response);
          setEmployees(response.data.response.data);
       });
    };
@@ -72,7 +74,7 @@ function Index(props) {
       } else {
          params = {
             usageType: usageType,
-            appointmentId: appointmentId,
+            appointmentId: appointmentId || inpatientRequestId,
             documentId: documentValue,
             patientId: patientId
          };
@@ -90,30 +92,18 @@ function Index(props) {
          });
    };
    const getDocumentForm = async () => {
-      await DocumentFormServices.getByPageFilter({
-         params: {
-            documentValue: documentValue
-         }
-      })
-         .then((response) => {
-            if (response.data.response?.length > 0) {
-               setDocumentForm(response.data.response[0]);
-            }
+      await DocumentFormServices.getById(document.formId)
+         .then(({ data: { response } }) => {
+            setDocumentForm(response);
          })
          .catch((error) => {
             console.log(error);
          });
    };
    const getDocumentOption = async () => {
-      await DocumentOptionServices.getByPageFilter({
-         params: {
-            structureId: structureId,
-            employeePositionIds: AppIds,
-            documentValue: documentValue
-         }
-      })
-         .then((response) => {
-            setDocumentOptions(response.data.response?.data);
+      await DocumentOptionServices.getById(document.optionId)
+         .then(({ data: { response } }) => {
+            setDocumentOptions(response.formOptionIds);
          })
          .catch((error) => {
             console.log(error);
@@ -121,85 +111,66 @@ function Index(props) {
    };
    const onFinish = async (values) => {
       setIsLoading(true);
-      if (documentValue === 87) {
-         const { total, message } = totalCalculator(values);
-         if (message) {
-            openNofi('error', 'Анхааруулга', message);
-         }
-      }
-      if (documentForm.isMulti) {
+      if (isEdit) {
          await jwtInterceopter
-            .get(documentForm.url, {
-               params: {
-                  appointmentId: appointmentId,
-                  patientId: patientId,
-                  documentId: documentValue,
-                  usageType: usageType
-               }
+            .patch(`${documentForm.url}/${editId}`, {
+               data: values
             })
-            .then(async ({ data: { response } }) => {
-               if (response.length > 0) {
-                  const oldData = response[0].data;
-                  const mergedData = { ...values, ...oldData };
-                  console.log(mergedData);
-                  // await jwtInterceopter
-                  //    .patch(documentForm.url + '/' + response[0]._id, {
-                  //       data: {
-                  //          ...response[0].data,
-                  //          ...values
-                  //       }
-                  //    })
-                  //    .then((res) => {
-                  //       if (res.data.response.success) {
-                  //          openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-                  //       }
-                  //    });
-               } else {
-                  await jwtInterceopter
-                     .post(documentForm.url, {
-                        appointmentId: appointmentId,
-                        usageType: usageType,
-                        documentId: documentValue,
-                        patientId: patientId,
-                        type: 'FORM',
-                        data: values
-                     })
-                     .then((res) => {
-                        if (res.data.response.success) {
-                           openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-                        }
-                     })
-                     .finally(() => {
-                        onOk(false);
-                     });
+            .then((response) => {
+               if (response.data.response.success) {
+                  openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
             .finally(() => {
                setIsLoading(false);
+               onOk(false);
             });
       } else {
+         if (documentValue === 87) {
+            const { total, message } = totalCalculator(values);
+            const color = colorTotal(values);
+            if (message) {
+               openNofi('error', 'Анхааруулга', message);
+            }
+            if (appointmentType === 0) {
+               apiAppointmentService.patchAppointment(appointmentId || inpatientRequestId, {
+                  slotId: slotId,
+                  assesment: {
+                     color: color,
+                     total: total
+                  }
+               });
+            } else if (appointmentType === 1) {
+               apiAppointmentService.patchPreOrder(appointmentId || inpatientRequestId, {
+                  slotId: slotId,
+                  assesment: {
+                     color: color,
+                     total: total
+                  }
+               });
+            }
+         }
          await jwtInterceopter
             .post(documentForm.url, {
-               appointmentId: appointmentId,
+               position: documentForm.position,
+               formId: document.formId,
+               formType: document.formType,
+               optionId: document.optionId,
+               appointmentId: appointmentId || inpatientRequestId,
                usageType: usageType,
                documentId: documentValue,
                patientId: patientId,
                data: values,
                type: 'FORM'
             })
-            .then((response) => {
-               if (response.status === 201) {
+            .then((res) => {
+               if (res.data.response.success) {
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
-                  onOk(false);
-               }
-            })
-            .catch((error) => {
-               if (error.response.status === 409) {
-                  openNofi('error', 'Алдаа', 'Мэдээлэл бөглөгдсөн байна');
                }
             })
             .finally(() => {
                setIsLoading(false);
+               onOk(false);
             });
       }
    };
@@ -235,7 +206,6 @@ function Index(props) {
    });
    useEffect(() => {
       if (documentValue != 0) {
-         console.log(documentType);
          if (documentType != 1) {
             getDocumentOption();
          }
@@ -248,9 +218,13 @@ function Index(props) {
          getData();
          getCabinets();
       }
+      if (isEdit) {
+         form.setFieldsValue(document.data);
+      }
    }, [documentForm]);
 
    const checkProgress = (_current, all) => {
+      console.log('all', all);
       const length = Object.keys(all)?.length - 1;
       const selected = Object.entries(all)
          ?.map(([key, value]) => {
@@ -293,7 +267,7 @@ function Index(props) {
                         label="Өдрөөр шүүх"
                         name="date"
                      >
-                        <NewRangePicker />
+                        <RangePicker />
                      </Form.Item>
                      {documentValue === 1 ? (
                         <Form.Item
@@ -306,22 +280,17 @@ function Index(props) {
                               }
                            ]}
                         >
-                           <NewSelect
+                           <Select
                               style={{ width: 200 }}
                               onChange={(e) => {
                                  getEmployees(e);
                               }}
                               onSelect={(_id, info) => setSelectedCabinet(info.children)}
-                           >
-                              {cabinets?.map((document, index) => {
-                                 console.log(cabinets);
-                                 return (
-                                    <NewOption key={index} value={document.id}>
-                                       {document.name}
-                                    </NewOption>
-                                 );
-                              })}
-                           </NewSelect>
+                              options={cabinets?.map((document) => ({
+                                 label: document.name,
+                                 value: document.id
+                              }))}
+                           />
                         </Form.Item>
                      ) : null}
                      {documentValue === 1 ? (
@@ -335,18 +304,14 @@ function Index(props) {
                               }
                            ]}
                         >
-                           <NewSelect
+                           <Select
                               style={{ width: 200 }}
                               onSelect={(_id, info) => setSelectedEmp(info.children.join(''))}
-                           >
-                              {employees?.map((document, index) => {
-                                 return (
-                                    <NewOption key={index} value={document.id}>
-                                       {document.lastName?.substr(0, 1)}. {document.firstName}
-                                    </NewOption>
-                                 );
-                              })}
-                           </NewSelect>
+                              options={employees?.map((employee) => ({
+                                 label: formatNameForDoc(employee?.lastName, employee?.firstName),
+                                 value: employee.id
+                              }))}
+                           />
                         </Form.Item>
                      ) : null}
                      <Form.Item className="self-end">
@@ -363,7 +328,7 @@ function Index(props) {
                   <ReturnById
                      type={usageType}
                      id={documentValue}
-                     appointmentId={null}
+                     appointmentId={appointmentId || inpatientRequestId}
                      data={data}
                      hospitalName={hospitalName}
                      doctorName={selectedEmp}
@@ -373,7 +338,7 @@ function Index(props) {
             </div>
          ) : (
             <>
-               <div className="flex flex-col gap-1 px-3 overflow-auto">
+               <div className="flex flex-col gap-1">
                   <Form
                      form={form}
                      layout="vertical"
@@ -384,22 +349,24 @@ function Index(props) {
                         documentPercent: 0
                      }}
                   >
-                     <ProgressBar className="mb-0" name="documentPercent">
+                     <ProgressBar className="mb-0 px-3" name="documentPercent">
                         <Input />
                      </ProgressBar>
-                     <NewFormRender
-                        useForm={form}
-                        form={documentForm}
-                        formOptionIds={documentOptions[0]?.formOptionIds}
-                        isCheck={true}
-                     />
+                     <div className="h-[500px] overflow-auto px-3">
+                        <NewFormRender
+                           useForm={form}
+                           form={documentForm}
+                           formOptionIds={documentOptions}
+                           isCheck={true}
+                        />
+                     </div>
                   </Form>
                   <Button
                      loading={isLoading}
                      onClick={() => form.validateFields().then((values) => onFinish(values))}
                      type="primary"
                   >
-                     Хадгалах
+                     {isEdit ? 'Засах' : 'Хадгалах'}
                   </Button>
                </div>
             </>

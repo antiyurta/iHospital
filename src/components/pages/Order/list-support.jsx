@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Empty, Table } from 'antd';
+import { ConfigProvider, Empty, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
 import React from 'react';
 import { localMn, numberToCurrency } from '../../comman';
@@ -16,10 +16,12 @@ import addButtonIcon from './addButton.svg';
 /** Захиалгын тусламж үйлчилгээний  */
 export const ListSupport = ({ careType, careTypeId, add }) => {
    const [isLoading, setIsLoading] = useState(false);
+   const [filterValue, setFilterValue] = useState();
    const [supports, setSupports] = useState([]);
    const [supMeta, setSupMeta] = useState({});
 
    const getData = async (page, limit, filter) => {
+      setFilterValue(filter);
       setIsLoading(true);
       if (careType == CARE_TYPE.Examination) {
          await examinationApi
@@ -134,7 +136,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
                   showSizeChanger: true,
                   pageSizeOptions: ['5', '10', '20', '50'],
                   showQuickJumper: true,
-                  onChange: (page, pageSize) => getData(careTypeId, page, pageSize)
+                  onChange: (page, pageSize) => getData(page, pageSize, filterValue)
                }}
             />
          </ConfigProvider>

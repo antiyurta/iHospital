@@ -98,8 +98,13 @@ function DoctorAppointment() {
       ScrollRef(scrollRef);
    }, []);
    return (
-      <div className="flex flex-col gap-3">
-         <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+      <div className="flex flex-col">
+         <div
+            className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3"
+            style={{
+               borderBottom: '1px solid #e5e6eb'
+            }}
+         >
             <PatientInformation patient={selectedPatient} handlesearch={onSearchSchedule} />
             <Card
                bordered={false}
@@ -151,16 +156,18 @@ function DoctorAppointment() {
                <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
             </div>
          </div>
-         <Appointment
-            selectedPatient={selectedPatient}
-            type={1}
-            prevAppointmentId={null}
-            isExtraGrud={{
-               isCreate: true,
-               isChange: true,
-               isDelete: true
-            }}
-         />
+         <div className="bg-[#f5f6f7] p-3">
+            <Appointment
+               selectedPatient={selectedPatient}
+               type={1}
+               prevAppointmentId={null}
+               isExtraGrud={{
+                  isCreate: true,
+                  isChange: true,
+                  isDelete: true
+               }}
+            />
+         </div>
       </div>
    );
 }

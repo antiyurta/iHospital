@@ -52,6 +52,10 @@ const Question = (props) => {
                      value: 'input'
                   },
                   {
+                     label: 'InputNumber',
+                     value: 'inputNumber'
+                  },
+                  {
                      label: 'Radio',
                      value: 'radio'
                   },
@@ -66,6 +70,18 @@ const Question = (props) => {
                   {
                      label: 'Text',
                      value: 'textarea'
+                  },
+                  {
+                     label: 'Date',
+                     value: 'datepicker'
+                  },
+                  {
+                     label: 'DateTime',
+                     value: 'dateTime'
+                  },
+                  {
+                     label: 'diagnose',
+                     value: 'diagnose'
                   }
                ]}
             />

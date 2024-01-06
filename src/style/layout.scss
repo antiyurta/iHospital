@@ -5,76 +5,62 @@
 }
 
 .main-layout {
-   height: calc(100vh - 12px);
-   padding: 6px 12px 6px 6px;
+   height: calc(100vh);
    background-color: white;
    .main-body {
       height: calc(100%);
       display: flex;
       flex-direction: row;
       gap: 6px;
-      border-radius: 8px;
-      background-color: #f5f6f7;
+      background-color: white;
       .sidebar {
+         gap: 12px;
+         padding: 12px;
          transition: all 0.5s;
          display: flex;
          flex-direction: column;
          justify-content: space-between;
          min-width: 220px;
          max-width: 220px;
+         background-color: white;
          .sidebar-header {
-            padding: 12px;
-            display: flex;
-            flex-direction: row;
-            gap: 3px;
-            justify-content: space-between;
-            .companyName {
-               opacity: 1;
-               transition: opacity 0.3s ease-in-out;
-               font-size: 24px;
-               font-weight: 700;
-               color: #2f4053;
-            }
-            span {
-               font-size: 18px;
-               &:hover {
-                  color: #0095ff;
-               }
+            align-self: center;
+            img {
+               height: 53px;
             }
          }
          .sidebar-body {
             height: 100%;
             overflow: auto;
             width: 100%;
-            padding: 12px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
             gap: 8px;
+            border-radius: 12px;
+            background-color: #eff4fa;
             .menu-item {
                display: flex;
                padding: 6px;
                flex-direction: row;
                gap: 8px;
                align-items: center;
+               color: #38586e;
                p > svg {
                   width: 20px;
                   height: 20px;
                }
-               a {
-                  color: #65717f;
-               }
                &:hover {
                   cursor: pointer;
                   border-radius: 8px;
-                  background-color: #dde0e5;
-                  a {
-                     color: #4f5d6b;
-                  }
+                  background-color: #c0dcff;
+                  color: #2d8cff !important;
                }
             }
             .menu-item.active {
                border-radius: 8px;
-               background-color: #dde0e5;
+               color: #2d8cff;
+               background-color: #c0dcff;
             }
             .menu-item-sub {
                display: flex;
@@ -106,6 +92,12 @@
                      display: flex;
                      flex-direction: row;
                      gap: 3px;
+                     a {
+                        width: 100%;
+                     }
+                     img {
+                        height: 100%;
+                     }
                   }
                }
                p.label {
@@ -127,8 +119,7 @@
             gap: 8px;
             padding: 12px;
             justify-content: space-between;
-            border-bottom-left-radius: 8px;
-            background-color: #e9ecef;
+            border-top: 1px solid #c9cdd4;
             &:hover {
                cursor: pointer;
             }
@@ -164,45 +155,6 @@
                &:hover {
                   cursor: pointer;
                }
-            }
-         }
-      }
-      .sidebar.sidebar-collapsed {
-         transition: all 0.5s;
-         min-width: 54px;
-         max-width: 54px;
-         .sidebar-header {
-            justify-content: center;
-            height: 60px;
-            .companyName {
-               display: none;
-               transition: opacity 0.5s ease-in-out;
-            }
-         }
-         .sidebar-body {
-            .menu-item {
-               a {
-                  display: none;
-               }
-            }
-            .menu-item-sub {
-               &:hover {
-                  cursor: pointer;
-                  border-radius: 8px;
-                  background-color: #dde0e5;
-                  a {
-                     color: #4f5d6b;
-                  }
-               }
-            }
-         }
-         .sidebar-footer {
-            justify-content: center;
-            .image-cropper {
-               display: none;
-            }
-            .profile-info {
-               display: none;
             }
          }
       }
@@ -375,14 +327,25 @@
    flex: 1 0 0;
    padding: 8px;
    flex-direction: row;
-   gap: 8px;
+   gap: 16px;
    background-color: white;
    align-items: center;
    border-radius: 5px;
    .picture {
       max-height: 150px;
+      min-height: 150px;
       max-width: 150px;
+      min-width: 150px;
       border-radius: 16px;
+      padding: 4px;
+      border: 1px solid #c9cdd4;
+      img {
+         max-height: 140px;
+         min-height: 140px;
+         max-width: 140px;
+         min-width: 140px;
+         border-radius: 16px;
+      }
    }
    > .info {
       display: flex;
@@ -424,27 +387,42 @@
       }
    }
 }
-.emr-navbar {
-   width: 100%;
+.navbar {
    display: flex;
    flex-direction: row;
-   gap: 8px;
+   justify-content: space-between;
    padding: 8px;
    border-bottom: 1px solid #e5e6eb;
    background: #fff;
-   justify-content: flex-end;
-   button {
+   .back a {
       display: flex;
-      padding: 4px 8px;
-      justify-content: center;
+      flex-direction: row;
+      gap: 4px;
       align-items: center;
+      color: #4e5969;
+      font-weight: 500;
+      &:hover {
+         color: #2d8cff;
+      }
+   }
+   .emr-navbar {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
       gap: 8px;
-      border-radius: 4px;
-      background: #2d8cff;
-      color: white;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
+      button {
+         display: flex;
+         padding: 4px 8px;
+         justify-content: center;
+         align-items: center;
+         gap: 8px;
+         border-radius: 4px;
+         background: #2d8cff;
+         color: white;
+         font-size: 14px;
+         font-style: normal;
+         font-weight: 400;
+      }
    }
 }
 
@@ -453,13 +431,41 @@
    flex-direction: column;
    justify-content: flex-end;
    padding: 8px;
+   gap: 6px;
    border-radius: 4px;
    border: 1px solid #61c695;
    background: #b6ecce;
    .content-notes {
-      max-height: 100px;
-      height: 100px;
+      padding-right: 10px;
+      max-height: 113px;
+      height: 113px;
       overflow: auto;
+      .note {
+         display: flex;
+         flex-direction: column;
+         gap: 4px;
+         .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .info {
+               padding: 2px 8px;
+               font-size: 10px;
+               font-weight: 400;
+               border-radius: 15px;
+            }
+            .doctor {
+               color: #4e5969;
+               font-size: 12px;
+               font-weight: 400;
+            }
+         }
+         .date {
+            color: #6b7785;
+            font-size: 12px;
+            font-weight: 400;
+         }
+      }
    }
    button {
       display: flex;
@@ -470,7 +476,7 @@
       background: #22a06b;
       color: white;
    }
-   input {
+   textarea {
       width: auto;
       min-height: 33px;
       border-radius: 4px;
@@ -486,13 +492,41 @@
    flex-direction: column;
    justify-content: flex-end;
    padding: 8px;
+   gap: 6px;
    border-radius: 4px;
    border: 1px solid #f4b35e;
    background: #f4b35e;
    .content-notes {
-      max-height: 100px;
-      height: 100px;
+      padding-right: 10px;
+      max-height: 113px;
+      height: 113px;
       overflow: auto;
+      .note {
+         display: flex;
+         flex-direction: column;
+         gap: 4px;
+         .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .info {
+               padding: 2px 8px;
+               font-size: 10px;
+               font-weight: 400;
+               border-radius: 15px;
+            }
+            .doctor {
+               color: #4e5969;
+               font-size: 12px;
+               font-weight: 400;
+            }
+         }
+         .date {
+            color: #6b7785;
+            font-size: 12px;
+            font-weight: 400;
+         }
+      }
    }
    button {
       display: flex;
@@ -503,7 +537,7 @@
       background: #ec7a09;
       color: white;
    }
-   input {
+   textarea {
       width: auto;
       min-height: 33px;
       border-radius: 4px;

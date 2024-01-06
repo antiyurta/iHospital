@@ -32,7 +32,7 @@ function Xray({ handleclick }) {
    return (
       <>
          <button
-            className="gray-order"
+            className="yellow-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedXrays([]);

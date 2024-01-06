@@ -1,17 +1,13 @@
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-import mn from 'antd/es/calendar/locale/mn_MN';
-import { Alert, Button, Descriptions, Form, Switch } from 'antd';
+import { Alert, Button, Card, Descriptions, Form, Modal, Radio, Select, Switch } from 'antd';
 import { ClockCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { selectCurrentInsurance } from '../../../features/authReducer';
 
 // components
 import List from './List';
-import NewCard from '../../Card/Card';
-import { NewDatePicker, NewOption, NewRadio, NewRadioGroup, NewSelect } from '../../Input/Input';
-import { openNofi } from '../../comman';
-import NewModal from '../../Modal/Modal';
+import { formatNameForDoc, openNofi } from '../../comman';
 import { NewColumn, NewTable } from '../../Table/Table';
 import Finger from '../../../features/finger';
 
@@ -58,7 +54,6 @@ function Index(props) {
    // tasagt hamaaraltai emch awchirah
    const getDoctor = async (value) => {
       setSelectedDep(structures.find((e) => e['id'] === value));
-      console.log(structures.find((e) => e['id'] === value));
       await OrganizationEmployeeService.getEmployee({
          params: {
             depId: value
@@ -80,13 +75,13 @@ function Index(props) {
    // emch songoh
    const selectDoctor = (doctorId) => {
       setSelectedDoctor(doctors.find((e) => e.id === doctorId));
-      console.log(doctors.find((e) => e.id === doctorId));
    };
    // filter engiin ued schedule awcirah
    const onFinish = async (values) => {
+      const date = new Date();
       await ScheduleService.get({
          params: {
-            findOneDate: moment(values.date).format('YYYY-MM-DD'),
+            findManyDate: dayjs(date.setDate(new Date().getDate() - 1)).format('YYYY-MM-DD'),
             structureId: values.structureId,
             doctorId: values.doctorId,
             type: type
@@ -157,7 +152,6 @@ function Index(props) {
                type: invoiceData.type
             })
             .then((response) => {
-               console.log(response);
                if (response.status === 200) {
                   setAppointmentModal(false);
                   handleClick(true, invoiceData.invoiceId);
@@ -172,7 +166,6 @@ function Index(props) {
             type: 3,
             status: 1,
             isInsurance: stateInsurance,
-            appointmentWorkDate: filterForm.getFieldValue('date'),
             appointmentId: prevAppointmentId
          }).then(async (response) => {
             if (response.status === 201) {
@@ -196,7 +189,11 @@ function Index(props) {
    return (
       <>
          <div className="flex flex-col gap-4">
-            <NewCard
+            <Card
+               className="rounded-xl"
+               bodyStyle={{
+                  padding: 10
+               }}
                title="Цаг захиалга"
                extra={
                   <div className="flex flex-row gap-3">
@@ -214,8 +211,8 @@ function Index(props) {
                                           roomNumber: '',
                                           structureName: 'TEST',
                                           time: {
-                                             start: moment(today).format('HH:mm'),
-                                             end: moment(today).format('HH:mm')
+                                             start: dayjs(today).format('HH:mm'),
+                                             end: dayjs(today).format('HH:mm')
                                           },
                                           slotId: null,
                                           cabinetId: selectedDep.id
@@ -232,12 +229,12 @@ function Index(props) {
                            Яаралтай
                         </Button>
                      ) : null}
-                     <Alert className="h-6" message={`Өнөөдөр: ${moment(today).format('YYYY-MM-DD')}`} type="success" />
+                     <Alert className="h-6" message={`Өнөөдөр: ${dayjs(today).format('YYYY-MM-DD')}`} type="success" />
                   </div>
                }
             >
                <Form form={filterForm}>
-                  <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
                      <Form.Item
                         label="Тасаг"
                         name="structureId"
@@ -249,15 +246,18 @@ function Index(props) {
                            }
                         ]}
                      >
-                        <NewSelect allowClear onChange={getDoctor} className="w-full" placeholder="Тасаг сонгох">
-                           {structures.map((structure, index) => {
-                              return (
-                                 <NewOption key={index} value={structure.id}>
-                                    {structure.name}
-                                 </NewOption>
-                              );
-                           })}
-                        </NewSelect>
+                        <Select
+                           allowClear
+                           onChange={getDoctor}
+                           className="w-full"
+                           placeholder="Тасаг сонгох"
+                           options={structures
+                              ?.filter((structure) => structure.isOrder)
+                              ?.map((isOrderStructure) => ({
+                                 label: isOrderStructure.name,
+                                 value: isOrderStructure.id
+                              }))}
+                        />
                      </Form.Item>
                      <Form.Item
                         label="Эмч"
@@ -270,32 +270,15 @@ function Index(props) {
                            }
                         ]}
                      >
-                        <NewSelect allowClear className="w-full" onChange={selectDoctor} placeholder="Эмч сонгох">
-                           {doctors.map((doctor, index) => {
-                              return (
-                                 <NewOption key={index} value={doctor.id}>
-                                    {doctor.firstName}
-                                 </NewOption>
-                              );
-                           })}
-                        </NewSelect>
-                     </Form.Item>
-                     <Form.Item
-                        className="mb-0"
-                        label="Өдөр"
-                        name="date"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Заавал'
-                           }
-                        ]}
-                     >
-                        <NewDatePicker
-                           style={{ minHeight: 32 }}
-                           onChange={(date) => setSelectedDate(date)}
-                           locale={mn}
-                           format={'YYYY/MM/DD'}
+                        <Select
+                           allowClear
+                           className="w-full"
+                           onChange={selectDoctor}
+                           placeholder="Эмч сонгох"
+                           options={doctors.map((doctor) => ({
+                              label: formatNameForDoc(doctor?.lastName, doctor?.firstName),
+                              value: doctor.id
+                           }))}
                         />
                      </Form.Item>
                      <Button
@@ -310,7 +293,7 @@ function Index(props) {
                      </Button>
                   </div>
                </Form>
-            </NewCard>
+            </Card>
             <List
                schedules={schedules}
                type={type}
@@ -320,7 +303,7 @@ function Index(props) {
                isExtraGrud={isExtraGrud}
             />
          </div>
-         <NewModal
+         <Modal
             title="Цаг захиалах"
             open={appointmentModal}
             okButtonProps={{
@@ -372,11 +355,11 @@ function Index(props) {
                               </p>
                            </div>
                            <div className="float-right">
-                              <NewRadioGroup value={reasonComming} onChange={(e) => setReasonComming(e.target.value)}>
-                                 <NewRadio value={1}>Өөрөө</NewRadio>
-                                 <NewRadio value={2}>Түргэн тусламжаар</NewRadio>
-                                 <NewRadio value={3}>Бусад</NewRadio>
-                              </NewRadioGroup>
+                              <Radio.Group value={reasonComming} onChange={(e) => setReasonComming(e.target.value)}>
+                                 <Radio value={1}>Өөрөө</Radio>
+                                 <Radio value={2}>Түргэн тусламжаар</Radio>
+                                 <Radio value={3}>Бусад</Radio>
+                              </Radio.Group>
                            </div>
                         </div>
                      </div>
@@ -466,7 +449,7 @@ function Index(props) {
                   </div>
                )}
             </div>
-         </NewModal>
+         </Modal>
       </>
    );
 }

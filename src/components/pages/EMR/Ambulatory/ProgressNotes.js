@@ -4,7 +4,7 @@ import { Card, Modal, Result, Spin, Tree } from 'antd';
 import Prescription from '../PrescriptionPrint';
 import Magadlaga from '../MagadlagaPrint';
 import jwtInterceopter from '../../../jwtInterceopter';
-import DiagnoseTypes from '../../service/DiagnoseTypes.json';
+import DiagnoseTypes from '../../service/DiagnoseTypes.js';
 
 const { DirectoryTree } = Tree;
 export default function ProgressNotes({ Appointments }) {

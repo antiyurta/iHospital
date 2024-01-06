@@ -11,5 +11,8 @@ class DocumentsFormPatient {
          params: params
       });
    }
+   async deleteDocument(id) {
+      return await jwtInterceopter.delete('document-middleware/' + id);
+   }
 }
 export default new DocumentsFormPatient();

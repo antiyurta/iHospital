@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, ConfigProvider, Empty, Form, Modal, Popconfirm, Select, Table } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Delete, Get, Patch, Post } from '../../comman';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
 import EditableTable from './Support/EditableTable';
 import mnMN from 'antd/es/locale/mn_MN';
-import { ReturnAll, ReturnByIdToName, ReturnDetails } from './Document/Index';
-import jwtInterceopter from '../../jwtInterceopter';
-const { Option } = Select;
+import { ReturnByIdToName } from './Document/Index';
+
+import OrganizationStructureApi from '../../../services/organization/structure';
+import OrganizationDocumentOptionApi from '../../../services/organization/documentOption';
+import OrganizationDocumentRoleApi from '../../../services/organization/documentRole';
 
 function DocForRoleList() {
    const [form] = Form.useForm();
-   const token = useSelector(selectCurrentToken);
-   //
    const [list, setList] = useState([]);
    const [spinner, setSpinner] = useState(false);
    const [meta, setMeta] = useState({});
-   //
    const [options, setOptions] = useState([]);
    const [opMeta, setOpMeta] = useState({});
    const [opSpinner, setOpSpinner] = useState(false);
-   //
    const [selectedId, setSelectedId] = useState(Number);
    const [structures, setStructures] = useState([]);
    const [positions, setPositions] = useState([]);
@@ -30,36 +25,31 @@ function DocForRoleList() {
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    const getList = async (page, pageSize) => {
       setSpinner(true);
-      const conf = {
-         headers: {},
+      await OrganizationDocumentRoleApi.getByPageFilter({
          params: {
             page: page,
             limit: pageSize
          }
-      };
-      const response = await Get('organization/document-role', token, conf);
-      setList(response.data);
-      setMeta(response.meta);
-      setSpinner(false);
+      })
+         .then(({ data: { response } }) => {
+            setList(response.data);
+            setMeta(response.meta);
+         })
+         .finally(() => {
+            setSpinner(false);
+         });
    };
    const getOptions = async (page, pageSize) => {
       setOpSpinner(true);
-      const conf = {
-         headers: {},
+      await OrganizationDocumentOptionApi.getByPageFilter({
          params: {
             page: page,
             limit: pageSize
          }
-      };
-      await jwtInterceopter
-         .get('organization/document-option', conf)
-         .then((response) => {
-            console.log(response);
-            setOptions(response.data.response.data);
-            setOpMeta(response.data.response.meta);
-         })
-         .catch((error) => {
-            console.log(error);
+      })
+         .then(({ data: { response } }) => {
+            setOptions(response.data);
+            setOpMeta(response.data);
          })
          .finally(() => {
             setOpSpinner(false);
@@ -75,111 +65,98 @@ function DocForRoleList() {
       setIsOpenEditModal(true);
    };
    const getPositions = async () => {
-      const conf = {
-         headers: {},
+      await OrganizationStructureApi.get({
          params: {
             type: 1
          }
-      };
-      const response = await Get('organization/structure', token, conf);
-      setPositions(response.data);
-      setClonedPositions(response.data);
+      }).then(({ data: { response } }) => {
+         setPositions(response.data);
+         setClonedPositions(response.data);
+      });
    };
    const getStructures = async () => {
-      const conf = {
-         headers: {},
+      await OrganizationStructureApi.get({
          params: {
-            types: '0,2'
+            type: 2
          }
-      };
-      const response = await Get('organization/structure', token, conf);
-      setStructures(response.data);
+      }).then(({ data: { response } }) => {
+         setStructures(response.data);
+      });
    };
    const getByIdStructureName = (parentId) => {
       const name = structures?.find((e) => e.id === parseInt(parentId))?.name;
       return name;
    };
    const selectDepartment = async (value) => {
-      const conf = {
-         headers: {},
-         params: {
-            parentId: value,
-            type: 1
-         }
-      };
       form.setFieldsValue({
          employeePositionIds: [],
          supervisePositionIds: []
       });
-      const response = await Get('organization/structure', token, conf);
-      setPositions(response.data);
+      await OrganizationStructureApi.get({
+         params: {
+            parentId: value,
+            type: 1
+         }
+      }).then(({ data: { response } }) => {
+         setPositions(response.data);
+      });
    };
-   const getPositionInfo = (positionIds) => {
-      return (
-         <ul className="list-decimal list-inside text-start">
-            {positionIds?.map((positionId, index) => {
-               const name = clonedPositions?.find((e) => e.id === parseInt(positionId))?.name;
-               return <li key={index}>{name}</li>;
-            })}
-         </ul>
-      );
-   };
+   const getPositionInfo = (positionIds) => (
+      <ul className="list-decimal list-inside text-start">
+         {positionIds?.map((positionId, index) => {
+            const name = clonedPositions?.find((e) => e.id === parseInt(positionId))?.name;
+            return <li key={index}>{name}</li>;
+         })}
+      </ul>
+   );
    const onFinish = async (values) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
       if (editMode) {
-         const response = await Patch('organization/document-role/' + selectedId, token, conf, values);
-         if (response === 200) {
-            form.resetFields();
-            setIsOpenEditModal(false);
-         }
+         await OrganizationDocumentRoleApi.patch(selectedId, values).then(({ data: { success } }) => {
+            if (success) {
+               form.resetFields();
+               setIsOpenEditModal(false);
+            }
+         });
       } else {
-         const response = await Post('organization/document-role', token, conf, values);
-         if (response === 201) {
-            form.resetFields();
-            setIsOpenEditModal(false);
-         }
+         await OrganizationDocumentRoleApi.post(values).then(({ data: { success } }) => {
+            if (success) {
+               form.resetFields();
+               setIsOpenEditModal(false);
+            }
+         });
       }
       getList(1, 20);
    };
    const getDelete = async (id) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      await Delete('organization/document-role/' + id, token, conf);
-      getList(1, 10);
+      await OrganizationDocumentRoleApi.delete(id).then(({ data: { success } }) => {
+         if (success) {
+            getList(1, 10);
+         }
+      });
    };
    const getDeleteOption = async (id) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      await Delete('organization/document-option/' + id, token, conf);
-      getOptions(1, 10);
+      await OrganizationDocumentOptionApi.delete(id).then(({ data: { success } }) => {
+         if (success) {
+            getOptions(1, 10);
+         }
+      });
    };
    const columns = [
       {
          title: '№',
          width: 40,
-         render: (_, _record, index) => {
-            return meta.page * meta.limit - (meta.limit - index - 1);
-         }
+         render: (_, _record, index) => meta.page * meta.limit - (meta.limit - index - 1)
       },
       {
          title: 'Тасаг',
          dataIndex: 'structureId',
-         render: (text) => {
-            return getByIdStructureName(text);
-         }
+         render: (text) => getByIdStructureName(text)
       },
       {
          title: 'Хэрэглэх газар',
          dataIndex: 'usageType',
-         render: (text) => {
-            if (text === 'OUT') {
+         render: (usageType) => {
+            if (usageType === 'OUT') {
                return 'Амбулатори';
             } else {
                return 'Хэвтэн';
@@ -189,12 +166,12 @@ function DocForRoleList() {
       {
          title: 'Төрөл',
          dataIndex: 'documentType',
-         render: (text) => {
-            if (text === 0) {
+         render: (documentType) => {
+            if (documentType === 0) {
                return 'Маягт';
-            } else if (text === 1) {
+            } else if (documentType === 1) {
                return 'Бүртгэл';
-            } else if (text === 2) {
+            } else if (documentType === 2) {
                return 'Мэдээлэх хуудас';
             } else {
                return 'Зөвшөөрлийн хуудас';
@@ -204,29 +181,23 @@ function DocForRoleList() {
       {
          title: 'Хэн мөрддөг',
          dataIndex: 'employeePositionIds',
-         render: (text) => {
-            return getPositionInfo(text);
-         }
+         render: (employeePositionIds) => getPositionInfo(employeePositionIds)
       },
       {
          title: 'Хэн хяналт тавих',
          dataIndex: 'supervisePositionIds',
-         render: (text) => {
-            return getPositionInfo(text);
-         }
+         render: (supervisePositionIds) => getPositionInfo(supervisePositionIds)
       },
       {
          title: 'Маягтууд',
          dataIndex: 'documents',
-         render: (documents) => {
-            return (
-               <div className="grid grid-cols-6 gap-1 justify-items-start">
-                  {documents?.map((document, index) => {
-                     return <li key={index}>{document.label}</li>;
-                  })}
-               </div>
-            );
-         }
+         render: (documents) => (
+            <div className="grid grid-cols-6 gap-1 justify-items-start">
+               {documents?.map((document, index) => (
+                  <li key={index}>{document.label}</li>
+               ))}
+            </div>
+         )
       },
       {
          title: 'Үйлдэл',
@@ -332,14 +303,8 @@ function DocForRoleList() {
       getOptions();
    }, []);
    return (
-      <div>
-         <div
-            style={{
-               display: 'flex',
-               flexDirection: 'column',
-               gap: 12
-            }}
-         >
+      <div className="w-full overflow-auto h-screen bg-[#f5f6f7] p-3">
+         <div className="flex flex-col gap-2">
             <Card
                bordered={false}
                className="header-solid max-h-max rounded-md"
@@ -443,15 +408,11 @@ function DocForRoleList() {
                         (option?.children ?? '').toLowerCase().includes(input?.toLowerCase())
                      }
                      onSelect={(e) => selectDepartment(e)}
-                  >
-                     {structures?.map((structure, index) => {
-                        return (
-                           <Option key={index} value={structure.id}>
-                              {structure?.name}
-                           </Option>
-                        );
-                     })}
-                  </Select>
+                     options={structures?.map((structure) => ({
+                        label: structure.name,
+                        value: structure.id
+                     }))}
+                  />
                </Form.Item>
                <Form.Item
                   label="Ашиглах газар"
@@ -463,10 +424,18 @@ function DocForRoleList() {
                      }
                   ]}
                >
-                  <Select>
-                     <Option value={'OUT'}>Амбулатори</Option>
-                     <Option value={'IN'}>Хэвтэн</Option>
-                  </Select>
+                  <Select
+                     options={[
+                        {
+                           label: 'Амбулатори',
+                           value: 'OUT'
+                        },
+                        {
+                           label: 'Хэвтэн',
+                           value: 'IN'
+                        }
+                     ]}
+                  />
                </Form.Item>
                <Form.Item
                   label="Маягтын төрөл"
@@ -478,12 +447,26 @@ function DocForRoleList() {
                      }
                   ]}
                >
-                  <Select>
-                     <Option value={0}>Маягт</Option>
-                     <Option value={1}>Бүртгэл</Option>
-                     <Option value={2}>Мэдээлэх хуудас</Option>
-                     <Option value={3}>Зөвшөөрлийн хуудас</Option>
-                  </Select>
+                  <Select
+                     options={[
+                        {
+                           label: 'Маягт',
+                           value: 0
+                        },
+                        {
+                           label: 'Бүртгэл',
+                           value: 1
+                        },
+                        {
+                           label: 'Мэдээлэх хуудас',
+                           value: 2
+                        },
+                        {
+                           label: 'Зөвшөөрлийн хуудас',
+                           value: 3
+                        }
+                     ]}
+                  />
                </Form.Item>
                <Form.Item
                   label="Хэн мөрдөх"
@@ -495,15 +478,13 @@ function DocForRoleList() {
                      }
                   ]}
                >
-                  <Select mode="multiple">
-                     {positions.map((option, idx) => {
-                        return (
-                           <Option key={idx} value={option.id}>
-                              {option.name}
-                           </Option>
-                        );
-                     })}
-                  </Select>
+                  <Select
+                     mode="multiple"
+                     options={positions.map((option) => ({
+                        label: option.name,
+                        value: option.id
+                     }))}
+                  />
                </Form.Item>
                <Form.Item
                   label="Хэн хяналт тавих"
@@ -515,15 +496,13 @@ function DocForRoleList() {
                      }
                   ]}
                >
-                  <Select mode="multiple">
-                     {positions?.map((option, idx) => {
-                        return (
-                           <Option key={idx} value={option.id}>
-                              {option.name}
-                           </Option>
-                        );
-                     })}
-                  </Select>
+                  <Select
+                     mode="multiple"
+                     options={positions?.map((option) => ({
+                        label: option.name,
+                        value: option.id
+                     }))}
+                  />
                </Form.Item>
                <Form.List name="documents">
                   {(documents, { add, remove }) => (

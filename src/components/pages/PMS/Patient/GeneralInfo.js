@@ -96,12 +96,7 @@ function GeneralInfo({ form, gbase }) {
                <UploadImage form={form} itemName={'imageId'} />
             </div>
             <div className="w-1/2 p-1">
-               <Statistic
-                  title="Картын дугаар"
-                  value={form.getFieldValue('cardNumber')}
-                  className="antiStatis"
-               />
-
+               <Statistic title="Картын дугаар" value={form.getFieldValue('cardNumber')} className="antiStatis" />
                {isXyp ? (
                   <Finger
                      isFinger={true}

@@ -31,7 +31,7 @@ function Treatment({ handleclick }) {
    return (
       <>
          <button
-            className="gray-order"
+            className="yellow-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedTreatmentId(null);

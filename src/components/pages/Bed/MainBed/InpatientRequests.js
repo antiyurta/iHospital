@@ -1,17 +1,19 @@
-import { Button, Card, ConfigProvider, Empty, Form, Input, Modal, Select, Table, Tag } from 'antd';
-import roomType from '../roomType.json';
+import { Avatar, Button, Card, ConfigProvider, Empty, Form, Input, InputNumber, Modal, Radio, Table, Tag } from 'antd';
+import roomType from '../roomType.js';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Patch, getAge, getGender, numberToCurrency } from '../../../comman';
-import orderType from '../orderType.json';
+import { Get, Patch, formatNameForDoc, getAge, getGender } from '../../../comman';
+import orderType from '../orderType.js';
 import { localMn } from '../../../comman';
 import PatientInformation from '../../PatientInformation';
+import dayjs from 'dayjs';
+import { Link, useNavigate } from 'react-router-dom';
 const { CheckableTag } = Tag;
-const { Option } = Select;
 const { Search } = Input;
 function InpatientRequests() {
+   const navigate = useNavigate();
    const token = useSelector(selectCurrentToken);
    const [form] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
@@ -133,74 +135,81 @@ function InpatientRequests() {
          title: 'Хүсэлт илгээсэн огноо',
          dataIndex: 'createdAt',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
+            return dayjs(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {
-         title: 'Төрөл',
-         key: 'type',
-         render: (_, record) => {
+         title: 'Захиалсан',
+         dataIndex: 'requestEmployee',
+         render: (object) => {
             return (
-               <>
-                  {orderType.map((item, index) => {
-                     if (item.value === record.process) {
-                        return (
-                           <img
-                              src={require(`../../../../assets/bed/${orderType[item.value].img}`)}
-                              width="20"
-                              className="inline-block"
-                              key={index}
-                           />
-                        );
-                     }
-                  })}
-               </>
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
             );
          }
       },
       {
-         title: 'Эмчийн мэдээлэл',
-         children: [
-            {
-               title: 'Овог',
-               dataIndex: ['employee', 'lastName']
-            },
-            {
-               title: 'Нэр',
-               dataIndex: ['employee', 'firstName']
-            }
-         ]
+         title: 'Эмч',
+         dataIndex: 'doctor',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
       },
       {
-         title: 'Өвчтөний мэдээлэл',
-         children: [
-            {
-               title: 'Овог',
-               dataIndex: ['patient', 'lastName']
-            },
-            {
-               title: 'Нэр',
-               dataIndex: ['patient', 'firstName']
-            },
-            {
-               title: 'Регистр',
-               dataIndex: ['patient', 'registerNumber']
-            },
-            {
-               title: 'Хүйс',
-               dataIndex: ['patient', 'registerNumber'],
-               render: (text) => {
-                  return getGender(text);
-               }
-            },
-            {
-               title: 'Нас',
-               dataIndex: ['patient', 'registerNumber'],
-               render: (text) => {
-                  return getAge(text);
-               }
-            }
-         ]
+         title: 'Өвчтөн',
+         dataIndex: 'patient',
+         render: (object) => {
+            return (
+               <div className="ambo-list-user">
+                  <Avatar
+                     style={{
+                        minWidth: 32
+                     }}
+                  />
+                  <div className="info">
+                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
+                     <p>{object?.registerNumber}</p>
+                  </div>
+               </div>
+            );
+         }
+      },
+      {
+         title: 'Нас',
+         width: 40,
+         dataIndex: ['patient', 'registerNumber'],
+         render: (text) => {
+            return getAge(text);
+         }
+      },
+      {
+         title: 'Хүйс',
+         width: 40,
+         dataIndex: ['patient', 'genderType'],
+         render: (text) => {
+            return getGender(text);
+         }
       },
       {
          title: 'Хэвтэх үеийн мэдээлэл',
@@ -211,7 +220,11 @@ function InpatientRequests() {
             },
             {
                title: 'Өрөө №',
-               dataIndex: ['rooms', 'roomNumber']
+               dataIndex: ['room', 'roomNumber']
+            },
+            {
+               title: 'Ор №',
+               dataIndex: ['bed', 'bedNumber']
             }
          ]
       },
@@ -251,9 +264,17 @@ function InpatientRequests() {
          render: (patient, row) => {
             if (row?.process === 0) {
                return (
-                  <Button type="primary" onClick={() => openModal(0, true, patient, row)}>
+                  <Link
+                     className="app-button-regular"
+                     to="/main/bed_management/create"
+                     state={{
+                        isRead: true,
+                        patient: patient,
+                        inpatientRequestId: row.id
+                     }}
+                  >
                      Хэвтүүлэх
-                  </Button>
+                  </Link>
                );
             } else if (row?.process === 2) {
                return (
@@ -265,14 +286,6 @@ function InpatientRequests() {
          }
       }
    ];
-   const checkGenderType = (type) => {
-      if (type === 'WOMAN') {
-         return 'ЭМЭГТЭЙ';
-      } else if (type === 'MAN') {
-         return 'ЭРЭГТЭЙ';
-      }
-      return 'Нийтийн';
-   };
    useEffect(() => {
       getInpatientRequests(1, 10, checkedKey);
    }, [checkedKey]);
@@ -324,7 +337,6 @@ function InpatientRequests() {
                      scroll={{
                         x: 1000
                      }}
-                     bordered
                      rowClassName={'hover:cursor-pointer'}
                      locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                      loading={{
@@ -334,14 +346,14 @@ function InpatientRequests() {
                      onRow={(row, _rowIndex) => {
                         return {
                            onDoubleClick: () => {
-                              open;
+                              open();
                            }
                         };
                      }}
                      columns={column}
                      dataSource={inpatientRequests}
                      pagination={{
-                        position: ['topCenter', 'bottomCenter'],
+                        position: ['bottomCenter'],
                         size: 'small',
                         current: inpatientRequsetsMeta.page,
                         total: inpatientRequsetsMeta.itemCount,
@@ -360,102 +372,184 @@ function InpatientRequests() {
             title="Эмнэлэгт хэвтүүлэх хэсэг"
             open={isOpenInBedModal}
             onCancel={() => setIsOpenBedModal(false)}
-            width="40%"
+            width="80%"
             bodyStyle={{
-               background: '#f8fafc'
+               background: '#f5f6f7',
+               height: 540
             }}
             footer={null}
          >
-            <PatientInformation OCS={false} handlesearch={false} patient={selectedPatient} />
-            <Card bordered={false} className="header-solid max-h-max rounded-md mt-2">
-               <Form form={form} onFinish={setPatientInBed}>
-                  <Form.Item
-                     label="Тасаг"
-                     name="depId"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Тасаг заавал сонгоно'
-                        }
-                     ]}
-                  >
-                     <Select
-                        allowClear
-                        showSearch
-                        size="small"
-                        onSelect={(id) => {
-                           setSelectedDepartment(id);
-                           form.setFieldValue('roomId', null);
+            <div className="flex flex-col gap-2">
+               <PatientInformation OCS={false} handlesearch={false} patient={selectedPatient} />
+               <div className="grid grid-cols-3 gap-2">
+                  <div className="flex flex-col gap-2">
+                     <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
+                        <p
+                           style={{
+                              color: '#272E3B',
+                              fontSize: 14,
+                              fontWeight: 700
+                           }}
+                        >
+                           Өрөөний мэдээлэл
+                        </p>
+                        <div className="h-[1px] w-full bg-[#C9CDD4]" />
+                     </div>
+                     <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
+                        <p
+                           style={{
+                              color: '#272E3B',
+                              fontSize: 14,
+                              fontWeight: 700
+                           }}
+                        >
+                           Үргэлжлэх хугацаа
+                        </p>
+                        <div className="h-[1px] w-full bg-[#C9CDD4]" />
+                     </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                     <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
+                        <p
+                           style={{
+                              color: '#272E3B',
+                              fontSize: 14,
+                              fontWeight: 700
+                           }}
+                        >
+                           Хэвтэн эмчлүүлэхийн мэдээлэл
+                        </p>
+                        <div className="h-[1px] w-full bg-[#C9CDD4]" />
+                     </div>
+                     <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
+                        <p
+                           style={{
+                              color: '#272E3B',
+                              fontSize: 14,
+                              fontWeight: 700
+                           }}
+                        >
+                           Төлбөрийн мэдээлэл
+                        </p>
+                        <div className="h-[1px] w-full bg-[#C9CDD4]" />
+                     </div>
+                  </div>
+                  <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
+                     <p
+                        style={{
+                           color: '#272E3B',
+                           fontSize: 14,
+                           fontWeight: 700
                         }}
-                        placeholder="Сонгох"
-                        optionFilterProp="children"
-                        filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-                        filterSort={(optionA, optionB) =>
-                           optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                        }
                      >
-                        {departments?.map((department, index) => {
-                           return (
-                              <Option key={index} value={department.id}>
-                                 {department.name}
-                              </Option>
-                           );
-                        })}
-                     </Select>
-                  </Form.Item>
-                  <Form.Item
-                     label="Өрөө"
-                     name="roomId"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Өрөө заавал сонгоно'
-                        }
-                     ]}
-                  >
-                     <Select onSelect={(room) => setSelectedRoom(room)} value={null}>
-                        {rooms?.map((room, index) => {
-                           return (
-                              <Option key={index} value={room.id}>
-                                 <span>
-                                    {room.roomNumber}--{numberToCurrency(room.price)}--
-                                    {checkGenderType(room.genderType)}
-                                    --{roomType[room.roomType]?.label}
-                                 </span>
-                              </Option>
-                           );
-                        })}
-                     </Select>
-                  </Form.Item>
-                  <Form.Item
-                     label="Ор"
-                     name="bedId"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Ор заавал сонгоно'
-                        }
-                     ]}
-                  >
-                     <Select>
-                        {filteredBed?.map((bed, index) => {
-                           if (bed.status === 3) {
-                              return (
-                                 <Option key={index} value={bed.id}>
-                                    {bed.bedNumber}
-                                 </Option>
-                              );
-                           }
-                        })}
-                     </Select>
-                  </Form.Item>
-                  <Form.Item>
-                     <Button style={{ width: '100%' }} loading={patientInBedLoading} type="primary" htmlType="submit">
-                        Хэвтүүлэх
-                     </Button>
-                  </Form.Item>
-               </Form>
-            </Card>
+                        Нэмэлт мэдээлэл
+                     </p>
+                     <div className="h-[1px] w-full bg-[#C9CDD4]" />
+                     <div className="h-[350px] overflow-auto">
+                        <Form layout="vertical">
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Харияаллын бус:" name="sdad">
+                                    <Radio.Group>
+                                       <Radio value={true}>Тийм</Radio>
+                                       <Radio value={false}>Үгүй</Radio>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Хөдөөнөөс ирсэн:" name="isCountry">
+                                    <Radio.Group>
+                                       <Radio value={true}>Тийм</Radio>
+                                       <Radio value={false}>Үгүй</Radio>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Давтан хэвтсэн:" name="isCountry">
+                                    <Radio.Group>
+                                       <Radio value={true}>Тийм</Radio>
+                                       <Radio value={false}>Үгүй</Radio>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Доод шатлалаас:" name="isCountry">
+                                    <Radio.Group>
+                                       <Radio value={true}>Тийм</Radio>
+                                       <Radio value={false}>Үгүй</Radio>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Саажилттай эсэх:" name="isCountry">
+                                    <Radio.Group>
+                                       <Radio value={true}>Тийм</Radio>
+                                       <Radio value={false}>Үгүй</Radio>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Хаанаас хэвтсэн:" name="isCountry">
+                                    <Radio.Group>
+                                       <Radio value={true}>Гаднаас хэвтсэн</Radio>
+                                       <Radio value={false}>Тасгаас хэвтсэн</Radio>
+                                    </Radio.Group>
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Өндөр:" name="isCountry">
+                                    <InputNumber />
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Жин:" name="isCountry">
+                                    <InputNumber />
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Систолын даралт:" name="isCountry">
+                                    <InputNumber />
+                                 </Form.Item>
+                              </div>
+                           </div>
+                           <div className="document-form">
+                              <div className="form-left" />
+                              <div className="form-inputs">
+                                 <Form.Item className="mb-0" label="Диастолын даралт:" name="isCountry">
+                                    <InputNumber />
+                                 </Form.Item>
+                              </div>
+                           </div>
+                        </Form>
+                     </div>
+                  </div>
+               </div>
+            </div>
          </Modal>
       </div>
    );

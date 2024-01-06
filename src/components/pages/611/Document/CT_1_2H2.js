@@ -15,6 +15,7 @@ function CT_1_2H2(props) {
       appointmentId,
       hospitalName
    } = props;
+   console.log('cth-2-2-2', props);
    const [chunks, setChunks] = useState();
    function sliceIntoChunks(arr, chunkSize) {
       const res = [];

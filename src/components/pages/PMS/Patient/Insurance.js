@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Radio, Result, Select, Switch } from 'antd';
+import { Form, Result, Select } from 'antd';
 import jwtInterceopter from '../../../jwtInterceopter';
 import { useSelector } from 'react-redux';
 import { selectCurrentInsurance } from '../../../../features/authReducer';

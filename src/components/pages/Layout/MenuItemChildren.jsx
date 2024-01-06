@@ -6,7 +6,8 @@ import upIcon from './up.svg';
 import beforLine from './beforeLine.svg';
 import lastLine from './lastLine.svg';
 
-const MenuItemChildren = ({ data, collapsed, children }) => {
+const MenuItemChildren = ({ data, children }) => {
+   const [collapsed, setCollapsed] = useState(false);
    const [expanded, setExpanded] = useState(false);
    const expand = () => {
       setExpanded(!expanded);
@@ -19,7 +20,7 @@ const MenuItemChildren = ({ data, collapsed, children }) => {
          }}
       >
          <div className="menu-item-sub-head" onClick={expand}>
-            {!collapsed ? <p className="label">{data.label}</p> : data.icon}
+            {!collapsed ? <p className="label">{data.title}</p> : data.icon}
             {!collapsed ? expanded ? <img src={downIcon} alt="/" /> : <img src={upIcon} alt="//" /> : null}
          </div>
          <div className="menu-item-sub-body">

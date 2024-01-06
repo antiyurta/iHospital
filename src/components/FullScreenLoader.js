@@ -6,6 +6,7 @@ const FullScreenLoader = ({ full = true }) => {
    return (
       <div
          style={{
+            width: '100%',
             height: full ? '100vh' : 'auto',
             display: 'flex',
             justifyContent: 'center',

@@ -25,7 +25,6 @@ const { CheckableTag } = Tag;
 function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
    const token = useSelector(selectCurrentToken);
    const AppIds = useSelector(selectCurrentAppId);
-   const [checkedKey, setCheckedKey] = useState(0);
    const [doctorDailyForm] = Form.useForm();
    const [isOpenDocumentModal, setIsOpenDocumentModal] = useState(false);
    const [story, setStory] = useState({});
@@ -117,18 +116,16 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
    // ];
    const [items, setItems] = useState([{ label: 'Өдрийн тэмдэглэл', key: 1, childre: <DoctorDaily /> }]);
    const handleMenuClick = (key) => {
+      console.log(key);
       setItems([
          {
             label: documents.find((document) => document.key === Number(key))?.label,
             key: key,
             children: (
                <Customized
-                  usageType={'IN'}
+                  document={documents.find((document) => document.key === Number(key))}
                   documentValue={Number(key)}
                   documentType={0}
-                  structureId={incomeEmrData.departmentId}
-                  appointmentId={incomeEmrData.appointmentId}
-                  patientId={incomeEmrData.patientId}
                   onOk={(state) => console.log(state)}
                />
             )
@@ -187,14 +184,17 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                   data.push(document);
                })
             );
+            console.log('data', data);
             const sortedArray = data
                .slice()
                .sort((a, b) => a.value - b.value)
                .map((sArray) => ({
                   label: sArray.docName,
-                  key: sArray.value
+                  key: sArray.value,
+                  formId: sArray.formId,
+                  optionId: sArray.optionId,
+                  formType: sArray.formType
                }));
-            console.log(sortedArray);
             setDocuments(sortedArray);
          }
       });
@@ -213,7 +213,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
          >
             Маягт
          </Button> */}
-         <div
+         {/* <div
             style={{
                display: 'flex',
                flexDirection: 'row',
@@ -232,16 +232,18 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                   documentType: 0
                }}
             />
+         </div> */}
+         <div className="flex flex-col gap-2">
+            <Dropdown overlay={menuddd} trigger={['click']}>
+               <Button type="primary" onClick={(e) => e.preventDefault()}>
+                  Маягт жагсаалт
+               </Button>
+            </Dropdown>
+            <div>
+               <Tabs type="card" items={items} />
+            </div>
          </div>
 
-         <Dropdown overlay={menuddd} trigger={['click']}>
-            <Button type="primary" onClick={(e) => e.preventDefault()}>
-               Маягт жагсаалт
-            </Button>
-         </Dropdown>
-         <div>
-            <Tabs type="card" items={items} />
-         </div>
          <Modal title="Маягт сонгох" open={isOpenDocumentModal} onCancel={() => setIsOpenDocumentModal(false)}>
             <Index
                handleClick={documentHandleClick}

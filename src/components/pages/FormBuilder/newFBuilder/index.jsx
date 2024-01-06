@@ -4,19 +4,11 @@ import { useState } from 'react';
 
 import Question from './question';
 import Answer from './answer';
+import { documentFormType } from '../../611/Document/DocumentUpload';
 
 const Index = (props) => {
-   const { form, data } = props;
-   const [items, setItems] = useState([]);
-
-   useEffect(() => {
-      console.log(data);
-      if (data != undefined) {
-         setItems(data);
-      } else {
-         setItems([]);
-      }
-   }, [data]);
+   const { type, form, data, formListName } = props;
+   const [items, setItems] = useState(data);
 
    const convertTree = (data) => {
       let root = [];
@@ -37,12 +29,18 @@ const Index = (props) => {
       });
       return root;
    };
-
    const tree = useMemo(() => {
       if (items) {
-         form.setFieldsValue({
-            documentForm: items
-         });
+         if (type === documentFormType.Form || type === documentFormType.Xray) {
+            form.setFieldsValue({
+               documentForm: items
+            });
+         } else if (type === documentFormType.Inspection) {
+            // console.log('dsada', items);
+            form.setFieldsValue({
+               [`${formListName}`]: items
+            });
+         }
          return convertTree(items);
       }
    }, [items]);
@@ -85,7 +83,6 @@ const Index = (props) => {
          }
          return childrenIds;
       }
-
       var test = getChildrenIds(indx, items);
       test.push(indx);
       if (test.length > 0) {
@@ -228,7 +225,6 @@ const Index = (props) => {
             {tree.map(renderHTML)}
          </div>
          <Button onClick={() => addQuestion(null)}>Нэмэх</Button>
-         <Button onClick={() => console.log('=====>', items)}>Хэвлэх</Button>
       </div>
    );
 };
