@@ -269,8 +269,13 @@ function Invoice() {
       getInformation();
    }, []);
    return (
-      <div className="flex flex-col gap-3">
-         <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="flex flex-col">
+         <div
+            className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3"
+            style={{
+               borderBottom: '1px solid #e5e6eb'
+            }}
+         >
             <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
             <Card
                bordered={false}
@@ -310,36 +315,44 @@ function Invoice() {
                </div>
             </Card>
          </div>
-         <Card
-            bordered={false}
-            className="header-solid max-h-max rounded-md"
-            bodyStyle={{
-               paddingTop: 10,
-               paddingLeft: 10,
-               paddingRight: 10,
-               paddingBottom: 10
+         <div
+            className="overflow-auto bg-[#f5f6f7] p-3"
+            style={{
+               height: 'calc(100vh - 200px)'
             }}
          >
-            <ConfigProvider locale={localMn()}>
-               <Table
-                  rowKey={'id'}
-                  bordered
-                  locale={{
-                     emptyText: <Result title="Мэдээлэл байхгүй байна" />
-                  }}
-                  loading={isLoadingFilter}
-                  columns={columns}
-                  dataSource={patientsList}
-                  pagination={{
-                     position: ['topCenter', 'bottomCenter'],
-                     size: 'small',
-                     total: patientsList?.length,
-                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                     pageSize: 10
-                  }}
-               />
-            </ConfigProvider>
-         </Card>
+            <Card
+               bordered={false}
+               className="header-solid max-h-max rounded-md"
+               bodyStyle={{
+                  paddingTop: 10,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  paddingBottom: 10
+               }}
+            >
+               <ConfigProvider locale={localMn()}>
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     locale={{
+                        emptyText: <Result title="Мэдээлэл байхгүй байна" />
+                     }}
+                     loading={isLoadingFilter}
+                     columns={columns}
+                     dataSource={patientsList}
+                     pagination={{
+                        position: ['topCenter', 'bottomCenter'],
+                        size: 'small',
+                        total: patientsList?.length,
+                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                        pageSize: 10
+                     }}
+                  />
+               </ConfigProvider>
+            </Card>
+         </div>
+
          <NewModal
             title="Урьдчилгаа төлбөр"
             open={isOpenBeforePaymentModal}
