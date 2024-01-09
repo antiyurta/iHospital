@@ -170,7 +170,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureId: deparmentId,
+            structureIds: deparmentId,
             usageType: 'IN',
             documentType: 0
          }

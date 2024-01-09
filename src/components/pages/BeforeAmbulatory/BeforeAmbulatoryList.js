@@ -1,5 +1,5 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Tabs } from 'antd';
 import Ambulatory from './Lists/Ambulatory';
 import PatientList from './Lists/PatientList';
@@ -7,8 +7,12 @@ import PreOrder from './Lists/PreOrder';
 import Surgery from './Lists/Surgery';
 import { SnippetsOutlined } from '@ant-design/icons';
 import DocumentShow from '../611/DocumentShow';
+import { useLocation } from 'react-router-dom';
 
 export default function BeforeAmbulatoryList() {
+   const {
+      state: { activeKey }
+   } = useLocation();
    const documents = (
       <>
          <DocumentShow
@@ -45,9 +49,17 @@ export default function BeforeAmbulatoryList() {
          children: <Surgery />
       }
    ];
+   const [currentActiveKey, setActiveKey] = useState(activeKey);
    return (
       <div className="p-3 w-full bg-[#f5f6f7]">
-         <Tabs type="card" tabBarExtraContent={documents} items={items} destroyInactiveTabPane={true} />
+         <Tabs
+            type="card"
+            activeKey={currentActiveKey}
+            onChange={(key) => setActiveKey(key)}
+            tabBarExtraContent={documents}
+            items={items}
+            destroyInactiveTabPane={true}
+         />
       </div>
    );
 }

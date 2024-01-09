@@ -5,7 +5,7 @@ import OtherCustomized from './OtherCustomized/Index';
 
 import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId } from '../../../features/authReducer';
+import { selectCurrentAppId, selectCurrentDepId } from '../../../features/authReducer';
 import { openNofi } from '../../comman';
 
 export default function BeforeAmbulatoryTabs({ patientId, patientData, type, structureId, listId, reasonComming }) {
@@ -60,6 +60,7 @@ export default function BeforeAmbulatoryTabs({ patientId, patientData, type, str
    }, [reasonComming]);
 
    const AppIds = useSelector(selectCurrentAppId);
+   const DepIds = useSelector(selectCurrentDepId);
    const [documents, setDocuments] = useState([]);
    const [activeKey, setActiveKey] = useState(Number);
    const [selectedDocument, setSelectedDocument] = useState(Number);
@@ -68,7 +69,7 @@ export default function BeforeAmbulatoryTabs({ patientId, patientData, type, str
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureId: structureId,
+            structureIds: DepIds,
             usageType: 'OUT',
             documentType: 0
          }

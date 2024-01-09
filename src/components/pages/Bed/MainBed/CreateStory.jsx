@@ -100,11 +100,11 @@ const CreateStory = () => {
    };
    const onSelectDoctor = async (id) => {
       const doctor = doctors?.find((doctor) => doctor.id === id);
-      const depId = form.getFieldValue(['roomInfo', 'depId']);
+      console.log(doctor);
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: doctor.appIds,
-            structureId: depId,
+            structureIds: doctor.depIds,
             usageType: 'IN',
             documentType: 0
          }
@@ -330,7 +330,7 @@ const CreateStory = () => {
                                        disabled={isDuration}
                                        format={'YYYY/MM/DD'}
                                        disabledDate={(current) => {
-                                          return dayjs().add(-3, 'days') >= current;
+                                          return dayjs().add(-7, 'days') >= current;
                                        }}
                                     />
                                  </Form.Item>

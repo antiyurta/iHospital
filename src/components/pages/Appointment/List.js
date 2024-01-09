@@ -192,7 +192,7 @@ function List(props) {
             bodyStyle={{
                padding: 10,
                overflow: 'auto',
-               height: 278
+               height: 'calc(100vh - 360px)'
             }}
          >
             {Object.entries(dd)?.map(([key, value], index) => (

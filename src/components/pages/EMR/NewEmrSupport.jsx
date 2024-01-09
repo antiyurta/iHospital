@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DocumentHistory from './NewEmrSupport/history/Index';
 import DocumentIndex from './NewEmrSupport/document/Index';
 import { Link } from 'react-router-dom';
+import { Modal } from 'antd';
 
 const BackArrow = () => (
    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -17,6 +18,8 @@ const BackArrow = () => (
 );
 
 const NewEmrSupport = () => {
+   const [isOpenModalRequests, setIsOpenModalRequests] = useState(false);
+   const hrefList = (type) => {};
    return (
       <div className="navbar">
          <div className="back">
@@ -33,11 +36,48 @@ const NewEmrSupport = () => {
          <div className="emr-navbar">
             <button>Гарын авлага</button>
             <button>Скан EMR</button>
-            <button>Үйлчлүүлэгчийн хүснэгт </button>
+            <button onClick={() => setIsOpenModalRequests(true)}>Үйлчлүүлэгчийн хүснэгт </button>
             <button>Эрүүл мэндийн даатгал </button>
             <DocumentHistory />
             <DocumentIndex />
          </div>
+         <Modal
+            title="Үйлчлүүлэгчийн хүсэлт"
+            width={300}
+            open={isOpenModalRequests}
+            onCancel={() => setIsOpenModalRequests(false)}
+            footer={false}
+         >
+            <div className="patient-requests">
+               <Link
+                  to={'/main/ambulatoryList'}
+                  state={{
+                     activeKey: '1',
+                     isRead: true
+                  }}
+               >
+                  Амбулатори
+               </Link>
+               <Link
+                  to={'/main/ambulatoryList'}
+                  state={{
+                     activeKey: '2',
+                     isRead: true
+                  }}
+               >
+                  Урьдчилсан сэргийлэх
+               </Link>
+               <Link
+                  to={'/main/ambulatoryList'}
+                  state={{
+                     activeKey: '3',
+                     isRead: true
+                  }}
+               >
+                  Хэвтэн
+               </Link>
+            </div>
+         </Modal>
       </div>
    );
 };
