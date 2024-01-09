@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-   CheckOutlined,
-   CloseOutlined,
-   EditOutlined,
-   MinusOutlined,
-   PlusCircleOutlined,
-   PlusOutlined
-} from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import 'moment/locale/mn';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectCurrentDepId, selectCurrentUserId } from '../../../../../features/authReducer';
+import { selectCurrentDepId, selectCurrentInsurance, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
 import { formatNameForDoc, getAge, getGenderInType, inspectionTOJSON, openNofi } from '../../../../comman';
 import orderType from './orderType.js';
@@ -43,6 +36,7 @@ function Index({ type, isDoctor }) {
    //3 bol mes zasal
    const [editFormDesc] = Form.useForm();
    const [startFormHics] = Form.useForm();
+   const isInsurance = useSelector(selectCurrentInsurance);
    const employeeId = useSelector(selectCurrentUserId);
    const depIds = useSelector(selectCurrentDepId);
    const navigate = useNavigate();
@@ -80,6 +74,9 @@ function Index({ type, isDoctor }) {
             .then(({ data: { response } }) => {
                setAppointments(response.data);
                setMeta(response.meta);
+            })
+            .catch((error) => {
+               console.log(error);
             })
             .finally(() => {
                setSpinner(false);
@@ -330,31 +327,39 @@ function Index({ type, isDoctor }) {
          );
       }
    };
-   const getEWSInfo = (color, totalEWS) => {
-      return (
-         <p
-            style={{
-               backgroundColor: color,
-               margin: '4px 8px',
-               borderRadius: 15,
-               color: 'white'
-            }}
-         >
-            {totalEWS}
-         </p>
-      );
-   };
+   const getEWSInfo = (assesment) => (
+      <p
+         style={{
+            backgroundColor: assesment?.color,
+            margin: '4px 8px',
+            borderRadius: 15,
+            color: 'white'
+         }}
+      >
+         {assesment?.total}
+      </p>
+   );
    const getPaymentInfo = (isPayment) => {
       if (isPayment) {
          return (
-            <p>
-               <PlusOutlined style={{ color: '#00adef', fontSize: '20px' }} />
+            <p
+               className="bg-[#5cb85c] text-white"
+               style={{
+                  borderRadius: 15
+               }}
+            >
+               Төлсөн
             </p>
          );
       } else {
          return (
-            <p>
-               <MinusOutlined style={{ color: 'red', fontSize: '20px' }} />
+            <p
+               className="bg-red-500 text-white"
+               style={{
+                  borderRadius: 15
+               }}
+            >
+               Төлөгдөөгүй
             </p>
          );
       }
@@ -436,119 +441,97 @@ function Index({ type, isDoctor }) {
    const columns = [
       {
          title: '№',
-         render: (_, record, index) => {
-            return meta.page * meta.limit - (meta.limit - index - 1);
-         },
+         render: (_, _record, index) => meta.page * meta.limit - (meta.limit - index - 1),
          width: 40
       },
       {
          title: 'Эмч',
          dataIndex: 'employee',
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
+         render: (employee) => (
+            <div className="ambo-list-user">
+               <Avatar
+                  style={{
+                     minWidth: 32
+                  }}
+               />
+               <div className="info">
+                  <p className="name">{formatNameForDoc(employee?.lastName, employee?.firstName)}</p>
+                  <p>{employee?.registerNumber}</p>
                </div>
-            );
-         }
+            </div>
+         )
       },
       {
          title: 'Он сар',
          dataIndex: ['slot', 'schedule', 'workDate'],
-         render: (text, row) => {
-            if (text != null) {
-               return dayjs(text).format('YYYY-MM-DD');
-            } else {
-               return dayjs(row.createdAt).format('YYYY-MM-DD');
-            }
-         }
+         render: (workDate, row) => dayjs(workDate || row.createdAt).format('YYYY/MM/DD')
       },
       {
          title: 'Үзлэгийн цаг',
          dataIndex: 'slot',
-         render: (slot, row) => {
-            return getTypeInfo(row.type, slot?.startTime, slot?.endTime);
-         }
+         render: (slot, row) => getTypeInfo(row.type, slot?.startTime, slot?.endTime)
       },
       {
          title: 'ЭСҮ',
-         render: (_, row) => {
-            // dataIndex: 'emergencySorter',
-            // dataIndex: 'assesment',
-            // яаралтай байвал эсвэл энгийн
-            return getEWSInfo(row.assesment?.color, row.assesment?.total);
-         }
+         // dataIndex: 'emergencySorter',
+         // dataIndex: 'assesment',
+         // яаралтай байвал эсвэл энгийн
+         dataIndex: 'assesment',
+         render: (assesment) => getEWSInfo(assesment)
       },
       {
          title: 'Үзлэг',
-         render: (_, row) => {
-            return getInspectionInfo(row.inspectionType);
-         }
+         dataIndex: 'inspectionType',
+         render: (inspectionType) => getInspectionInfo(inspectionType)
       },
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
+         render: (patient) => (
+            <div className="ambo-list-user">
+               <Avatar
+                  style={{
+                     minWidth: 32
+                  }}
+               />
+               <div className="info">
+                  <p className="name">{formatNameForDoc(patient.lastName, patient.firstName)}</p>
+                  <p>{patient?.registerNumber}</p>
                </div>
-            );
-         }
+            </div>
+         )
       },
       {
          title: 'Нас',
          width: 40,
          dataIndex: ['patient', 'registerNumber'],
-         render: (text) => {
-            return getAge(text);
-         }
+         render: (text) => getAge(text)
       },
       {
          title: 'Хүйс',
          width: 40,
          dataIndex: ['patient', 'genderType'],
-         render: (text) => {
-            return getGenderInType(text);
-         }
+         render: (text) => getGenderInType(text)
       },
       {
          title: 'Захиалгийн огноо',
-         dataIndex: ['createdAt'],
-         render: (text) => {
-            return dayjs(text).format('YYYY-MM-DD HH:mm');
-         }
+         dataIndex: 'createdAt',
+         render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD HH:mm')
       },
       {
          title: 'Статус',
          dataIndex: 'status',
-         render: (text) => {
-            if (text === 1) {
+         render: (status) => {
+            if (status === 1) {
                return <div className="text-start">Цаг захиалсан</div>;
-            } else if (text === 2) {
+            } else if (status === 2) {
                return (
                   <div className="text-start">
                      <p className="text-black">Өдөр солисон</p>
                      <p className="text-black">цаг солисон</p>
                   </div>
                );
-            } else if (text === 3) {
+            } else if (status === 3) {
                return <div className="text-start">Цаг цуцалсан</div>;
             }
          }
@@ -556,80 +539,26 @@ function Index({ type, isDoctor }) {
       {
          title: 'Онош',
          dataIndex: 'patientDiagnosis',
-         render: (patientDiagnosis) => {
-            const codes = patientDiagnosis?.map((diagnose) => diagnose.diagnose.code);
-            return (
-               <ul>
-                  {codes?.map((code, index) => (
-                     <li key={index}>{code}</li>
-                  ))}
-               </ul>
-            );
-         }
+         render: (patientDiagnosis) => patientDiagnosis?.map((diagnose) => diagnose.diagnose.code)?.join('|')
       },
-      // {
-      //    title: 'Эхэлсэн цаг',
-      //    dataIndex: 'startDate',
-      //    render: (text) => {
-      //       if (text) {
-      //          return dayjs(text).format('YYYY-MM-DD HH:mm');
-      //       }
-      //    }
-      // },
-      // {
-      //    title: 'Дууссан цаг',
-      //    dataIndex: 'endDate',
-      //    render: (text) => {
-      //       if (text) {
-      //          return dayjs(text).format('YYYY-MM-DD HH:mm');
-      //       }
-      //    }
-      // },
-      // {
-      //    title: 'Онош',
-      //    dataIndex: 'patientDiagnosis',
-      //    render: (text) => {
-      //       if (text?.length > 0) {
-      //          var string = '';
-      //          text.map((item) => {
-      //             string += item.diagnose?.code + '|';
-      //          });
-      //          return string;
-      //       }
-      //       return;
-      //    }
-      // },
-      // {
-      //    title: 'Хяналт',
-      //    width: 60,
-      //    render: (_text, row) => {
-      //       return <MonitorCriteria props={{ serviceId: row.id, serviceType: 5 }} />;
-      //    }
-      // },
-      // {
-      //    title: 'Даатгал',
-      //    width: 60,
-      //    dataIndex: 'isInsurance',
-      //    render: (text) => {
-      //       return getPaymentInfo(text);
-      //    }
-      // },
-      // {
-      //    title: 'Төлбөр',
-      //    width: 60,
-      //    dataIndex: ['isPayment'],
-      //    render: (text) => {
-      //       return getPaymentInfo(text);
-      //    }
-      // },
-      // {
-      //    title: 'Үзлэг',
-      //    width: 60,
-      //    dataIndex: 'inspectionNotes',
-      //    render: (text) => {
-      //       return checkInspection(text);
-      //    }
-      // },
+      {
+         title: 'Хяналт',
+         dataIndex: 'id',
+         width: 60,
+         render: (id) => <MonitorCriteria props={{ serviceId: id, serviceType: 5 }} />
+      },
+      {
+         title: 'Даатгал',
+         width: 60,
+         dataIndex: 'isInsurance',
+         render: (isInsurance) => getPaymentInfo(isInsurance)
+      },
+      {
+         title: 'Төлбөр',
+         width: 60,
+         dataIndex: 'isPayment',
+         render: (isPayment) => getPaymentInfo(isPayment)
+      },
       {
          title: 'Үйлдэл',
          dataIndex: 'endDate',

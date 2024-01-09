@@ -9,6 +9,9 @@ class DocumentOption {
    async post(data) {
       return await jwtInterceopter.post('organization/document-option/custom-all', data);
    }
+   async regularPatch(id, data) {
+      return await jwtInterceopter.patch('organization/document-option/' + id, data);
+   }
    async patch(data) {
       return await jwtInterceopter.patch('organization/document-option/update/custom', data);
    }

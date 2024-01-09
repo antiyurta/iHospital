@@ -70,7 +70,20 @@ function DocForRoleList() {
             type: 1
          }
       }).then(({ data: { response } }) => {
-         setPositions(response.data);
+         var result = response.data.reduce(function (r, a) {
+            r[a.parentId] = r[a.parentId] || [];
+            r[a.parentId].push(a);
+            return r;
+         }, Object.create(null));
+         const grouped = Object.entries(result)?.map(([key, value]) => ({
+            label: getByIdStructureName(key),
+            options: value.map((item) => ({
+               label: item.name,
+               value: item.id
+            }))
+         }));
+         console.log('result', grouped);
+         setPositions(grouped);
          setClonedPositions(response.data);
       });
    };
@@ -79,27 +92,50 @@ function DocForRoleList() {
          params: {
             type: 2
          }
-      }).then(({ data: { response } }) => {
-         setStructures(response.data);
-      });
+      })
+         .then(({ data: { response } }) => {
+            setStructures(response.data);
+         })
+         .finally(() => {
+            getPositions();
+         });
    };
-   const getByIdStructureName = (parentId) => {
-      const name = structures?.find((e) => e.id === parseInt(parentId))?.name;
+   const getByIdStructureName = (id) => {
+      console.log('str', structures);
+      const name = structures?.find((e) => e.id === Number(id))?.name;
       return name;
    };
-   const selectDepartment = async (value) => {
+   const selectDepartment = async (depIds) => {
       form.setFieldsValue({
          employeePositionIds: [],
          supervisePositionIds: []
       });
       await OrganizationStructureApi.get({
          params: {
-            parentId: value,
+            parentId: depIds.toString(),
             type: 1
          }
-      }).then(({ data: { response } }) => {
-         setPositions(response.data);
-      });
+      }).then(
+         ({
+            data: {
+               response: { data }
+            }
+         }) => {
+            var result = data.reduce(function (r, a) {
+               r[a.parentId] = r[a.parentId] || [];
+               r[a.parentId].push(a);
+               return r;
+            }, Object.create(null));
+            const grouped = Object.entries(result)?.map(([key, value]) => ({
+               label: getByIdStructureName(key),
+               options: value.map((item) => ({
+                  label: item.name,
+                  value: item.id
+               }))
+            }));
+            setPositions(grouped);
+         }
+      );
    };
    const getPositionInfo = (positionIds) => (
       <ul className="list-decimal list-inside text-start">
@@ -149,8 +185,10 @@ function DocForRoleList() {
       },
       {
          title: 'Тасаг',
-         dataIndex: 'structureId',
-         render: (text) => getByIdStructureName(text)
+         dataIndex: 'departments',
+         render: (departments) => {
+            return departments?.map((departments) => departments.name);
+         }
       },
       {
          title: 'Хэрэглэх газар',
@@ -299,7 +337,6 @@ function DocForRoleList() {
    useEffect(() => {
       getList(1, 20);
       getStructures();
-      getPositions();
       getOptions();
    }, []);
    return (
@@ -392,7 +429,7 @@ function DocForRoleList() {
             <Form form={form} layout="vertical">
                <Form.Item
                   label="Тасаг сонгох"
-                  name="structureId"
+                  name="structureIds"
                   rules={[
                      {
                         required: true,
@@ -403,11 +440,12 @@ function DocForRoleList() {
                   <Select
                      showSearch
                      allowClear
+                     mode="multiple"
                      optionFilterProp="children"
                      filterOption={(input, option) =>
                         (option?.children ?? '').toLowerCase().includes(input?.toLowerCase())
                      }
-                     onSelect={(e) => selectDepartment(e)}
+                     onChange={selectDepartment}
                      options={structures?.map((structure) => ({
                         label: structure.name,
                         value: structure.id
@@ -478,13 +516,7 @@ function DocForRoleList() {
                      }
                   ]}
                >
-                  <Select
-                     mode="multiple"
-                     options={positions.map((option) => ({
-                        label: option.name,
-                        value: option.id
-                     }))}
-                  />
+                  <Select mode="multiple" options={positions} />
                </Form.Item>
                <Form.Item
                   label="Хэн хяналт тавих"
@@ -496,13 +528,7 @@ function DocForRoleList() {
                      }
                   ]}
                >
-                  <Select
-                     mode="multiple"
-                     options={positions?.map((option) => ({
-                        label: option.name,
-                        value: option.id
-                     }))}
-                  />
+                  <Select mode="multiple" options={positions} />
                </Form.Item>
                <Form.List name="documents">
                   {(documents, { add, remove }) => (

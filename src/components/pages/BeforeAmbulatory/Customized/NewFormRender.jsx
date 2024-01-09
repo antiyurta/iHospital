@@ -112,9 +112,9 @@ const NewFormRender = (props) => {
    const RenderFormInType = (RFITProps) => {
       const { item } = RFITProps;
       var state = true;
-      if (isCheck) {
-         state = formOptionIds?.some((id) => id === item.keyWord);
-      }
+      // if (isCheck) {
+      //    state = formOptionIds?.some((id) => id === item.keyWord);
+      // }
       if (item.type === 'radio') {
          const options = form.documentForm.filter((form) => form.parentIndex === item.index);
          return (

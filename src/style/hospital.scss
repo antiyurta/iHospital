@@ -176,13 +176,12 @@
    flex-direction: column;
    gap: 12px;
    > .header {
-      height: 55px;
       width: 100%;
-      overflow: auto;
       display: flex;
       flex-direction: row;
       gap: 8px;
       > p {
+         padding: 4px 0px;
          color: #86909c;
          font-size: 14px;
          font-style: normal;
@@ -199,7 +198,8 @@
    }
    > .content {
       height: calc(100% - 55px);
-      .list-of-issues {
+      .list-of-issues,
+      .list-of-orders {
          height: 100%;
          border-radius: 8px;
          background: #f2f3f5;
@@ -249,6 +249,52 @@
                   justify-content: center;
                   align-items: center;
                   gap: 4px;
+                  border-radius: 4px;
+                  border: 1px solid #c9cdd4;
+                  background: #fff;
+               }
+            }
+         }
+         .order {
+            display: flex;
+            flex-direction: column;
+            padding: 6px;
+            gap: 8px;
+            > .header {
+               display: flex;
+               flex-direction: row;
+               gap: 8px;
+               > .name {
+                  color: #ec7a09;
+                  font-weight: 500;
+                  font-size: 13px;
+               }
+            }
+            > .description {
+               display: flex;
+               justify-content: space-between;
+               flex-direction: row;
+               padding-left: 20px;
+               p {
+                  display: flex;
+                  flex-direction: row;
+                  gap: 4px;
+                  font-size: 13px;
+               }
+            }
+            > .extra {
+               padding-left: 20px;
+               display: flex;
+               flex-direction: row;
+               gap: 20px;
+               justify-content: space-between;
+               button {
+                  display: flex;
+                  padding: 4px 8px;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 4px;
+                  font-size: 13px;
                   border-radius: 4px;
                   border: 1px solid #c9cdd4;
                   background: #fff;
@@ -485,5 +531,23 @@
          border-bottom-width: 1px;
          border-bottom-color: #2d8cff;
       }
+   }
+}
+.patient-requests {
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+   a {
+      display: flex;
+      padding: 4px 8px;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border-radius: 4px;
+      background: #2d8cff;
+      color: white;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
    }
 }

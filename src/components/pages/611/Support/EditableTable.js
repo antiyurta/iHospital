@@ -24,9 +24,18 @@ function EditableTable(props) {
    const [selectedStructureId, setSelectedStructureId] = useState(Number);
    const [selectedDocumentValue, setSelectDocumentValue] = useState(Number);
    const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]);
+   const [currentDocumentOptions, setCurrentDocumentOptions] = useState([]);
    const getPositionInfo = (positionId) => {
-      const name = positions?.find((e) => e.id === parseInt(positionId))?.name;
-      return name;
+      var title = '';
+      console.log(positions);
+      positions?.map((position) => {
+         position.options?.map((option) => {
+            if (option.value === positionId) {
+               title = `${position.label} / ${option.label}`;
+            }
+         });
+      });
+      return title;
    };
    const handleClick = (selectedDocuments) => {
       if (selectedDocuments?.length === 0) {
@@ -39,12 +48,12 @@ function EditableTable(props) {
       const documents = form.getFieldValue('documents');
       setOldDocuments(documents);
    };
-   const getDocumentOptions = async (documentValue, employeePositionIds, structureId, index) => {
+   const getDocumentOptions = async (documentValue, employeePositionIds, structureIds, index) => {
       await DocumentOptionServices.getByPageFilter({
          params: {
             employeePositionIds: employeePositionIds,
             documentValue: documentValue,
-            structureId: structureId
+            structureIds: structureIds
          }
       }).then(
          ({
@@ -53,10 +62,15 @@ function EditableTable(props) {
             }
          }) => {
             if (data.length > 0) {
+               setCurrentDocumentOptions(data);
                setEditModePosition(true);
-               form.setFieldValue(['documents', index, 'optionId'], data[0].id);
-               console.log(form.getFieldsValue());
-               confForm.setFieldValue(data[0].employeePositionId, data[0].formOptionIds);
+               form.setFieldValue(
+                  ['documents', index, 'optionIds'],
+                  data.map((item) => item.id)
+               );
+               data.map((item) => {
+                  confForm.setFieldValue(item.employeePositionId, item.formOptionIds);
+               });
             }
          }
       );
@@ -69,9 +83,9 @@ function EditableTable(props) {
       });
       const documentValue = form.getFieldValue(['documents', index, 'value']);
       const employeePositionIds = form.getFieldValue('employeePositionIds');
-      const structureId = form.getFieldValue('structureId');
-      getDocumentOptions(documentValue, employeePositionIds, structureId, index);
-      setSelectedStructureId(structureId);
+      const structureIds = form.getFieldValue('structureIds');
+      getDocumentOptions(documentValue, employeePositionIds, structureIds, index);
+      setSelectedStructureId(structureIds);
       setSelectedEmployeeIds(employeePositionIds);
       setSelectDocumentValue(documentValue);
    };
@@ -82,15 +96,30 @@ function EditableTable(props) {
          items: values
       };
       if (editModePosition) {
-         await DocumentOptionServices.patch(data).then((response) => {
-            if (response.status === 200) {
-               confForm.resetFields();
-               setIsOpenConfModal(false);
-            }
-         });
+         Promise.all(
+            Object.entries(values).map(async ([key, value]) => {
+               const currentOption = currentDocumentOptions.find((option) => option.employeePositionId === Number(key));
+               if (currentOption) {
+                  await DocumentOptionServices.regularPatch(currentOption.id, {
+                     formOptionIds: value
+                  });
+               } else {
+                  await DocumentOptionServices.post({
+                     structureId: selectedStructureId,
+                     documentValue: selectedDocumentValue,
+                     items: { [`${key}`]: value }
+                  });
+               }
+            })
+         );
+         confForm.resetFields();
+         setIsOpenConfModal(false);
       } else {
          await DocumentOptionServices.post(data).then(({ data: { response } }) => {
-            form.setFieldValue(['documents', selectedIndex, 'optionId'], response.id);
+            form.setFieldValue(
+               ['documents', selectedIndex, 'optionIds'],
+               response.map((res) => res.id)
+            );
             confForm.resetFields();
             setIsOpenConfModal(false);
          });

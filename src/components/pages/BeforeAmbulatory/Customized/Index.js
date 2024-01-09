@@ -207,7 +207,7 @@ function Index(props) {
    useEffect(() => {
       if (documentValue != 0) {
          if (documentType != 1) {
-            getDocumentOption();
+            // getDocumentOption();
          }
          getDocumentForm();
          form.resetFields();
@@ -353,12 +353,7 @@ function Index(props) {
                         <Input />
                      </ProgressBar>
                      <div className="h-[500px] overflow-auto px-3">
-                        <NewFormRender
-                           useForm={form}
-                           form={documentForm}
-                           formOptionIds={documentOptions}
-                           isCheck={true}
-                        />
+                        <NewFormRender useForm={form} form={documentForm} formOptionIds={[]} isCheck={true} />
                      </div>
                   </Form>
                   <Button
