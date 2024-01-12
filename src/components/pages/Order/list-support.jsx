@@ -25,7 +25,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
       setIsLoading(true);
       if (careType == CARE_TYPE.Examination) {
          await examinationApi
-            .get({ examinationTypeId: careTypeId, page, limit, name: filter })
+            .get({ examinationTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -35,7 +35,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
             });
       } else if (careType == CARE_TYPE.Xray) {
          await xrayApi
-            .get({ xrayTypeId: careTypeId, page, limit, name: filter })
+            .get({ xrayTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -43,7 +43,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
             .finally(() => setIsLoading(false));
       } else if (careType == CARE_TYPE.Treatment) {
          await treatmentApi
-            .get({ treatmentTypeId: careTypeId, page, limit, name: filter })
+            .get({ treatmentTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -51,7 +51,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
             .finally(() => setIsLoading(false));
       } else if (careType == CARE_TYPE.Surgery) {
          await surgeryApi
-            .get({ surgeryTypeId: careTypeId, page, limit, name: filter })
+            .get({ surgeryTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
