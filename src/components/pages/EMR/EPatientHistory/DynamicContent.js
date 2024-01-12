@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Collapse, Form, Input, Select, Spin, Table } from 'antd';
+import { Button, Checkbox, Collapse, Form, Input, Select, Spin, Table } from 'antd';
 import Diagnose from '../../service/Diagnose';
 import EditableFormItem from '../../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
@@ -161,6 +161,7 @@ function DynamicContent({
          }
       } else {
          let data = {};
+         console.log(notes);
          if (notes.inspectionNote) {
             data = inspectionTOJSON(notes.inspectionNote);
             setEditModeInspectionNote(true);
@@ -181,6 +182,7 @@ function DynamicContent({
             setEditModeDiagnosis(true);
             setSelectedDiagnoseIds(diagnoseIds);
             data['diagnosis'] = diagnosis;
+            data['services'] = notes.services;
          }
          form.setFieldsValue(data);
       }
@@ -210,7 +212,7 @@ function DynamicContent({
                      <Panel key={1} forceRender header="Зовиур">
                         <div
                            style={{
-                              height: 358,
+                              height: 278,
                               overflow: 'auto'
                            }}
                         >
@@ -228,7 +230,7 @@ function DynamicContent({
                      <Panel key={2} forceRender header="Асуумж">
                         <div
                            style={{
-                              height: 358,
+                              height: 278,
                               overflow: 'auto'
                            }}
                         >
@@ -246,7 +248,7 @@ function DynamicContent({
                      <Panel key={3} forceRender header="Бодит үзлэг">
                         <div
                            style={{
-                              height: 358,
+                              height: 278,
                               overflow: 'auto'
                            }}
                         >
@@ -265,7 +267,7 @@ function DynamicContent({
                         <Panel key={4} header="Онош">
                            <div
                               style={{
-                                 height: 358,
+                                 height: 278,
                                  overflow: 'auto'
                               }}
                            >
@@ -335,8 +337,9 @@ function DynamicContent({
                      ) : null}
                      <Panel key={5} forceRender header="Төлөвлөгөө">
                         <div
+                           className="flex flex-col gap-1"
                            style={{
-                              height: 358,
+                              height: 278,
                               overflow: 'auto'
                            }}
                         >
@@ -349,6 +352,43 @@ function DynamicContent({
                               isCheck={false}
                               formName="plan"
                            />
+                           <Form.List name="services">
+                              {(services) => (
+                                 <Table
+                                    className="emr-plan-table"
+                                    size="small"
+                                    pagination={false}
+                                    columns={[
+                                       {
+                                          title: '№',
+                                          render: (_, _row, index) => {
+                                             return index + 1;
+                                          }
+                                       },
+                                       {
+                                          title: 'Үйлчилгээ',
+                                          dataIndex: 'name',
+                                          align: 'left',
+                                          render: (_, _row, index) => (
+                                             <EditableFormItem name={[index, 'name']}>
+                                                <Input />
+                                             </EditableFormItem>
+                                          )
+                                       },
+                                       {
+                                          title: 'Тоо',
+                                          dataIndex: 'total',
+                                          render: (_, _row, index) => (
+                                             <EditableFormItem name={[index, 'total']}>
+                                                <Input />
+                                             </EditableFormItem>
+                                          )
+                                       }
+                                    ]}
+                                    dataSource={services}
+                                 />
+                              )}
+                           </Form.List>
                         </div>
                      </Panel>
                   </Collapse>

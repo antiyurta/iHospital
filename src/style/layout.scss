@@ -5,9 +5,11 @@
 }
 
 .main-layout {
-   height: calc(100vh);
+   width: 100%;
+   height: 100vh;
    background-color: white;
    .main-body {
+      width: 100%;
       height: calc(100%);
       display: flex;
       flex-direction: row;
@@ -23,7 +25,12 @@
          max-width: 220px;
          background-color: white;
          .sidebar-header {
-            align-self: center;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
             img {
                height: 53px;
             }
@@ -157,119 +164,8 @@
             }
          }
       }
-   }
-}
-
-.main_sidebar {
-   border-top-left-radius: 8px;
-   border-bottom-left-radius: 8px;
-   display: flex;
-   min-width: 78px;
-   max-width: 78px;
-   flex-direction: column;
-   align-items: center;
-   padding: 24px 0;
-   background-color: #0095ff;
-   gap: 12px;
-   .main_sidebar_menus {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      height: calc(100% - 150px);
-      justify-content: space-between;
-      .top,
-      .bottom {
-         display: flex;
-         width: 100%;
-         flex-direction: column;
-         position: relative;
-         gap: 60px;
-         align-items: center;
-         ul {
-            position: absolute;
-            width: 68px;
-            padding: 0px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            a {
-               position: relative;
-               display: flex;
-               flex-direction: column;
-               justify-content: center;
-               align-items: center;
-               align-self: stretch;
-               .content-profile {
-                  width: 62px;
-                  height: 62px;
-                  padding: 11px 11px;
-                  .icon-profile {
-                     display: inline-block;
-                     background-size: cover;
-                     background-image: url('/src/assets/images/maleAvatar.svg');
-                     border-radius: 50%;
-                  }
-                  &:hover {
-                     border-radius: 50%;
-                     background-color: rgb(240, 242, 245);
-                     cursor: pointer;
-                  }
-               }
-               .content {
-                  width: 60px;
-                  height: 60px;
-                  padding: 11px 11px;
-                  .icon {
-                     display: inline-block;
-                     width: 38px;
-                     height: 38px;
-                     background-size: cover;
-                  }
-                  &:hover {
-                     border-radius: 50%;
-                     background-color: rgb(240, 242, 245);
-                     cursor: pointer;
-                     .icon-i {
-                        background-image: url('/public/images/iSymbolColor.svg');
-                     }
-                  }
-                  .icon-i {
-                     background-image: url('/public/images/iSymbol.svg');
-                     &.active {
-                        background-image: url('/public/images/iSymbolColor.svg');
-                     }
-                  }
-               }
-            }
-            a.active {
-               border-radius: 100px 0px 0px 100px;
-               background: var(--gray-white, #fff);
-               width: 73px;
-               .content,
-               .content-profile {
-                  margin-right: 5px;
-               }
-               &::before,
-               &::after {
-                  content: '';
-                  height: 20px;
-                  width: 18px;
-                  position: absolute;
-                  bottom: 0;
-                  background: radial-gradient(circle at top left, #fff0 73.5%, #fff 75%);
-               }
-               &::after {
-                  right: 0px;
-                  top: 100%;
-                  background: radial-gradient(circle at bottom left, #fff0 73.5%, #fff 75%);
-               }
-               &::before {
-                  bottom: 100%;
-                  right: 0px;
-               }
-            }
-         }
+      .main-content {
+         width: calc(100% - 220px);
       }
    }
 }
@@ -309,15 +205,190 @@
    }
 }
 
-@media screen and (min-width: 768px) {
-   .patient-info {
-      .info {
-         width: 100%;
+@media (min-width: 320px) and (max-width: 768px) {
+   .ambo-list-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .left {
+         flex-wrap: wrap;
+         button:nth-child(n) {
+            width: 30%;
+         }
+      }
+      .right {
+         flex-wrap: wrap;
+         .pagi-list {
+            width: 100%;
+            .ant-select.ant-select-single {
+               width: 75px !important;
+            }
+         }
       }
    }
-   .emr-doctor-notes-public,
-   .emr-doctor-notes-private {
-      width: 100%;
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 420px) !important;
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .patient {
+            padding-top: 88px !important;
+            flex-direction: column !important;
+            .patient-info {
+               max-width: 100%;
+               min-width: 100%;
+               .info {
+                  p.names {
+                     font-size: 16px;
+                  }
+                  .infos {
+                     div:nth-child(n) {
+                        gap: 4px !important;
+                     }
+                  }
+               }
+            }
+            .note-timer {
+               flex-direction: column;
+               gap: 8px;
+               .emr-timer {
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 8px;
+                  p:nth-child(odd) {
+                     font-size: 14px;
+                  }
+                  .timer {
+                     font-size: 20px;
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+   .ambo-list-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .left {
+         justify-content: space-between;
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 250px;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 290px) !important;
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .patient {
+            justify-content: space-between;
+            .patient-info {
+               max-width: 400px;
+               min-width: 400px;
+               .info {
+                  p.names {
+                     font-size: 16px;
+                  }
+                  .infos {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 8px;
+                     div:nth-child(even) {
+                        justify-content: start;
+                     }
+                  }
+               }
+            }
+            .note-timer {
+               flex-direction: column;
+               gap: 8px;
+               .emr-timer {
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 8px;
+                  p:nth-child(odd) {
+                     font-size: 14px;
+                  }
+                  .timer {
+                     font-size: 20px;
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+@media (min-width: 1025px) and (max-width: 1279px) {
+   .ambo-list-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .left {
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 250px;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 245px) !important;
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .patient {
+            justify-content: space-between;
+            .patient-info {
+               min-width: calc(100% - 720px);
+               min-width: calc(100% - 720px);
+               .info {
+                  p.names {
+                     font-size: 16px;
+                  }
+                  .infos {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 8px;
+                     div:nth-child(even) {
+                        justify-content: start;
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+@media screen and (min-width: 1280px) {
+   .ambo-list-filter {
+      .left {
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 236px;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 245px) !important;
+      }
    }
 }
 
@@ -325,7 +396,6 @@
    min-width: 600px;
    max-width: 800px;
    display: flex;
-   flex: 1 0 0;
    padding: 8px;
    flex-direction: row;
    gap: 16px;
@@ -351,13 +421,21 @@
    > .info {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px;
       p.names {
          color: #6b7785;
          font-size: 20px;
          font-style: normal;
          font-weight: 500;
          line-height: normal;
+      }
+      .infos {
+         display: grid;
+         grid-template-columns: repeat(2, minmax(0, 1fr));
+         gap: 4px;
+         div:nth-child(even) {
+            justify-content: end;
+         }
       }
       p {
          color: #6b7785;
@@ -369,6 +447,7 @@
       > .ant-radio-group {
          height: 36px;
          > .ant-radio-button-wrapper {
+            background-color: transparent;
             border: none !important;
             padding: 8px 12px;
             height: 36px;
@@ -388,41 +467,68 @@
       }
    }
 }
-.navbar {
+.new-emr {
+   height: 100vh;
    display: flex;
-   flex-direction: row;
-   justify-content: space-between;
-   padding: 8px;
-   border-bottom: 1px solid #e5e6eb;
-   background: #fff;
-   .back a {
+   flex-direction: column;
+   width: 100%;
+   .navbar {
+      position: fixed;
+      z-index: 3;
+      width: calc(100% - 220px);
       display: flex;
       flex-direction: row;
-      gap: 4px;
-      align-items: center;
-      color: #4e5969;
-      font-weight: 500;
-      &:hover {
-         color: #2d8cff;
+      justify-content: space-between;
+      padding: 8px;
+      border-bottom: 1px solid #e5e6eb;
+      background: #fff;
+      .back a {
+         display: flex;
+         flex-direction: row;
+         gap: 4px;
+         align-items: center;
+         color: #4e5969;
+         font-weight: 500;
+         &:hover {
+            color: #2d8cff;
+         }
+      }
+      .emr-navbar {
+         display: flex;
+         flex-direction: row;
+         justify-content: flex-end;
+         gap: 8px;
+         button {
+            display: flex;
+            padding: 4px 8px;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border-radius: 4px;
+            background: #2d8cff;
+            color: white;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+         }
       }
    }
-   .emr-navbar {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      gap: 8px;
-      button {
+   .new-emr-index {
+      height: 100%;
+      overflow: auto;
+      .patient {
          display: flex;
-         padding: 4px 8px;
-         justify-content: center;
-         align-items: center;
+         flex-direction: row;
+         gap: 4px;
+         padding: 50px 4px 4px 4px;
+         background-color: white;
+         border-bottom: 1px solid #e5e6eb;
+         justify-content: space-between;
+      }
+      .note-timer {
+         display: flex;
+         flex-direction: row;
          gap: 8px;
-         border-radius: 4px;
-         background: #2d8cff;
-         color: white;
-         font-size: 14px;
-         font-style: normal;
-         font-weight: 400;
       }
    }
 }

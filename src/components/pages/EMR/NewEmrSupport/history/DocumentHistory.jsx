@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import DocumentsFormPatientService from '../../../../../services/organization/document';
-import serviceService from '../../../../../services/service/service';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import { Button, Empty, Modal, Table } from 'antd';
@@ -11,10 +9,17 @@ import arrow from '../document/arrow.svg';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import ReactToPrint from 'react-to-print';
 
-const DocumentHistory = (props) => {
-   const { usageType } = props;
+import Document from './document';
+
+import apiAppointmentService from '../../../../../services/appointment/api-appointment-service';
+import DocumentsFormPatientService from '../../../../../services/organization/document';
+import serviceService from '../../../../../services/service/service';
+
+const DocumentHistory = () => {
    const currentRef = useRef(null);
    const elementsRef = useRef([]);
+   const incomeEmrData = useSelector(selectCurrentEmrData);
+   const { usageType } = incomeEmrData;
    const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
    const [isOpenModalView, setIsOpenModalView] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +27,6 @@ const DocumentHistory = (props) => {
    const [documentsOut, setDocumentsOut] = useState([]);
    const [selectedDocument, setSelectedDocument] = useState({});
    const [selectedDocuments, setSelectedDocuments] = useState([]);
-   const incomeEmrData = useSelector(selectCurrentEmrData);
    const [selectedId, setSelectedId] = useState(false);
    const groupedByAppointmentId = (documents) => {
       // hewtengiin maygtuud angilah
@@ -35,7 +39,7 @@ const DocumentHistory = (props) => {
          return apps;
       }, {});
    };
-   const groupByDocumentValue = (groupedDocuments) => {
+   const groupByDocumentValueIn = (groupedDocuments) => {
       var result = {};
       Object?.entries(groupedDocuments)?.map(([key, value]) => {
          result[key] = [];
@@ -77,17 +81,18 @@ const DocumentHistory = (props) => {
                   response: { response }
                }
             }) => {
-               if (usageType === 'OUT') {
-                  setDocuments(response);
-               } else {
-                  if (response?.length > 0) {
+               if (response?.length > 0) {
+                  if (usageType === 'OUT') {
+                     const sortedResponse = response.sort((a, b) => a.createdAt - b.createdAt);
+                     setDocuments(sortedResponse);
+                  } else if (usageType === 'IN') {
                      const sortedResponse = response.sort((a, b) => a.position - b.position);
                      const groupedDocuments = groupedByAppointmentId(sortedResponse);
-                     const grouped = groupByDocumentValue(groupedDocuments);
+                     const grouped = groupByDocumentValueIn(groupedDocuments);
                      figureOut(grouped);
-                  } else {
-                     figureOut({});
                   }
+               } else {
+                  figureOut({});
                }
             }
          )
@@ -113,7 +118,6 @@ const DocumentHistory = (props) => {
          };
       });
    };
-
    const figureOut = async (groupedDocuments) => {
       const promises = Object?.entries(groupedDocuments)?.map(async ([key, value], index) => {
          return await getInpatientRequest(key, index, value);
@@ -307,8 +311,11 @@ const DocumentHistory = (props) => {
       getDocumentsHistory();
    }, []);
    return (
-      <div>
-         <Table
+      <div className="list-of-orders">
+         {usageType === 'OUT'
+            ? documentsIn?.map((documentIn, index) => <Document key={index} document={documentIn} index={index} />)
+            : null}
+         {/* <Table
             rowKey={usageType === 'OUT' ? '_id' : 'index'}
             rowClassName="hover: cursor-pointer"
             locale={{
@@ -322,7 +329,7 @@ const DocumentHistory = (props) => {
             columns={usageType === 'OUT' ? ambColumns : inColumns}
             dataSource={usageType === 'OUT' ? documentsIn : documentsOut}
             pagination={false}
-         />
+         /> */}
          <Modal
             title="Маягт засах"
             open={isOpenModalEdit}

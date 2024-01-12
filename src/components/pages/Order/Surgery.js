@@ -49,10 +49,10 @@ function Surgery(props) {
    const add = (surgery) => {
       const state = selectedSurgeries.includes(surgery);
       if (state) {
-         openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
+         openNofi('warning', 'Анхааруулга', 'Мэс засал сонгогдсон байна');
       } else {
          const clone = { ...surgery };
-         clone.type = surgery.types.type;
+         clone.type = surgery.type?.type;
          setSurgeryId(clone.id);
          setIsOpenSubModal(true);
       }

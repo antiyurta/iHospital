@@ -2,13 +2,14 @@ import React, { Fragment, Suspense, useContext } from 'react';
 import companyLogo from '../../../assets/logo/iHospital.png';
 import male from '../../../assets/images/maleAvatar.svg';
 import { Outlet } from 'react-router-dom';
-import { LogoutOutlined } from '@ant-design/icons';
+import { ExpandOutlined, LogoutOutlined, MenuFoldOutlined, MenuOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Delete, logout, selectCurrentFirstName, selectCurrentLastName } from '../../../features/authReducer';
 import Sidebar from './NewSidebar';
 import { useNavigate } from 'react-router-dom';
 import FullScreenLoader from '../../FullScreenLoader';
 import AuthContext from '../../../features/AuthContext';
+import { Button } from 'antd';
 
 const MainLayout = () => {
    const navigate = useNavigate();
@@ -28,6 +29,7 @@ const MainLayout = () => {
             <div className="sidebar">
                <div className="sidebar-header">
                   <img src={companyLogo} alt="logo" />
+                  <Button type="link" icon={<MenuFoldOutlined />} />
                </div>
                <Sidebar />
                <div className="sidebar-footer">
@@ -43,11 +45,13 @@ const MainLayout = () => {
                   </div>
                </div>
             </div>
-            <Fragment>
-               <Suspense fallback={<FullScreenLoader full={true} />}>
-                  <Outlet />
-               </Suspense>
-            </Fragment>
+            <div className="main-content">
+               <Fragment>
+                  <Suspense fallback={<FullScreenLoader full={true} />}>
+                     <Outlet />
+                  </Suspense>
+               </Fragment>
+            </div>
          </div>
       </div>
    );

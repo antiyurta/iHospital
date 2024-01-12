@@ -64,9 +64,6 @@ const ListFilter = (props) => {
             </button>
             <ConfigProvider locale={locale}>
                <RangePicker
-                  style={{
-                     width: 250
-                  }}
                   onChange={(e) => {
                      if (e != null) {
                         setRangePickerValue(e);

@@ -30,7 +30,7 @@ const OrderHistory = () => {
    return (
       <div className="list-of-issues">
          {orders?.map((order, index) => (
-            <div className="order">
+            <div key={index} className="order">
                <div className="header">
                   <p>{`${index + 1}.`}</p>
                   <p className="name">{getName(order)}</p>

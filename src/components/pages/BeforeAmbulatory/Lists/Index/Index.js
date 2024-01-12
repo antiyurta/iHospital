@@ -235,7 +235,8 @@ function Index({ type, isDoctor }) {
       dispatch(
          setNote({
             inspectionNote: row.inspectionNote,
-            diagnosis: row.patientDiagnosis
+            diagnosis: row.patientDiagnosis,
+            services: [].concat(...row.serviceRequests?.map((request) => request.services))
          })
       );
       dispatch(setEmrData(data));
@@ -447,6 +448,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Эмч',
          dataIndex: 'employee',
+         width: 150,
          render: (employee) => (
             <div className="ambo-list-user">
                <Avatar
@@ -464,11 +466,13 @@ function Index({ type, isDoctor }) {
       {
          title: 'Он сар',
          dataIndex: ['slot', 'schedule', 'workDate'],
+         width: 90,
          render: (workDate, row) => dayjs(workDate || row.createdAt).format('YYYY/MM/DD')
       },
       {
          title: 'Үзлэгийн цаг',
          dataIndex: 'slot',
+         width: 90,
          render: (slot, row) => getTypeInfo(row.type, slot?.startTime, slot?.endTime)
       },
       {
@@ -477,16 +481,19 @@ function Index({ type, isDoctor }) {
          // dataIndex: 'assesment',
          // яаралтай байвал эсвэл энгийн
          dataIndex: 'assesment',
+         width: 50,
          render: (assesment) => getEWSInfo(assesment)
       },
       {
          title: 'Үзлэг',
          dataIndex: 'inspectionType',
+         width: 70,
          render: (inspectionType) => getInspectionInfo(inspectionType)
       },
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
+         width: 170,
          render: (patient) => (
             <div className="ambo-list-user">
                <Avatar
@@ -516,11 +523,13 @@ function Index({ type, isDoctor }) {
       {
          title: 'Захиалгийн огноо',
          dataIndex: 'createdAt',
+         width: 150,
          render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD HH:mm')
       },
       {
          title: 'Статус',
          dataIndex: 'status',
+         width: 120,
          render: (status) => {
             if (status === 1) {
                return <div className="text-start">Цаг захиалсан</div>;
@@ -539,6 +548,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Онош',
          dataIndex: 'patientDiagnosis',
+         width: 100,
          render: (patientDiagnosis) => patientDiagnosis?.map((diagnose) => diagnose.diagnose.code)?.join('|')
       },
       {
@@ -549,7 +559,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Даатгал',
-         width: 60,
+         width: 100,
          dataIndex: 'isInsurance',
          render: (isInsurance) => getPaymentInfo(isInsurance)
       },
@@ -574,7 +584,9 @@ function Index({ type, isDoctor }) {
                         backgroundColor: 'white',
                         color: '#2D8CFF',
                         border: '1px solid #2D8CFF',
-                        height: 'auto'
+                        height: 'auto',
+                        margin: 8,
+                        width: '100%'
                      }}
                      onClick={() => getInspectionFormDesc(row.inspectionNote, row.patientId)}
                      icon={<EditOutlined />}
@@ -592,7 +604,9 @@ function Index({ type, isDoctor }) {
                         backgroundColor: 'white',
                         color: '#2D8CFF',
                         border: '1px solid #2D8CFF',
-                        height: 'auto'
+                        height: 'auto',
+                        margin: 8,
+                        width: '100%'
                      }}
                      onClick={() => {
                         getEMRorENR(row);
@@ -954,12 +968,7 @@ function Index({ type, isDoctor }) {
 
    return (
       <div className="w-full">
-         <div
-            className="flex flex-col gap-3"
-            style={{
-               height: 'calc(100vh - 100px)'
-            }}
-         >
+         <div className="flex flex-col gap-3">
             <ScheduleTypeInfo />
             {type === 2 ? <InpatientTypeInfo /> : null}
             <ListFilter
@@ -968,33 +977,32 @@ function Index({ type, isDoctor }) {
                selectedTags={selectedTags}
                getList={getAppointment}
             />
-            <div className="w-full overflow-auto">
-               <Card
-                  bordered={false}
-                  className="header-solid rounded-md"
-                  bodyStyle={{
-                     padding: 8
+            <Card
+               bordered={false}
+               className="header-solid rounded-md"
+               bodyStyle={{
+                  padding: 8
+               }}
+            >
+               <Table
+                  className="emr-index-list"
+                  rowKey={'id'}
+                  rowClassName="hover: cursor-pointer"
+                  locale={{
+                     emptyText: <Empty description={'Хоосон'} />
                   }}
-               >
-                  <Table
-                     rowKey={'id'}
-                     rowClassName="hover: cursor-pointer"
-                     locale={{
-                        emptyText: <Empty description={'Хоосон'} />
-                     }}
-                     loading={{
-                        spinning: spinner,
-                        tip: 'Уншиж байна....'
-                     }}
-                     columns={CurrentColumn()}
-                     dataSource={appointments}
-                     scroll={{
-                        x: 1000
-                     }}
-                     pagination={false}
-                  />
-               </Card>
-            </div>
+                  loading={{
+                     spinning: spinner,
+                     tip: 'Уншиж байна....'
+                  }}
+                  columns={CurrentColumn()}
+                  dataSource={appointments}
+                  scroll={{
+                     y: 665
+                  }}
+                  pagination={false}
+               />
+            </Card>
          </div>
          <Modal
             title="Тэмдэглэл засах хэсэг"
@@ -1002,7 +1010,6 @@ function Index({ type, isDoctor }) {
             onCancel={() => setIsOpenEditForm(false)}
             footer={false}
          >
-            {JSON.stringify(formData)}
             <DynamicContent
                props={{
                   data: formStyle.formItem,

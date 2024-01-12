@@ -149,37 +149,47 @@ function MainPatientHistory({ handleClick }) {
    const getInspectionTabs = async () => {
       setLoading(true);
       //Тухайн эмчид харагдах TAB ууд
-      await EmrInspectionFormServices.get({
-         params: {
-            cabinetId: cabinetId
+      setItems((items) => [
+         ...items,
+         {
+            label: 'Давтан үзлэгийн асуумж',
+            key: `item-second`,
+            children: <DynamicTabContent data={defualtForm} />
          }
-      })
-         .then(({ data: { response } }) => {
-            response.data?.map((el) => {
-               setItems((items) => [
-                  ...items,
-                  {
-                     label: el.name,
-                     key: `item-${el.id}`,
-                     children: (
-                        <DynamicTabContent
-                           data={{
-                              inspection: el.inspection,
-                              pain: el.pain,
-                              plan: el.plan,
-                              question: el.question
-                           }}
-                           formKey={el.formId != null ? el.formId : el.id}
-                           formName={el.name}
-                        />
-                     )
-                  }
-               ]);
-            });
-         })
-         .finally(() => {
-            setLoading(false);
-         });
+      ]);
+      // Түр commit hiwe
+      // await EmrInspectionFormServices.get({
+      //    params: {
+      //       cabinetId: cabinetId
+      //    }
+      // })
+      //    .then(({ data: { response } }) => {
+      //       response.data?.map((el) => {
+      //          setItems((items) => [
+      //             ...items,
+      //             {
+      //                label: el.name,
+      //                key: `item-${el.id}`,
+      //                children: (
+      //                   <DynamicTabContent
+      //                      data={{
+      //                         inspection: el.inspection,
+      //                         pain: el.pain,
+      //                         plan: el.plan,
+      //                         question: el.question
+      //                      }}
+      //                      formKey={el.formId != null ? el.formId : el.id}
+      //                      formName={el.name}
+      //                   />
+      //                )
+      //             }
+      //          ]);
+      //       });
+      //    })
+      //    .finally(() => {
+      //       setLoading(false);
+      //    });
+      // Түр commit hiwe
    };
    const defualtForm = {
       pain: [

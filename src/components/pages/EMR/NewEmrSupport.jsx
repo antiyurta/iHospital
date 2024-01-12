@@ -38,7 +38,7 @@ const NewEmrSupport = () => {
             <button>Скан EMR</button>
             <button onClick={() => setIsOpenModalRequests(true)}>Үйлчлүүлэгчийн хүснэгт </button>
             <button>Эрүүл мэндийн даатгал </button>
-            <DocumentHistory />
+            {/* <DocumentHistory /> */}
             <DocumentIndex />
          </div>
          <Modal

@@ -4,6 +4,49 @@
       font-size: 13px;
    }
 }
+.ant-card-head-title {
+   padding: 8px 0px !important;
+}
+.ant-card-extra {
+   padding: 8px 0px !important;
+}
+.ant-card-body {
+   padding: 8px !important;
+}
+.ant-card {
+   .ant-card-head {
+      height: auto !important;
+   }
+}
+
+.regular-divider {
+   font-size: 14px;
+   font-weight: 500;
+   display: flex;
+   align-items: center;
+}
+.regular-divider::before,
+.regular-divider::after {
+   flex: 1;
+   content: '';
+   padding: 1px;
+   background-color: #c9cdd4;
+}
+
+.emr-plan-table {
+   tr {
+      max-height: 15px !important;
+   }
+   th.ant-table-cell {
+      font-size: 12px !important;
+   }
+   td.ant-table-cell {
+      font-size: 12px !important;
+      div {
+         font-size: 12px !important;
+      }
+   }
+}
 
 .app-button-regular {
    display: flex;
@@ -197,12 +240,13 @@
       }
    }
    > .content {
-      height: calc(100% - 55px);
+      height: calc(100% - 100px);
       .list-of-issues,
       .list-of-orders {
-         height: 100%;
          border-radius: 8px;
          background: #f2f3f5;
+         overflow: auto;
+         height: calc(100% - 100px);
          .diagnose {
             display: flex;
             flex-direction: column;
@@ -243,6 +287,59 @@
                display: flex;
                align-items: flex-end;
                flex-direction: column;
+               > button {
+                  display: flex;
+                  padding: 6px 12px;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 4px;
+                  border-radius: 4px;
+                  border: 1px solid #c9cdd4;
+                  background: #fff;
+               }
+            }
+         }
+         .document {
+            display: flex;
+            flex-direction: column;
+            padding: 6px;
+            gap: 8px;
+            > .header {
+               display: flex;
+               flex-direction: row;
+               gap: 8px;
+               span.code {
+                  color: #e34935;
+               }
+               span {
+                  color: #a9aeb8;
+                  font-size: 12px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;
+               }
+               &:hover {
+                  cursor: pointer;
+               }
+            }
+            > .expandable {
+               padding-left: 20px;
+               display: flex;
+               flex-direction: column;
+               gap: 8px;
+               p {
+                  color: #4e5969;
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;
+               }
+            }
+            > .description {
+               display: flex;
+               align-self: flex-end;
+               flex-direction: row;
+               gap: 8px;
                > button {
                   display: flex;
                   padding: 6px 12px;
@@ -363,34 +460,49 @@
 
 .internal-order-set-order {
    display: flex;
-   flex-direction: row;
+   flex-direction: column;
    gap: 8px;
-   > .left {
+   .filter {
+      width: 100%;
       display: flex;
-      width: 270px;
-      padding: 12px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      border-radius: 8px;
-      background: #f7f8fa;
-      input {
+      flex-direction: row;
+      gap: 12px;
+      span.ant-input-affix-wrapper {
+         height: 38px !important;
+      }
+      .filter-icon {
+         width: 38px;
+         height: 38px;
+         padding: 8px;
          border-radius: 4px;
          background: #e5e6eb;
-      }
-      button {
-         width: 100%;
+         text-align: center;
+         svg {
+            width: 16px;
+            height: 16px;
+            color: #6b7785;
+         }
       }
    }
-   > .right {
-      display: flex;
-      width: 100%;
-      padding: 12px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-      border-radius: 8px;
-      background: #f7f8fa;
+   .ant-tabs-extra-content {
+      padding: 6px;
+      button {
+         display: flex;
+         padding: 4px 6px;
+         justify-content: center;
+         align-items: center;
+         gap: 8px;
+         display: flex;
+         flex-direction: row;
+         border-radius: 4px;
+         border: 1px solid #22a06b;
+         background: #f7f8fa;
+         color: #22a06b;
+         font-size: 14px;
+         font-style: normal;
+         font-weight: 400;
+         line-height: normal;
+      }
    }
 }
 
@@ -398,6 +510,7 @@
    border-radius: 4px;
    padding: 6px;
    display: flex;
+   text-align: start;
    align-items: flex-start;
    color: #6b7785;
    font-size: 14px;

@@ -22,7 +22,7 @@ const LandingLayout = () => {
       }
    }, [user]);
    return (
-      <div className="bg-[#F7F9FF]">
+      <div className="bg-[#F7F9FF] h-screen">
          <Header />
          <Outlet />
          <Footer />

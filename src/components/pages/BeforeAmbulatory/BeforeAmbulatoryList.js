@@ -51,7 +51,7 @@ export default function BeforeAmbulatoryList() {
    ];
    const [currentActiveKey, setActiveKey] = useState(activeKey);
    return (
-      <div className="p-3 w-full bg-[#f5f6f7]">
+      <div className="p-3 w-full h-full bg-[#f5f6f7]">
          <Tabs
             type="card"
             activeKey={currentActiveKey}

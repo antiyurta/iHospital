@@ -1,26 +1,92 @@
 //Явцын тэмдэглэл
 import React, { useEffect, useState } from 'react';
-import { Card, Modal, Result, Spin, Tree } from 'antd';
+import { Modal, Result, Spin, Tree } from 'antd';
+import male from '../../../../assets/images/maleAvatar.svg';
 import Prescription from '../PrescriptionPrint';
 import Magadlaga from '../MagadlagaPrint';
-import jwtInterceopter from '../../../jwtInterceopter';
 import DiagnoseTypes from '../../service/DiagnoseTypes.js';
+import { useSelector } from 'react-redux';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
+//
+import AppointmentService from '../../../../services/appointment/api-appointment-service';
+import dayjs from 'dayjs';
 
-const { DirectoryTree } = Tree;
-export default function ProgressNotes({ Appointments }) {
-   const [testData, setTestData] = useState([]);
+export default function ProgressNotes() {
+   const incomeEMRData = useSelector(selectCurrentEmrData);
+   const [spinner, setSpinner] = useState(false);
+   const [spinerInfo, setSpinnerInfo] = useState(false);
+   const [inspectionNote, setInspectionNote] = useState({});
+   const [diagnosis, setDiagnosis] = useState([]);
+   const [services, setServices] = useState([]);
+   const [treeData, setTreeData] = useState([]);
+   const [isSelected, setIsSelected] = useState(false);
+   const [info, setInfo] = useState({});
+   const renderTreeNodes = (data) => {
+      return Object.keys(data).map((key) => {
+         if (Array.isArray(data[key])) {
+            return data[key].map((leaf) => <Tree.TreeNode key={leaf.key} title={leaf.title} isLeaf={leaf.isLeaf} />);
+         }
+         return (
+            <Tree.TreeNode key={key} title={key}>
+               {renderTreeNodes(data[key])}
+            </Tree.TreeNode>
+         );
+      });
+   };
+   const getPatientInspectionNotes = async () => {
+      setSpinner(true);
+      await AppointmentService.getByPageFilter({
+         params: {
+            patientId: incomeEMRData.patientId
+         }
+      })
+         .then(({ data: { response } }) => {
+            const treeData = [];
+            const data = response.data;
+            data?.map((item) => {
+               const id = item.id;
+               const year = dayjs(item?.createdAt).get('year');
+               const month = dayjs(item?.createdAt).get('month') + 1;
+               const day = dayjs(item?.createdAt).get('date');
+               treeData[year] = treeData[year] || {};
+               treeData[year][`${month}-${day}`] = treeData[year][`${month}-${day}`] || { children: [] };
+               treeData[year][`${month}-${day}`].children.push({
+                  key: id,
+                  title: item.cabinet.name,
+                  isLeaf: true
+               });
+            });
+            setTreeData(treeData);
+         })
+         .finally(() => {
+            setSpinner(false);
+         });
+   };
+   const getAppointmentById = async (id) => {
+      setSpinnerInfo(true);
+      await AppointmentService.getById(id)
+         .then(({ data: { response } }) => {
+            setInspectionNote(response.inspectionNote);
+            setDiagnosis(response.patientDiagnosis);
+            setServices([].concat(...response.serviceRequests?.map((request) => request.services)));
+            setInfo({
+               lastName: response.employee.lastName,
+               firstName: response.employee.firstName,
+               cabinetName: response.cabinet.name
+            });
+         })
+         .finally(() => {
+            setIsSelected(true);
+            setSpinnerInfo(false);
+         });
+   };
    const RenderHTML = ({ data }) => {
       if (data) {
+         console.log(JSON.parse(data));
          return Object.entries(JSON.parse(data)).map(([key, value], index) => {
             return (
                <div key={index} className="flex flex-wrap">
-                  {Object.entries(value).map((elValues, index) => {
-                     return (
-                        <p className="pr-2" key={index}>
-                           {elValues[0] + ': ' + elValues[1]}
-                        </p>
-                     );
-                  })}
+                  <p>{`${key}: ${value}`}</p>
                </div>
             );
          });
@@ -30,8 +96,8 @@ export default function ProgressNotes({ Appointments }) {
       const filteredData = DiagnoseTypes.filter((e) => e.value === diagnoseTypeId);
       return filteredData[0]?.label;
    };
-   const RenderHTMLDiagnose = ({ diagnoses }) => {
-      return diagnoses?.map((diagnose, index) => {
+   const RenderHTMLDiagnose = ({ diagnosis }) => {
+      return diagnosis?.map((diagnose, index) => {
          return (
             <div key={index} className="flex">
                <p className="font-semibold mx-2">{diagnoseTypeInfo(diagnose.diagnoseType)}: </p>
@@ -49,131 +115,66 @@ export default function ProgressNotes({ Appointments }) {
          );
       });
    };
-   const [spinner, setSpinner] = useState(false);
-   const [spinerInfo, setSpinnerInfo] = useState(false);
-   const [appointment, setAppointment] = useState({});
    const [printPrescription, setPrintPrescription] = useState([]);
    const [printMagadlaga, setPrintMagadlaga] = useState({});
    const [isOpenModalPrescription, setIsOpenModalPrescription] = useState(false);
    const [isOpenModalMagadlaga, setIsOpenModalMagadlaga] = useState(false);
-   const onChangeTree = async (key, evnt) => {
-      if (evnt?.node?.isLeaf) {
-         setSpinnerInfo(true);
-         await jwtInterceopter
-            .get('appointment/show/' + key[0])
-            .then((response) => {
-               const data = response.data.response;
-               setAppointment({
-                  employee: data.employee?.lastName.substring(0, 1) + '.' + data.employee?.firstName,
-                  name: data.cabinet?.name,
-                  inspectionNotes: data.inspectionNotes,
-                  diagnoses: data.patientDiagnosis,
-                  services: data.serviceRequest?.services
-               });
-            })
-            .catch((error) => {
-               console.log(error);
-            })
-            .finally(() => {
-               setSpinnerInfo(false);
-            });
+   const onChangeTree = async (info) => {
+      if (info.selected && info.node.isLeaf) {
+         getAppointmentById(Number(info.node.key));
+      } else {
+         setIsSelected(false);
       }
    };
    useEffect(() => {
-      setSpinner(true);
-      if (Appointments) {
-         var cloneAppointments = Appointments;
-         var treeData = [];
-         Object.entries(cloneAppointments).map(([key, value], _index) => {
-            if (value?.length > 0) {
-               var result = value?.reduce(function (r, a) {
-                  r[a.createdAt.substring(5, 10)] = r[a.createdAt.substring(5, 10)] || [];
-                  r[a.createdAt.substring(5, 10)].push(a);
-                  return r;
-               }, Object.create(null));
-               cloneAppointments[`${key}`] = result;
-            }
-         });
-         Object.entries(cloneAppointments).map(([key, value], index) => {
-            var tree = {
-               title: key,
-               key: `${index}`
-            };
-            if (Object.keys(value).length > 0) {
-               var children = [];
-               Object.entries(value).map(([key2, value2], idx) => {
-                  if (value2?.length > 0) {
-                     const data = value2.map((item, _indx) => {
-                        return {
-                           title: item.cabinet?.name,
-                           // key: `${index}-${idx}-${indx}`,
-                           key: item.id,
-                           isLeaf: true
-                        };
-                     });
-                     children.push({
-                        title: key2,
-                        key: `${index} - ${idx}`,
-                        children: data
-                     });
-                  } else {
-                     children.push({
-                        title: key2,
-                        key: `${index} - ${idx}`
-                     });
-                  }
-               });
-               tree['children'] = children;
-            }
-            treeData.push(tree);
-         });
-         setTestData(treeData);
-      }
-      const timer = setTimeout(() => {
-         setSpinner(false);
-      }, 1000);
-      return () => clearTimeout(timer);
-   }, [Appointments]);
+      getPatientInspectionNotes();
+   }, []);
    return (
       <>
          <div>
-            <div className="grid grid-cols-3 gap-3">
-               <Spin wrapperClassName="h-[572px]" spinning={spinner}>
-                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                     <div className="p-3">
-                        <DirectoryTree
-                           className="bg-transparent"
-                           multiple
-                           treeData={testData}
-                           onSelect={(keys, info) => onChangeTree(keys, info)}
-                        />
-                     </div>
+            <div className="grid grid-cols-3 gap-1">
+               <Spin wrapperClassName="h-[500px]" spinning={spinner}>
+                  <div className="rounded-md border-1 border-[#C9CDD4] bg-white w-full inline-block overflow-auto h-full">
+                     <Tree showLine showIcon onSelect={(_, info) => onChangeTree(info)}>
+                        {renderTreeNodes(treeData)}
+                     </Tree>
                   </div>
                </Spin>
                <div className="col-span-2">
-                  <Spin wrapperClassName="h-[572px]" spinning={spinerInfo}>
-                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                        <div className="p-3">
-                           {Object.entries(appointment)?.length > 0 ? (
-                              <Card
-                                 title={appointment?.employee + ' | ' + appointment?.name}
-                                 className="header-solid max-h-max rounded-md"
-                                 bodyStyle={{
-                                    padding: 10
-                                 }}
-                              >
-                                 <ul className="list-disc list-inside">
-                                    <li>ЭМЧИЙН ҮЗЛЭГ</li>
-                                    <RenderHTML data={appointment?.inspectionNotes[0]?.pain} />
-                                    <RenderHTML data={appointment?.inspectionNotes[0]?.inspection} />
-                                    <RenderHTML data={appointment?.inspectionNotes[0]?.question} />
-                                    <RenderHTML data={appointment?.inspectionNotes[0]?.plan} />
-                                    <li>ОНОШ</li>
-                                    <RenderHTMLDiagnose diagnoses={appointment.diagnoses} />
-                                    <li>ЗАХИАЛГА</li>
-                                    <RenderHTMLServices services={appointment?.services} />
-                                 </ul>
-                              </Card>
+                  <Spin wrapperClassName="h-[500px]" spinning={spinerInfo}>
+                     <div className="rounded-md border-1 border-[#C9CDD4] bg-white w-full inline-block overflow-auto h-full">
+                        <div className="p-1">
+                           {isSelected ? (
+                              <div className="flex flex-col gap-1 p-1">
+                                 <div className="flex flex-row gap-2">
+                                    <img src={male} width={70} alt="d" />
+                                    <div className="flex flex-col gap-1">
+                                       <p className="text-xs text-[#86909C]">
+                                          <span>Овог:</span>
+                                          <span className="text-black">{info.lastName}</span>
+                                       </p>
+                                       <p className="text-xs text-[#86909C]">
+                                          <span>Нэр:</span>
+                                          <span className="text-black">{info.firstName}</span>
+                                       </p>
+                                       <p className="text-xs text-[#86909C]">
+                                          <span>Кабинет:</span>
+                                          <span className="text-black">{info.cabinetName}</span>
+                                       </p>
+                                    </div>
+                                 </div>
+                                 <div className="regular-divider">Зовиур</div>
+                                 <RenderHTML data={inspectionNote?.pain} />
+                                 <div className="regular-divider">Асуумж</div>
+                                 <RenderHTML data={inspectionNote?.question} />
+                                 <div className="regular-divider">Бодит үзлэг</div>
+                                 <RenderHTML data={inspectionNote?.inspection} />
+                                 <div className="regular-divider">Онош</div>
+                                 <RenderHTMLDiagnose diagnosis={diagnosis} />
+                                 <div className="regular-divider">Төлөвлөгөө</div>
+                                 <RenderHTML data={inspectionNote?.plan} />
+                                 <RenderHTMLServices services={services} />
+                              </div>
                            ) : (
                               <Result title={'Хугацаа сонгох'} />
                            )}

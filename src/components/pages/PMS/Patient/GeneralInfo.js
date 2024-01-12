@@ -265,7 +265,7 @@ function GeneralInfo({ form, gbase }) {
                name="email"
                rules={[
                   {
-                     required: true,
+                     required: false,
                      type: 'email',
                      message: 'И-мэйл хэлбэр буруу !!!'
                   }

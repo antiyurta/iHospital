@@ -10,12 +10,12 @@ import Assesments from './Nurse/Assesments';
 import SentService from '../Insurance/sent-service';
 //
 
-export default function MainAmbulatory({ patientId, appointments }) {
+export default function MainAmbulatory({ patientId }) {
    const items = [
       {
          label: 'Явцын тэмдэглэл',
          key: 'item-1',
-         children: <ProgressNotes Appointments={appointments} />
+         children: <ProgressNotes />
       },
       {
          label: 'Амьдралын түүх',

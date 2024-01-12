@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useState } from 'react';
 import ListOfIssues from './ListOfIssues';
 import OrderHistory from './OrderHistory';
+import DocumentHistroy from '../EMR/NewEmrSupport/history/DocumentHistory';
 
 const OneWindow = () => {
    const [activeKey, setActiveKey] = useState(0);
@@ -12,7 +13,7 @@ const OneWindow = () => {
       } else if (activeKey === 1) {
          return OrderHistory;
       } else if (activeKey === 2) {
-         return <div>1</div>;
+         return DocumentHistroy;
       }
    }, [activeKey]);
    return (

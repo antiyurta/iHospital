@@ -1,7 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { formatNameForDoc, openNofi } from '../../comman';
-import { Button, Checkbox, Form, Input, Modal, Table } from 'antd';
-import { CloseOutlined, HeartOutlined, PlusCircleFilled } from '@ant-design/icons';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { formatNameForDoc, localMn, localMnC, openNofi } from '../../comman';
+import { Button, Checkbox, ConfigProvider, Form, Input, Modal, Table, Tabs } from 'antd';
+import {
+   CloseOutlined,
+   DeleteOutlined,
+   EditOutlined,
+   EyeOutlined,
+   FilterOutlined,
+   HeartOutlined,
+   PlusCircleFilled,
+   PlusCircleOutlined,
+   SearchOutlined
+} from '@ant-design/icons';
+import mnMN from 'antd/es/locale/mn_MN';
 
 //components
 import OrderTable from '../Order/Order';
@@ -11,71 +22,81 @@ import { NewInput, NewSearch, NewTextArea } from '../../Input/Input';
 import NewModal from '../../Modal/Modal';
 // services
 import ServiceService from '../../../services/service/service';
+import OrganizationStructureApi from '../../../services/organization/structure';
 import AuthContext from '../../../features/AuthContext';
+
+const InMode = {
+   EDIT: 'EDIT',
+   VIEW: 'VIEW'
+};
+
+const InTitle = {
+   EDIT: 'Засварлах',
+   VIEW: 'Харах'
+};
 
 function SetOrder({ handleclick }) {
    const { user } = useContext(AuthContext);
+   const [orders, setOrders] = useState([]);
+   const [activeKey, setActiveKey] = useState(1);
+   const [structures, setStructures] = useState([]);
+   const [isOpenModal, setIsOpenModal] = useState(false);
+   const [isOpenSubModal, setIsOpenSubModal] = useState(false);
+   const [isMode, setIsMode] = useState();
+   //
    const [form] = Form.useForm();
    const [packForm] = Form.useForm();
    const [editMode, setEditMode] = useState(false);
    const [searchValue, setSearchValue] = useState('');
    const [isLoading, setIsLoading] = useState(false);
    const [isLoadingConfirm, setIsLoadingConfirm] = useState(false);
-   const [isOpenModal, setIsOpenModal] = useState(false);
+
    const [isOpenPackageModal, setIsOpenPackageModal] = useState(false);
-   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
-   const [orders, setOrders] = useState([]);
+
    const [meta, setMeta] = useState({});
    const [selectedOrderId, setSelectedOrderId] = useState(Number);
-   const openOrCloseModal = (state, isOpen, data) => {
-      setEditMode(state);
-      setIsOpenAddModal(isOpen);
-      if (state) {
-         form.setFieldsValue(data);
-         setSelectedOrderId(data.id);
-      } else {
-         form.resetFields();
-      }
-   };
-   const getSetOrders = async (page, pageSize, value) => {
+   const getSetOrders = async () => {
       setIsLoading(true);
-      setSearchValue(value);
-      await ServiceService.getSetOrder({
-         params: {
-            page: page,
-            limit: pageSize,
-            code: value
-         }
-      }).then((response) => {
-         if (response.data.success) {
-            setOrders(response.data.response.data);
-            setMeta(response.data.response.meta);
+      await ServiceService.getSetOrder({})
+         .then(({ data: { response } }) => {
+            setOrders(response.data);
+         })
+         .finally(() => {
             setIsLoading(false);
+         });
+   };
+   const getStructures = async () => {
+      await OrganizationStructureApi.get({
+         params: {
+            type: 2
          }
+      }).then(({ data: { response } }) => {
+         setStructures(response.data);
       });
    };
 
-   const onFinish = async (values) => {
-      setIsLoadingConfirm(true);
-      if (editMode) {
-         await ServiceService.patchSetOrder(selectedOrderId, values).then((response) => {
-            if (response.data.success) {
-               setIsLoadingConfirm(false);
-               setIsOpenAddModal(false);
-               getSetOrders(1, 10);
-            }
-         });
-      } else {
-         await ServiceService.postSetOrder(values).then((response) => {
-            setIsLoadingConfirm(false);
-            setIsOpenAddModal(false);
-            getSetOrders(1, 10);
-         });
-      }
-   };
+   // const onFinish = async (values) => {
+   //    setIsLoadingConfirm(true);
+   //    if (editMode) {
+   //       await ServiceService.patchSetOrder(selectedOrderId, values).then((response) => {
+   //          if (response.data.success) {
+   //             setIsLoadingConfirm(false);
+   //             setIsOpenAddModal(false);
+   //             getSetOrders(1, 10);
+   //          }
+   //       });
+   //    } else {
+   //       await ServiceService.postSetOrder(values).then((response) => {
+   //          setIsLoadingConfirm(false);
+   //          setIsOpenAddModal(false);
+   //          getSetOrders(1, 10);
+   //       });
+   //    }
+   // };
 
    useEffect(() => {
-      // getSetOrders(1, 10);
+      getSetOrders();
+      getStructures();
    }, []);
 
    const SerivceTable = (props) => {
@@ -200,6 +221,116 @@ function SetOrder({ handleclick }) {
       );
    };
 
+   const FullTable = () => {
+      return (
+         <ConfigProvider locale={mnMN}>
+            <Table
+               rowKey={'id'}
+               columns={[
+                  {
+                     title: 'Төлөв',
+                     dataIndex: 'setOrderType',
+                     render: (setOrderType) => {
+                        if (setOrderType === 0) {
+                           return (
+                              <span className="bg-[#22A06B] p-1 flex justify-center text-white rounded-lg">
+                                 Нийтийн
+                              </span>
+                           );
+                        } else {
+                           return (
+                              <span className="bg-[#EC7A09] p-1 flex justify-center text-white rounded-lg">Хувийн</span>
+                           );
+                        }
+                     },
+                     filters: [
+                        {
+                           text: <span className="bg-[#22A06B] p-1 text-white rounded-lg">Нийтийн</span>,
+                           value: 0
+                        },
+                        {
+                           text: <span className="bg-[#EC7A09] p-1 text-white rounded-lg">Хувийн</span>,
+                           value: 1
+                        }
+                     ],
+                     onFilter: (value, record) => record.setOrderType === value
+                  },
+                  {
+                     title: 'Тасгийн нэр',
+                     dataIndex: ['structure', 'name'],
+                     filters: structures?.map((structure) => ({
+                        text: structure.name,
+                        value: structure.id
+                     })),
+                     filterSearch: true,
+                     onFilter: (value, record) => record.structureId === value
+                  },
+                  {
+                     title: 'Эмч',
+                     render: (_, row) => formatNameForDoc(row?.createdLastName, row?.createdFirstName)
+                  },
+                  {
+                     title: 'Тайлбар',
+                     dataIndex: 'description'
+                  },
+                  {
+                     title: '',
+                     render: (_, row) => (
+                        <div className="flex flex-row gap-2">
+                           <EyeOutlined
+                              onClick={() => {
+                                 setIsMode(InMode.VIEW);
+                                 setIsOpenSubModal(true);
+                              }}
+                           />
+                           <EditOutlined
+                              onClick={() => {
+                                 setIsMode(InMode.EDIT);
+                                 setIsOpenSubModal(true);
+                              }}
+                           />
+                           <DeleteOutlined />
+                        </div>
+                     )
+                  }
+               ]}
+               dataSource={orders}
+               pagination={false}
+            />
+         </ConfigProvider>
+      );
+   };
+   const PublicTable = () => {
+      return (
+         <Table
+            rowKey={'id'}
+            columns={[
+               {
+                  title: 'Төлөв',
+                  dataIndex: 'setOrderType'
+               }
+            ]}
+            dataSource={orders?.filter((order) => order.setOrderType === 0)}
+            pagination={false}
+         />
+      );
+   };
+   const PrivateTable = () => {
+      return (
+         <Table
+            rowKey={'id'}
+            columns={[
+               {
+                  title: 'Төлөв',
+                  dataIndex: 'setOrderType'
+               }
+            ]}
+            dataSource={orders?.filter((order) => order.setOrderType === 1)}
+            pagination={false}
+         />
+      );
+   };
+
    return (
       <>
          <button
@@ -211,187 +342,59 @@ function SetOrder({ handleclick }) {
             <HeartOutlined />
             Сэт-Ордер
          </button>
-         <Modal title="Багц үүсгэх" width={400} open={isOpenPackageModal} onCancel={() => setIsOpenPackageModal(false)}>
-            <Form form={packForm} layout="vertical">
-               <Form.Item className="mb-0" label="Багцын нэр:">
-                  <Input />
-               </Form.Item>
-               <Form.Item className="mb-0" label="Тасаг сонгох:">
-                  <Input />
-               </Form.Item>
-               <Form.Item className="mb-0" label="Код:">
-                  <Input />
-               </Form.Item>
-               <Form.Item className="mb-0" label="Онош:">
-                  <Input />
-               </Form.Item>
-               <Form.Item className="mb-0" label="Загвар болгож хадгалах">
-                  <Checkbox />
-               </Form.Item>
-            </Form>
-         </Modal>
          <Modal
             title="Сэт-Ордер сонгох"
-            width={1500}
+            width={1000}
             open={isOpenModal}
             onCancel={() => setIsOpenModal(false)}
-            okText="Хадгалах"
+            okButtonProps={{
+               style: {
+                  display: 'none'
+               }
+            }}
          >
             <div className="internal-order-set-order">
-               <div className="left">
-                  <Input placeholder="Хайх ..." />
-                  <div>1</div>
-                  <Button onClick={() => setIsOpenPackageModal(true)}>Багц үүсгэх</Button>
+               <div className="filter">
+                  <Input prefix={<SearchOutlined />} placeholder="Хайх ...." />
+                  <div className="filter-icon">
+                     <FilterOutlined />
+                  </div>
                </div>
-               <div className="right">
-                  <NewSearch
-                     style={{
-                        width: 300
-                     }}
-                     placeholder="Код хайх"
-                     enterButton="Хайх"
-                     onSearch={(value) => getSetOrders(1, 10, value)}
-                  />
-                  <Table
-                     rowKey="id"
-                     bordered
-                     loading={{
-                        spinning: isLoading,
-                        tip: 'Уншиж байна....'
-                     }}
-                     columns={[
-                        {
-                           title: 'Код',
-                           dataIndex: 'code'
-                        },
-                        {
-                           title: 'Тайлбар',
-                           dataIndex: 'description'
-                        },
-                        {
-                           title: 'Үйлчилгээ',
-                           dataIndex: 'services',
-                           render: (text) => {
-                              return (
-                                 <ul>
-                                    {text?.map((service, index) => {
-                                       return (
-                                          <li
-                                             key={index}
-                                             style={{
-                                                display: 'flex',
-                                                alignItems: 'start'
-                                             }}
-                                          >
-                                             -{service.serviceName}
-                                          </li>
-                                       );
-                                    })}
-                                 </ul>
-                              );
-                           }
-                        },
-                        {
-                           title: 'Үүсгэсэн эмч',
-                           render: (_, row) => {
-                              return formatNameForDoc(row.createdLastName, row.createdFirstName);
-                           }
-                        },
-                        {
-                           title: 'Үйлдэл',
-                           render: (_, row) => {
-                              return (
-                                 <div className="flex flex-row justify-center gap-3">
-                                    <div>
-                                       {user.userId === row.createdBy ? (
-                                          <Button onClick={() => openOrCloseModal(true, true, row)}>Засах</Button>
-                                       ) : null}
-                                    </div>
-                                    <Button
-                                       type="primary"
-                                       onClick={() => {
-                                          handleclick(row.services);
-                                          setIsOpenModal(false);
-                                       }}
-                                    >
-                                       Aшиглах
-                                    </Button>
-                                 </div>
-                              );
-                           }
-                        }
-                     ]}
-                     dataSource={orders}
-                     pagination={{
-                        position: ['bottomCenter'],
-                        size: 'small',
-                        current: meta.page,
-                        total: meta.itemCount,
-                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                        pageSize: meta.limit,
-                        showSizeChanger: true,
-                        pageSizeOptions: ['5', '10', '20', '50'],
-                        showQuickJumper: true,
-                        onChange: (page, pageSize) => getSetOrders(page, pageSize, searchValue)
-                     }}
-                     footer={() => (
-                        <div>
-                           <Button type="primary" onClick={() => openOrCloseModal(false, true)}>
-                              Нэмэх
-                           </Button>
-                        </div>
-                     )}
-                  />
-               </div>
+               <Tabs
+                  type="card"
+                  activeKey={activeKey}
+                  onChange={setActiveKey}
+                  items={[
+                     {
+                        key: 1,
+                        label: 'Бүгд',
+                        children: <FullTable />
+                     },
+                     {
+                        key: 2,
+                        label: 'Нийтийн жор',
+                        children: <PublicTable />
+                     },
+                     {
+                        key: 3,
+                        label: 'Хувийн жор',
+                        children: <PrivateTable />
+                     }
+                  ]}
+                  tabBarExtraContent={
+                     <button
+                        onClick={() => {
+                           setIsOpenAddModal(true);
+                        }}
+                     >
+                        <PlusCircleOutlined />
+                        Сэт-Ордер нэмэх
+                     </button>
+                  }
+               />
             </div>
          </Modal>
-         <Modal
-            title={editMode ? 'Сэт-Ордер засах' : 'Сэт-Ордер нэмэх'}
-            open={isOpenAddModal}
-            onCancel={() => openOrCloseModal(false, false)}
-            onOk={() => {
-               form.validateFields().then((values) => {
-                  if (values.services === undefined) {
-                     openNofi('error', 'Алдаа', 'Хамгийн багадаа нэг үйлчилгээ нэмэх');
-                  } else {
-                     onFinish(values);
-                  }
-               });
-            }}
-            confirmLoading={isLoadingConfirm}
-         >
-            <Form form={form} layout="vertical">
-               <Form.Item
-                  name="code"
-                  label="Код:"
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Код заавал'
-                     }
-                  ]}
-               >
-                  <NewInput />
-               </Form.Item>
-               <Form.Item
-                  name="description"
-                  label="Тайлбар:"
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Тайлбар заавал'
-                     }
-                  ]}
-               >
-                  <NewTextArea />
-               </Form.Item>
-               <Form.List name="services">
-                  {(services, { remove }) => {
-                     return <SerivceTable services={services} remove={remove} />;
-                  }}
-               </Form.List>
-            </Form>
-         </Modal>
+         <Modal title={InTitle[isMode]} open={isOpenSubModal} onCancel={() => setIsOpenSubModal(false)}></Modal>
       </>
    );
 }

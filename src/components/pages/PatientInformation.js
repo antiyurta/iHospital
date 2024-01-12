@@ -154,7 +154,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                   </div>
                ) : null}
                <p className="names">{`Овог: ${patient?.lastName || ''} | Нэр: ${patient?.firstName || ''}`}</p>
-               <div className="flex justify-between">
+               <div className="infos">
                   <div className="flex flex-row gap-3">
                      <img
                         style={{
@@ -171,8 +171,6 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      <img src={addressSymbol} alt="Addres" />
                      <p>{patient?.registerNumber}</p>
                   </div>
-               </div>
-               <div className="flex justify-between">
                   <div className="flex flex-row gap-3">
                      <img src={mailSymbol} alt="symbolMail" />
                      <p>{patient?.email}</p>

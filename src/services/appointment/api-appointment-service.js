@@ -6,6 +6,9 @@ class ApiAppointmentService {
    async getByPageFilter(conf) {
       return await jwtInterceopter.get('appointment', conf);
    }
+   async getById(id) {
+      return await jwtInterceopter.get('appointment/show/' + id);
+   }
    async postAppointment(data) {
       return await jwtInterceopter.post('appointment', data);
    }
