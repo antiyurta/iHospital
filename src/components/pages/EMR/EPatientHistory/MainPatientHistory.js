@@ -301,7 +301,7 @@ function MainPatientHistory({ handleClick }) {
    return (
       <>
          {usageType === 'OUT' ? (
-            <Spin wrapperClassName="h-full" spinning={loading} tip="Уншиж байна ...">
+            <Spin wrapperClassName="h-full" spinning={false} tip="Уншиж байна ...">
                <Tabs destroyInactiveTabPane defaultActiveKey={activeKey} items={items} />
             </Spin>
          ) : null}
