@@ -291,6 +291,7 @@ const Attachment2 = ({ document }) => {
                document={document}
                documentValue={87}
                documentType={0}
+               isBackButton={false}
                onOk={(state) => {
                   getData();
                   setIsOpenModal(state);

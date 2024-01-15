@@ -36,8 +36,8 @@ const DiagnoseWindow = (props) => {
          });
    };
    useEffect(() => {
-      getDiagnosis(1, 10, paramValue, param);
-   }, []);
+      isOpenModal && getDiagnosis(1, 10, paramValue, param);
+   }, [isOpenModal]);
    return (
       <>
          <Button

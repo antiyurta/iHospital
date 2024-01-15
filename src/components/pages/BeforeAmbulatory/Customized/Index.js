@@ -27,7 +27,7 @@ function Index(props) {
       state: { slotId }
    } = useLocation();
    // slotId ni appointment ruu patchlah ued heregtei
-   const { isEdit, editId, document, documentValue, documentType, onOk } = props;
+   const { isEdit, editId, document, documentValue, documentType, onOk, isBackButton, handleBackButton } = props;
    const { appointmentType, usageType, patientId, appointmentId, inpatientRequestId } =
       useSelector(selectCurrentEmrData);
    const hospitalName = useSelector(selectCurrentHospitalName);
@@ -338,7 +338,7 @@ function Index(props) {
             </div>
          ) : (
             <>
-               <div className="flex flex-col gap-1">
+               <div className="flex flex-col gap-1 justify-between">
                   <Form
                      form={form}
                      layout="vertical"
@@ -356,13 +356,23 @@ function Index(props) {
                         <NewFormRender useForm={form} form={documentForm} formOptionIds={[]} isCheck={true} />
                      </div>
                   </Form>
-                  <Button
-                     loading={isLoading}
-                     onClick={() => form.validateFields().then((values) => onFinish(values))}
-                     type="primary"
-                  >
-                     {isEdit ? 'Засах' : 'Хадгалах'}
-                  </Button>
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Button
+                        danger
+                        onClick={() => {
+                           handleBackButton(true);
+                        }}
+                     >
+                        Буцах
+                     </Button>
+                     <Button
+                        loading={isLoading}
+                        onClick={() => form.validateFields().then((values) => onFinish(values))}
+                        type="primary"
+                     >
+                        {isEdit ? 'Засах' : 'Хадгалах'}
+                     </Button>
+                  </div>
                </div>
             </>
          )}
