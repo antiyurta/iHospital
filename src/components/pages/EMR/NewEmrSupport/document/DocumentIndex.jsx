@@ -24,7 +24,7 @@ const DocumentIndex = (props) => {
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureIds: incomeEmrData.departmentId,
+            structureIds: [incomeEmrData.departmentId],
             usageType: usageType,
             documentType: 0
          }
