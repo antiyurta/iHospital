@@ -3,9 +3,6 @@ class ServiceRequest {
    async get(conf) {
       return await jwtInterceopter.get('service-request', conf);
    }
-   async getPatientOts(patientId) {
-      return await jwtInterceopter.get('service-request/patientId/' + patientId);
-   }
    async post(data) {
       return await jwtInterceopter.post('service-request', data);
    }

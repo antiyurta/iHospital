@@ -5,6 +5,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useMemo } from 'react';
 
 export const ListCareType = ({ type, getTypeById }) => {
+   console.log(type);
    const [searchValue, setSearchValue] = useState('');
    const [activeKey, setActiveKey] = useState();
    const [types, setTypes] = useState([]);

@@ -47,6 +47,9 @@ function DocumentUpload({ type }) {
    // xray
    const [xrays, setXrays] = useState([]);
    const openModal = (state, row) => {
+      if (!state) {
+         setNewIndexData([]);
+      }
       form.resetFields();
       if (row != null) {
          setSelectedId(row.id);

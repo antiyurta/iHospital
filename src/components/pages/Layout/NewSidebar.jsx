@@ -6,7 +6,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import PermissionServices from '../../../services/organization/permission';
 import MenuItem from './MenuItem';
 import MenuItemChildren from './MenuItemChildren';
-const Sidebar = () => {
+const Sidebar = ({ collapsed }) => {
+   console.log('collapsed', collapsed);
    const [userMenu, setMenus] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const UserId = useSelector(selectCurrentUserId);

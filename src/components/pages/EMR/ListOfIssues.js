@@ -3,6 +3,7 @@ import PatientDiagnoseSerivce from '../../../services/emr/patientDiagnose';
 import Diagnose from './ListOfIssues/Diagnose';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../features/emrReducer';
+import { Each } from '../../../features/Each';
 
 function ListOfIssues() {
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -14,11 +15,12 @@ function ListOfIssues() {
          }
       }).then(({ data: { response } }) => {
          const data = response?.data?.map((appointment) => ({
-            appointmentId: appointment.id,
+            appointmentId: appointment.appointmentId,
             doctor: appointment?.createdLastname?.substring(0, 1) + '.' + appointment.createdFirstname,
             diagnose: appointment.diagnose,
             inspectionDate: appointment.createdAt
          }));
+         console.log(data);
          setData(data);
       });
    };
@@ -27,9 +29,7 @@ function ListOfIssues() {
    }, []);
    return (
       <div className="list-of-issues">
-         {data.map((diagnose, index) => {
-            return <Diagnose key={index} diagnose={diagnose} index={index} />;
-         })}
+         <Each of={data} render={(diagnose, index) => <Diagnose key={index} diagnose={diagnose} index={index} />} />
       </div>
    );
 }

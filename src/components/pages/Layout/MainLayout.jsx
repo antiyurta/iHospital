@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useContext } from 'react';
+import React, { Fragment, Suspense, useContext, useState } from 'react';
 import companyLogo from '../../../assets/logo/iHospital.png';
 import male from '../../../assets/images/maleAvatar.svg';
 import { Outlet } from 'react-router-dom';
@@ -9,11 +9,14 @@ import Sidebar from './NewSidebar';
 import { useNavigate } from 'react-router-dom';
 import FullScreenLoader from '../../FullScreenLoader';
 import AuthContext from '../../../features/AuthContext';
-import { Button } from 'antd';
+import { Button, Layout } from 'antd';
+
+const { Header, Content, Sider } = Layout;
 
 const MainLayout = () => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
+   const [collapsed, setCollapsed] = useState(false);
    const { logoutt } = useContext(AuthContext);
    const firstName = useSelector(selectCurrentFirstName);
    const lastName = useSelector(selectCurrentLastName);
@@ -24,14 +27,20 @@ const MainLayout = () => {
       navigate('/');
    };
    return (
-      <div className="main-layout">
-         <div className="main-body">
-            <div className="sidebar">
+      <>
+         {/* <Layout className="main-layout">
+            <Sider trigger={null} collapsible collapsed={collapsed}>
                <div className="sidebar-header">
                   <img src={companyLogo} alt="logo" />
-                  <Button type="link" icon={<MenuFoldOutlined />} />
+                  <Button
+                     type="link"
+                     onClick={() => {
+                        setCollapsed(!collapsed);
+                     }}
+                     icon={<MenuFoldOutlined />}
+                  />
                </div>
-               <Sidebar />
+               <Sidebar collapsed={collapsed} />
                <div className="sidebar-footer">
                   <div className="image-cropper" onClick={() => navigate('/profile')}>
                      <img src={male} className="profile-pic" alt="profile" />
@@ -44,16 +53,42 @@ const MainLayout = () => {
                      <LogoutOutlined title="Гарах" />
                   </div>
                </div>
-            </div>
-            <div className="main-content">
-               <Fragment>
-                  <Suspense fallback={<FullScreenLoader full={true} />}>
-                     <Outlet />
-                  </Suspense>
-               </Fragment>
+            </Sider>
+            <Layout>
+               <Content>Content</Content>
+            </Layout>
+         </Layout> */}
+         <div className="main-layout">
+            <div className="main-body">
+               <div className="sidebar">
+                  <div className="sidebar-header">
+                     <img src={companyLogo} alt="logo" />
+                     <Button type="link" icon={<MenuFoldOutlined />} />
+                  </div>
+                  <Sidebar collapsed={collapsed} />
+                  <div className="sidebar-footer">
+                     <div className="image-cropper" onClick={() => navigate('/profile')}>
+                        <img src={male} className="profile-pic" alt="profile" />
+                     </div>
+                     <div className="profile-info">
+                        <p className="profile-lastname">{lastName}</p>
+                        <p className="profile-firstname">{firstName}</p>
+                     </div>
+                     <div className="logout" onClick={() => handelLogOut()}>
+                        <LogoutOutlined title="Гарах" />
+                     </div>
+                  </div>
+               </div>
+               <div className="main-content">
+                  <Fragment>
+                     <Suspense fallback={<FullScreenLoader full={true} />}>
+                        <Outlet />
+                     </Suspense>
+                  </Fragment>
+               </div>
             </div>
          </div>
-      </div>
+      </>
    );
 };
 export default MainLayout;

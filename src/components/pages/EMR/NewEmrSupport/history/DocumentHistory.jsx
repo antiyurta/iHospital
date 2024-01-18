@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
-import { Button, Empty, Modal, Table } from 'antd';
+import { Button, Empty, Modal, Table, Tabs } from 'antd';
 import { ReturnById, ReturnByIdToCode } from '../../../611/Document/Index';
 import dayjs from 'dayjs';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
@@ -10,10 +10,12 @@ import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import ReactToPrint from 'react-to-print';
 
 import Document from './document';
+import GroupDocument from './groupDocument';
 
 import apiAppointmentService from '../../../../../services/appointment/api-appointment-service';
 import DocumentsFormPatientService from '../../../../../services/organization/document';
 import serviceService from '../../../../../services/service/service';
+import { Each } from '../../../../../features/Each';
 
 const DocumentHistory = () => {
    const currentRef = useRef(null);
@@ -23,8 +25,10 @@ const DocumentHistory = () => {
    const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
    const [isOpenModalView, setIsOpenModalView] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
-   const [documentsIn, setDocuments] = useState([]);
-   const [documentsOut, setDocumentsOut] = useState([]);
+   const [documentsOut, setDocuments] = useState([]);
+   const [documentsIn, setDocumentsIn] = useState([]);
+   const [documentsInNurse, setDocumentsInNurse] = useState([]);
+   const [documentsInDoctor, setDocumentsInDoctor] = useState([]);
    const [selectedDocument, setSelectedDocument] = useState({});
    const [selectedDocuments, setSelectedDocuments] = useState([]);
    const [selectedId, setSelectedId] = useState(false);
@@ -123,7 +127,8 @@ const DocumentHistory = () => {
          return await getInpatientRequest(key, index, value);
       });
       const items = await Promise.all(promises);
-      setDocumentsOut(items);
+      console.log('items', items);
+      setDocumentsInDoctor(items);
    };
 
    const ambColumns = [
@@ -312,9 +317,40 @@ const DocumentHistory = () => {
    }, []);
    return (
       <div className="list-of-orders">
-         {usageType === 'OUT'
-            ? documentsIn?.map((documentIn, index) => <Document key={index} document={documentIn} index={index} />)
-            : null}
+         {usageType === 'OUT' ? (
+            documentsOut
+               ?.filter((documentOut) => documentOut.documentId != 87)
+               .map((fDocumentOut, index) => (
+                  <Document key={index} document={fDocumentOut} index={index} incomeEmrData={incomeEmrData} />
+               ))
+         ) : (
+            <Tabs
+               type="card"
+               tabBarStyle={{
+                  backgroundColor: 'white'
+               }}
+               items={[
+                  {
+                     key: 1,
+                     label: 'Эмч',
+                     children: (
+                        <div className="documents-in">
+                           <Each
+                              of={documentsInDoctor}
+                              render={(documentInDoctor, index) => (
+                                 <GroupDocument key={index} document={documentInDoctor} />
+                              )}
+                           />
+                        </div>
+                     )
+                  },
+                  {
+                     key: 2,
+                     label: 'Сувилагч'
+                  }
+               ]}
+            />
+         )}
          {/* <Table
             rowKey={usageType === 'OUT' ? '_id' : 'index'}
             rowClassName="hover: cursor-pointer"

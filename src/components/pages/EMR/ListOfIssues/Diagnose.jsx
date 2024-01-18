@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 
 import collapseIcon from './collapse.svg';
 import expandIcon from './expand.svg';
 import arrowNext from './arrowNext.svg';
 import dayjs from 'dayjs';
+import EmrContext from '../../../../features/EmrContext';
 
 const Diagnose = (props) => {
    const {
       diagnose: {
+         appointmentId,
          doctor,
          inspectionDate,
          diagnose: { code, nameMn }
       },
       index
    } = props;
+   const { setId } = useContext(EmrContext);
    const [expanded, setExpanded] = useState(false);
+   const setAppointmentIdForContext = () => {
+      setId(appointmentId);
+   };
    return (
       <div className="diagnose">
          <div onClick={() => setExpanded(!expanded)} className="header">
@@ -32,7 +38,7 @@ const Diagnose = (props) => {
                   <p>{`Асуудал: ${nameMn}`}</p>
                </div>
                <div className="description">
-                  <button>
+                  <button onClick={setAppointmentIdForContext}>
                      Дэлгэрэнгүй <img src={arrowNext} alt="arr" />
                   </button>
                </div>

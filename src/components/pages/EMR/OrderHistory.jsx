@@ -7,13 +7,31 @@ import { CalendarOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import arrowNext from './ListOfIssues/arrowNext.svg';
 //api
 import ServiceRequestApi from '../../../services/serviceRequest';
+import { Each } from '../../../features/Each';
 
 const OrderHistory = () => {
    const IncomeEMRData = useSelector(selectCurrentEmrData);
    const [orders, setOrders] = useState([]);
    const getPatientRequests = async () => {
-      await ServiceRequestApi.getPatientOts(IncomeEMRData.patientId).then(({ data: { response } }) => {
-         setOrders(response);
+      await ServiceRequestApi.get({
+         params: {
+            patientId: IncomeEMRData.patientId
+         }
+      }).then(({ data: { response } }) => {
+         var newOrders = [];
+         response.data?.map((data) => {
+            data.services?.map((service) => {
+               newOrders.push({
+                  id: service.id,
+                  name: service.name,
+                  type: service.type,
+                  typeId: service.typeId,
+                  createdAt: data.createdAt
+               });
+            });
+         });
+         console.log(newOrders);
+         setOrders(newOrders);
       });
    };
    const getName = (order) => {
@@ -33,7 +51,7 @@ const OrderHistory = () => {
             <div key={index} className="order">
                <div className="header">
                   <p>{`${index + 1}.`}</p>
-                  <p className="name">{getName(order)}</p>
+                  <p className="name">{order.name}</p>
                </div>
                <div className="description">
                   <p>

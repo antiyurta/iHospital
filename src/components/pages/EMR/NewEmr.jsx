@@ -21,6 +21,7 @@ import { FullscreenExitOutlined, FullscreenOutlined, PrinterOutlined } from '@an
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import NewEmrSupport from './NewEmrSupport';
+import { EmrContextProvider } from '../../../features/EmrContext';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -107,7 +108,7 @@ class NewEmr extends React.Component {
    }
    render() {
       return (
-         <>
+         <EmrContextProvider>
             <div className="new-emr">
                <NewEmrSupport />
                <div className="new-emr-index">
@@ -305,7 +306,7 @@ class NewEmr extends React.Component {
                   </Button>
                </div>
             </Modal>
-         </>
+         </EmrContextProvider>
       );
    }
 }

@@ -8,164 +8,165 @@
    width: 100%;
    height: 100vh;
    background-color: white;
-   .sidebar,
-   .ant-layout-sider-children {
-      gap: 12px;
-      padding: 12px;
-      transition: all 0.5s;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background-color: white;
-      .sidebar-header {
-         width: 100%;
-         display: flex;
-         flex-direction: row;
-         gap: 12px;
-         justify-content: space-between;
-         align-items: center;
-         img {
-            height: 53px;
-         }
-      }
-      .sidebar-body {
-         height: 100%;
-         overflow: auto;
-         width: 100%;
-         padding: 8px;
-         display: flex;
-         flex-direction: column;
-         gap: 8px;
-         border-radius: 12px;
-         background-color: #eff4fa;
-         .menu-item {
-            display: flex;
-            padding: 6px;
-            flex-direction: row;
-            gap: 8px;
-            align-items: center;
-            color: #38586e;
-            p > svg {
-               width: 20px;
-               height: 20px;
-            }
-            &:hover {
-               cursor: pointer;
-               border-radius: 8px;
-               background-color: #c0dcff;
-               color: #2d8cff !important;
-            }
-         }
-         .menu-item.active {
-            border-radius: 8px;
-            color: #2d8cff;
-            background-color: #c0dcff;
-         }
-         .menu-item-sub {
-            display: flex;
-            flex-direction: column;
-            transition: 0.3s ease;
-            padding: 6px;
-            .menu-item-sub-head {
-               p > svg {
-                  width: 20px;
-                  height: 20px;
-               }
-               display: flex;
-               flex-direction: row;
-               justify-content: space-between;
-               img {
-                  height: 14px;
-               }
-               &:hover {
-                  cursor: pointer;
-               }
-            }
-            .menu-item-sub-body {
-               display: flex;
-               flex-direction: column;
-               padding-left: 6px;
-               gap: 3px;
-               height: auto;
-               .before {
-                  display: flex;
-                  flex-direction: row;
-                  gap: 3px;
-                  a {
-                     width: 100%;
-                  }
-                  img {
-                     height: 100%;
-                  }
-               }
-            }
-            p.label {
-               color: #a0aab3;
-            }
-         }
-         .menu-item-sub.expand {
-            height: auto;
-         }
-      }
-      .sidebar-body.loading {
-         justify-content: center;
-         align-items: center;
-      }
-      .sidebar-footer {
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-         gap: 8px;
-         padding: 12px;
-         justify-content: space-between;
-         border-top: 1px solid #c9cdd4;
-         &:hover {
-            cursor: pointer;
-         }
-         .image-cropper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 50%;
-         }
-         .profile-pic {
-            height: auto;
-            width: auto;
-         }
-         .profile-info {
-            .profile-lastname {
-               font-size: 14px;
-               font-weight: 700;
-               color: #445565;
-            }
-            .profile-firstname {
-               font-size: 13px;
-               font-weight: 500;
-               color: #a8b3be;
-            }
-         }
-         .logout {
-            font-size: 18px;
-            color: red;
-            &:hover {
-               cursor: pointer;
-            }
-         }
-      }
-   }
-   .main-content {
-      width: calc(100% - 220px);
-   }
    .main-body {
       width: 100%;
       height: calc(100%);
       display: flex;
       flex-direction: row;
       background-color: white;
+      .sidebar {
+         gap: 12px;
+         padding: 12px;
+         transition: all 0.5s;
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         min-width: 220px;
+         max-width: 220px;
+         background-color: white;
+         .sidebar-header {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            img {
+               height: 53px;
+            }
+         }
+         .sidebar-body {
+            height: 100%;
+            overflow: auto;
+            width: 100%;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-radius: 12px;
+            background-color: #eff4fa;
+            .menu-item {
+               display: flex;
+               padding: 6px;
+               flex-direction: row;
+               gap: 8px;
+               align-items: center;
+               color: #38586e;
+               p > svg {
+                  width: 20px;
+                  height: 20px;
+               }
+               &:hover {
+                  cursor: pointer;
+                  border-radius: 8px;
+                  background-color: #c0dcff;
+                  color: #2d8cff !important;
+               }
+            }
+            .menu-item.active {
+               border-radius: 8px;
+               color: #2d8cff;
+               background-color: #c0dcff;
+            }
+            .menu-item-sub {
+               display: flex;
+               flex-direction: column;
+               transition: 0.3s ease;
+               padding: 6px;
+               .menu-item-sub-head {
+                  p > svg {
+                     width: 20px;
+                     height: 20px;
+                  }
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: space-between;
+                  img {
+                     height: 14px;
+                  }
+                  &:hover {
+                     cursor: pointer;
+                  }
+               }
+               .menu-item-sub-body {
+                  display: flex;
+                  flex-direction: column;
+                  padding-left: 6px;
+                  gap: 3px;
+                  height: auto;
+                  .before {
+                     display: flex;
+                     flex-direction: row;
+                     gap: 3px;
+                     a {
+                        width: 100%;
+                     }
+                     img {
+                        height: 100%;
+                     }
+                  }
+               }
+               p.label {
+                  color: #a0aab3;
+               }
+            }
+            .menu-item-sub.expand {
+               height: auto;
+            }
+         }
+         .sidebar-body.loading {
+            justify-content: center;
+            align-items: center;
+         }
+         .sidebar-footer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            justify-content: space-between;
+            border-top: 1px solid #c9cdd4;
+            &:hover {
+               cursor: pointer;
+            }
+            .image-cropper {
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               width: 45px;
+               height: 45px;
+               position: relative;
+               overflow: hidden;
+               border-radius: 50%;
+            }
+            .profile-pic {
+               height: auto;
+               width: auto;
+            }
+            .profile-info {
+               .profile-lastname {
+                  font-size: 14px;
+                  font-weight: 700;
+                  color: #445565;
+               }
+               .profile-firstname {
+                  font-size: 13px;
+                  font-weight: 500;
+                  color: #a8b3be;
+               }
+            }
+            .logout {
+               font-size: 18px;
+               color: red;
+               &:hover {
+                  cursor: pointer;
+               }
+            }
+         }
+      }
+      .main-content {
+         width: calc(100% - 220px);
+      }
    }
 }
 

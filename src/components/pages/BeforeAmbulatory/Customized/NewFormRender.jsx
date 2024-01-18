@@ -374,13 +374,7 @@ const NewFormRender = (props) => {
    }, [indexes]);
 
    useEffect(() => {
-      const firstIndexes = form?.documentForm
-         ?.map((item) => {
-            if (item.parentIndex === null) {
-               return item.index;
-            }
-         })
-         .filter(Boolean);
+      const firstIndexes = form?.documentForm?.filter((item) => item.parentIndex === null)?.map((fItem) => fItem.index);
       setIndexes(firstIndexes);
    }, [form]);
 
