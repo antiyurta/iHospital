@@ -107,13 +107,19 @@ const DocumentIndex = (props) => {
             title={selectedDocument?.docName}
             open={isOpenRenderModal}
             onCancel={() => setIsOpenRenderModal(false)}
-            width={800}
+            width={700}
+            footer={null}
          >
             <Customized
+               propsUsageType={usageType}
+               isEdit={false}
+               editId={null}
                document={selectedDocument}
                documentValue={selectedDocument?.value}
                documentType={0}
-               onOk={(state) => console.log(state)}
+               onOk={(state) => setIsOpenRenderModal(state)}
+               isBackButton={false}
+               handleBackButton={() => null}
             />
          </Modal>
       </div>

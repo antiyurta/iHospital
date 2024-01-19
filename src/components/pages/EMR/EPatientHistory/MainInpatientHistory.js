@@ -1,5 +1,5 @@
-import { Modal, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Badge, Modal, Table, Tabs } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentAppId, selectCurrentDepId } from '../../../../features/authReducer';
 import { openNofi } from '../../../comman';
@@ -15,6 +15,8 @@ import OrganizationDocumentRoleServices from '../../../../services/organization/
 import Customized from '../../BeforeAmbulatory/Customized/Index';
 //
 import ArrowIcon from '../../EMR/NewEmrSupport/document/arrow.svg';
+import DocumentDraft from './DocumentDraft';
+import EmrContext from '../../../../features/EmrContext';
 
 const MonitorType = {
    List: 'list',
@@ -24,6 +26,7 @@ const MonitorType = {
 function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
    const AppIds = useSelector(selectCurrentAppId);
    const DepIds = useSelector(selectCurrentDepId);
+   const { countOfDocument, countOfDraft, setDocumentCount } = useContext(EmrContext);
    const [currentMonitor, setCurrentMonitor] = useState(MonitorType.List);
    const [selectedDocument, setSelectedDocument] = useState();
    const [documents, setDocuments] = useState([]);
@@ -86,6 +89,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                })
             );
             const sortedArray = data.slice().sort((a, b) => a.value - b.value);
+            setDocumentCount(sortedArray?.length);
             setDocuments(sortedArray);
          }
       });
@@ -96,52 +100,101 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
    return (
       <>
          {currentMonitor === MonitorType.List ? (
-            <Table
-               rowKey="value"
-               columns={[
+            <Tabs
+               type="card"
+               fo
+               items={[
                   {
-                     title: '№',
-                     render: (_, _record, index) => index + 1,
-                     width: 40
-                  },
-                  {
-                     title: 'Нэр',
-                     dataIndex: 'docName'
-                  },
-                  {
-                     title: 'Дугаар',
-                     dataIndex: 'label'
-                  },
-                  {
-                     title: ' ',
-                     render: (_, row) => (
+                     key: 1,
+                     label: (
                         <div
-                           className="hover: cursor-pointer"
-                           onClick={() => {
-                              setCurrentMonitor(MonitorType.Document);
-                              setSelectedDocument(row);
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              gap: 8,
+                              alignItems: 'flex-end'
                            }}
                         >
-                           <img src={ArrowIcon} alt="sda" />
+                           <p>Маягтууд</p>
+                           <Badge showZero count={countOfDocument || 0} color="#2D8CFF" />
                         </div>
+                     ),
+                     children: (
+                        <Table
+                           rowKey="value"
+                           columns={[
+                              {
+                                 title: '№',
+                                 render: (_, _record, index) => index + 1,
+                                 width: 40
+                              },
+                              {
+                                 title: 'Нэр',
+                                 dataIndex: 'docName'
+                              },
+                              {
+                                 title: 'Дугаар',
+                                 dataIndex: 'label'
+                              },
+                              {
+                                 title: ' ',
+                                 render: (_, row) => (
+                                    <div
+                                       className="hover: cursor-pointer"
+                                       onClick={() => {
+                                          setCurrentMonitor(MonitorType.Document);
+                                          setSelectedDocument(row);
+                                       }}
+                                    >
+                                       <img src={ArrowIcon} alt="sda" />
+                                    </div>
+                                 )
+                              }
+                           ]}
+                           dataSource={documents}
+                           pagination={false}
+                        />
                      )
+                  },
+                  {
+                     key: 2,
+                     forceRender: true,
+                     label: (
+                        <div
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              gap: 8,
+                              alignItems: 'flex-end'
+                           }}
+                        >
+                           <p>Ноорог</p>
+                           <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
+                        </div>
+                     ),
+                     children: <DocumentDraft />
                   }
                ]}
-               dataSource={documents}
-               pagination={false}
             />
          ) : (
             <Customized
+               propsUsageType="IN"
+               isEdit={false}
+               editId={null}
                document={selectedDocument}
                documentValue={selectedDocument.value}
                documentType={0}
+               onOk={(state) => {
+                  if (!state) {
+                     setCurrentMonitor(MonitorType.List);
+                  }
+               }}
                isBackButton={true}
                handleBackButton={(state) => {
                   if (state) {
                      setCurrentMonitor(MonitorType.List);
                   }
                }}
-               onOk={(state) => console.log(state)}
             />
          )}
          <Modal

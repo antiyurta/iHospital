@@ -82,7 +82,6 @@ function DocForRoleList() {
                value: item.id
             }))
          }));
-         console.log('result', grouped);
          setPositions(grouped);
          setClonedPositions(response.data);
       });
@@ -101,7 +100,6 @@ function DocForRoleList() {
          });
    };
    const getByIdStructureName = (id) => {
-      console.log('str', structures);
       const name = structures?.find((e) => e.id === Number(id))?.name;
       return name;
    };

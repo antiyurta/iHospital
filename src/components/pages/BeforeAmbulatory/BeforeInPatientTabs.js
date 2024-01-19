@@ -31,7 +31,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureIds: departmentId,
+            structureIds: [departmentId],
             usageType: 'IN',
             documentType: 0
          }

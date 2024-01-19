@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, DatePicker, Form, Input, Progress, Result, Select } from 'antd';
+import { Button, DatePicker, Form, Input, Modal, Progress, Result, Select } from 'antd';
 import { ReturnById } from '../../611/Document/Index';
 import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
@@ -27,7 +27,17 @@ function Index(props) {
       state: { slotId }
    } = useLocation();
    // slotId ni appointment ruu patchlah ued heregtei
-   const { isEdit, editId, document, documentValue, documentType, onOk, isBackButton, handleBackButton } = props;
+   const {
+      propsUsageType,
+      isEdit,
+      editId,
+      document,
+      documentValue,
+      documentType,
+      onOk,
+      isBackButton,
+      handleBackButton
+   } = props;
    const { appointmentType, usageType, patientId, appointmentId, inpatientRequestId } =
       useSelector(selectCurrentEmrData);
    const hospitalName = useSelector(selectCurrentHospitalName);
@@ -109,7 +119,7 @@ function Index(props) {
             console.log(error);
          });
    };
-   const onFinish = async (values) => {
+   const onFinish = async (values, saveType) => {
       setIsLoading(true);
       if (isEdit) {
          await jwtInterceopter
@@ -150,6 +160,7 @@ function Index(props) {
                });
             }
          }
+         console.log(documentForm);
          await jwtInterceopter
             .post(documentForm.url, {
                position: documentForm.position,
@@ -157,7 +168,8 @@ function Index(props) {
                formType: document.formType,
                optionId: document.optionId,
                appointmentId: appointmentId || inpatientRequestId,
-               usageType: usageType,
+               usageType: propsUsageType,
+               saveType: saveType,
                documentId: documentValue,
                patientId: patientId,
                data: values,
@@ -357,21 +369,45 @@ function Index(props) {
                      </div>
                   </Form>
                   <div className="flex flex-row gap-2 justify-between">
-                     <Button
-                        danger
-                        onClick={() => {
-                           handleBackButton(true);
+                     <div>
+                        {isBackButton ? (
+                           <Button
+                              danger
+                              onClick={() => {
+                                 handleBackButton(true);
+                              }}
+                           >
+                              Буцах
+                           </Button>
+                        ) : null}
+                     </div>
+                     <div
+                        style={{
+                           display: 'flex',
+                           flexDirection: 'row',
+                           gap: 8
                         }}
                      >
-                        Буцах
-                     </Button>
-                     <Button
-                        loading={isLoading}
-                        onClick={() => form.validateFields().then((values) => onFinish(values))}
-                        type="primary"
-                     >
-                        {isEdit ? 'Засах' : 'Хадгалах'}
-                     </Button>
+                        {isBackButton ? (
+                           <Button
+                              onClick={() => {
+                                 Modal.confirm({
+                                    content: 'Та маягтаа ноороглох гэж байна',
+                                    onOk: () => form.validateFields().then((values) => onFinish(values, 'Draft'))
+                                 });
+                              }}
+                           >
+                              Ноороглох
+                           </Button>
+                        ) : null}
+                        <Button
+                           loading={isLoading}
+                           onClick={() => form.validateFields().then((values) => onFinish(values, 'Save'))}
+                           type="primary"
+                        >
+                           {isEdit ? 'Засах' : 'Хадгалах'}
+                        </Button>
+                     </div>
                   </div>
                </div>
             </>
