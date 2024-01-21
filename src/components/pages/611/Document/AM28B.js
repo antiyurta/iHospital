@@ -1,8 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
-import { formatNameForDoc } from '../../../comman';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 //маягт АМ-28Б
 function AM28B(props) {
@@ -76,7 +75,7 @@ function AM28B(props) {
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div>Өрөөний №</div>
                <div style={{ display: 'flex' }}>
-                  <span style={styles.generalText}>РД:{patientData?.registerNumber}</span>
+                  <span style={styles.generalText}>РД: {patientData?.registerNumber}</span>
                </div>
                <div style={{ display: 'flex', marginTop: 5 }}>
                   <span style={styles.generalText}>ЭМД:</span>
@@ -92,11 +91,11 @@ function AM28B(props) {
                </div>
             </div>
             <div style={styles.rowStyle}>
-               1. Эцэг /эх/-ийн нэр {patientData?.lastName}
-               <span style={{ marginLeft: 50 }}>Нэр {patientData?.firstName}</span>
+               1. Эцэг /эх/-ийн нэр: {patientData?.lastName}
+               <span style={{ marginLeft: 50 }}>Нэр: {patientData?.firstName}</span>
             </div>
             <div style={styles.rowStyle}>
-               2. Нас {patientData?.age}
+               2. Нас: {patientData?.age}
                <span style={{ marginLeft: 50 }}>
                   Хүйс: /зур/
                   <span style={{ marginLeft: 30 }}>
@@ -105,44 +104,38 @@ function AM28B(props) {
                   </span>
                </span>
             </div>
-            <div style={styles.rowStyle}>3. Үндсэн онош: {formData?.['AM28.1']}</div>
+            <div style={styles.rowStyle}>3. Үндсэн онош: {formData?.q1}</div>
             <div style={styles.rowStyle}>4. Төөнө заслын төрөл: /зур/</div>
             <div style={styles.rowStyle}>
-               <NewCheckboxGroup value={formData?.['AM28.2']} className="dstory">
+               <NewCheckboxGroup value={formData?.q2} className="dstory">
                   5. Зүү эмчилгээний төрөл:/зур/
                   <br />
-                  <NewCheckbox value={0} className="test">
-                     <span style={{ fontSize: 12 }}>Их биеийн зүү</span>
-                  </NewCheckbox>
-                  <br />
-                  <NewCheckbox value={1} className="test">
+                  <NewCheckbox value={'q2-1'} className="test">
                      <span style={{ fontSize: 12 }}>Цахилгаан төөнө</span>
                   </NewCheckbox>
                   <br />
-                  <NewCheckbox value={2} className="test">
+                  <NewCheckbox value={'q2-2'} className="test">
                      <span style={{ fontSize: 12 }}>Монгол төөнө</span>
                   </NewCheckbox>
                   <br />
-                  <NewCheckbox value={3} className="test">
+                  <NewCheckbox value={'q2-3'} className="test">
                      <span style={{ fontSize: 12 }}>Шовгон төөнө</span>
                   </NewCheckbox>
                   <br />
-                  <NewCheckbox value={4} className="test">
+                  <NewCheckbox value={'q2-4'} className="test">
                      <span style={{ fontSize: 12 }}>Хайрцаган төөнө</span>
                   </NewCheckbox>
                   <br />
-                  <NewCheckbox value={5} className="test">
+                  <NewCheckbox value={'q2-5'} className="test">
                      <span style={{ fontSize: 12 }}>Харандаан төөнө</span>
                   </NewCheckbox>
                </NewCheckboxGroup>
+               <div className="ml-2">
+                  <span style={{ fontSize: 12 }}>Бусад: {formData?.q2Other}</span>
+               </div>
             </div>
-            <div style={styles.rowStyle}>5. Төөнө хийх бэлчир орон:{formData?.['AM28.3']}</div>
-            <div style={styles.rowStyle}>
-               Эмчилгээ хийсэн эмчийн нэр:{' '}
-               <span className="underline">
-                  {formatNameForDoc(formData?.createdByName?.lastName, formData?.createdByName?.firstName)}
-               </span>
-            </div>
+            <div style={styles.rowStyle}>5. Төөнө хийх бэлчир орон: {formData?.q3}</div>
+            <div style={styles.rowStyle}>Эмчилгээ хийсэн эмчийн нэр: {formData?.q4}</div>
             <div style={styles.rowStyle}>Төөнө эмчилгээ хийлгэхийг зөвшөөрсөн гарын үсэг:</div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>Маягтын ар тал</span>
@@ -157,13 +150,13 @@ function AM28B(props) {
                      <td style={styles.centerText}>Төөнө засал</td>
                      <td style={styles.centerText}>Засал хийсэн эмчийн нэр</td>
                   </tr>
-                  {formData?.['AM28.4']?.map((el, index) => {
+                  {formData?.q5?.map((el, index) => {
                      return (
                         <tr key={index}>
                            <td style={styles.centerText}>{index + 1}</td>
-                           <td style={styles.centerText}>{moment(el[0]).format('YYYY/MM/DD')}</td>
-                           <td style={styles.centerText}>{el[1]}</td>
-                           <td style={styles.centerText}>{el[2]}</td>
+                           <td style={styles.centerText}>{dayjs(el['q5-1'])?.format('YYYY он MM сар DD өдөр')}</td>
+                           <td style={styles.centerText}>{el['q5-2']}</td>
+                           <td style={styles.centerText}>{el['q5-3']}</td>
                         </tr>
                      );
                   })}

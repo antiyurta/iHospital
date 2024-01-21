@@ -1,9 +1,8 @@
 import React from 'react';
-import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 function AM13A(props) {
-   console.log('ASD', props);
    const {
       data: { formData, patientData },
       hospitalName
@@ -42,7 +41,7 @@ function AM13A(props) {
                   justifyContent: 'space-between'
                }}
             >
-               <span style={styles.generalText}>Эмнэлгийн нэр {hospitalName}</span>
+               <span style={styles.generalText}>Эмнэлгийн нэр: {hospitalName}</span>
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={styles.generalText}>A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</span>
                   <span style={{ fontWeight: 'bold', fontSize: 12 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-13A</span>
@@ -83,20 +82,14 @@ function AM13A(props) {
                <span style={{ fontWeight: 'bold', fontSize: 14 }}>ЭМНЭЛЭГТ ӨВЧТӨН ИЛГЭЭХ ХУУДАС</span>
             </div>
             <div style={styles.generalText}>
-               1. Эцэг /эх/-ийн нэр {patientData?.lastName} Нэр {patientData?.firstName} Нас: {patientData?.age} 2. Хүйс
-               /зур/
+               1. Эцэг /эх/-ийн нэр: {patientData?.lastName} Нэр: {patientData?.firstName} Нас: {patientData?.age} 2.
+               Хүйс /зур/
                <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
                <span className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}>эмэгтэй</span>
             </div>
-            <div style={styles.generalText}>
-               Шилжүүлж буй эмнэлгийн нэр _______________________________________________________________
-            </div>
-            <div style={styles.generalText}>
-               3. Тогтмол хаяг: {patientData?.address}, {patientData?.building}
-            </div>
-            <div style={styles.generalText}>
-               4. Ажлын газар, албан тушаал: {patientData?.organization}, {patientData?.jobPosition}
-            </div>
+            <div style={styles.generalText}>Шилжүүлж буй эмнэлгийн нэр {formData?.q2}</div>
+            <div style={styles.generalText}>3. Тогтмол хаяг: {formData?.q3}</div>
+            <div style={styles.generalText}>4. Ажлын газар, албан тушаал: {formData?.q4}</div>
             <div style={styles.generalText}>
                5. Шилжүүлж буй эрүүл мэндийн байгууллагад хийгдсэн шинжилгээ (
                <span style={{ fontSize: 10, fontStyle: 'italic' }}>шинжилгээний гол өөрчлөлтийг бичнэ</span>)
@@ -109,7 +102,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">ЦЕШ:</span>
-               <span>{formData?.['АМ13.1.1']}</span>
+               <span>{formData?.q5}</span>
             </div>
             <div
                style={{
@@ -118,7 +111,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">ШЕШ:</span>
-               <span>{formData?.['АМ13.1.2']}</span>
+               <span>{formData?.q6}</span>
             </div>
             <div
                style={{
@@ -127,7 +120,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">Биохими:</span>
-               <span>{formData?.['АМ13.1.3']}</span>
+               <span>{formData?.q7}</span>
             </div>
             <div
                style={{
@@ -136,7 +129,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">Рентген: </span>
-               <span>{formData?.['АМ13.1.4']}</span>
+               <span>{formData?.q8}</span>
             </div>
             <div
                style={{
@@ -145,7 +138,7 @@ function AM13A(props) {
                }}
             >
                <span className="mr-1">Бусад: </span>
-               <span> {formData?.['АМ13.1.5']}</span>
+               <span>{formData?.q9}</span>
             </div>
             <div
                style={{
@@ -157,7 +150,7 @@ function AM13A(props) {
             >
                6. Шилжүүлж буй эмнэлэгт хийгдсэн эмчилгээний үр дүн, өвчтөний биеийн байдал
             </div>
-            <div style={styles.blankSpaces}>{formData?.['АМ13.2']}</div>
+            <div style={styles.blankSpaces}>{formData?.q10}</div>
             <div
                style={{
                   ...styles.generalText,
@@ -170,18 +163,40 @@ function AM13A(props) {
             </div>
             <div style={styles.generalText}>
                Онош:
-               {formData?.['АМ13.3']}
+               {formData?.q11}
             </div>
             <div style={styles.generalText}>
                8. Дараагийн шатлалын эмнэлэгт явуулж буй үндэслэл: (зур)
-               <NewCheckboxGroup value={formData?.['АМ13.4']} className="dstory">
-                  <NewCheckbox value={0} className="test">
-                     <span style={{ fontSize: 12 }}>1. онош тодруулах</span>
-                  </NewCheckbox>
-                  <NewCheckbox value={1} className="test">
-                     <span style={{ fontSize: 12 }}>2. эмчилгээ хийхгүй</span>
-                  </NewCheckbox>
-               </NewCheckboxGroup>
+               {formData?.q12?.includes('q12-1') ? (
+                  formData?.q12?.map((el, index) => {
+                     if (el === 'q12-1') {
+                        return (
+                           <span key={index} style={{ fontSize: 10 }} className="underline mr-2">
+                              1. онош тодруулах
+                           </span>
+                        );
+                     }
+                  })
+               ) : (
+                  <span style={{ fontSize: 10 }} className="mr-2">
+                     1. онош тодруулах
+                  </span>
+               )}
+               {formData?.q12?.includes('q12-2') ? (
+                  formData?.q12?.map((el, index) => {
+                     if (el === 'q12-2') {
+                        return (
+                           <span key={index} style={{ fontSize: 10 }} className="underline ml-2">
+                              2. эмчилгээ хийхгүй
+                           </span>
+                        );
+                     }
+                  })
+               ) : (
+                  <span style={{ fontSize: 10 }} className="ml-2">
+                     2. эмчилгээ хийхгүй
+                  </span>
+               )}
             </div>
             <div
                style={{
@@ -206,11 +221,7 @@ function AM13A(props) {
                </div>
             </div>
             <div style={{ ...styles.generalText, ...{ textAlign: 'right' } }}>
-               {moment(formData?.['АМ13.5']).format('YYYY')} оны {moment(formData?.['АМ13.5']).format('MM')} сарын{' '}
-               {moment(formData?.['АМ13.5']).format('DD')} өдөр
-            </div>
-            <div style={styles.generalText}>
-               ....................................................................................................................................................................................................................................................................................
+               {dayjs(formData.q19)?.format('YYYY он MM сар DD өдөр')}
             </div>
          </div>
       </div>

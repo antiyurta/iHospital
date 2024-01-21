@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 //маягт АМ-29Б
 function AM29B(props) {
@@ -26,6 +26,11 @@ function AM29B(props) {
       rowStyle: {
          fontSize: 12,
          marginTop: 10
+      },
+      centerText: {
+         textAlign: 'center',
+         verticalAlign: 'middle',
+         fontSize: 12
       }
    };
    return (
@@ -71,7 +76,7 @@ function AM29B(props) {
                   ...{ marginLeft: 450, marginBottom: 5 }
                }}
             >
-               Өрөөний № ________
+               Өрөөний №: {formData?.q1}
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 450 } }}>
                <div
@@ -94,11 +99,11 @@ function AM29B(props) {
                </div>
             </div>
             <div style={styles.rowStyle}>
-               1. Эцэг /эх/-ийн нэр {patientData?.lastName}
-               <span style={{ marginLeft: 50 }}>Нэр {patientData?.firstName}</span>
+               1. Эцэг /эх/-ийн нэр: {patientData?.lastName}
+               <span style={{ marginLeft: 50 }}>Нэр: {patientData?.firstName}</span>
             </div>
             <div style={styles.rowStyle}>
-               2. Нас {patientData?.age}
+               2. Нас: {patientData?.age}
                <span style={{ marginLeft: 50 }}>
                   Хүйс: /зур/
                   <span className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}> эрэгтэй, </span>
@@ -108,7 +113,7 @@ function AM29B(props) {
 
             <div style={styles.rowStyle}>
                3. Үндсэн онош:
-               {formData?.['AM29.1']}
+               {formData?.q2}
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                <div style={styles.generalText}>4. Барианы төрөл</div>
@@ -120,31 +125,30 @@ function AM29B(props) {
                   }}
                >
                   <span style={styles.generalText}>Бүтэн биеийн бариа :</span>
-                  <NewCheckboxGroup value={formData?.['AM29.2']} className="dstory">
-                     <NewCheckbox value={0} className="test">
+                  <NewCheckboxGroup value={formData?.['q3']} className="dstory">
+                     <NewCheckbox value={'q3-1'} className="test">
                         <span style={{ fontSize: 12 }}>1. Бүтэн биеийн зөөлөн бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={1} className="test">
+                     <NewCheckbox value={'q3-1'} className="test">
                         <span style={{ fontSize: 12 }}>2. Халуун тосон бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={2} className="test">
+                     <NewCheckbox value={'q3-2'} className="test">
                         <span style={{ fontSize: 12 }}>3. Сүүн бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={3} className="test">
+                     <NewCheckbox value={'q3-3'} className="test">
                         <span style={{ fontSize: 12 }}>4. Шөлөн бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={4} className="test">
+                     <NewCheckbox value={'q3-4'} className="test">
                         <span style={{ fontSize: 12 }}>5. Арвайн бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={5} className="test">
-                        <span style={{ fontSize: 12 }}>6. Бусад бариа ................</span>
-                     </NewCheckbox>
-                     <br />
+                     <div className="ml-2">
+                        <span style={{ fontSize: 12 }}>Бусад: {formData?.q3Other}</span>
+                     </div>
                   </NewCheckboxGroup>
                </div>
                <div
@@ -155,45 +159,44 @@ function AM29B(props) {
                   }}
                >
                   <span style={styles.generalText}>Хэсэгчилсэн бариа:</span>
-                  <NewCheckboxGroup value={formData?.['AM29.3']} className="dstory">
-                     <NewCheckbox value={0} className="test">
+                  <NewCheckboxGroup value={formData?.['q4']} className="dstory">
+                     <NewCheckbox value={'q4-1'} className="test">
                         <span style={{ fontSize: 12 }}>1. Толгой, хүзүү, нуруу</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={1} className="test">
+                     <NewCheckbox value={'q4-2'} className="test">
                         <span style={{ fontSize: 12 }}>2. Нүүрний хэсэг</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={2} className="test">
+                     <NewCheckbox value={'q4-3'} className="test">
                         <span style={{ fontSize: 12 }}>3. Гарын /мөр, бугалга, шуу, тохой, сарвууны хэсэг/</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={3} className="test">
+                     <NewCheckbox value={'q4-4'} className="test">
                         <span style={{ fontSize: 12 }}>4. Сээр бүсэлхий ууц нуруу</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={4} className="test">
+                     <NewCheckbox value={'q4-5'} className="test">
                         <span style={{ fontSize: 12 }}>5. Хөлийн /түнх, гуя, өвдөг, шилбэ, тавхайн хэсэг/</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={5} className="test">
+                     <NewCheckbox value={'q4-6'} className="test">
                         <span style={{ fontSize: 12 }}>6. 4 тольтын бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={6} className="test">
+                     <NewCheckbox value={'q4-7'} className="test">
                         <span style={{ fontSize: 12 }}>7. Даран бариа</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={7} className="test">
-                        <span style={{ fontSize: 12 }}>8. Бусад бариа</span>
-                     </NewCheckbox>
-                     <br />
+                     <div className="ml-2">
+                        <span style={{ fontSize: 12 }}>Бусад: {formData?.q4Other}</span>
+                     </div>
                   </NewCheckboxGroup>
                </div>
             </div>
-            <div style={styles.rowStyle}>5. Анхаарах зүйл:{formData?.['AM29.4']}</div>
+            <div style={styles.rowStyle}>5. Анхаарах зүйл: {formData?.q5}</div>
             <div style={{ ...styles.rowStyle, ...{ textAlign: 'center' } }}>
-               Эмчийн нэр: <span className="underline">{formData?.createdByName?.firstName}</span>
+               Эмчийн нэр: <span className="underline">{formData?.q6}</span>
             </div>
             <div
                style={{
@@ -257,7 +260,7 @@ function AM29B(props) {
                         <span>Сувилагчийн нэр</span>
                      </td>
                   </tr>
-                  {formData?.['AM29.5']?.map((el, index) => {
+                  {formData?.['q7']?.map((el, index) => {
                      return (
                         <tr style={{ height: 30 }} key={index}>
                            <td
@@ -270,10 +273,10 @@ function AM29B(props) {
                            >
                               {index + 1}
                            </td>
-                           <td>{moment(el[0]).format('YYYY/MM/DD')}</td>
-                           <td>{el[1]}</td>
-                           <td>{el[2]}</td>
-                           <td>{el[3]}</td>
+                           <td style={styles.centerText}>{dayjs(el['q7-1'])?.format('YYYY он MM сар DD өдөр')}</td>
+                           <td style={styles.centerText}>{el['q7-2']}</td>
+                           <td style={styles.centerText}>{el['q7-3']}</td>
+                           <td style={styles.centerText}>{el['q7-4']}</td>
                         </tr>
                      );
                   })}
