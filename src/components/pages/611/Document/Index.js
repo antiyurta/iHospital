@@ -82,6 +82,11 @@ import AM39 from './AM39';
 import AM40 from './AM40';
 import AM41 from './AM41';
 // AM end
+
+import CT1Nuur from './CT_1_nuur';
+import CT1Anamnes from './CT_1_ana';
+import CT1General from './CT_1_general';
+
 // EIM start
 import EIM4_2 from './../EIM/EIM4_2';
 import EIM5_2 from './../EIM/EIM5_2';
@@ -94,6 +99,8 @@ import CT1_2H11 from './CT_1_2H11';
 //
 import EMT201_4_2 from '../EMT/EMT201_4_2';
 //
+
+import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 
 // nemelt tushaal
 const C537M1 = React.lazy(() => import('../Command/537M1')); // tushaal maygt
@@ -536,7 +543,7 @@ const options = [
    {
       value: 87,
       label: 'CT-1,2 Хавсралт 2',
-      docName: 'Амин үзүүлэлтийг хянах'
+      docName: 'ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС'
    },
    {
       value: 88,
@@ -547,6 +554,16 @@ const options = [
       value: 89,
       label: 'CT-1,2 Хавсралт 11',
       docName: 'СУВИЛАГЧ ЭМЧЛҮҮЛЭГЧИЙН БИЕИЙН БАЙДЛЫГ ҮНЭЛЭХ ХУУДАС'
+   },
+   {
+      value: 90,
+      label: 'CT-1,2 Хавсралт 12',
+      docName: 'СУВИЛГААНЫ ТЭМДЭГЛЭЛ'
+   },
+   {
+      value: 91,
+      label: 'CT-1,2 Хавсралт 13',
+      docName: 'ШИНГЭНИЙ БАЛАНС ХЯНАХ ХУУДАС'
    }
 ];
 
@@ -588,6 +605,7 @@ const NotFound = () => {
 
 export function ReturnById({ type, id, appointmentId, data, hospitalName, doctorName, cabinetName }) {
    //type ni maygt harulah esvel form harulah
+   console.log('end end end2', id);
    if (id === 1)
       return (
          <AM1B
@@ -753,6 +771,12 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <NotFound type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 82)
       return <EIM5_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   else if (id === 83)
+      return <CT1Nuur type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   else if (id === 84)
+      return <CT1Anamnes type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   else if (id === 85)
+      return <CT1General type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 86)
       return <A293 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 87)
@@ -777,6 +801,7 @@ export function ReturnByIdToCode(id) {
 
 export function ReturnDetails({ type, oldDocuments, handleClick }) {
    // type = 0 bol list awah 1 bol select
+   const [documentForms, setDocumentForms] = useState([]);
    const [searchValue, setSearchValue] = useState('');
    const [searchValueSelect, setSearchValueSelect] = useState('');
    const [documentId, setDocumentId] = useState(Number);
@@ -784,12 +809,15 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
    const filteredOptions = options?.filter((e) => {
       return e.label.toLowerCase().includes(searchValue.toLowerCase());
    });
+   const filteredOptionsSelectDf = documentForms?.filter((e) => {
+      return e.label.toLowerCase().includes(searchValue.toLowerCase());
+   });
    const filteredOptionsSelect = options?.filter((e) => {
       return e.docName.toLowerCase().includes(searchValueSelect.toLowerCase());
    });
    const add = (row) => {
       const result = selectedOptions?.find((option) => {
-         return option.value === row.value;
+         return option.formId === row.formId;
       });
       if (result === undefined || result === null) {
          if (selectedOptions?.length === 0) {
@@ -806,6 +834,25 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
       arr.splice(index, 1);
       setSelectedOptions(arr);
    };
+
+   const getDocumentForms = async () => {
+      await OrganizationDocumentFormService.getByPageFilter({
+         params: {
+            type: 'FORM'
+         }
+      }).then(({ data: { response } }) => {
+         setDocumentForms(
+            response.map((res) => ({
+               value: res.documentValue,
+               docName: ReturnByIdToName(res.documentValue),
+               label: ReturnByIdToCode(res.documentValue),
+               formId: res.id,
+               formType: res.formType
+            }))
+         );
+      });
+   };
+
    useEffect(() => {
       if (type === 1) {
          if (oldDocuments === undefined || oldDocuments === null) {
@@ -815,6 +862,9 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
          }
       }
    }, [oldDocuments]);
+   useEffect(() => {
+      getDocumentForms();
+   }, []);
    if (type === 0) {
       return (
          <div className="flex flex-row gap-3">
@@ -875,11 +925,11 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                      scroll: {
                         y: 500
                      },
-                     dataSource: filteredOptionsSelect
+                     dataSource: filteredOptionsSelectDf
                   }}
                   meta={{
                      page: 1,
-                     limit: filteredOptionsSelect.length
+                     limit: filteredOptionsSelectDf.length
                   }}
                   isLoading={false}
                   isPagination={false}
@@ -895,6 +945,21 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                      title="Тушаал шийдвэрийн дугаар"
                      dataIndex="label"
                      render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="FORM ID"
+                     dataIndex="formId"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="FORM TYPE"
+                     dataIndex="formType"
+                     render={(text) => {
+                        console.log(text);
                         return <p className="whitespace-normal text-start text-black">{text}</p>;
                      }}
                   />
@@ -950,9 +1015,16 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                      }}
                   />
                   <NewColumn
+                     title=" asd"
+                     dataIndex="formType"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
                      title=""
                      width={40}
-                     dataIndex="value"
+                     dataIndex="formId"
                      render={(_text, _row, index) => {
                         return (
                            <CloseOutlined

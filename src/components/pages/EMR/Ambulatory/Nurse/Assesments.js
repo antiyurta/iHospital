@@ -17,11 +17,12 @@ function Assesments(props) {
                usageType: 'OUT'
             }
          })
-         .then((response) => {
+         .then(({ data: { response } }) => {
             let data = [];
-            response.data.response?.map((item) => {
-               data = item.data;
-            });
+            console.log(response);
+            // response.data.response?.map((item) => {
+            //    data = item.data;
+            // });
             setData(data);
          })
          .catch((error) => {

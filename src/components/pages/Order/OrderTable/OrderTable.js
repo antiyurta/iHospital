@@ -204,11 +204,12 @@ function OrderTable(props) {
                   );
                }}
             />
-            {usageType === 'IN' && (
-               <NewColumn
-                  title="Нийт хэмжээ"
-                  dataIndex={'startAt'}
-                  render={(value, row, index) => {
+            <NewColumn
+               title="Эхлэх өдөр"
+               dataIndex={'startAt'}
+               render={(value, row, index) => {
+                  const type = form.getFieldValue(['services', index, 'type']);
+                  if (type === 2 || type === 8) {
                      return (
                         <OrderForm name={[index, 'startAt']} editing={true}>
                            <DatePicker
@@ -220,9 +221,10 @@ function OrderTable(props) {
                            />
                         </OrderForm>
                      );
-                  }}
-               />
-            )}
+                  }
+                  return;
+               }}
+            />
             <NewColumn
                title="Үнэ"
                width={200}

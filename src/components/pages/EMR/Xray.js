@@ -3,16 +3,23 @@ import React, { useEffect, useRef, useState } from 'react';
 import { dataToTree } from '../../comman';
 import FormXray from './FormPrint/Xray';
 import XrayImg from './FormPrint/XrayImg';
+import male from '../../../assets/images/maleAvatar.svg';
 import jwtInterceopter from '../../jwtInterceopter';
 
 //
 import * as XrayDocumentIndex from '../Xray/Document/Index';
+
+const XrayDocumentReturnById = XrayDocumentIndex.ReturnById;
+
 import { selectCurrentHospitalId } from '../../../features/authReducer';
 import { useSelector } from 'react-redux';
 //
 import PmsPatientServices from '../../../services/pms/patient.api';
 import DocumentsFormPatientServices from '../../../services/organization/document';
 import ReactToPrint from 'react-to-print';
+import dayjs from 'dayjs';
+import { FolderAddFilled } from '@ant-design/icons';
+import FormRenderHtml from '../BeforeAmbulatory/Customized/FormRenderHtml';
 //
 
 const { DirectoryTree } = Tree;
@@ -123,8 +130,8 @@ function Xrays({ PatientId }) {
    //rentgen
    const Rentgen = () => (
       <>
-         <div className="grid grid-cols-3 gap-3">
-            <Spin wrapperClassName="h-[440px]" spinning={spinner}>
+         <div className="flex flex-row gap-3">
+            <Spin wrapperClassName="h-[572px]" spinning={spinner}>
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
                   <div className="p-3">
                      <DirectoryTree
@@ -137,9 +144,9 @@ function Xrays({ PatientId }) {
                </div>
             </Spin>
             <div className="col-span-2">
-               <Spin wrapperClassName="h-[440px]" spinning={spinerInfo}>
+               <Spin wrapperClassName="h-[572px]" spinning={spinerInfo}>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                     <div className="p-3">
+                     <div className="p-2">
                         {Object.entries(appointment)?.length > 0 ? (
                            <Card
                               title={appointment?.employee}
@@ -185,6 +192,7 @@ function Xrays({ PatientId }) {
    //EXO
    const Exo = () => {
       const printRef = useRef();
+      const bodyRef = useRef();
       const [spinner, setSpinner] = useState(false);
       const [spinerInfo, setSpinnerInfo] = useState(false);
       const [document, setDocument] = useState();
@@ -192,9 +200,15 @@ function Xrays({ PatientId }) {
       const getDocumentData = async (id) => {
          setSpinnerInfo(true);
          await DocumentsFormPatientServices.getById(id)
-            .then((response) => {
-               setDocument(response.data.response.response);
-            })
+            .then(
+               ({
+                  data: {
+                     response: { response }
+                  }
+               }) => {
+                  setDocument(response);
+               }
+            )
             .finally(() => {
                setSpinnerInfo(false);
             });
@@ -213,18 +227,15 @@ function Xrays({ PatientId }) {
                const data = response.data.response;
                data?.map((item) => {
                   const id = item._id;
-                  const date = new Date(item.createdAt);
-                  const year = date.getFullYear().toString();
-                  const month = (date.getMonth() + 1).toString(); // Months are zero-indexed in JavaScript
-                  const day = date.getDate().toString();
+                  const year = dayjs(item?.data.createdAt).get('year');
+                  const month = dayjs(item?.data.createdAt).get('month') + 1;
+                  const day = dayjs(item?.data.createdAt).get('date');
                   const name = XrayDocumentIndex.ReturnByIdToName(hospitalId, item.documentId);
-
                   treeData[year] = treeData[year] || {};
-                  treeData[year][month] = treeData[year][month] || {};
-                  treeData[year][month][day] = treeData[year][month][day] || { children: [] };
-                  treeData[year][month][day].children.push({
+                  treeData[year][`${month}-${day}`] = treeData[year][`${month}-${day}`] || { children: [] };
+                  treeData[year][`${month}-${day}`].children.push({
                      key: id,
-                     title: name,
+                     title: name.toLowerCase(),
                      isLeaf: true
                   });
                });
@@ -239,7 +250,6 @@ function Xrays({ PatientId }) {
             if (Array.isArray(data[key])) {
                return data[key].map((leaf) => <Tree.TreeNode key={leaf.key} title={leaf.title} isLeaf={leaf.isLeaf} />);
             }
-
             return (
                <Tree.TreeNode key={key} title={key}>
                   {renderTreeNodes(data[key])}
@@ -252,36 +262,67 @@ function Xrays({ PatientId }) {
       }, []);
       return (
          <div>
-            <div className="grid grid-cols-3 gap-3">
-               <Spin wrapperClassName="h-[440px]" spinning={spinner}>
+            <div className="flex flex-row gap-2">
+               <Spin wrapperClassName="h-[440px] w-[200px]" spinning={spinner}>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                     <div className="p-3">
-                        <DirectoryTree
-                           className="bg-transparent"
-                           onSelect={(selectedKeys, info) => {
+                     <div className="p-1">
+                        <Tree
+                           className="bg-white"
+                           onSelect={(_selectedKeys, info) => {
                               if (info?.node?.isLeaf) {
-                                 getDocumentData(selectedKeys?.[0]);
+                                 getDocumentData(info?.node?.key);
                               }
                            }}
+                           showLine
                         >
                            {renderTreeNodes(test)}
-                        </DirectoryTree>
+                        </Tree>
                      </div>
                   </div>
                </Spin>
-               <div className="col-span-2">
+               <div className="w-full">
                   <Spin wrapperClassName="h-[440px]" spinning={spinerInfo}>
                      <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                        <div className="p-3 m-3 bg-white">
+                        <div className="m-1 bg-white">
                            {document ? (
-                              <div>
+                              <div className="flex flex-col gap-2">
+                                 <div
+                                    className="flex flex-row gap-2"
+                                    style={{
+                                       padding: '0px 0px 4px 0px',
+                                       borderBottom: '1px solid #C9CDD4'
+                                    }}
+                                 >
+                                    <img src={male} width={70} alt="d" />
+                                    <div className="flex flex-col gap-1">
+                                       <p className="text-xs text-[#86909C]">
+                                          <span>Овог:</span>
+                                          <span className="text-black">{document.createdByName?.split(' ')?.[0]}</span>
+                                       </p>
+                                       <p className="text-xs text-[#86909C]">
+                                          <span>Нэр:</span>
+                                          <span className="text-black">{document.createdByName?.split(' ')?.[1]}</span>
+                                       </p>
+                                       <p className="text-xs text-[#86909C]">
+                                          <span>Төлөв:</span>
+                                          <span className="text-black">TEST</span>
+                                       </p>
+                                    </div>
+                                 </div>
                                  <ReactToPrint
                                     trigger={() => {
                                        return <Button type="primary">Хэвлэх</Button>;
                                     }}
                                     content={() => printRef.current}
                                  />
-                                 <div ref={printRef}>{XrayDocumentIndex.ReturnById(hospitalId, document, patient)}</div>
+                                 <div ref={printRef}>
+                                    <XrayDocumentReturnById
+                                       hospitalId={hospitalId}
+                                       document={document}
+                                       patient={patient}
+                                       body={<FormRenderHtml formId={document.formId} documentData={document.data} />}
+                                    />
+                                 </div>
                               </div>
                            ) : (
                               <Result title={'Хугацаа сонгох'} />
@@ -298,7 +339,6 @@ function Xrays({ PatientId }) {
    return (
       <>
          <Tabs
-            type="card"
             destroyInactiveTabPane
             items={[
                {

@@ -1,8 +1,10 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, Input, Modal, Select, Table } from 'antd';
+import { Button, Empty, Modal, Table } from 'antd';
 import React, { useState } from 'react';
 import { numberToCurrency, openNofi } from '../../comman';
-import jwtInterceopter from '../../jwtInterceopter';
+
+import xrayIcon from './NewOrder/xrayIcon.svg';
+
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
@@ -29,15 +31,16 @@ function Xray({ handleclick }) {
    };
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="yellow-order"
             onClick={() => {
                setIsOpenModal(true);
                setSelectedXrays([]);
             }}
          >
+            <img src={xrayIcon} />
             Оношилгоо
-         </Button>
+         </button>
          <Modal
             title="Оношилгоо сонгох"
             width={'80%'}

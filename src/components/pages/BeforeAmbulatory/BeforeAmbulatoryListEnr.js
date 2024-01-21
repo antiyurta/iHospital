@@ -16,6 +16,10 @@ function BeforeAmbulatoryListEnr() {
          children: <NurseInPatientList />
       }
    ];
-   return <Tabs type="card" items={items} />;
+   return (
+      <div className="p-3 w-full bg-[#f5f6f7]">
+         <Tabs type="card" items={items} />
+      </div>
+   );
 }
 export default BeforeAmbulatoryListEnr;

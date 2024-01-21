@@ -116,7 +116,6 @@ function DocumentShow({ props }) {
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <Customized
-                           usageType={'OUT'}
                            documentValue={documentId}
                            documentType={props.documentType}
                            structureId={props.departmentId}

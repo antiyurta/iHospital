@@ -397,7 +397,7 @@ function Patient() {
       ScrollRef(scrollRef);
    }, []);
    return (
-      <>
+      <div className="p-3 w-full bg-[#f5f6f7] overflow-auto">
          <Card
             bordered={false}
             className="header-solid max-h-max rounded-md"
@@ -474,7 +474,7 @@ function Patient() {
                   contacts: [{}]
                }}
             >
-               <Tabs tabPosition="left" items={items} />
+               <Tabs tabPosition="left" destroyInactiveTabPane items={items} />
             </Form>
          </Modal>
          <Modal
@@ -564,7 +564,7 @@ function Patient() {
                </div> */}
             </div>
          </Modal>
-      </>
+      </div>
    );
 }
 export default Patient;

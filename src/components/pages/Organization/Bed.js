@@ -61,41 +61,37 @@ function Bed() {
    }, []);
 
    return (
-      <>
-         <div className="flex flex-wrap">
-            <div className="w-full">
-               <NewCard
-                  title="Ор"
-                  extra={
-                     <>
-                        <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => setIsOpen(true)}>
-                           Нэмэх
-                        </Button>
-                     </>
-                  }
-               >
-                  <NewTable
-                     prop={{
-                        rowKey: 'id',
-                        bordered: true,
-                        dataSource: beds
-                     }}
-                     meta={bedsMeta}
-                     isLoading={isLoading}
-                     onChange={(page, pageSize) => getBeds(page, pageSize)}
-                  >
-                     <NewColumn
-                        dataIndex={'roomId'}
-                        title="Өрөөний дугаар"
-                        render={(value) => {
-                           return rooms?.find((e) => e.id === value)?.roomNumber;
-                        }}
-                     />
-                     <NewColumn dataIndex={'bedNumber'} title="Ор дугаар" />
-                  </NewTable>
-               </NewCard>
-            </div>
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <NewCard
+            title="Ор"
+            extra={
+               <>
+                  <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => setIsOpen(true)}>
+                     Нэмэх
+                  </Button>
+               </>
+            }
+         >
+            <NewTable
+               prop={{
+                  rowKey: 'id',
+                  bordered: true,
+                  dataSource: beds
+               }}
+               meta={bedsMeta}
+               isLoading={isLoading}
+               onChange={(page, pageSize) => getBeds(page, pageSize)}
+            >
+               <NewColumn
+                  dataIndex={'roomId'}
+                  title="Өрөөний дугаар"
+                  render={(value) => {
+                     return rooms?.find((e) => e.id === value)?.roomNumber;
+                  }}
+               />
+               <NewColumn dataIndex={'bedNumber'} title="Ор дугаар" />
+            </NewTable>
+         </NewCard>
          <NewModal
             title="Ор нэмэх"
             open={isOpen}
@@ -148,19 +144,7 @@ function Bed() {
                </Form.Item>
             </Form>
          </NewModal>
-         {/* <div className="w-full">
-            <UTable
-               title={'Ор'}
-               url={'organization/bed'}
-               column={column}
-               width="30%"
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-            />
-         </div> */}
-      </>
+      </div>
    );
 }
 export default Bed;

@@ -168,7 +168,7 @@ function Footer() {
                      <div className="flex flex-col relative w-2/3 m-auto rounded-2xl bg-white p-10 gap-7">
                         <p
                            style={{
-                              fontFamily: 'Roboto',
+                              
                               fontStyle: 'normal',
                               fontWeight: 600,
                               fontSize: 30,
@@ -181,7 +181,7 @@ function Footer() {
                         </p>
                         <p
                            style={{
-                              fontFamily: 'Roboto',
+                              
                               fontStyle: 'normal',
                               fontWeight: 300,
                               fontSize: 18,
@@ -226,7 +226,7 @@ function Footer() {
                         <div className="flex flex-col items-start gap-9">
                            <p
                               style={{
-                                 fontFamily: 'Roboto',
+                                 
                                  fontStyle: 'normal',
                                  fontWeight: 400,
                                  fontSize: 20,
@@ -238,7 +238,7 @@ function Footer() {
                            <div className="flex flex-col items-start gap-4">
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -250,7 +250,7 @@ function Footer() {
                               <NavLink
                                  to="/privacy"
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -261,7 +261,7 @@ function Footer() {
                               </NavLink>
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -272,7 +272,7 @@ function Footer() {
                               </p>
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -286,7 +286,7 @@ function Footer() {
                         <div className="flex flex-col items-start gap-9">
                            <p
                               style={{
-                                 fontFamily: 'Roboto',
+                                 
                                  fontStyle: 'normal',
                                  fontWeight: 400,
                                  fontSize: 20,
@@ -298,7 +298,7 @@ function Footer() {
                            <div className="flex flex-col items-start gap-4">
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -309,7 +309,7 @@ function Footer() {
                               </p>
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -320,7 +320,7 @@ function Footer() {
                               </p>
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -331,7 +331,7 @@ function Footer() {
                               </p>
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,
@@ -342,7 +342,7 @@ function Footer() {
                               </p>
                               <p
                                  style={{
-                                    fontFamily: 'Roboto',
+                                    
                                     fontStyle: 'normal',
                                     fontWeight: 400,
                                     fontSize: 20,

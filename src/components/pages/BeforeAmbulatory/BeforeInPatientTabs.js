@@ -1,5 +1,5 @@
-import { Button, Card, Divider, Tabs, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Card } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import BodyConditionSheet from './BeforeInPatientTabs/BodyConditionSheet';
 import NursingNote from './BeforeInPatientTabs/NursingNote';
 import PainAssessment from './BeforeInPatientTabs/PainAssessment';
@@ -12,94 +12,91 @@ import InputOutput from './BeforeInPatientTabs/InputOutput';
 import VasculerTube from './BeforeInPatientTabs/VasculerTube';
 import Acting from './BeforeInPatientTabs/Acting';
 import NursingLog from './BeforeInPatientTabs/NursingLog';
-import { Get } from '../../comman';
+import { openNofi } from '../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentToken } from '../../../features/authReducer';
-const { CheckableTag } = Tag;
-import Customized from './Customized/Index';
-import jwtInterceopter from '../../jwtInterceopter';
+import { selectCurrentAppId } from '../../../features/authReducer';
+
+import OtherCustomized from './OtherCustomized/Index';
+
+///
+import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
+///
 function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, departmentId }) {
    const AppIds = useSelector(selectCurrentAppId);
-   const token = useSelector(selectCurrentToken);
+   const [activeKey, setActiveKey] = useState(0);
    const [documents, setDocuments] = useState([]);
    const [pageId, setPageId] = useState(Number);
-   const [selectedTag, setSelectedTag] = useState(Number);
+   const [selectedDocument, setSelectedDocument] = useState(Number);
    const getDocuments = async () => {
-      console.log(departmentId);
-      const conf = {
-         headers: {},
+      await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureId: departmentId,
-            usageType: 'OUT',
+            structureIds: [departmentId],
+            usageType: 'IN',
             documentType: 0
          }
-      };
-      await jwtInterceopter.get('organization/document-role/show', conf).then((response) => {
-         if (response.data.response?.length === 0) {
-            openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
-         } else {
-            var data = [];
-            response.data.response?.map((item) =>
-               item?.documents?.map((document) => {
-                  data.push(document);
-               })
-            );
-            // setDocuments([...documents, ...data]);
-            setDocuments(data);
-         }
-      });
+      })
+         .then(({ data: { response } }) => {
+            if (response?.length === 0) {
+               openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
+            } else {
+               var data = [];
+               response?.map((item) =>
+                  item?.documents?.map((document) => {
+                     data.push(document);
+                  })
+               );
+               setDocuments(data);
+            }
+         })
+         .catch((error) => {
+            console.log(error);
+         });
    };
+
+   const Render = useMemo(() => {
+      if (activeKey === 0) {
+         return <Cardex />;
+      } else if (activeKey === 1) {
+         return <MedicineRequests />;
+      } else if (activeKey === 2) {
+         return <Acting />;
+      } else if (activeKey > 2) {
+         return <OtherCustomized document={selectedDocument} />;
+      }
+      return;
+   }, [activeKey]);
+
    useEffect(() => {
       getDocuments();
    }, []);
    return (
-      <>
-         {/* <div>
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               bodyStyle={{
-                  padding: 7
-               }}
-            >
-               {documents?.map((item, index) => {
-                  return (
-                     <div key={index}>
-                        <div className="w-full">
-                           <div className="bg-[#1890ff] checkTag">
-                              {item.documents?.map((document, idx) => {
-                                 return (
-                                    <CheckableTag
-                                       key={idx}
-                                       checked={selectedTag === document.value}
-                                       onChange={() => {
-                                          setSelectedTag(document.value);
-                                       }}
-                                       className="text-white m-1"
-                                    >
-                                       {document.docName}
-                                    </CheckableTag>
-                                 );
-                              })}
-                           </div>
-                        </div>
-                     </div>
-                  );
-               })}
-            </Card>
+      <div className="ambo-enr">
+         <div className="ambo-enr-list">
+            <button onClick={() => setActiveKey(0)} className={activeKey === 0 ? 'active' : ''}>
+               Cardex
+            </button>
+            <button onClick={() => setActiveKey(1)} className={activeKey === 1 ? 'active' : ''}>
+               Захиалга
+            </button>
+            <button onClick={() => setActiveKey(2)} className={activeKey === 2 ? 'active' : ''}>
+               Acting
+            </button>
+            <div className="line" />
+            {documents?.map((item, index) => (
+               <button
+                  onClick={() => {
+                     setActiveKey(index + 3);
+                     setSelectedDocument(item);
+                  }}
+                  className={activeKey === index + 3 ? 'active' : ''}
+                  key={index}
+               >
+                  {item.docName}
+               </button>
+            ))}
          </div>
-         <div>
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               bodyStyle={{
-                  padding: 7
-               }}
-            >
-               <Customized usageType={'IN'} selectedTag={selectedTag} structureId={departmentId} />
-            </Card>
-         </div> */}
+         {Render}
          <div className="flex flex-wrap">
             <div className="w-full pb-1">
                <Card
@@ -260,7 +257,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
                </Card>
             </div>
          </div>
-      </>
+      </div>
    );
 }
 export default BeforeInPatientTabs;

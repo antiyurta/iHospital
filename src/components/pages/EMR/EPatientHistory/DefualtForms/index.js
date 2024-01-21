@@ -2,50 +2,50 @@ export function defaultForm() {
    return {
       pain: [
          {
-            label: 'Зовиур',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Зовиур'
-               }
-            ],
-            inspectionType: 'pain'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Зовиур',
+            isNumber: false,
+            question: 'Зовиур',
+            parentIndex: null
          }
       ],
       question: [
          {
-            label: 'Асуумж',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Асуумж'
-               }
-            ],
-            inspectionType: 'question'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Асуумж',
+            isNumber: false,
+            question: 'Асуумж',
+            parentIndex: null
          }
       ],
       inspection: [
          {
-            label: 'Бодит үзлэг',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Бодит үзлэг'
-               }
-            ],
-            inspectionType: 'inspection'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Бодит үзлэг',
+            isNumber: false,
+            question: 'Бодит үзлэг',
+            parentIndex: null
          }
       ],
       plan: [
          {
-            label: 'Төлөвлөгөө',
-            options: [
-               {
-                  type: 'textarea',
-                  value: 'Төлөвлөгөө'
-               }
-            ],
-            inspectionType: 'plan'
+            type: 'textarea',
+            index: 1,
+            isHead: true,
+            isOther: false,
+            keyWord: 'Төлөвлөгөө',
+            isNumber: false,
+            question: 'Төлөвлөгөө',
+            parentIndex: null
          }
       ]
    };

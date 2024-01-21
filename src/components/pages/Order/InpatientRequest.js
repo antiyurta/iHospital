@@ -2,7 +2,10 @@ import { Button, Form, InputNumber, Modal, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 
-function InpatientRequest({ handleClick }) {
+import inpatientIcon from './NewOrder/inpatientIcon.svg';
+import { openNofi } from '../../comman';
+
+function InpatientRequest({ selectedPatient, handleClick }) {
    const [InpatientRequestForm] = Form.useForm();
    const [isDuration, setIsDuration] = useState(true);
    const [doctors, setDoctors] = useState([]);
@@ -44,21 +47,46 @@ function InpatientRequest({ handleClick }) {
             console.log(error);
          });
    };
+
+   const getConfirm = () => {
+      Modal.confirm({
+         title: 'Хэвтүүлэх хүсэлт',
+         content: (
+            <div>
+               <p>Та хэвтүүлэх хүсэлт илгээх гэж байна</p>
+            </div>
+         ),
+         okText: 'Захиалах',
+         async onOk() {
+            handleClick({
+               patientId: selectedPatient.id
+            });
+         }
+      });
+   };
+
    useEffect(() => {
-      getStructures();
+      // getStructures();
    }, []);
 
    return (
       <>
-         <Button
-            type="primary"
+         <button
+            className="yellow-order"
             onClick={() => {
-               setIsOpenModal(true);
+               if (!selectedPatient.hasOwnProperty('id')) {
+                  openNofi('error', 'Алдаа', 'Өвчтөн сонгогдоогүй байна');
+               } else {
+                  getConfirm();
+               }
+               // setIsOpenModal(true);
             }}
          >
+            <img src={inpatientIcon} />
             Хэвтүүлэх
-         </Button>
-         <Modal
+         </button>
+
+         {/* <Modal
             title="Хэвтүүлэх хүсэлт"
             open={isOpenModal}
             onCancel={() => {
@@ -167,7 +195,7 @@ function InpatientRequest({ handleClick }) {
                   </div>
                </div>
             </Form>
-         </Modal>
+         </Modal> */}
       </>
    );
 }

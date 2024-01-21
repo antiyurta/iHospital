@@ -1,6 +1,5 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
 class Country {
-   /** data => {} */
    async post(civilID, { citizenFingerprint, citizenRegnum }, { operatorFingerprint, operatorRegnum }) {
       return await jwtInterceopter.post('xyp', {
          civilID,

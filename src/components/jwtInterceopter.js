@@ -23,10 +23,8 @@ jwtInterceopter.interceptors.response.use(
       return response;
    },
    async (error) => {
-      console.log('============>', error);
       const originalConfig = error.config;
       if (originalConfig?.url !== '/login' && error.response) {
-         console.log(error);
          if (error.response.status === 401 && !originalConfig._retry) {
             originalConfig._retry = true;
             try {
@@ -38,7 +36,6 @@ jwtInterceopter.interceptors.response.use(
                      'x-api-key': API_KEY
                   }
                });
-               console.log(response);
                localStorage.setItem('tokens', JSON.stringify(response.data.response));
                error.config.headers['Authorization'] = `bearer ${response.data.response.accessToken}`;
                error.config.headers['x-api-key'] = API_KEY;

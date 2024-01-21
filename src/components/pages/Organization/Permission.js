@@ -1,38 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentHospitalId, selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
+import { selectCurrentHospitalId } from '../../../features/authReducer';
 import UTable from '../../UTable';
 
+import ReferenceRoleService from '../../../services/reference/role';
+import ReferenceMenuServices from '../../../services/reference/menu';
+
 function Permission() {
-   const token = useSelector(selectCurrentToken);
    const hospitalId = useSelector(selectCurrentHospitalId);
-   const config = {
-      headers: {},
-      params: {}
-   };
-   const [permissions, setPermissions] = useState([]);
    const [roles, setRoles] = useState([]);
    const [menus, setMenus] = useState([]);
-   const getPermissions = async () => {
-      const response = await Get('organization/permission', token, config);
-      setPermissions(response.data);
-   };
    const getRoles = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('reference/role', token, conf);
-      setRoles(response.data);
+      await ReferenceRoleService.get({}).then((response) => {
+         setRoles(response.data.response.data);
+      });
    };
    const getMenus = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('reference/menu', token, conf);
-      setMenus(response.data.filter((item) => item.parentId === null));
+      await ReferenceMenuServices.get({}).then((response) => {
+         const data = response.data.response.data;
+         setMenus(data.filter((item) => item.parentId === null));
+      });
    };
    const column = [
       {
@@ -91,7 +78,6 @@ function Permission() {
       }
    ];
    useEffect(() => {
-      getPermissions();
       getRoles();
       getMenus();
    }, []);

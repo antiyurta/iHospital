@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentToken, selectCurrentInsurance, set as setAuth } from '../features/authReducer';
+import { selectCurrentToken, selectCurrentInsurance, set as setAuth, Delete, logout } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
 import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
 import { openNofi, Patch } from './comman';
-import { KeyOutlined, UserOutlined } from '@ant-design/icons';
+import { KeyOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
 import authenticationApi from '../services/authentication/authentication.api';
 import { set as setHospital } from '../features/hospitalReducer';
+import { useContext } from 'react';
+import AuthContext from '../features/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
+   const { logoutt } = useContext(AuthContext);
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    const dispatch = useDispatch();
+   const navigate = useNavigate();
    const [profileForm] = Form.useForm();
    const [user, setUser] = useState([]);
    const [profileModal, setProfileModal] = useState(false);
@@ -29,6 +34,14 @@ function Profile() {
       headers: {},
       params: {}
    };
+
+   const handelLogOut = async () => {
+      dispatch(Delete());
+      dispatch(logout()); // tur bicew jwtBugdin ajilah ued ustagna
+      await logoutt();
+      navigate('/');
+   };
+
    const getProfile = async () => {
       await authenticationApi
          .get()
@@ -106,7 +119,7 @@ function Profile() {
       isValid ? setPasswordValid(true) : setPasswordValid(false);
    };
    return (
-      <div>
+      <div className="flex flex-col gap-2">
          <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + bg + ')' }}></div>
          <Card
             className="card-profile-head rounded-md h-28"
@@ -141,7 +154,7 @@ function Profile() {
          <Card
             bordered={false}
             title={<h6 className="font-semibold m-0">Профайл мэдээлэл</h6>}
-            className="header-solid h-full card-profile-information rounded-md"
+            className="header-solid card-profile-information rounded-md"
             extra={
                <>
                   <Button className="mx-1" type="primary" icon={<UserOutlined />} onClick={() => setProfileModal(true)}>
@@ -149,6 +162,15 @@ function Profile() {
                   </Button>
                   <Button className="mx-1" type="primary" icon={<KeyOutlined />} onClick={() => setPasswordModal(true)}>
                      Нууц үг солих
+                  </Button>
+                  <Button
+                     danger
+                     className="mx-1"
+                     type="primary"
+                     icon={<LoginOutlined />}
+                     onClick={() => handelLogOut(true)}
+                  >
+                     Системээс гарах
                   </Button>
                </>
             }

@@ -17,19 +17,17 @@ function Settings() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Үзлэгийн минут'}
-               url={'settings'}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               column={column}
-               width="50%"
-            />
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Үзлэгийн минут'}
+            url={'settings'}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            column={column}
+            width="50%"
+         />
       </div>
    );
 }

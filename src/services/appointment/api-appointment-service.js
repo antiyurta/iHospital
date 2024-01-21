@@ -6,6 +6,9 @@ class ApiAppointmentService {
    async getByPageFilter(conf) {
       return await jwtInterceopter.get('appointment', conf);
    }
+   async getById(id) {
+      return await jwtInterceopter.get('appointment/show/' + id);
+   }
    async postAppointment(data) {
       return await jwtInterceopter.post('appointment', data);
    }
@@ -16,6 +19,12 @@ class ApiAppointmentService {
       return await jwtInterceopter.get('appointment-status-history/', {
          params
       });
+   }
+   async getPreOrder(conf) {
+      return await jwtInterceopter.get('appointment/pre-order', conf);
+   }
+   async patchPreOrder(id, data) {
+      return await jwtInterceopter.patch(`appointment/pre-order/${id}`, data);
    }
 }
 export default new ApiAppointmentService();

@@ -1,8 +1,8 @@
-import { Button, ConfigProvider, Empty, Input, Table } from 'antd';
+import { ConfigProvider, Empty, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
 import React from 'react';
 import { localMn, numberToCurrency } from '../../comman';
-import { PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { CARE_TYPE } from './care-enum';
 import { useState } from 'react';
 import examinationApi from '../../../services/service/examination.api';
@@ -10,17 +10,22 @@ import { useEffect } from 'react';
 import xrayApi from '../../../services/service/xray.api';
 import treatmentApi from '../../../services/service/treatment.api';
 import surgeryApi from '../../../services/service/surgery.api';
+
+import addButtonIcon from './addButton.svg';
+
 /** Захиалгын тусламж үйлчилгээний  */
 export const ListSupport = ({ careType, careTypeId, add }) => {
    const [isLoading, setIsLoading] = useState(false);
+   const [filterValue, setFilterValue] = useState();
    const [supports, setSupports] = useState([]);
    const [supMeta, setSupMeta] = useState({});
 
    const getData = async (page, limit, filter) => {
+      setFilterValue(filter);
       setIsLoading(true);
       if (careType == CARE_TYPE.Examination) {
          await examinationApi
-            .get({ examinationTypeId: careTypeId, page, limit, name: filter })
+            .get({ examinationTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -30,7 +35,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
             });
       } else if (careType == CARE_TYPE.Xray) {
          await xrayApi
-            .get({ xrayTypeId: careTypeId, page, limit, name: filter })
+            .get({ xrayTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -38,7 +43,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
             .finally(() => setIsLoading(false));
       } else if (careType == CARE_TYPE.Treatment) {
          await treatmentApi
-            .get({ treatmentTypeId: careTypeId, page, limit, name: filter })
+            .get({ treatmentTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -46,7 +51,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
             .finally(() => setIsLoading(false));
       } else if (careType == CARE_TYPE.Surgery) {
          await surgeryApi
-            .get({ surgeryTypeId: careTypeId, page, limit, name: filter })
+            .get({ surgeryTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);
@@ -78,7 +83,6 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
          <ConfigProvider locale={localMn()}>
             <Table
                rowKey={'id'}
-               bordered
                scroll={{
                   y: 400
                }}
@@ -86,19 +90,19 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
                locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                columns={[
                   {
+                     title: '№',
+                     width: 50,
+                     className: 'font-bold',
+                     render: (_text, _row, index) => {
+                        return supMeta.page * supMeta.limit - (supMeta.limit - index - 1);
+                     }
+                  },
+                  {
                      title: 'Нэр',
                      dataIndex: 'name',
+                     align: 'left',
                      render: (text) => {
-                        return (
-                           <p
-                              style={{
-                                 whiteSpace: 'normal',
-                                 color: 'black'
-                              }}
-                           >
-                              {text}
-                           </p>
-                        );
+                        return <p className="whitespace-pre-wrap text-black">{text}</p>;
                      }
                   },
                   {
@@ -114,16 +118,9 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
                      width: 40,
                      render: (_text, row) => {
                         return (
-                           <Button
-                              onClick={() => add(row)}
-                              icon={
-                                 <PlusCircleOutlined
-                                    style={{
-                                       color: 'green'
-                                    }}
-                                 />
-                              }
-                           />
+                           <div onClick={() => add(row)} className="flex justify-center hover:cursor-pointer">
+                              <img src={addButtonIcon} />
+                           </div>
                         );
                      }
                   }
@@ -139,7 +136,7 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
                   showSizeChanger: true,
                   pageSizeOptions: ['5', '10', '20', '50'],
                   showQuickJumper: true,
-                  onChange: (page, pageSize) => getData(careTypeId, page, pageSize)
+                  onChange: (page, pageSize) => getData(page, pageSize, filterValue)
                }}
             />
          </ConfigProvider>

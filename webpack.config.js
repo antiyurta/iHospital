@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
@@ -10,15 +9,17 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (_env, argv) => {
    const isDevelopment = argv.mode !== 'production';
+   console.log('isDevelopment', isDevelopment);
    return {
       mode: isDevelopment,
-      // devtool: isDevelopment ? 'eval' : 'source-map',
+      devtool: isDevelopment ? 'eval' : 'source-map',
       context: __dirname,
       entry: './src/index.js',
       output: {
          filename: '[name].js',
          chunkFilename: '[name].bundle.js',
-         path: path.resolve(__dirname, './build')
+         path: path.resolve(__dirname, './build'),
+         publicPath: '/'
       },
       devServer: {
          compress: true,
@@ -57,15 +58,24 @@ module.exports = (_env, argv) => {
                use: ['style-loader', 'css-loader', 'less-loader']
             },
             {
-               test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|mp3)(\?[a-z0-9=.]+)?$/,
-               loader: 'url-loader',
-               options: { limit: 100000, esModule: false }
+               test: /\.(ico|png|jpg|jpeg|gif|svg|json)$/,
+               type: 'asset/resource'
             }
          ]
       },
       optimization: {
-         minimize: true,
-         minimizer: [new TerserPlugin()]
+         runtimeChunk: 'single',
+         minimize: !isDevelopment,
+         minimizer: [new TerserPlugin()],
+         splitChunks: {
+            cacheGroups: {
+               vendor: {
+                  test: /[\\/]node_modules[\\/]/,
+                  name: 'vendors',
+                  chunks: 'all'
+               }
+            }
+         }
       },
       plugins: [
          new ReactRefreshPlugin({
@@ -77,10 +87,10 @@ module.exports = (_env, argv) => {
          }),
          new webpack.HotModuleReplacementPlugin(),
          new FaviconsWebpackPlugin({
-            logo: './public/ihospital.png',
+            logo: './public/favicon-32x32.png',
             mode: 'webapp',
             manifest: './public/manifest.json',
-            publicPath: './public/'
+            publicPath: '/'
          }),
          new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './public/index.html'),

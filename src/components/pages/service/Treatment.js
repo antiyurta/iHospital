@@ -1,4 +1,3 @@
-import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
@@ -116,21 +115,19 @@ function Treatment() {
       }
    ];
    return (
-      <Row gutter={[8, 8]}>
-         <Col span={24}>
-            <UTable
-               title={'Эмчилгээ'}
-               url={'service/treatment'}
-               column={column}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               refresh={getTreatmentTypeData}
-               width="50%"
-            />
-         </Col>
-      </Row>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Эмчилгээ'}
+            url={'service/treatment'}
+            column={column}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            refresh={getTreatmentTypeData}
+            width="50%"
+         />
+      </div>
    );
 }
 export default Treatment;

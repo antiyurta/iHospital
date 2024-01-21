@@ -1,7 +1,7 @@
 import React from 'react';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Select } from 'antd';
-import ContactPerson from '../ContactPerson.json';
+import ContactPerson from '../ContactPerson.js';
 function Contact({ form }) {
    const { Option } = Select;
    return (

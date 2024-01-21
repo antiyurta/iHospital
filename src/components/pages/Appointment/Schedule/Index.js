@@ -3,14 +3,19 @@ import { Form, Select, Button, Slider, Card, Collapse, DatePicker, Row, Col, Tim
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import mn from 'antd/es/calendar/locale/mn_MN';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, openNofi, Patch, Post } from '../../../comman';
+import { formatNameForDoc, openNofi } from '../../../comman';
 import { Table } from 'react-bootstrap';
 import { EditOutlined } from '@ant-design/icons';
 
+//
+import OrganizationEmployeeApi from '../../../../services/organization/employee';
+import OrganizationStructureApi from '../../../../services/organization/structure';
+import OrganizationRoomApi from '../../../../services/organization/room';
+import ReferenceSettingsApi from '../../../../services/reference/settings';
+import ReferenceDevicesApi from '../../../../services/reference/devices';
+import ScheduleApi from '../../../../services/schedule';
+//
 const { Panel } = Collapse;
-const { Option } = Select;
 const TimeFormat = 'HH:mm';
 const Marks = {
    0: '0%',
@@ -19,85 +24,76 @@ const Marks = {
 };
 
 function Index({ type }) {
-   const today = new Date();
    const [newScheduleDay, setNewScheduleDay] = useState(new Date());
    const [form] = Form.useForm();
-   const token = useSelector(selectCurrentToken);
    const [editMode, setEditMode] = useState(false);
    const [id, setId] = useState(Number);
    const [editWorkDate, setEditWorkDate] = useState([]);
-   //
    const [doctors, setDoctors] = useState([]);
    const [structures, setStructures] = useState([]);
    const [cabinets, setCabinets] = useState([]);
    const [inspectionTimes, setInspectionTimes] = useState([]);
    const [rooms, setRooms] = useState([]);
    const [deviceList, setDeviceList] = useState([]);
-   //
-   const config = {
-      headers: {},
-      params: {}
-   };
-   //
+
    const getDoctor = async (depId) => {
-      // config.params.type = 2;
-      config.params.depId = depId;
-      const response = await Get('organization/employee', token, config);
-      if (response.data.length != 0) {
-         setDoctors(response.data);
-      } else {
-         setDoctors([]);
-      }
+      await OrganizationEmployeeApi.getEmployee({
+         params: {
+            depId: depId
+         }
+      }).then(({ data: { response, success } }) => {
+         if (success) {
+            setDoctors(response.data);
+         }
+      });
    };
    const getStructures = async () => {
-      const conf = {
-         headers: {},
+      await OrganizationStructureApi.get({
          params: {
             type: 2
          }
-      };
-      const response = await Get('organization/structure', token, conf);
-      if (response.data.length != 0) {
-         setStructures(response.data);
-      }
+      }).then(({ data: { response, success } }) => {
+         if (success) {
+            setStructures(response.data);
+         }
+      });
    };
    const getCabinets = async (e) => {
-      const conf = {
-         headers: {},
+      await OrganizationStructureApi.get({
          params: {
             type: 3,
             parentId: e
          }
-      };
-      const response = await Get('organization/structure', token, conf);
-      if (response.data.length != 0) {
-         setCabinets(response.data);
-      } else {
-         setCabinets([]);
-      }
+      }).then(({ data: { response, success } }) => {
+         if (success) {
+            setCabinets(response.data);
+         }
+      });
    };
    const getInspectionTimes = async () => {
-      config.params.type = null;
-      const response = await Get('settings', token, config);
-      if (response.data.length != 0) {
-         setInspectionTimes(response.data);
-      }
+      await ReferenceSettingsApi.get({}).then(({ data: { response, success } }) => {
+         if (success) {
+            setInspectionTimes(response.data);
+         }
+      });
    };
-   const getRooms = async (value) => {
-      const conf = {
-         headers: {},
+   const getRooms = async () => {
+      await OrganizationRoomApi.getByPageFilter({
          params: {
             isInpatient: false
          }
-      };
-      const response = await Get('organization/room', token, conf);
-      if (response.data.length != 0) {
-         setRooms(response.data);
-      }
+      }).then(({ data: { response, success } }) => {
+         if (success) {
+            setRooms(response.data);
+         }
+      });
    };
    const getDeviceList = async () => {
-      const response = await Get('device', token, config);
-      setDeviceList(response.data);
+      await ReferenceDevicesApi.get({}).then(({ data: { response, success } }) => {
+         if (success) {
+            setDeviceList(response.data);
+         }
+      });
    };
    //
    const [days, setDays] = useState([]);
@@ -121,25 +117,26 @@ function Index({ type }) {
       const month = firstDayOfMonth.getMonth() + 1;
       const startDay = firstDayOfMonth.getDate();
       const endDay = lastDayOfMonth.getDate();
-      const conf = {
-         headers: {},
+      await ScheduleApi.get({
          params: {
             type: type,
             startDate: moment(firstDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD'),
             endDate: moment(lastDayOfMonth).utcOffset('+0800').format('YYYY-MM-DD')
          }
-      };
-      const response = await Get('schedule', token, conf);
-      const Ddays = [];
-      for (let i = startDay; i <= endDay; i++) {
-         const ddd = new Date(year + '-' + month + '-' + i);
-         const data = getData(ddd, response.data);
-         Ddays.push({
-            title: ddd,
-            schedule: data
-         });
-      }
-      setDays(Ddays);
+      }).then(({ data: { response, success } }) => {
+         if (success) {
+            const Ddays = [];
+            for (let i = startDay; i <= endDay; i++) {
+               const ddd = new Date(year + '-' + month + '-' + i);
+               const data = getData(ddd, response.data);
+               Ddays.push({
+                  title: ddd,
+                  schedule: data
+               });
+            }
+            setDays(Ddays);
+         }
+      });
    };
 
    const getData = (value, data) => {
@@ -149,7 +146,6 @@ function Index({ type }) {
    const changeMonth = (value) => {
       const date = new Date(value);
       const dayd = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
-      console.log(moment(dayd).format('YYYY-MM-DD HH:mm'));
       setNewScheduleDay(dayd);
       const firstDayOfMonth = getFirstDayOfMonth(date.getFullYear(), date.getMonth());
       const lastDayOfMonth = getLastDayOfMonth(date.getFullYear(), date.getMonth());
@@ -178,22 +174,20 @@ function Index({ type }) {
                ) {
                   openNofi('error', 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                } else {
-                  const conf = {
-                     headers: {},
-                     params: {}
-                  };
                   if (editMode) {
-                     const response = await Patch('schedule/' + id, token, conf, arr);
-                     if (response === 200) {
-                        setEditMode(false);
-                        getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-                        form.resetFields();
-                     }
+                     await ScheduleApi.patchSchedule(id, arr).then(({ data: { success } }) => {
+                        if (success) {
+                           setEditMode(false);
+                           getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                           form.resetFields();
+                        }
+                     });
                   } else {
-                     const response = await Post('schedule', token, conf, arr);
-                     if (response === 201) {
-                        getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-                     }
+                     await ScheduleApi.postSchedule(arr).then(({ data: { success } }) => {
+                        if (success) {
+                           getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                        }
+                     });
                   }
                }
             } else {
@@ -255,15 +249,12 @@ function Index({ type }) {
                                  }
                               ]}
                            >
-                              <Select>
-                                 {deviceList.map((list, index) => {
-                                    return (
-                                       <Option key={index} value={list.id}>
-                                          {list.name}
-                                       </Option>
-                                    );
-                                 })}
-                              </Select>
+                              <Select
+                                 options={deviceList?.map((list) => ({
+                                    label: list.name,
+                                    value: list.id
+                                 }))}
+                              />
                            </Form.Item>
                         </Col>
                      )}
@@ -313,15 +304,11 @@ function Index({ type }) {
                                  getCabinets(e);
                                  getDoctor(e);
                               }}
-                           >
-                              {structures.map((structure, index) => {
-                                 return (
-                                    <Option key={index} value={structure.id}>
-                                       {structure.name}
-                                    </Option>
-                                 );
-                              })}
-                           </Select>
+                              options={structures?.map((structure) => ({
+                                 label: structure.name,
+                                 value: structure.id
+                              }))}
+                           />
                         </Form.Item>
                      </Col>
                      <Col span={24} className="p-1">
@@ -335,15 +322,12 @@ function Index({ type }) {
                               }
                            ]}
                         >
-                           <Select>
-                              {cabinets.map((cabinet, index) => {
-                                 return (
-                                    <Option key={index} value={cabinet.id}>
-                                       {cabinet.name}
-                                    </Option>
-                                 );
-                              })}
-                           </Select>
+                           <Select
+                              options={cabinets?.map((cabinet) => ({
+                                 label: cabinet.name,
+                                 value: cabinet.id
+                              }))}
+                           />
                         </Form.Item>
                      </Col>
                      <Col span={24} className="p-1">
@@ -357,15 +341,12 @@ function Index({ type }) {
                               }
                            ]}
                         >
-                           <Select>
-                              {doctors.map((doctor, index) => {
-                                 return (
-                                    <Option key={index} value={doctor.id}>
-                                       {doctor.firstName}
-                                    </Option>
-                                 );
-                              })}
-                           </Select>
+                           <Select
+                              options={doctors?.map((doctor) => ({
+                                 label: formatNameForDoc(doctor?.lastName, doctor?.firstName),
+                                 value: doctor.id
+                              }))}
+                           />
                         </Form.Item>
                      </Col>
                      <Col span={12} className="p-1">
@@ -379,15 +360,12 @@ function Index({ type }) {
                               }
                            ]}
                         >
-                           <Select>
-                              {inspectionTimes.map((inspectionTime, index) => {
-                                 return (
-                                    <Option key={index} value={inspectionTime.id}>
-                                       {inspectionTime.inspectionTime}
-                                    </Option>
-                                 );
-                              })}
-                           </Select>
+                           <Select
+                              options={inspectionTimes?.map((time) => ({
+                                 label: time.inspectionTime,
+                                 value: time.id
+                              }))}
+                           />
                         </Form.Item>
                      </Col>
                      <Col span={12} className="p-1">
@@ -401,15 +379,12 @@ function Index({ type }) {
                               }
                            ]}
                         >
-                           <Select>
-                              {rooms.map((room, index) => {
-                                 return (
-                                    <Option key={index} value={room.id}>
-                                       {room.roomNumber}
-                                    </Option>
-                                 );
-                              })}
-                           </Select>
+                           <Select
+                              options={rooms?.map((room) => ({
+                                 label: room.roomNumber,
+                                 value: room.id
+                              }))}
+                           />
                         </Form.Item>
                      </Col>
                      <Col span={24} className="p-1">

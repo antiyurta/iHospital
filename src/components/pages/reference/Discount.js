@@ -19,19 +19,17 @@ function Discount() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'discount'}
-               url={'payment/discount'}
-               column={column}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               width="50%"
-            />
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'discount'}
+            url={'payment/discount'}
+            column={column}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            width="50%"
+         />
       </div>
    );
 }

@@ -203,71 +203,69 @@ function BeforeTreatmentRequest() {
       getTreatmentRequest(1, 10, today, today);
    }, []);
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <Card title={'Эмийн бус эмчилгээ жагсаалт'} bordered={false} className="header-solid max-h-max rounded-md">
-               <div className="flex flex-wrap">
-                  <div className="basis-1/3">
-                     <RangePicker
-                        onChange={(e) => {
-                           if (e != null) {
-                              getTreatmentRequest(1, 10, e[0], e[1]);
-                           }
-                        }}
-                        locale={mnMN}
-                     />
-                  </div>
-                  <div className="w-full py-2">
-                     <div className="flex float-left">
-                        {/* <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <Card title={'Эмийн бус эмчилгээ жагсаалт'} bordered={false} className="header-solid max-h-max rounded-md">
+            <div className="flex flex-wrap">
+               <div className="basis-1/3">
+                  <RangePicker
+                     onChange={(e) => {
+                        if (e != null) {
+                           getTreatmentRequest(1, 10, e[0], e[1]);
+                        }
+                     }}
+                     locale={mnMN}
+                  />
+               </div>
+               <div className="w-full py-2">
+                  <div className="flex float-left">
+                     {/* <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
                                         <span className="font-medium mx-1">Яаралтай</span>
                                     </div> */}
-                        <div
-                           className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                           role="alert"
-                        >
-                           <span className="font-medium mx-1">Шууд</span>
-                        </div>
-                        <div
-                           className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                           role="alert"
-                        >
-                           <span className="font-medium mx-1">Урьдчилсан захиалга</span>
-                        </div>
-                        {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                     <div
+                        className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                        role="alert"
+                     >
+                        <span className="font-medium mx-1">Шууд</span>
+                     </div>
+                     <div
+                        className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                        role="alert"
+                     >
+                        <span className="font-medium mx-1">Урьдчилсан захиалга</span>
+                     </div>
+                     {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
                                         <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
                                     </div> */}
-                     </div>
-                     <div className="float-right">
-                        <Button title="Сэргээх" type="primary" onClick={() => getTreatmentRequest(1, 10, start, end)}>
-                           <ReloadOutlined // spin={!spinner}
-                           />
-                        </Button>
-                     </div>
                   </div>
-                  <div className="w-full py-2">
-                     <Table
-                        rowKey={'id'}
-                        bordered
-                        locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                        loading={{
-                           spinning: spinner,
-                           tip: 'Уншиж байна....'
-                        }}
-                        columns={columns}
-                        dataSource={treatments}
-                        pagination={{
-                           simple: true,
-                           pageSize: 10,
-                           total: meta.itemCount,
-                           current: meta.page,
-                           onChange: (page, pageSize) => getTreatmentRequest(page, pageSize, start, end)
-                        }}
-                     />
+                  <div className="float-right">
+                     <Button title="Сэргээх" type="primary" onClick={() => getTreatmentRequest(1, 10, start, end)}>
+                        <ReloadOutlined // spin={!spinner}
+                        />
+                     </Button>
                   </div>
                </div>
-            </Card>
-         </div>
+               <div className="w-full py-2">
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                     loading={{
+                        spinning: spinner,
+                        tip: 'Уншиж байна....'
+                     }}
+                     columns={columns}
+                     dataSource={treatments}
+                     pagination={{
+                        simple: true,
+                        pageSize: 10,
+                        total: meta.itemCount,
+                        current: meta.page,
+                        onChange: (page, pageSize) => getTreatmentRequest(page, pageSize, start, end)
+                     }}
+                  />
+               </div>
+            </div>
+         </Card>
       </div>
    );
 }

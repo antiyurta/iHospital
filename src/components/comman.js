@@ -3,7 +3,7 @@ import axios from 'axios';
 import { notification } from 'antd';
 import mnMn from 'antd/es/locale/mn_MN';
 import mnMnn from 'antd/es/calendar/locale/mn_MN';
-import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.json';
+import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.js';
 import moment from 'moment';
 import { NumericFormat } from 'react-number-format';
 
@@ -308,7 +308,14 @@ export const getAge = (registerNumber) => {
       const age = currentYear - year;
       return age;
    } else {
-      return null;
+      return '';
+   }
+};
+export const getGenderInType = (type) => {
+   if (type === 'WOMAN') {
+      return 'Эм';
+   } else if (type === 'MAN') {
+      return 'Эр';
    }
 };
 export const getGender = (registerNumber) => {
@@ -322,6 +329,19 @@ export const getGender = (registerNumber) => {
       return null;
    }
 };
+
+export const getGenderFullName = (registerNumber) => {
+   if (registerNumber != undefined) {
+      if (registerNumber[registerNumber.length - 2] % 2 === 1) {
+         return 'Эрэгтэй';
+      } else {
+         return 'Эмэгтэй';
+      }
+   } else {
+      return '';
+   }
+};
+
 export const checkNumber = (event) => {
    var charCode = event.charCode;
    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {

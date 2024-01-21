@@ -61,13 +61,8 @@ function Index({ PatientId, RegisterNumber }) {
       <Card
          bordered={false}
          bodyStyle={{
-            paddingTop: 10,
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingBottom: 10,
-            minHeight: 300,
-            maxHeight: 300,
-            overflowY: 'auto'
+            padding: 10,
+            overflow: 'auto'
          }}
       >
          <Tabs type="card" items={items} tabBarExtraContent={<FullScreen />} />
@@ -122,7 +117,12 @@ function Index({ PatientId, RegisterNumber }) {
             paddingBottom: 10
          }}
       >
-         <Result title="Тун удахгүй" />
+         <Result
+            style={{
+               padding: 0
+            }}
+            title="Тун удахгүй"
+         />
       </Card>
    );
 }

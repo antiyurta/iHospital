@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Form, Checkbox, Divider } from 'antd';
-import { localMn, numberToCurrency, openNofi } from '../../../comman';
+import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Form, Select, Radio, InputNumber } from 'antd';
+import { localMn, openNofi } from '../../../comman';
 import PatientInformation from '../../PatientInformation';
 import Order from '../../Order/Order';
 import Schedule from '../../OCS/Schedule';
@@ -11,9 +11,8 @@ import NewCard from '../../../Card/Card';
 
 //service uud
 import PaymentService from '../../../../services/payment/payment';
-import { NewInputNumber, NewOption, NewRadio, NewRadioGroup, NewSelect } from '../../../Input/Input';
 import EbarimtPrint from '../EbarimtPrint';
-import { NewTable } from '../../../Table/Table';
+import dayjs from 'dayjs';
 
 function Invoice() {
    const [orderModal, setOrderModal] = useState(false);
@@ -115,7 +114,6 @@ function Invoice() {
          });
    };
    const saveOrder = async (value) => {
-      console.log('it is working save order =======>', value);
       if (selectedPatient && selectedPatient.length === 0) {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       } else if (value.length > 0) {
@@ -148,7 +146,6 @@ function Invoice() {
    };
    const sendData = async () => {
       await jwtInterceopter.get('ebarimt/sendData').then((response) => {
-         console.log('====>', response);
          if (response.data.response.status && response.status === 200) {
             openNofi('success', 'Амжиллтай', 'Амжилттай татлаа');
             getInformation();
@@ -193,6 +190,11 @@ function Invoice() {
          //bagts
          name: 'Package',
          label: 'Багц'
+      },
+      {
+         //hewtuuleh
+         name: 'Inpatient',
+         label: 'Хэвтэн эмчлүүлэх'
       }
    ];
    const notPatientColumn = [
@@ -268,81 +270,73 @@ function Invoice() {
       getInformation();
    }, []);
    return (
-      <div className="flex flex-col gap-3">
-         <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="w-full flex flex-col">
+         <div
+            className="flex flex-row gap-2 justify-between p-2"
+            style={{
+               borderBottom: '1px solid #e5e6eb'
+            }}
+         >
             <PatientInformation patient={selectedPatient} handlesearch={onSearch} />
+            <div className="rounded-md bg-[#F3F4F6] flex flex-col gap-2 p-3 max-w-xs">
+               <div className="flex flex-row gap-2 justify-between">
+                  <p className="font-bold">И-Баримт:</p>
+                  <p className="font-bold">{`${ebarimtInfo?.countBill} / ${ebarimtInfo?.countLottery}`}</p>
+               </div>
+               <div className="flex flex-row gap-2 justify-between">
+                  <p className="font-bold">Сүүлд татсан огноо:</p>
+                  <p className="font-bold">{`${dayjs(ebarimtInfo?.lastSentdate).format('YYYY/MM/DD')}`}</p>
+               </div>
+               <Button onClick={() => sendData()} type="primary">
+                  И-баримт илгээх
+               </Button>
+               <div className="h-[1px] w-full bg-black" />
+               <Button type="primary" onClick={() => setOrderModal(true)}>
+                  Оношилгоо шинжилгээ захиалах
+               </Button>
+               <Button type="primary" onClick={() => setIsOpenBeforePaymentModal(true)}>
+                  Урьдчилгаа төлбөр
+               </Button>
+            </div>
+         </div>
+         <div
+            className="overflow-auto bg-[#f5f6f7] p-3"
+            style={{
+               height: 'calc(100vh - 200px)'
+            }}
+         >
             <Card
                bordered={false}
-               title={<h6 className="font-semibold m-0">Туслах цэс</h6>}
                className="header-solid max-h-max rounded-md"
                bodyStyle={{
-                  paddingTop: 0,
+                  paddingTop: 10,
                   paddingLeft: 10,
                   paddingRight: 10,
                   paddingBottom: 10
                }}
             >
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block mb-3">
-                  <div className="p-3 flex justify-between">
-                     <div className="flex flex-row gap-3">
-                        <label>И-Баримт:</label>
-                        <p>{ebarimtInfo?.countBill}</p>/<p>{ebarimtInfo?.countLottery}</p>
-                        <label>Сүүлд татсан огноо:</label>
-                        <p>{moment(ebarimtInfo?.lastSentdate).format('YYYY-MM-DD')}</p>
-                     </div>
-                     <Button onClick={() => sendData()} type="primary">
-                        И-баримт илгээх
-                     </Button>
-                  </div>
-               </div>
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                  <div className="p-3">
-                     <div className="grid sm:grid-cols-1 xl:grid-cols-2 gap-3">
-                        <Button className="bg-[#4a7fc1]" type="primary" onClick={() => setOrderModal(true)}>
-                           Оношилгоо шинжилгээ захиалах
-                        </Button>
-                        <Button
-                           className="bg-[#4a7fc1]"
-                           type="primary"
-                           onClick={() => setIsOpenBeforePaymentModal(true)}
-                        >
-                           Урьдчилгаа төлбөр
-                        </Button>
-                     </div>
-                  </div>
-               </div>
+               <ConfigProvider locale={localMn()}>
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     locale={{
+                        emptyText: <Result title="Мэдээлэл байхгүй байна" />
+                     }}
+                     loading={isLoadingFilter}
+                     columns={columns}
+                     dataSource={patientsList}
+                     pagination={{
+                        position: ['topCenter', 'bottomCenter'],
+                        size: 'small',
+                        total: patientsList?.length,
+                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                        pageSize: 10
+                     }}
+                  />
+               </ConfigProvider>
             </Card>
          </div>
-         <Card
-            bordered={false}
-            className="header-solid max-h-max rounded-md"
-            bodyStyle={{
-               paddingTop: 10,
-               paddingLeft: 10,
-               paddingRight: 10,
-               paddingBottom: 10
-            }}
-         >
-            <ConfigProvider locale={localMn()}>
-               <Table
-                  rowKey={'id'}
-                  bordered
-                  locale={{
-                     emptyText: <Result title="Мэдээлэл байхгүй байна" />
-                  }}
-                  loading={isLoadingFilter}
-                  columns={columns}
-                  dataSource={patientsList}
-                  pagination={{
-                     position: ['topCenter', 'bottomCenter'],
-                     size: 'small',
-                     total: patientsList?.length,
-                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                     pageSize: 10
-                  }}
-               />
-            </ConfigProvider>
-         </Card>
+
          <NewModal
             title="Урьдчилгаа төлбөр"
             open={isOpenBeforePaymentModal}
@@ -352,6 +346,7 @@ function Invoice() {
                   beforePay(values);
                })
             }
+            width={700}
             maskClosable={true}
             cancelText="Болих"
             okText="Хадгалах"
@@ -360,81 +355,94 @@ function Invoice() {
                padding: 10
             }}
          >
-            <div className="flex flex-col gap-3">
-               <div className="grid sm:grid-cols-1 lg:grid-cols-1 gap-3">
-                  <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
-                  <Card
-                     bordered={false}
-                     title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
-                     className="header-solid max-h-max rounded-md"
-                     bodyStyle={{
-                        paddingTop: 0,
-                        paddingLeft: 10,
-                        paddingRight: 10,
-                        paddingBottom: 10
+            <div className="grid sm:grid-cols-1 lg:grid-cols-1 gap-1">
+               <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
+               <Card
+                  bordered={false}
+                  title={<h6 className="font-semibold m-0">Үйлчлүүлэгчийн Жагсаалт</h6>}
+                  className="header-solid rounded-md"
+                  style={{
+                     margin: 12
+                  }}
+                  bodyStyle={{
+                     paddingTop: 0,
+                     paddingLeft: 10,
+                     paddingRight: 10,
+                     paddingBottom: 10
+                  }}
+                  extra={
+                     <>
+                        <Pagination
+                           simple
+                           current={notPatientsMeta.page}
+                           pageSize={notPatientsMeta.limit}
+                           total={notPatientsMeta.itemCount}
+                           onChange={(page, pageSize) => onSearchPayment(page, pageSize, notPatientsValue)}
+                        />
+                     </>
+                  }
+               >
+                  <Table
+                     rowKey={'id'}
+                     bordered
+                     rowClassName="hover:cursor-pointer"
+                     onRow={(row, rowIndex) => {
+                        return {
+                           onClick: () => {
+                              setSelectedPatient(row);
+                           }
+                        };
                      }}
-                     extra={
-                        <>
-                           <Pagination
-                              simple
-                              current={notPatientsMeta.page}
-                              pageSize={notPatientsMeta.limit}
-                              total={notPatientsMeta.itemCount}
-                              onChange={(page, pageSize) => onSearchPayment(page, pageSize, notPatientsValue)}
-                           />
-                        </>
-                     }
-                  >
-                     <Table
-                        rowKey={'id'}
-                        bordered
-                        rowClassName="hover:cursor-pointer"
-                        onRow={(row, rowIndex) => {
-                           return {
-                              onClick: () => {
-                                 setSelectedPatient(row);
-                              }
-                           };
-                        }}
-                        loading={notPatientLoading}
-                        columns={notPatientColumn}
-                        dataSource={notPatientsList}
-                        pagination={false}
-                        scroll={{ y: 120 }}
-                     />
-                  </Card>
-                  <NewCard title="Төлбөр">
-                     <Form form={beforePayForm} layout="vertical">
-                        <Form.Item name="preAmount" label="Урьдчилсан төлбөр">
-                           <NewInputNumber
-                              style={{
-                                 width: '100%'
-                              }}
-                              prefix={'₮ '}
-                              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                              parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                           />
-                        </Form.Item>
-                        <Form.Item name="paymentTypeId" label="Төлбөрийн хэлбэр">
-                           <NewSelect>
-                              {paymentShape?.map((paymentShape, index) => {
-                                 return (
-                                    <NewOption key={index} value={paymentShape.id}>
-                                       {paymentShape.name}
-                                    </NewOption>
-                                 );
-                              })}
-                           </NewSelect>
-                        </Form.Item>
-                        <Form.Item name={'isEbarimt'} label="И-Баримт өгөх эсэх">
-                           <NewRadioGroup>
-                              <NewRadio value={true}>Тийм</NewRadio>
-                              <NewRadio value={false}>Үгүй</NewRadio>
-                           </NewRadioGroup>
-                        </Form.Item>
-                     </Form>
-                  </NewCard>
-               </div>
+                     loading={notPatientLoading}
+                     columns={notPatientColumn}
+                     dataSource={notPatientsList}
+                     pagination={false}
+                     scroll={{ y: 120 }}
+                  />
+               </Card>
+               <Card
+                  bordered={false}
+                  title={<h6 className="font-semibold m-0">Төлбөр</h6>}
+                  className="header-solid rounded-md"
+                  style={{
+                     marginLeft: 12,
+                     marginRight: 12,
+                     marginBottom: 12
+                  }}
+                  bodyStyle={{
+                     paddingTop: 0,
+                     paddingLeft: 10,
+                     paddingRight: 10,
+                     paddingBottom: 10
+                  }}
+               >
+                  <Form form={beforePayForm} layout="vertical">
+                     <Form.Item name="preAmount" label="Урьдчилсан төлбөр">
+                        <InputNumber
+                           style={{
+                              width: '100%'
+                           }}
+                           prefix={'₮ '}
+                           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                           parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                        />
+                     </Form.Item>
+                     <Form.Item name="paymentTypeId" label="Төлбөрийн хэлбэр">
+                        <Select
+                           options={paymentShape?.map((paymentShape) => ({
+                              label: paymentShape.name,
+                              value: paymentShape.id
+                           }))}
+                        />
+                     </Form.Item>
+                     <Form.Item name={'isEbarimt'} label="И-Баримт өгөх эсэх">
+                        <Radio.Group>
+                           <Radio value={true}>Тийм</Radio>
+                           <Radio value={false}>Үгүй</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                  </Form>
+               </Card>
             </div>
          </NewModal>
          <NewModal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">

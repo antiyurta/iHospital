@@ -10,6 +10,10 @@ function Schedule() {
       { label: 'Эмчилгээний хуваарь', key: 2, children: <TreatmentSchedule /> },
       { label: 'Оношилгооны хуваарь', key: 3, children: <DeviceSchedule /> }
    ];
-   return <Tabs type="card" items={tabs} />;
+   return (
+      <div className="p-3 w-full bg-[#f5f6f7] overflow-auto">
+         <Tabs type="card" items={tabs} />
+      </div>
+   );
 }
 export default Schedule;

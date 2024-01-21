@@ -13,6 +13,7 @@ import NursingStats from './NursingStats';
 const { CheckableTag } = Tag;
 function MainInPatient({ patientId }) {
    const token = useSelector(selectCurrentToken);
+   const [activeKey, setActiveKey] = useState(1);
    const [checkedKey, setCheckedKey] = useState(1);
    const [isLoading, setIsLoading] = useState(false);
    const [inpatientRequests, setInpatientRequests] = useState([]);
@@ -41,6 +42,48 @@ function MainInPatient({ patientId }) {
    useEffect(() => {
       getInpatienRequests();
    }, [patientId]);
+   const buttonItems = [
+      {
+         label: 'Шинжилгээний хариу',
+         key: 1,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Дүрс оношилгоо',
+         key: 2,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Эмийн эмчилгээ',
+         key: 3,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Эмийн бус эмчилгээ',
+         key: 4,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Мэс засал',
+         key: 5,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Мэдээгүйжүүлэг',
+         key: 6,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Эмчийн тэмдэглэл',
+         key: 7,
+         children: <ComingSoon />
+      },
+      {
+         label: 'Сувилгааны тэмдэглэл',
+         key: 8,
+         children: <ComingSoon />
+      }
+   ];
    const items = [
       {
          label: 'Анамнез',
@@ -103,40 +146,23 @@ function MainInPatient({ patientId }) {
          children: <NursingStats />
       }
    ];
-   const onChange = (key) => {
-      setCheckedKey(key);
-   };
-   const Render = () => {
-      if (checkedKey != 0) {
-         return <div className="p-2">{items[checkedKey - 1].children}</div>;
-      }
-   };
-   useEffect(() => {
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-         setIsLoading(false);
-      }, 1000);
-      return () => clearTimeout(timer);
-   }, [checkedKey]);
    return (
-      <div>
-         <div className="bg-[#1890ff] checkTag">
-            {items.map((item, index) => {
-               return (
-                  <CheckableTag
-                     key={index}
-                     checked={checkedKey === item.key}
-                     onChange={() => {
-                        onChange(item.key);
-                     }}
-                     className="text-white m-1"
-                  >
-                     {item.label}
-                  </CheckableTag>
-               );
-            })}
+      <div className="inpatient-history-filter">
+         <div className="filters">
+            {buttonItems?.map((buttonItem) => (
+               <button
+                  key={buttonItem.key}
+                  className={activeKey === buttonItem.key ? 'active' : ''}
+                  onClick={() => {
+                     console.log(buttonItem.key);
+                     setActiveKey(buttonItem.key);
+                  }}
+               >
+                  {buttonItem.label}
+               </button>
+            ))}
          </div>
-         <div className="pt-1">{isLoading ? <FullScreenLoader full={false} /> : <Render />}</div>
+         <div>{buttonItems[activeKey - 1].children}</div>
       </div>
    );
 }

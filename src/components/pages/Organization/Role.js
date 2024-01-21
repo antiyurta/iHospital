@@ -30,22 +30,20 @@ function Role() {
       }
    ];
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full">
-            <UTable
-               title={'Role'}
-               url={'reference/role'}
-               column={roleColumn}
-               initialValues={{
-                  hospitalId: hospitalId
-               }}
-               isCreate={true}
-               isRead={true}
-               isUpdate={true}
-               isDelete={true}
-               width="80%"
-            />
-         </div>
+      <div className="w-full bg-[#f5f6f7] p-3">
+         <UTable
+            title={'Role'}
+            url={'reference/role'}
+            column={roleColumn}
+            initialValues={{
+               hospitalId: hospitalId
+            }}
+            isCreate={true}
+            isRead={true}
+            isUpdate={true}
+            isDelete={true}
+            width="80%"
+         />
       </div>
    );
 }

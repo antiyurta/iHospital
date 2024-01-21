@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get, Post } from '../../comman';
+import { Get } from '../../comman';
 import UTable from '../../UTable';
 
 function Structure() {
@@ -165,8 +165,8 @@ function Structure() {
       // getFinanceDepartments();
    }, []);
    return (
-      <div className="flex flex-wrap">
-         <div className="w-full p-1">
+      <div className="w-full overflow-auto h-screen bg-[#f5f6f7] p-3">
+         <div className="flex flex-col gap-2">
             <UTable
                title={'Tасаг'}
                url={'organization/structure'}
@@ -179,8 +179,6 @@ function Structure() {
                width="80%"
                isRefresh={testParam}
             />
-         </div>
-         <div className="w-full p-1">
             <UTable
                title={'Кабинет'}
                url={'organization/structure'}
@@ -192,8 +190,6 @@ function Structure() {
                isDelete={true}
                width="80%"
             />
-         </div>
-         <div className="w-full p-1">
             <UTable
                title={'Харьяалал'}
                url={'organization/structure'}

@@ -1,28 +1,20 @@
+import React, { useState, useEffect } from 'react';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
-import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentIsAfterPay, selectCurrentToken } from '../../../features/authReducer';
-import { Get, numberToCurrency, openNofi } from '../../comman';
+import { selectCurrentIsAfterPay } from '../../../features/authReducer';
+import { numberToCurrency, openNofi } from '../../comman';
+import dayjs from 'dayjs';
 import Appointment from '../Appointment/Index';
 import EbarimtPrint from '../EPayment/EbarimtPrint';
 
 import PaymentService from '../../../services/payment/payment';
 import EbarimtService from '../../../services/ebarimt/ebarimt';
-import { NewColumn, NewTable } from '../../Table/Table';
-import { NewOption, NewSelect } from '../../Input/Input';
-import moment from 'moment';
 
-const { Option } = Select;
 const { Search } = Input;
 function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSuccess }) {
    // isOCS = true bol emch OSC false bol burgel tolbor awah ued
-   const token = useSelector(selectCurrentToken);
    const hospitalIsAfterPay = useSelector(selectCurrentIsAfterPay);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const [noTimeRequirePayments, setNoTimeRequirePayments] = useState([]);
    const [timeRequirePayments, setTimeRequirePayments] = useState([]);
    //
@@ -53,8 +45,9 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    const [prePaymentId, setPrePaymentId] = useState(Number);
    //
    const getDiscounts = async () => {
-      const response = await Get('payment/discount', token, config);
-      setDiscounts(response.data);
+      await PaymentService.getDiscount().then(({ data: { response } }) => {
+         setDiscounts(response.data);
+      });
    };
    const getFilterInvoices = (invoices) => {
       setTotalAmount(invoices?.reduce((totalAmount, invoice) => (totalAmount += invoice.amount), 0));
@@ -62,7 +55,6 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       var time = [];
       invoices?.map((invoice) => {
          if (hospitalIsAfterPay) {
-            console.log('======>hospitalIsAfterPay', hospitalIsAfterPay);
             noTime.push(invoice);
          } else {
             if (invoice.type === 2 && invoice.treatmentRequest?.slotId === null && invoice.treatment?.isSlot) {
@@ -257,15 +249,14 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                            {isDiscount && (
                               <div className="w-full p-1">
                                  <label>Хөнгөлөх хувь</label>
-                                 <Select style={{ width: '100%' }} onChange={(e) => setDiscountPercentRequest(e)}>
-                                    {discounts.map((discount, index) => {
-                                       return (
-                                          <Option key={index} value={discount.id}>
-                                             {discount.name}
-                                          </Option>
-                                       );
-                                    })}
-                                 </Select>
+                                 <Select
+                                    style={{ width: '100%' }}
+                                    onChange={(e) => setDiscountPercentRequest(e)}
+                                    options={discounts.map((discount) => ({
+                                       label: discount.name,
+                                       value: discount.id
+                                    }))}
+                                 />
                               </div>
                            )}
                         </div>
@@ -339,35 +330,24 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                               <p className="float-right font-bold">
                                  Урьдчилан өгсөн төлбөр : {numberToCurrency(preTotalAmount)}
                               </p>
-                              <NewTable
-                                 prop={{
-                                    rowKey: 'id',
-                                    bordered: true,
-                                    dataSource: prePayments,
-                                    rowSelection: rowSelectionPre
-                                 }}
-                                 meta={{
-                                    page: 1,
-                                    limit: prePayments.length
-                                 }}
-                                 isLoading={false}
-                                 isPagination={false}
-                              >
-                                 <NewColumn
-                                    title="Огноо"
-                                    dataIndex={'createdAt'}
-                                    render={(text) => {
-                                       return moment(text).format('YYYY/MM/DD HH:mm');
-                                    }}
-                                 />
-                                 <NewColumn
-                                    title="Төлсөн дүн"
-                                    dataIndex={'preAmount'}
-                                    render={(text) => {
-                                       return numberToCurrency(text);
-                                    }}
-                                 />
-                              </NewTable>
+                              <Table
+                                 rowKey="id"
+                                 columns={[
+                                    {
+                                       title: 'Огноо',
+                                       dataIndex: 'createdAt',
+                                       render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD')
+                                    },
+                                    {
+                                       title: 'Төлсөн дүн',
+                                       dataIndex: 'preAmount',
+                                       render: (preAmount) => numberToCurrency(preAmount)
+                                    }
+                                 ]}
+                                 dataSource={prePayments}
+                                 rowSelection={rowSelectionPre}
+                                 pagination={false}
+                              />
                            </div>
                         </div>
                      </div>
@@ -397,16 +377,12 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                                     {
                                        title: 'Иргэн төлөх',
                                        dataIndex: 'amount',
-                                       render: (text) => {
-                                          return numberToCurrency(text);
-                                       }
+                                       render: (amount) => numberToCurrency(amount)
                                     },
                                     {
                                        title: 'Даатгалаас төлөх',
                                        dataIndex: 'hicsAmount',
-                                       render: (text) => {
-                                          return numberToCurrency(text);
-                                       }
+                                       render: (text) => numberToCurrency(text)
                                     }
                                  ]}
                                  dataSource={noTimeRequirePayments}
@@ -419,15 +395,14 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                         <div className="p-3">
                            <div className="flex justify-between">
                               <p className="float-right font-bold w-full">Төлбөрийн хэлбэр</p>
-                              <NewSelect className="w-full" onChange={(e) => setSelectedPaymentShape(e)}>
-                                 {paymentShape?.map((shape, index) => {
-                                    return (
-                                       <NewOption key={index} value={shape.id}>
-                                          {shape.name}
-                                       </NewOption>
-                                    );
-                                 })}
-                              </NewSelect>
+                              <Select
+                                 className="w-full"
+                                 onChange={(e) => setSelectedPaymentShape(e)}
+                                 options={paymentShape?.map((shape) => ({
+                                    label: shape.name,
+                                    value: shape.id
+                                 }))}
+                              />
                            </div>
                         </div>
                      </div>

@@ -211,7 +211,7 @@ function Finger(props) {
                                        disabled={currentStep === steps?.length - 1 ? true : false}
                                        onClick={() => next()}
                                     >
-                                       Дараахь
+                                       Дараах
                                     </Button>
                                  </div>
                               </div>

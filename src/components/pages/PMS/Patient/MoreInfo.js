@@ -1,9 +1,9 @@
 import { Form, Input, Select } from 'antd';
 import React, { useState } from 'react';
-import SocialStatus from '../socialStatus.json';
-import ChildStatus from '../childStatus.json';
-import serviceScopeStatus from '../serviceScopeStatus.json';
-import marriageStatus from '../marriageStatus.json';
+import SocialStatus from '../socialStatus.js';
+import ChildStatus from '../childStatus.js';
+import serviceScopeStatus from '../serviceScopeStatus.js';
+import marriageStatus from '../marriageStatus.js';
 function MoreInfo({ form }) {
    const { Option } = Select;
    const [isChild, setIsChild] = useState(true);
@@ -21,7 +21,7 @@ function MoreInfo({ form }) {
             <Form.Item
                label="Нийгмийн байдал:"
                name="socialStatusType"
-               rules={[{ required: true, message: 'Нийгмийн байдал оруулна уу' }]}
+               rules={[{ required: false, message: 'Нийгмийн байдал оруулна уу' }]}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >
@@ -66,7 +66,8 @@ function MoreInfo({ form }) {
                name="marriageStatus"
                rules={[
                   {
-                     required: isChild,
+                     // required: isChild,
+                     required: false,
                      message: 'Гэрлэлтийн байдал оруулна уу'
                   }
                ]}
@@ -90,7 +91,8 @@ function MoreInfo({ form }) {
                name="educationType"
                rules={[
                   {
-                     required: isChild,
+                     // required: isChild,
+                     required: false,
                      message: 'Боловсрол оруулна уу'
                   }
                ]}
@@ -115,7 +117,8 @@ function MoreInfo({ form }) {
                name="serviceScopeStatusType"
                rules={[
                   {
-                     required: isChild,
+                     // required: isChild,
+                     required: false,
                      message: 'Үйлчлэх хүрээ оруулна уу'
                   }
                ]}
@@ -139,7 +142,8 @@ function MoreInfo({ form }) {
                name="organization"
                rules={[
                   {
-                     required: isChild,
+                     // required: isChild,
+                     required: false,
                      message: 'Ажлын газар оруулна уу'
                   }
                ]}
@@ -155,7 +159,8 @@ function MoreInfo({ form }) {
                name="jobPosition"
                rules={[
                   {
-                     required: isChild,
+                     // required: isChild,
+                     required: false,
                      message: 'Албан тушаал оруулна уу'
                   }
                ]}
