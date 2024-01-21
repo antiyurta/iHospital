@@ -2,7 +2,12 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 //маягт АМ-3
-function AM3() {
+function AM3(props) {
+   console.log('props', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -50,20 +55,33 @@ function AM3() {
          lineHeight: 1
       }
    };
+
+   const returnQuestionCode = (key, question, val) => {
+      return formData?.[key].includes(question) ? (
+         formData?.[key].map((el, index) => {
+            if (el == question) {
+               return (
+                  <span
+                     key={index}
+                     style={{ fontSize: 10, textAlign: 'center' }}
+                     className={el === question ? 'underline' : ''}
+                  >
+                     {val}
+                  </span>
+               );
+            }
+         })
+      ) : (
+         <span style={{ fontSize: 10 }}>{val}</span>
+      );
+   };
    return (
       <>
          <div className="page">
             <div className="subpage">
                <div style={styles.flexContainer}>
                   <div style={{ display: 'flex' }}>
-                     <span style={{ marginRight: 5 }}>Эмнэлгийн нэр: </span>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
+                     <span style={{ marginRight: 5 }}>Эмнэлгийн нэр: {hospitalName}</span>
                   </div>
                   <div>
                      <span
@@ -122,12 +140,17 @@ function AM3() {
                      <div style={styles.rowCells}></div>
                   </div>
                   <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>5. Хүйс: /зур/ эрэгтэй, эмэгтэй</div>
-                  <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>6. Жирэмсэн эсэх:</div>
-                  <div style={styles.rowCellWithText}>
-                     <div style={styles.rowCells}></div>&nbsp;тийм
-                  </div>
-                  <div style={{ ...styles.rowCellWithText, ...{ marginLeft: 20 } }}>
-                     <div style={styles.rowCells}></div>&nbsp;үгүй
+                  <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
+                     6. Жирэмсэн эсэх:
+                     <span style={{ marginLeft: 10 }}>
+                        <span style={{ fontSize: 10 }} className={formData?.q2 === 'q2-1' ? 'underline mr-1' : 'mr-1'}>
+                           {' '}
+                           тийм,{' '}
+                        </span>
+                        <span style={{ fontSize: 10 }} className={formData?.q2 === 'q2-2' ? 'underline mr-1' : 'mr-1'}>
+                           үгүй
+                        </span>
+                     </span>
                   </div>
                </div>
                <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -153,12 +176,34 @@ function AM3() {
                               </td>
                               <td style={styles.leftText}>Хөдөлмөр эрхлэлтийн байдал</td>
                               <td style={styles.leftText}>
-                                 <div style={{ width: 20 }}></div>
+                                 <div style={{ width: 40 }}>
+                                    {formData?.q3.map((el, index) => {
+                                       return (
+                                          <span key={index} style={{ fontSize: 10 }}>
+                                             {el?.substr(3)}
+                                             {index === formData.length - 1 ? '' : ','}
+                                          </span>
+                                       );
+                                    })}
+                                    <span style={{ fontSize: 10 }}>{formData.q3Other}</span>
+                                 </div>
                               </td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Хөдөлмөр эрхлэхгүй шалтгаан</td>
-                              <td style={styles.leftText}></td>
+                              <td style={styles.leftText}>
+                                 <div style={{ width: 40 }}>
+                                    {formData?.q4.map((el, index) => {
+                                       return (
+                                          <span key={index} style={{ fontSize: 10 }}>
+                                             {el?.substr(3)}
+                                             {index === formData.length - 1 ? '' : ','}
+                                          </span>
+                                       );
+                                    })}
+                                    <span style={{ fontSize: 10 }}>{formData.q4Other}</span>
+                                 </div>
+                              </td>
                            </tr>
                         </tbody>
                      </Table>
@@ -169,27 +214,27 @@ function AM3() {
                                  <b>10. Гэр бүлийн байдал</b>
                               </td>
                               <td style={styles.leftText}>Огт гэрлээгүй</td>
-                              <td style={styles.centerText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q5', 'q5-01', 1)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Батлуулсан гэр бүлтэй</td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q5', 'q5-02', 2)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Батлуулаагүй гэр бүлтэй</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q5', 'q5-03', 3)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Тусгаарласан</td>
-                              <td style={styles.centerText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q5', 'q5-04', 4)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Цуцалсан</td>
-                              <td style={styles.centerText}>5</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q5', 'q5-05', 5)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бэлбэсэн</td>
-                              <td style={styles.centerText}>6</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q5', 'q5-06', 6)}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -197,22 +242,22 @@ function AM3() {
                         <tbody>
                            <tr>
                               <td rowSpan={4} style={styles.centerText}>
-                                 <b>10. Гэр бүлийн байдал</b>
+                                 <b>10. Эрсдэлт бүлэг</b>
                               </td>
                               <td style={styles.leftText}>ЭБҮ</td>
-                              <td style={styles.centerText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q9', 'q9-1', 1)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>ЭБЭ</td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q9', 'q9-2', 2)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>МБСТХ</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q9', 'q9-3', 3)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Хөдөлгөөнт хүн ам</td>
-                              <td style={styles.centerText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q9', 'q9-4', 4)}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -232,39 +277,39 @@ function AM3() {
                                  <b>8. Боловсролын байдал</b>
                               </td>
                               <td style={styles.leftText}>Боловсролгүй</td>
-                              <td style={styles.leftText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-01', 1)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бага</td>
-                              <td style={styles.leftText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-02', 2)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Суурь боловсрол</td>
-                              <td style={styles.leftText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-03', 3)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бүрэн дунд</td>
-                              <td style={styles.leftText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-04', 4)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Мэргэжлийн болон техникийн</td>
-                              <td style={styles.leftText}>5</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-05', 5)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Дипломын</td>
-                              <td style={styles.leftText}>6</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-06', 6)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бакалавр</td>
-                              <td style={styles.leftText}>7</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-07', 7)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Магистр</td>
-                              <td style={styles.leftText}>8</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-08', 8)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Доктор</td>
-                              <td style={styles.leftText}>9</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q6', 'q6-09', 9)}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -275,23 +320,23 @@ function AM3() {
                                  <b>11.Үзлэгийн төрөл</b>
                               </td>
                               <td style={styles.leftText}>Урьдчилан сэргийлэх үзлэг</td>
-                              <td style={styles.centerText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q7', 'q7-1', 1)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Өвчний учир амбулаторт</td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q7', 'q7-2', 2)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Хяналт</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q7', 'q7-3', 3)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Тандалт /хавьтлаар/</td>
-                              <td style={styles.centerText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q7', 'q7-4', 4)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Дуудлага</td>
-                              <td style={styles.centerText}>5</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q7', 'q7-5', 5)}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -302,15 +347,15 @@ function AM3() {
                                  <b>12. Илрүүлсэн байгууллага</b>
                               </td>
                               <td style={styles.leftText}>Улсын ЭМБ</td>
-                              <td style={styles.centerText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q8', 'q8-1', 1)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Хувийн хэвшлийн ЭМБ </td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q8', 'q8-2', 2)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>ТББ</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q8', 'q8-3', 3)}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -321,23 +366,23 @@ function AM3() {
                                  <b>14. Бэлгийн чиг баримжаа, хүйсийн баримжаа илэрхийлэл</b>
                               </td>
                               <td style={styles.leftText}>Гетеросекс</td>
-                              <td style={styles.centerText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q10', 'q10-1', 1)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Гомосекс</td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q10', 'q10-2', 2)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бисекс</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q10', 'q10-3', 3)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Трансжендер</td>
-                              <td style={styles.centerText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q10', 'q10-4', 4)}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Тодорхой бус</td>
-                              <td style={styles.centerText}>5</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q10', 'q10-5', 5)}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -350,22 +395,17 @@ function AM3() {
                            <b>15.Үндсэн онош:</b>
                         </td>
                         <td style={{ ...styles.centerText, ...{ width: 30 } }}>1</td>
-                        <td
-                           style={{
-                              ...styles.centerText,
-                              ...{ width: 80, height: 50 }
-                           }}
-                        ></td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>{formData?.q11}</td>
                         <td style={{ ...styles.centerText, ...{ width: 30 } }}>2</td>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>{formData?.q12}</td>
                         <td style={{ ...styles.centerText, ...{ width: 30 } }}>3</td>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>{formData?.q13}</td>
                         <td style={{ ...styles.centerText, ...{ width: 30 } }}>4</td>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>{formData?.q14}</td>
                         <td style={{ ...styles.centerText, ...{ width: 30 } }}>5</td>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>{formData?.q15}</td>
                         <td style={{ ...styles.centerText, ...{ width: 30 } }}>6</td>
-                        <td style={{ ...styles.centerText, ...{ width: 80 } }}></td>
+                        <td style={{ ...styles.centerText, ...{ width: 80 } }}>{formData?.q16}</td>
                      </tr>
                   </tbody>
                </Table>
@@ -382,39 +422,39 @@ function AM3() {
                                  <div style={{ marginTop: 30 }}>Цус, цусан бүтээгдэхүүн</div>
                               </td>
                               <td style={styles.leftText}>Байнгын бэлгийн хавьтагч</td>
-                              <td style={styles.centerText}>1А</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-1', '1A')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Тохиолдлын бэлгийн хавьтагч</td>
-                              <td style={styles.centerText}>1В</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-2', '1B')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Мэс ажилбар</td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-3', '2')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>МБСТХ</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-4', '3')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бохир зүү тариур</td>
-                              <td style={styles.centerText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-5', '4')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Цус сэлбүүлсэн</td>
-                              <td style={styles.centerText}>5</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-6', '5')}</td>
                            </tr>
                            <tr>
                               <td colSpan={2} style={styles.leftText}>
                                  Эхээс хүүхдэд халдварласан
                               </td>
-                              <td style={styles.centerText}>6</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-7', '6')}</td>
                            </tr>
                            <tr>
                               <td colSpan={2} style={styles.leftText}>
                                  Тодорхой бус
                               </td>
-                              <td style={styles.centerText}>7</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q17', 'q17-8', '7')}</td>
                            </tr>
                         </tbody>
                      </Table>
@@ -427,39 +467,39 @@ function AM3() {
                         <tbody>
                            <tr>
                               <td style={styles.leftText}>Хурдавчилсан сорил</td>
-                              <td style={styles.centerText}>1</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-1', '1')}</td>
                               <td style={styles.leftText}>Полимеразын гинжин урвал /PCR/</td>
-                              <td style={styles.centerText}>7</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-7', '7')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>RPR</td>
-                              <td style={styles.centerText}>2</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-2', '2')}</td>
                               <td style={styles.leftText}>Нойтон түрхэц</td>
-                              <td style={styles.centerText}>8</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-8', '8')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>TPHA</td>
-                              <td style={styles.centerText}>3</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-3', '3')}</td>
                               <td style={styles.leftText}>Наац</td>
-                              <td style={styles.centerText}>9</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-9', '9')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>ФХЭБУ/ ELISA/ </td>
-                              <td style={styles.centerText}>4</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-4', '4')}</td>
                               <td style={styles.leftText}>Өсгөвөр</td>
-                              <td style={styles.centerText}>10</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-10', '10')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>FTA-abs</td>
-                              <td style={styles.centerText}>5</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-5', '5')}</td>
                               <td style={styles.leftText}>Эмнэл зүй</td>
-                              <td style={styles.centerText}>11</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-11', '11')}</td>
                            </tr>
                            <tr>
                               <td style={styles.leftText}>Бараан талбайд шууд харах</td>
-                              <td style={styles.centerText}>6</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-6', '6')}</td>
                               <td style={styles.leftText}>Бусад</td>
-                              <td style={styles.centerText}>12</td>
+                              <td style={styles.centerText}>{returnQuestionCode('q18', 'q18-12', '12')}</td>
                            </tr>
                         </tbody>
                      </Table>
