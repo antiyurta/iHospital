@@ -1,6 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { formatNameForDoc } from '../../comman';
-import { Badge, ConfigProvider, Form, Input, Modal, Radio, Table, Tabs } from 'antd';
+import {
+   Badge,
+   Button,
+   ConfigProvider,
+   Descriptions,
+   Form,
+   Input,
+   Modal,
+   Popconfirm,
+   Radio,
+   Select,
+   Table,
+   Tabs
+} from 'antd';
 import {
    DeleteOutlined,
    EditOutlined,
@@ -22,15 +35,18 @@ import DiagnoseWindow from '../service/DiagnoseWindow';
 import EditableTableMedicine from './SetOrder/EditableTableMedicine';
 import EditableTableExamination from './SetOrder/EditableTableExamination';
 import EditableTableXray from './SetOrder/EditableTableXray';
+import { Each } from '../../../features/Each';
 
 const InMode = {
    EDIT: 'EDIT',
-   VIEW: 'VIEW'
+   VIEW: 'VIEW',
+   CREATE: 'CREATE'
 };
 
 const InTitle = {
-   EDIT: 'Засварлах',
-   VIEW: 'Харах'
+   EDIT: 'засварлах',
+   VIEW: 'харах',
+   CREATE: 'нэмэх'
 };
 
 const { TextArea } = Input;
@@ -47,9 +63,11 @@ function SetOrder({ handleclick }) {
    const [structures, setStructures] = useState([]);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isOpenFirstModal, setIsOpenFirstModal] = useState(false);
-   const [isOpenSubModal, setIsOpenSubModal] = useState(false);
+   const [selectedSetOrder, setSelectedSetOrder] = useState({});
+   const [isOpenViewModal, setIsOpenViewModal] = useState(false);
    const [isMode, setIsMode] = useState();
    const [isLoading, setIsLoading] = useState(false);
+   const [isLoadingConfirm, setIsLoadingConfirm] = useState(false);
 
    const getSetOrders = async () => {
       setIsLoading(true);
@@ -71,24 +89,32 @@ function SetOrder({ handleclick }) {
       });
    };
 
-   // const onFinish = async (values) => {
-   //    setIsLoadingConfirm(true);
-   //    if (editMode) {
-   //       await ServiceService.patchSetOrder(selectedOrderId, values).then((response) => {
-   //          if (response.data.success) {
-   //             setIsLoadingConfirm(false);
-   //             setIsOpenAddModal(false);
-   //             getSetOrders(1, 10);
-   //          }
-   //       });
-   //    } else {
-   //       await ServiceService.postSetOrder(values).then((response) => {
-   //          setIsLoadingConfirm(false);
-   //          setIsOpenAddModal(false);
-   //          getSetOrders(1, 10);
-   //       });
-   //    }
-   // };
+   const onFinish = async (values) => {
+      setIsLoadingConfirm(true);
+      if (isMode === InMode.EDIT) {
+         await ServiceService.patchSetOrder(selectedOrderId, values).then((response) => {
+            if (response.data.success) {
+               // setIsLoadingConfirm(false);
+               // setIsOpenAddModal(false);
+               // getSetOrders(1, 10);
+            }
+         });
+      } else if (isMode === InMode.CREATE) {
+         await ServiceService.postSetOrder(values).then((response) => {
+            // setIsLoadingConfirm(false);
+            // setIsOpenAddModal(false);
+            // getSetOrders(1, 10);
+         });
+      }
+   };
+   const onDelete = async (id) => {
+      await ServiceService.deleteSetOrder(id).then(({ data: { response, success } }) => {
+         if (success) {
+            console.log(response);
+            getSetOrders();
+         }
+      });
+   };
 
    useEffect(() => {
       getSetOrders();
@@ -144,26 +170,42 @@ function SetOrder({ handleclick }) {
                      render: (_, row) => formatNameForDoc(row?.createdLastName, row?.createdFirstName)
                   },
                   {
+                     title: 'Онош',
+                     dataIndex: 'icdCode'
+                  },
+                  {
                      title: 'Тайлбар',
                      dataIndex: 'description'
                   },
                   {
                      title: '',
                      render: (_, row) => (
-                        <div className="flex flex-row gap-2">
+                        <div className="flex flex-row gap-3 justify-center">
                            <EyeOutlined
+                              className="text-blue-600"
                               onClick={() => {
                                  setIsMode(InMode.VIEW);
-                                 setIsOpenSubModal(true);
+                                 setSelectedSetOrder(row);
+                                 setIsOpenViewModal(true);
                               }}
                            />
                            <EditOutlined
+                              className="text-green-600"
                               onClick={() => {
                                  setIsMode(InMode.EDIT);
-                                 setIsOpenSubModal(true);
+                                 form.setFieldsValue(row);
+                                 setIsOpenFirstModal(true);
                               }}
                            />
-                           <DeleteOutlined />
+                           <Popconfirm
+                              title="Сет-Ордер устгах"
+                              description="Та утсгахдаа итгэлттэй байна уу?"
+                              onConfirm={() => onDelete(row.id)}
+                              okText="Тийм"
+                              cancelText="Үгүй"
+                           >
+                              <DeleteOutlined className="text-red-600" />
+                           </Popconfirm>
                         </div>
                      )
                   }
@@ -175,6 +217,7 @@ function SetOrder({ handleclick }) {
                      <div className="set-order-add-button">
                         <button
                            onClick={() => {
+                              setIsMode(InMode.CREATE);
                               setIsOpenFirstModal(true);
                            }}
                         >
@@ -237,7 +280,18 @@ function SetOrder({ handleclick }) {
                            </div>
                         ),
                         forceRender: true,
-                        children: <SetOrderTable type={0} orders={orders} />
+                        children: (
+                           <SetOrderTable
+                              type={0}
+                              orders={orders}
+                              handleClickAdd={() => setIsOpenFirstModal(true)}
+                              handleClickEdit={(row) => {
+                                 setIsMode(InMode.CREATE);
+                                 form.setFieldsValue(row);
+                                 setIsOpenFirstModal(true);
+                              }}
+                           />
+                        )
                      },
                      {
                         key: 3,
@@ -248,20 +302,31 @@ function SetOrder({ handleclick }) {
                            </div>
                         ),
                         forceRender: true,
-                        children: <SetOrderTable type={0} orders={orders} />
+                        children: (
+                           <SetOrderTable
+                              type={1}
+                              orders={orders}
+                              handleClickAdd={() => setIsOpenFirstModal(true)}
+                              handleClickEdit={(row) => {
+                                 setIsMode(InMode.CREATE);
+                                 form.setFieldsValue(row);
+                                 setIsOpenFirstModal(true);
+                              }}
+                           />
+                        )
                      }
                   ]}
                />
             </div>
          </Modal>
          <Modal
-            title="Cет-Ордер нэмэх"
+            title={`Cет-Ордер ${InTitle[isMode]}`}
             width={700}
             open={isOpenFirstModal}
             onCancel={() => setIsOpenFirstModal(false)}
             onOk={() =>
                form.validateFields().then((values) => {
-                  console.log(values);
+                  onFinish(values);
                })
             }
          >
@@ -294,6 +359,23 @@ function SetOrder({ handleclick }) {
                      />
                   </div>
                   <Form.Item
+                     label="Тасаг"
+                     name="structureId"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Онош заавал'
+                        }
+                     ]}
+                  >
+                     <Select
+                        options={structures?.map((structure) => ({
+                           label: structure.name,
+                           value: structure.id
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item
                      label="Тайлбар"
                      name="description"
                      rules={[
@@ -321,7 +403,11 @@ function SetOrder({ handleclick }) {
                            children: (
                               <Form.List name={['services', 'medicines']}>
                                  {(medicines, { remove }) => (
-                                    <EditableTableMedicine medicines={medicines} remove={remove} isEdit={false} />
+                                    <EditableTableMedicine
+                                       medicines={medicines}
+                                       remove={remove}
+                                       isEdit={isMode === InMode.EDIT ? true : false}
+                                    />
                                  )}
                               </Form.List>
                            )
@@ -342,7 +428,7 @@ function SetOrder({ handleclick }) {
                                        form={form}
                                        examinations={examinations}
                                        remove={remove}
-                                       isEdit={false}
+                                       isEdit={isMode === InMode.EDIT ? true : false}
                                     />
                                  )}
                               </Form.List>
@@ -360,7 +446,12 @@ function SetOrder({ handleclick }) {
                            children: (
                               <Form.List name={['services', 'xrays']}>
                                  {(xrays, { remove }) => (
-                                    <EditableTableXray form={form} xrays={xrays} remove={remove} isEdit={false} />
+                                    <EditableTableXray
+                                       form={form}
+                                       xrays={xrays}
+                                       remove={remove}
+                                       isEdit={isMode === InMode.EDIT ? true : false}
+                                    />
                                  )}
                               </Form.List>
                            )
@@ -370,7 +461,59 @@ function SetOrder({ handleclick }) {
                </div>
             </Form>
          </Modal>
-         <Modal title={InTitle[isMode]} open={isOpenSubModal} onCancel={() => setIsOpenSubModal(false)}></Modal>
+         <Modal
+            title={`Cет-Ордер ${InTitle[isMode]}`}
+            open={isOpenViewModal}
+            onCancel={() => setIsOpenViewModal(false)}
+            footer={null}
+         >
+            <Descriptions
+               bordered
+               size="small"
+               title="Дэлгэрэнгүй"
+               extra={
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        handleclick(selectedSetOrder);
+                        setIsOpenViewModal(false);
+                        setIsOpenModal(false);
+                     }}
+                  >
+                     Сет-Ордер ашиглах
+                  </Button>
+               }
+            >
+               <Descriptions.Item label={'Үүсгэсэн хүн'} span={2}>
+                  {selectedSetOrder?.createdFirstName}
+               </Descriptions.Item>
+               <Descriptions.Item label={'Онош'}>{selectedSetOrder?.icdCode}</Descriptions.Item>
+               <Descriptions.Item label={'Захиалсан эм'} span={3}>
+                  <ul className="list-decimal">
+                     <Each
+                        of={selectedSetOrder?.services?.medicines}
+                        render={(medicine, index) => <li key={index}>{medicine?.name}</li>}
+                     />
+                  </ul>
+               </Descriptions.Item>
+               <Descriptions.Item label={'Захиалсан шинжилгээ'} span={3}>
+                  <ul className="list-decimal">
+                     <Each
+                        of={selectedSetOrder?.services?.examinations}
+                        render={(examination, index) => <li key={index}>{examination?.name}</li>}
+                     />
+                  </ul>
+               </Descriptions.Item>
+               <Descriptions.Item label={'Захиалсан оношилгоо'} span={3}>
+                  <ul className="list-decimal">
+                     <Each
+                        of={selectedSetOrder?.services?.xrays}
+                        render={(xray, index) => <li key={index}>{xray.name}</li>}
+                     />
+                  </ul>
+               </Descriptions.Item>
+            </Descriptions>
+         </Modal>
       </>
    );
 }

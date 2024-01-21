@@ -159,6 +159,7 @@ const InternalOrder = (props) => {
          orderForm.setFieldsValue({ services: data });
          setTotal(total + subTotal);
       }
+      console.log('services', services);
       setIsLoadingOrderTable(false);
    };
    const inpatientRequestClick = async (values) => {
@@ -172,28 +173,33 @@ const InternalOrder = (props) => {
             console.log(err);
          });
    };
-   const handleClickSetOrder = async (services) => {
+   const handleClickSetOrder = async (setOrders) => {
+      const { services } = setOrders;
       setIsLoadingOrderTable(true);
       var newServices = [];
-      await Promise.all(
-         services?.map(async (service) => {
-            if (service.serviceType === 0) {
-               await ExaminationService.getById(service.serviceId).then((response) => {
-                  newServices.push(response.data.response);
-               });
-            } else if (service.serviceType === 1) {
-               await XrayService.getById(service.serviceId).then((response) => {
-                  console.log(response);
-                  newServices.push(response.data.response);
-               });
-            } else if (service.serviceType === 2) {
-               await TreatmentService.getById(service.serviceId).then((response) => {
-                  console.log(response);
-                  newServices.push(response.data.response);
-               });
-            }
-         })
-      );
+      services?.medicines?.map((medicine) => newServices.push(medicine));
+      services?.examinations?.map((examination) => newServices.push(examination));
+      services?.xrays?.map((xray) => newServices.push(xray));
+      console.log(newServices);
+      // await Promise.all(
+      //    services?.map(async (service) => {
+      //       if (service.serviceType === 0) {
+      //          await ExaminationService.getById(service.serviceId).then((response) => {
+      //             newServices.push(response.data.response);
+      //          });
+      //       } else if (service.serviceType === 1) {
+      //          await XrayService.getById(service.serviceId).then((response) => {
+      //             console.log(response);
+      //             newServices.push(response.data.response);
+      //          });
+      //       } else if (service.serviceType === 2) {
+      //          await TreatmentService.getById(service.serviceId).then((response) => {
+      //             console.log(response);
+      //             newServices.push(response.data.response);
+      //          });
+      //       }
+      //    })
+      // );
       handleclick(newServices);
    };
 

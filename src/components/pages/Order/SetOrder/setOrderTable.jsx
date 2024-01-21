@@ -6,7 +6,7 @@ import { formatNameForDoc } from '../../../comman';
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const SetOrderTable = (props) => {
-   const { type, orders, handleClickAdd } = props;
+   const { type, orders, handleClickAdd, handleClickEdit } = props;
    const { setPublicSetOrderCount, setPrivateSetOrderCount } = useContext(EmrContext);
    useEffect(() => {
       if (type === 0) {
@@ -41,7 +41,7 @@ const SetOrderTable = (props) => {
             },
             {
                title: 'Онош',
-               dataIndex: 'code'
+               dataIndex: 'icdCode'
             },
             {
                title: 'Тайлбар',
@@ -49,11 +49,11 @@ const SetOrderTable = (props) => {
             },
             {
                title: ' ',
-               render: () => {
+               render: (_, row) => {
                   return (
                      <div className="flex flex-row gap-3 justify-center">
                         <EyeOutlined className="text-blue-600" />
-                        <EditOutlined className="text-green-600" />
+                        <EditOutlined onClick={() => handleClickEdit(row)} className="text-green-600" />
                         <DeleteOutlined className="text-red-600" />
                      </div>
                   );

@@ -24,5 +24,8 @@ class Service {
    async patchSetOrder(id, data) {
       return await jwtInterceopter.patch('service/setorder/' + id, data);
    }
+   async deleteSetOrder(id) {
+      return await jwtInterceopter.delete('service/setorder/' + id);
+   }
 }
 export default new Service();

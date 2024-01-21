@@ -1,11 +1,10 @@
 import React from 'react';
-import { Button, Checkbox, DatePicker, Input, InputNumber } from 'antd';
+import { Button, Checkbox, DatePicker, Input, InputNumber, Table } from 'antd';
 import OrderForm from './OrderForm';
 import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { NewInputNumber } from '../../../Input/Input';
-import { NewColumn, NewTable } from '../../../Table/Table';
 const checkNumber = (event) => {
    var charCode = event.charCode;
    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
@@ -62,98 +61,81 @@ function OrderTable(props) {
    };
    return (
       <>
-         <NewTable
-            prop={{
-               rowKey: 'unikey',
-               bordered: true,
-               dataSource: services
-            }}
-            meta={{
-               page: 1,
-               limit: services.length
-            }}
-            isLoading={isLoading}
-            isPagination={false}
-         >
-            <NewColumn
-               title="Cito"
-               width={40}
-               dataIndex={'isCito'}
-               render={(_value, _row, index) => {
-                  return (
+         <Table
+            rowKey="unikey"
+            loading={isLoading}
+            columns={[
+               {
+                  title: '№',
+                  width: 50,
+                  render: (_, _row, index) => index + 1
+               },
+               {
+                  title: 'Cito',
+                  width: 40,
+                  dataIndex: 'isCito',
+                  render: (_value, _row, index) => (
                      <OrderForm noStyle name={[index, 'isCito']} valuePropName="checked" editing={true}>
                         <Checkbox />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Нэр"
-               dataIndex={'name'}
-               render={(_value, _row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Нэр',
+                  dataIndex: 'name',
+                  render: (_value, _row, index) => (
                      <OrderForm noStyle name={[index, 'name']} editing={false}>
                         <Input />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Хэлбэр"
-               dataIndex={'medicineType'}
-               render={(_value, _row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Хэлбэр',
+                  dataIndex: 'medicineType',
+                  render: (_value, _row, index) => (
                      <OrderForm name={[index, 'medicineType']} editing={false}>
                         <TextArea />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Тун"
-               dataIndex={'dose'}
-               render={(_value, _row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Тун',
+                  dataIndex: 'dose',
+                  render: (_value, _row, index) => (
                      <OrderForm
                         name={[index, 'dose']}
                         editing={form.getFieldValue(['services', index, 'type']) === 8 ? true : false}
                      >
                         <Input />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Сорьц"
-               dataIndex={'specimen'}
-               render={(_value, _row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Сорьц',
+                  dataIndex: 'specimen',
+                  render: (_value, _row, index) => (
                      <OrderForm
                         name={[index, 'specimen']}
                         editing={form.getFieldValue(['services', index, 'type']) === 0 ? true : false}
                      >
                         <TextArea />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Тайлбар"
-               dataIndex={'description'}
-               render={(value, row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Тайлбар',
+                  dataIndex: 'description',
+                  render: (_value, _row, index) => (
                      <OrderForm name={[index, 'description']} editing={true}>
                         <TextArea />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Өдөрт хэдэн удаа"
-               width={130}
-               dataIndex={'repeatTime'}
-               render={(value, row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Өдөрт хэдэн удаа',
+                  width: 130,
+                  dataIndex: 'repeatTime',
+                  render: (_value, _row, index) => (
                      <OrderForm
                         name={[index, 'repeatTime']}
                         rules={minRule(index, 'repeatTime')}
@@ -167,15 +149,13 @@ function OrderTable(props) {
                            onKeyPress={checkNumber}
                         />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Хэдэн өдөр"
-               width={130}
-               dataIndex={'dayCount'}
-               render={(value, row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Хэдэн өдөр',
+                  width: 130,
+                  dataIndex: 'dayCount',
+                  render: (_value, _row, index) => (
                      <OrderForm
                         name={[index, 'dayCount']}
                         rules={minRule(index, 'dayCount')}
@@ -189,64 +169,60 @@ function OrderTable(props) {
                            onKeyPress={checkNumber}
                         />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Нийт"
-               width={60}
-               dataIndex={'total'}
-               render={(value, row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: 'Нийт',
+                  width: 60,
+                  dataIndex: 'total',
+                  render: (_value, _row, index) => (
                      <OrderForm noStyle name={[index, 'total']} editing={false}>
                         <InputNumber onKeyPress={checkNumber} />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title="Эхлэх өдөр"
-               dataIndex={'startAt'}
-               render={(value, row, index) => {
-                  const type = form.getFieldValue(['services', index, 'type']);
-                  if (type === 2 || type === 8) {
-                     return (
-                        <OrderForm name={[index, 'startAt']} editing={true}>
-                           <DatePicker
-                              showTime={{
-                                 format: 'HH:mm'
-                              }}
-                              locale={mnMN}
-                              placeholder="Өдөр сонгох"
-                           />
-                        </OrderForm>
-                     );
+                  )
+               },
+               {
+                  title: 'Эхлэх өдөр',
+                  dataIndex: 'startAt',
+                  render: (_value, _row, index) => {
+                     const type = form.getFieldValue(['services', index, 'type']);
+                     if (type === 2 || type === 8) {
+                        return (
+                           <OrderForm name={[index, 'startAt']} editing={true}>
+                              <DatePicker
+                                 showTime={{
+                                    format: 'HH:mm'
+                                 }}
+                                 locale={mnMN}
+                                 placeholder="Өдөр сонгох"
+                              />
+                           </OrderForm>
+                        );
+                     }
+                     return;
                   }
-                  return;
-               }}
-            />
-            <NewColumn
-               title="Үнэ"
-               width={200}
-               dataIndex={'price'}
-               render={(value, row, index) => {
-                  return (
+               },
+               {
+                  title: 'Үнэ',
+                  width: 200,
+                  dataIndex: 'price',
+                  render: (_value, _row, index) => (
                      <OrderForm noStyle name={[index, 'price']} isNumber={true} editing={false}>
                         <InputNumber onKeyPress={checkNumber} />
                      </OrderForm>
-                  );
-               }}
-            />
-            <NewColumn
-               title=""
-               width={40}
-               render={(value, row, index) => {
-                  return (
+                  )
+               },
+               {
+                  title: '',
+                  width: 40,
+                  render: (_value, _row, index) => (
                      <Button onClick={() => remove(index)} icon={<MinusCircleOutlined style={{ color: 'red' }} />} />
-                  );
-               }}
-            />
-         </NewTable>
+                  )
+               }
+            ]}
+            dataSource={services}
+            pagination={false}
+         />
       </>
    );
 }
