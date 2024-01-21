@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import moment from 'moment';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 
@@ -57,8 +59,8 @@ function AM3(props) {
    };
 
    const returnQuestionCode = (key, question, val) => {
-      return formData?.[key].includes(question) ? (
-         formData?.[key].map((el, index) => {
+      return formData?.[key]?.includes(question) ? (
+         formData?.[key]?.map((el, index) => {
             if (el == question) {
                return (
                   <span
@@ -110,19 +112,8 @@ function AM3(props) {
                      ...{ display: 'flex', flexDirection: 'row' }
                   }}
                >
-                  1. Эцэг /эх/-ийн нэр ______________________ 2. Нэр _______________________ 3. РД
-                  <div style={{ display: 'flex', marginLeft: 15 }}>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                  </div>
+                  1. Эцэг /эх/-ийн нэр: {patientData?.lastName} Нэр: {patientData?.firstName} 3. РД{' '}
+                  {patientData?.registerNumber}
                </div>
                <div
                   style={{
@@ -134,12 +125,26 @@ function AM3(props) {
                      }
                   }}
                >
-                  <div style={{ display: 'flex' }}>
+                  <div style={{ ...styles.rowStyle, ...{ display: 'flex' } }}>
                      4. Нас:
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 20 } }}></div>
-                     <div style={styles.rowCells}></div>
+                     {patientData?.age}
                   </div>
-                  <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>5. Хүйс: /зур/ эрэгтэй, эмэгтэй</div>
+                  <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
+                     5. Хүйс: /зур/
+                     <span
+                        style={{ fontSize: 10 }}
+                        className={patientData?.genderType === 'MAN' ? 'underline mr-1' : 'mr-1'}
+                     >
+                        {' '}
+                        эрэгтэй,{' '}
+                     </span>
+                     <span
+                        style={{ fontSize: 10 }}
+                        className={patientData?.genderType === 'WOMAN' ? 'underline mr-1' : 'mr-1'}
+                     >
+                        эмэгтэй
+                     </span>
+                  </div>
                   <div style={{ ...styles.rowStyle, ...{ marginLeft: 20 } }}>
                      6. Жирэмсэн эсэх:
                      <span style={{ marginLeft: 10 }}>
@@ -177,7 +182,7 @@ function AM3(props) {
                               <td style={styles.leftText}>Хөдөлмөр эрхлэлтийн байдал</td>
                               <td style={styles.leftText}>
                                  <div style={{ width: 40 }}>
-                                    {formData?.q3.map((el, index) => {
+                                    {formData?.q3?.map((el, index) => {
                                        return (
                                           <span key={index} style={{ fontSize: 10 }}>
                                              {el?.substr(3)}
@@ -193,7 +198,7 @@ function AM3(props) {
                               <td style={styles.leftText}>Хөдөлмөр эрхлэхгүй шалтгаан</td>
                               <td style={styles.leftText}>
                                  <div style={{ width: 40 }}>
-                                    {formData?.q4.map((el, index) => {
+                                    {formData?.q4?.map((el, index) => {
                                        return (
                                           <span key={index} style={{ fontSize: 10 }}>
                                              {el?.substr(3)}
@@ -506,13 +511,13 @@ function AM3(props) {
                   </div>
                </div>
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  Эмчид үзүүлсэн: он ______________ сар _____________ өдөр ________
+                  Эмчид үзүүлсэн: {dayjs(formData.q19)?.format('YYYY он MM сар DD өдөр')}
                </div>
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>Мэдээлсэн их эмч:</div>
                <div style={styles.centerText}>
                   _____________________
                   <span style={{ marginLeft: 10 }}> ______________________</span>
-                  <span style={{ marginLeft: 10 }}>____________________________</span>
+                  <span style={{ marginLeft: 10 }}>{formData?.q20}</span>
                </div>
                <div style={{ ...styles.leftText, ...{ marginLeft: 220 } }}>
                   <span>/албан тушаал/</span>

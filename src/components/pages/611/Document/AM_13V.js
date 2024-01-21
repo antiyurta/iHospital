@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import dayjs from 'dayjs';
 
 //маягт АМ-13В
 function AM_13V(props) {
@@ -72,7 +73,7 @@ function AM_13V(props) {
                   <b>Паспортын хэсэг</b>
                </div>
                <div style={styles.generalText}>
-                  1. Эцэг /эх/-ийн нэр {patientData?.lastName} Нэр {patientData?.firstName} Нас {patientData?.age}
+                  1. Эцэг /эх/-ийн нэр: {patientData?.lastName} Нэр: {patientData?.firstName} Нас: {patientData?.age}
                </div>
                <div
                   style={{
@@ -84,27 +85,13 @@ function AM_13V(props) {
                   }}
                >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                     <span style={{ fontSize: 12, marginRight: 5 }}>РД {patientData?.registerNumber}</span>
+                     <span style={{ fontSize: 12, marginRight: 5 }}>РД: {patientData?.registerNumber}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                     <span style={{ fontSize: 12, marginRight: 5 }}>ЭМД </span>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
+                     <span style={{ fontSize: 12, marginRight: 5 }}>ЭМД: {formData?.q1}</span>
                   </div>
                   <div style={{ display: 'flex' }}>
-                     <span style={{ fontSize: 12, marginRight: 5 }}>Цахим № </span>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
-                     <div style={styles.rowCells}></div>
+                     <span style={{ fontSize: 12, marginRight: 5 }}>Цахим №: {formData?.q2}</span>
                   </div>
                </div>
                <div style={{ height: 30 }}></div>
@@ -116,8 +103,8 @@ function AM_13V(props) {
                   </span>
                </div>
                <div style={styles.generalText}>
-                  3. Иргэний
-                  <span style={{ marginLeft: 30 }}>гар утас: {patientData?.phoneNo}</span>
+                  3. Иргэний гар утас:
+                  <span style={{ marginLeft: 30 }}>{patientData?.phoneNo}</span>
                   <span style={{ marginLeft: 30 }}>цахим хаяг: {patientData?.email}</span>
                </div>
                <div style={styles.generalText}>
@@ -131,91 +118,80 @@ function AM_13V(props) {
                      <b>“Илгээх” хэсэг</b>
                   </div>
                </div>
+               <div style={styles.generalText}>6.Илгээж байгаа байгууллагын нэр {formData?.q3}</div>
                <div style={styles.generalText}>
-                  6.Илгээж байгаа байгууллагын нэр (сонго)................................код /автоматаар гарч ирнэ/
+                  7.Илгээсэн: {dayjs(formData.q4)?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
                </div>
                <div style={styles.generalText}>
-                  7.Илгээсэн: {moment(formData?.['АМ13.1']).format('YYYY')} оны{' '}
-                  {moment(formData?.['АМ13.1']).format('MM')} сарын {moment(formData?.['АМ13.1']).format('DD')} өдөр{' '}
-                  {moment(formData?.['АМ13.1']).format('HH')} цаг {moment(formData?.['АМ13.1']).format('MM')} минут{' '}
-                  {moment(formData?.['АМ13.1']).format('SS')} секунд
+                  8.Эмчлэгч эмчийн нэр {formData?.q5} хувийн дугаар {formData?.q6}
                </div>
-               <div style={styles.generalText}>
-                  8.Эмчлэгч эмчийн нэр .............................................хувийн дугаар
-                  ........................
-               </div>
-               <div style={styles.generalText}>9.Хүлээн авах байгууллагын нэр (сонго){formData?.['АМ13.2']}</div>
+               <div style={styles.generalText}>9.Хүлээн авах байгууллагын нэр {formData?.q7}</div>
                <div style={styles.generalText}>10.Иргэнийг илгээж байгаа шалтгаан (сонго)</div>
                <div style={{ marginLeft: 100 }}>
-                  <NewCheckboxGroup value={formData?.['АМ13.3.1']} className="dstory">
-                     <NewCheckbox value={0} className="test">
+                  <NewCheckboxGroup value={formData?.q8} className="dstory">
+                     <NewCheckbox value={'q8-1'} className="test">
                         <span style={{ fontSize: 12 }}>- Онош тодруулах /сонго/</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={1} className="test">
+                     <NewCheckbox value={'q8-2'} className="test">
                         <span style={{ fontSize: 12 }}>- Урьдчилан сэргийлэх үзлэг /сонго/</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={2} className="test">
+                     <NewCheckbox value={'q8-3'} className="test">
                         <span style={{ fontSize: 12 }}>- Эмчилгээ /сонго/</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={3} className="test">
+                     <NewCheckbox value={'q8-4'} className="test">
                         <span style={{ fontSize: 12 }}>- Эмчилгээний дараах хяналт /сонго/</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={4} className="test">
+                     <NewCheckbox value={'q8-5'} className="test">
                         <span style={{ fontSize: 12 }}>- Жирэмсний болон төрөх үеийн тусламж, үйлчилгээ</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={5} className="test">
+                     <NewCheckbox value={'q8-6'} className="test">
                         <span style={{ fontSize: 12 }}>- Хөнгөвчлөх эмчилгээ</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={6} className="test">
+                     <NewCheckbox value={'q8-7'} className="test">
                         <span style={{ fontSize: 12 }}>- Сэргээн засах тусламж, үйлчилгээ</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={7} className="test">
+                     <NewCheckbox value={'q8-8'} className="test">
                         <span style={{ fontSize: 12 }}>- Сувилахуйн тусламж, үйлчилгээ</span>
                      </NewCheckbox>
                      <br />
-                     <NewCheckbox value={8} className="test">
+                     <NewCheckbox value={'q8-9'} className="test">
                         <span style={{ fontSize: 12 }}>- Давтан хяналт</span>
                      </NewCheckbox>
                   </NewCheckboxGroup>
                   <br />
                   <NewCheckboxGroup value={null} className="dstory">
                      <NewCheckbox value={1} className="test">
-                        <span style={{ fontSize: 12 }}>- Бусад: {formData?.['АМ13.3.2']}</span>
+                        <span style={{ fontSize: 12 }}>- Бусад: {formData?.q8Other}</span>
                      </NewCheckbox>
                   </NewCheckboxGroup>
                </div>
                <div style={styles.generalText}>
-                  11.Үндсэн онош (Өвчний олон улсын 10-р ангиллын дагуу дэлгэрэнгүй бичнэ) {formData?.['АМ13.4.1']}{' '}
-                  /сонго/
+                  11.Үндсэн онош (Өвчний олон улсын 10-р ангиллын дагуу дэлгэрэнгүй бичнэ) {formData?.q9}{' '}
                </div>
                <div style={{ marginLeft: 100 }}>
-                  <div style={styles.generalText}>Хавсарсан онош /сонго/ {formData?.['АМ13.4.2']}</div>
-                  <div style={styles.generalText}>Хавсарсан онош /сонго/ {formData?.['АМ13.4.3']}</div>
-                  <div style={styles.generalText}>Хавсарсан онош /сонго/ {formData?.['АМ13.4.4']}</div>
-                  <div style={styles.generalText}>Хавсарсан онош /сонго/ {formData?.['АМ13.4.5']}</div>
-                  <div style={styles.generalText}>Тайлбар /бичих/{formData?.['АМ13.4.6']}</div>
+                  <div style={styles.generalText}>Хавсарсан онош /сонго/ {formData?.q10}</div>
+                  <div style={styles.generalText}>Тайлбар /бичих/{formData?.q11}</div>
                </div>
                <div style={styles.generalText}>
                   12. Шилжүүлэх болсон шалтгааныг үндэслэх шинжилгээ (програмын өгөгдлийг бөглөнө)
                </div>
-               <div style={styles.generalText}>ЦЕШ_/сонгох/: {formData?.['АМ13.5.1']}</div>
-               <div style={styles.generalText}>Биохими_/сонгох/: {formData?.['АМ13.5.2']}</div>
-               <div style={styles.generalText}>ШЕШ_/сонгох/: {formData?.['АМ13.5.3']}</div>
+               <div style={styles.generalText}>ЦЕШ_: {formData?.q12}</div>
+               <div style={styles.generalText}>Биохими_: {formData?.q13}</div>
+               <div style={styles.generalText}>ШЕШ_: {formData?.q14}</div>
             </div>
          </div>
 
          <div className="page">
             <div className="subpage">
-               <div style={styles.generalText}>Рентген _/эмчийн хариуг бичих/</div>
-               <div style={styles.generalText}>{formData?.['АМ13.5.4']}</div>
-               <div style={styles.generalText}>Бусад /MRI, KTG/_/эмчийн хариуг бичих/ {formData?.['АМ13.5.5']}</div>
+               <div style={styles.generalText}>Рентген _/эмчийн хариуг бичих/: {formData?.q15}</div>
+               <div style={styles.generalText}>Бусад /MRI, KTG/_/эмчийн хариуг бичих/: {formData?.q16}</div>
                <div style={{ marginTop: 20, marginBottom: 20 }}>
                   <div style={styles.generalText}>
                      <b>“Цаг товлох” хэсэг</b>
@@ -223,8 +199,8 @@ function AM_13V(props) {
                </div>
                <div style={styles.generalText}>
                   13. Хүлээн авах эсэх шийдвэр (сонго)
-                  <span className={formData?.['АМ13.6']?.[0] === 0 ? 'underline mr-1' : 'mr-1'}>1. тийм, </span>
-                  <span className={formData?.['АМ13.6']?.[0] === 1 ? 'underline mr-1' : 'mr-1'}>2. үгүй </span>
+                  <span className={formData?.q17 === 'q17-1' ? 'underline mr-1' : 'mr-1'}>1. тийм, </span>
+                  <span className={formData?.q17 === 'q17-2' ? 'underline mr-1' : 'mr-1'}>2. үгүй </span>
                </div>
                <div style={styles.generalText}>
                   14.Хэрэв тийм бол үзлэгийн кабинетын нэр ........................тасгийн нэр /сонго/ .................
@@ -232,74 +208,55 @@ function AM_13V(props) {
                <div style={styles.generalText}>15.Хэрэв үгүй бол тайлбар, үндэслэл (сонго)</div>
                <div style={{ marginLeft: 50 }}>
                   <div style={styles.generalText}>
-                     <span className={formData?.['АМ13.7.1']?.[0] === 1 ? 'underline mr-1' : 'mr-1'}>
-                        - тухайн эмнэлэгт тусламж, үйлчилгээ авах боломжгүй
-                     </span>
+                     <span className="">- тухайн эмнэлэгт тусламж, үйлчилгээ авах боломжгүй</span>
                   </div>
-                  <div style={styles.generalText}>- бусад /бичих/ {formData?.['АМ13.7.2']}</div>
+                  <div style={styles.generalText}>- бусад /бичих/: </div>
                </div>
                <div style={styles.generalText}>
-                  16. Шийдвэр гаргасан {moment(formData?.['АМ13.8']).format('YYYY')} оны{' '}
-                  {moment(formData?.['АМ13.8']).format('MM')} сарын {moment(formData?.['АМ13.8']).format('DD')} өдөр{' '}
-                  {moment(formData?.['АМ13.8']).format('HH')} цаг {moment(formData?.['АМ13.8']).format('MM')} минут{' '}
-                  {moment(formData?.['АМ13.8']).format('SS')} секунд
+                  16. Шийдвэр гаргасан {dayjs(formData.q18)?.format('YYYY он MM сар DD өдөр')}
                </div>
-               <div style={styles.generalText}>
-                  17.Товлосон {moment(formData?.['АМ13.9']).format('YYYY')} оны{' '}
-                  {moment(formData?.['АМ13.9']).format('MM')} сарын {moment(formData?.['АМ13.9']).format('DD')} өдөр{' '}
-                  {moment(formData?.['АМ13.9']).format('HH')} цаг{' '}
-               </div>
+               <div style={styles.generalText}>17.Товлосон {dayjs(formData.q19)?.format('YYYY он MM сар DD өдөр')}</div>
                <div style={{ marginTop: 20, marginBottom: 20 }}>
                   <div style={styles.generalText}>
                      <b>“Хүлээн авах” хэсэг</b>
                   </div>
                </div>
                <div style={styles.generalText}>
-                  18. Хүлээн авсан {moment(formData?.['АМ13.10']).format('YYYY')} оны{' '}
-                  {moment(formData?.['АМ13.10']).format('MM')} сарын {moment(formData?.['АМ13.10']).format('DD')} өдөр{' '}
-                  {moment(formData?.['АМ13.10']).format('HH')} цаг Хүлээн авах эмчийн нэр: {formData?.['АМ13.11']}
+                  18. Хүлээн авсан {dayjs(formData.q20)?.format('YYYY он MM сар DD өдөр')}
                </div>
+               <div style={styles.generalText}>Хүлээн авах эмчийн нэр {formData?.q21}</div>
+               <div style={styles.generalText}>19. Хүлээн авсан: {formData?.q22}</div>
+               <div style={styles.generalText}>Хавсарсан онош /сонго/: {formData?.q23}</div>
+               <div style={styles.generalText}>20. Эмчлүүлсэн: Үндсэн онош :{formData?.q24}</div>
+               <div style={styles.generalText}> Хавсарсан онош /сонго/: {formData?.q25}</div>
+               <div style={styles.generalText}>21.Эмнэлэгт хэвтсэн ор хоног /сонго/: {formData?.q26}</div>
                <div style={styles.generalText}>
-                  19. Хүлээн авсан: Үндсэн онош (Өвчний олон улсын 10-р ангиллын дагуу дэлгэрэнгүй бичнэ)
+                  22.Эмнэлгээс гарсан огноо, цаг: {dayjs(formData.q27)?.format('YYYY он MM сар DD өдөр')}
                </div>
-               <div style={styles.generalText}>___Хавсарсан онош /сонго/: {formData?.['АМ13.12.1']}</div>
-               <div style={styles.generalText}>Хавсарсан онош /сонго/: {formData?.['АМ13.12.2']}</div>
+               <div style={styles.generalText}>23.Эмнэлгээс гарах үеийн дүгнэлт: {formData?.q28}</div>
                <div style={styles.generalText}>
-                  20. Эмчлүүлсэн: Үндсэн онош (Өвчний олон улсын 10-р ангиллын дагуу дэлгэрэнгүй бичнэ)
-               </div>
-               <div style={styles.generalText}> ___Хавсарсан онош /сонго/: {formData?.['АМ13.13.2']}</div>
-               <div style={styles.generalText}>21.Эмнэлэгт хэвтсэн ор хоног /сонго/: {formData?.['АМ13.14']}</div>
-               <div style={styles.generalText}>
-                  22.Эмнэлгээс гарсан огноо, цаг: {moment(formData?.['АМ13.15']).format('YYYY-MM-DD HH:MM:SS')}
-               </div>
-               <div style={styles.generalText}>23.Эмнэлгээс гарах үеийн дүгнэлт</div>
-               <div style={styles.generalText}>(эпикриз)_/бичих/: {formData?.['АМ13.16']}</div>
-               <div style={styles.generalText}>
-                  24.Эмчлэгч эмчийн нэр: {formData?.['АМ13.17.1']} утасны дугаар: {formData?.['АМ13.17.2']} цахим хаяг:{' '}
-                  {formData?.['АМ13.17.3']}
+                  24.Эмчлэгч эмчийн нэр: {formData?.q29} утасны дугаар: {formData?.q30} цахим хаяг: {formData?.q31}
                </div>
                <div style={{ marginTop: 20, marginBottom: 20 }}>
                   <div style={styles.generalText}>
                      <b>“Эргэх холбоо тогтоох” хэсэг</b>
                   </div>
                </div>
-               <div style={styles.generalText}>
-                  25. Илгээсэн байгууллагад өгөх зөвлөмж /бичих/: {formData?.['АМ13.18']}
-               </div>
+               <div style={styles.generalText}>25. Илгээсэн байгууллагад өгөх зөвлөмж /бичих/: {formData?.q32}</div>
                <div style={styles.generalText}>
                   26. Зөвлөмжийг хүлээн авсан огноо
-                  <span style={{ marginLeft: 20 }}>{moment(formData?.['АМ13.19']).format('YYYY-MM-DD HH:MM:SS')}</span>
+                  <span style={{ marginLeft: 20 }}>{dayjs(formData.q33)?.format('YYYY он MM сар DD өдөр')}</span>
                </div>
                <div style={styles.generalText}>
                   27. Иргэнийг хяналтад авсан эсэх (сонго)
                   <span style={{ marginLeft: 20 }}>
-                     <span className={formData?.['АМ13.20']?.[0] === 0 ? 'underline mr-1' : 'mr-1'}>1.тийм</span>
-                     <span className={formData?.['АМ13.20']?.[0] === 1 ? 'underline mr-1' : 'mr-1'}>2. үгүй</span>
+                     <span className={formData?.q34 === 'q34-1' ? 'underline mr-1' : 'mr-1'}>1. тийм</span>
+                     <span className={formData?.q34 === 'q34-2' ? 'underline mr-1' : 'mr-1'}>2. үгүй</span>
                   </span>
                </div>
                <div style={styles.generalText}>
-                  28. Иргэнийг хяналтад авсан эмчийн нэр {formData?.['АМ13.21.1']} утас: {formData?.['АМ13.21.2']}цахим
-                  хаяг: {formData?.['АМ13.21.3']}
+                  28. Иргэнийг хяналтад авсан эмчийн нэр: {formData?.q35} утас: {formData?.q36} цахим хаяг:{' '}
+                  {formData?.q37}
                </div>
             </div>
          </div>
