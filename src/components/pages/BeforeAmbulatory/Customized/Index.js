@@ -169,7 +169,7 @@ function Index(props) {
                optionId: document.optionId,
                appointmentId: appointmentId || inpatientRequestId,
                usageType: propsUsageType,
-               saveType: saveType,
+               saveType: saveType || 'Save',
                documentId: documentValue,
                patientId: patientId,
                data: values,
