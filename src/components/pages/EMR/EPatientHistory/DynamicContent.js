@@ -135,7 +135,6 @@ function DynamicContent({
                   }
                })
                .catch((error) => {
-                  console.log('Asdaa', error);
                   if (error.response.status === 409) {
                      openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
                   }
@@ -148,20 +147,17 @@ function DynamicContent({
    };
 
    const onFinishFailed = (errorInfo) => {
-      console.log('Failed:', errorInfo);
       setValidStep(false);
    };
    useEffect(() => {
       if (editForm != undefined && editForm != null) {
          if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
             form.setFieldsValue(editForm);
-            console.log(editForm);
          } else {
             form.resetFields();
          }
       } else {
          let data = {};
-         console.log(notes);
          if (notes.inspectionNote) {
             data = inspectionTOJSON(notes.inspectionNote);
             setEditModeInspectionNote(true);

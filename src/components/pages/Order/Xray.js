@@ -33,7 +33,8 @@ function Xray({ handleclick }) {
       <>
          <button
             className="yellow-order"
-            onClick={() => {
+            onClick={(event) => {
+               event.preventDefault();
                setIsOpenModal(true);
                setSelectedXrays([]);
             }}

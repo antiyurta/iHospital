@@ -23,16 +23,7 @@ import ServiceService from '../../../../services/service/service';
 import moment from 'moment';
 
 const InternalOrder = (props) => {
-   const {
-      isPackage,
-      usageType,
-      selectedPatient,
-      categories,
-      IncomeAppointmentId,
-      IncomePatientId,
-      IncomeCabinetId,
-      save
-   } = props;
+   const { isPackage, usageType, selectedPatient, categories, IncomeAppointmentId, save } = props;
    const [total, setTotal] = useState(0);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();
@@ -105,8 +96,6 @@ const InternalOrder = (props) => {
             service.unikey = index;
             service.id = item.id;
             service.name = item.name;
-            // console.log(item);
-            // service.type = item.types?.type; // oorclow 2023/11/10
             service.type = item.type;
             if (usageType === 'IN') {
                service.price = item.inpatientPrice;
@@ -173,16 +162,11 @@ const InternalOrder = (props) => {
       setIsLoadingOrderTable(false);
    };
    const inpatientRequestClick = async (values) => {
-      // values.patientId = IncomePatientId;
-      // values.cabinetId = IncomeCabinetId;
-      // values.appointmentId = IncomeAppointmentId;
-      // values.type = values.InType;
       await ServiceService.postInpatientRequest(values)
          .then((response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжиллтай', 'Хэвтүүлэх хүсэлт амжилттай илгээгдлээ');
             }
-            // setInPatientId(response.id);
          })
          .catch((err) => {
             console.log(err);
@@ -225,13 +209,7 @@ const InternalOrder = (props) => {
          <div className={isPackage ? 'grid grid-cols-3 gap-3' : 'flex flex-wrap gap-3'}>
             {showSetOrder && <SetOrder handleclick={handleClickSetOrder} />}
             {showRecentRepice && <RecentRecipe />}
-            <div
-               style={{
-                  height: 35,
-                  width: 1,
-                  background: '#C9CDD4'
-               }}
-            ></div>
+            {showSetOrder || showRecentRepice ? <div className="h-full w-[1px] bg-[#c9cdd4]" /> : null}
             {showExamination && <Examination handleclick={handleclick} />}
             {showXray && <Xray handleclick={handleclick} />}
             {showTreatment && <Treatment handleclick={handleclick} />}
@@ -255,7 +233,7 @@ const InternalOrder = (props) => {
             <div className="w-full">
                <Form form={orderForm}>
                   <Form.List name="services">
-                     {(services, { add, remove }) => {
+                     {(services, { remove }) => {
                         if (isPackage) {
                            return <PackageTable form={orderForm} services={services} remove={remove} />;
                         } else {

@@ -20,7 +20,6 @@ function ListOfIssues() {
             diagnose: appointment.diagnose,
             inspectionDate: appointment.createdAt
          }));
-         console.log(data);
          setData(data);
       });
    };

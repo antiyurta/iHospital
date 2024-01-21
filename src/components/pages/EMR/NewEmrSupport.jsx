@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
-import DocumentHistory from './NewEmrSupport/history/Index';
 import DocumentIndex from './NewEmrSupport/document/Index';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
-
-const BackArrow = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path
-         d="M7.49992 9.95998L4.23992 6.69998C3.85492 6.31498 3.85492 5.68498 4.23992 5.29998L7.49992 2.03998"
-         stroke="#86909C"
-         stroke-width="1.5"
-         stroke-miterlimit="10"
-         stroke-linecap="round"
-         stroke-linejoin="round"
-      />
-   </svg>
-);
+import backArrow from './icon/backArrow.svg';
+import SentService from './Insurance/sent-service';
+import { useSelector } from 'react-redux';
+import { selectCurrentEmrData } from '../../../features/emrReducer';
 
 const NewEmrSupport = () => {
+   const incomeEmrData = useSelector(selectCurrentEmrData);
    const [isOpenModalRequests, setIsOpenModalRequests] = useState(false);
-   const hrefList = (type) => {};
+   const [isOpenModalHics, setIsOpenModalHics] = useState(false);
    return (
       <div className="navbar">
          <div className="back">
@@ -29,7 +20,7 @@ const NewEmrSupport = () => {
                   isRead: true
                }}
             >
-               <BackArrow />
+               <img src={backArrow} alt="icon" />
                <p>Буцах</p>
             </Link>
          </div>
@@ -37,10 +28,12 @@ const NewEmrSupport = () => {
             <button>Гарын авлага</button>
             <button>Скан EMR</button>
             <button onClick={() => setIsOpenModalRequests(true)}>Үйлчлүүлэгчийн хүснэгт </button>
-            <button>Эрүүл мэндийн даатгал </button>
-            {/* <DocumentHistory /> */}
+            <button onClick={() => setIsOpenModalHics(true)}>Эрүүл мэндийн даатгал </button>
             <DocumentIndex />
          </div>
+         <Modal title="Даатгал" open={isOpenModalHics} onCancel={() => setIsOpenModalHics(false)}>
+            <SentService PatientId={incomeEmrData.patientId} />
+         </Modal>
          <Modal
             title="Үйлчлүүлэгчийн хүсэлт"
             width={300}

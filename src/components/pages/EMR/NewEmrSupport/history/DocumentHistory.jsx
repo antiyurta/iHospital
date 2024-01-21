@@ -93,11 +93,6 @@ const DocumentHistory = () => {
             setIsLoading(false);
          });
    };
-   const deleteDocument = async (id) => {
-      DocumentsFormPatientService.deleteDocument(id).then((response) => {
-         getDocumentsHistory();
-      });
-   };
    const getInpatientRequest = async (id, index, value) => {
       return await serviceService.getInpatientRequestById(id).then(({ data: { response } }) => {
          return {
@@ -116,7 +111,6 @@ const DocumentHistory = () => {
          return await getInpatientRequest(key, index, value);
       });
       const items = await Promise.all(promises);
-      console.log('items', items);
       setDocumentsIn(items);
    };
 

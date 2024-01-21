@@ -7,7 +7,6 @@ import { CalendarOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import arrowNext from './ListOfIssues/arrowNext.svg';
 //api
 import ServiceRequestApi from '../../../services/serviceRequest';
-import { Each } from '../../../features/Each';
 
 const OrderHistory = () => {
    const IncomeEMRData = useSelector(selectCurrentEmrData);

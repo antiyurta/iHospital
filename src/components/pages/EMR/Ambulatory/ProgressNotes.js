@@ -252,7 +252,7 @@ export default function ProgressNotes() {
    };
    const renderHTML = ([key, value]) => {
       if (value.length > 0) {
-         return <Body data={value} />;
+         return <Body key={key} data={value} />;
       }
       const renderedItems = Object.entries(value).map(renderHTML);
       return (

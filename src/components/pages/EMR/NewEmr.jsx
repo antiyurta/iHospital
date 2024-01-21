@@ -238,7 +238,6 @@ class NewEmr extends React.Component {
                                     <Ocs
                                        selectedPatient={this.state.selectedPatient}
                                        UsageType={this.props.IncomeEMRData.usageType}
-                                       AppointmentHasInsurance={this.props.IncomeEMRData.hicsServiceId ? true : false}
                                        handleClick={this.saveOrder}
                                     />
                                  </NewCard>

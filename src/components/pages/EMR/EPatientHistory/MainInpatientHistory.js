@@ -102,19 +102,11 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
          {currentMonitor === MonitorType.List ? (
             <Tabs
                type="card"
-               fo
                items={[
                   {
                      key: 1,
                      label: (
-                        <div
-                           style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              gap: 8,
-                              alignItems: 'flex-end'
-                           }}
-                        >
+                        <div className="flex flex-row gap-2 items-end">
                            <p>Маягтууд</p>
                            <Badge showZero count={countOfDocument || 0} color="#2D8CFF" />
                         </div>
@@ -142,8 +134,15 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                                     <div
                                        className="hover: cursor-pointer"
                                        onClick={() => {
-                                          setCurrentMonitor(MonitorType.Document);
-                                          setSelectedDocument(row);
+                                          Modal.confirm({
+                                             content: `Та ${row.docName} маягт бөглөх гэж байна итгэлттэй байна уу`,
+                                             cancelText: 'Үгүй',
+                                             okText: 'Тийм',
+                                             onOk: () => {
+                                                setCurrentMonitor(MonitorType.Document);
+                                                setSelectedDocument(row);
+                                             }
+                                          });
                                        }}
                                     >
                                        <img src={ArrowIcon} alt="sda" />
@@ -160,14 +159,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                      key: 2,
                      forceRender: true,
                      label: (
-                        <div
-                           style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              gap: 8,
-                              alignItems: 'flex-end'
-                           }}
-                        >
+                        <div className="flex flex-row gap-2 items-end">
                            <p>Ноорог</p>
                            <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
                         </div>
@@ -177,25 +169,28 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                ]}
             />
          ) : (
-            <Customized
-               propsUsageType="IN"
-               isEdit={false}
-               editId={null}
-               document={selectedDocument}
-               documentValue={selectedDocument.value}
-               documentType={0}
-               onOk={(state) => {
-                  if (!state) {
-                     setCurrentMonitor(MonitorType.List);
-                  }
-               }}
-               isBackButton={true}
-               handleBackButton={(state) => {
-                  if (state) {
-                     setCurrentMonitor(MonitorType.List);
-                  }
-               }}
-            />
+            <div className="flex flex-col gap-1">
+               <p className="text-center font-semibold">{selectedDocument?.docName}</p>
+               <Customized
+                  propsUsageType="IN"
+                  isEdit={false}
+                  editId={null}
+                  document={selectedDocument}
+                  documentValue={selectedDocument.value}
+                  documentType={0}
+                  onOk={(state) => {
+                     if (!state) {
+                        setCurrentMonitor(MonitorType.List);
+                     }
+                  }}
+                  isBackButton={true}
+                  handleBackButton={(state) => {
+                     if (state) {
+                        setCurrentMonitor(MonitorType.List);
+                     }
+                  }}
+               />
+            </div>
          )}
          <Modal
             title="Даатгалын сервисүүд"

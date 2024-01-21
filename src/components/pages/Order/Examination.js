@@ -34,7 +34,8 @@ export const Examination = ({ handleclick }) => {
       <>
          <button
             className="yellow-order"
-            onClick={() => {
+            onClick={(event) => {
+               event.preventDefault();
                setIsOpenModal(true);
                setSelectedExaminations([]);
             }}

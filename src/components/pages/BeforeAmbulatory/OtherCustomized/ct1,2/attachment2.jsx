@@ -286,16 +286,20 @@ const Attachment2 = ({ document }) => {
                </div>
             </div>
          </div>
-         <Modal title="Маягт бөглөх" open={isOpenModal} onCancel={() => setIsOpenModal(false)}>
+         <Modal title="Маягт бөглөх" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null}>
             <Customized
+               propsUsageType={incomeEmrData.usageType}
+               isEdit={false}
+               editId={null}
                document={document}
                documentValue={87}
                documentType={0}
-               isBackButton={false}
                onOk={(state) => {
                   getData();
                   setIsOpenModal(state);
                }}
+               isBackButton={false}
+               handleBackButton={() => null}
             />
          </Modal>
       </>
