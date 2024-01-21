@@ -3,10 +3,8 @@ import { useLocation } from 'react-router-dom';
 import InternalOrder from './NewOrder/InternalOrder';
 import PartnerOrder from './NewOrder/PartnerOrder';
 //
-function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, appointmentHasInsurance, save }) {
+function Order({ isPackage, selectedPatient, usageType, categories, save }) {
    const [activeKey, setActiveKey] = useState(0);
-   const IncomePatientId = useLocation()?.state?.patientId;
-   const IncomeCabinetId = useLocation()?.state?.cabinetId;
    const IncomeAppointmentId = useLocation()?.state?.appointmentId;
    const components = [
       <InternalOrder
@@ -15,8 +13,6 @@ function Order({ isPackage, selectedPatient, isDoctor, usageType, categories, ap
          selectedPatient={selectedPatient}
          categories={categories}
          IncomeAppointmentId={IncomeAppointmentId}
-         IncomePatientId={IncomePatientId}
-         IncomeCabinetId={IncomeCabinetId}
          save={save}
       />,
       <PartnerOrder />

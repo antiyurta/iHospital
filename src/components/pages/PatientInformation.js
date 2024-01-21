@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 
 import maleSymbol from '../../../src/assets/images/male.svg';
 import femaleSymbol from '../../../src/assets/images/female.svg';
@@ -14,8 +14,10 @@ import CountryServices from '../../services/reference/country';
 import { NewSearch, NewRadioGroup, NewRadio } from '../Input/Input';
 import { getAge, getGenderFullName } from '../comman';
 import { Spin } from 'antd';
+import EmrContext from '../../features/EmrContext';
 
 function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type }) {
+   const { setPatient } = useContext(EmrContext);
    const [citizens, setCitizens] = useState([]);
    const [provices, setProvices] = useState([]);
    const [towns, setTowns] = useState([]);
@@ -138,6 +140,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
+      setPatient(patient);
    }, [patient]);
    return (
       <>

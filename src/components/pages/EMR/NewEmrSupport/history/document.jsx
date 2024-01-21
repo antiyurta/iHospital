@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 
 import collapseIcon from '../../ListOfIssues/collapse.svg';
@@ -8,9 +8,11 @@ import dayjs from 'dayjs';
 import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from '../../../611/Document/Index';
 import { PrinterOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
+import EmrContext from '../../../../../features/EmrContext';
 
 const Document = (props) => {
    const { document, index, incomeEmrData } = props;
+   const { selectedPatient } = useContext(EmrContext);
    const [expanded, setExpanded] = useState(false);
    const [isOpenModalView, setIsOpenModalView] = useState(false);
    return (
@@ -68,7 +70,8 @@ const Document = (props) => {
                   appointmentId={incomeEmrData.inpatientRequestId || incomeEmrData.appointmentId}
                   data={{
                      formData: document.data,
-                     patientData: {}
+                     createdAt: document.createdAt,
+                     patientData: selectedPatient
                   }}
                   hospitalName={'hospitalName'}
                />

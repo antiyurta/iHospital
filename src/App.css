@@ -511,13 +511,6 @@ input[type='number'] {
    border-bottom: 1px solid #0095ff;
 }
 
-.ant-tabs-top > .ant-tabs-nav::before {
-   border-bottom: 1px solid #0095ff;
-}
-
-/* .ant-tabs > .ant-tabs-nav {
-  margin: 0 !important;
-} */
 .segmented-enr {
    background-color: transparent;
 }

@@ -530,36 +530,35 @@
          border-bottom: 2px solid #2d8cff;
       }
    }
-   .green-order {
-      display: flex;
-      padding: 6px 10px;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      color: #f7f8fa;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      border-radius: 4px;
-      background: #22a06b;
-   }
-   .yellow-order {
-      display: flex;
-      padding: 6px 10px;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      color: #4e5969;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      border-radius: 4px;
-      background: #fbe3b9;
-   }
 }
-
+.green-order {
+   display: flex;
+   padding: 6px 10px;
+   justify-content: center;
+   align-items: center;
+   gap: 8px;
+   color: #f7f8fa;
+   font-size: 14px;
+   font-style: normal;
+   font-weight: 400;
+   line-height: normal;
+   border-radius: 4px;
+   background: #22a06b;
+}
+.yellow-order {
+   display: flex;
+   padding: 6px 10px;
+   justify-content: center;
+   align-items: center;
+   gap: 8px;
+   color: #4e5969;
+   font-size: 14px;
+   font-style: normal;
+   font-weight: 400;
+   line-height: normal;
+   border-radius: 4px;
+   background: #fbe3b9;
+}
 .internal-order-set-order {
    display: flex;
    flex-direction: column;
@@ -586,11 +585,13 @@
          }
       }
    }
-   .ant-tabs-extra-content {
-      padding: 6px;
+   .set-order-add-button {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
       button {
          display: flex;
-         padding: 4px 6px;
+         padding: 8px 12px;
          justify-content: center;
          align-items: center;
          gap: 8px;
