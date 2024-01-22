@@ -1,6 +1,4 @@
-import React, { useContext } from 'react';
-import { useState } from 'react';
-
+import React, { useState } from 'react';
 import collapseIcon from '../../ListOfIssues/collapse.svg';
 import expandIcon from '../../ListOfIssues/expand.svg';
 import arrowNext from '../../ListOfIssues/arrowNext.svg';
@@ -8,11 +6,12 @@ import dayjs from 'dayjs';
 import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from '../../../611/Document/Index';
 import { PrinterOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
-import EmrContext from '../../../../../features/EmrContext';
+import { useSelector } from 'react-redux';
+import { selectCurrentSelectedPatient } from '../../../../../features/emrReducer';
 
 const Document = (props) => {
    const { document, index, incomeEmrData } = props;
-   const { selectedPatient } = useContext(EmrContext);
+   const currentPatient = useSelector(selectCurrentSelectedPatient);
    const [expanded, setExpanded] = useState(false);
    const [isOpenModalView, setIsOpenModalView] = useState(false);
    return (
@@ -71,7 +70,7 @@ const Document = (props) => {
                   data={{
                      formData: document.data,
                      createdAt: document.createdAt,
-                     patientData: selectedPatient
+                     patientData: currentPatient
                   }}
                   hospitalName={'hospitalName'}
                />

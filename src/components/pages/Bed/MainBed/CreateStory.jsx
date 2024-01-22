@@ -166,7 +166,9 @@ const CreateStory = () => {
                      </div>
                      <div className="flex flex-col gap-2">
                         <Button>ЭМД</Button>
-                        <Button onClick={() => setInpatient()}>Өвчтөнг хэвтүүлэх</Button>
+                        <Button type="primary" onClick={() => setInpatient()}>
+                           Өвчтөнг хэвтүүлэх
+                        </Button>
                         <Button danger icon={<RollbackOutlined />} onClick={() => window.history.back()}>
                            Буцах
                         </Button>

@@ -152,8 +152,8 @@ function MainPatientHistory({ handleClick }) {
       setItems((items) => [
          ...items,
          {
-            label: 'Давтан үзлэгийн асуумж',
-            key: `item-second`,
+            label: 'Анхан үзлэгийн асуумж',
+            key: `item-first`,
             children: <DynamicTabContent data={defualtForm} />
          }
       ]);

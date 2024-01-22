@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Collapse, Form, Input, Select, Spin, Table } from 'antd';
+import { Button, Form, Input, Select, Spin, Table } from 'antd';
 import Diagnose from '../../service/Diagnose';
 import EditableFormItem from '../../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
@@ -8,14 +8,13 @@ import { inspectionTOJSON, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentNote } from '../../../../features/noteReducer';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
+import Soap from './Soap';
 
 import EmrPatientDiagnoseServices from '../../../../services/emr/patientDiagnose';
 import EmrInspectionNoteServices from '../../../../services/emr/inspectionNote';
 
 const { TextArea } = Input;
 const { Column } = Table;
-const { Option } = Select;
-const { Panel } = Collapse;
 function DynamicContent({
    props,
    incomeData,
@@ -27,6 +26,7 @@ function DynamicContent({
    triggerForModal
 }) {
    const [form] = Form.useForm();
+   const [expandedIndex, setExpandedIndex] = useState(null);
    const notes = useSelector(selectCurrentNote);
    const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(Number);
    const [editModeInspectionNote, setEditModeInspectionNote] = useState(false);
@@ -183,6 +183,13 @@ function DynamicContent({
          form.setFieldsValue(data);
       }
    }, [editForm]);
+   const handleSoapClick = (key) => {
+      if (key === expandedIndex) {
+         setExpandedIndex(null);
+      } else {
+         setExpandedIndex(key);
+      }
+   };
    return (
       <Spin spinning={loading}>
          <Form
@@ -194,200 +201,203 @@ function DynamicContent({
             onFinishFailed={onFinishFailed}
          >
             <div className="flex flex-col gap-2">
-               <div
-                  style={{
-                     paddingRight: 10
-                  }}
-               >
+               <div className="flex flex-col pr-3 gap-2">
                   <div className="hidden">
                      <Form.Item name="description">
                         <TextArea disabled={true} />
                      </Form.Item>
                   </div>
-                  <Collapse accordion>
-                     <Panel key={1} forceRender header="Зовиур">
-                        <div
-                           style={{
-                              height: 278,
-                              overflow: 'auto'
-                           }}
-                        >
-                           <NewFormRender
-                              useForm={form}
-                              form={{
-                                 documentForm: props.data.pain
-                              }}
-                              formOptionIds={[]}
-                              isCheck={false}
-                              formName="pain"
+                  <Soap
+                     title="Зовиур"
+                     subTitle="(Subject)"
+                     soapKey={1}
+                     expandedKey={expandedIndex}
+                     handleClick={handleSoapClick}
+                  >
+                     <NewFormRender
+                        useForm={form}
+                        form={{
+                           documentForm: props.data.pain
+                        }}
+                        formOptionIds={[]}
+                        isCheck={false}
+                        formName="pain"
+                     />
+                  </Soap>
+                  <Soap
+                     title="Асуумж"
+                     subTitle="(Q)"
+                     soapKey={2}
+                     expandedKey={expandedIndex}
+                     handleClick={handleSoapClick}
+                  >
+                     <NewFormRender
+                        useForm={form}
+                        form={{
+                           documentForm: props.data.pain
+                        }}
+                        formOptionIds={[]}
+                        isCheck={false}
+                        formName="question"
+                     />
+                  </Soap>
+                  <Soap
+                     title="Бодит үзлэг"
+                     subTitle="(O)"
+                     soapKey={3}
+                     expandedKey={expandedIndex}
+                     handleClick={handleSoapClick}
+                  >
+                     <NewFormRender
+                        useForm={form}
+                        form={{
+                           documentForm: props.data.pain
+                        }}
+                        formOptionIds={[]}
+                        isCheck={false}
+                        formName="inspection"
+                     />
+                  </Soap>
+                  {!isEditFromList ? (
+                     <Soap
+                        title="Онош"
+                        subTitle="(A)"
+                        soapKey={4}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <div className="flex flex-col gap-2">
+                           <Diagnose
+                              form={form}
+                              handleClick={DiagnoseHandleClick}
+                              types={[0, 1, 2]}
+                              hicsServiceId={hicsServiceId}
+                              // type ene heregte bji OUT deer
+                              appointmentType={appointmentType}
                            />
-                        </div>
-                     </Panel>
-                     <Panel key={2} forceRender header="Асуумж">
-                        <div
-                           style={{
-                              height: 278,
-                              overflow: 'auto'
-                           }}
-                        >
-                           <NewFormRender
-                              useForm={form}
-                              form={{
-                                 documentForm: props.data.question
-                              }}
-                              formOptionIds={[]}
-                              isCheck={false}
-                              formName="question"
-                           />
-                        </div>
-                     </Panel>
-                     <Panel key={3} forceRender header="Бодит үзлэг">
-                        <div
-                           style={{
-                              height: 278,
-                              overflow: 'auto'
-                           }}
-                        >
-                           <NewFormRender
-                              useForm={form}
-                              form={{
-                                 documentForm: props.data.inspection
-                              }}
-                              formOptionIds={[]}
-                              isCheck={false}
-                              formName="inspection"
-                           />
-                        </div>
-                     </Panel>
-                     {!isEditFromList ? (
-                        <Panel key={4} header="Онош">
-                           <div
-                              style={{
-                                 height: 278,
-                                 overflow: 'auto'
-                              }}
-                           >
-                              <div className="flex flex-col gap-2">
-                                 <Diagnose
-                                    form={form}
-                                    handleClick={DiagnoseHandleClick}
-                                    types={[0, 1, 2]}
-                                    hicsServiceId={hicsServiceId}
-                                    // type ene heregte bji OUT deer
-                                    appointmentType={appointmentType}
-                                 />
-                                 <Form.List name="diagnosis">
-                                    {(diagnose) => (
-                                       <Table
-                                          bordered
-                                          locale={{
-                                             emptyText: 'Дата байхгүй'
-                                          }}
-                                          dataSource={diagnose}
-                                          pagination={false}
-                                       >
-                                          <Column
-                                             dataIndex={'code'}
-                                             title="Код"
-                                             render={(_value, _row, index) => {
-                                                return (
-                                                   <EditableFormItem name={[index, 'code']}>
-                                                      <Input />
-                                                   </EditableFormItem>
-                                                );
-                                             }}
-                                          />
-                                          <Column
-                                             dataIndex={'nameMn'}
-                                             title="Монгол нэр"
-                                             render={(_value, _row, index) => {
-                                                return (
-                                                   <EditableFormItem name={[index, 'nameMn']}>
-                                                      <Input />
-                                                   </EditableFormItem>
-                                                );
-                                             }}
-                                          />
-                                          <Column
-                                             dataIndex={'diagnoseType'}
-                                             title="Оношийн төрөл"
-                                             render={(_value, _row, index) => {
-                                                return (
-                                                   <EditableFormItemSelect name={[index, 'diagnoseType']}>
-                                                      <Select style={{ width: '100%' }}>
-                                                         <Option value={0}>Үндсэн</Option>
-                                                         <Option value={1}>Урьдчилсан</Option>
-                                                         <Option value={2}>Хавсрах онош</Option>
-                                                         <Option value={3}>Дагалдах</Option>
-                                                      </Select>
-                                                   </EditableFormItemSelect>
-                                                );
-                                             }}
-                                          />
-                                       </Table>
-                                    )}
-                                 </Form.List>
-                              </div>
-                           </div>
-                        </Panel>
-                     ) : null}
-                     <Panel key={5} forceRender header="Төлөвлөгөө">
-                        <div
-                           className="flex flex-col gap-1"
-                           style={{
-                              height: 278,
-                              overflow: 'auto'
-                           }}
-                        >
-                           <NewFormRender
-                              useForm={form}
-                              form={{
-                                 documentForm: props.data.plan
-                              }}
-                              formOptionIds={[]}
-                              isCheck={false}
-                              formName="plan"
-                           />
-                           <Form.List name="services">
-                              {(services) => (
+                           <Form.List name="diagnosis">
+                              {(diagnose) => (
                                  <Table
-                                    className="emr-plan-table"
-                                    size="small"
+                                    bordered
+                                    locale={{
+                                       emptyText: 'Дата байхгүй'
+                                    }}
+                                    dataSource={diagnose}
                                     pagination={false}
-                                    columns={[
-                                       {
-                                          title: '№',
-                                          render: (_, _row, index) => {
-                                             return index + 1;
-                                          }
-                                       },
-                                       {
-                                          title: 'Үйлчилгээ',
-                                          dataIndex: 'name',
-                                          align: 'left',
-                                          render: (_, _row, index) => (
-                                             <EditableFormItem name={[index, 'name']}>
+                                 >
+                                    <Column
+                                       dataIndex={'code'}
+                                       title="Код"
+                                       render={(_value, _row, index) => {
+                                          return (
+                                             <EditableFormItem name={[index, 'code']}>
                                                 <Input />
                                              </EditableFormItem>
-                                          )
-                                       },
-                                       {
-                                          title: 'Тоо',
-                                          dataIndex: 'total',
-                                          render: (_, _row, index) => (
-                                             <EditableFormItem name={[index, 'total']}>
+                                          );
+                                       }}
+                                    />
+                                    <Column
+                                       dataIndex={'nameMn'}
+                                       title="Монгол нэр"
+                                       render={(_value, _row, index) => {
+                                          return (
+                                             <EditableFormItem name={[index, 'nameMn']}>
                                                 <Input />
                                              </EditableFormItem>
-                                          )
-                                       }
-                                    ]}
-                                    dataSource={services}
-                                 />
+                                          );
+                                       }}
+                                    />
+                                    <Column
+                                       dataIndex={'diagnoseType'}
+                                       title="Оношийн төрөл"
+                                       render={(_value, _row, index) => {
+                                          return (
+                                             <EditableFormItemSelect name={[index, 'diagnoseType']}>
+                                                <Select
+                                                   style={{ width: '100%' }}
+                                                   options={[
+                                                      {
+                                                         label: 'Үндсэн',
+                                                         value: 0
+                                                      },
+                                                      {
+                                                         label: 'Урьдчилсан',
+                                                         value: 1
+                                                      },
+                                                      {
+                                                         label: 'Хавсрах онош',
+                                                         value: 2
+                                                      },
+                                                      {
+                                                         label: 'Дагалдах',
+                                                         value: 3
+                                                      }
+                                                   ]}
+                                                />
+                                             </EditableFormItemSelect>
+                                          );
+                                       }}
+                                    />
+                                 </Table>
                               )}
                            </Form.List>
                         </div>
-                     </Panel>
-                  </Collapse>
+                     </Soap>
+                  ) : null}
+                  <Soap
+                     title="Төлөвлөгөө"
+                     subTitle="(P)"
+                     soapKey={5}
+                     expandedKey={expandedIndex}
+                     handleClick={handleSoapClick}
+                  >
+                     <NewFormRender
+                        useForm={form}
+                        form={{
+                           documentForm: props.data.plan
+                        }}
+                        formOptionIds={[]}
+                        isCheck={false}
+                        formName="plan"
+                     />
+                     <Form.List name="services">
+                        {(services) => (
+                           <Table
+                              className="emr-plan-table"
+                              size="small"
+                              pagination={false}
+                              columns={[
+                                 {
+                                    title: '№',
+                                    render: (_, _row, index) => {
+                                       return index + 1;
+                                    }
+                                 },
+                                 {
+                                    title: 'Үйлчилгээ',
+                                    dataIndex: 'name',
+                                    align: 'left',
+                                    render: (_, _row, index) => (
+                                       <EditableFormItem name={[index, 'name']}>
+                                          <Input />
+                                       </EditableFormItem>
+                                    )
+                                 },
+                                 {
+                                    title: 'Тоо',
+                                    dataIndex: 'total',
+                                    render: (_, _row, index) => (
+                                       <EditableFormItem name={[index, 'total']}>
+                                          <Input />
+                                       </EditableFormItem>
+                                    )
+                                 }
+                              ]}
+                              dataSource={services}
+                           />
+                        )}
+                     </Form.List>
+                  </Soap>
                </div>
                <Button type="primary" htmlType="submit" loading={loading}>
                   EMR хадгалах

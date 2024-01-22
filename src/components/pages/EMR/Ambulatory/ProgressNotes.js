@@ -1,21 +1,22 @@
 //Явцын тэмдэглэл
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Modal, Result, Spin } from 'antd';
+import { Input, Modal, Result, Spin } from 'antd';
 import male from '../../../../assets/images/maleAvatar.svg';
 import Prescription from '../PrescriptionPrint';
 import Magadlaga from '../MagadlagaPrint';
 import DiagnoseTypes from '../../service/DiagnoseTypes.js';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
-//
+import Highlighter from 'react-highlight-words';
 import AppointmentService from '../../../../services/appointment/api-appointment-service';
 import dayjs from 'dayjs';
 import EmrContext from '../../../../features/EmrContext';
 import { Each } from '../../../../features/Each';
+import { SearchOutlined } from '@ant-design/icons';
 
 export default function ProgressNotes() {
-   // const [expandedKeys, setKeys] = useState();
    const { selectedAppoitmentId, expandedKeys, setKeys } = useContext(EmrContext);
+   const [searchValue, setSearchValue] = useState('');
    const [activeKeyId, setActiveKeyId] = useState(null);
    const incomeEMRData = useSelector(selectCurrentEmrData);
    const [spinner, setSpinner] = useState(false);
@@ -49,23 +50,8 @@ export default function ProgressNotes() {
          }
       })
          .then(({ data: { response } }) => {
-            const treeData = [];
             const data = response.data;
             setResponseData(data);
-            data?.map((item) => {
-               const id = item.id;
-               const year = dayjs(item?.createdAt).get('year');
-               const month = dayjs(item?.createdAt).get('month') + 1;
-               const day = dayjs(item?.createdAt).get('date');
-               treeData[year] = treeData[year] || {};
-               treeData[year][`${month}-${day}`] = treeData[year][`${month}-${day}`] || { children: [] };
-               treeData[year][`${month}-${day}`].children.push({
-                  key: id,
-                  title: item.cabinet.name,
-                  isLeaf: true
-               });
-            });
-            setTreeData(treeData);
          })
          .finally(() => {
             setSpinner(false);
@@ -243,7 +229,12 @@ export default function ProgressNotes() {
                      onClick={() => getAppointmentById(item.key)}
                   >
                      <PageIcon />
-                     <p>{item.title}</p>
+                     <Highlighter
+                        highlightClassName="YourHighlightClass"
+                        searchWords={[searchValue]}
+                        autoEscape={true}
+                        textToHighlight={item.title}
+                     />
                   </div>
                )}
             />
@@ -262,6 +253,25 @@ export default function ProgressNotes() {
       );
    };
    //
+   const convertToTree = (search) => {
+      setSearchValue(search);
+      const treeData = [];
+      const data = responseData.filter((res) => res.cabinet?.name?.toLowerCase().includes(search?.toLowerCase()));
+      data?.map((item) => {
+         const id = item.id;
+         const year = dayjs(item?.createdAt).get('year');
+         const month = dayjs(item?.createdAt).get('month') + 1;
+         const day = dayjs(item?.createdAt).get('date');
+         treeData[year] = treeData[year] || {};
+         treeData[year][`${month}-${day}`] = treeData[year][`${month}-${day}`] || { children: [] };
+         treeData[year][`${month}-${day}`].children.push({
+            key: id,
+            title: item.cabinet.name,
+            isLeaf: true
+         });
+      });
+      setTreeData(treeData);
+   };
    const newData = useMemo(() => {
       return treeData;
    }, [treeData]);
@@ -274,7 +284,14 @@ export default function ProgressNotes() {
             <div className="grid grid-cols-3 gap-1">
                <Spin wrapperClassName="h-[500px]" spinning={spinner}>
                   <div className="rounded-md border-1 border-[#C9CDD4] bg-white w-full inline-block overflow-auto h-full">
-                     <div className="regular-tree">{Object.entries(newData).map(renderHTML)}</div>
+                     <div className="flex flex-col gap-2 p-2">
+                        <Input
+                           prefix={<SearchOutlined />}
+                           placeholder="Хайх"
+                           onChange={(e) => convertToTree(e.target.value)}
+                        />
+                        <div className="regular-tree">{Object.entries(newData).map(renderHTML)}</div>
+                     </div>
                   </div>
                </Spin>
                <div className="col-span-2">

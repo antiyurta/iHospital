@@ -46,7 +46,7 @@ const DoctorNotes = (props) => {
          });
    };
    useEffect(() => {
-      getNotes();
+      patientId && getNotes();
    }, [isPublic]);
 
    const Note = ({ data }) => {

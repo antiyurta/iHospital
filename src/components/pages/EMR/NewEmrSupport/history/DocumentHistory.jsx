@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../../../features/emrReducer';
+import { selectCurrentEmrData, selectCurrentSelectedPatient } from '../../../../../features/emrReducer';
 
 import Document from './document';
 import GroupDocument from './groupDocument';

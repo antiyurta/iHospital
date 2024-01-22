@@ -27,6 +27,7 @@
       "react-cookie": "^4.1.1",
       "react-dom": "^18.2.0",
       "react-fast-marquee": "^1.5.2",
+      "react-highlight-words": "^0.20.0",
       "react-infinite-scroll-component": "^6.1.0",
       "react-number-format": "^5.2.2",
       "react-password-checklist": "^1.4.3",
