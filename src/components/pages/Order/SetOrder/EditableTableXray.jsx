@@ -2,6 +2,7 @@ import React from 'react';
 import { Input, Table } from 'antd';
 import Xray from '../Xray';
 import EditableFormItem from '../../611/Support/EditableFormItem';
+import TextArea from 'antd/lib/input/TextArea';
 
 const EditableTableXray = (props) => {
    const { form, xrays, isEdit } = props;
@@ -24,8 +25,17 @@ const EditableTableXray = (props) => {
                title: 'Нэр',
                dataIndex: 'name',
                render: (_, _row, index) => (
-                  <EditableFormItem name={[index, 'name']} editing={isEdit}>
+                  <EditableFormItem name={[index, 'name']} editing={false}>
                      <Input />
+                  </EditableFormItem>
+               )
+            },
+            {
+               title: 'Тайлбар',
+               dataIndex: 'description',
+               render: (_, _row, index) => (
+                  <EditableFormItem name={[index, 'description']} editing={isEdit}>
+                     <TextArea />
                   </EditableFormItem>
                )
             }

@@ -147,18 +147,16 @@ function Medicine({ usageType, handleclick }) {
          }
       }
    ];
-   //
-   useEffect(() => {
-      getMedicine(1, 10);
-   }, []);
 
    return (
       <>
          <button
             className="yellow-order"
-            onClick={() => {
+            onClick={(event) => {
+               event.preventDefault();
                setIsOpenModal(true);
                setSelectedMedicines([]);
+               getMedicine(1, 10);
             }}
          >
             <img src={medicineIcon} />

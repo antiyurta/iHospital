@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SetOrder from '../SetOrder';
 import { Examination } from '../Examination';
 import Xray from '../Xray';
@@ -10,15 +10,10 @@ import InpatientRequest from '../InpatientRequest';
 import DoctorInspection from '../DoctorInspection';
 import Reinspection from '../Reinspection';
 import RecentRecipe from '../RecentRecipe';
-import { useState } from 'react';
 import { Button, Form } from 'antd';
 import PackageTable from '../PackageTable/PackageTable';
 import OrderTable from '../OrderTable/OrderTable';
 import { numberToCurrency, openNofi } from '../../../comman';
-import { useEffect } from 'react';
-import ExaminationService from '../../../../services/service/examination.api';
-import TreatmentService from '../../../../services/service/treatment.api';
-import XrayService from '../../../../services/service/xray.api';
 import ServiceService from '../../../../services/service/service';
 import moment from 'moment';
 
@@ -97,6 +92,8 @@ const InternalOrder = (props) => {
             service.id = item.id;
             service.name = item.name;
             service.type = item.type;
+            service.specimen = item.specimen;
+            service.description = item.description;
             if (usageType === 'IN') {
                service.price = item.inpatientPrice;
                service.oPrice = item.inpatientPrice;
@@ -116,7 +113,6 @@ const InternalOrder = (props) => {
                service.oPrice = item.price;
                service.type = item.type;
                service.medicineType = null;
-               service.description = '';
                service.repeatTime = 1;
                service.dayCount = 1;
                service.total = 0;
@@ -159,7 +155,6 @@ const InternalOrder = (props) => {
          orderForm.setFieldsValue({ services: data });
          setTotal(total + subTotal);
       }
-      console.log('services', services);
       setIsLoadingOrderTable(false);
    };
    const inpatientRequestClick = async (values) => {
@@ -180,26 +175,6 @@ const InternalOrder = (props) => {
       services?.medicines?.map((medicine) => newServices.push(medicine));
       services?.examinations?.map((examination) => newServices.push(examination));
       services?.xrays?.map((xray) => newServices.push(xray));
-      console.log(newServices);
-      // await Promise.all(
-      //    services?.map(async (service) => {
-      //       if (service.serviceType === 0) {
-      //          await ExaminationService.getById(service.serviceId).then((response) => {
-      //             newServices.push(response.data.response);
-      //          });
-      //       } else if (service.serviceType === 1) {
-      //          await XrayService.getById(service.serviceId).then((response) => {
-      //             console.log(response);
-      //             newServices.push(response.data.response);
-      //          });
-      //       } else if (service.serviceType === 2) {
-      //          await TreatmentService.getById(service.serviceId).then((response) => {
-      //             console.log(response);
-      //             newServices.push(response.data.response);
-      //          });
-      //       }
-      //    })
-      // );
       handleclick(newServices);
    };
 

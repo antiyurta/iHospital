@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { formatNameForDoc } from '../../comman';
+import { formatNameForDoc, openNofi } from '../../comman';
 import {
    Badge,
    Button,
@@ -36,6 +36,7 @@ import EditableTableMedicine from './SetOrder/EditableTableMedicine';
 import EditableTableExamination from './SetOrder/EditableTableExamination';
 import EditableTableXray from './SetOrder/EditableTableXray';
 import { Each } from '../../../features/Each';
+import dayjs from 'dayjs';
 
 const InMode = {
    EDIT: 'EDIT',
@@ -54,16 +55,20 @@ const { TextArea } = Input;
 function SetOrder({ handleclick }) {
    const { countOfPublicSetOrder, countOfPrivateSetOrder } = useContext(EmrContext);
    const [form] = Form.useForm();
-   const xrays = Form.useWatch(['services', 'xrays'], form);
-   const examinations = Form.useWatch(['services', 'examinations'], form);
-   const medicines = Form.useWatch(['services', 'medicines'], form);
-
+   const [medicineLength, setMedicineLength] = useState(0);
+   const [examinationsLength, setExaminationsLength] = useState(0);
+   const [xraysLength, setXraysLength] = useState(0);
+   const [selectedSetOrder, setSelectedSetOrder] = useState({});
+   const [selectedOrderId, setSelectedSetOrderId] = useState(null);
+   const [bottomActiveKey, setBottomActiveKey] = useState(1);
+   const [isOpenModalFirst, setIsOpenModalFirst] = useState(false);
+   const [isOpenModalSecond, setIsOpenModalSecond] = useState(false);
+   //
    const [orders, setOrders] = useState([]);
    const [activeKey, setActiveKey] = useState(1);
    const [structures, setStructures] = useState([]);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isOpenFirstModal, setIsOpenFirstModal] = useState(false);
-   const [selectedSetOrder, setSelectedSetOrder] = useState({});
    const [isOpenViewModal, setIsOpenViewModal] = useState(false);
    const [isMode, setIsMode] = useState();
    const [isLoading, setIsLoading] = useState(false);
@@ -92,19 +97,29 @@ function SetOrder({ handleclick }) {
    const onFinish = async (values) => {
       setIsLoadingConfirm(true);
       if (isMode === InMode.EDIT) {
-         await ServiceService.patchSetOrder(selectedOrderId, values).then((response) => {
-            if (response.data.success) {
-               // setIsLoadingConfirm(false);
-               // setIsOpenAddModal(false);
-               // getSetOrders(1, 10);
-            }
-         });
+         await ServiceService.patchSetOrder(selectedOrderId, values)
+            .then((response) => {
+               if (response.data.success) {
+                  openNofi('success', 'Амжилттай');
+                  getSetOrders(1, 10);
+               }
+            })
+            .finally(() => {
+               setIsOpenFirstModal(false);
+               setIsOpenModalSecond(false);
+               setIsLoadingConfirm(false);
+            });
       } else if (isMode === InMode.CREATE) {
-         await ServiceService.postSetOrder(values).then((response) => {
-            // setIsLoadingConfirm(false);
-            // setIsOpenAddModal(false);
-            // getSetOrders(1, 10);
-         });
+         await ServiceService.postSetOrder(values)
+            .then((response) => {
+               setSelectedSetOrderId(response.data?.response?.id);
+            })
+            .finally(() => {
+               setIsMode(InMode.EDIT);
+               setIsOpenModalFirst(false);
+               setIsOpenModalSecond(true);
+               setIsLoadingConfirm(false);
+            });
       }
    };
    const onDelete = async (id) => {
@@ -156,6 +171,10 @@ function SetOrder({ handleclick }) {
                      onFilter: (value, record) => record.setOrderType === value
                   },
                   {
+                     title: 'Жорын нэр',
+                     dataIndex: 'name'
+                  },
+                  {
                      title: 'Тасгийн нэр',
                      dataIndex: ['structure', 'name'],
                      filters: structures?.map((structure) => ({
@@ -178,6 +197,11 @@ function SetOrder({ handleclick }) {
                      dataIndex: 'description'
                   },
                   {
+                     title: 'Огноо',
+                     dataIndex: 'createdAt',
+                     render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD')
+                  },
+                  {
                      title: '',
                      render: (_, row) => (
                         <div className="flex flex-row gap-3 justify-center">
@@ -193,6 +217,7 @@ function SetOrder({ handleclick }) {
                               className="text-green-600"
                               onClick={() => {
                                  setIsMode(InMode.EDIT);
+                                 setSelectedSetOrderId(row.id);
                                  form.setFieldsValue(row);
                                  setIsOpenFirstModal(true);
                               }}
@@ -217,8 +242,11 @@ function SetOrder({ handleclick }) {
                      <div className="set-order-add-button">
                         <button
                            onClick={() => {
+                              form.resetFields();
                               setIsMode(InMode.CREATE);
-                              setIsOpenFirstModal(true);
+                              setIsOpenModalFirst(true);
+                              // setIsMode(InMode.CREATE);
+                              // setIsOpenFirstModal(true);
                            }}
                         >
                            <PlusCircleOutlined />
@@ -231,6 +259,162 @@ function SetOrder({ handleclick }) {
          </ConfigProvider>
       );
    };
+
+   const Top = () => (
+      <>
+         <Form.Item
+            label="Жорын нэр"
+            name="name"
+            rules={[
+               {
+                  required: true,
+                  message: 'Нэр заавал'
+               }
+            ]}
+         >
+            <Input />
+         </Form.Item>
+         <Form.Item
+            label="Тасаг"
+            name="structureId"
+            rules={[
+               {
+                  required: true,
+                  message: 'Тасаг заавал'
+               }
+            ]}
+         >
+            <Select
+               options={structures?.map((structure) => ({
+                  label: structure.name,
+                  value: structure.id
+               }))}
+            />
+         </Form.Item>
+         <div className="flex flex-row gap-2 justify-between items-end">
+            <Form.Item
+               className="mb-0"
+               label="Оношийн код"
+               name="icdCode"
+               rules={[
+                  {
+                     required: true,
+                     message: 'Онош заавал'
+                  }
+               ]}
+            >
+               <Input disabled />
+            </Form.Item>
+            <DiagnoseWindow
+               handleClick={(diagnose) => {
+                  form.setFieldValue('icdCode', diagnose.code);
+               }}
+            />
+         </div>
+         <Form.Item label="Жорын төрөл" name="setOrderType">
+            <Radio.Group>
+               <Radio value={0}>Нийтийн</Radio>
+               <Radio value={1}>Хувийн</Radio>
+            </Radio.Group>
+         </Form.Item>
+         <Form.Item
+            label="Тайлбар"
+            name="description"
+            rules={[
+               {
+                  required: true,
+                  message: 'Тайлбар заавал'
+               }
+            ]}
+         >
+            <TextArea />
+         </Form.Item>
+      </>
+   );
+
+   const Bottom = () => (
+      <Tabs
+         type="card"
+         activeKey={bottomActiveKey}
+         onChange={(key) => setBottomActiveKey(key)}
+         items={[
+            {
+               key: 1,
+               label: (
+                  <div className="flex flex-row gap-2 items-end">
+                     <p>Захиалсан эм</p>
+                     <Badge showZero count={medicineLength || 0} color="#2D8CFF" />
+                  </div>
+               ),
+               forceRender: true,
+               children: (
+                  <Form.List name={['services', 'medicines']}>
+                     {(medicines, { remove }) => {
+                        setMedicineLength(medicines?.length);
+                        return (
+                           <EditableTableMedicine
+                              medicines={medicines}
+                              remove={remove}
+                              isEdit={isMode === InMode.EDIT ? true : false}
+                           />
+                        );
+                     }}
+                  </Form.List>
+               )
+            },
+            {
+               key: 2,
+               label: (
+                  <div className="flex flex-row gap-2 items-end">
+                     <p>Захиалсан шинжилгээ</p>
+                     <Badge showZero count={examinationsLength || 0} color="#2D8CFF" />
+                  </div>
+               ),
+               forceRender: true,
+               children: (
+                  <Form.List name={['services', 'examinations']}>
+                     {(examinations, { remove }) => {
+                        setExaminationsLength(examinations?.length);
+                        return (
+                           <EditableTableExamination
+                              form={form}
+                              examinations={examinations}
+                              remove={remove}
+                              isEdit={isMode === InMode.EDIT ? true : false}
+                           />
+                        );
+                     }}
+                  </Form.List>
+               )
+            },
+            {
+               key: 3,
+               label: (
+                  <div className="flex flex-row gap-2 items-end">
+                     <p>Захиасан оношилгоо</p>
+                     <Badge showZero count={xraysLength || 0} color="#2D8CFF" />
+                  </div>
+               ),
+               forceRender: true,
+               children: (
+                  <Form.List name={['services', 'xrays']}>
+                     {(xrays, { remove }) => {
+                        setXraysLength(xrays?.length);
+                        return (
+                           <EditableTableXray
+                              form={form}
+                              xrays={xrays}
+                              remove={remove}
+                              isEdit={isMode === InMode.EDIT ? true : false}
+                           />
+                        );
+                     }}
+                  </Form.List>
+               )
+            }
+         ]}
+      />
+   );
 
    return (
       <>
@@ -320,6 +504,46 @@ function SetOrder({ handleclick }) {
             </div>
          </Modal>
          <Modal
+            title="Жор үүсгэх"
+            open={isOpenModalFirst}
+            onCancel={() => setIsOpenModalFirst(false)}
+            okText="Хадгалах"
+            onOk={() => {
+               form.validateFields().then((values) => {
+                  onFinish(values);
+               });
+            }}
+            confirmLoading={isLoadingConfirm}
+         >
+            <Form
+               form={form}
+               layout="vertical"
+               initialValues={{
+                  setOrderType: 1
+               }}
+            >
+               <Top />
+            </Form>
+         </Modal>
+         <Modal
+            title="Жор үүсгэх"
+            width={'80%'}
+            open={isOpenModalSecond}
+            onCancel={() => setIsOpenModalSecond(false)}
+            okText="Хадгалах"
+            onOk={() =>
+               form.validateFields().then((values) => {
+                  onFinish(values);
+               })
+            }
+            confirmLoading={isLoadingConfirm}
+            zIndex={1001}
+         >
+            <Form form={form}>
+               <Bottom />
+            </Form>
+         </Modal>
+         <Modal
             title={`Cет-Ордер ${InTitle[isMode]}`}
             width={700}
             open={isOpenFirstModal}
@@ -338,126 +562,8 @@ function SetOrder({ handleclick }) {
                }}
             >
                <div className="flex flex-col gap-2">
-                  <div className="flex flex-row gap-2 justify-between items-end">
-                     <Form.Item
-                        className="mb-0"
-                        label="Оношийн код"
-                        name="icdCode"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Онош заавал'
-                           }
-                        ]}
-                     >
-                        <Input disabled />
-                     </Form.Item>
-                     <DiagnoseWindow
-                        handleClick={(diagnose) => {
-                           form.setFieldValue('icdCode', diagnose.code);
-                        }}
-                     />
-                  </div>
-                  <Form.Item
-                     label="Тасаг"
-                     name="structureId"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Онош заавал'
-                        }
-                     ]}
-                  >
-                     <Select
-                        options={structures?.map((structure) => ({
-                           label: structure.name,
-                           value: structure.id
-                        }))}
-                     />
-                  </Form.Item>
-                  <Form.Item
-                     label="Тайлбар"
-                     name="description"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Онош заавал'
-                        }
-                     ]}
-                  >
-                     <TextArea />
-                  </Form.Item>
-                  <Form.Item label="Сэт-Ордерын төрөл" name="setOrderType">
-                     <Radio.Group>
-                        <Radio value={0}>Нийтийн</Radio>
-                        <Radio value={1}>Хувийн</Radio>
-                     </Radio.Group>
-                  </Form.Item>
-                  <Tabs
-                     type="card"
-                     items={[
-                        {
-                           key: 1,
-                           forceRender: true,
-                           label: 'Захиалсан эм',
-                           children: (
-                              <Form.List name={['services', 'medicines']}>
-                                 {(medicines, { remove }) => (
-                                    <EditableTableMedicine
-                                       medicines={medicines}
-                                       remove={remove}
-                                       isEdit={isMode === InMode.EDIT ? true : false}
-                                    />
-                                 )}
-                              </Form.List>
-                           )
-                        },
-                        {
-                           key: 2,
-                           forceRender: true,
-                           label: (
-                              <div className="flex flex-row gap-2 items-end">
-                                 <p>Захиалсан шинжилгээ</p>
-                                 <Badge showZero count={examinations?.length || 0} color="#2D8CFF" />
-                              </div>
-                           ),
-                           children: (
-                              <Form.List name={['services', 'examinations']}>
-                                 {(examinations, { remove }) => (
-                                    <EditableTableExamination
-                                       form={form}
-                                       examinations={examinations}
-                                       remove={remove}
-                                       isEdit={isMode === InMode.EDIT ? true : false}
-                                    />
-                                 )}
-                              </Form.List>
-                           )
-                        },
-                        {
-                           key: 3,
-                           forceRender: true,
-                           label: (
-                              <div className="flex flex-row gap-2 items-end">
-                                 <p>Захиасан оношилгоо</p>
-                                 <Badge showZero count={xrays?.length || 0} color="#2D8CFF" />
-                              </div>
-                           ),
-                           children: (
-                              <Form.List name={['services', 'xrays']}>
-                                 {(xrays, { remove }) => (
-                                    <EditableTableXray
-                                       form={form}
-                                       xrays={xrays}
-                                       remove={remove}
-                                       isEdit={isMode === InMode.EDIT ? true : false}
-                                    />
-                                 )}
-                              </Form.List>
-                           )
-                        }
-                     ]}
-                  />
+                  <Top />
+                  <Bottom />
                </div>
             </Form>
          </Modal>

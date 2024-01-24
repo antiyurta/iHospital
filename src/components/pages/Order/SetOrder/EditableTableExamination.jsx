@@ -1,7 +1,8 @@
 import React from 'react';
-import { Form, Input, Table } from 'antd';
+import { Input, Table } from 'antd';
 import { Examination } from '../Examination';
 import EditableFormItem from '../../611/Support/EditableFormItem';
+import TextArea from 'antd/lib/input/TextArea';
 
 const EditableTableExamination = (props) => {
    const { form, examinations, isEdit } = props;
@@ -11,7 +12,6 @@ const EditableTableExamination = (props) => {
             examinations: incomeExaminations
          }
       });
-      console.log('asdasd', form.getFieldsValue());
    };
    return (
       <Table
@@ -24,8 +24,26 @@ const EditableTableExamination = (props) => {
                title: 'Нэр',
                dataIndex: 'name',
                render: (_, _row, index) => (
-                  <EditableFormItem name={[index, 'name']} editing={isEdit}>
+                  <EditableFormItem name={[index, 'name']} editing={false}>
                      <Input />
+                  </EditableFormItem>
+               )
+            },
+            {
+               title: 'Сорьц',
+               dataIndex: 'specimen',
+               render: (_, _row, index) => (
+                  <EditableFormItem name={[index, 'specimen']} editing={isEdit}>
+                     <TextArea />
+                  </EditableFormItem>
+               )
+            },
+            {
+               title: 'Тайлбар',
+               dataIndex: 'description',
+               render: (_, _row, index) => (
+                  <EditableFormItem name={[index, 'description']} editing={isEdit}>
+                     <TextArea />
                   </EditableFormItem>
                )
             }

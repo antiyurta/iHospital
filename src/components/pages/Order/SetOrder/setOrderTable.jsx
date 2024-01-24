@@ -27,13 +27,12 @@ const SetOrderTable = (props) => {
                render: (_, _row, rowIndex) => rowIndex + 1
             },
             {
-               title: 'Тасгийн нэр',
-               dataIndex: ['structure', 'name']
+               title: 'Жорын нэр',
+               dataIndex: 'name'
             },
             {
-               title: 'Огноо',
-               dataIndex: 'createdAt',
-               render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD')
+               title: 'Тасгийн нэр',
+               dataIndex: ['structure', 'name']
             },
             {
                title: 'Эмчийн нэр',
@@ -46,6 +45,11 @@ const SetOrderTable = (props) => {
             {
                title: 'Тайлбар',
                dataIndex: 'description'
+            },
+            {
+               title: 'Огноо',
+               dataIndex: 'createdAt',
+               render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD')
             },
             {
                title: ' ',

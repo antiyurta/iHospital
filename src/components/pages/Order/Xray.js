@@ -53,6 +53,7 @@ function Xray({ handleclick }) {
             }}
             okText={'Хадгалах'}
             cancelText={'Болих'}
+            zIndex={1002}
          >
             <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-3">
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">

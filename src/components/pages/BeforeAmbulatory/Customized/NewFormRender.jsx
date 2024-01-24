@@ -230,7 +230,7 @@ const NewFormRender = (props) => {
                      label={item.question}
                      name={configNames(item.keyWord)}
                   >
-                     <TextArea disabled={!state} placeholder={item.question} />
+                     <TextArea rows={7} disabled={!state} placeholder={item.question || 'Энд бичнэ үү'} />
                   </Form.Item>
                </div>
             </div>

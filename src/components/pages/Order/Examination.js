@@ -1,6 +1,5 @@
-import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, Modal, Table } from 'antd';
 import React, { useState } from 'react';
+import { Empty, Modal, Table } from 'antd';
 import { numberToCurrency, openNofi } from '../../comman';
 
 import examIcon from './NewOrder/examIcon.svg';
@@ -59,6 +58,7 @@ export const Examination = ({ handleclick }) => {
             }}
             okText={'Хадгалах'}
             cancelText={'Болих'}
+            zIndex={1002}
          >
             <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-2">
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block">

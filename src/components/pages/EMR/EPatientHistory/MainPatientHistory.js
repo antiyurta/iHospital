@@ -274,6 +274,7 @@ function MainPatientHistory({ handleClick }) {
       ]
    };
    const getDefualtTab = () => {
+      setActiveKey('item-second');
       setItems([
          {
             label: 'Давтан үзлэгийн асуумж',
@@ -283,6 +284,7 @@ function MainPatientHistory({ handleClick }) {
       ]);
    };
    const getXrayDefualtTab = () => {
+      setActiveKey('item-xray');
       setItems([
          {
             label: 'Дүгнэлт',
