@@ -57,7 +57,7 @@ function DynamicContent({
       form.setFieldValue('diagnosis', diagnosis);
    };
    const saveDynamicTab = async (values, key) => {
-      setLoading(true);
+      // setLoading(true);
       if ((selectedInspectionNoteId && editModeInspectionNote) || isEditFromList) {
          const diagnosis = values.diagnosis?.map((diagnose) => ({
             patientId: incomeData.patientId,
@@ -199,6 +199,7 @@ function DynamicContent({
             scrollToFirstError
             onFinish={(e) => saveDynamicTab(e, props.formKey)}
             onFinishFailed={onFinishFailed}
+            onFieldsChange={(e) => console.log(e)}
          >
             <div className="flex flex-col gap-2">
                <div className="flex flex-col pr-3 gap-2">
@@ -234,7 +235,7 @@ function DynamicContent({
                      <NewFormRender
                         useForm={form}
                         form={{
-                           documentForm: props.data.pain
+                           documentForm: props.data.question
                         }}
                         formOptionIds={[]}
                         isCheck={false}
@@ -251,7 +252,7 @@ function DynamicContent({
                      <NewFormRender
                         useForm={form}
                         form={{
-                           documentForm: props.data.pain
+                           documentForm: props.data.inspection
                         }}
                         formOptionIds={[]}
                         isCheck={false}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 const Soap = (props) => {
-   const { soapKey, expandedKey, handleClick } = props;
+   const { soapKey, expandedKey, handleClick, form } = props;
    const [expand, setExpand] = useState(false);
    useEffect(() => {
       if (expandedKey === soapKey) {
@@ -15,17 +15,17 @@ const Soap = (props) => {
             <p className="text-[#4E5969] font-bold">{props.title}</p>
             <p className="text-[#A9AEB8] font-bold">{props.subTitle}</p>
          </div>
-         {expand ? (
-            <div
-               className="flex flex-col gap-1"
-               style={{
-                  height: 205,
-                  overflow: 'auto'
-               }}
-            >
-               {props.children}
-            </div>
-         ) : (
+         <div
+            className="flex-col gap-1"
+            style={{
+               display: expand ? 'flex' : 'none',
+               height: 205,
+               overflow: 'auto'
+            }}
+         >
+            {props.children}
+         </div>
+         {expand ? null : (
             <div
                className="px-2 py-1 bg-white border-[#C9CDD4] border-1 rounded-lg hover:cursor-pointer"
                onClick={() => handleClick(soapKey)}

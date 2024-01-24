@@ -108,7 +108,7 @@ function MainPatientHistory({ handleClick }) {
             <div
                style={{
                   overflow: 'auto',
-                  height: 560
+                  height: 520
                }}
             >
                <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
@@ -142,11 +142,12 @@ function MainPatientHistory({ handleClick }) {
          .then((response) => {
             setItems([
                {
-                  key: 0,
+                  key: response.data.response[0]?.id,
                   label: response.data.response[0]?.name,
                   children: <XrayDocumentShow data={response.data.response[0]} />
                }
             ]);
+            setActiveKey(response.data.response[0]?.id);
          })
          .finally(() => {
             setLoading(false);
