@@ -8,7 +8,7 @@ export default function Step3() {
       <div
          className="flex flex-col gap-2"
          style={{
-            height: 260,
+            height: 200,
             overflow: 'auto'
          }}
       >

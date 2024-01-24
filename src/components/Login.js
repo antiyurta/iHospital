@@ -26,7 +26,12 @@ function Login() {
    }, []);
 
    return (
-      <div className="px-4 sm:px-4 pt-[72px]">
+      <div
+         className="px-4 sm:px-4 pt-[90px]"
+         style={{
+            height: '80vh'
+         }}
+      >
          <Row gutter={[24, 0]} justify="space-around">
             <Col xs={{ span: 24, offset: 0 }} lg={{ span: 6, offset: 2 }} md={{ span: 12 }}>
                <Title className="mb-15">Нэвтрэх</Title>

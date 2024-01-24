@@ -29,17 +29,8 @@ const OrderHistory = () => {
                });
             });
          });
-         console.log(newOrders);
          setOrders(newOrders);
       });
-   };
-   const getName = (order) => {
-      if (order.treatment) {
-         return order.treatment.name;
-      } else if (order.xray) {
-         return order.xray.name;
-      } else if (order.details) {
-      }
    };
    useEffect(() => {
       getPatientRequests();
@@ -63,7 +54,7 @@ const OrderHistory = () => {
                   </p>
                </div>
                <div className="extra">
-                  <button>Захиалах</button>
+                  <div />
                   <button>
                      Дэлгэрэнгүй <img src={arrowNext} alt="arr" />
                   </button>

@@ -64,7 +64,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                <div
                   className="flex flex-col gap-2"
                   style={{
-                     height: 395,
+                     height: 340,
                      overflow: 'auto'
                   }}
                >
@@ -143,7 +143,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                <div
                   className="flex flex-col gap-2"
                   style={{
-                     height: 395,
+                     height: 340,
                      overflow: 'auto'
                   }}
                >
@@ -192,7 +192,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                <div
                   className="flex flex-col gap-2"
                   style={{
-                     height: 395,
+                     height: 340,
                      overflow: 'auto'
                   }}
                >
@@ -364,7 +364,7 @@ export default function GeneralInspection({ patientId, inspection }) {
                <div
                   className="flex flex-col gap-2"
                   style={{
-                     height: 395,
+                     height: 340,
                      overflow: 'auto'
                   }}
                >

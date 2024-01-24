@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Tabs, Button, Form, Modal, Result, Spin } from 'antd';
+import { Button, Form, Modal, Result } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from '../../../../features/authReducer';
@@ -8,6 +8,12 @@ import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
 import jwtInterceopter from '../../../jwtInterceopter';
 
+import leftArrow from '../leftArrow.svg';
+import rightArrow from '../rightArrow.svg';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 //
 import EmrInspectionFormServices from '../../../../services/emr/inspectionForm';
 import DocumentFormServices from '../../../../services/organization/documentForm';
@@ -298,12 +304,89 @@ function MainPatientHistory({ handleClick }) {
          }
       }
    }, [usageType]);
+   //
+   const SwiperButtonNext = ({ children }) => {
+      const swiper = useSwiper();
+      return (
+         <div className="box-next" onClick={() => swiper.slideNext()}>
+            {children}
+         </div>
+      );
+   };
+   const SwiperButtonPrev = ({ children }) => {
+      const swiper = useSwiper();
+      return (
+         <div className="box-prev" onClick={() => swiper.slidePrev()}>
+            {children}
+         </div>
+      );
+   };
+   //
    return (
       <>
          {usageType === 'OUT' ? (
-            <Spin wrapperClassName="h-full" spinning={false} tip="Уншиж байна ...">
-               <Tabs destroyInactiveTabPane defaultActiveKey={activeKey} items={items} />
-            </Spin>
+            <>
+               <div className="progress-note-header">
+                  <Swiper
+                     className="swiper-group"
+                     modules={[Navigation, Pagination, Scrollbar, A11y]}
+                     navigation
+                     spaceBetween={20}
+                     slidesPerView={1}
+                     breakpoints={{
+                        640: {
+                           slidesPerView: 2,
+                           spaceBetween: 10
+                        },
+                        768: {
+                           slidesPerView: 3,
+                           spaceBetween: 10
+                        },
+                        1024: {
+                           slidesPerView: 3,
+                           spaceBetween: 10
+                        },
+                        1366: {
+                           slidesPerView: 2.5,
+                           spaceBetween: 10
+                        },
+                        1441: {
+                           slidesPerView: 4,
+                           spaceBetween: 10
+                        },
+                        1562: {
+                           slidesPerView: 4,
+                           spaceBetween: 10
+                        },
+                        1797: {
+                           slidesPerView: 4,
+                           spaceBetween: 10
+                        },
+                        2560: {
+                           slidesPerView: 4,
+                           spaceBetween: 10
+                        }
+                     }}
+                  >
+                     <SwiperButtonPrev>
+                        <img src={leftArrow} alt="left" />
+                     </SwiperButtonPrev>
+                     <div className="content">
+                        {items?.map((item) => (
+                           <SwiperSlide key={item.key}>
+                              <div className={activeKey === item.key ? 'section active' : 'section'}>
+                                 <p onClick={() => setActiveKey(item.key)}>{item.label}</p>
+                              </div>
+                           </SwiperSlide>
+                        ))}
+                     </div>
+                     <SwiperButtonNext>
+                        <img src={rightArrow} alt="right" />
+                     </SwiperButtonNext>
+                  </Swiper>
+               </div>
+               {items?.find((item) => item.key === activeKey)?.children}
+            </>
          ) : null}
          {usageType === 'IN' ? (
             <MainInpatientHistory

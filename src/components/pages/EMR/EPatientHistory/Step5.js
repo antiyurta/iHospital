@@ -6,7 +6,12 @@ export default function Step5() {
    const { TextArea } = Input;
 
    return (
-      <div>
+      <div
+         style={{
+            height: 200,
+            overflow: 'auto'
+         }}
+      >
          <Divider orientation="left" className="text-sm my-2">
             Харшил
          </Divider>

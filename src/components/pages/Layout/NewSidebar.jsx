@@ -7,6 +7,7 @@ import PermissionServices from '../../../services/organization/permission';
 import MenuItem from './MenuItem';
 import MenuItemChildren from './MenuItemChildren';
 const Sidebar = ({ collapsed }) => {
+   console.log('collapse', collapsed);
    const [userMenu, setMenus] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const UserId = useSelector(selectCurrentUserId);
@@ -89,11 +90,11 @@ const Sidebar = ({ collapsed }) => {
 
    const renderMenuItem = (menuItem) => {
       if (!menuItem.children) {
-         return <MenuItem key={menuItem.key} data={menuItem} />;
+         return <MenuItem key={menuItem.key} data={menuItem} collapsed={collapsed} />;
       }
       const renderedMenuItems = menuItem.children.map(renderMenuItem);
       return (
-         <MenuItemChildren key={menuItem.key} data={menuItem}>
+         <MenuItemChildren key={menuItem.key} data={menuItem} collapsed={collapsed}>
             {renderedMenuItems}
          </MenuItemChildren>
       );

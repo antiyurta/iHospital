@@ -21,7 +21,12 @@ export const EmrContextProvider = ({ children }) => {
    };
    //
    const setId = (id) => {
-      setSelectedAppointmentId(id);
+      if (id === selectedAppoitmentId) {
+         console.log(id, selectedAppoitmentId);
+         setSelectedAppointmentId(null);
+      } else {
+         setSelectedAppointmentId(id);
+      }
    };
    const setKeys = (keys) => {
       setExpandedKeys(keys);

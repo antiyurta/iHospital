@@ -136,70 +136,75 @@ class NewEmr extends React.Component {
                      </div>
                   </div>
                   <div className="emr-body">
-                     <div
-                        className={this.state.type === 'EMR' ? 'grid grid-cols-5 gap-3' : 'flex flex-col gap-3'}
-                        style={{
-                           height: '100%'
-                        }}
-                     >
-                        {this.state.isExpandHistory && this.state.type === 'EMR' ? (
-                           <div
-                              className={
-                                 this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-${this.state.colSpan}` : null
-                              }
-                           >
-                              <div className="history">
-                                 <div className="head">
-                                    <p>Түүх</p>
-                                    <Button
-                                       onClick={() => {
-                                          this.setState({
-                                             isExpandHistory: true,
-                                             isExpandInspection: !this.state.isExpandInspection,
-                                             isExpandOneWindow: !this.state.isExpandOneWindow,
-                                             colSpan:
-                                                this.state.isExpandHistory &&
-                                                !this.state.isExpandInspection &&
-                                                !this.isExpandOneWindow
-                                                   ? 2
-                                                   : 5
-                                          });
-                                       }}
-                                       icon={
-                                          this.state.isExpandHistory ? (
-                                             <FullscreenOutlined />
-                                          ) : (
-                                             <FullscreenExitOutlined />
-                                          )
-                                       }
-                                    />
+                     {this.state.type === 'EMR' ? (
+                        <>
+                           {this.state.isExpandHistory ? (
+                              <div
+                                 className={
+                                    this.state.isExpandHistory &&
+                                    !this.state.isExpandInspection &&
+                                    !this.state.isExpandOneWindow
+                                       ? 'basis-full'
+                                       : 'basis-2/5 lg:basis-full xl:basis-2/5'
+                                 }
+                              >
+                                 <div className="history">
+                                    <div className="head">
+                                       <p>Түүх</p>
+                                       <Button
+                                          onClick={() => {
+                                             this.setState({
+                                                isExpandHistory: true,
+                                                isExpandInspection: !this.state.isExpandInspection,
+                                                isExpandOneWindow: !this.state.isExpandOneWindow,
+                                                colSpan:
+                                                   this.state.isExpandHistory &&
+                                                   !this.state.isExpandInspection &&
+                                                   !this.isExpandOneWindow
+                                                      ? 2
+                                                      : 5
+                                             });
+                                          }}
+                                          icon={
+                                             this.state.isExpandHistory ? (
+                                                <FullscreenOutlined />
+                                             ) : (
+                                                <FullscreenExitOutlined />
+                                             )
+                                          }
+                                       />
+                                    </div>
+                                    <div className="px-2">
+                                       <Radio.Group
+                                          defaultValue={this.state.usageType}
+                                          onChange={(e) =>
+                                             this.setState({
+                                                usageType: e.target.value
+                                             })
+                                          }
+                                       >
+                                          <Radio value={'OUT'}>Амбулатори</Radio>
+                                          <Radio value={'IN'}>Хэвтэн</Radio>
+                                       </Radio.Group>
+                                    </div>
+                                    {this.state.usageType === 'OUT' ? (
+                                       <MainAmbulatory patientId={this.props.IncomeEMRData.patientId} />
+                                    ) : (
+                                       <MainInPatient patientId={this.props.IncomeEMRData.patientId} />
+                                    )}
                                  </div>
-                                 <Radio.Group
-                                    defaultValue={this.state.usageType}
-                                    onChange={(e) =>
-                                       this.setState({
-                                          usageType: e.target.value
-                                       })
-                                    }
-                                 >
-                                    <Radio value={'OUT'}>Амбулатори</Radio>
-                                    <Radio value={'IN'}>Хэвтэн</Radio>
-                                 </Radio.Group>
-                                 {this.state.usageType === 'OUT' ? (
-                                    <MainAmbulatory patientId={this.props.IncomeEMRData.patientId} />
-                                 ) : (
-                                    <MainInPatient patientId={this.props.IncomeEMRData.patientId} />
-                                 )}
                               </div>
-                           </div>
-                        ) : null}
-                        {this.state.isExpandInspection ? (
-                           <div
-                              className={
-                                 this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-${this.state.colSpan}` : null
-                              }
-                           >
-                              {this.state.type === 'EMR' ? (
+                           ) : null}
+                           {this.state.isExpandInspection ? (
+                              <div
+                                 className={
+                                    this.state.isExpandInspection &&
+                                    !this.state.isExpandHistory &&
+                                    !this.state.isExpandOneWindow
+                                       ? 'basis-full'
+                                       : 'basis-2/5 md:basis-full lg:basis-1/2 xl:basis-2/5'
+                                 }
+                              >
                                  <div className="progress">
                                     <div className="head">
                                        <p>Явцын үзлэг</p>
@@ -228,28 +233,29 @@ class NewEmr extends React.Component {
                                     </div>
                                     <MainPatientHistory handleClick={this.handleTypeChange} />
                                  </div>
-                              ) : (
-                                 <NewCard
-                                    title=""
-                                    style={{
-                                       paddingTop: 10
-                                    }}
-                                 >
-                                    <Ocs
-                                       selectedPatient={this.state.selectedPatient}
-                                       UsageType={this.props.IncomeEMRData.usageType}
-                                       handleClick={this.saveOrder}
-                                    />
-                                 </NewCard>
-                              )}
-                           </div>
-                        ) : null}
-                        {this.state.isExpandOneWindow && this.state.type === 'EMR' ? (
-                           <div className={this.state.type === 'EMR' ? `sm:col-span-5 xl:col-span-1` : null}>
-                              <OneWindow />
-                           </div>
-                        ) : null}
-                     </div>
+                              </div>
+                           ) : null}
+                           {this.state.isExpandOneWindow ? (
+                              <div className="basis-1/5 md:basis-full lg:basis-1/2 xl:basis-1/5">
+                                 <OneWindow />
+                              </div>
+                           ) : null}
+                        </>
+                     ) : (
+                        <NewCard
+                           title=""
+                           style={{
+                              paddingTop: 10,
+                              width: '100%'
+                           }}
+                        >
+                           <Ocs
+                              selectedPatient={this.state.selectedPatient}
+                              UsageType={this.props.IncomeEMRData.usageType}
+                              handleClick={this.saveOrder}
+                           />
+                        </NewCard>
+                     )}
                   </div>
                </div>
             </div>

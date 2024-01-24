@@ -29,6 +29,7 @@ export default function ProgressNotes() {
    const [isSelected, setIsSelected] = useState(false);
    const [info, setInfo] = useState({});
    useEffect(() => {
+      setSearchValue('');
       if (selectedAppoitmentId) {
          setActiveKeyId(selectedAppoitmentId);
          const createdAt = responseData?.find((rData) => rData.id === selectedAppoitmentId)?.createdAt;
@@ -41,6 +42,9 @@ export default function ProgressNotes() {
          }
       }
    }, [selectedAppoitmentId]);
+   useEffect(() => {
+      expandedKeys && setIsSelected(true);
+   }, [expandedKeys]);
 
    const getPatientInspectionNotes = async () => {
       setSpinner(true);
@@ -253,10 +257,14 @@ export default function ProgressNotes() {
       );
    };
    //
-   const convertToTree = (search) => {
-      setSearchValue(search);
+   useEffect(() => {
       const treeData = [];
-      const data = responseData.filter((res) => res.cabinet?.name?.toLowerCase().includes(search?.toLowerCase()));
+      var data = [];
+      if (searchValue != undefined) {
+         data = responseData.filter((res) => res.cabinet?.name?.toLowerCase().includes(searchValue?.toLowerCase()));
+      } else {
+         data = responseData;
+      }
       data?.map((item) => {
          const id = item.id;
          const year = dayjs(item?.createdAt).get('year');
@@ -271,7 +279,8 @@ export default function ProgressNotes() {
          });
       });
       setTreeData(treeData);
-   };
+   }, [searchValue, responseData]);
+
    const newData = useMemo(() => {
       return treeData;
    }, [treeData]);
@@ -288,7 +297,8 @@ export default function ProgressNotes() {
                         <Input
                            prefix={<SearchOutlined />}
                            placeholder="Хайх"
-                           onChange={(e) => convertToTree(e.target.value)}
+                           value={searchValue}
+                           onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <div className="regular-tree">{Object.entries(newData).map(renderHTML)}</div>
                      </div>

@@ -28,7 +28,7 @@ const NewEmrSupport = () => {
             <button>Гарын авлага</button>
             <button>Скан EMR</button>
             <button onClick={() => setIsOpenModalRequests(true)}>Үйлчлүүлэгчийн хүснэгт </button>
-            <button onClick={() => setIsOpenModalHics(true)}>Эрүүл мэндийн даатгал </button>
+            <button onClick={() => setIsOpenModalHics(true)}>ЭМД</button>
             <DocumentIndex />
          </div>
          <Modal title="Даатгал" open={isOpenModalHics} onCancel={() => setIsOpenModalHics(false)}>

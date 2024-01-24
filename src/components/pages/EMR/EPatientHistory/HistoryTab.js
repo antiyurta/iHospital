@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Collapse, Row, Button, Form } from 'antd';
+import { Collapse, Button, Form } from 'antd';
 import Step2 from './Step2';
 import Step3 from './Step3';
 import Step1 from './Step1';
@@ -8,24 +8,15 @@ import Step5 from './Step5';
 import Step6 from './Step6';
 import Step7 from './Step7';
 import Step8 from './Step8';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Post } from '../../../comman';
-import moment from 'moment';
 
 import patientHistoryService from '../../../../services/emr/patientHistory';
 import dayjs from 'dayjs';
 
+const { Panel } = Collapse;
+
 export default function HistoryTab({ patientId, inspection }) {
-   const { Panel } = Collapse;
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const [historyForm] = Form.useForm();
    const saveHistory = () => {
-      config.params.patientId = null;
       historyForm.validateFields().then(async (values) => {
          values['patientId'] = patientId;
          await patientHistoryService.postPatientHistory(values).then((response) => {
@@ -38,7 +29,6 @@ export default function HistoryTab({ patientId, inspection }) {
       });
    };
    const getPatientHistory = async (id) => {
-      config.params.patientId = id;
       await patientHistoryService
          .getPatientHistory({
             params: {

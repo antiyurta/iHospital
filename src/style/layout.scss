@@ -1,28 +1,54 @@
-.main_layout_hospital {
+.menu-item-sub-popup {
+   z-index: 1000;
+   padding: 12px;
+   border-radius: 15px;
+   background-color: white;
+   position: absolute;
+   max-height: 400px;
+   overflow: auto;
    display: flex;
-   flex-direction: row;
+   flex-direction: column;
    gap: 12px;
 }
+.menu-item {
+   min-width: 20px;
+   display: flex;
+   padding: 6px;
+   flex-direction: row;
+   gap: 8px;
+   align-items: center;
+   color: #38586e;
+   p > svg {
+      width: 20px;
+      height: 20px;
+   }
+   &:hover {
+      cursor: pointer;
+      border-radius: 8px;
+      background-color: #c0dcff;
+      color: #2d8cff !important;
+   }
+}
+.menu-item.active {
+   border-radius: 8px;
+   color: #2d8cff;
+   background-color: #c0dcff;
+}
 
-.main-layout {
-   width: 100%;
-   height: 100vh;
+section.ant-layout {
+   transition: all 1s ease 0s;
    background-color: white;
-   .main-body {
-      width: 100%;
-      height: calc(100%);
-      display: flex;
-      flex-direction: row;
-      background-color: white;
+   .ant-layout-sider-children {
       .sidebar {
+         height: 100vh;
          gap: 12px;
          padding: 12px;
          transition: all 0.5s;
          display: flex;
          flex-direction: column;
          justify-content: space-between;
-         min-width: 220px;
-         max-width: 220px;
+         min-width: 200px;
+         max-width: 200px;
          background-color: white;
          .sidebar-header {
             width: 100%;
@@ -33,9 +59,27 @@
             align-items: center;
             img {
                height: 53px;
+               opacity: 0;
+               animation: fadeIn 1s forwards;
+            }
+            @keyframes fadeIn {
+               to {
+                  opacity: 1;
+               }
             }
          }
          .sidebar-body {
+            .menu-item-sub-popup.hided {
+               display: none;
+            }
+            .menu-item-sub-popup.showed {
+               display: flex;
+               a.menu-item {
+                  span {
+                     display: flex;
+                  }
+               }
+            }
             height: 100%;
             overflow: auto;
             width: 100%;
@@ -45,29 +89,6 @@
             gap: 8px;
             border-radius: 12px;
             background-color: #eff4fa;
-            .menu-item {
-               display: flex;
-               padding: 6px;
-               flex-direction: row;
-               gap: 8px;
-               align-items: center;
-               color: #38586e;
-               p > svg {
-                  width: 20px;
-                  height: 20px;
-               }
-               &:hover {
-                  cursor: pointer;
-                  border-radius: 8px;
-                  background-color: #c0dcff;
-                  color: #2d8cff !important;
-               }
-            }
-            .menu-item.active {
-               border-radius: 8px;
-               color: #2d8cff;
-               background-color: #c0dcff;
-            }
             .menu-item-sub {
                display: flex;
                flex-direction: column;
@@ -164,231 +185,31 @@
             }
          }
       }
-      .main-content {
-         width: calc(100% - 220px);
-      }
-   }
-}
-
-.ihospital-menu {
-   height: 100vh;
-   display: flex;
-   flex-direction: column;
-   gap: 24px;
-   padding: 24px 0px 100px 8px;
-   background-color: white;
-   .ant-layout-sider-children {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-   }
-   .menu-body {
-      padding: 8px;
-      border-radius: 8px;
-      background-color: #eff4fa;
-      height: 100%;
-      overflow: auto;
-      .ant-menu-item-icon {
-         svg {
-            height: 20px;
-            width: 20px;
+      .sidebar.collapsed {
+         max-width: 77px;
+         min-width: 77px;
+         .sidebar-header {
+            flex-direction: column;
          }
-      }
-      .ant-menu.ant-menu-inline-collapsed {
-         > .ant-menu-item {
-            padding: 0px calc(50% - 20px / 2);
-         }
-      }
-      .ant-menu.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
-         padding: 0px calc(50% - 20px / 2);
-      }
-   }
-}
-
-@media (min-width: 320px) and (max-width: 768px) {
-   .ambo-list-filter {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      .left {
-         flex-wrap: wrap;
-         button:nth-child(n) {
-            width: 30%;
-         }
-      }
-      .right {
-         flex-wrap: wrap;
-         .pagi-list {
-            width: 100%;
-            .ant-select.ant-select-single {
-               width: 75px !important;
-            }
-         }
-      }
-   }
-   .emr-index-list {
-      .ant-table-body {
-         max-height: calc(100vh - 420px) !important;
-      }
-   }
-   .new-emr {
-      .new-emr-index {
-         .patient {
-            padding-top: 88px !important;
-            flex-direction: column !important;
-            .patient-info {
-               max-width: 100%;
-               min-width: 100%;
-               .info {
-                  p.names {
-                     font-size: 16px;
-                  }
-                  .infos {
-                     div:nth-child(n) {
-                        gap: 4px !important;
-                     }
-                  }
-               }
-            }
-            .note-timer {
-               flex-direction: column;
-               gap: 8px;
-               .emr-timer {
-                  display: grid;
-                  grid-template-columns: repeat(2, minmax(0, 1fr));
-                  gap: 8px;
-                  p:nth-child(odd) {
-                     font-size: 14px;
-                  }
-                  .timer {
-                     font-size: 20px;
-                  }
+         .sidebar-body {
+            a.menu-item {
+               span {
+                  display: none;
                }
             }
          }
-      }
-   }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-   .ambo-list-filter {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      .left {
-         justify-content: space-between;
-         button {
-            width: 100%;
-         }
-         .ant-picker.ant-picker-range {
-            min-width: 250px;
-         }
-      }
-   }
-   .emr-index-list {
-      .ant-table-body {
-         max-height: calc(100vh - 290px) !important;
-      }
-   }
-   .new-emr {
-      .new-emr-index {
-         .patient {
-            justify-content: space-between;
-            .patient-info {
-               max-width: 400px;
-               min-width: 400px;
-               .info {
-                  p.names {
-                     font-size: 16px;
-                  }
-                  .infos {
-                     display: flex;
-                     flex-direction: column;
-                     gap: 8px;
-                     div:nth-child(even) {
-                        justify-content: start;
-                     }
-                  }
-               }
-            }
-            .note-timer {
-               flex-direction: column;
-               gap: 8px;
-               .emr-timer {
-                  display: grid;
-                  grid-template-columns: repeat(2, minmax(0, 1fr));
-                  gap: 8px;
-                  p:nth-child(odd) {
-                     font-size: 14px;
-                  }
-                  .timer {
-                     font-size: 20px;
-                  }
-               }
+         .sidebar-footer {
+            align-self: center;
+            .image-cropper,
+            .profile-info {
+               display: none;
             }
          }
       }
    }
-}
-@media (min-width: 1025px) and (max-width: 1279px) {
-   .ambo-list-filter {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      .left {
-         button {
-            width: 100%;
-         }
-         .ant-picker.ant-picker-range {
-            min-width: 250px;
-         }
-      }
-   }
-   .emr-index-list {
-      .ant-table-body {
-         max-height: calc(100vh - 245px) !important;
-      }
-   }
-   .new-emr {
-      .new-emr-index {
-         .patient {
-            justify-content: space-between;
-            .patient-info {
-               min-width: calc(100% - 720px);
-               min-width: calc(100% - 720px);
-               .info {
-                  p.names {
-                     font-size: 16px;
-                  }
-                  .infos {
-                     display: flex;
-                     flex-direction: column;
-                     gap: 8px;
-                     div:nth-child(even) {
-                        justify-content: start;
-                     }
-                  }
-               }
-            }
-         }
-      }
-   }
-}
-@media screen and (min-width: 1280px) {
-   .ambo-list-filter {
-      .left {
-         button {
-            width: 100%;
-         }
-         .ant-picker.ant-picker-range {
-            min-width: 236px;
-         }
-      }
-   }
-   .emr-index-list {
-      .ant-table-body {
-         max-height: calc(100vh - 245px) !important;
-      }
+   .main-content {
+      height: 100vh;
+      overflow-x: hidden;
    }
 }
 
@@ -472,10 +293,12 @@
    display: flex;
    flex-direction: column;
    width: 100%;
+   position: relative;
    .navbar {
-      position: fixed;
+      flex-wrap: nowrap;
+      position: absolute;
       z-index: 3;
-      width: calc(100% - 220px);
+      width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -514,7 +337,7 @@
       }
    }
    .new-emr-index {
-      height: 100%;
+      height: 100vh;
       overflow: auto;
       .patient {
          display: flex;
@@ -531,16 +354,91 @@
          gap: 8px;
       }
       .emr-body {
-         height: calc(100% - 250px);
+         width: 100%;
+         display: flex;
+         flex-wrap: wrap;
          background-color: #f5f6f7;
-         padding: 8px;
+         .progress,
+         .history {
+            > .progress-note-header,
+            > .history-header {
+               position: relative;
+               width: 100%;
+               height: 30px;
+               > .swiper-group {
+                  position: absolute;
+                  height: 26px;
+                  width: 100%;
+                  padding: 0px 26px;
+                  .section {
+                     display: flex;
+                     flex-direction: row;
+                     gap: 8px;
+                     align-items: center;
+                     svg {
+                        min-height: 16px;
+                        min-width: 16px;
+                     }
+                     > p {
+                        white-space: nowrap;
+                        padding: 4px 0px;
+                        color: #86909c;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                        &:hover {
+                           cursor: pointer;
+                        }
+                     }
+                  }
+                  .section.active {
+                     border-bottom: 2px solid #2d8cff;
+                     p {
+                        color: #2d8cff;
+                     }
+                  }
+                  > .box-next,
+                  .box-prev {
+                     img {
+                        height: 26px;
+                        width: 26px;
+                     }
+                     &:hover {
+                        cursor: pointer;
+                     }
+                  }
+                  > .box-prev {
+                     position: absolute;
+                     background-color: white;
+                     top: 0px;
+                     left: 0px;
+                     width: 26px !important;
+                     min-width: 26px !important;
+                     justify-content: center !important;
+                     z-index: 3;
+                  }
+                  > .box-next {
+                     position: absolute;
+                     background-color: white;
+                     top: 0px;
+                     right: 0px;
+                     width: 26px !important;
+                     min-width: 26px !important;
+                     justify-content: center !important;
+                     z-index: 3;
+                  }
+               }
+            }
+         }
          .history,
          .progress {
+            height: 640px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            height: 100%;
             border-radius: 8px;
+            margin: 8px;
             padding: 8px;
             background-color: white;
             .head {
@@ -737,5 +635,211 @@
       align-items: center;
       background-color: white;
       font-weight: 700;
+   }
+}
+
+@media (min-width: 320px) and (max-width: 768px) {
+   .ambo-list-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .left {
+         justify-content: space-between;
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 250px;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 420px) !important;
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .patient {
+            padding-top: 88px !important;
+            flex-direction: column !important;
+            .patient-info {
+               max-width: 100%;
+               min-width: 100%;
+               .info {
+                  p.names {
+                     font-size: 16px;
+                  }
+                  .infos {
+                     div:nth-child(n) {
+                        gap: 4px !important;
+                     }
+                  }
+               }
+            }
+            .note-timer {
+               flex-direction: column;
+               gap: 8px;
+               .emr-timer {
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 8px;
+                  p:nth-child(odd) {
+                     font-size: 14px;
+                  }
+                  .timer {
+                     font-size: 20px;
+                  }
+               }
+            }
+         }
+         .emr-body {
+            flex-direction: column;
+         }
+      }
+   }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+   .ambo-list-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .left {
+         justify-content: space-between;
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 250px;
+         }
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .emr-body {
+            flex-direction: column;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 290px) !important;
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .patient {
+            justify-content: space-between;
+            .patient-info {
+               max-width: 400px;
+               min-width: 400px;
+               .info {
+                  p.names {
+                     font-size: 16px;
+                  }
+                  .infos {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 8px;
+                     div:nth-child(even) {
+                        justify-content: start;
+                     }
+                  }
+               }
+            }
+            .note-timer {
+               flex-direction: column;
+               gap: 8px;
+               .emr-timer {
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 8px;
+                  p:nth-child(odd) {
+                     font-size: 14px;
+                  }
+                  .timer {
+                     font-size: 20px;
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+@media (min-width: 1025px) and (max-width: 1279px) {
+   .ambo-list-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .left {
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 250px;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 245px) !important;
+      }
+   }
+   .new-emr {
+      .new-emr-index {
+         .patient {
+            justify-content: space-between;
+            .patient-info {
+               max-width: 400px;
+               min-width: 400px;
+               .info {
+                  p.names {
+                     font-size: 16px;
+                  }
+                  .infos {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 8px;
+                     div:nth-child(even) {
+                        justify-content: start;
+                     }
+                  }
+               }
+            }
+            .note-timer {
+               flex-direction: column;
+               gap: 8px;
+               .emr-timer {
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 8px;
+                  p:nth-child(odd) {
+                     font-size: 14px;
+                  }
+                  .timer {
+                     font-size: 20px;
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+@media screen and (min-width: 1280px) {
+   .ambo-list-filter {
+      .left {
+         button {
+            width: 100%;
+         }
+         .ant-picker.ant-picker-range {
+            min-width: 236px;
+         }
+      }
+   }
+   .emr-index-list {
+      .ant-table-body {
+         max-height: calc(100vh - 245px) !important;
+      }
    }
 }

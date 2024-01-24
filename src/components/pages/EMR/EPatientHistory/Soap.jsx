@@ -19,7 +19,7 @@ const Soap = (props) => {
             <div
                className="flex flex-col gap-1"
                style={{
-                  height: 278,
+                  height: 205,
                   overflow: 'auto'
                }}
             >
