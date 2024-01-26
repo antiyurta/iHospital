@@ -531,11 +531,6 @@ const options = [
       docName: 'Эмчлүүлэгчийн анамнез'
    },
    {
-      value: 85,
-      label: 'A/611 СТ-1 Ерөнхий үзлэг',
-      docName: 'Ерөнхий үзлэг'
-   },
-   {
       value: 86,
       label: 'А/293',
       docName: 'Яаралтай үнэлэх'
@@ -775,8 +770,6 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <CT1Nuur type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 84)
       return <CT1Anamnes type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 85)
-      return <CT1General type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 86)
       return <A293 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 87)
