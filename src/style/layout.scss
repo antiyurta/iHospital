@@ -192,6 +192,7 @@ section.ant-layout {
             flex-direction: column;
          }
          .sidebar-body {
+            align-items: center;
             a.menu-item {
                span {
                   display: none;
@@ -655,7 +656,7 @@ section.ant-layout {
    }
    .emr-index-list {
       .ant-table-body {
-         max-height: calc(100vh - 420px) !important;
+         max-height: calc(100vh - 285px) !important;
       }
    }
    .new-emr {

@@ -631,12 +631,14 @@ function Index({ type, isDoctor }) {
       {
          title: 'Төрөл',
          dataIndex: 'type',
+         width: 100,
          render: (text) => {
             return getInPatientType(text);
          }
       },
       {
          title: 'Тасаг',
+         width: 160,
          dataIndex: ['structure', 'name'],
          render: (text) => {
             return <span className="whitespace-break-spaces">{text}</span>;
@@ -644,11 +646,13 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Өрөө',
+         width: 60,
          dataIndex: ['room', 'roomNumber']
       },
       {
          title: 'Эмч',
          dataIndex: 'employee',
+         width: 170,
          render: (object) => {
             return (
                <div className="ambo-list-user">
@@ -668,6 +672,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
+         width: 170,
          render: (object) => {
             return (
                <div className="ambo-list-user">
@@ -703,6 +708,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Хэвтэх өдөр',
          dataIndex: 'startDate',
+         width: 100,
          render: (text) => {
             if (text) {
                return dayjs(text).format('YYYY/MM/DD');
@@ -713,6 +719,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Гарах өдөр',
          dataIndex: 'endDate',
+         width: 100,
          render: (text) => {
             if (text) {
                return dayjs(text).format('YYYY/MM/DD');
@@ -723,6 +730,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Гарсан өдөр',
          dataIndex: 'outDate',
+         width: 100,
          render: (text) => {
             if (text) {
                return dayjs(text).format('YYYY/MM/DD');
@@ -733,6 +741,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Даатгал',
          dataIndex: 'isInsurance',
+         width: 100,
          render: (text) => {
             if (text) {
                return (
@@ -777,6 +786,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Үйлдэл',
+         width: 120,
          render: (_text, row) => {
             return (
                <Button
