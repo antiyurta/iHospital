@@ -21,6 +21,7 @@ import DocumentFormServices from '../../../../services/organization/documentForm
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
+import { openNofi } from '../../../comman';
 //
 function MainPatientHistory({ handleClick }) {
    const {
@@ -68,7 +69,6 @@ function MainPatientHistory({ handleClick }) {
       );
    }, []);
    const onFinishXray = async (values, { data }) => {
-      console.log('data', data);
       const body = {
          appointmentId: xrayRequestId,
          usageType: usageType,
@@ -84,12 +84,12 @@ function MainPatientHistory({ handleClick }) {
             createdAt: dayjs()
          }
       };
-      console.log(body);
-      console.log(xrayRequestId);
       await jwtInterceopter
          .post(data.url, body)
          .then((response) => {
-            console.log(response);
+            if (response.status == 201) {
+               openNofi('success', 'Амжилттай', 'Дүгнэлт амжилттай хадгалагдсан');
+            }
          })
          .then(() => {
             jwtInterceopter.patch('service/xrayRequest/' + xrayRequestId, {
@@ -113,7 +113,7 @@ function MainPatientHistory({ handleClick }) {
                   height: 520
                }}
             >
-               <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={false} />
+               <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={true} />
             </div>
             <Button type="primary" htmlType="submit">
                Хадгалах
