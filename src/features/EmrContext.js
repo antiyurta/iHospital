@@ -3,9 +3,7 @@ import React, { createContext, useState } from 'react';
 const EmrContext = createContext();
 
 export const EmrContextProvider = ({ children }) => {
-   //
-   const [selectedPatient, setSelectedPatient] = useState({});
-   //
+   const [selectedPatient, setSelectedPatient] = useState({}); // songogdson owtoni medelel
    const [selectedAppoitmentId, setSelectedAppointmentId] = useState(null); // onosh delgerngu
    const [expandedKeys, setExpandedKeys] = useState(null); // onosh songogdson ued
    const [countOfDocument, setCountOfDocument] = useState(0); // hewten maygtin too
@@ -15,7 +13,10 @@ export const EmrContextProvider = ({ children }) => {
    const [countOfPublicSetOrder, setCountOfPublicSetOrder] = useState(0);
    const [countOfPrivateSetOrder, setCountOfPrivateSetOrder] = useState(0);
    // OTS end
-   //
+   // Document Start
+   const [isViewDocument, setIsViewDocument] = useState(false);
+   const [selectedDocument, setSelectedDocument] = useState(false);
+   // Document End
    const setPatient = (patient) => {
       setSelectedPatient(patient);
    };
@@ -45,6 +46,12 @@ export const EmrContextProvider = ({ children }) => {
       setCountOfPrivateSetOrder(count);
    };
    // OTS Function end
+   // DocumentViewer functuin start
+   const setDocumentView = (state, document) => {
+      setSelectedDocument(document);
+      setIsViewDocument(state);
+   };
+   // DocumentViewer functuin end
    return (
       <EmrContext.Provider
          value={{
@@ -63,7 +70,10 @@ export const EmrContextProvider = ({ children }) => {
             countOfPublicSetOrder,
             setPublicSetOrderCount,
             countOfPrivateSetOrder,
-            setPrivateSetOrderCount
+            setPrivateSetOrderCount,
+            isViewDocument,
+            selectedDocument,
+            setDocumentView
          }}
       >
          {children}

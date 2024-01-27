@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-
 import DocumentsFormPatientService from '../../../../services/organization/document';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
@@ -9,7 +8,8 @@ import { ReturnByIdToName } from '../../611/Document/Index';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import Customized from '../../BeforeAmbulatory/Customized/Index';
-const DocumentDraft = () => {
+const DocumentDraft = (props) => {
+   const { usageType, handleCount } = props;
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const { setDocumentDraft, setIsReloadDocumentHistory } = useContext(EmrContext);
    const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +24,7 @@ const DocumentDraft = () => {
       await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
          appointmentId: incomeEmrData.inpatientRequestId,
          type: 'FORM',
-         usageType: incomeEmrData.usageType,
+         usageType: usageType,
          saveType: 'Draft'
       })
          .then(
@@ -33,22 +33,12 @@ const DocumentDraft = () => {
                   response: { response }
                }
             }) => {
-               console.log(response);
                setDraftedDocuments(response);
-               setDocumentDraft(response?.length);
-               //    if (response?.length > 0) {
-               //       if (usageType === 'OUT') {
-               //          const sortedResponse = response.sort((a, b) => a.createdAt - b.createdAt);
-               //          setDocuments(sortedResponse);
-               //       } else if (usageType === 'IN') {
-               //          const sortedResponse = response.sort((a, b) => a.position - b.position);
-               //          const groupedDocuments = groupedByAppointmentId(sortedResponse);
-               //          const grouped = groupByDocumentValueIn(groupedDocuments);
-               //          figureOut(grouped);
-               //       }
-               //    } else {
-               //       figureOut({});
-               //    }
+               if (usageType === 'IN') {
+                  setDocumentDraft(response?.length);
+               } else {
+                  handleCount?.(response?.length);
+               }
             }
          )
          .finally(() => {
@@ -91,6 +81,7 @@ const DocumentDraft = () => {
       <div>
          <Table
             rowKey="value"
+            loading={isLoading}
             columns={[
                {
                   title: '№',
@@ -139,15 +130,6 @@ const DocumentDraft = () => {
                            className="hover: cursor-pointer text-green-600"
                         />
                      </p>
-                     //  <div
-                     //     className="hover: cursor-pointer"
-                     //     onClick={() => {
-                     //        setCurrentMonitor(MonitorType.Document);
-                     //        setSelectedDocument(row);
-                     //     }}
-                     //  >
-                     //     <img src={ArrowIcon} alt="sda" />
-                     //  </div>
                   )
                }
             ]}
@@ -165,7 +147,7 @@ const DocumentDraft = () => {
             footer={false}
          >
             <Customized
-               propsUsageType="IN"
+               propsUsageType={usageType}
                isEdit={true}
                editId={selectedId}
                document={selectedDocument}

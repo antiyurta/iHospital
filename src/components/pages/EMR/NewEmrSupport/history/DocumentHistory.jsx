@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData, selectCurrentSelectedPatient } from '../../../../../features/emrReducer';
-
+import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import Document from './document';
 import GroupDocument from './groupDocument';
-
 import DocumentsFormPatientService from '../../../../../services/organization/document';
 import serviceService from '../../../../../services/service/service';
 import { Each } from '../../../../../features/Each';
@@ -14,7 +12,6 @@ const DocumentHistory = () => {
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const { isReloadDocumentHistory, setIsReloadDocumentHistory } = useContext(EmrContext);
    const { usageType } = incomeEmrData;
-   const [isLoading, setIsLoading] = useState(false);
    const [documentsOut, setDocuments] = useState([]);
    const [documentsIn, setDocumentsIn] = useState([]);
    const groupedByAppointmentId = (documents) => {
@@ -59,7 +56,6 @@ const DocumentHistory = () => {
       return result;
    };
    const getDocumentsHistory = async () => {
-      setIsLoading(true);
       await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
          type: 'FORM',
          usageType: usageType,
@@ -90,7 +86,6 @@ const DocumentHistory = () => {
             if (isReloadDocumentHistory) {
                setIsReloadDocumentHistory(false);
             }
-            setIsLoading(false);
          });
    };
    const getInpatientRequest = async (id, index, value) => {
@@ -136,59 +131,6 @@ const DocumentHistory = () => {
                />
             </div>
          )}
-
-         {/* <Modal
-            width={'21cm'}
-            title="Маягт харах"
-            open={isOpenModalView}
-            onCancel={() => setIsOpenModalView(false)}
-            bodyStyle={{
-               width: '19cm',
-               margin: 'auto'
-            }}
-         >
-            {selectedDocuments.length > 1 ? (
-               <ReactToPrint
-                  trigger={() => {
-                     return <Button type="primary">Хэвлэх</Button>;
-                  }}
-                  content={() => currentRef.current}
-               />
-            ) : null}
-            <div ref={currentRef} className="new-form">
-               {selectedDocuments?.map((document, index) => {
-                  return (
-                     <div key={index}>
-                        {selectedDocuments.length === 1 ? (
-                           <ReactToPrint
-                              trigger={() => {
-                                 return <Button type="primary">Хэвлэх</Button>;
-                              }}
-                              content={() => elementsRef.current[index]}
-                           />
-                        ) : null}
-                        <div
-                           key={index}
-                           ref={(ref) => {
-                              elementsRef.current[index] = ref;
-                           }}
-                        >
-                           <ReturnById
-                              type={usageType}
-                              id={document.documentId}
-                              appointmentId={incomeEmrData.inpatientRequestId || incomeEmrData.appointmentId}
-                              data={{
-                                 formData: document.isExpand ? document.children?.map((dD) => dD.data) : document.data,
-                                 patientData: {}
-                              }}
-                              hospitalName={'hospitalName'}
-                           />
-                        </div>
-                     </div>
-                  );
-               })}
-            </div>
-         </Modal> */}
       </div>
    );
 };

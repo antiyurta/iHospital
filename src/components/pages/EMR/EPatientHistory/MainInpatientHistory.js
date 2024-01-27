@@ -164,7 +164,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                            <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
                         </div>
                      ),
-                     children: <DocumentDraft />
+                     children: <DocumentDraft usageType="IN" />
                   }
                ]}
             />

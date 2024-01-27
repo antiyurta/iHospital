@@ -12,9 +12,11 @@ import Arrow from './arrow.svg';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
 
 const DocumentIndex = (props) => {
-   const { usageType } = props;
+   const { usageType, handleCount } = props;
    const AppIds = useSelector(selectCurrentAppId);
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   const [current, setCurrent] = useState(1);
+   const [pageSize, setPageSize] = useState(10);
    const [isOpenRenderModal, setIsOpenRenderModal] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const [documents, setDocuments] = useState([]);
@@ -39,6 +41,7 @@ const DocumentIndex = (props) => {
                      data.push(document);
                   })
                );
+               handleCount?.(data?.length);
                setDocuments(data);
             }
          })
@@ -65,9 +68,7 @@ const DocumentIndex = (props) => {
             columns={[
                {
                   title: '№',
-                  render: (_text, row, rowIndex) => {
-                     return rowIndex + 1;
-                  }
+                  render: (_text, _row, rowIndex) => rowIndex + 1 + pageSize * (current - 1)
                },
                {
                   title: 'Нэр',
@@ -99,6 +100,10 @@ const DocumentIndex = (props) => {
                }
             ]}
             dataSource={documents}
+            onChange={({ current, pageSize }) => {
+               setCurrent(current);
+               setPageSize(pageSize);
+            }}
             pagination={{
                simple: true
             }}
@@ -118,8 +123,8 @@ const DocumentIndex = (props) => {
                documentValue={selectedDocument?.value}
                documentType={0}
                onOk={(state) => setIsOpenRenderModal(state)}
-               isBackButton={false}
-               handleBackButton={() => null}
+               isBackButton={true}
+               handleBackButton={(state) => setIsOpenRenderModal(!state)}
             />
          </Modal>
       </div>

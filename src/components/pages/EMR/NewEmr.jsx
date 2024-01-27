@@ -17,7 +17,7 @@ import NewCard from '../../Card/Card';
 import DoctorNotes from './DoctorNotes';
 import EmrTimer from './EmrTimer';
 import OneWindow from './OneWindow';
-import { FullscreenExitOutlined, FullscreenOutlined, PrinterOutlined } from '@ant-design/icons';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import NewEmrSupport from './NewEmrSupport';
@@ -48,8 +48,7 @@ class NewEmr extends React.Component {
          payments: [],
          isExpandHistory: true,
          isExpandInspection: true,
-         isExpandOneWindow: true,
-         colSpan: 2
+         isExpandOneWindow: true
       };
    }
 
@@ -156,13 +155,7 @@ class NewEmr extends React.Component {
                                              this.setState({
                                                 isExpandHistory: true,
                                                 isExpandInspection: !this.state.isExpandInspection,
-                                                isExpandOneWindow: !this.state.isExpandOneWindow,
-                                                colSpan:
-                                                   this.state.isExpandHistory &&
-                                                   !this.state.isExpandInspection &&
-                                                   !this.isExpandOneWindow
-                                                      ? 2
-                                                      : 5
+                                                isExpandOneWindow: !this.state.isExpandOneWindow
                                              });
                                           }}
                                           icon={
@@ -213,13 +206,7 @@ class NewEmr extends React.Component {
                                              this.setState({
                                                 isExpandHistory: !this.state.isExpandHistory,
                                                 isExpandInspection: true,
-                                                isExpandOneWindow: !this.state.isExpandOneWindow,
-                                                colSpan:
-                                                   !this.state.isExpandHistory &&
-                                                   this.state.isExpandInspection &&
-                                                   !this.isExpandOneWindow
-                                                      ? 2
-                                                      : 5
+                                                isExpandOneWindow: !this.state.isExpandOneWindow
                                              });
                                           }}
                                           icon={
@@ -236,8 +223,24 @@ class NewEmr extends React.Component {
                               </div>
                            ) : null}
                            {this.state.isExpandOneWindow ? (
-                              <div className="basis-1/5 md:basis-full lg:basis-1/2 xl:basis-1/5">
-                                 <OneWindow />
+                              <div
+                                 className={
+                                    this.state.isExpandOneWindow &&
+                                    !this.state.isExpandHistory &&
+                                    !this.state.isExpandInspection
+                                       ? 'basis-full'
+                                       : 'basis-1/5 md:basis-full lg:basis-1/2 xl:basis-1/5'
+                                 }
+                              >
+                                 <OneWindow
+                                    handleView={(state) => {
+                                       this.setState({
+                                          isExpandHistory: state ? !this.state.isExpandHistory : true,
+                                          isExpandInspection: state ? !this.state.isExpandInspection : true,
+                                          isExpandOneWindow: true
+                                       });
+                                    }}
+                                 />
                               </div>
                            ) : null}
                         </>

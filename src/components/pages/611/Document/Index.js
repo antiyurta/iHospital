@@ -85,8 +85,11 @@ import AM41 from './AM41';
 
 import CT1Nuur from './CT_1_nuur';
 import CT1Anamnes from './CT_1_ana';
-import CT1General from './CT_1_general';
-
+import CT1Dotor from './CT_1_Dotor';
+import CT1ClinalDiagnose from './CT_1_ClinicalDiagnose';
+import CT1BaseOfClinicalDiagnose from './CT_1_BaseOfClinicalDiagnose';
+import CT1Inspection from './CT_1_Inspection';
+import CT1End from './CT_1_End';
 // EIM start
 import EIM4_2 from './../EIM/EIM4_2';
 import EIM5_2 from './../EIM/EIM5_2';
@@ -531,6 +534,11 @@ const options = [
       docName: 'Эмчлүүлэгчийн анамнез'
    },
    {
+      value: 85,
+      label: 'A/611 СТ-1 Дотрын эмчийн үзлэг',
+      docName: 'Дотрын эмчийн үзлэг'
+   },
+   {
       value: 86,
       label: 'А/293',
       docName: 'Яаралтай үнэлэх'
@@ -559,6 +567,26 @@ const options = [
       value: 91,
       label: 'CT-1,2 Хавсралт 13',
       docName: 'Шингэний баланс хянах хуудас'
+   },
+   {
+      value: 92,
+      label: 'CT-1 Клиникийн урьдчилсан онош',
+      docName: 'Клиникийн урьдчилсан онош'
+   },
+   {
+      value: 93,
+      label: 'CT-1 Клиникийн оношийн үндэслэл',
+      docName: 'Клиникийн оношийн үндэслэл'
+   },
+   {
+      value: 94,
+      label: 'CT-1 Үзлэгийн тэмдэглэл',
+      docName: 'Үзлэгийн тэмдэглэл'
+   },
+   {
+      value: 95,
+      label: 'CT-1 Эмнэлгээс гарах, шилжих үеийн дүгнэлт',
+      docName: 'Эмнэлгээс гарах, шилжих үеийн дүгнэлт'
    }
 ];
 
@@ -770,6 +798,8 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <CT1Nuur type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 84)
       return <CT1Anamnes type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   else if (id === 85)
+      return <CT1Dotor type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 86)
       return <A293 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    else if (id === 87)
@@ -778,6 +808,16 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <EMT201_4_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 89) {
       return <CT1_2H11 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 92) {
+      return <CT1ClinalDiagnose type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 93) {
+      return (
+         <CT1BaseOfClinicalDiagnose type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />
+      );
+   } else if (id === 94) {
+      return <CT1Inspection type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 95) {
+      return <CT1End type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    }
 }
 

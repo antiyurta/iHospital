@@ -1,19 +1,105 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import collapseIcon from '../../ListOfIssues/collapse.svg';
 import expandIcon from '../../ListOfIssues/expand.svg';
 import arrowNext from '../../ListOfIssues/arrowNext.svg';
 import dayjs from 'dayjs';
-import { ReturnById, ReturnByIdToCode, ReturnByIdToName } from '../../../611/Document/Index';
-import { PrinterOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
-import { useSelector } from 'react-redux';
-import { selectCurrentSelectedPatient } from '../../../../../features/emrReducer';
+import logo from '../../../../../assets/logo/logo.png';
+import { ReturnByIdToCode, ReturnByIdToName } from '../../../611/Document/Index';
+import { PDFDownloadLink, Font, Document, Page, Text, View, Image } from '@react-pdf/renderer';
+import EmrContext from '../../../../../features/EmrContext';
 
-const Document = (props) => {
-   const { document, index, incomeEmrData } = props;
-   const currentPatient = useSelector(selectCurrentSelectedPatient);
+Font.register({
+   family: 'Open Sans',
+   fonts: [
+      { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+      { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+   ]
+});
+
+const test = 'asdasdasdasdasd';
+
+const MyDoc = () => (
+   <Document>
+      <Page
+         style={{
+            padding: '1cm',
+            fontFamily: 'Open Sans'
+         }}
+      >
+         <View
+            style={{
+               width: '100%',
+               display: 'flex',
+               flexDirection: 'column'
+            }}
+         >
+            <View
+               style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end'
+               }}
+            >
+               <Text>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</Text>
+               <Text>өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</Text>
+               <Text
+                  style={{
+                     fontWeight: 'bold'
+                  }}
+               >
+                  Эрүүл мэндийн бүртгэлийн маягт СТ-1
+               </Text>
+            </View>
+            <View
+               style={{
+                  textAlign: 'center'
+               }}
+            >
+               <Text>ӨВЧНИЙ ТҮҮХ №</Text>
+            </View>
+            <View
+               style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'nowrap'
+               }}
+            >
+               <View
+                  style={{
+                     flexBasis: '50%'
+                  }}
+               >
+                  <Image
+                     style={{
+                        width: 100
+                     }}
+                     src={logo}
+                  />
+               </View>
+               <View
+                  style={{
+                     flexBasis: '50%'
+                  }}
+               >
+                  <Text>{test}</Text>
+                  <Text>{dayjs().format('YYYY/MM/DD')}</Text>
+               </View>
+            </View>
+         </View>
+      </Page>
+      <Page>
+         <View>
+            <Text>2222</Text>
+         </View>
+      </Page>
+   </Document>
+);
+
+const DocumentR = (props) => {
+   const { document, index } = props;
+   const { setDocumentView } = useContext(EmrContext);
    const [expanded, setExpanded] = useState(false);
-   const [isOpenModalView, setIsOpenModalView] = useState(false);
    return (
       <>
          <div className="document">
@@ -30,13 +116,10 @@ const Document = (props) => {
                      <p>{`Хугацаа: ${dayjs(document.createdAt).format('HH:mm:ss')}`}</p>
                   </div>
                   <div className="description">
-                     <button>
-                        <PrinterOutlined />
-                     </button>
+                     <div />
                      <button
                         onClick={() => {
-                           console.log(document);
-                           setIsOpenModalView(true);
+                           setDocumentView(true, document);
                         }}
                      >
                         Дэлгэрэнгүй <img src={arrowNext} alt="arr" />
@@ -52,31 +135,7 @@ const Document = (props) => {
                }}
             />
          </div>
-         <Modal
-            width={'21cm'}
-            title="Маягт харах"
-            open={isOpenModalView}
-            onCancel={() => setIsOpenModalView(false)}
-            bodyStyle={{
-               width: '19cm',
-               margin: 'auto'
-            }}
-         >
-            <div className="new-form">
-               <ReturnById
-                  type={incomeEmrData.usageType}
-                  id={document.documentId}
-                  appointmentId={incomeEmrData.inpatientRequestId || incomeEmrData.appointmentId}
-                  data={{
-                     formData: document.data,
-                     createdAt: document.createdAt,
-                     patientData: currentPatient
-                  }}
-                  hospitalName={'hospitalName'}
-               />
-            </div>
-         </Modal>
       </>
    );
 };
-export default Document;
+export default DocumentR;
