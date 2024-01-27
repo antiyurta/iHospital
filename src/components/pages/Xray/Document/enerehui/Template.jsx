@@ -4,7 +4,10 @@ import fb from './assets/fb.png';
 import route from './assets/route.png';
 import dayjs from 'dayjs';
 const Template = (props) => {
-   const { patient, createdAt, children } = props;
+   const { patient, createdAt, children, serviceName } = props;
+   const capitalizeFirstLetter = (str) => {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+   };
    return (
       <div
          style={{
@@ -54,7 +57,16 @@ const Template = (props) => {
                <span className="font-bold text-xs text-black">Регистр:</span> {patient?.registerNumber}
             </div>
          </div>
+         <div className="border-1 border-black"></div>
+         <p className="text-center text-base font-bold">{capitalizeFirstLetter(serviceName)}</p>
          {children}
+         <div className="border-1 border-black"></div>
+         <p className="font-bold">
+            САНАМЖ: Хэт авиан оношилгооны дүгнэлт нь тухайн багажийн шинжлэх хүрээнд гарч буй бүтцийн өөрчлөлтүүд юм.
+            Үүнийг эмчлэгч эмч эмнэлзүйн илрэл, явц, лабораторийн ба үйл ажиллагааны бусад шинжилгээнүүдтэй харьцуулан
+            эмнэлзүйн онош, цаашид авах арга хэмжээндээ хэрхэн тусгахаа шийдвэрлэнэ.
+         </p>
+         <div className="border-1 border-black"></div>
       </div>
    );
 };

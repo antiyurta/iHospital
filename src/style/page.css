@@ -35,6 +35,13 @@ table.dailyTable tbody > tr > th {
    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.page-a5 {
+   width: 148mm;
+   height: 210mm;
+   background-color: white;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .subpage {
    padding: 20px;
 }

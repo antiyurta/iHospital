@@ -69,7 +69,7 @@ export function ReturnByIdToName(id) {
 }
 
 export function ReturnById(props) {
-   const { document, patient, body } = props;
+   const { serviceName, document, patient, body } = props;
    // if (document.documentId === 1) {
    //    return <Test data={document.data} patient={patient} />;
    // } else if (document.documentId === 3) {
@@ -87,7 +87,7 @@ export function ReturnById(props) {
    //    // return <Doc4 data={document.data} patient={patient} />;
    // }
    return (
-      <Template patient={patient} createdAt={document.createdAt}>
+      <Template patient={patient} createdAt={document.createdAt} serviceName={serviceName}>
          {body}
       </Template>
    );

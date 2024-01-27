@@ -197,6 +197,7 @@ function Xrays({ PatientId }) {
       const [spinerInfo, setSpinnerInfo] = useState(false);
       const [document, setDocument] = useState();
       const [test, setTest] = useState({});
+      const [serviceName, setServiceName] = useState('');
       const getDocumentData = async (id) => {
          setSpinnerInfo(true);
          await DocumentsFormPatientServices.getById(id)
@@ -206,6 +207,7 @@ function Xrays({ PatientId }) {
                      response: { response }
                   }
                }) => {
+                  console.log(response);
                   setDocument(response);
                }
             )
@@ -270,6 +272,7 @@ function Xrays({ PatientId }) {
                            className="bg-white"
                            onSelect={(_selectedKeys, info) => {
                               if (info?.node?.isLeaf) {
+                                 setServiceName(info.node?.title);
                                  getDocumentData(info?.node?.key);
                               }
                            }}
@@ -315,13 +318,18 @@ function Xrays({ PatientId }) {
                                     }}
                                     content={() => printRef.current}
                                  />
-                                 <div ref={printRef}>
-                                    <XrayDocumentReturnById
-                                       hospitalId={hospitalId}
-                                       document={document}
-                                       patient={patient}
-                                       body={<FormRenderHtml formId={document.formId} documentData={document.data} />}
-                                    />
+                                 <div ref={printRef} className="page-a5 w-full m-auto">
+                                    <div className="subpage">
+                                       <XrayDocumentReturnById
+                                          serviceName={serviceName}
+                                          hospitalId={hospitalId}
+                                          document={document}
+                                          patient={patient}
+                                          body={
+                                             <FormRenderHtml formId={document.formId} documentData={document.data} />
+                                          }
+                                       />
+                                    </div>
                                  </div>
                               </div>
                            ) : (

@@ -26,11 +26,11 @@ function ReturnByIdToName(hospitalId, docId) {
    return;
 }
 function ReturnById(props) {
-   const { hospitalId, document, patient, body } = props;
+   const { serviceName, hospitalId, document, patient, body } = props;
    if (hospitalId === 1) {
       return <UniversalmedReturnById document={document} patient={patient} />;
    } else if (hospitalId === 2) {
-      return <EnerehuiReturnById document={document} patient={patient} body={body} />;
+      return <EnerehuiReturnById serviceName={serviceName} document={document} patient={patient} body={body} />;
    }
    return;
 }
