@@ -75,6 +75,7 @@ function MainPatientHistory({ handleClick }) {
          formId: data.id,
          documentId: data.documentValue,
          patientId: patientId,
+         formType: 0,
          saveType: 'Save',
          type: 'XRAY',
          data: {
@@ -141,6 +142,7 @@ function MainPatientHistory({ handleClick }) {
          }
       })
          .then((response) => {
+            console.log(response);
             setItems([
                {
                   key: response.data.response[0]?.id,
