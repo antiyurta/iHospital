@@ -1,8 +1,15 @@
+import dayjs from 'dayjs';
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
 
 //маягт АМ-30А
-function AM30A() {
+function AM30A(props) {
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
+   console.log('аягт 30А', props);
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -49,6 +56,28 @@ function AM30A() {
          lineHeight: 1
       }
    };
+   const returnQuestionCode = (key, question, val) => {
+      return formData?.[key]?.includes(question) ? (
+         formData?.[key]?.map((el, index) => {
+            if (el === question) {
+               return (
+                  <span
+                     key={index}
+                     style={{
+                        fontSize: 10,
+                        textAlign: 'center',
+                        textDecoration: formData[key].includes(question) ? 'underline' : 'none'
+                     }}
+                  >
+                     {val}
+                  </span>
+               );
+            }
+         })
+      ) : (
+         <span style={{ fontSize: 10 }}>{val}</span>
+      );
+   };
    return (
       <>
          <div className="page">
@@ -87,54 +116,52 @@ function AM30A() {
                   Дугаар №
                </div>
                <div style={styles.rowStyle}>
-                  Өдрийн эмчилгээний хуудас нээсэн огноо: _______он______сар______өдөр ______ цаг ______ мин ______
+                  Өдрийн эмчилгээний хуудас нээсэн огноо: {dayjs(formData?.q1)?.format('YYYY он MM сар DD өдөр')}
                </div>
                <div style={styles.rowStyle}>
-                  Эмнэлгийн нэр: ................................................................... Тасаг, кабинетийн
-                  нэр: .....................................................................
+                  Эмнэлгийн нэр: {hospitalName} Тасаг, кабинетийн нэр: {formData?.q2}
                </div>
                <div style={styles.rowStyle}>
-                  Эцэг /эх/-ийн нэр:..................................... Нэр.
-                  ..........................................
-                  <span style={{ marginLeft: 30 }}>Нас .......</span>
-                  <span style={{ marginLeft: 30 }}>Хүйс ......</span>
+                  Эцэг /эх/-ийн нэр: {patientData?.lastName} Нэр: {patientData?.firstName}
+                  <span style={{ marginLeft: 30 }}>Нас: {patientData?.age}</span>
+                  <span style={{ marginLeft: 30 }}>
+                     Хүйс: {patientData?.genderType === 'MAN' ? 'Эрэгтэй' : 'Эмэгтэй'}
+                  </span>
                </div>
                <div style={styles.rowStyle}>
-                  Регистрийн дугаар: ....................................
+                  Регистрийн дугаар: {patientData?.registerNumber}
                   <span style={{ marginLeft: 30 }}>ЭМДаатгал №: ...........................</span>
                </div>
                <div style={styles.rowStyle}>
                   <div style={styles.rowCellWithText}>
-                     Цусны бүлэг:&nbsp;<div style={styles.rowCells}></div>
-                     <span style={{ marginLeft: 30 }}>
-                        ( эцэг эхийн үгээр / .............. эмнэлэгт тодорхойлсон бол хэзээ?
-                        ............................)
-                     </span>
+                     Цусны бүлэг: ( эцэг эхийн үгээр / {formData?.q3} эмнэлэгт тодорхойлсон бол хэзээ?{' '}
+                     {dayjs(formData?.q4)?.format('YYYY он MM сар DD өдөр')})
                   </div>
                </div>
                <div style={styles.rowStyle}>
-                  Тодорхойлсон эмч: ........................... сувилагч: ........................ огноо ..........
+                  Тодорхойлсон эмч, сувилагч: {formData?.q5} огноо:{' '}
+                  {dayjs(formData?.q6)?.format('YYYY он MM сар DD өдөр')}
                </div>
                <div style={styles.rowStyle}>
                   Тогтмол хаяг:
-                  ....................................................................................................................................................................................................................................................................
+                  ............................................................................................................................................................................................
                </div>
                <div style={styles.rowStyle}>
-                  ....................................................................................................................................................................................................................................................................
+                  Холбоо барих утас:{' '}
+                  {formData?.q8?.map((el, index) => {
+                     return (
+                        <span key={index}>
+                           {el['q8-1']}, {el['q8-2']}, {el['q8-3']}
+                        </span>
+                     );
+                  })}
                </div>
                <div style={styles.rowStyle}>
-                  ....................................................................................................................................................................................................................................................................
+                  Нарийн мэргэжлийн эмчид үзүүлсэн: {dayjs(formData?.q9)?.format('YYYY он MM сар DD өдөр')}
                </div>
                <div style={styles.rowStyle}>
-                  Холбоо барих утас: 1. .................................... 2..................................... 3.
-                  ..................................... 4. .................... .................
-               </div>
-               <div style={styles.rowStyle}>
-                  Нарийн мэргэжлийн эмчид үзүүлсэн: ............ оны .... сарын ..... өдөр
-               </div>
-               <div style={styles.rowStyle}>
-                  Явуулсан эмнэлэг: ............................
-                  <span style={{ marginLeft: 30 }}>Үйлчлүүлэгчийн өвчний онош:</span>
+                  Явуулсан эмнэлэг: {formData?.q10}
+                  <span style={{ marginLeft: 30 }}>Үйлчлүүлэгчийн өвчний онош: </span>
                </div>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
@@ -146,25 +173,26 @@ function AM30A() {
                      </tr>
                      <tr>
                         <td style={styles.leftText}>1. Үндсэн</td>
+                        <td style={styles.centerText}>{formData?.q11}</td>
                         <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
+                        <td style={styles.centerText}>{dayjs(formData?.q11CreatedAt)?.format('YYYY-MM-DD')}</td>
                      </tr>
                      <tr>
                         <td style={styles.leftText}>2. Хавсарсан</td>
+                        <td style={styles.centerText}>{formData?.q12}</td>
                         <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
+                        <td style={styles.centerText}>{dayjs(formData?.q12CreatedAt)?.format('YYYY-MM-DD')}</td>
                      </tr>
                      <tr>
                         <td style={styles.leftText}>3. Хүндрэл</td>
+                        <td style={styles.centerText}>{formData?.q13}</td>
                         <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
+                        <td style={styles.centerText}>{dayjs(formData?.q13CreatedAt)?.format('YYYY-MM-DD')}</td>
                      </tr>
                      <tr>
                         <td colSpan={2} style={styles.centerText}>
-                           Мэс засал / ажилбарын нэр огноо. . . . . . . . . ./. . . . . . . . /. . . . . . . .
+                           Мэс засал / ажилбарын нэр: {formData?.q14}, огноо:{' '}
+                           {dayjs(formData?.q15)?.format('YYYY/MM/DD')}
                         </td>
                         <td style={styles.centerText}>ӨОУА-9 код</td>
                         <td style={styles.centerText}>нийт зардал</td>
@@ -172,129 +200,116 @@ function AM30A() {
                      <tr>
                         <td colSpan={2} style={styles.centerText}></td>
                         <td style={styles.centerText}></td>
-                        <td style={styles.centerText}>…………….₮</td>
+                        <td style={styles.centerText}>{formData?.q16} ₮</td>
                      </tr>
                   </tbody>
                </Table>
                <div style={styles.rowStyle}>Эмчийн үзлэг:</div>
-               <div style={styles.rowStyle}>
-                  Өгүүлэмж:
-                  ..................................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  ....................................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  ....................................................................................................................................................................................................................................................................
-               </div>
+               <div style={styles.rowStyle}>Өгүүлэмж: {formData?.q17}</div>
                <div style={styles.rowCellWithText}>
-                  Харшил
+                  Харшил:{' '}
                   <div style={styles.rowCellWithText}>
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 30 } }}></div>
-                     &nbsp;эм .....................................
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 30 } }}></div>
-                     &nbsp;хоол .....................................
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 30 } }}></div>
-                     &nbsp;бусад .....................................
+                     <span className={formData?.q18 === 'q18-1' ? 'underline mr-1' : 'mr-1'}> эм, </span>
+                     <span className={formData?.q18 === 'q18-2' ? 'underline mr-1' : 'mr-1'}> хоол, </span>
+                     <span className={formData?.q18 === 'q18-3' ? 'underline mr-1' : 'mr-1'}>
+                        {' '}
+                        бусад: {formData?.['q18-3-1']},{' '}
+                     </span>
                   </div>
                </div>
 
                <div style={styles.rowStyle}>
-                  Хүүхдийн амин үзүүлэлт: Биеийн байдал .................................................., Ухаан санаа
-                  ........................................................ ,
+                  Хүүхдийн амин үзүүлэлт: Биеийн байдал: {formData?.q19}, Ухаан санаа:
+                  {formData?.q20} ,
                </div>
                <div style={styles.rowStyle}>
-                  Амьсгал .............................. Зүрхний цохилт ............................., Артерийн
-                  даралт........................., Биеийн хэм ................. ,
+                  Амьсгал: {formData?.q21}, Зүрхний цохилт: {formData?.q22}, Артерийн дарал: {formData?.q23}, Биеийн
+                  хэм: {formData?.q24} ,
                </div>
                <div style={styles.rowStyle}>
-                  Цусны хүчилтөрөгчийн хангамж ................... , Хялгасан судасны эргэн дүүрэлт ................ ,
-                  FiO2 ................ ,
+                  Цусны хүчилтөрөгчийн хангамж: {formData?.q25} , Хялгасан судасны эргэн дүүрэлт: {formData?.q26} ,
+                  FiO2: {formData?.q27} ,
+               </div>
+               <div style={styles.rowStyle}>Ерөнхий үзлэг: {formData?.q28}</div>
+               <div style={styles.rowStyle}>Хэсэг газрын үзлэг: {formData?.q29}</div>
+               <div style={styles.rowStyle}>
+                  Шинжилгээний үзүүлэлтүүд{' '}
+                  <span className={formData?.q30 === 'q30-1' ? 'underline mr-1' : 'mr-1'}> хэвийн, </span> /{' '}
+                  <span className={formData?.q30 === 'q30-2' ? 'underline mr-1' : 'mr-1'}> хэвийн бус: </span>
+                  {formData?.['q30-2-1']}
                </div>
                <div style={styles.rowStyle}>
-                  Ерөнхий үзлэг:
-                  ..............................................................................................................................................................................................................................
+                  Хавсаргасан шинжилгээ:
+                  <NewCheckboxGroup value={formData?.['q31']} className="dstory">
+                     <NewCheckbox value={'q31-1'} className="test">
+                        <span style={{ fontSize: 12 }}>ЦЕШ,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q31-2'} className="test">
+                        <span style={{ fontSize: 12 }}>ШЕШ,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q31-3'} className="test">
+                        <span style={{ fontSize: 12 }}>Rё зураг/харалт,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q31-4'} className="test">
+                        <span style={{ fontSize: 12 }}>Биохими,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q31-5'} className="test">
+                        <span style={{ fontSize: 12 }}>Бүлэгнэлт,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q31-6'} className="test">
+                        <span style={{ fontSize: 12 }}>Вирус,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q31-7'} className="test">
+                        <span style={{ fontSize: 12 }}>Бак</span>
+                     </NewCheckbox>
+                  </NewCheckboxGroup>
                </div>
                <div style={styles.rowStyle}>
-                  ...............................................................................................................................................................................................................................................................
+                  Өдрийн ( мэс засал / эмийн ) оношлогоо/эмчилгээний үндэслэл: {formData?.q32}
+               </div>
+               <div style={styles.rowStyle}>Төлөвлөж буй мэдээгүйжүүлгийн хэлбэр: {formData?.q33}</div>
+               <div style={styles.rowStyle}>Төлөвлөж буй мэс засал/ажилбар: {formData?.q34}</div>
+               <div style={styles.rowStyle}>
+                  Мэс заслын өмнөх өвөрмөц бэлтгэл, гарч болох хүндрэл, түүнээс сэргийлэн авсан арга хэмжээ:{' '}
+                  {formData?.['q34-1-1']}
+               </div>
+               <div style={styles.rowStyle}>Үйлчлүүлэгчээс тавьсан асуулт: {formData?.q35}</div>
+               <div style={styles.rowStyle}>Хариулт: {formData?.q36}</div>
+               <div style={styles.rowStyle}></div>
+               <div style={styles.rowStyle}>
+                  <NewCheckboxGroup value={formData?.['q37']} className="dstory">
+                     <span style={styles.leftText}>Өвчтөн –н</span>
+                     <NewCheckbox value={'q37-1'} className="test">
+                        <span style={{ fontSize: 12 }}>аав,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q37-2'} className="test">
+                        <span style={{ fontSize: 12 }}>ээж,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q37-3'} className="test">
+                        <span style={{ fontSize: 12 }}>ах,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q37-4'} className="test">
+                        <span style={{ fontSize: 12 }}>эгч,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q37-5'} className="test">
+                        <span style={{ fontSize: 12 }}>эмээ,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q37-6'} className="test">
+                        <span style={{ fontSize: 12 }}>өвөө,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q37-7'} className="test">
+                        <span style={{ fontSize: 12 }}>асран хамгаалагч</span>
+                     </NewCheckbox>
+                  </NewCheckboxGroup>{' '}
+                  (доогуур зур) би хүүхэддээ өдрийн мэс засал / эмийн эмчилгээг хийлгэхийг зөвшөөрч байна
                </div>
                <div style={styles.rowStyle}>
-                  ...............................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Хэсэг газрын үзлэг:
-                  .....................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  ...............................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  ...............................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Шинжилгээний үзүүлэлтүүд хэвийн / хэвийн бус
-                  ...........................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Хавсаргасан шинжилгээ: ( &nbsp;) ЦЕШ ( &nbsp; ) ШЕШ ( &nbsp; ) Rё зураг/харалт ( &nbsp; ) Биохими (
-                  &nbsp; ) Бүлэгнэлт ( &nbsp; ) Вирус ( &nbsp; ) Бак
-               </div>
-               <div style={styles.rowStyle}>
-                  Өдрийн ( мэс засал / эмийн ) оношлогоо/эмчилгээний үндэслэл:
-                  ....................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Төлөвлөж буй мэдээгүйжүүлгийн хэлбэр:
-                  ..........................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Төлөвлөж буй мэс засал/ажилбар:
-                  .............................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Мэс заслын өмнөх өвөрмөц бэлтгэл, гарч болох хүндрэл, түүнээс сэргийлэн авсан арга хэмжээ:
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 40 } }}>
-                  1. .................................................................................................
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 40 } }}>
-                  2. ..................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Үйлчлүүлэгчээс тавьсан асуулт:
-                  .....................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Хариулт:
-                  ...........................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .........................................................................................................................................................................Өвчтөн
-               </div>
-               <div style={styles.rowStyle}>
-                  ..................................................... –н аав/ ээж/ ах/ эгч/ эмээ/ өвөө/ асран
-                  хамгаалагч (доогуур зур)
-               </div>
-               <div style={styles.rowStyle}>
-                  би хүүхэддээ өдрийн мэс засал / эмийн эмчилгээг хийлгэхийг зөвшөөрч байна
-               </div>
-               <div style={styles.rowStyle}>
-                  Үйлчлүүлэгч/асран хамгаалагчийн нэр: ...................... овогтой ................. Гарын үсэг /
+                  Үйлчлүүлэгч/асран хамгаалагчийн овог, нэр: {formData?.q38} Гарын үсэг /
                   <span style={{ marginLeft: 100 }}>/,</span>
                </div>
-               <div style={styles.rowStyle}>20...... оны ....... –р сарын.......өдөр</div>
+               <div style={styles.rowStyle}>{dayjs(formData?.q39)?.format('YYYY он MM сар DD өдөр')}</div>
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 80 } }}>
-                  Эмчлэгч эмч ................................/
-                  <span style={{ marginLeft: 100 }}>/,</span>
+                  Эмчлэгч эмч: {formData?.q40}/<span style={{ marginLeft: 100 }}>/,</span>
                </div>
             </div>
          </div>
@@ -303,123 +318,104 @@ function AM30A() {
                <div style={styles.rowStyle}>Мэдээгүйжүүлэлтийн хэлбэр:</div>
                <div style={styles.rowCellWithText}>
                   <div style={styles.rowCellWithText}>
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 30 } }}></div>
-                     &nbsp;Хэсэг газарт нэвчүүлэн
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 30 } }}></div>
-                     &nbsp;Бүсчилсэн/ мэд.хориг
-                     <div style={{ ...styles.rowCells, ...{ marginLeft: 30 } }}></div>
-                     &nbsp;Ерөнхий ( ETT / LMA / FM ) үгүй
+                     <NewCheckboxGroup value={formData?.['q41']} className="dstory">
+                        <NewCheckbox value={'q41-1'} className="test">
+                           <span style={{ fontSize: 12 }}>Хэсэг газарт нэвчүүлэн ,</span>
+                        </NewCheckbox>
+                        <NewCheckbox value={'q41-2'} className="test">
+                           <span style={{ fontSize: 12 }}>Бүсчилсэн/ мэд.хориг,</span>
+                        </NewCheckbox>
+                        <NewCheckbox value={'q41-3'} className="test">
+                           <span style={{ fontSize: 12 }}>Ерөнхий ( ETT / LMA / FM ) үгүй,</span>
+                        </NewCheckbox>
+                     </NewCheckboxGroup>
                   </div>
                </div>
                <div style={{ marginTop: 5 }}>
                   <div style={styles.rowCellWithText}>
                      <div style={styles.rowCellWithText}>
-                        <div style={styles.rowCells}></div>
-                        &nbsp; Мэс засал / ажилбар: цэвэр / идээт (зур)
+                        Мэс засал / ажилбар:
+                        <NewCheckboxGroup value={formData?.['q42']} className="dstory">
+                           <NewCheckbox value={'q42-1'} className="test">
+                              <span style={{ fontSize: 12 }}>цэвэр / ,</span>
+                           </NewCheckbox>
+                           <NewCheckbox value={'q42-2'} className="test">
+                              <span style={{ fontSize: 12 }}>идээт</span>
+                           </NewCheckbox>{' '}
+                           (зур)
+                        </NewCheckboxGroup>
                      </div>
                   </div>
                </div>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={styles.leftText}>Огноо. . . . . . . . . . . . . .</td>
+                        <td style={styles.leftText}>Огноо: {dayjs(formData?.q43)?.format('YYYY-MM-DD')}</td>
                         <td style={styles.centerText}>Эхэлсэн</td>
                         <td style={styles.centerText}>Дууссан</td>
                         <td style={styles.centerText}>Нийт</td>
                      </tr>
                      <tr>
                         <td style={styles.leftText}>Мэдээгүйжүүлэг</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
+                        <td style={styles.centerText}>{dayjs(formData?.q44)?.format('HH цаг MM минут')}</td>
+                        <td style={styles.centerText}>{dayjs(formData?.q45)?.format('HH цаг MM минут')}</td>
+                        <td style={styles.centerText}>{formData?.q46}</td>
                      </tr>
                      <tr>
                         <td style={styles.leftText}>Мэс засал / ажилбар</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
+                        <td style={styles.centerText}>{dayjs(formData?.q47)?.format('HH цаг MM минут')}</td>
+                        <td style={styles.centerText}>{dayjs(formData?.q48)?.format('HH цаг MM минут')}</td>
+                        <td style={styles.centerText}>{formData?.q49}</td>
                      </tr>
                      <tr>
                         <td style={styles.leftText}>Эмийн эмчилгээ</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
-                        <td style={styles.centerText}>. . . . . цаг. . . . . . .мин</td>
+                        <td style={styles.centerText}>{dayjs(formData?.q50)?.format('HH цаг MM минут')}</td>
+                        <td style={styles.centerText}>{dayjs(formData?.q51)?.format('HH цаг MM минут')}</td>
+                        <td style={styles.centerText}>{formData?.q52}</td>
                      </tr>
                   </tbody>
                </Table>
-               <div style={styles.rowStyle}>
-                  Мэс заслын/ ажилбарын/ эмийн эмчилгээний тэмдэглэл:
-                  ............................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
+               <div style={styles.rowStyle}>Мэс заслын/ ажилбарын/ эмийн эмчилгээний тэмдэглэл: {formData?.q53}</div>
                <div style={styles.rowStyle}>
                   Мэс засал/ ажилбарын үед авсан эдийн болон бусад шинжилгээ авсан эсэх:{' '}
-                  <span style={{ marginLeft: 30 }}>тийм / үгүй (зур)</span>
+                  <NewCheckboxGroup value={formData?.['q54']} className="dstory">
+                     <NewCheckbox value={'q54-1'} className="test">
+                        <span style={{ fontSize: 12 }}>тийм / ,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q54-2'} className="test">
+                        <span style={{ fontSize: 12 }}>үгүй</span>
+                     </NewCheckbox>{' '}
+                     (зур)
+                  </NewCheckboxGroup>
                </div>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
                      <tr>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.leftText}>Шинжилгээ</td>
-                        <td style={styles.centerText}>сорьц</td>
-                        <td style={styles.centerText}>Тоо, хэмжээ</td>
+                        <td style={styles.leftText}></td>
+                        <td style={styles.leftText}>Эдийн сорьц</td>
+                        <td style={styles.leftText}>Нян судлалын сорьц</td>
+                        <td style={styles.leftText}>Цусны сорьц</td>
+                        <td style={styles.leftText}>Бусад: </td>
                      </tr>
-                     <tr>
-                        <td style={styles.centerText}>1</td>
-                        <td style={styles.leftText}>Эдийн</td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>2</td>
-                        <td style={styles.leftText}>Нян судлалын</td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>3</td>
-                        <td style={styles.leftText}>Цусны</td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                     </tr>
-                     <tr>
-                        <td style={styles.centerText}>4</td>
-                        <td style={styles.leftText}>Бусад . . . . . . . . . . . . . . . . . .</td>
-                        <td style={styles.centerText}></td>
-                        <td style={styles.centerText}></td>
-                     </tr>
+                     {formData?.['q54-2-2'].map((el, index) => {
+                        return (
+                           <tr key={index}>
+                              <td style={styles.leftText}>{index + 1}</td>
+                              <td style={styles.leftText}>{el?.['q54-2-2-1']}</td>
+                              <td style={styles.leftText}>{el?.['q54-2-2-2']}</td>
+                              <td style={styles.leftText}>{el?.['q54-2-2-3']}</td>
+                              <td style={styles.leftText}>{el?.['q54-2-2-4']}</td>
+                           </tr>
+                        );
+                     })}
                   </tbody>
                </Table>
+               <div style={styles.rowStyle}>Мэс засал / ажилбарын дараах онош: {formData?.q55}</div>
+               <div style={styles.rowStyle}>Оёдолд хэрэглэсэн утас: {formData?.q56}</div>
                <div style={styles.rowStyle}>
-                  Мэс засал / ажилбарын дараах онош:
-                  ...........................................................................................................................................................
+                  Хэрэглэсэн антибиотик мэс заслын өмнө, мэс заслын үед, дараа нь: {formData?.q57}
                </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  .....................................................................................................................................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>
-                  Оёдолд хэрэглэсэн утас:
-                  .................................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>Хэрэглэсэн антибиотикийн тухай:</div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
+               {/* <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
                   Мэс заслын өмнө:
                   .........................................................................................................................
                </div>
@@ -430,55 +426,9 @@ function AM30A() {
                <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
                   Мэс заслын дараа:
                   .......................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>Үйлчлүүлэгчид өгсөн зөвлөгөө:</div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  1.
-                  .......................................................................................................................
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  2.
-                  .......................................................................................................................
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  3.
-                  .......................................................................................................................
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  4.
-                  .......................................................................................................................
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 110 } }}>
-                  ........................................................................................................................
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 110 } }}>
-                  ........................................................................................................................
-               </div>
-               <div style={styles.rowStyle}>Өдрийн эмчилгээний баг:</div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  1. ............................................................................................ /{' '}
-                  <span style={{ marginLeft: 100 }}>/</span>
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  2. ............................................................................................ /{' '}
-                  <span style={{ marginLeft: 100 }}>/</span>
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  3. ............................................................................................ /{' '}
-                  <span style={{ marginLeft: 100 }}>/</span>
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  4. ............................................................................................ /{' '}
-                  <span style={{ marginLeft: 100 }}>/</span>
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  5. ............................................................................................ /{' '}
-                  <span style={{ marginLeft: 100 }}>/</span>
-               </div>
-               <div style={{ ...styles.rowStyle, ...{ marginLeft: 100 } }}>
-                  6. ............................................................................................ /{' '}
-                  <span style={{ marginLeft: 100 }}>/</span>
-               </div>
+               </div> */}
+               <div style={styles.rowStyle}>Үйлчлүүлэгчид өгсөн зөвлөгөө: {formData?.q58}</div>
+               <div style={styles.rowStyle}>Өдрийн эмчилгээний баг: {formData?.q59}</div>
             </div>
          </div>
       </>

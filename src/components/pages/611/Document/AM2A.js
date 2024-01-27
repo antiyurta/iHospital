@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import dayjs from 'dayjs';
 
 //маягт АМ-2А
 function AM2A(props) {
@@ -70,6 +71,27 @@ function AM2A(props) {
          marginTop: 3
       }
    };
+
+   const returnQuestionCode = (key, question, val) => {
+      return formData?.[key]?.includes(question) ? (
+         formData?.[key]?.map((el, index) => {
+            if (el == question) {
+               return (
+                  <span
+                     key={index}
+                     style={{ fontSize: 10, textAlign: 'center' }}
+                     className={el === question ? 'underline' : ''}
+                  >
+                     {val}
+                  </span>
+               );
+            }
+         })
+      ) : (
+         <span style={{ fontSize: 10 }}>{val}</span>
+      );
+   };
+
    return (
       <>
          <div className="page">
@@ -100,10 +122,7 @@ function AM2A(props) {
                   </span>
                </div>
                <div style={styles.rowStyle}>
-                  <b>
-                     Хамшинж, сэжигтэй тохиолдлын нэр:
-                     {formData['AM2.1']}
-                  </b>
+                  <b>Хамшинж, сэжигтэй тохиолдлын нэр: {formData?.q1}</b>
                </div>
                <Table bordered className="document" style={{ marginBottom: 0 }}>
                   <tbody>
@@ -115,9 +134,11 @@ function AM2A(props) {
                      <tr>
                         <td style={styles.leftText}>Эцэг/эхийн нэр: {patientData?.lastName}</td>
                         <td style={styles.leftText}>Өөрийн нэр: {patientData?.firstName}</td>
-                        <td style={styles.leftText}>Нас</td>
-                        <td style={styles.leftText}>Хүйс</td>
-                        <td style={styles.leftText}>Утасны дугаар</td>
+                        <td style={styles.leftText}>Нас: {patientData?.age}</td>
+                        <td style={styles.leftText}>
+                           Хүйс: {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
+                        </td>
+                        <td style={styles.leftText}>Утасны дугаар: {patientData?.phoneNo}</td>
                      </tr>
                      <tr>
                         <td colSpan={2} style={styles.leftText}>
@@ -149,21 +170,85 @@ function AM2A(props) {
                            </div>
                         </td>
                         <td colSpan={2} style={styles.leftText}>
-                           <b>Боловсролын байдал:</b>
-                           <div style={styles.leftText}>
-                              1. Боловсролгүй
-                              <span style={{ marginLeft: 20 }}>2. Бага</span>
-                           </div>
-                           <div style={styles.leftText}>3. Суурь боловсрол</div>
-                           <div style={styles.leftText}>4. Бүрэн дунд</div>
-                           <div style={styles.leftText}>5. Мэргэжлийн болон техникийн</div>
-                           <div style={styles.leftText}>
-                              6. Дипломын
-                              <span style={{ marginLeft: 20 }}>7. Бакалавр</span>
-                           </div>
-                           <div style={styles.leftText}>
-                              8. Магистр <span style={{ marginLeft: 20 }}>9. Доктор</span>
-                           </div>
+                           <Table className="document">
+                              <tbody>
+                                 <tr>
+                                    <td rowSpan={9} style={styles.centerText} className="border-0">
+                                       <b>8. Боловсролын байдал</b>
+                                    </td>
+                                    <td style={styles.leftText} className="border-0">
+                                       Боловсролгүй
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-01', 1)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Бага
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-02', 2)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Суурь боловсрол
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-03', 3)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Бүрэн дунд
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-04', 4)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Мэргэжлийн болон техникийн
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-05', 5)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Дипломын
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-06', 6)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Бакалавр
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-07', 7)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Магистр
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-08', 8)}
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style={styles.leftText} className="border-0">
+                                       Доктор
+                                    </td>
+                                    <td style={styles.centerText} className="border-0">
+                                       {returnQuestionCode('q2', 'q2-09', 9)}
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </Table>
                         </td>
                         <td style={{ textAlign: 'start', fontSize: 10, padding: 1 }}>Ажлын хаяг:</td>
                      </tr>
@@ -178,61 +263,78 @@ function AM2A(props) {
                      <tr>
                         <td style={{ ...styles.leftText, ...{ height: 15 } }}>{formData?.['AM2.2.1']}</td>
                         <td rowSpan={5} style={styles.leftText}>
-                           <div style={styles.rightText}>
-                              <b>{moment(formData?.['AM2.3']).format('YYYY')} /он/</b>
-                           </div>
-                           <div style={styles.rightText}>
-                              <b>{moment(formData?.['AM2.3']).format('MM')} /сар/</b>
-                           </div>
-                           <div style={styles.rightText}>
-                              <b>{moment(formData?.['AM2.3']).format('DD')} /өдөр/</b>
-                           </div>
-                           <div style={styles.rightText}>
-                              <b>{moment(formData?.['AM2.3']).format('HH:MM')} /цаг мин/</b>
-                           </div>
+                           {dayjs(formData.q4)?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
                         </td>
                         <td colSpan={2} rowSpan={5} style={styles.leftText}>
-                           <NewCheckboxGroup value={formData?.['AM2.4.1']} className="dstory">
-                              <NewCheckbox value={0} className="test">
+                           <NewCheckboxGroup value={formData?.['q5']} className="dstory">
+                              <NewCheckbox value={'q5-1'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Тийм</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={1} className="test">
+                              <NewCheckbox value={'q5-2'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Үгүй</span>
                               </NewCheckbox>
                            </NewCheckboxGroup>
                            <div style={styles.leftText}>
                               <b>Тийм бол огноо:</b>
                            </div>
-                           <div style={styles.leftText}>{moment(formData?.['AM2.4.2']).format('YYYY/MM/DD HH:mm')}</div>
+                           <div style={styles.leftText}>
+                              {dayjs(formData?.['q5-1-1'])?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
+                           </div>
                         </td>
                         <td rowSpan={5} style={styles.leftText}>
-                           <NewCheckboxGroup value={formData?.['AM2.5.1']} className="dstory">
-                              <NewCheckbox value={0} className="test">
+                           <NewCheckboxGroup value={formData?.['q6']} className="dstory">
+                              <NewCheckbox value={'q6-1'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Тийм</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={1} className="test">
+                              <NewCheckbox value={'q6-2'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Үгүй</span>
                               </NewCheckbox>
                            </NewCheckboxGroup>
                            <div style={styles.leftText}>
                               <b>Тийм бол огноо:</b>
                            </div>
-                           <div style={styles.leftText}>{moment(formData?.['AM2.5.2']).format('YYYY/MM/DD HH:mm')}</div>
+                           <div style={styles.leftText}>
+                              {dayjs(formData?.['q6-1-1'])?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
+                           </div>
                         </td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>1. Хөдөлмөр эрхлэлтийн байдал</td>
+                        <td style={styles.leftText}>
+                           1. Хөдөлмөр эрхлэлтийн байдал:{' '}
+                           {formData?.['q3-1-1']?.map((el, index) => {
+                              return (
+                                 <span key={index} style={{ fontSize: 10 }} className="font-bold">
+                                    {el?.slice(-2)}
+                                    {index === formData?.['q3-1-1'].length - 1 ? '' : ','}
+                                 </span>
+                              );
+                           })}
+                        </td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.leftText, ...{ height: 15 } }}>{formData?.['AM2.2.2']}</td>
+                        <td style={{ ...styles.leftText, ...{ height: 15 } }}>
+                           <div>{formData?.['q3-1-1Other'] ? formData?.['q3-1-1Other'] : null}</div>
+                        </td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>2. Хөдөлмөр эрхлэхгүй шалтгаан</td>
+                        <td style={styles.leftText}>
+                           2. Хөдөлмөр эрхлэхгүй шалтгаан:{' '}
+                           {formData?.['q3-2-1']?.map((el, index) => {
+                              return (
+                                 <span key={index} style={{ fontSize: 10 }} className="font-bold">
+                                    {el?.slice(-2)}
+                                    {index === formData?.['q3-2-1'].length - 1 ? '' : ','}
+                                 </span>
+                              );
+                           })}
+                        </td>
                      </tr>
                      <tr>
-                        <td style={{ ...styles.leftText, ...{ height: 15 } }}>{formData?.['AM2.2.3']}</td>
+                        <td style={{ ...styles.leftText, ...{ height: 15 } }}>
+                           <div>{formData?.['q3-2-1Other'] ? formData?.['q3-2-1Other'] : null}</div>
+                        </td>
                      </tr>
                      <tr>
                         <td colSpan={5} style={styles.leftText}>
@@ -250,17 +352,17 @@ function AM2A(props) {
                         >
                            Хамшинж:
                            <br />
-                           {formData?.['AM2.6']}
+                           {formData?.q7}
                         </td>
                         <td colSpan={3} style={{ textAlign: 'start', fontSize: 10, padding: 1 }}>
                            Эмнэл зүйн шинж тэмдгийг онцлон бичнэ үү.
                            <br />
-                           {formData?.['AM2.7']}
+                           {formData?.q8}
                         </td>
                         <td style={{ textAlign: 'start', fontSize: 10, padding: 1 }}>
                            Илэрсэн огноо:
                            <br />
-                           {moment(formData?.['AM2.8']).format('YYYY/MM/DD HH:mm')}
+                           {dayjs(formData?.q9)?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
                         </td>
                      </tr>
                      <tr>
@@ -294,63 +396,63 @@ function AM2A(props) {
                      </tr>
                      <tr>
                         <td style={styles.leftText}>
-                           <NewCheckboxGroup value={formData?.['AM2.9']} className="dstory">
-                              <NewCheckbox value={0} className="test">
+                           <NewCheckboxGroup value={formData?.['q10']} className="dstory">
+                              <NewCheckbox value={'q10-1'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Хүн</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={1} className="test">
-                                 <span style={{ fontSize: 10 }}>&#8226; Мал (төрөл)________</span>
+                              <NewCheckbox value={'q10-2'} className="test">
+                                 <span style={{ fontSize: 10 }}>&#8226; Мал (төрөл){formData?.['q10-3-1']}</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={2} className="test">
-                                 <span style={{ fontSize: 10 }}>&#8226; Амьтан (төрөл)______</span>
+                              <NewCheckbox value={'q10-3'} className="test">
+                                 <span style={{ fontSize: 10 }}>&#8226; Амьтан (төрөл){formData?.['q10-3-1']}</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={3} className="test">
+                              <NewCheckbox value={'q10-4'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Тогтоогдоогүй</span>
                               </NewCheckbox>
                            </NewCheckboxGroup>
                         </td>
                         <td colSpan={2} style={styles.leftText}>
-                           <NewCheckboxGroup value={formData?.['AM2.10']} className="dstory">
-                              <NewCheckbox value={0} className="test">
+                           <NewCheckboxGroup value={formData?.['q11']} className="dstory">
+                              <NewCheckbox value={'q11-1'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Ахуйн:</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={1} className="test">
+                              <NewCheckbox value={'q11-2'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Шууд хавьтал /ам мөр:</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={2} className="test">
+                              <NewCheckbox value={'q11-3'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Ус мөр:</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={3} className="test">
+                              <NewCheckbox value={'q11-4'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Хүнс мөр:</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={4} className="test">
+                              <NewCheckbox value={'q11-5'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Хөрс мөр:</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={5} className="test">
+                              <NewCheckbox value={'q11-6'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Бусад:______________ мөр:</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={6} className="test">
+                              <NewCheckbox value={'q11-7'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Агаар / дусал</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={7} className="test">
+                              <NewCheckbox value={'q11-8'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Дам халдвар</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={8} className="test">
+                              <NewCheckbox value={'q11-9'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Цусаар</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={9} className="test">
+                              <NewCheckbox value={'q11-10'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Тодорхойгүй</span>
                               </NewCheckbox>
                            </NewCheckboxGroup>
@@ -363,7 +465,7 @@ function AM2A(props) {
                               padding: 1
                            }}
                         >
-                           {moment(formData?.['AM2.11']).format('YYYY/MM/DD HH:mm')}
+                           {dayjs(formData?.q12)?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
                         </td>
                      </tr>
                      <tr>
@@ -392,20 +494,20 @@ function AM2A(props) {
                            <b>Сорьц авахаас өмнө хэрэглэсэн эмийн нэр, тун, хэмжээ</b>
                         </td>
                      </tr>
-                     {formData?.['AM2.12']?.map((el, index) => {
+                     {formData?.q13?.map((el, index) => {
                         return (
                            <tr key={index}>
-                              <td style={styles.leftText}>{el[0]}</td>
-                              <td style={styles.leftText}>{el[1]}</td>
-                              <td style={styles.leftText}>{el[2]}</td>
-                              <td style={styles.leftText}>{el[3]}</td>
-                              <td style={styles.leftText}>{el[4]}</td>
+                              <td style={styles.leftText}>{el['q13-1']}</td>
+                              <td style={styles.leftText}>{el['q13-2']}</td>
+                              <td style={styles.leftText}>{el['q13-3']}</td>
+                              <td style={styles.leftText}>{el['q13-4']}</td>
+                              <td style={styles.leftText}>{el['q13-5']}</td>
                            </tr>
                         );
                      })}
                      <tr>
                         <td colSpan={5} style={styles.leftText}>
-                           <b className="mr-1">Урьдчилсан онош (ОУӨА-10)</b> {formData?.['AM2.13']}
+                           <b className="mr-1">Урьдчилсан онош (ОУӨА-10): </b> {formData?.q14}
                         </td>
                      </tr>
                      <tr>
@@ -432,24 +534,26 @@ function AM2A(props) {
                         </td>
                      </tr>
                      <tr>
-                        <td style={styles.leftText}>{formData?.['AM2.14']}</td>
-                        <td style={styles.leftText}>{formData?.['AM2.15']}</td>
+                        <td style={styles.leftText}>{formData?.q15}</td>
+                        <td style={styles.leftText}>{formData?.q16}</td>
                         <td style={styles.leftText}>
-                           <NewCheckboxGroup value={formData?.['AM2.16']} className="dstory">
-                              <NewCheckbox value={0} className="test">
+                           <NewCheckboxGroup value={formData?.['q17']} className="dstory">
+                              <NewCheckbox value={'q17-1'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Утсаар</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={1} className="test">
+                              <NewCheckbox value={'q17-2'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Цахимаар</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={2} className="test">
+                              <NewCheckbox value={'q17-3'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Цаасаар</span>
                               </NewCheckbox>
                            </NewCheckboxGroup>
                         </td>
-                        <td style={styles.leftText}>{moment(formData?.['AM2.17']).format('YYYY/MM/DD HH:mm')}</td>
+                        <td style={styles.leftText}>
+                           {dayjs(formData?.q18)?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}
+                        </td>
                      </tr>
                      <tr>
                         <td colSpan={5} style={styles.leftText}>
@@ -482,14 +586,14 @@ function AM2A(props) {
                            <b>Лабораторийн нэр</b>
                         </td>
                      </tr>
-                     {formData?.['AM2.18']?.map((el, index) => {
+                     {formData?.q19?.map((el, index) => {
                         return (
                            <tr key={index}>
-                              <td style={styles.leftText}>{el[0]}</td>
-                              <td style={styles.leftText}>{el[1]}</td>
-                              <td style={styles.leftText}>{el[2]}</td>
-                              <td style={styles.leftText}>{el[3]}</td>
-                              <td style={styles.leftText}>{el[4]}</td>
+                              <td style={styles.leftText}>{el['q19-1']}</td>
+                              <td style={styles.leftText}>{el['q19-2']}</td>
+                              <td style={styles.leftText}>{el['q19-3']}</td>
+                              <td style={styles.leftText}>{el['q19-4']}</td>
+                              <td style={styles.leftText}>{el['q19-5']}</td>
                            </tr>
                         );
                      })}
@@ -499,21 +603,21 @@ function AM2A(props) {
                   <tbody>
                      <tr>
                         <td style={styles.leftText}>
-                           <b>Батлагдсан онош (ОУӨА-10)</b>
+                           <b>Батлагдсан онош (ОУӨА-10): {formData?.q20}</b>
                            <NewCheckboxGroup
-                              value={formData?.['AM2.19']}
+                              value={formData?.['q21']}
                               className="dstory"
                               style={{ display: 'flex', flexDirection: 'row' }}
                            >
-                              <NewCheckbox value={0} className="test">
+                              <NewCheckbox value={'q21-1'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Эмнэлзүйгээр</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={1} className="test">
+                              <NewCheckbox value={'q21-2'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Тархвар холбогдлоор</span>
                               </NewCheckbox>
                               <br />
-                              <NewCheckbox value={2} className="test">
+                              <NewCheckbox value={'q21-3'} className="test">
                                  <span style={{ fontSize: 10 }}>&#8226; Лаборатороор</span>
                               </NewCheckbox>
                            </NewCheckboxGroup>
@@ -524,15 +628,15 @@ function AM2A(props) {
                            <div style={styles.rowCellWithText}>
                               <b>Эмнэлгийн тусламж үйлчилгээтэй холбоотой халдвар</b>
                               <NewCheckboxGroup
-                                 value={formData?.['AM2.20']}
+                                 value={formData?.['q22']}
                                  className="dstory"
                                  style={{ display: 'flex', flexDirection: 'row' }}
                               >
-                                 <NewCheckbox value={0} className="test">
+                                 <NewCheckbox value={'q22-1'} className="test">
                                     <span style={{ fontSize: 10 }}>&#8226; Тийм</span>
                                  </NewCheckbox>
                                  <br />
-                                 <NewCheckbox value={1} className="test">
+                                 <NewCheckbox value={'q22-2'} className="test">
                                     <span style={{ fontSize: 10 }}>&#8226; Үгүй</span>
                                  </NewCheckbox>
                               </NewCheckboxGroup>
@@ -541,7 +645,10 @@ function AM2A(props) {
                      </tr>
                      <tr>
                         <td colSpan={5} style={styles.leftText}>
-                           <b>Онош батлагдсан огноо: {moment(formData?.['AM2.21']).format('YYYY/MM/DD HH:mm')} </b>
+                           <b>
+                              Онош батлагдсан огноо:{' '}
+                              {dayjs(formData?.q23)?.format('YYYY он MM сар DD өдөр HH цаг MM минут')}{' '}
+                           </b>
                         </td>
                      </tr>
                   </tbody>

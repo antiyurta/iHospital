@@ -17,7 +17,7 @@ function AM9C(props) {
          fontSize: 12,
          display: 'block',
          width: '100%',
-         height: 230,
+         height: 40,
          fontWeight: 'bold'
       },
       blockContentSm: {
@@ -100,23 +100,26 @@ function AM9C(props) {
                            {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
                         </span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Онош: {formData?.['AM9C.2']}</span>
+                        <span style={{ fontSize: 12 }}>Онош: {formData?.q2}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Регистрийн № {patientData?.registerNumber}</span>
-                        <br />
-                        <span style={styles.blockContentSm}>Rp: {formData?.['AM9C.3.1']}</span>
-                        <br />
-                        <span style={styles.blockContentLg}>S: {formData?.['AM9C.3.2']}</span>
-                        <br />
-                        <div style={{ textAlign: 'center' }}>
-                           <span style={{ fontSize: 12 }}>#</span>
-                        </div>
+                        {formData?.q3?.map((el, index) => {
+                           return (
+                              <div key={index}>
+                                 <span style={styles.blockContentLg}>Rp:{el['q3-1']}</span>
+                                 <span style={styles.blockContentLg}>S:{el['q3-2']}</span>
+                                 <div style={{ textAlign: 'center' }}>
+                                    <span style={{ fontSize: 13 }}>#</span>
+                                 </div>
+                              </div>
+                           );
+                        })}
                      </div>
                      <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                        <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг: ___________________</span>
+                        <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг: {formData?.q4}</span>
                         <br />
 
-                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: {formData?.['AM9C.4']}</span>
+                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: {formData?.q5}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: {hospitalName}</span>
                         <br />
@@ -219,17 +222,13 @@ function AM9C(props) {
                      </span>
                      <span style={{ fontSize: 12 }}>Жор баригч доорх мэдээллийг бүрэн хөтөлж, эмийг олгоно</span>
                      <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Өвчтөний регистрийн дугаар: __________________
+                        Өвчтөний регистрийн дугаар: {patientData?.registerNumber}
                      </span>
                      <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Эм хүлээн авсан хүний нэр: _____________________
+                        Эм хүлээн авсан хүний нэр: {patientData?.phoneNo}
                      </span>
-                     <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Регистрийн дугаар: ____________________________
-                     </span>
-                     <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Утасны дугаар: ________________________________
-                     </span>
+                     <span style={{ fontSize: 12, paddingTop: 10 }}>Регистрийн дугаар: __________________</span>
+                     <span style={{ fontSize: 12, paddingTop: 10 }}>Утасны дугаар: {patientData?.phoneNo}</span>
                      <span
                         style={{
                            fontSize: 12,
@@ -240,7 +239,7 @@ function AM9C(props) {
                         Гарын үсэг, огноо:
                      </span>
                   </div>
-                  <table>
+                  <Table bordered>
                      <thead>
                         <tr
                            style={{
@@ -301,7 +300,7 @@ function AM9C(props) {
                            <td></td>
                         </tr>
                      </thead>
-                  </table>
+                  </Table>
                   <div
                      style={{
                         borderWidth: 1,

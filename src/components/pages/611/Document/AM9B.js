@@ -17,7 +17,7 @@ function AM9B(props) {
          fontSize: 12,
          display: 'block',
          width: '100%',
-         height: 60,
+         height: 40,
          fontWeight: 'bold'
       },
       blockContentSm: {
@@ -100,16 +100,16 @@ function AM9B(props) {
                            {patientData?.genderType === 'MAN' ? 'эрэгтэй' : 'эмэгтэй'}
                         </span>
                         <br />
-                        <span style={{ fontSize: 12 }}>Онош: {formData?.['AM9B.2']}</span>
+                        <span style={{ fontSize: 12 }}>Онош: {formData?.q2}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Регистрийн № {patientData?.registerNumber}</span>
                         <br />
-                        {formData?.['AM9B.5']?.map((el, index) => {
+                        {formData?.q3?.map((el, index) => {
                            return (
                               <div key={index}>
-                                 <span style={styles.blockContentLg}>Rp: {el[0]}</span>
+                                 <span style={styles.blockContentLg}>Rp: {el['q3-1']}</span>
                                  <br />
-                                 <span style={styles.blockContentLg}>S: {el[1]}</span>
+                                 <span style={styles.blockContentLg}>S: {el['q3-2']}</span>
                                  <br />
                                  <div style={{ textAlign: 'center' }}>
                                     <span style={{ fontSize: 12 }}>#</span>
@@ -119,12 +119,10 @@ function AM9B(props) {
                         })}
                      </div>
                      <div style={{ borderWidth: 1, borderStyle: 'solid' }}>
-                        <span style={{ fontSize: 12 }}>
-                           Жор бичсэн эмчийн нэр, утас, тэмдэг: {formData?.['AM9B.4']}
-                        </span>
+                        <span style={{ fontSize: 12 }}>Жор бичсэн эмчийн нэр, утас, тэмдэг: {formData?.q4}</span>
                         <br />
 
-                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: ___________________</span>
+                        <span style={{ fontSize: 12 }}>Ерөнхий эмчийн гарын үсэг: {formData?.q5}</span>
                         <br />
                         <span style={{ fontSize: 12 }}>Эмнэлгийн нэр: {hospitalName}</span>
                         <br />
@@ -227,17 +225,13 @@ function AM9B(props) {
                      </span>
                      <span style={{ fontSize: 12 }}>Жор баригч доорх мэдээллийг бүрэн хөтөлж, эмийг олгоно</span>
                      <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Өвчтөний регистрийн дугаар: __________________
+                        Өвчтөний регистрийн дугаар:{patientData?.registerNumber}
                      </span>
                      <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Эм хүлээн авсан хүний нэр: _____________________
+                        Эм хүлээн авсан хүний нэр: {patientData?.phoneNo}
                      </span>
-                     <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Регистрийн дугаар: ____________________________
-                     </span>
-                     <span style={{ fontSize: 12, paddingTop: 10 }}>
-                        Утасны дугаар: ________________________________
-                     </span>
+                     <span style={{ fontSize: 12, paddingTop: 10 }}>Регистрийн дугаар: __________________</span>
+                     <span style={{ fontSize: 12, paddingTop: 10 }}>Утасны дугаар: {patientData?.phoneNo}</span>
                      <span
                         style={{
                            fontSize: 12,
