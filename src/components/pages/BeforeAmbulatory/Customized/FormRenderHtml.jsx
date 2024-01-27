@@ -35,11 +35,14 @@ const FormRenderHtml = (props) => {
       return root;
    };
    const RenderOptions = ({ item }) => {
+      if (item.isHead && item.type === 'title') {
+         return <span className="font-semibold pr-1">{item.question}</span>;
+      }
       if (documentData.hasOwnProperty(item.keyWord)) {
          const answer = Object.entries(documentData).find(([key, value]) => key === item.keyWord)?.[1];
          if (item.type == 'other') {
             return <span>Бусад: {answer}</span>;
-         } else if (item.type === 'input') {
+         } else if (item.type === 'input' || item.type === 'inputNumber') {
             let pattern = /\.{1,}/g;
             const text = item.question.replace(pattern, `<span style="text-decoration: underline;"> ${answer} </span>`);
             return (
