@@ -75,6 +75,7 @@ function MainPatientHistory({ handleClick }) {
          formId: data.id,
          documentId: data.documentValue,
          patientId: patientId,
+         saveType: 'Save',
          type: 'XRAY',
          data: {
             ...values,
