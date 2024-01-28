@@ -208,7 +208,7 @@ function AM24Б(props) {
                <span className={formData?.['AM24B.35'] === 1 ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Хэвлийн хөндийд:</span>
+               <span style={{ fontWeight: 'bold' }}>Хэвлийн хөндийд: </span>
                <span className={formData?.['AM24B.36'] === 0 ? 'underline mr-1' : 'mr-1'}> сул шингэнгүй, </span>
                <span className={formData?.['AM24B.36'] === 1 ? 'underline mr-1' : 'mr-1'}> шингэнтэй, </span>
             </div>
