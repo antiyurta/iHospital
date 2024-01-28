@@ -2,10 +2,11 @@ import moment from 'moment';
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import dayjs from 'dayjs';
 
 //маягт АМ-25А
 function AM25A(props) {
-   console.log('ASD', props);
+   console.log('25А', props);
    const {
       data: { formData, patientData },
       hospitalName
@@ -53,7 +54,7 @@ function AM25A(props) {
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>Эрүүл мэндийн бүртгэлийн маягт АМ-25А</span>
                </div>
             </div>
-            <span style={styles.generalText}>Эмнэлгийн код:</span>
+            <span style={styles.generalText}>Эмнэлгийн код: {formData?.q1}</span>
             <div style={{ textAlign: 'center', marginTop: 15, marginBottom: 15 }}>
                <span style={{ fontWeight: 'bold', fontSize: 16 }}>СЭРГЭЭН ЗАСАХ ЭМЧИЛГЭЭНИЙ КАРТ</span>
             </div>
@@ -74,18 +75,14 @@ function AM25A(props) {
                </span>
             </div>
             <div style={styles.rowStyle}>
-               3. Эмчилгээ эхэлсэн {moment(formData?.['AM25.1']?.[0]).format('YYYY')} он{' '}
-               {moment(formData?.['AM25.1']?.[0]).format('MM')} сар {moment(formData?.['AM25.1']?.[0]).format('DD')}{' '}
-               өдөр,
-               <span style={{ marginLeft: 20 }}>
-                  Эмчилгээ дууссан {moment(formData?.['AM25.1']?.[1]).format('YYYY')} он{' '}
-                  {moment(formData?.['AM25.1']?.[1]).format('MM')} сар {moment(formData?.['AM25.1']?.[1]).format('DD')}{' '}
-                  өдөр,
+               3. Эмчилгээ эхэлсэн {dayjs(formData.q2)?.format('YYYY он MM сар DD өдөр')},{"  "}
+               <span style={styles.rowStyle}>
+                  Эмчилгээ дууссан {dayjs(formData.q3)?.format('YYYY он MM сар DD өдөр')},
                </span>
             </div>
 
             <div style={styles.rowStyle}>
-               4. Ажлын газар, албан тушаал {patientData?.organization}, {patientData?.jobPosition}
+               4. Ажлын газар, албан тушаал {formData?.q4}
             </div>
             <div
                style={{
@@ -94,17 +91,17 @@ function AM25A(props) {
                }}
             >
                <div>
-                  <div>5. Үндсэн онош: {formData?.['AM25.2']}</div>
+                  <div>5. Үндсэн онош: {formData?.q5}</div>
                   <div style={styles.rowStyle}>
-                     6. Хэдэн удаа эмчилсэн:{formData?.['AM25.3']}
+                     6. Хэдэн удаа эмчилсэн: {formData?.q6}
                      <span style={{ marginLeft: 50 }}>Удаа /зур/: </span>
                      <span style={{ marginLeft: 20 }}>
-                        <span className={formData?.['AM25.4'] === 0 ? 'underline mr-1' : 'mr-1'}> анх, </span>
-                        <span className={formData?.['AM25.4'] === 1 ? 'underline mr-1' : 'mr-1'}>давтан</span>{' '}
+                        <span className={formData?.q7 === 'q7-1' ? 'underline mr-1' : 'mr-1'}> анх, </span>
+                        <span className={formData?.q7 === 'q7-2' ? 'underline mr-1' : 'mr-1'}>давтан</span>{' '}
                      </span>
                   </div>
 
-                  <div style={styles.rowStyle}>7. Мэргэжлийн эмчийн заалт {formData?.['AM25.18']}</div>
+                  <div style={styles.rowStyle}>7. Мэргэжлийн эмчийн заалт: {formData?.q8}</div>
                </div>
                <div style={{ display: 'flex' }}>
                   <div
@@ -119,20 +116,20 @@ function AM25A(props) {
                      Өвчний төгсгөл
                   </div>
                   <div style={{ width: '100%' }}>
-                     <NewCheckboxGroup value={formData?.['AM25.5']} className="dstory">
-                        <NewCheckbox value={0} className="test">
+                     <NewCheckboxGroup value={formData?.q9} className="dstory">
+                        <NewCheckbox value={'q9-1'} className="test">
                            <span style={{ fontSize: 12 }}>Эдгэрсэн</span>
                         </NewCheckbox>
                         <br />
-                        <NewCheckbox value={1} className="test">
+                        <NewCheckbox value={'q9-2'} className="test">
                            <span style={{ fontSize: 12 }}>Сайжирсан</span>
                         </NewCheckbox>
                         <br />
-                        <NewCheckbox value={2} className="test">
+                        <NewCheckbox value={'q9-3'} className="test">
                            <span style={{ fontSize: 12 }}>Хэвэндээ</span>
                         </NewCheckbox>
                         <br />
-                        <NewCheckbox value={3} className="test">
+                        <NewCheckbox value={'q9-4'} className="test">
                            <span style={{ fontSize: 12 }}>Дутуу</span>
                         </NewCheckbox>
                      </NewCheckboxGroup>
@@ -201,16 +198,16 @@ function AM25A(props) {
                      </td>
                   </tr>
 
-                  {formData?.['AM25_TABLE1']?.map((el, index) => {
+                  {formData?.q10?.map((el, index) => {
                      return (
                         <tr style={{ height: 30 }} key={index}>
-                           <td>{el[0]}</td>
-                           <td>{el[1]}</td>
-                           <td>{el[2]}</td>
-                           <td>{el[3]}</td>
-                           <td>{el[4]}</td>
-                           <td>{el[5]}</td>
-                           <td>{el[6]}</td>
+                           <td>{el['q10-1']}</td>
+                           <td>{el['q10-2']}</td>
+                           <td>{el['q10-3']}</td>
+                           <td>{el['q10-4']}</td>
+                           <td>{el['q10-5']}</td>
+                           <td>{el['q10-6']}</td>
+                           <td>{el['q10-7']}</td>
                         </tr>
                      );
                   })}
@@ -223,9 +220,9 @@ function AM25A(props) {
                <div>Маягтын ар тал</div>
                <div>Б тал</div>
             </div>
-            <div style={styles.rowStyle}>8. Илгээсэн эмч, кабинетийн нэр: {formData?.['AM25.9']}</div>
-            <div style={styles.rowStyle}>8. Сэргээн засах эмчилгээний эмч: {formData?.['AM25.10']}</div>
-            <div style={styles.rowStyle}>8. Зөвлөгөө өгсөн байдал: {formData?.['AM25.11']}</div>
+            <div style={styles.rowStyle}>8. Илгээсэн эмч, кабинетийн нэр: {formData?.q11}</div>
+            <div style={styles.rowStyle}>8. Сэргээн засах эмчилгээний эмч: {formData?.q12}</div>
+            <div style={styles.rowStyle}>8. Зөвлөгөө өгсөн байдал: {formData?.q13}</div>
             <Table bordered style={{ marginTop: 20 }}>
                <thead>
                   <tr
@@ -287,15 +284,16 @@ function AM25A(props) {
                         <span> Гарын үсэг</span>
                      </td>
                   </tr>
-                  {formData?.['AM25_TABLE2']?.map((el, index) => {
+                  {formData?.q14?.map((el, index) => {
                      return (
                         <tr style={{ height: 30 }} key={index}>
-                           <td>{moment(el[0]).format('YYYY/MM/DD')}</td>
-                           <td>{el[1]}</td>
-                           <td>{el[2]}</td>
-                           <td>{el[3]}</td>
-                           <td>{el[4]}</td>
-                           <td>{el[5]}</td>
+                           <td style={{width: 80}}>{dayjs(formData['q14-1'])?.format('YYYY-MM-DD')}</td>
+                           <td>{el['q14-2']}</td>
+                           <td>{el['q14-3']}</td>
+                           <td>{el['q14-4']}</td>
+                           <td>{el['q14-5']}</td>
+                           <td>{el['q14-6']}</td>
+                           <td>{el['q14-7']}</td>
                         </tr>
                      );
                   })}
