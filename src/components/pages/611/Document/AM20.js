@@ -1,8 +1,15 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
+import dayjs from 'dayjs';
 
 //маягт АМ-20
-function AM20() {
+function AM20(props) {
+   console.log('AM20', props);
+   const {
+      data: { formData, patientData },
+      hospitalName
+   } = props;
    const styles = {
       rowCells: {
          borderWidth: 1,
@@ -71,30 +78,16 @@ function AM20() {
                </div>
                <div style={{ display: 'flex', flexDirection: 'row' }}>
                   <div style={{ width: '50%' }}>
-                     <div style={{ fontSize: 12, textAlign: 'center' }}>Эмнэлэг</div>
-                     <div style={{ fontSize: 12 }}>
-                        _________________________________________________________________
-                     </div>
-                     <div style={{ fontSize: 12 }}>
-                        _________________________________________________________________
-                     </div>
-                     <div style={{ fontSize: 12 }}>
-                        _________________________________________________________________
-                     </div>
-                     <div style={{ fontSize: 12 }}>
-                        _________________________________________________________________
-                     </div>
-                     <div style={{ fontSize: 12 }}>
-                        _________________________________________________________________
-                     </div>
-                     <div style={{ fontSize: 12 }}>
-                        _________________________________________________________________
-                     </div>
+                     <div style={{ fontSize: 12, textAlign: 'center' }}>Эмнэлэг: {hospitalName}</div>
                   </div>
                   <div style={{ width: '50%' }}>
-                     <div style={{ fontSize: 12 }}>1. Эцэг /эх/-ийн нэр ____________________________________</div>
-                     <div style={{ fontSize: 12 }}>2. Нэр ___________________________________________________</div>
-                     <div style={{ fontSize: 12 }}>3. Нас ____________ 4. Хүйс /зур/ Эрэгтэй, Эмэгтэй</div>
+                     <div style={{ fontSize: 12 }}>1. Эцэг /эх/-ийн нэр: {patientData?.lastName}</div>
+                     <div style={{ fontSize: 12 }}>2. Нэр: {patientData?.firstName}</div>
+                     <div style={{ fontSize: 12 }}>3. Нас: {patientData?.age} 4. Хүйс /зур/ 
+                  <span style={{ marginLeft: 30 }}>
+                     <span className={patientData?.genderType === 'MAN' ? 'underline font-bold' : ''}> эрэгтэй, </span>
+                     <span className={patientData?.genderType === 'WOMAN' ? 'underline font-bold' : ''}>эмэгтэй</span>
+                  </span></div>
                      <div style={{ fontSize: 12 }}>5. Яс үндэс _______________________________________________</div>
                      <div style={{ fontSize: 12 }}>6. Тогтмол хаяг __________________________________________</div>
                      <div style={{ fontSize: 12 }}>___________________________________________________________</div>
@@ -105,23 +98,43 @@ function AM20() {
                   <span style={styles.generalTextBold}>2-р тал</span>
                </div>
                <div style={{ fontSize: 12, marginTop: 5 }}>
-                  7. Ажлын газар _______________________________________________________________________________________
+                  7. Ажлын газар: {formData?.q1}
                </div>
                <div style={{ fontSize: 12, marginTop: 5 }}>
-                  ___________________________________________________________________________________________________________
+                  8. Албан тушаал:  {formData?.q2}
+                  
                </div>
                <div style={{ fontSize: 12, marginTop: 5 }}>
-                  8. Албан тушаал
-                  _______________________________________________________________________________________
+                  9. Мэргэжил: {formData?.q3} 10. Боловсрол: /зур/
+                  <NewCheckboxGroup value={formData?.['q4']} className="dstory">
+                     <NewCheckbox value={'q4-01'} className="test">
+                        <span style={{ fontSize: 10 }}> Боловсролгүй,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-02'} className="test">
+                        <span style={{ fontSize: 10 }}> Бага,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-03'} className="test">
+                        <span style={{ fontSize: 10 }}> Бүрэн дунд,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-04'} className="test">
+                        <span style={{ fontSize: 10 }}> Мэргэжлийн болон техникийн,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-05'} className="test">
+                        <span style={{ fontSize: 10 }}> Дипломын,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-06'} className="test">
+                        <span style={{ fontSize: 10 }}> Бакалавр,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-07'} className="test">
+                        <span style={{ fontSize: 10 }}> Магистр,</span>
+                     </NewCheckbox>
+                     <NewCheckbox value={'q4-08'} className="test">
+                        <span style={{ fontSize: 10 }}> Доктор</span>
+                     </NewCheckbox>
+                  </NewCheckboxGroup>       
                </div>
                <div style={{ fontSize: 12, marginTop: 5 }}>
-                  9. Мэргэжил __________________________________ 10. Боловсрол: /зур/ Боловсролгүй, Бага, Бүрэн дунд
-               </div>
-               <div style={{ fontSize: 12, marginTop: 5 }}>
-                  Мэргэжлийн болон техникийн, Дипломын, Бакалавр, Магистр, Доктор
-               </div>
-               <div style={{ fontSize: 12, marginTop: 5 }}>
-                  10. Карт нээсэн _______ он ___ сар ___ өдөр хаасан _______ он ____ сар ____ өдөр
+                  10. Карт нээсэн {dayjs(formData.q5)?.format('YYYY он MM сар DD өдөр')} хаасан {dayjs(formData.q6)?.format('YYYY он MM сар DD өдөр')}
                </div>
                <Table bordered style={{ marginTop: 20 }} className="document">
                   <thead>
@@ -140,54 +153,16 @@ function AM20() {
                         <td style={{ ...styles.verticalText, ...{ width: 20 } }}>Эхэлсэн</td>
                         <td style={{ ...styles.verticalText, ...{ width: 20 } }}>Дууссан</td>
                      </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
-                     <tr>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                        <td style={{ height: 30, width: 30 }}></td>
-                     </tr>
+                     {formData?.q7?.map((el, index) => {
+                        return (
+                           <tr key={index}>
+                              <td style={{ height: 30, width: 30 }}>{el['q7-1']}</td>
+                              <td style={{ height: 30, width: 30 }}>{dayjs(el['q7-2'])?.format('YYYY-MM-DD')}</td>
+                              <td style={{ height: 30, width: 30 }}>{dayjs(el['q7-3'])?.format('YYYY-MM-DD')}</td>
+                              <td style={{ height: 30, width: 30 }}>{el['q7-4']}</td>
+                           </tr>
+                        );
+                     })}
                   </thead>
                </Table>
             </div>
@@ -210,11 +185,15 @@ function AM20() {
                         <td style={{ ...styles.centerText, ...{ width: '50%' } }}>Эмчийн тэмдэглэл</td>
                         <td style={{ ...styles.centerText, ...{ width: '40%' } }}>заалт</td>
                      </tr>
-                     <tr style={{ height: 430 }}>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                     </tr>
+                     {formData?.q8?.map((el, index) => {
+                        return (
+                           <tr key={index}>
+                              <td>{dayjs(el['q8-1'])?.format('YYYY-MM-DD')}</td>
+                              <td>{el['q8-2']}</td>
+                              <td>{el['q8-3']}</td>
+                           </tr>
+                        );
+                     })}
                   </thead>
                </Table>
                <span style={{ ...styles.generalText, ...{ fontWeight: 'bold' } }}>4, 16-р тал</span>
@@ -232,11 +211,15 @@ function AM20() {
                         <td style={{ ...styles.centerText, ...{ width: '50%' } }}>Эмчийн тэмдэглэл</td>
                         <td style={{ ...styles.centerText, ...{ width: '40%' } }}>заалт</td>
                      </tr>
-                     <tr style={{ height: 430 }}>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                     </tr>
+                     {formData?.q9?.map((el, index) => {
+                        return (
+                           <tr key={index}>
+                              <td>{dayjs(el['q9-1'])?.format('YYYY-MM-DD')}</td>
+                              <td>{el['q9-2']}</td>
+                              <td>{el['q9-3']}</td>
+                           </tr>
+                        );
+                     })}
                   </thead>
                </Table>
             </div>
