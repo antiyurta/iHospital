@@ -15,6 +15,7 @@ export const EmrContextProvider = ({ children }) => {
    // OTS end
    // Document Start
    const [isViewDocument, setIsViewDocument] = useState(false);
+   const [documentType, setDocumentType] = useState('one'); // one | many
    const [selectedDocument, setSelectedDocument] = useState(false);
    // Document End
    const setPatient = (patient) => {
@@ -47,7 +48,8 @@ export const EmrContextProvider = ({ children }) => {
    };
    // OTS Function end
    // DocumentViewer functuin start
-   const setDocumentView = (state, document) => {
+   const setDocumentView = (state, document, type) => {
+      setDocumentType(type);
       setSelectedDocument(document);
       setIsViewDocument(state);
    };
@@ -73,6 +75,7 @@ export const EmrContextProvider = ({ children }) => {
             setPrivateSetOrderCount,
             isViewDocument,
             selectedDocument,
+            documentType,
             setDocumentView
          }}
       >

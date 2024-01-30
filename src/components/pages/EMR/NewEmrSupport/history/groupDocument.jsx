@@ -47,16 +47,8 @@ const DocumentIn = (props) => {
                <p>{`Цаг: ${dayjs(props.document.createdAt)?.format('HH:mm:ss')}`}</p>
                <p>{`Давтамж: ${props.document.isExpand ? props.document.children.length : 1}`}</p>
                <button
-                  onClick={() => setDocumentView(true, props.document)}
-                  style={{
-                     display: 'flex',
-                     padding: '6px 12px',
-                     justifyContent: 'center',
-                     alignItems: 'center',
-                     gap: 4,
-                     borderRadius: 8,
-                     background: '#fff'
-                  }}
+                  className="flex bg-white rounded-lg items-center justify-center px-3 py-[6px]"
+                  onClick={() => setDocumentView(true, props.document, 'one')}
                >
                   Дэлгэрэнгүй <img src={arrowNext} alt="arr" />
                </button>
@@ -86,7 +78,7 @@ const GroupDocument = (props) => {
                   <Button
                      type="primary"
                      className="w-full mb-2"
-                     onClick={() => setDocumentView(true, props.document.documents)}
+                     onClick={() => setDocumentView(true, props.document.documents, 'many')}
                   >
                      Дэлгэрэнгүй
                   </Button>

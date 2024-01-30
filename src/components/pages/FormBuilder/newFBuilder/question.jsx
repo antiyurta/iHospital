@@ -72,6 +72,10 @@ const Question = (props) => {
                      value: 'textarea'
                   },
                   {
+                     label: 'Only Time',
+                     value: 'timepicker'
+                  },
+                  {
                      label: 'Date',
                      value: 'datepicker'
                   },
@@ -82,6 +86,10 @@ const Question = (props) => {
                   {
                      label: 'diagnose',
                      value: 'diagnose'
+                  },
+                  {
+                     label: 'Human Body',
+                     value: 'humanbody'
                   }
                ]}
             />

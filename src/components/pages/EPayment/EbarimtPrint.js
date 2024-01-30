@@ -29,8 +29,8 @@ function EbarimtPrint(props) {
       content: () => printRef.current
    });
    return (
-      <div className="pt-6">
-         <div ref={printRef} style={{ width: '80mm' }}>
+      <div className="pt-6 font-sans">
+         <div ref={printRef} className="mx-auto" style={{ width: '80mm' }}>
             <div>
                <div className="flow-root">
                   <p className="float-right font-normal whitespace-pre-wrap">{hospitalName}</p>

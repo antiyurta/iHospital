@@ -8,6 +8,7 @@ import { selectCurrentEmrData } from '../../../features/emrReducer';
 
 import PmsPatientServices from '../../../services/pms/patient.api';
 import DoctorNotes from '../EMR/DoctorNotes';
+import { EmrContextProvider } from '../../../features/EmrContext';
 
 function BeforeAmbulatoryDetail() {
    let location = useLocation();
@@ -23,33 +24,35 @@ function BeforeAmbulatoryDetail() {
       getByIdPatient();
    }, []);
    return (
-      <div className="w-full flex flex-col">
-         <div className="w-full flex flex-row justify-between p-2">
-            <PatientInformation handlesearch={false} patient={selectedPatient} />
-            <div className="max-w-[350px]">
-               <DoctorNotes patientId={selectedPatient.id} />
+      <EmrContextProvider>
+         <div className="w-full flex flex-col">
+            <div className="w-full flex flex-row justify-between p-2">
+               <PatientInformation handlesearch={false} patient={selectedPatient} />
+               <div className="max-w-[350px]">
+                  <DoctorNotes patientId={selectedPatient.id} />
+               </div>
+            </div>
+            <div className="w-full p-3 overflow-auto bg-[#f5f6f7]">
+               {incomeENRData.usageType === 'OUT' ? (
+                  <BeforeAmbulatoryTabs
+                     patientId={incomeENRData.patientId}
+                     patientData={selectedPatient}
+                     structureId={incomeENRData.departmentId}
+                     listId={incomeENRData.appointmentId}
+                     reasonComming={reasonComming}
+                  />
+               ) : (
+                  <BeforeInPatientTabs
+                     patientId={incomeENRData.patientId}
+                     listId={incomeENRData.appointmentId}
+                     patientData={selectedPatient}
+                     departmentName={'TEST'}
+                     departmentId={incomeENRData.departmentId}
+                  />
+               )}
             </div>
          </div>
-         <div className="w-full p-3 overflow-auto bg-[#f5f6f7]">
-            {incomeENRData.usageType === 'OUT' ? (
-               <BeforeAmbulatoryTabs
-                  patientId={incomeENRData.patientId}
-                  patientData={selectedPatient}
-                  structureId={incomeENRData.departmentId}
-                  listId={incomeENRData.appointmentId}
-                  reasonComming={reasonComming}
-               />
-            ) : (
-               <BeforeInPatientTabs
-                  patientId={incomeENRData.patientId}
-                  listId={incomeENRData.appointmentId}
-                  patientData={selectedPatient}
-                  departmentName={'TEST'}
-                  departmentId={incomeENRData.departmentId}
-               />
-            )}
-         </div>
-      </div>
+      </EmrContextProvider>
    );
 }
 export default BeforeAmbulatoryDetail;

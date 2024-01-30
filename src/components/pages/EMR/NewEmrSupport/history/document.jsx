@@ -119,7 +119,7 @@ const DocumentR = (props) => {
                      <div />
                      <button
                         onClick={() => {
-                           setDocumentView(true, document);
+                           setDocumentView(true, document, 'one');
                         }}
                      >
                         Дэлгэрэнгүй <img src={arrowNext} alt="arr" />

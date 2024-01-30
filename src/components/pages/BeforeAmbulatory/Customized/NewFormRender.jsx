@@ -1,8 +1,8 @@
-import { Checkbox, DatePicker, Form, Input, InputNumber, Radio, Table } from 'antd';
+import { Checkbox, DatePicker, Form, Input, InputNumber, Radio, Table, TimePicker } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import NewFormTable from './NewFormTable';
 import TextArea from 'antd/lib/input/TextArea';
-import dayjs from 'dayjs';
+import HumanBody from './human-body';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
@@ -112,9 +112,6 @@ const NewFormRender = (props) => {
    const RenderFormInType = (RFITProps) => {
       const { item } = RFITProps;
       var state = true;
-      // if (isCheck) {
-      //    state = formOptionIds?.some((id) => id === item.keyWord);
-      // }
       if (item.type === 'radio') {
          const options = form.documentForm.filter((form) => form.parentIndex === item.index);
          return (
@@ -286,6 +283,29 @@ const NewFormRender = (props) => {
                {item.question}
             </p>
          );
+      } else if (item.type === 'timepicker') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <Form.Item
+                     tooltip={!state ? message : null}
+                     className="mb-0"
+                     label={item.question}
+                     name={configNames(item.keyWord)}
+                     getValueProps={(i) => {
+                        if (i) {
+                           return { value: moment(i) };
+                        } else {
+                           return;
+                        }
+                     }}
+                  >
+                     <TimePicker locale={mnMN} disabled={!state} placeholder={item.question} />
+                  </Form.Item>
+               </div>
+            </div>
+         );
       } else if (item.type === 'datepicker') {
          return (
             <div key={item.index} className="document-form">
@@ -335,6 +355,36 @@ const NewFormRender = (props) => {
                         placeholder={item.question}
                      />
                   </Form.Item>
+               </div>
+            </div>
+         );
+      } else if (item.type === 'humanbody') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Form.List name={configNames(item.keyWord)}>
+                        {(fields) => (
+                           <div>
+                              {fields.map((field) => (
+                                 <Form.Item shouldUpdate label={item.question} name={[field.name, 'desc']}>
+                                    <Input />
+                                 </Form.Item>
+                              ))}
+                           </div>
+                        )}
+                     </Form.List>
+                     <div>
+                        <HumanBody
+                           name={configNames(item.keyWord)}
+                           currentData={useForm.getFieldValue(configNames(item.keyWord))}
+                           handleClick={(data) => {
+                              useForm.setFieldValue(configNames(item.keyWord), data[`${configNames(item.keyWord)}`]);
+                           }}
+                        />
+                     </div>
+                  </div>
                </div>
             </div>
          );

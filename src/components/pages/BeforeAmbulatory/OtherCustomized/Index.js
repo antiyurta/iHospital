@@ -242,6 +242,10 @@ function Index({ document }) {
    console.log(document);
    if (document.value === 87 || document.value === 91) {
       return <CT1and2Index document={document} />;
+   } else if (document.value === 90) {
+      return <CT1and2Index document={document} />;
+   } else if (document.value === 96) {
+      return <CT1and2Index document={document} />;
    }
    return <div>...</div>;
 }

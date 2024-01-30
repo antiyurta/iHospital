@@ -98,6 +98,8 @@ import EIM5_2 from './../EIM/EIM5_2';
 //CT
 import CT1_2H2 from './CT_1_2H2';
 import CT1_2H11 from './CT_1_2H11';
+import CT1_2H12 from './CT_1_2H12';
+import CT1_2H14 from './CT_1_2H14';
 //
 //
 import EMT201_4_2 from '../EMT/EMT201_4_2';
@@ -587,6 +589,11 @@ const options = [
       value: 95,
       label: 'CT-1 Эмнэлгээс гарах, шилжих үеийн дүгнэлт',
       docName: 'Эмнэлгээс гарах, шилжих үеийн дүгнэлт'
+   },
+   {
+      value: 96,
+      label: 'CT-1,2 Хавсралт 14',
+      docName: 'Өвдөлтийг хянах хуудас'
    }
 ];
 
@@ -808,6 +815,8 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <EMT201_4_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 89) {
       return <CT1_2H11 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 90) {
+      return <CT1_2H12 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 92) {
       return <CT1ClinalDiagnose type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 93) {
@@ -818,6 +827,8 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <CT1Inspection type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 95) {
       return <CT1End type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 96) {
+      return <CT1_2H14 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    }
 }
 
