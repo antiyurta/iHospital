@@ -21,6 +21,9 @@ import { ArrowRightOutlined, PlusCircleOutlined, PrinterOutlined } from '@ant-de
 import { regularByDocumentValueIn } from '../../../../documentInjection';
 import EmrContext from '../../../../../features/EmrContext';
 import DocumentViewer from '../../../EMR/DocumentViewer';
+
+import DocumentsFormServices from '../../../../../services/organization/document';
+
 const Attachment13 = ({ document }) => {
    ChartJS.register(CategoryScale, LinearScale, PointElement, BarElement, Title, Tooltip, Legend);
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -32,15 +35,14 @@ const Attachment13 = ({ document }) => {
    const [selectedData, setSelectedData] = useState({});
    const getData = async () => {
       setIsLoading(true);
-      await jwtInterceopter
-         .get('document-middleware', {
-            params: {
-               appointmentId: incomeEmrData.inpatientRequestId,
-               patientId: incomeEmrData.patientId,
-               documentId: 91,
-               usageType: incomeEmrData.usageType
-            }
-         })
+      await DocumentsFormServices.get({
+         params: {
+            appointmentId: incomeEmrData.inpatientRequestId,
+            patientId: incomeEmrData.patientId,
+            documentId: 91,
+            usageType: incomeEmrData.usageType
+         }
+      })
          .then(({ data: { response } }) => {
             setData(response);
          })
@@ -48,7 +50,11 @@ const Attachment13 = ({ document }) => {
             setIsLoading(false);
          });
    };
-
+   const deleteData = async (id) => {
+      await DocumentsFormServices.deleteDocument(id).then(() => {
+         getData();
+      });
+   };
    const columns = [
       {
          title: 'Огноо',
@@ -166,15 +172,24 @@ const Attachment13 = ({ document }) => {
       {
          title: '',
          render: (_, row) => (
-            <Button
-               onClick={() => {
-                  setEditMode(true);
-                  setIsOpenModal(true);
-                  setSelectedData(row);
-               }}
-            >
-               edit
-            </Button>
+            <div className="flex flex-row gap-2">
+               <Button
+                  onClick={() => {
+                     setEditMode(true);
+                     setIsOpenModal(true);
+                     setSelectedData(row);
+                  }}
+               >
+                  edit
+               </Button>
+               <Button
+                  onClick={() => {
+                     deleteData(row._id);
+                  }}
+               >
+                  delete
+               </Button>
+            </div>
          )
       }
    ];
@@ -206,6 +221,7 @@ const Attachment13 = ({ document }) => {
                            icon={<ArrowRightOutlined />}
                            onClick={() => {
                               const documents = regularByDocumentValueIn(data);
+                              console.log('docment', documents);
                               setDocumentView(true, documents, 'many');
                            }}
                         >

@@ -1,5 +1,8 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
 class DocumentsFormPatient {
+   async get(config) {
+      return await jwtInterceopter.get('document-middleware/', config);
+   }
    async getById(id) {
       return await jwtInterceopter.get('document-middleware/' + id);
    }

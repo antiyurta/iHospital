@@ -36,13 +36,9 @@ const FormRenderHtml = (props) => {
       return root;
    };
    const RenderOptions = ({ item }) => {
-      // if (item.isHead && item.type === 'title') {
-      //    return <span className="font-semibold pr-1">{item.question}</span>;
-      // }
-      // if (documentData.hasOwnProperty(item.keyWord)) {
       const answer = Object.entries(documentData).find(([key, value]) => key === item.keyWord)?.[1];
       if (item.type == 'other') {
-         if (answer) return <span>Бусад: {answer}</span>;
+         if (answer) return <span>{answer}</span>;
          return;
       } else if (item.type === 'input' || item.type === 'inputNumber') {
          if (answer) {
@@ -55,14 +51,14 @@ const FormRenderHtml = (props) => {
                <span
                   dangerouslySetInnerHTML={{ __html: text }}
                   style={{
-                     paddingRight: 3,
-                     fontWeight: 700
+                     paddingRight: 3
                   }}
                />
             );
          }
          return;
       } else if (item.type === 'radio' || item.type === 'checkbox') {
+         console.log(item);
          var other;
          if (item.isOther) {
             other = (
@@ -77,7 +73,6 @@ const FormRenderHtml = (props) => {
          const selectedAnswer = item.options.find((option) => option.keyWord === answer)?.question;
          if (item.type === 'checkbox') {
             const dd = item.options?.filter((option) => answer?.includes(option.keyWord));
-            console.log('dd', dd);
             const ched = dd.map((d, index) => (
                <span
                   key={index}
@@ -89,14 +84,16 @@ const FormRenderHtml = (props) => {
                </span>
             ));
             return (
-               <span className="">
+               <span className="flex flex-wrap gap-1">
+                  <span>{item.question}</span>
                   {ched}
                   <span>{other}</span>
                </span>
             );
          }
          return (
-            <span className="">
+            <span className="flex flex-wrap gap-1">
+               <span>{item.question}</span>
                {selectedAnswer}
                <span>{other}</span>
             </span>
@@ -111,34 +108,23 @@ const FormRenderHtml = (props) => {
       } else if (item.type === 'datepicker') {
          return (
             <p>
-               <span className="font-semibold pr-1">{item.question}</span>
+               <span className="pr-1">{item.question}</span>
                {answer ? <span className="underline">{dayjs(answer).format('YYYY-MM-DD')}</span> : null}
             </p>
          );
-      }
-      // }
-      return;
-   };
-   const RenderUnOptions = ({ item }) => {
-      if (item.isHead) {
-         return (
-            <>
-               <span className="font-semibold pr-1">{item.question}</span>
-               <RenderOptions item={item} />
-            </>
-         );
+      } else if (item.type === 'title') {
+         return <span className="font-bold pr-1">{item.question}</span>;
       }
       return;
    };
 
    const renderHTML = (item) => {
-      console.log('item', item);
       if (!item.options) {
          return <RenderOptions key={item.index} item={item} />;
       }
       return (
          <span className="flex flex-wrap" key={item.index}>
-            <RenderUnOptions key={item.index} item={item}></RenderUnOptions>
+            <RenderOptions item={item} />
             {item.options.map(renderHTML)}
          </span>
       );
