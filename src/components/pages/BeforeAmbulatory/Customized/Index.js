@@ -229,9 +229,9 @@ function Index(props) {
       if (!isObjectEmpty(documentForm)) {
          getData();
          getCabinets();
+         form.resetFields();
       }
       if (isEdit) {
-         console.log('document', document);
          form.setFieldsValue(document.data);
       }
    }, [documentForm]);

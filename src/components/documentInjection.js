@@ -28,7 +28,8 @@ export const groupedByAppointmentId = (documents) => {
 
 export const regularByDocumentValueIn = (documents) => {
    var result = [];
-   documents?.map((document, indx) => {
+   const reversedDocuments = [...documents]?.reverse();
+   reversedDocuments?.map((document, indx) => {
       const { formType, documentId } = document;
       if (formType != 1) {
          result.push({

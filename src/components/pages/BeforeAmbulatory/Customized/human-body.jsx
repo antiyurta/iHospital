@@ -95,7 +95,7 @@ const Humanbody = (props) => {
                   setIsOpenModal(false);
                });
             }}
-            width={730}
+            width={900}
          >
             <div className="flex flex-row gap-2">
                <div className="w-[400px]">
@@ -107,19 +107,36 @@ const Humanbody = (props) => {
                            const newMarkers = [...markers, marker];
                            setMarkers(newMarkers);
                            const currentValues = form.getFieldValue(name);
-                           currentValues.push({
-                              desc: '',
-                              top: marker.top,
-                              left: marker.left
-                           });
-                           form.setFieldsValue({
-                              [`${name}`]: currentValues
-                           });
+                           if (currentValues?.length > 0) {
+                              currentValues.push({
+                                 desc: '',
+                                 top: marker.top,
+                                 left: marker.left
+                              });
+                              form.setFieldsValue({
+                                 [`${name}`]: currentValues
+                              });
+                           } else {
+                              form.setFieldsValue({
+                                 [`${name}`]: [
+                                    {
+                                       desc: '',
+                                       top: marker.top,
+                                       left: marker.left
+                                    }
+                                 ]
+                              });
+                           }
                         });
                      }}
                   />
                </div>
-               <div className="flex flex-col gap-2 my-3 h-[500px] p-2 overflow-auto">
+               <div
+                  className="flex flex-col gap-2 my-3 h-[500px] p-2 overflow-auto"
+                  style={{
+                     width: 'calc(100% - 400px)'
+                  }}
+               >
                   <Form form={form} layout="vertical">
                      <Form.List name={name}>
                         {(fields, { add, remove }) => {

@@ -363,14 +363,23 @@ const NewFormRender = (props) => {
             <div key={item.index} className="document-form">
                <div className="form-left" />
                <div className="form-inputs">
+                  <p className="font-bold pb-2">{item.question}</p>
                   <div className="flex flex-row gap-2 justify-between">
                      <Form.List name={configNames(item.keyWord)}>
-                        {(fields) => (
-                           <div>
+                        {(fields, index) => (
+                           <div key={index}>
                               {fields.map((field) => (
-                                 <Form.Item shouldUpdate label={item.question} name={[field.name, 'desc']}>
-                                    <Input />
-                                 </Form.Item>
+                                 <div key={field.key} className="flex flex-row gap-1">
+                                    <Form.Item shouldUpdate name={[field.name, 'desc']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item shouldUpdate name={[field.name, 'top']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item shouldUpdate name={[field.name, 'left']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                 </div>
                               ))}
                            </div>
                         )}

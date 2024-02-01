@@ -1,5 +1,5 @@
 import { Button, Card } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import BodyConditionSheet from './BeforeInPatientTabs/BodyConditionSheet';
 import NursingNote from './BeforeInPatientTabs/NursingNote';
 import PainAssessment from './BeforeInPatientTabs/PainAssessment';
@@ -20,8 +20,10 @@ import OtherCustomized from './OtherCustomized/Index';
 
 ///
 import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
+import EmrContext from '../../../features/EmrContext';
 ///
 function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, departmentId }) {
+   const { setDocumentView } = useContext(EmrContext);
    const AppIds = useSelector(selectCurrentAppId);
    const [activeKey, setActiveKey] = useState(0);
    const [documents, setDocuments] = useState([]);
@@ -87,6 +89,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
                <button
                   onClick={() => {
                      setActiveKey(index + 3);
+                     setDocumentView(false, {}, 'one');
                      setSelectedDocument(item);
                   }}
                   className={activeKey === index + 3 ? 'active' : ''}

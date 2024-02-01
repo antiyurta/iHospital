@@ -952,6 +952,18 @@ table.new-table {
    /* width: 100%; */
 }
 
+table.attac14 > thead > tr > th {
+   font-size: 8px;
+   padding: 2px;
+}
+table.attac14 > thead > tr > th > .image-marker > .image-marker__image.image {
+   min-width: 150px;
+}
+table.attac14 > thead > tr > th > .image-marker > .image-marker__marker.image-marker__marker--default {
+   width: 10px;
+   height: 10px;
+}
+
 table.new-table > thead > tr > th,
 table.new-table > tbody > tr > td {
    border: 1px solid black;

@@ -2,6 +2,7 @@ import React from 'react';
 import enerehui_logo from './assets/enerehui_logo.png';
 import fb from './assets/fb.png';
 import route from './assets/route.png';
+import marker from './assets/marker.png';
 import dayjs from 'dayjs';
 const Template = (props) => {
    const { patient, createdAt, children, serviceName } = props;
@@ -18,15 +19,15 @@ const Template = (props) => {
       >
          <img src={enerehui_logo} style={{ width: 180 }} className="self-center" />
          <div className="border-1 border-black" />
-         <div className="flex justify-between">
-            <div className="flex">
-               <img src={route} style={{ width: 30, height: 30 }} />
+         <div className="flex gap-1 justify-between">
+            <div className="flex gap-2">
+               <img src={marker} style={{ width: 30, height: 30, borderRadius: 5 }} />
                <p className="text-xs text-black">
                   Хаяг: БЗД, 26-р хороо, Олимп хотхон, 424-р байр, үйлчилгээний хэсэгт.
                </p>
             </div>
             <div className="flex gap-2">
-               <img src={fb} style={{ width: 20, height: 20 }} />
+               <img src={fb} style={{ width: 30, height: 30, borderRadius: 5 }} />
                <p className="text-xs text-black">Энэрэхүй эмнэлэг(Уламжлалт, Сэргээн засах, Эхо оношилгоо)</p>
             </div>
          </div>
@@ -53,15 +54,12 @@ const Template = (props) => {
             <div>
                <span className="font-bold text-xs text-black">Огноо:</span> {dayjs(createdAt).format('YYYY-MM-DD')}
             </div>
-            <div>
-               <span className="font-bold text-xs text-black">Регистр:</span> {patient?.registerNumber}
-            </div>
          </div>
          <div className="border-1 border-black"></div>
          <p className="text-center text-base font-bold">{capitalizeFirstLetter(serviceName)}</p>
          {children}
          <div className="border-1 border-black"></div>
-         <p className="font-bold">
+         <p className="font-bold text-[10px] text-black">
             САНАМЖ: Хэт авиан оношилгооны дүгнэлт нь тухайн багажийн шинжлэх хүрээнд гарч буй бүтцийн өөрчлөлтүүд юм.
             Үүнийг эмчлэгч эмч эмнэлзүйн илрэл, явц, лабораторийн ба үйл ажиллагааны бусад шинжилгээнүүдтэй харьцуулан
             эмнэлзүйн онош, цаашид авах арга хэмжээндээ хэрхэн тусгахаа шийдвэрлэнэ.

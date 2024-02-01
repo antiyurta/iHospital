@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import jwtInterceopter from '../../../../jwtInterceopter';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import { Button, Modal, Table } from 'antd';
-import { PlusCircleOutlined, PrinterOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
 import dayjs from 'dayjs';
 
-import { i18Little } from '../../../../documentInjection';
+import { i18Little, regularByDocumentValueIn } from '../../../../documentInjection';
+import EmrContext from '../../../../../features/EmrContext';
+import DocumentViewer from '../../../EMR/DocumentViewer';
 
 const Attachment14 = ({ document }) => {
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   const { setDocumentView, isViewDocument } = useContext(EmrContext);
    const [isLoading, setIsLoading] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [editMode, setEditMode] = useState(false);
@@ -84,39 +87,52 @@ const Attachment14 = ({ document }) => {
    }, []);
    return (
       <div>
-         <div className="attachment-13">
-            <div className="list">
-               <div className="head">
-                  <p>Түүх</p>
-                  <div className="flex flex-row gap-2">
-                     <Button
-                        type="primary"
-                        icon={<PlusCircleOutlined />}
-                        onClick={() => {
-                           setEditMode(false);
-                           setIsOpenModal(true);
-                        }}
-                     >
-                        Нэмэх
-                     </Button>
-                     <Button icon={<PrinterOutlined />}>Хэвлэх</Button>
+         {isViewDocument ? (
+            <DocumentViewer />
+         ) : (
+            <div className="attachment-13">
+               <div className="list">
+                  <div className="head">
+                     <p>Түүх</p>
+                     <div className="flex flex-row gap-2">
+                        <Button
+                           type="primary"
+                           icon={<PlusCircleOutlined />}
+                           onClick={() => {
+                              setEditMode(false);
+                              setIsOpenModal(true);
+                           }}
+                        >
+                           Нэмэх
+                        </Button>
+                        <Button
+                           icon={<ArrowRightOutlined />}
+                           onClick={() => {
+                              const documents = regularByDocumentValueIn(data);
+                              setDocumentView(true, documents, 'many');
+                           }}
+                        >
+                           Дэлгэрэнгүй
+                        </Button>
+                     </div>
                   </div>
+                  <Table
+                     rowKey="_id"
+                     loading={{
+                        spinning: isLoading,
+                        tip: 'Уншиж байна'
+                     }}
+                     scroll={{
+                        x: 500
+                     }}
+                     columns={columns}
+                     dataSource={data}
+                     pagination={false}
+                  />
                </div>
-               <Table
-                  rowKey={'_id'}
-                  loading={{
-                     spinning: isLoading,
-                     tip: 'Уншиж байна'
-                  }}
-                  scroll={{
-                     x: 500
-                  }}
-                  columns={columns}
-                  dataSource={data}
-                  pagination={false}
-               />
             </div>
-         </div>
+         )}
+
          <Modal title="Маягт бөглөх" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null}>
             <Customized
                propsUsageType="IN"

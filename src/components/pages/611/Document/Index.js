@@ -99,6 +99,7 @@ import EIM5_2 from './../EIM/EIM5_2';
 import CT1_2H2 from './CT_1_2H2';
 import CT1_2H11 from './CT_1_2H11';
 import CT1_2H12 from './CT_1_2H12';
+import CT1_2H13 from './CT_1_2H13';
 import CT1_2H14 from './CT_1_2H14';
 //
 //
@@ -817,6 +818,8 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <CT1_2H11 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 90) {
       return <CT1_2H12 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 91) {
+      return <CT1_2H13 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 92) {
       return <CT1ClinalDiagnose type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 93) {

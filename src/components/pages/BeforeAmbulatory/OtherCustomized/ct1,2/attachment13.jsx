@@ -1,5 +1,5 @@
 import { Button, Modal, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
@@ -17,13 +17,19 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import dayjs from 'dayjs';
-import { PlusCircleOutlined, PrinterOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, PlusCircleOutlined, PrinterOutlined } from '@ant-design/icons';
+import { regularByDocumentValueIn } from '../../../../documentInjection';
+import EmrContext from '../../../../../features/EmrContext';
+import DocumentViewer from '../../../EMR/DocumentViewer';
 const Attachment13 = ({ document }) => {
    ChartJS.register(CategoryScale, LinearScale, PointElement, BarElement, Title, Tooltip, Legend);
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   const { setDocumentView, isViewDocument } = useContext(EmrContext);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const [data, setData] = useState([]);
+   const [editMode, setEditMode] = useState(false);
+   const [selectedData, setSelectedData] = useState({});
    const getData = async () => {
       setIsLoading(true);
       await jwtInterceopter
@@ -156,6 +162,20 @@ const Attachment13 = ({ document }) => {
          render: (text) => {
             return formatNameForDoc(text.lastName, text.firstName);
          }
+      },
+      {
+         title: '',
+         render: (_, row) => (
+            <Button
+               onClick={() => {
+                  setEditMode(true);
+                  setIsOpenModal(true);
+                  setSelectedData(row);
+               }}
+            >
+               edit
+            </Button>
+         )
       }
    ];
 
@@ -164,41 +184,71 @@ const Attachment13 = ({ document }) => {
    }, []);
    return (
       <>
-         <div className="attachment-13">
-            <div className="list">
-               <div className="head">
-                  <p>Түүх</p>
-                  <div className="flex flex-row gap-2">
-                     <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => setIsOpenModal(true)}>
-                        Нэмэх
-                     </Button>
-                     <Button icon={<PrinterOutlined />}>Хэвлэх</Button>
+         {isViewDocument ? (
+            <DocumentViewer />
+         ) : (
+            <div className="attachment-13">
+               <div className="list">
+                  <div className="head">
+                     <p>Түүх</p>
+                     <div className="flex flex-row gap-2">
+                        <Button
+                           type="primary"
+                           icon={<PlusCircleOutlined />}
+                           onClick={() => {
+                              setEditMode(false);
+                              setIsOpenModal(true);
+                           }}
+                        >
+                           Нэмэх
+                        </Button>
+                        <Button
+                           icon={<ArrowRightOutlined />}
+                           onClick={() => {
+                              const documents = regularByDocumentValueIn(data);
+                              setDocumentView(true, documents, 'many');
+                           }}
+                        >
+                           Дэлгэрэнгүй
+                        </Button>
+                     </div>
                   </div>
+                  <Table
+                     rowKey={'_id'}
+                     loading={{
+                        spinning: isLoading,
+                        tip: 'Уншиж байна'
+                     }}
+                     scroll={{
+                        x: 500
+                     }}
+                     columns={columns}
+                     dataSource={data}
+                     pagination={false}
+                  />
                </div>
-               <Table
-                  rowKey={'_id'}
-                  loading={{
-                     spinning: isLoading,
-                     tip: 'Уншиж байна'
-                  }}
-                  scroll={{
-                     x: 500
-                  }}
-                  columns={columns}
-                  dataSource={data}
-                  pagination={false}
-               />
             </div>
-         </div>
-         <Modal title="Маягт бөглөх" open={isOpenModal} onCancel={() => setIsOpenModal(false)}>
+         )}
+         <Modal
+            title="Маягт бөглөх"
+            open={isOpenModal}
+            onCancel={() => setIsOpenModal(false)}
+            destroyOnClose
+            footer={null}
+         >
             <Customized
-               document={document}
+               propsUsageType="IN"
+               isEdit={editMode}
+               editId={editMode ? selectedData._id : null}
+               document={editMode ? selectedData : document}
                documentValue={91}
                documentType={0}
                onOk={(state) => {
                   getData();
                   setIsOpenModal(state);
                }}
+               isBackButton={false}
+               handleBackButton={() => null}
             />
          </Modal>
       </>
