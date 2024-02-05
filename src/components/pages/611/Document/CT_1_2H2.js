@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import EarlyWarningPrint from '../../BeforeAmbulatory/EarlyWarningPrint';
-import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import VSCanvas from './VSCanvas';
+import dayjs from 'dayjs';
+import { formatNameForDoc, getAge } from '../../../comman';
 
-import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
-
-const pulse = 150;
-const breat = 55;
-const temp = 40.5;
 function CT_1_2H2(props) {
    const {
       type,
@@ -15,328 +10,1035 @@ function CT_1_2H2(props) {
       appointmentId,
       hospitalName
    } = props;
-   console.log('cth-2-2-2', props);
    const [chunks, setChunks] = useState();
-   function sliceIntoChunks(arr, chunkSize) {
-      const res = [];
+   function sliceIntoChunks(arr, chunkSize, secondSize) {
+      const slices = [];
       for (let i = 0; i < arr.length; i += chunkSize) {
-         const chunk = arr.slice(i, i + chunkSize);
-         res.push(chunk);
+         const newArr = arr.slice(i, i + chunkSize);
+         const newSlices = [];
+         for (let k = 0; k < newArr.length; k += secondSize) {
+            newSlices.push(newArr.slice(k, k + secondSize));
+         }
+         slices.push(newSlices);
       }
-      return res;
+      return slices;
    }
+   const [line, setLine] = useState([]);
+   const createLine = () => {
+      var linee = [];
+      for (let index = 0; index < 58 * 4; index++) {
+         linee.push(index);
+      }
+      setLine(linee);
+   };
+   const calcNurses = (items) => {
+      var early = '';
+      var middle = '';
+      var late = '';
+      items?.map((item) => {
+         if (item.data?.q7 === 'q7-1') {
+            early = formatNameForDoc(item.createdBy?.lastName, item.createdBy?.firstName);
+         } else if (item.data?.q7 === 'q7-2') {
+            middle = formatNameForDoc(item.createdBy?.lastName, item.createdBy?.firstName);
+         } else if (item.data?.q7 === 'q7-3') {
+            late = formatNameForDoc(item.createdBy?.lastName, item.createdBy?.firstName);
+         }
+      });
+      return (
+         <>
+            <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
+               <p
+                  style={{
+                     fontSize: 12,
+                     textAlign: 'center',
+                     fontWeight: 'bold'
+                  }}
+               >
+                  {early}
+               </p>
+            </div>
+            <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
+               <p
+                  style={{
+                     fontSize: 12,
+                     textAlign: 'center',
+                     fontWeight: 'bold'
+                  }}
+               >
+                  {middle}
+               </p>
+            </div>
+            <div className="w-full amaraDeer amaraBaruun amaraDoor" style={{ height: 18.86 }}>
+               <p
+                  style={{
+                     fontSize: 12,
+                     textAlign: 'center',
+                     fontWeight: 'bold'
+                  }}
+               >
+                  {late}
+               </p>
+            </div>
+         </>
+      );
+   };
    useEffect(() => {
-      setChunks(sliceIntoChunks(formData, 5));
+      createLine();
+   }, []);
+   //
+   useEffect(() => {
+      setChunks(sliceIntoChunks(formData, 10, 2));
    }, [formData]);
    return (
       <>
-         <div>END BAINA</div>
          {chunks?.map((chunk, index) => (
-            <div key={index}>
+            <div key={index} className="relative">
                <VSCanvas data={chunk} />
-               <img src={'/Capture.png'} width={2100} alt="page" />
+               <div className="page">
+                  <div className="subpage h-full">
+                     <div className="flex flex-col gap-1">
+                        <div className="flow-root">
+                           <p className="float-right">
+                              <p>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>
+                              <p>өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
+                              <p>Эрүүл мэндийн бүртгэлийн маягт СТ-1,2 Хавсралт 2</p>
+                           </p>
+                        </div>
+                        <p className="font-bold text-center">ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС</p>
+                        <div className="flow-root">
+                           <div className="float-left inline-flex">
+                              <p>Эмчлүүлэгчийн овог, нэр:</p>
+                              <p>{formatNameForDoc(patientData?.lastName, patientData?.firstName)}</p>
+                           </div>
+                           <div className="float-right inline-flex">
+                              <p>Нас:</p>
+                              <p>{getAge(patientData?.registerNumber)}</p>
+                              <p className="pl-1">Хүйс:</p>
+                              <p>{patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}</p>
+                              <p className="pl-1">Тасаг:</p>
+                              {/* <p>{location?.state?.departmentName}</p> */}
+                              <p className="pl-1">Өрөө:</p>
+                              {/* <p>{location?.state?.roomNumber}</p> */}
+                           </div>
+                        </div>
+                     </div>
+                     <div className="flex flex-wrap">
+                        <div className="basis-1/3">
+                           <div className="flex flex-wrap">
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p style={{ fontSize: 12 }}>Огноо</p>
+                              </div>
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p style={{ fontSize: 12 }}>Хэвтсэн хоног</p>
+                              </div>
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p style={{ fontSize: 12 }}>Мэс засал хийлгэсний дараах өдөр</p>
+                              </div>
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold'
+                                    }}
+                                 >
+                                    Цаг минут
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red'
+                                    }}
+                                 >
+                                    Пульс(P)
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue'
+                                    }}
+                                 >
+                                    Амьсгал(R)
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun amaraBaruun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold'
+                                    }}
+                                 >
+                                    Халуун(T°C)
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun align-bottom">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 17
+                                    }}
+                                 >
+                                    150
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 17
+                                    }}
+                                 >
+                                    55
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '36px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 17
+                                    }}
+                                 >
+                                    40.5
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    140
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    50
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    40
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    130
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    45
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    39.5
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    120
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    40
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    39
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    110
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    35
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    38.5
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    100
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    30
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    38
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    90
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    25
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    37.5
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    80
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    25
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    37
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    70
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    15
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    36.5
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    60
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    10
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    36
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    50
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    5
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    35.5
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'red',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    40
+                                 </p>
+                              </div>
+                              <div className="basis-1/3 amaraDeer amaraZuun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       color: 'blue',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    0
+                                 </p>
+                              </div>
+                              <div
+                                 className="basis-1/3 amaraDeer amaraZuun amaraBaruun"
+                                 style={{
+                                    height: '60px'
+                                 }}
+                              >
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center',
+                                       fontWeight: 'bold',
+                                       height: '100%',
+                                       paddingTop: 40
+                                    }}
+                                 >
+                                    35
+                                 </p>
+                              </div>
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center'
+                                    }}
+                                 >
+                                    Цусны даралт
+                                 </p>
+                              </div>
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center'
+                                    }}
+                                 >
+                                    Хоол №
+                                 </p>
+                              </div>
+                              <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                 <p
+                                    style={{
+                                       fontSize: 12,
+                                       textAlign: 'center'
+                                    }}
+                                 >
+                                    Биеийн жин
+                                 </p>
+                              </div>
+                              <div className="w-full">
+                                 <div className="flex flex-wrap">
+                                    <div className="basis-2/3 amaraDeer amaraZuun">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       >
+                                          ялгаруулалт давтамж /хэдэн удаа/
+                                       </p>
+                                    </div>
+                                    <div className="basis-1/3">
+                                       <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                          <p
+                                             style={{
+                                                fontSize: 12,
+                                                textAlign: 'center'
+                                             }}
+                                          >
+                                             Өтгөн
+                                          </p>
+                                       </div>
+                                       <div className="w-full amaraDeer amaraZuun amaraBaruun">
+                                          <p
+                                             style={{
+                                                fontSize: 12,
+                                                textAlign: 'center'
+                                             }}
+                                          >
+                                             Шээс
+                                          </p>
+                                       </div>
+                                    </div>
+                                    <div className="basis-1/2 amaraDeer amaraZuun">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       ></p>
+                                    </div>
+                                    <div className="basis-1/2 amaraDeer amaraZuun amaraBaruun">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       >
+                                          Өглөөний ээлж
+                                       </p>
+                                    </div>
+                                    <div className="basis-1/2 amaraDeer amaraZuun">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       >
+                                          Сувилагчийн гарын
+                                       </p>
+                                    </div>
+                                    <div className="basis-1/2 amaraDeer amaraZuun amaraBaruun">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       >
+                                          Өдрийн ээлж
+                                       </p>
+                                    </div>
+                                    <div className="basis-1/2 amaraDeer amaraZuun amaraDoor">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       ></p>
+                                    </div>
+                                    <div className="basis-1/2 amaraDeer amaraZuun amaraDoor amaraBaruun">
+                                       <p
+                                          style={{
+                                             fontSize: 12,
+                                             textAlign: 'center'
+                                          }}
+                                       >
+                                          Оройн ээлж
+                                       </p>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="basis-2/3">
+                           <div className="flex flex-wrap">
+                              {chunk?.map((firstChunk, index) => {
+                                 console.log('firstChunk', firstChunk);
+                                 return (
+                                    <div key={index} className="basis-1/5">
+                                       <div className="w-full amaraDeer amaraBaruun">
+                                          <p
+                                             style={{
+                                                fontSize: 12,
+                                                textAlign: 'center',
+                                                fontWeight: 'bold'
+                                             }}
+                                          >
+                                             {dayjs(firstChunk[0]?.createdAt).format('YYYY/MM/DD')}
+                                          </p>
+                                       </div>
+                                       <div className="w-full amaraDeer amaraBaruun">
+                                          <p
+                                             style={{
+                                                fontSize: 12,
+                                                textAlign: 'center',
+                                                fontWeight: 'bold'
+                                             }}
+                                          >
+                                             {firstChunk[0]?.data?.q1}
+                                          </p>
+                                       </div>
+                                       <div className="w-full amaraDeer amaraBaruun">
+                                          <p
+                                             style={{
+                                                fontSize: 12,
+                                                textAlign: 'center',
+                                                fontWeight: 'bold'
+                                             }}
+                                          >
+                                             {firstChunk[0]?.data?.q2}
+                                          </p>
+                                       </div>
+                                       <div className="w-full">
+                                          <div className="flex flex-wrap">
+                                             {firstChunk?.map((second, index) => {
+                                                return (
+                                                   <div key={index} className="basis-1/2 amaraDeer amaraBaruun">
+                                                      <p
+                                                         style={{
+                                                            fontSize: 12,
+                                                            textAlign: 'center',
+                                                            fontWeight: 'bold'
+                                                         }}
+                                                      >
+                                                         {dayjs(second.createdAt).format('HH:mm')}
+                                                      </p>
+                                                   </div>
+                                                );
+                                             })}
+                                             <div className="w-full amaraDeer amaraBaruun">
+                                                <p
+                                                   style={{
+                                                      fontSize: 12,
+                                                      textAlign: 'center',
+                                                      fontWeight: 'bold'
+                                                   }}
+                                                >
+                                                   {'|'}
+                                                </p>
+                                             </div>
+                                             {line.map((el) => {
+                                                return (
+                                                   <div
+                                                      key={el}
+                                                      className="basis-1/4 amaraDeer amaraBaruun"
+                                                      style={{ height: 12 }}
+                                                   >
+                                                      <p
+                                                         style={{
+                                                            fontSize: 7,
+                                                            textAlign: 'center',
+                                                            fontWeight: 'bold'
+                                                         }}
+                                                      ></p>
+                                                   </div>
+                                                );
+                                             })}
+                                             {firstChunk?.map((item, index) => (
+                                                <div
+                                                   key={index}
+                                                   className="basis-1/2 amaraDeer amaraBaruun"
+                                                   style={{ height: 18.86 }}
+                                                >
+                                                   <p
+                                                      style={{
+                                                         fontSize: 11,
+                                                         textAlign: 'center',
+                                                         fontWeight: 'bold'
+                                                      }}
+                                                   >
+                                                      {`${item.data?.highPressureRight}/${item.data?.lowPressureRight}`}
+                                                   </p>
+                                                </div>
+                                             ))}
+                                          </div>
+                                       </div>
+                                       <div className="w-full flex">
+                                          {firstChunk?.map((item, index) => (
+                                             <div
+                                                key={index}
+                                                className="basis-1/2 amaraDeer amaraBaruun"
+                                                style={{ height: 18.86 }}
+                                             >
+                                                <p
+                                                   style={{
+                                                      fontSize: 11,
+                                                      textAlign: 'center',
+                                                      fontWeight: 'bold'
+                                                   }}
+                                                >
+                                                   {item.data?.q3}
+                                                </p>
+                                             </div>
+                                          ))}
+                                       </div>
+                                       <div className="w-full amaraDeer amaraBaruun" style={{ height: 18.86 }}>
+                                          <p
+                                             style={{
+                                                fontSize: 12,
+                                                textAlign: 'center',
+                                                fontWeight: 'bold'
+                                             }}
+                                          >
+                                             {firstChunk[0]?.data?.q4}
+                                          </p>
+                                       </div>
+                                       <div className="w-full">
+                                          <div className="flex flex-wrap">
+                                             {firstChunk?.map((item, index) => (
+                                                <div
+                                                   key={index}
+                                                   className="basis-1/2 amaraDeer amaraBaruun"
+                                                   style={{ height: 18.86 }}
+                                                >
+                                                   <p
+                                                      style={{
+                                                         fontSize: 12,
+                                                         textAlign: 'center',
+                                                         fontWeight: 'bold'
+                                                      }}
+                                                   >
+                                                      {item?.data?.q5}
+                                                   </p>
+                                                </div>
+                                             ))}
+                                             <div className="w-full flex">
+                                                {firstChunk?.map((item, index) => (
+                                                   <div
+                                                      key={index}
+                                                      className="basis-1/2 amaraDeer amaraBaruun"
+                                                      style={{ height: 18.86 }}
+                                                   >
+                                                      <p
+                                                         style={{
+                                                            fontSize: 12,
+                                                            textAlign: 'center',
+                                                            fontWeight: 'bold'
+                                                         }}
+                                                      >
+                                                         {item?.data?.q6}
+                                                      </p>
+                                                   </div>
+                                                ))}
+                                             </div>
+                                          </div>
+                                       </div>
+                                       {calcNurses(firstChunk)}
+                                    </div>
+                                 );
+                              })}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </div>
-            // <div key={index} className="page-container">
-            //    <div className="page-inner">
-            //       <div className="">
-            //          <div className="flow-root">
-            //             <div className="float-right">
-            //                <p style={{ fontSize: 11 }}>Эрүүл мэндийн сайдын 2019 оны 12 дугаар сарын 30-ны</p>
-            //                <p style={{ fontSize: 11 }}>өдрийн A/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
-            //                <p style={{ fontSize: 11 }} className="font-bold">
-            //                   Эрүүд мэндийн бүртгэлийн маягт CT-1,2 Хавсралт 2
-            //                </p>
-            //             </div>
-            //          </div>
-            //          <p className="font-bold text-center" style={{ fontSize: 12 }}>
-            //             ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС
-            //          </p>
-            //          <div className="flow-root py-1">
-            //             <div className="float-left inline-flex">
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   Эмчлүүлэгчийн овог, нэр:
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   {patientData?.lastName.substring(0, 1) + '.' + patientData?.firstName}
-            //                </p>
-            //             </div>
-            //             <div className="float-right inline-flex">
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   Нас:
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   {patientData?.age}
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                   className="pl-1"
-            //                >
-            //                   Хүйс:
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   {patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                   className="pl-1"
-            //                >
-            //                   Тасаг:
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   {/* {location?.state?.departmentName} */}
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                   className="pl-1"
-            //                >
-            //                   Өрөө:
-            //                </p>
-            //                <p
-            //                   style={{
-            //                      fontSize: 9,
-            //                      fontWeight: 'bold'
-            //                   }}
-            //                >
-            //                   {/* {location?.state?.roomNumber} */}
-            //                </p>
-            //             </div>
-            //          </div>
-            //          <VSCanvas data={chunk} />
-            //          <table className="new-table">
-            //             <thead>
-            //                <tr>
-            //                   <th colSpan={3}>Огноо</th>
-            //                   {chunk?.map((item, idx) => (
-            //                      <th key={idx} colSpan={4}>
-            //                         {moment(item?.createdAt).format('YYYY/MM/DD HH:mm')}
-            //                      </th>
-            //                   ))}
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={3}>Хэвтсэн хоног</th>
-            //                   <th colSpan={4}>1</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={3}>Мэс засал хийлгэсний дараах өдөр</th>
-            //                   <th colSpan={4}>1</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={3}>Цаг минут</th>
-            //                   <th colSpan={2}>1</th>
-            //                   <th colSpan={2}>2</th>
-            //                </tr>
-            //                <tr>
-            //                   <th
-            //                      style={{
-            //                         width: 60,
-            //                         fontSize: 8,
-            //                         color: 'red',
-            //                         textAlign: 'center'
-            //                      }}
-            //                   >
-            //                      Пульс (P)
-            //                   </th>
-            //                   <th
-            //                      style={{
-            //                         width: 70,
-            //                         fontSize: 8,
-            //                         color: 'blue',
-            //                         textAlign: 'center'
-            //                      }}
-            //                   >
-            //                      Амьсгал (R)
-            //                   </th>
-            //                   <th
-            //                      style={{
-            //                         width: 80,
-            //                         fontSize: 8,
-            //                         color: 'black',
-            //                         textAlign: 'center'
-            //                      }}
-            //                   >
-            //                      Халуун (T&#176; C)
-            //                   </th>
-            //                   <th colSpan={2}>1</th>
-            //                   <th colSpan={2}>2</th>
-            //                </tr>
-            //             </thead>
-            //             <tbody>
-            //                {Array.from({ length: 12 }, (item, index) => (
-            //                   <>
-            //                      <tr key={index}>
-            //                         <td rowSpan={5}>
-            //                            <span
-            //                               style={{
-            //                                  display: 'flex',
-            //                                  fontSize: 8,
-            //                                  color: 'red',
-            //                                  justifyContent: 'center',
-            //                                  paddingTop: 45
-            //                               }}
-            //                            >
-            //                               {pulse - index * 10}
-            //                            </span>
-            //                         </td>
-            //                         <td rowSpan={5}>
-            //                            <span
-            //                               style={{
-            //                                  display: 'flex',
-            //                                  fontSize: 8,
-            //                                  color: 'blue',
-            //                                  justifyContent: 'center',
-            //                                  paddingTop: 45
-            //                               }}
-            //                            >
-            //                               {breat - index * 5}
-            //                            </span>
-            //                         </td>
-            //                         <td rowSpan={5}>
-            //                            <span
-            //                               style={{
-            //                                  display: 'flex',
-            //                                  fontSize: 8,
-            //                                  color: 'black',
-            //                                  justifyContent: 'center',
-            //                                  paddingTop: 45
-            //                               }}
-            //                            >
-            //                               {temp - index * 0.5}
-            //                            </span>
-            //                         </td>
-            //                         <td>
-            //                            <span style={{ color: 'black' }}>1222</span>
-            //                         </td>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1222</span>
-            //                         </td>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1222</span>
-            //                         </td>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1222</span>
-            //                         </td>
-            //                      </tr>
-            //                      <tr>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1</span>
-            //                         </td>
-            //                         <td></td>
-            //                         <td></td>
-            //                         <td></td>
-            //                      </tr>
-            //                      <tr>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1</span>
-            //                         </td>
-            //                         <td></td>
-            //                         <td></td>
-            //                         <td></td>
-            //                      </tr>
-            //                      <tr>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1</span>
-            //                         </td>
-            //                         <td></td>
-            //                         <td></td>
-            //                         <td></td>
-            //                      </tr>
-            //                      <tr>
-            //                         <td>
-            //                            <span style={{ color: 'white' }}>1</span>
-            //                         </td>
-            //                         <td></td>
-            //                         <td></td>
-            //                         <td></td>
-            //                      </tr>
-            //                   </>
-            //                ))}
-            //                <tr></tr>
-            //             </tbody>
-            //             <thead>
-            //                <tr>
-            //                   <th colSpan={3}>Цусны даралт</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={3}>Хоол №</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={3}>Биеийн жин</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={2} rowSpan={2}>
-            //                      Ялгаруулалтын давтамж /хэдэн удаа/
-            //                   </th>
-            //                   <th>Өтгөн</th>
-            //                </tr>
-            //                <tr>
-            //                   <th>Шээс</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={2}></th>
-            //                   <th>Өглөөний ээлж</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={2}>Сувилагчийн гарын</th>
-            //                   <th>Өдрийн ээлж</th>
-            //                </tr>
-            //                <tr>
-            //                   <th colSpan={2}></th>
-            //                   <th>Оройн ээлж</th>
-            //                </tr>
-            //             </thead>
-            //          </table>
-            //          {/* <canvas
-            //       className="absolute border-none p-0"
-            //       style={{
-            //          marginTop: 99.2
-            //       }}
-            //       ref={vsCanvas}
-            //       width={100}
-            //       height={100}
-            //    ></canvas> */}
-            //          {/* <EarlyWarningPrint /> */}
-            //       </div>
-            //    </div>
-            // </div>
          ))}
       </>
    );

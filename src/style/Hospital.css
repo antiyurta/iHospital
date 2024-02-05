@@ -1,6 +1,12 @@
 .body {
    margin: 24px 16px;
 }
+.text-rtl {
+   writing-mode: tb !important;
+}
+.text-tb {
+   writing-mode: horizontal-tb !important;
+}
 
 /* .ant-col .ant-form-item-label {
     align-self: center !important;

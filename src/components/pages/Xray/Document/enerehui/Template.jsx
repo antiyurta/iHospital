@@ -59,7 +59,7 @@ const Template = (props) => {
          <p className="text-center text-base font-bold">{capitalizeFirstLetter(serviceName)}</p>
          {children}
          <div className="border-1 border-black"></div>
-         <p className="font-bold text-[10px] text-black">
+         <p className="text-[10px] text-black">
             САНАМЖ: Хэт авиан оношилгооны дүгнэлт нь тухайн багажийн шинжлэх хүрээнд гарч буй бүтцийн өөрчлөлтүүд юм.
             Үүнийг эмчлэгч эмч эмнэлзүйн илрэл, явц, лабораторийн ба үйл ажиллагааны бусад шинжилгээнүүдтэй харьцуулан
             эмнэлзүйн онош, цаашид авах арга хэмжээндээ хэрхэн тусгахаа шийдвэрлэнэ.

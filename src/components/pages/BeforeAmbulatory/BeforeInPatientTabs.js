@@ -100,7 +100,7 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
             ))}
          </div>
          {Render}
-         <div className="flex flex-wrap">
+         {/* <div className="flex flex-wrap">
             <div className="w-full pb-1">
                <Card
                   bordered={false}
@@ -181,15 +181,15 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
                   >
                      Сувилгааны тэмдэглэл
                   </Button>
-                  {/* <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(9);
-                  }}
-                  className={pageId === 9 ? 'button-active m-1' : 'm-1'}
-               >
-                  Гарах үеийн эпикриз
-               </Button> */}
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(9);
+                     }}
+                     className={pageId === 9 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Гарах үеийн эпикриз
+                  </Button>
                   <Button
                      type="primary"
                      onClick={() => {
@@ -199,15 +199,15 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
                   >
                      Судасны гуурстай холбоотой тандалт
                   </Button>
-                  {/* <Button
-                  type="primary"
-                  onClick={() => {
-                     setPageId(11);
-                  }}
-                  className={pageId === 11 ? 'button-active m-1' : 'm-1'}
-               >
-                  Acting
-               </Button> */}
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        setPageId(11);
+                     }}
+                     className={pageId === 11 ? 'button-active m-1' : 'm-1'}
+                  >
+                     Acting
+                  </Button>
                   <Button
                      type="primary"
                      onClick={() => {
@@ -238,28 +238,14 @@ function BeforeInPatientTabs({ patientId, listId, patientData, departmentName, d
                   {pageId === 7 && (
                      <BodyConditionSheet PatientId={patientId} ListId={listId} PatientData={patientData} />
                   )}
-
-                  {/* {pageId === 9 && (
-                  <Epicriz
-                     PatientId={patientId}
-                     ListId={listId}
-                     PatientData={patientData}
-                  />
-               )} */}
-
-                  {/* {pageId === 11 && (
-                  <Acting
-                     PatientData={patientData}
-                     ListId={listId}
-                     DepartmentId={departmentId}
-                  />
-               )} */}
+                  {pageId === 9 && <Epicriz PatientId={patientId} ListId={listId} PatientData={patientData} />}
+                  {pageId === 11 && <Acting PatientData={patientData} ListId={listId} DepartmentId={departmentId} />}
                   {pageId === 12 && (
                      <NursingLog PatientData={patientData} ListId={listId} DepartmentId={departmentId} />
                   )}
                </Card>
             </div>
-         </div>
+         </div> */}
       </div>
    );
 }

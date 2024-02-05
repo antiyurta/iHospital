@@ -36,7 +36,8 @@ function Index(props) {
       documentType,
       onOk,
       isBackButton,
-      handleBackButton
+      handleBackButton,
+      extraData
    } = props;
    const { appointmentType, usageType, patientId, appointmentId, inpatientRequestId } =
       useSelector(selectCurrentEmrData);
@@ -160,7 +161,6 @@ function Index(props) {
                });
             }
          }
-         console.log(documentForm);
          await jwtInterceopter
             .post(documentForm.url, {
                position: documentForm.position,
@@ -172,7 +172,7 @@ function Index(props) {
                saveType: saveType || 'Save',
                documentId: documentValue,
                patientId: patientId,
-               data: values,
+               data: { ...extraData, ...values },
                type: 'FORM'
             })
             .then((res) => {
@@ -188,7 +188,6 @@ function Index(props) {
    };
 
    const onFinishFilter = async (filters) => {
-      console.log(filters);
       setIsLoading(true);
       const start = moment(filters.date[0]).set({ hour: 0, minute: 0, second: 0 });
       const end = moment(filters.date[1]).set({ hour: 23, minute: 59, second: 59 });
@@ -222,22 +221,21 @@ function Index(props) {
             // getDocumentOption();
          }
          getDocumentForm();
-         form.resetFields();
       }
    }, [documentValue]);
+   useEffect(() => {
+      if (isEdit) {
+         form.setFieldsValue(document.data);
+      }
+   }, [isEdit]);
    useEffect(() => {
       if (!isObjectEmpty(documentForm)) {
          getData();
          getCabinets();
-         form.resetFields();
-      }
-      if (isEdit) {
-         form.setFieldsValue(document.data);
       }
    }, [documentForm]);
 
    const checkProgress = (_current, all) => {
-      console.log('all', all);
       const length = Object.keys(all)?.length - 1;
       const selected = Object.entries(all)
          ?.map(([key, value]) => {
@@ -365,7 +363,7 @@ function Index(props) {
                      <ProgressBar className="mb-0 px-3" name="documentPercent">
                         <Input />
                      </ProgressBar>
-                     <div className="h-[500px] overflow-auto px-3">
+                     <div className="h-[500px] overflow-auto p-3">
                         <NewFormRender useForm={form} form={documentForm} formOptionIds={[]} isCheck={true} />
                      </div>
                   </Form>

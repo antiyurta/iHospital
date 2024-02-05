@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { i18Little, regularByDocumentValueIn } from '../../../../documentInjection';
 import EmrContext from '../../../../../features/EmrContext';
 import DocumentViewer from '../../../EMR/DocumentViewer';
+import DocumentFormServices from '../../../../../services/organization/document';
 
 const Attachment14 = ({ document }) => {
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -21,15 +22,14 @@ const Attachment14 = ({ document }) => {
    const [data, setData] = useState([]);
    const getData = async () => {
       setIsLoading(true);
-      await jwtInterceopter
-         .get('document-middleware', {
-            params: {
-               appointmentId: incomeEmrData.inpatientRequestId,
-               patientId: incomeEmrData.patientId,
-               documentId: 96,
-               usageType: incomeEmrData.usageType
-            }
-         })
+      await DocumentFormServices.get({
+         params: {
+            appointmentId: incomeEmrData.inpatientRequestId,
+            patientId: incomeEmrData.patientId,
+            documentId: 96,
+            usageType: incomeEmrData.usageType
+         }
+      })
          .then(({ data: { response } }) => {
             setData(response);
          })
@@ -58,13 +58,91 @@ const Attachment14 = ({ document }) => {
       {
          title: 'Өвдөлтийн байрлал',
          dataIndex: ['data', 'q3'],
-         render: (q3) => {
-            return Object.entries(q3)?.map(([key]) => <div>{i18Little[key]}</div>);
-         }
+         render: (q3) => (
+            <ul className="list-decimal list-inside">
+               {q3?.map((position, index) => (
+                  <li key={index}>{`${position.top?.toFixed(2)}-${position.left?.toFixed(2)}`}</li>
+               ))}
+            </ul>
+         )
       },
       {
          title: 'Өвдөлтийн хүч*',
          dataIndex: ['data', 'q4']
+      },
+      {
+         title: 'Ямар өвдөлт байгаа вэ?',
+         dataIndex: ['data', 'q3'],
+         render: (q3) => q3?.map((item) => item.desc)?.join(', ')
+      },
+      {
+         title: 'Өвдөлтийн давтамж',
+         children: [
+            {
+               title: 'Босч явах үед',
+               dataIndex: ['data', 'q5'],
+               render: (q5) => {
+                  if (q5 === 'q5-1') return 'Тийм';
+                  else if (q5 === 'q5-2') return 'Үгүй';
+                  return;
+               }
+            },
+            {
+               title: 'Дандаа',
+               dataIndex: ['data', 'q6'],
+               render: (q5) => {
+                  if (q5 === 'q6-1') return 'Тийм';
+                  else if (q5 === 'q6-2') return 'Үгүй';
+                  return;
+               }
+            },
+            {
+               title: 'Өвдөөд унтаж чадахгүй'
+            }
+         ]
+      },
+      {
+         title: 'Өвдөлт, үйл ажиллагааны байршлаар',
+         children: [
+            {
+               title: 'Хооллоход'
+            },
+            {
+               title: 'Ялгаруулалтын үед'
+            },
+            {
+               title: 'Сууж/босоход'
+            },
+            {
+               title: 'Бусад хөдөлгөөн хийхэд'
+            }
+         ]
+      },
+      {
+         title: 'Эмийн бус аргууд',
+         children: [
+            {
+               title: 'Халуун жин'
+            },
+            {
+               title: 'Хүйтэн жин'
+            },
+            {
+               title: 'Зүү'
+            },
+            {
+               title: 'Дасгал'
+            },
+            {
+               title: 'Массаж'
+            },
+            {
+               title: 'Физик эмчилгээ'
+            },
+            {
+               title: 'Бусад'
+            }
+         ]
       },
       {
          title: '',
@@ -118,6 +196,7 @@ const Attachment14 = ({ document }) => {
                   </div>
                   <Table
                      rowKey="_id"
+                     bordered
                      loading={{
                         spinning: isLoading,
                         tip: 'Уншиж байна'

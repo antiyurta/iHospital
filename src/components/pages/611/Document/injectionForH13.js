@@ -44,7 +44,7 @@ export const calcTotal = (data) => {
             eveningTotal += value.evening;
          });
          item['oMorningTotal'] = morningTotal;
-         item['oAternoonTotal'] = afternoonTotal;
+         item['oAfternoonTotal'] = afternoonTotal;
          item['oEveningTotal'] = eveningTotal;
       });
    });

@@ -3,29 +3,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
-import jwtInterceopter from '../../../../jwtInterceopter';
 import { formatNameForDoc } from '../../../../comman';
-import {
-   Chart as ChartJS,
-   Tooltip,
-   Legend,
-   CategoryScale,
-   LinearScale,
-   PointElement,
-   BarElement,
-   Title
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import dayjs from 'dayjs';
-import { ArrowRightOutlined, PlusCircleOutlined, PrinterOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { regularByDocumentValueIn } from '../../../../documentInjection';
 import EmrContext from '../../../../../features/EmrContext';
 import DocumentViewer from '../../../EMR/DocumentViewer';
-
+import dayjs from 'dayjs';
 import DocumentsFormServices from '../../../../../services/organization/document';
 
 const Attachment13 = ({ document }) => {
-   ChartJS.register(CategoryScale, LinearScale, PointElement, BarElement, Title, Tooltip, Legend);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const { setDocumentView, isViewDocument } = useContext(EmrContext);
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -141,7 +127,7 @@ const Attachment13 = ({ document }) => {
          title: ' ',
          children: [
             {
-               title: 'Бусад',
+               title: 'Судсаар',
                dataIndex: ['data', 'q5'],
                render: (text, row) => {
                   if (row.data?.q1 === 'q1-1') {
@@ -151,8 +137,33 @@ const Attachment13 = ({ document }) => {
                }
             },
             {
-               title: 'Бөөлжүүлэх',
+               title: 'Гуурсаар',
                dataIndex: ['data', 'q5'],
+               render: (text, row) => {
+                  if (row.data?.q1 === 'q1-2') {
+                     return `${text} ml`;
+                  }
+                  return;
+               }
+            }
+         ]
+      },
+      {
+         title: ' ',
+         children: [
+            {
+               title: 'Бусад',
+               dataIndex: ['data', 'q6'],
+               render: (text, row) => {
+                  if (row.data?.q1 === 'q1-1') {
+                     return `${text} ml`;
+                  }
+                  return;
+               }
+            },
+            {
+               title: 'Бөөлжүүлэх',
+               dataIndex: ['data', 'q6'],
                render: (text, row) => {
                   if (row.data?.q1 === 'q1-2') {
                      return `${text} ml`;

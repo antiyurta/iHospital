@@ -29,6 +29,15 @@ const Index = (props) => {
       });
       return root;
    };
+   const lastIndex = () => {
+      var max = 0;
+      items?.map((item) => {
+         if (item.index > max) {
+            max = item.index;
+         }
+      });
+      return max + 1;
+   };
    const tree = useMemo(() => {
       if (items) {
          if (type === documentFormType.Form || type === documentFormType.Xray) {
@@ -46,30 +55,52 @@ const Index = (props) => {
    }, [items]);
 
    const addQuestion = (parentIndex) => {
-      const clone = [...items];
-      clone.push({
-         isHead: true,
-         index: clone.length + 1,
-         parentIndex: parentIndex,
-         type: '',
-         keyWord: '',
-         question: '',
-         isNumber: false,
-         isOther: false
-      });
-      setItems(clone);
+      setItems(
+         items.concat([
+            {
+               isHead: true,
+               index: lastIndex(),
+               parentIndex: parentIndex,
+               type: '',
+               keyWord: '',
+               question: '',
+               isNumber: false,
+               isOther: false
+            }
+         ])
+      );
+   };
+
+   const addNewLineMiddle = (item) => {
+      const { parentIndex, index } = item;
+      const currentIndex = items.findIndex((item) => item.index === index);
+      const clone = [].concat(items);
+      const first = clone.slice(0, currentIndex + 1);
+      const second = clone.slice(currentIndex + 1);
+      setItems(
+         [].concat(
+            first,
+            [
+               {
+                  isHead: true,
+                  index: lastIndex(),
+                  parentIndex: parentIndex,
+                  type: '',
+                  keyWord: '',
+                  question: '',
+                  isNumber: false,
+                  isOther: false
+               }
+            ],
+            second
+         )
+      );
    };
 
    const addAnswer = (parentIndex) => {
-      const clone = [...items];
-      clone.push({
-         isHead: false,
-         index: clone.length + 1,
-         parentIndex: parentIndex,
-         keyWord: '',
-         question: ''
-      });
-      setItems(clone);
+      setItems(
+         items.concat([{ isHead: false, index: lastIndex(), parentIndex: parentIndex, keyWord: '', question: '' }])
+      );
    };
 
    const removeAny = (indx) => {
@@ -131,6 +162,7 @@ const Index = (props) => {
                   key={item.index}
                   item={item}
                   handleClick={addAnswer}
+                  handleClickMiddle={addNewLineMiddle}
                   handleClickTitle={addQuestion}
                   handleRemove={removeAny}
                   handleChange={(values) => {
@@ -171,6 +203,7 @@ const Index = (props) => {
                   key={item.index}
                   item={item}
                   handleClick={addAnswer}
+                  handleClickMiddle={addNewLineMiddle}
                   handleClickTitle={addQuestion}
                   handleRemove={removeAny}
                   handleChange={(values) => {

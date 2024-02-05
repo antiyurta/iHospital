@@ -105,6 +105,8 @@ import CT1_2H14 from './CT_1_2H14';
 //
 import EMT201_4_2 from '../EMT/EMT201_4_2';
 //
+import A539H3 from './A539_H3';
+//
 
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 
@@ -595,6 +597,11 @@ const options = [
       value: 96,
       label: 'CT-1,2 Хавсралт 14',
       docName: 'Өвдөлтийг хянах хуудас'
+   },
+   {
+      value: 97,
+      label: 'A539 Хавсралт 3',
+      docName: 'Судасны гуурстай холбоотой тандалт'
    }
 ];
 
@@ -832,6 +839,8 @@ export function ReturnById({ type, id, appointmentId, data, hospitalName, doctor
       return <CT1End type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    } else if (id === 96) {
       return <CT1_2H14 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   } else if (id === 97) {
+      return <A539H3 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
    }
 }
 

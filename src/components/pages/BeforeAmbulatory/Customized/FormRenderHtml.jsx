@@ -58,7 +58,6 @@ const FormRenderHtml = (props) => {
          }
          return;
       } else if (item.type === 'radio' || item.type === 'checkbox') {
-         console.log(item);
          var other;
          if (item.isOther) {
             other = (
@@ -70,7 +69,8 @@ const FormRenderHtml = (props) => {
                />
             );
          }
-         const selectedAnswer = item.options.find((option) => option.keyWord === answer)?.question;
+         const selectedAnswer = item?.options?.find((option) => option.keyWord === answer)?.question;
+         console.log('selectedAnswer', selectedAnswer);
          if (item.type === 'checkbox') {
             const dd = item.options?.filter((option) => answer?.includes(option.keyWord));
             const ched = dd.map((d, index) => (
@@ -106,6 +106,7 @@ const FormRenderHtml = (props) => {
             </p>
          );
       } else if (item.type === 'datepicker') {
+         console.log(item);
          return (
             <p>
                <span className="pr-1">{item.question}</span>
@@ -131,6 +132,7 @@ const FormRenderHtml = (props) => {
    };
 
    const testData = useMemo(() => {
+      console.log('tree', convertTree(documentForm));
       return convertTree(documentForm);
    }, [documentForm]);
 

@@ -62,16 +62,16 @@ const DocumentViewer = () => {
             <div
                className="col-span-4 overflow-auto"
                style={{
-                  maxHeight: 800
+                  maxHeight: 800,
+                  background: 'gainsboro',
+                  padding: 10
                }}
             >
-               <div className="w-[21cm] m-auto">
-                  <div ref={currentRef}>
-                     {documentType === 'one' ? <Body document={selectedDocument} /> : null}
-                     {documentType === 'many' ? (
-                        <Each of={selectedDocument} render={(document) => <Body document={document} />} />
-                     ) : null}
-                  </div>
+               <div ref={currentRef}>
+                  {documentType === 'one' ? <Body document={selectedDocument} /> : null}
+                  {documentType === 'many' ? (
+                     <Each of={selectedDocument} render={(document) => <Body document={document} />} />
+                  ) : null}
                </div>
             </div>
             <div className="col-span-1 bg-white rounded-xl flex flex-col gap-2 p-2">

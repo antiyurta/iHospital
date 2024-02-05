@@ -3,7 +3,7 @@ import { Button, Checkbox, Input, Popconfirm, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 const Question = (props) => {
-   const { item, handleClick, handleClickTitle, handleRemove, handleChange } = props;
+   const { item, handleClick, handleClickMiddle, handleClickTitle, handleRemove, handleChange } = props;
    const [type, setType] = useState(item.type);
    const [keyWord, setKeyWord] = useState(item.keyWord);
    const [question, setQuestion] = useState(item.question);
@@ -160,10 +160,23 @@ const Question = (props) => {
                }}
             />
          </div>
+         <Button onClick={() => handleClickMiddle(item)}>Яг доор нэмэх</Button>
          {type === 'radio' || type === 'table' || type === 'checkbox' ? (
-            <Button onClick={() => handleClick(item.index)} icon={<PlusOutlined />} />
+            <Button
+               onClick={() => {
+                  handleClick(item.index);
+               }}
+               icon={<PlusOutlined />}
+            />
          ) : null}
-         {type === 'title' ? <Button onClick={() => handleClickTitle(item.index)} icon={<PlusOutlined />} /> : null}
+         {type === 'title' ? (
+            <Button
+               onClick={() => {
+                  handleClickTitle(item.index);
+               }}
+               icon={<PlusOutlined />}
+            />
+         ) : null}
          <Popconfirm
             title="Асуулт устгах?"
             description="Та устгахдаа итгэлтэй байна уу доторх бүр агууллага устана?"

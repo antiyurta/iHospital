@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import { Button, Modal, Table } from 'antd';
-import jwtInterceopter from '../../../../jwtInterceopter';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
 import {
    Chart as ChartJS,
@@ -34,14 +33,42 @@ import {
    totalCalculator
 } from '../../../../injection';
 import { formatNameForDoc } from '../../../../comman';
-import { PlusCircleOutlined, PrinterOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { regularByDocumentValueIn } from '../../../../documentInjection';
+import EmrContext from '../../../../../features/EmrContext';
+import DocumentViewer from '../../../EMR/DocumentViewer';
+import DocumentsFormServices from '../../../../../services/organization/document';
 const Attachment2 = ({ document }) => {
    ChartJS.register(CategoryScale, LinearScale, PointElement, BarElement, Title, Tooltip, Legend);
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   const { setDocumentView, isViewDocument } = useContext(EmrContext);
+   const [editMode, setEditMode] = useState(false);
+   const [selectedData, setSelectedData] = useState({});
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const [data, setData] = useState([]);
-   console.log('ENRM', incomeEmrData);
+   const getData = async () => {
+      setIsLoading(true);
+      await DocumentsFormServices.get({
+         params: {
+            appointmentId: incomeEmrData.inpatientRequestId,
+            patientId: incomeEmrData.patientId,
+            documentId: 87,
+            usageType: incomeEmrData.usageType
+         }
+      })
+         .then(({ data: { response } }) => {
+            setData(response);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
+   };
+   const deleteData = async (id) => {
+      await DocumentsFormServices.deleteDocument(id).then(() => {
+         getData();
+      });
+   };
    const columns = [
       {
          title: 'Огноо',
@@ -140,158 +167,188 @@ const Attachment2 = ({ document }) => {
          render: (text) => {
             return formatNameForDoc(text.lastName, text.firstName);
          }
+      },
+      {
+         title: '',
+         render: (_, row) => (
+            <div className="flex flex-row gap-2">
+               <Button
+                  onClick={() => {
+                     setEditMode(true);
+                     setIsOpenModal(true);
+                     setSelectedData(row);
+                  }}
+               >
+                  edit
+               </Button>
+               <Button
+                  onClick={() => {
+                     deleteData(row._id);
+                  }}
+               >
+                  delete
+               </Button>
+            </div>
+         )
       }
    ];
-   const getData = async () => {
-      setIsLoading(true);
-      await jwtInterceopter
-         .get('document-middleware', {
-            params: {
-               appointmentId: incomeEmrData.appointmentId,
-               patientId: incomeEmrData.patientId,
-               documentId: 87,
-               usageType: incomeEmrData.usageType
-            }
-         })
-         .then(({ data: { response } }) => {
-            setData(response);
-         })
-         .finally(() => {
-            setIsLoading(false);
-         });
-   };
    useEffect(() => {
       getData();
    }, []);
 
    return (
       <>
-         <div className="attachment-12">
-            <div className="list">
-               <div className="head">
-                  <p>Түүх</p>
-                  <div className="flex flex-row gap-2">
-                     <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => setIsOpenModal(true)}>
-                        Нэмэх
-                     </Button>
-                     <Button icon={<PrinterOutlined />}>Хэвлэх</Button>
+         {isViewDocument ? (
+            <DocumentViewer />
+         ) : (
+            <div className="attachment-12">
+               <div className="list">
+                  <div className="head">
+                     <p>Түүх</p>
+                     <div className="flex flex-row gap-2">
+                        <Button
+                           type="primary"
+                           icon={<PlusCircleOutlined />}
+                           onClick={() => {
+                              setEditMode(false);
+                              setIsOpenModal(true);
+                           }}
+                        >
+                           Нэмэх
+                        </Button>
+                        <Button
+                           icon={<ArrowRightOutlined />}
+                           onClick={() => {
+                              const documents = regularByDocumentValueIn(data);
+                              setDocumentView(true, documents, 'many');
+                           }}
+                        >
+                           Дэлгэрэнгүй
+                        </Button>
+                     </div>
+                  </div>
+                  <Table
+                     rowKey={'_id'}
+                     loading={{
+                        spinning: isLoading,
+                        tip: 'Уншиж байна'
+                     }}
+                     scroll={{
+                        x: 500
+                     }}
+                     columns={columns}
+                     dataSource={data}
+                     pagination={false}
+                  />
+               </div>
+               <div className="graph">
+                  <div className="line">
+                     <Bar
+                        options={{
+                           responsive: true,
+                           maintainAspectRatio: false,
+                           plugins: {
+                              legend: {
+                                 display: true,
+                                 position: 'bottom'
+                              },
+                              title: {
+                                 display: true,
+                                 position: 'top',
+                                 text: 'VS - ын диаграмм',
+                                 color: 'black'
+                              }
+                           }
+                        }}
+                        data={{
+                           labels: data?.map((item) => dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')),
+                           datasets: [
+                              {
+                                 label: 'Амьсгал',
+                                 data: data?.slice(-7)?.map((item) => item.data?.respiratoryRate),
+                                 borderColor: ['#2596be'],
+                                 backgroundColor: '#2596be',
+                                 borderRadius: 15
+                              },
+                              {
+                                 label: 'SPO2',
+                                 data: data?.slice(-7)?.map((item) => item.data?.spO2),
+                                 borderColor: ['#21130d'],
+                                 backgroundColor: '#21130d',
+                                 borderRadius: 15
+                              },
+                              {
+                                 label: 'Пульс',
+                                 data: data?.slice(-7)?.map((item) => item.data?.pulse),
+                                 borderColor: ['#ff0000'],
+                                 backgroundColor: '#ff0000',
+                                 borderRadius: 15
+                              }
+                           ]
+                        }}
+                     />
+                  </div>
+                  <div className="line">
+                     <Bar
+                        options={{
+                           responsive: true,
+                           maintainAspectRatio: false,
+                           plugins: {
+                              legend: {
+                                 display: true,
+                                 position: 'bottom'
+                              },
+                              title: {
+                                 display: true,
+                                 position: 'top',
+                                 text: 'Даралтын диаграмм',
+                                 color: 'black'
+                              }
+                           }
+                        }}
+                        data={{
+                           labels: data?.map((item) => dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')),
+                           datasets: [
+                              {
+                                 label: 'Дээд даралт',
+                                 data: data?.slice(-7)?.map((item) => item.data?.highPressureRight),
+                                 borderColor: ['#c51ceb'],
+                                 backgroundColor: '#c51ceb',
+                                 borderRadius: 15
+                              },
+                              {
+                                 label: 'Доод даралт',
+                                 data: data?.slice(-7)?.map((item) => item.data?.lowPressureRight),
+                                 borderColor: ['#2596be'],
+                                 backgroundColor: '#2596be',
+                                 borderRadius: 15
+                              },
+                              {
+                                 label: 'Халуун',
+                                 data: data?.slice(-7)?.map((item) => item.data?.temp),
+                                 borderColor: ['#000000'],
+                                 backgroundColor: '#000000',
+                                 borderRadius: 15
+                              }
+                           ]
+                        }}
+                     />
                   </div>
                </div>
-               <Table
-                  rowKey={'_id'}
-                  loading={{
-                     spinning: isLoading,
-                     tip: 'Уншиж байна'
-                  }}
-                  scroll={{
-                     x: 500
-                  }}
-                  columns={columns}
-                  dataSource={data}
-                  pagination={false}
-               />
             </div>
-            <div className="graph">
-               <div className="line">
-                  <Bar
-                     options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                           legend: {
-                              display: true,
-                              position: 'bottom'
-                           },
-                           title: {
-                              display: true,
-                              position: 'top',
-                              text: 'VS - ын диаграмм',
-                              color: 'black'
-                           }
-                        }
-                     }}
-                     data={{
-                        labels: data?.map((item) => dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')),
-                        datasets: [
-                           {
-                              label: 'Амьсгал',
-                              data: data?.slice(-7)?.map((item) => item.data?.respiratoryRate),
-                              borderColor: ['#2596be'],
-                              backgroundColor: '#2596be',
-                              borderRadius: 15
-                           },
-                           {
-                              label: 'SPO2',
-                              data: data?.slice(-7)?.map((item) => item.data?.spO2),
-                              borderColor: ['#21130d'],
-                              backgroundColor: '#21130d',
-                              borderRadius: 15
-                           },
-                           {
-                              label: 'Пульс',
-                              data: data?.slice(-7)?.map((item) => item.data?.pulse),
-                              borderColor: ['#ff0000'],
-                              backgroundColor: '#ff0000',
-                              borderRadius: 15
-                           }
-                        ]
-                     }}
-                  />
-               </div>
-               <div className="line">
-                  <Bar
-                     options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                           legend: {
-                              display: true,
-                              position: 'bottom'
-                           },
-                           title: {
-                              display: true,
-                              position: 'top',
-                              text: 'Даралтын диаграмм',
-                              color: 'black'
-                           }
-                        }
-                     }}
-                     data={{
-                        labels: data?.map((item) => dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')),
-                        datasets: [
-                           {
-                              label: 'Дээд даралт',
-                              data: data?.slice(-7)?.map((item) => item.data?.highPressureRight),
-                              borderColor: ['#c51ceb'],
-                              backgroundColor: '#c51ceb',
-                              borderRadius: 15
-                           },
-                           {
-                              label: 'Доод даралт',
-                              data: data?.slice(-7)?.map((item) => item.data?.lowPressureRight),
-                              borderColor: ['#2596be'],
-                              backgroundColor: '#2596be',
-                              borderRadius: 15
-                           },
-                           {
-                              label: 'Халуун',
-                              data: data?.slice(-7)?.map((item) => item.data?.temp),
-                              borderColor: ['#000000'],
-                              backgroundColor: '#000000',
-                              borderRadius: 15
-                           }
-                        ]
-                     }}
-                  />
-               </div>
-            </div>
-         </div>
-         <Modal title="Маягт бөглөх" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null}>
+         )}
+         <Modal
+            title="Маягт бөглөх"
+            open={isOpenModal}
+            onCancel={() => setIsOpenModal(false)}
+            footer={null}
+            destroyOnClose
+         >
             <Customized
-               propsUsageType={incomeEmrData.usageType}
-               isEdit={false}
-               editId={null}
-               document={document}
+               propsUsageType={'IN'}
+               isEdit={editMode}
+               editId={editMode ? selectedData._id : null}
+               document={editMode ? selectedData : document}
                documentValue={87}
                documentType={0}
                onOk={(state) => {

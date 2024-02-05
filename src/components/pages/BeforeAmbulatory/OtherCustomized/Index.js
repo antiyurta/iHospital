@@ -6,7 +6,8 @@ import moment from 'moment';
 
 const { Option } = Select;
 
-import CT1and2Index from './ct1,2/index';
+import { CT1and2Index } from './ct1,2/index';
+import { A539Index } from './A539/index';
 
 function Index({ document }) {
    // yaralta duudlaga
@@ -239,13 +240,14 @@ function Index({ document }) {
    //       </div>
    //    );
    // }
-   console.log(document);
    if (document.value === 87 || document.value === 91) {
       return <CT1and2Index document={document} />;
    } else if (document.value === 90) {
       return <CT1and2Index document={document} />;
    } else if (document.value === 96) {
       return <CT1and2Index document={document} />;
+   } else if (document.value === 97) {
+      return <A539Index document={document} />;
    }
    return <div>...</div>;
 }

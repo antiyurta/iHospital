@@ -749,7 +749,7 @@ table .formTable tr > td {
 }
 
 .bcp2 thead > tr > th {
-   padding: 0px !important;
+   padding: 1px !important;
    font-weight: 400 !important;
    font-size: 10px !important;
    vertical-align: middle !important;
