@@ -29,7 +29,7 @@ function EbarimtPrint(props) {
       content: () => printRef.current
    });
    return (
-      <div className="pt-6 font-sans">
+      <div className="pt-6 font-times">
          <div ref={printRef} className="mx-auto" style={{ width: '80mm' }}>
             <div>
                <div className="flow-root">

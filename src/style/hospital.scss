@@ -276,11 +276,38 @@
    }
 }
 
+.section {
+   display: flex;
+   flex-direction: row;
+   gap: 8px;
+   align-items: center;
+   svg {
+      min-height: 16px;
+      min-width: 16px;
+   }
+   > p {
+      white-space: nowrap;
+      padding: 4px 0px;
+      color: #86909c;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      &:hover {
+         cursor: pointer;
+      }
+   }
+}
+.section.active {
+   border-bottom: 2px solid #2d8cff;
+   p {
+      color: #2d8cff;
+   }
+}
 .ambo-issuse-order {
    height: 640px;
    border-radius: 8px;
    background-color: white;
-   margin: 8px;
    padding: 8px;
    display: flex;
    flex-direction: column;
@@ -295,34 +322,7 @@
          width: calc(100% - 16px);
          height: 26px;
          padding: 0px 26px;
-         .section {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-            align-items: center;
-            svg {
-               min-height: 16px;
-               min-width: 16px;
-            }
-            > p {
-               white-space: nowrap;
-               padding: 4px 0px;
-               color: #86909c;
-               font-size: 14px;
-               font-style: normal;
-               font-weight: 500;
-               line-height: normal;
-               &:hover {
-                  cursor: pointer;
-               }
-            }
-         }
-         .section.active {
-            border-bottom: 2px solid #2d8cff;
-            p {
-               color: #2d8cff;
-            }
-         }
+
          > .box-next,
          .box-prev {
             img {

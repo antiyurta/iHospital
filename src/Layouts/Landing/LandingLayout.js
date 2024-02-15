@@ -1,8 +1,7 @@
-import React, { Fragment, Suspense, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import FullScreenLoader from '../../components/FullScreenLoader';
 import AuthContext from '../../features/AuthContext';
 const LandingLayout = () => {
    const navigate = useNavigate();
@@ -16,7 +15,6 @@ const LandingLayout = () => {
       window.scrollTo(0, 0);
    }, [pathname]);
    useEffect(() => {
-      console.log(pathname);
       if (pathname != '/privacy') {
          navigate('/login');
       }

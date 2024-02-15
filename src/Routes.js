@@ -88,7 +88,7 @@ const BeforeAmbulatoryListEnr = React.lazy(() => import('./components/pages/Befo
 //Оношилгооны өмнөх жагсаалт
 const BeforeXrayRequest = React.lazy(() => import('./components/pages/Xray/BeforeXrayRequest'));
 //ornii manegment
-const MainBed = React.lazy(() => import('./components/pages/Bed/MainBed'));
+const MainBed = React.lazy(() => import('./components/pages/Bed/Index'));
 // lobarotory
 const RequestAnalys = React.lazy(() => import('./components/pages/Laboratory/RequestAnalys'));
 // hynah sambar

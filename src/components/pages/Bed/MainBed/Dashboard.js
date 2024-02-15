@@ -1,66 +1,24 @@
-import { Button, Card, Form, Input, Progress, Spin } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { Get } from '../../../comman';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { ReloadOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Table } from 'react-bootstrap';
-import { Bar, Pie, getElementAtEvent } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, Title } from 'chart.js';
-const { Search } = Input;
+import { Card } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserAddOutlined } from '@ant-design/icons';
+import OrganizationBedServices from '../../../../services/organization/bed';
+import BedManagementContext from '../../../../features/BedContext';
+
 function Dashboard() {
-   ChartJS.register(ChartDataLabels, ArcElement, Tooltip, CategoryScale, LinearScale, BarElement, Title, Legend);
-   const PieRef = useRef();
-   const token = useSelector(selectCurrentToken);
-   const [structures, setStructures] = useState([]);
-   const [meta, setMeta] = useState({});
-   const [refreshLoading, setRefreshLoading] = useState(false);
-   //
+   const { setActiveKey, setBedStatus } = useContext(BedManagementContext);
    const [emptyBeds, setEmptyBeds] = useState([]); //Сул өрөө
    const [usedBeds, setUsedBeds] = useState([]); //Дүүрсэн өрөө
    const [repairBeds, setRepairBeds] = useState([]); //Засвартай өрөө
-   //
-   const getStructures = async () => {
-      setRefreshLoading(true);
-      const conf = {
-         headers: {},
-         params: {
-            type: 2
-         }
-      };
-      const response = await Get('organization/structure/rooms', token, conf);
-      console.log(response);
-      const filteredData = [];
-      response?.data?.map((item) => {
-         if (item.rooms?.length > 0) {
-            filteredData.push(item);
-         }
-      });
-      setStructures(filteredData);
-      setRefreshLoading(false);
-   };
+
    const getAllBed = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('organization/bed', token, conf);
-      response.data &&
-         response.data.map((el) => {
-            if (el.status === 3) {
-               setEmptyBeds((emptyBeds) => [...emptyBeds, el]);
-            } else if (el.status === 0) {
-               setUsedBeds((usedBeds) => [...usedBeds, el]);
-            } else if (el.status === 2) {
-               setRepairBeds((repairBeds) => [...repairBeds, el]);
-            }
-         });
+      await OrganizationBedServices.get().then(({ data: { response } }) => {
+         setUsedBeds(response?.data?.filter((bed) => bed.status === 0));
+         setRepairBeds(response?.data?.filter((bed) => bed.status === 2));
+         setEmptyBeds(response?.data?.filter((bed) => bed.status === 3));
+      });
    };
    useEffect(() => {
-      // getStructures();
       getAllBed();
-      console.log('sadsadsa');
    }, []);
    return (
       <>
@@ -71,9 +29,8 @@ function Dashboard() {
                   className="rounded-xl cursor-pointer"
                   bodyStyle={styles.cardBodyStyle}
                   onClick={() => {
-                     props.setSelectedFn('rooms');
-                     props.setStatus('3'); //Сул өрөө
-                     navigate(`/bed_management/rooms`);
+                     setActiveKey('4');
+                     setBedStatus(3);
                   }}
                >
                   <div style={{ width: '70%' }}>
@@ -91,9 +48,8 @@ function Dashboard() {
                   className="rounded-xl cursor-pointer"
                   bodyStyle={styles.cardBodyStyle}
                   onClick={() => {
-                     props.setSelectedFn('rooms');
-                     props.setStatus('2'); //Засвартай өрөө
-                     navigate(`/bed_management/rooms`);
+                     setActiveKey('4');
+                     setBedStatus(2);
                   }}
                >
                   <div style={{ width: '70%' }}>
@@ -111,9 +67,8 @@ function Dashboard() {
                   className="rounded-xl cursor-pointer"
                   bodyStyle={styles.cardBodyStyle}
                   onClick={() => {
-                     props.setSelectedFn('rooms');
-                     props.setStatus('0'); //Дүүрсэн өрөө
-                     navigate(`/bed_management/rooms`);
+                     setActiveKey('4');
+                     setBedStatus(0);
                   }}
                >
                   <div style={{ width: '70%' }}>

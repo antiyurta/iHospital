@@ -66,7 +66,6 @@ const DocumentHistory = () => {
          return await getInpatientRequest(key, index, value);
       });
       const items = await Promise.all(promises);
-      console.log(items);
       setDocumentsIn(items);
    };
 

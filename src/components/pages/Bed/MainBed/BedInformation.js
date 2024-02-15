@@ -1,199 +1,317 @@
-import React, { useState, useEffect } from 'react';
-import { Segmented, Col, Row, Card, Input, Tag, Modal, Divider, Collapse, Button, notification, Select } from 'antd';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import {
+   Segmented,
+   Col,
+   Row,
+   Card,
+   Input,
+   Tag,
+   Modal,
+   Divider,
+   Collapse,
+   Button,
+   notification,
+   Select,
+   Spin,
+   Form
+} from 'antd';
 import {
    AppstoreFilled,
    BorderOutlined,
    LineOutlined,
    SearchOutlined,
+   SwapOutlined,
    ToolOutlined,
    UnorderedListOutlined
 } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, numberToCurrency, Patch } from '../../../comman';
-import Spinner from 'react-bootstrap/Spinner';
+import { numberToCurrency, openNofi } from '../../../comman';
 import orderType from '../orderType.js';
 import roomType from '../roomType.js';
-import { useLocation } from 'react-router-dom';
+//
+import femaleImg from '../../../../assets/bed/female.png';
+import manImg from '../../../../assets/bed/male.png';
+import otherImg from '../../../../assets/bed/empty_room.png';
+//
+import BedManagementContext from '../../../../features/BedContext';
+import OrganizationStructureServices from '../../../../services/organization/structure';
+import OrganizationRoomServices from '../../../../services/organization/room';
+import InpatientRequestServices from '../../../../services/service/inpatient';
+import { useNavigate } from 'react-router-dom';
 
-const BedInformation = (props) => {
-   /// amara ehlew
-   const [filter, setFilter] = useState(0);
-   /// amara ehlew
-   const token = useSelector(selectCurrentToken);
-   const [searchValue, setSearchValue] = useState('');
+const { Panel } = Collapse;
+
+const statusList = [
+   { id: 0, label: 'Дүүрсэн' },
+   { id: 1, label: 'Цэвэрлэх' },
+   { id: 2, label: 'Засвартай' },
+   { id: 3, label: 'Сул' }
+];
+
+const BedInformation = () => {
+   const { bedStatus, setBedStatus } = useContext(BedManagementContext);
+   const navigate = useNavigate();
+   const [isLoading, setIsLoading] = useState(false);
+   const [isLoadingModal, setIsLoadingModal] = useState(false);
+   const [rooms, setRooms] = useState([]); // all oroo
+   const [selectedRoom, setSelectedRoom] = useState(''); //Сонгогдсон Өрөө
+   const [departments, setDepartments] = useState([]); // all deps
+   const [selectedDepId, setSelectedDepId] = useState(null); // songogdson depId
+   const [searchValue, setSearchValue] = useState(''); // oro toot haih utga
    const [selectedBed, setSelectedBed] = useState(''); //Сонгогдсон ор
-   const [selectedRoomBeds, setSelectedRoomBeds] = useState(''); //Сонгогдсон өрөөний орнууд
-   const [rooms, setRooms] = useState('');
+   const [transferRooms, setTransferRooms] = useState([]); // shiljuuleh ued oroonuud
+   const [transferBeds, setTransferBeds] = useState([]); // shiljuuleh ued ornuud
    const [isModalOpen, setIsModalOpen] = useState(false);
-   const [roomWithStatus, setRoomWithStatus] = useState({});
-   const [department, setDepartment] = useState(''); //Тасаг
-   const [genderSearchValue, setGenderSearchValue] = useState('all');
    const [orderedPatientList, setOrderedPatientList] = useState([]); //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт
-   const [data, setData] = useState({});
    const [patientInfoOfBed, setPatientInfoOfBed] = useState(''); //Оронд хэвтэж буй өвчтөний мэдээлэл
    const [isTransfer, setIsTransfer] = useState(false);
-   const [beds, setBeds] = useState([]); //ор
-   const [selectedDep, setSelectedDep] = useState(''); //Сонгогдсон Тасаг
-   const [selectedRoom, setSelectedRoom] = useState(''); //Сонгогдсон Өрөө
-   const [selectedNewBed, setSelectedNewBed] = useState(''); //Сонгогдсон Ор
-   const [roomsOfDef, setRoomsOfDef] = useState('');
-   const config = {
-      headers: {},
-      params: {}
-   };
-
-   const statusList = [
-      { id: 0, label: 'Дүүрсэн' },
-      { id: 1, label: 'Цэвэрлэх' },
-      { id: 2, label: 'Засвартай' },
-      { id: 3, label: 'Сул' }
-   ];
-   const { Panel } = Collapse;
-
-   const showModal = () => {
-      setIsModalOpen(true);
-   };
-   const handleCancel = () => {
-      setIsModalOpen(false);
-   };
-   const selectBed = (data) => {
-      if (data.id === selectedBed.id) {
-         setSelectedBed(''); //Орны мэдээлэл state -д хадгалах
-      } else {
-         setSelectedBed(data);
-         data.status === 0 && getPatientInformationOfBed(data);
-      }
-   };
 
    //Орон дээр хэвтэж буй өвчтөний мэдээлэл
-   const getPatientInformationOfBed = async (bed_data) => {
-      const response = await Get(`service/inpatient-request/bedPatient/${bed_data.id}`, token, config);
-      // console.log("xxxxxxxxxxxxxx ====>", response);
-      if (response) {
-         setPatientInfoOfBed(response);
-      } else {
-         setPatientInfoOfBed('');
-      }
-      // console.log("response get Ordered Patient ====>", response);
+   const getPatientInformationOfBed = async () => {
+      setIsLoadingModal(true);
+      await InpatientRequestServices.getBedPatient(selectedBed.id)
+         .then(({ data: { response } }) => {
+            setPatientInfoOfBed(response);
+         })
+         .catch(() => {
+            setPatientInfoOfBed(null);
+         })
+         .finally(() => {
+            setIsLoadingModal(false);
+         });
    };
    //Эмнэлэгт хэвтэхээр захиалга өгсөн өвчтөний жагсаалт авах
    const getOrderedPatient = async () => {
       setOrderedPatientList([]);
-      config.params.process = '0,1'; //Хэвтэх захиалгатай = 0, Хэвтэх зөвшөөрөлтэй өвтөн = 1
-      const response = await Get('service/inpatient-request', token, config);
-      if (response.data.length !== 0) {
+      await InpatientRequestServices.getInpatient({
+         params: {
+            process: '0,1'
+         }
+      }).then(({ data: { response } }) => {
          setOrderedPatientList(response.data);
-      }
+      });
    };
 
    //Өвчтөнг орноос гаргах
    const outPatientBed = async (inpatient_request_id) => {
-      data.isOut = true;
-      data.process = 2;
-      data.bedId = selectedBed.id;
-      const response = await Patch(`service/inpatient-request/bed/${inpatient_request_id}`, token, config, data);
-      if (response === 200) {
-         getOrderedPatient();
-         setSelectedRoomBeds(selectedRoomBeds);
-         setSelectedBed('');
-         selectRoom(selectedBed.roomId);
-      }
+      setIsLoadingModal(true);
+      await InpatientRequestServices.patch(inpatient_request_id, {
+         isOut: true,
+         process: 2,
+         bedId: selectedBed.id
+      })
+         .then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'Өвчтөнг амжиллтай шилжүүллээ');
+               setIsModalOpen(false);
+               getRooms(null);
+               setIsTransfer(false);
+               setSelectedBed({});
+               setPatientInfoOfBed(null);
+               getOrderedPatient();
+            }
+         })
+         .finally(() => {
+            setIsLoadingModal(false);
+         });
    };
    const getDepartment = async () => {
-      config.params.type = 2;
-      config.params.startDate = null;
-      config.params.endDate = null;
-      const response = await Get('organization/structure', token, config);
-      if (response.data.length != 0) {
-         response.data.map((el, index) => {
-            setDepartment((department) => [...department, { label: el.name, value: el.id }]);
-         });
-      }
+      await OrganizationStructureServices.get({
+         params: {
+            type: 2
+         }
+      }).then(({ data: { response } }) => {
+         setDepartments(response.data);
+      });
    };
-   const getRooms = async () => {
-      var emptyBeds = [];
-      var usedBeds = [];
-      var repairBeds = [];
-      config.params.isInpatient = true;
-      const response = await Get('organization/room', token, config);
-      if (response.data.length != 0) {
-         response.data.map((el) => {
-            if (el.beds.length > 0) {
-               el.beds.map((bed) => {
-                  if (bed.status === 3) {
-                     !emptyBeds.includes(bed.roomId) && emptyBeds.push(bed.roomId);
-                     setRoomWithStatus((prevState) => ({
-                        ...prevState,
-                        empty: emptyBeds
-                     }));
-                  } else if (bed.status === 2) {
-                     !repairBeds.includes(bed.roomId) && repairBeds.push(bed.roomId);
-                     setRoomWithStatus((prevState) => ({
-                        ...prevState,
-                        repair: repairBeds
-                     }));
-                  } else if (bed.status === 0) {
-                     !usedBeds.includes(bed.roomId) && usedBeds.push(bed.roomId);
-                     setRoomWithStatus((prevState) => ({
-                        ...prevState,
-                        used: usedBeds
-                     }));
-                  }
-               });
+   const getRoomsForTransfer = async (depId) => {
+      setIsLoadingModal(true);
+      await OrganizationRoomServices.getByPageFilter({
+         params: {
+            structureId: depId,
+            status: 3,
+            isInpatient: true
+         }
+      })
+         .then(({ data: { response } }) => {
+            setTransferRooms(response.data);
+         })
+         .finally(() => {
+            setIsLoadingModal(false);
+         });
+   };
+   const getRooms = async (depId) => {
+      setIsLoading(true);
+      await OrganizationRoomServices.getByPageFilter({
+         params: {
+            structureId: depId,
+            status: bedStatus === 1 ? null : bedStatus,
+            isInpatient: true
+         }
+      })
+         .then(({ data: { response } }) => {
+            setRooms(response.data);
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
+   };
+
+   //Оронд хуваарилж хэвтүүлэх
+   const setPatientBed = async (inpatient_request_id, patient) => {
+      if (selectedBed === '' || selectedBed.status !== 3) {
+         notification['warning']({
+            message: `Өвчтөн хэвтүүлэх ор сонгоно уу.`,
+            description: ``,
+            duration: 2
+         });
+      } else {
+         navigate('/main/bed_management/create', {
+            state: {
+               isRead: true,
+               patient: patient,
+               roomInfo: {
+                  depId: selectedRoom.structureId,
+                  floorId: selectedRoom.floorId,
+                  roomId: selectedBed.roomId,
+                  bedId: selectedBed.id
+               },
+               inpatientRequestId: inpatient_request_id
             }
          });
-         setRooms(response.data);
       }
    };
 
-   const getRoomsOfDep = async () => {
-      config.params.structureId = selectedDep;
-      const response = await Get('organization/room', token, config);
-      // console.log("response InformationBed", response);
-      if (response.data.length != 0) {
-         response.data.map((el) => {
-            setRoomsOfDef((roomsOfDef) => [...roomsOfDef, { label: el.roomNumber, value: el.id, beds: el.beds }]);
-         });
-      }
-   };
+   const filteredRooms = useMemo(() => {
+      return rooms?.filter((room) => room.roomNumber.includes(searchValue));
+   }, [searchValue, rooms]);
+
    useEffect(() => {
-      getRooms();
+      if (selectedBed.status === 0) {
+         getPatientInformationOfBed();
+      } else if (selectedBed.status === 3) {
+         getOrderedPatient();
+      }
+   }, [selectedBed]);
+
+   useEffect(() => {
+      getRooms(null);
+      setSelectedDepId(null);
+      setSearchValue('');
+   }, [bedStatus]);
+   useEffect(() => {
+      getDepartment();
    }, []);
 
-   {
-      rooms !== '' ? (
-         <Row gutter={[16, 16]} className="mt-4">
-            {rooms
-               ?.filter((obj) => obj.roomNumber?.includes(searchValue))
-               ?.filter((obj) => {
-                  if (props.status === 'all') {
-                     return obj;
-                  } else if (props.status === '3') {
-                     return roomWithStatus['empty']?.includes(obj.id);
-                  } else if (props.status === '2') {
-                     return roomWithStatus['repair']?.includes(obj.id);
-                  } else if (props.status === '0') {
-                     return roomWithStatus['used']?.includes(obj.id);
-                  }
-               })
-               .map((el, index) => {
-                  return (
-                     <Col className="gutter-row" span={8} key={index}>
+   const transferPatient = async (values) => {
+      // Өвчтөн шилжүүлэх
+      setIsLoadingModal(true);
+      await InpatientRequestServices.bedSwitch(patientInfoOfBed.id, {
+         ...values,
+         process: 2,
+         bedOutId: selectedBed.id
+      })
+         .then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'Өвчтөнг амжиллтай шилжүүллээ');
+               setIsModalOpen(false);
+               getRooms(null);
+               setIsTransfer(false);
+               setSelectedBed({});
+               setPatientInfoOfBed(null);
+            }
+         })
+         .finally(() => {
+            setIsLoadingModal(false);
+         });
+   };
+   return (
+      <>
+         <Spin spinning={isLoading}>
+            <div className="flex flex-col gap-2">
+               <div className="bg-white rounded-xl w-full p-2">
+                  <div className="flex justify-between gap-2">
+                     <Segmented
+                        className="department-bed-segment self-center"
+                        size="small"
+                        options={[
+                           {
+                              label: 'Бүгд',
+                              value: 1,
+                              icon: <UnorderedListOutlined />
+                           },
+                           {
+                              label: 'Сул өрөө',
+                              value: 3,
+                              icon: <BorderOutlined />
+                           },
+                           {
+                              label: 'Засвартай өрөө',
+                              value: 2,
+                              icon: <ToolOutlined />
+                           },
+                           {
+                              label: 'Дүүрсэн өрөө',
+                              value: 0,
+                              icon: <AppstoreFilled />
+                           }
+                        ]}
+                        value={bedStatus}
+                        onChange={setBedStatus}
+                     />
+                     <Select
+                        allowClear
+                        style={{
+                           width: 400
+                        }}
+                        value={selectedDepId}
+                        onChange={(depId) => {
+                           setSelectedDepId(depId);
+                           getRooms(depId);
+                           setSearchValue('');
+                        }}
+                        options={departments?.map((department) => ({
+                           label: department.name,
+                           value: department.id
+                        }))}
+                        placeholder="Тасаг сонгох"
+                     />
+                     <Input
+                        style={{
+                           width: 400
+                        }}
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        placeholder="Өрөө хайх"
+                        prefix={<SearchOutlined />}
+                     />
+                  </div>
+               </div>
+               <div style={{ height: 780, overflow: 'auto' }}>
+                  <div className="grid grid-cols-3 gap-2">
+                     {filteredRooms?.map((room, index) => (
                         <Card
+                           key={index}
                            style={styles.cardStyle}
                            className="rounded-xl cursor-pointer"
                            bodyStyle={styles.cardBodyStyle}
-                           onClick={() => selectRoom(el.id)}
+                           onClick={() => {
+                              setPatientInfoOfBed(null);
+                              setSelectedRoom(room);
+                              setIsModalOpen(true);
+                           }}
                         >
                            <div style={{ width: '15%' }}>
-                              {el.genderType === 'WOMAN' ? (
-                                 <img src={require('../../../../assets/bed/female.png')} style={styles.iconStyle} />
-                              ) : el.genderType === 'MAN' ? (
-                                 <img src={require('../../../../assets/bed/male.png')} style={styles.iconStyle} />
-                              ) : (
-                                 <img src={require('../../../../assets/bed/empty_room.png')} style={styles.iconStyle} />
-                              )}
+                              <img
+                                 src={
+                                    room.genderType === 'WOMAN'
+                                       ? femaleImg
+                                       : room.genderType === 'MAN'
+                                       ? manImg
+                                       : otherImg
+                                 }
+                                 style={styles.iconStyle}
+                                 alt="iconStyle"
+                              />
                            </div>
                            <div style={{ width: '85%' }}>
                               <div style={styles.cardRowContainer} className="mb-6">
@@ -206,25 +324,25 @@ const BedInformation = (props) => {
                                           }
                                        }}
                                     >
-                                       {el.structures?.name}
+                                       {room.structure?.name}
                                     </p>
                                     <p style={styles.total}>
-                                       {el.roomNumber} -{' '}
+                                       {room.roomNumber} -{' '}
                                        {roomType.map((item, index) => {
-                                          if (item.value === el.roomType) {
+                                          if (item.value === room.roomType) {
                                              return <span key={index}>{item.label}</span>;
                                           }
                                        })}
+                                       - {numberToCurrency(room.price)}
                                     </p>
                                  </div>
-                                 <p style={styles.total}>Орны тоо: {el.beds.length}</p>
+                                 <p style={styles.total}>Орны тоо: {room.beds.length}</p>
                               </div>
                               <div style={styles.statusRowContainer}>
-                                 йыбйы
                                  <Tag color="success" className="rounded-xl">
                                     Сул:{' '}
                                     <span>
-                                       {el.beds?.reduce((sum, val) => {
+                                       {room.beds?.reduce((sum, val) => {
                                           if (val.status === 3) {
                                              sum += 1;
                                           }
@@ -235,7 +353,7 @@ const BedInformation = (props) => {
                                  <Tag color="error" className="rounded-xl">
                                     Засвартай:{' '}
                                     <span>
-                                       {el.beds?.reduce((sum, val) => {
+                                       {room.beds?.reduce((sum, val) => {
                                           if (val.status === 2) {
                                              sum += 1;
                                           }
@@ -246,7 +364,7 @@ const BedInformation = (props) => {
                                  <Tag color="warning" className="rounded-xl">
                                     Дүүрсэн:{' '}
                                     <span>
-                                       {el.beds?.reduce((sum, val) => {
+                                       {room.beds?.reduce((sum, val) => {
                                           if (val.status === 0) {
                                              sum += 1;
                                           }
@@ -257,265 +375,27 @@ const BedInformation = (props) => {
                               </div>
                            </div>
                         </Card>
-                     </Col>
-                  );
-               })}
-         </Row>
-      ) : (
-         <div className="text-center">
-            <Spinner animation="grow" style={{ color: '#1890ff' }} />
-         </div>
-      );
-   }
-
-   //Оронд хуваарилж хэвтүүлэх
-   const setPatientBed = async (inpatient_request_id) => {
-      if (selectedBed === '' || selectedBed.status !== 3) {
-         notification['warning']({
-            message: `Өвчтөн хэвтүүлэх ор сонгоно уу.`,
-            description: ``,
-            duration: 2
-         });
-      } else {
-         data.roomId = selectedBed.roomId;
-         data.bedId = selectedBed.id;
-         data.isOut = false;
-         data.process = 0;
-         const response = await Patch(`service/inpatient-request/bed/${inpatient_request_id}`, token, config, data);
-         if (response === 200) {
-            getOrderedPatient();
-            setSelectedRoomBeds(selectedRoomBeds);
-            setSelectedBed('');
-            selectRoom(selectedBed.roomId);
-         }
-         // console.log("response set PatientBed ====>", response);
-      }
-   };
-   const selectRoom = async (room_id) => {
-      const response = await Get(`organization/room/${room_id}`, token, config);
-      if (response) {
-         // console.log("response get Ordered Patient ====>", response);
-         setSelectedRoomBeds(response); //Өрөөний мэдээлэл state -д хадгалах
-      }
-   };
-
-   useEffect(() => {
-      department === '' && getDepartment();
-      if (selectedRoomBeds !== '') {
-         showModal(); //Өрөөний мэдээлэл SET хийгдсэний дараа MODAL дуудах
-         getOrderedPatient();
-      }
-   }, [selectedRoomBeds]);
-   useEffect(() => {
-      setRoomsOfDef([]);
-      setSelectedRoom('');
-      setSelectedNewBed('');
-      getRoomsOfDep();
-   }, [selectedDep]);
-   useEffect(() => {
-      setSelectedNewBed('');
-      roomsOfDef &&
-         roomsOfDef?.map((el) => {
-            if (el.value === selectedRoom) {
-               el.beds.map((el, bedIndex) => {
-                  setBeds((beds) => [...beds, { label: el.bedNumber, value: el.id }]);
-               });
-            }
-         });
-   }, [selectedRoom]);
-
-   const transferPatient = async (inpatient_request_id) => {
-      //Өвчтөн шилжүүлэх
-      data.departmentId = selectedDep;
-      data.roomId = selectedRoom;
-      data.bedOutId = selectedBed.id;
-      data.bedInId = selectedNewBed;
-      data.process = 2;
-      const response = await Patch(`service/inpatient-request/switch/${inpatient_request_id}`, token, config, data);
-      if (response === 200) {
-         getOrderedPatient();
-         setSelectedRoomBeds(selectedRoomBeds);
-         setSelectedBed('');
-         selectRoom(selectedBed.roomId);
-         setSelectedDep('');
-         setSelectedRoom('');
-         setSelectedNewBed('');
-         getRooms();
-      }
-   };
-   return (
-      <>
-         <div className="flow-root">
-            <div className="float-left">
-               <Segmented
-                  className="department-bed-segment"
-                  size="small"
-                  options={[
-                     {
-                        label: 'Бүгд',
-                        value: 0,
-                        icon: <UnorderedListOutlined />
-                     },
-                     {
-                        label: 'Сул өрөө',
-                        value: 1,
-                        icon: <BorderOutlined />
-                     },
-                     {
-                        label: 'Засвартай өрөө',
-                        value: 2,
-                        icon: <ToolOutlined />
-                     },
-                     {
-                        label: 'Дүүрсэн өрөө',
-                        value: 3,
-                        icon: <AppstoreFilled />
-                     }
-                  ]}
-                  value={filter}
-                  onChange={(e) => setFilter(e)}
-               />
-            </div>
-            <div className="float-right">
-               <Input
-                  style={{
-                     width: 400
-                  }}
-                  size="small"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  placeholder="Өрөө хайх"
-                  prefix={<SearchOutlined />}
-               />
-            </div>
-         </div>
-         <div className="p-6">
-            {rooms !== '' ? (
-               <Row gutter={[16, 16]} className="mt-4">
-                  {rooms
-                     ?.filter((obj) => obj.roomNumber?.includes(searchValue))
-                     ?.filter((obj) => {
-                        if (filter === 0) {
-                           return obj;
-                        } else if (filter === 1) {
-                           return roomWithStatus['empty']?.includes(obj.id);
-                        } else if (filter === 2) {
-                           return roomWithStatus['repair']?.includes(obj.id);
-                        } else if (filter === 3) {
-                           return roomWithStatus['used']?.includes(obj.id);
-                        }
-                     })
-                     .map((el, index) => {
-                        return (
-                           <Col className="gutter-row" span={8} key={index}>
-                              <Card
-                                 style={styles.cardStyle}
-                                 className="rounded-xl cursor-pointer"
-                                 bodyStyle={styles.cardBodyStyle}
-                                 onClick={() => selectRoom(el.id)}
-                              >
-                                 <div style={{ width: '15%' }}>
-                                    {el.genderType === 'WOMAN' ? (
-                                       <img
-                                          src={require('../../../../assets/bed/female.png')}
-                                          style={styles.iconStyle}
-                                       />
-                                    ) : el.genderType === 'MAN' ? (
-                                       <img src={require('../../../../assets/bed/male.png')} style={styles.iconStyle} />
-                                    ) : (
-                                       <img
-                                          src={require('../../../../assets/bed/empty_room.png')}
-                                          style={styles.iconStyle}
-                                       />
-                                    )}
-                                 </div>
-                                 <div style={{ width: '85%' }}>
-                                    <div style={styles.cardRowContainer} className="mb-6">
-                                       <div>
-                                          <p
-                                             style={{
-                                                ...styles.total,
-                                                ...{
-                                                   color: '#4a7fc1'
-                                                }
-                                             }}
-                                          >
-                                             {el.structures?.name}
-                                          </p>
-                                          <p style={styles.total}>
-                                             {el.roomNumber} -{' '}
-                                             {roomType.map((item, index) => {
-                                                if (item.value === el.roomType) {
-                                                   return <span key={index}>{item.label}</span>;
-                                                }
-                                             })}
-                                             - {numberToCurrency(el.price)}
-                                          </p>
-                                       </div>
-                                       <p style={styles.total}>Орны тоо: {el.beds.length}</p>
-                                    </div>
-                                    <div style={styles.statusRowContainer}>
-                                       <Tag color="success" className="rounded-xl">
-                                          Сул:{' '}
-                                          <span>
-                                             {el.beds?.reduce((sum, val) => {
-                                                if (val.status === 3) {
-                                                   sum += 1;
-                                                }
-                                                return sum;
-                                             }, 0)}
-                                          </span>
-                                       </Tag>
-                                       <Tag color="error" className="rounded-xl">
-                                          Засвартай:{' '}
-                                          <span>
-                                             {el.beds?.reduce((sum, val) => {
-                                                if (val.status === 2) {
-                                                   sum += 1;
-                                                }
-                                                return sum;
-                                             }, 0)}
-                                          </span>
-                                       </Tag>
-                                       <Tag color="warning" className="rounded-xl">
-                                          Дүүрсэн:{' '}
-                                          <span>
-                                             {el.beds?.reduce((sum, val) => {
-                                                if (val.status === 0) {
-                                                   sum += 1;
-                                                }
-                                                return sum;
-                                             }, 0)}
-                                          </span>
-                                       </Tag>
-                                    </div>
-                                 </div>
-                              </Card>
-                           </Col>
-                        );
-                     })}
-               </Row>
-            ) : (
-               <div className="text-center">
-                  <Spinner animation="grow" style={{ color: '#1890ff' }} />
-               </div>
-            )}
-
-            <Modal
-               title={
-                  <div className="grid">
-                     <span>Өрөөний мэдээлэл</span>
-                     <span className="text-xs">
-                        <b>Тасаг</b>: {props.data?.name} <LineOutlined /> <b>Өрөө:</b> {selectedRoomBeds?.roomNumber}{' '}
-                        <LineOutlined /> <b>Орны тоо:</b> {selectedRoomBeds?.beds?.length}
-                     </span>
+                     ))}
                   </div>
-               }
-               open={isModalOpen}
-               onCancel={handleCancel}
-               width={800}
-               footer={null}
-            >
+               </div>
+            </div>
+         </Spin>
+         <Modal
+            title={
+               <div className="grid">
+                  <span>Өрөөний мэдээлэл</span>
+                  <span className="text-xs">
+                     <b>Тасаг</b>: {selectedRoom?.structure?.name} <LineOutlined /> <b>Өрөө:</b>{' '}
+                     {selectedRoom?.roomNumber} <LineOutlined /> <b>Орны тоо:</b> {selectedRoom?.beds?.length}
+                  </span>
+               </div>
+            }
+            open={isModalOpen}
+            onCancel={() => setIsModalOpen(false)}
+            width={800}
+            footer={null}
+         >
+            <Spin spinning={isLoadingModal} tip="Уншиж байна...">
                <Row
                   gutter={{
                      xs: 8,
@@ -524,53 +404,50 @@ const BedInformation = (props) => {
                      lg: 32
                   }}
                >
-                  {selectedRoomBeds !== '' && selectedRoomBeds.beds !== '' ? (
+                  {selectedRoom?.beds?.length > 0 ? (
                      <>
-                        {selectedRoomBeds.beds.map((el, index) => {
-                           return (
-                              <Col className="gutter-row mb-4 text-center" span={6} key={index}>
-                                 <div
-                                    style={{
-                                       ...styles.bedContainer,
-                                       ...{
-                                          borderColor: selectedBed && selectedBed.id === el.id ? '#4a7fc1' : null
-                                       }
-                                    }}
-                                    onClick={() => selectBed(el)}
-                                 >
-                                    <img
-                                       src={
-                                          el.status === 0
-                                             ? require('../../../../assets/bed/hunte.png')
-                                             : el.status === 1
-                                             ? require('../../../../assets/bed/tsewerleh.png')
-                                             : el.status === 2
-                                             ? require('../../../../assets/bed/zaswartai.png')
-                                             : el.status === 3
-                                             ? require('../../../../assets/bed/sul.png')
-                                             : require('../../../../assets/bed/sul.png')
-                                       }
-                                       style={{ zIndex: 1, display: 'inline' }}
-                                       draggable="false"
-                                    />
-                                 </div>
-                                 <span style={styles.bedText}>
-                                    № {el.bedNumber} -{' '}
-                                    {statusList.map((i) => {
-                                       return i.id === el.status ? i.label : '';
-                                    })}
-                                 </span>
-                              </Col>
-                           );
-                        })}
+                        {selectedRoom?.beds?.map((bed, index) => (
+                           <Col className="gutter-row mb-4 text-center" span={6} key={index}>
+                              <div
+                                 style={{
+                                    ...styles.bedContainer,
+                                    ...{
+                                       borderColor: selectedBed?.id === bed.id ? '#4a7fc1' : null
+                                    }
+                                 }}
+                                 onClick={() => {
+                                    setIsTransfer(false);
+                                    setSelectedBed(bed);
+                                 }}
+                              >
+                                 <img
+                                    src={
+                                       bed.status === 0
+                                          ? require('../../../../assets/bed/hunte.png')
+                                          : bed.status === 1
+                                          ? require('../../../../assets/bed/tsewerleh.png')
+                                          : bed.status === 2
+                                          ? require('../../../../assets/bed/zaswartai.png')
+                                          : bed.status === 3
+                                          ? require('../../../../assets/bed/sul.png')
+                                          : require('../../../../assets/bed/sul.png')
+                                    }
+                                    style={{ zIndex: 1, display: 'inline' }}
+                                    draggable="false"
+                                 />
+                              </div>
+                              <span style={styles.bedText}>
+                                 № {bed.bedNumber} -{' '}
+                                 {statusList.map((i) => {
+                                    return i.id === bed.status ? i.label : '';
+                                 })}
+                              </span>
+                           </Col>
+                        ))}
                      </>
-                  ) : selectedRoomBeds.beds?.length === 0 ? (
+                  ) : (
                      <div className="text-center w-100">
                         <p>Бүртгэлтэй ор байхгүй байна.</p>
-                     </div>
-                  ) : (
-                     <div className="text-center">
-                        <Spinner animation="grow" style={{ color: '#1890ff' }} />
                      </div>
                   )}
                </Row>
@@ -633,7 +510,11 @@ const BedInformation = (props) => {
                              >
                                 <div>
                                    <div className="text-right">
-                                      <Button className="mr-3" onClick={() => setIsTransfer(!isTransfer)}>
+                                      <Button
+                                         className="mr-3"
+                                         icon={<SwapOutlined />}
+                                         onClick={() => setIsTransfer(!isTransfer)}
+                                      >
                                          Шилжүүлэх
                                       </Button>
                                       <Button
@@ -645,68 +526,72 @@ const BedInformation = (props) => {
                                       </Button>
                                    </div>
                                    {isTransfer ? (
-                                      <div className="border-solid border p-4 rounded-xl mt-2">
-                                         <Row>
-                                            <Col span={4}>Тасаг</Col>
-                                            <Col span={12}>
+                                      <Form layout="vertical" onFinish={transferPatient}>
+                                         <div className="border-solid grid grid-cols-3 gap-2 border p-4 rounded-xl mt-2">
+                                            <Form.Item
+                                               label="Тасаг"
+                                               name="departmentId"
+                                               rules={[
+                                                  {
+                                                     required: true,
+                                                     message: 'Заавал'
+                                                  }
+                                               ]}
+                                            >
                                                <Select
                                                   allowClear
-                                                  style={{
-                                                     width: 200
-                                                  }}
-                                                  onChange={handleChangeTransfer}
-                                                  value={selectedDep || undefined}
-                                                  options={department}
+                                                  onChange={getRoomsForTransfer}
+                                                  options={departments?.map((department) => ({
+                                                     label: department.name,
+                                                     value: department.id
+                                                  }))}
                                                   placeholder="Сонгох"
                                                />
-                                            </Col>
-                                         </Row>
-                                         <Row className="mt-2">
-                                            <Col span={4}>Өрөө</Col>
-                                            <Col span={12}>
+                                            </Form.Item>
+                                            <Form.Item
+                                               label="Өрөө"
+                                               name="roomId"
+                                               rules={[
+                                                  {
+                                                     required: true,
+                                                     message: 'Заавал'
+                                                  }
+                                               ]}
+                                            >
                                                <Select
-                                                  allowClear
-                                                  style={{
-                                                     width: 200
+                                                  onSelect={(roomId) => {
+                                                     setTransferBeds(
+                                                        transferRooms?.find((room) => room.id == roomId)?.beds
+                                                     );
                                                   }}
-                                                  onChange={handleChangeRoom}
-                                                  value={selectedRoom || undefined}
-                                                  options={roomsOfDef}
-                                                  placeholder="Сонгох"
+                                                  options={transferRooms?.map((room) => ({
+                                                     label: room.roomNumber,
+                                                     value: room.id
+                                                  }))}
                                                />
-                                            </Col>
-                                         </Row>
-                                         <Row className="mt-2">
-                                            <Col span={4}>Ор</Col>
-                                            <Col span={12}>
+                                            </Form.Item>
+                                            <Form.Item
+                                               label="Ор"
+                                               name="bedInId"
+                                               rules={[
+                                                  {
+                                                     required: true,
+                                                     message: 'Заавал'
+                                                  }
+                                               ]}
+                                            >
                                                <Select
-                                                  allowClear
-                                                  style={{
-                                                     width: 200
-                                                  }}
-                                                  onChange={handleChangeBed}
-                                                  value={selectedNewBed || undefined}
-                                                  options={beds}
-                                                  placeholder="Сонгох"
+                                                  options={transferBeds?.map((bed) => ({
+                                                     label: bed.bedNumber,
+                                                     value: bed.id
+                                                  }))}
                                                />
-                                            </Col>
-                                         </Row>
-                                         <Row className="mt-2">
-                                            <Col span={4}></Col>
-                                            <Col span={12}>
-                                               <Button
-                                                  style={{
-                                                     width: 200
-                                                  }}
-                                                  type="primary"
-                                                  className="custom-primary-btn"
-                                                  onClick={() => transferPatient(patientInfoOfBed.id)}
-                                               >
-                                                  Хадгалах
-                                               </Button>
-                                            </Col>
-                                         </Row>
-                                      </div>
+                                            </Form.Item>
+                                            <Button htmlType="submit" type="primary">
+                                               Хадгалах
+                                            </Button>
+                                         </div>
+                                      </Form>
                                    ) : null}
                                 </div>
                              </Panel>
@@ -758,7 +643,7 @@ const BedInformation = (props) => {
                                          <Button
                                             type="primary"
                                             className="custom-primary-btn"
-                                            onClick={() => setPatientBed(el.id)}
+                                            onClick={() => setPatientBed(el.id, el.patient)}
                                          >
                                             Хэвтүүлэх
                                          </Button>
@@ -769,8 +654,8 @@ const BedInformation = (props) => {
                           );
                        })}
                </Col>
-            </Modal>
-         </div>
+            </Spin>
+         </Modal>
       </>
    );
 };

@@ -21,7 +21,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const CreateStory = () => {
    const {
-      state: { patient, inpatientRequestId }
+      state: { patient, inpatientRequestId, roomInfo }
    } = useLocation();
    const [form] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
@@ -77,8 +77,8 @@ const CreateStory = () => {
    const onSelectDep = (id) => {
       setIsLoading(true);
       const rooms = departments.find((department) => department.id === id)?.rooms;
-      const floorIds = rooms.filter((room) => room.isInpatient)?.map((fRoom) => fRoom.floorId);
-      const unDupFloorIds = floorIds.filter((item, index) => floorIds.indexOf(item) === index);
+      const floorIds = rooms?.filter((room) => room.isInpatient)?.map((fRoom) => fRoom.floorId);
+      const unDupFloorIds = floorIds?.filter((item, index) => floorIds.indexOf(item) === index);
       setFloorIds(unDupFloorIds);
       setFloors([]);
       form.resetFields([
@@ -90,17 +90,20 @@ const CreateStory = () => {
       setRooms(rooms);
    };
    const onSelectFloor = (id) => {
-      const filteredRooms = rooms.filter((room) => room.floorId === id && room.isInpatient);
+      const filteredRooms = rooms?.filter((room) => room.floorId === id && room.isInpatient);
       setFilteredRooms(filteredRooms);
       form.resetFields([['roomInfo', 'roomId']]);
    };
-   const onSelectRoom = (id) => {
-      const beds = rooms.find((room) => room.id === id)?.beds;
+   const onSelectRoom = (id, incomeRooms) => {
+      if (incomeRooms) {
+         setFilteredRooms(incomeRooms);
+      }
+      const currentRooms = incomeRooms || rooms;
+      const beds = currentRooms.find((room) => room.id === id)?.beds;
       setBeds(beds?.filter((bed) => bed.isActive));
    };
    const onSelectDoctor = async (id) => {
       const doctor = doctors?.find((doctor) => doctor.id === id);
-      console.log(doctor);
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: doctor.appIds,
@@ -143,9 +146,23 @@ const CreateStory = () => {
          });
       });
    };
+
+   const setIncomeRoomInfo = () => {
+      const rooms = departments?.find((department) => department.id === roomInfo.depId)?.rooms;
+      const floorIds = rooms?.filter((room) => room.isInpatient)?.map((fRoom) => fRoom.floorId);
+      setFloorIds(floorIds);
+      onSelectRoom(roomInfo.roomId, rooms);
+      form.setFieldValue('roomInfo', roomInfo);
+   };
+
    useEffect(() => {
-      floorIds.length > 0 && getFloors();
+      floorIds?.length > 0 && getFloors();
    }, [floorIds]);
+   useEffect(() => {
+      if (roomInfo && Object.entries(roomInfo)?.length > 0 && departments?.length > 0) {
+         setIncomeRoomInfo();
+      }
+   }, [roomInfo, departments]);
    useEffect(() => {
       getDepartments();
    }, []);
@@ -181,7 +198,7 @@ const CreateStory = () => {
                      height: 'calc(100vh - 190px)'
                   }}
                >
-                  <Form form={form} layout="vertical" onFinish={(values) => console.log(values)}>
+                  <Form form={form} layout="vertical">
                      <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col gap-2">
                            <div className="bg-white p-2 rounded-lg flex flex-col gap-1">

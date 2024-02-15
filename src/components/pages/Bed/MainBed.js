@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
    AppstoreOutlined,
    FundViewOutlined,
@@ -12,8 +12,10 @@ import Dashboard from './MainBed/Dashboard';
 import Basic from './MainBed/Calender';
 import InpatientRequests from './MainBed/InpatientRequests';
 import BedInformation from './MainBed/BedInformation';
+import BedManagementContext from '../../../features/BedContext';
 
 const MainBed = () => {
+   const { activeKey, setActiveKey } = useContext(BedManagementContext);
    const menus = [
       {
          key: '1',
@@ -100,8 +102,8 @@ const MainBed = () => {
    ];
 
    return (
-      <div className="w-full bg-[#f5f6f7] p-3">
-         <Tabs type="card" destroyInactiveTabPane={true} items={menus} />
+      <div className="w-full h-full p-3 bg-[#f5f6f7]">
+         <Tabs type="card" activeKey={activeKey} onChange={setActiveKey} destroyInactiveTabPane={true} items={menus} />
       </div>
    );
 };

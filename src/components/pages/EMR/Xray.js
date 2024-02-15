@@ -131,7 +131,7 @@ function Xrays({ PatientId }) {
    const Rentgen = () => (
       <>
          <div className="flex flex-row gap-3">
-            <Spin wrapperClassName="h-[572px]" spinning={spinner}>
+            <Spin wrapperClassName="h-[440px] w-[200px]" spinning={spinner}>
                <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
                   <div className="p-3">
                      <DirectoryTree
@@ -143,8 +143,8 @@ function Xrays({ PatientId }) {
                   </div>
                </div>
             </Spin>
-            <div className="col-span-2">
-               <Spin wrapperClassName="h-[572px]" spinning={spinerInfo}>
+            <div className="w-full">
+               <Spin wrapperClassName="h-[440px]" spinning={spinerInfo}>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
                      <div className="p-2">
                         {Object.entries(appointment)?.length > 0 ? (

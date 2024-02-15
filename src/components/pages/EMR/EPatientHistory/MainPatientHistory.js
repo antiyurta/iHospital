@@ -7,22 +7,15 @@ import HistoryTab from './HistoryTab';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
 import jwtInterceopter from '../../../jwtInterceopter';
-
-import leftArrow from '../leftArrow.svg';
-import rightArrow from '../rightArrow.svg';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-//
 import EmrInspectionFormServices from '../../../../services/emr/inspectionForm';
 import DocumentFormServices from '../../../../services/organization/documentForm';
-//
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
 import { openNofi } from '../../../comman';
-//
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
+
 function MainPatientHistory({ handleClick }) {
    const {
       appointmentId,
@@ -310,86 +303,28 @@ function MainPatientHistory({ handleClick }) {
          }
       }
    }, [usageType]);
-   //
-   const SwiperButtonNext = ({ children }) => {
-      const swiper = useSwiper();
-      return (
-         <div className="box-next" onClick={() => swiper.slideNext()}>
-            {children}
-         </div>
-      );
-   };
-   const SwiperButtonPrev = ({ children }) => {
-      const swiper = useSwiper();
-      return (
-         <div className="box-prev" onClick={() => swiper.slidePrev()}>
-            {children}
-         </div>
-      );
-   };
-   //
    return (
       <>
          {usageType === 'OUT' ? (
             <>
                <div className="progress-note-header">
-                  <Swiper
-                     className="swiper-group"
-                     modules={[Navigation, Pagination, Scrollbar, A11y]}
-                     navigation
-                     spaceBetween={20}
-                     slidesPerView={1}
-                     breakpoints={{
-                        640: {
-                           slidesPerView: 2,
-                           spaceBetween: 10
-                        },
-                        768: {
-                           slidesPerView: 3,
-                           spaceBetween: 10
-                        },
-                        1024: {
-                           slidesPerView: 3,
-                           spaceBetween: 10
-                        },
-                        1366: {
-                           slidesPerView: 2.5,
-                           spaceBetween: 10
-                        },
-                        1441: {
-                           slidesPerView: 4,
-                           spaceBetween: 10
-                        },
-                        1562: {
-                           slidesPerView: 4,
-                           spaceBetween: 10
-                        },
-                        1797: {
-                           slidesPerView: 4,
-                           spaceBetween: 10
-                        },
-                        2560: {
-                           slidesPerView: 4,
-                           spaceBetween: 10
-                        }
+                  <Splide
+                     options={{
+                        pagination: false,
+                        arrows: false,
+                        autoWidth: true,
+                        autoHeight: true,
+                        gap: 10
                      }}
                   >
-                     <SwiperButtonPrev>
-                        <img src={leftArrow} alt="left" />
-                     </SwiperButtonPrev>
-                     <div className="content">
-                        {items?.map((item) => (
-                           <SwiperSlide key={item.key}>
-                              <div className={activeKey === item.key ? 'section active' : 'section'}>
-                                 <p onClick={() => setActiveKey(item.key)}>{item.label}</p>
-                              </div>
-                           </SwiperSlide>
-                        ))}
-                     </div>
-                     <SwiperButtonNext>
-                        <img src={rightArrow} alt="right" />
-                     </SwiperButtonNext>
-                  </Swiper>
+                     {items?.map((item) => (
+                        <SplideSlide key={item.key}>
+                           <div className={activeKey === item.key ? 'section active' : 'section'}>
+                              <p onClick={() => setActiveKey(item.key)}>{item.label}</p>
+                           </div>
+                        </SplideSlide>
+                     ))}
+                  </Splide>
                </div>
                {items?.find((item) => item.key === activeKey)?.children}
             </>

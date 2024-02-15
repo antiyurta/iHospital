@@ -95,7 +95,17 @@ function Assesments(props) {
    return (
       <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
          <div className="p-3">
-            <Table rowKey={'_id'} bordered loading={isLoading} columns={columns} dataSource={data} pagination={false} />
+            <Table
+               rowKey={'_id'}
+               bordered
+               loading={isLoading}
+               columns={columns}
+               dataSource={data}
+               pagination={false}
+               scroll={{
+                  x: 1000
+               }}
+            />
          </div>
       </div>
    );

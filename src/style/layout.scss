@@ -355,9 +355,6 @@ section.ant-layout {
          gap: 8px;
       }
       .emr-body {
-         width: 100%;
-         display: flex;
-         flex-wrap: wrap;
          background-color: #f5f6f7;
          .progress,
          .history {
@@ -439,7 +436,6 @@ section.ant-layout {
             flex-direction: column;
             gap: 8px;
             border-radius: 8px;
-            margin: 8px;
             padding: 8px;
             background-color: white;
             .head {
