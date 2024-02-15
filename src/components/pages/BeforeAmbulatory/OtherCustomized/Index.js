@@ -240,11 +240,13 @@ function Index({ document }) {
    //       </div>
    //    );
    // }
-   if (document.value === 87 || document.value === 91) {
-      return <CT1and2Index document={document} />;
-   } else if (document.value === 90) {
-      return <CT1and2Index document={document} />;
-   } else if (document.value === 96) {
+   if (
+      document.value === 87 ||
+      document.value === 91 ||
+      document.value === 89 ||
+      document.value === 90 ||
+      document.value === 96
+   ) {
       return <CT1and2Index document={document} />;
    } else if (document.value === 97) {
       return <A539Index document={document} />;

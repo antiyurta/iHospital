@@ -1,8 +1,8 @@
-import { Checkbox, DatePicker, Form, Input, InputNumber, Radio, Table, TimePicker } from 'antd';
+import { Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import NewFormTable from './NewFormTable';
 import TextArea from 'antd/lib/input/TextArea';
-import HumanBody from './human-body';
+import HumanParts from './human-parts';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
@@ -358,6 +358,46 @@ const NewFormRender = (props) => {
                </div>
             </div>
          );
+      } else if (item.type === 'humanhead') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <p className="font-bold pb-2">{item.question}</p>
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Form.List name={configNames(item.keyWord)}>
+                        {(fields, index) => (
+                           <div key={index}>
+                              {fields.map((field) => (
+                                 <div key={field.key} className="flex flex-row gap-1">
+                                    <Form.Item shouldUpdate name={[field.name, 'desc']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item shouldUpdate name={[field.name, 'top']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item shouldUpdate name={[field.name, 'left']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                 </div>
+                              ))}
+                           </div>
+                        )}
+                     </Form.List>
+                     <div>
+                        <HumanParts
+                           part="head"
+                           name={configNames(item.keyWord)}
+                           currentData={useForm.getFieldValue(configNames(item.keyWord))}
+                           handleClick={(data) => {
+                              useForm.setFieldValue(configNames(item.keyWord), data[`${configNames(item.keyWord)}`]);
+                           }}
+                        />
+                     </div>
+                  </div>
+               </div>
+            </div>
+         );
       } else if (item.type === 'humanbody') {
          return (
             <div key={item.index} className="document-form">
@@ -385,7 +425,8 @@ const NewFormRender = (props) => {
                         )}
                      </Form.List>
                      <div>
-                        <HumanBody
+                        <HumanParts
+                           part="body"
                            name={configNames(item.keyWord)}
                            currentData={useForm.getFieldValue(configNames(item.keyWord))}
                            handleClick={(data) => {
