@@ -1,15 +1,13 @@
-import { Button, Form } from 'antd';
+import { Button, Form, Input, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
-
-// components
-import NewModal from '../../Modal/Modal';
-import { NewInput, NewOption, NewSearch, NewSelect, NewTextArea } from '../../Input/Input';
+import { CloseOutlined, PlusCircleFilled, RedoOutlined } from '@ant-design/icons';
+import OrderForm from './OrderTable/OrderForm';
+import { NewColumn, NewTable } from '../../Table/Table';
 // servicesuud
 import RecentRecipeService from '../../../services/service/prescription';
 import DiagnoseService from '../../../services/reference/diagnose';
-import { NewColumn, NewTable } from '../../Table/Table';
-import { CloseOutlined, PlusCircleFilled, RedoOutlined } from '@ant-design/icons';
-import OrderForm from './OrderTable/OrderForm';
+
+const { TextArea, Search } = Input;
 
 function RecentRecipe() {
    const [form] = Form.useForm();
@@ -89,7 +87,7 @@ function RecentRecipe() {
                               name={[index, 'serviceName']}
                               editing={false}
                            >
-                              <NewInput />
+                              <Input />
                            </OrderForm>
                         );
                      }}
@@ -135,7 +133,7 @@ function RecentRecipe() {
             <RedoOutlined />
             Өмнөх жор
          </button>
-         <NewModal title="Өмнөх жор" open={isOpenModal} onCancel={() => setIsOpenModal(false)}>
+         <Modal title="Өмнөх жор" open={isOpenModal} onCancel={() => setIsOpenModal(false)}>
             <Form form={form} layout="vertical">
                <div className="flex flex-col gap-3">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
@@ -148,7 +146,7 @@ function RecentRecipe() {
                            >
                               Онош сонгох
                            </p>
-                           <NewSearch
+                           <Search
                               style={{
                                  backgroundColor: 'white',
                                  width: 300
@@ -183,7 +181,7 @@ function RecentRecipe() {
                         }
                      ]}
                   >
-                     <NewTextArea />
+                     <TextArea />
                   </Form.Item>
                   <Form.List name="prescriptions">
                      {(services, { remove }) => {
@@ -192,7 +190,7 @@ function RecentRecipe() {
                   </Form.List>
                </div>
             </Form>
-         </NewModal>
+         </Modal>
       </>
    );
 }

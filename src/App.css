@@ -716,7 +716,9 @@ table .formTable tr > td {
    text-align: center !important;
    color: black !important;
 }
-
+.bcp thead > tr > td > span {
+   font-size: 9px !important;
+}
 .bcp thead > tr > td {
    padding: 0px !important;
    font-weight: 400 !important;

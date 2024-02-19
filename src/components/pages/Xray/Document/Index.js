@@ -1,7 +1,3 @@
-import { useSelector } from 'react-redux';
-import { selectCurrentHospitalId } from '../../../../features/authReducer';
-import { useEffect } from 'react';
-
 // uni med
 import React from 'react';
 import * as universalMed from './universalMed/index';

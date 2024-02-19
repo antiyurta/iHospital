@@ -13,7 +13,6 @@ import { delNote } from '../../../features/noteReducer';
 import PmsPatientServices from '../../../services/pms/patient.api';
 import ServiceRequestService from '../../../services/serviceRequest';
 import PaymentService from '../../../services/payment/payment';
-import NewCard from '../../Card/Card';
 import DoctorNotes from './DoctorNotes';
 import EmrTimer from './EmrTimer';
 import OneWindow from './OneWindow';

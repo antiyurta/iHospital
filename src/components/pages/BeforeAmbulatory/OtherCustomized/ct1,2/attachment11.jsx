@@ -7,7 +7,7 @@ import { regularByDocumentValueIn } from '../../../../documentInjection';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
 import DocumentFormServices from '../../../../../services/organization/document';
 
-import { columns1 } from './injection11';
+import { columns1, columns2, columns3, columns4, columns5, columns6 } from './injection11';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import { useSelector } from 'react-redux';
 
@@ -124,14 +124,224 @@ const Attachment11 = ({ document }) => {
                               pagination={false}
                            />
                         </Panel>
-                        <Panel header="2. Хоол боловсруулалт"></Panel>
-                        <Panel header="3. Шээс ялгаруулалт"></Panel>
-                        <Panel header="4. Арьс"></Panel>
-                        <Panel header="5. Мэдрэл, сэтгэхүйн байдал"></Panel>
+                        <Panel header="2. Хоол боловсруулалт">
+                           <Table
+                              bordered
+                              rowKey="_id"
+                              loading={{
+                                 spinning: isLoading,
+                                 tip: 'Уншиж байна'
+                              }}
+                              scroll={{
+                                 x: 500
+                              }}
+                              columns={[
+                                 ...columns2,
+                                 ...[
+                                    {
+                                       title: '',
+                                       render: (_, row) => (
+                                          <>
+                                             <Button
+                                                onClick={() => {
+                                                   setEditMode(true);
+                                                   setIsOpenModal(true);
+                                                   setSelectedData(row);
+                                                }}
+                                             >
+                                                edit
+                                             </Button>
+                                             <Button
+                                                onClick={() => {
+                                                   deleteData(row._id);
+                                                }}
+                                             >
+                                                delete
+                                             </Button>
+                                          </>
+                                       )
+                                    }
+                                 ]
+                              ]}
+                              dataSource={data}
+                              pagination={false}
+                           />
+                        </Panel>
+                        <Panel header="3. Шээс ялгаруулалт">
+                           <Table
+                              bordered
+                              rowKey="_id"
+                              loading={{
+                                 spinning: isLoading,
+                                 tip: 'Уншиж байна'
+                              }}
+                              scroll={{
+                                 x: 500
+                              }}
+                              columns={[
+                                 ...columns3,
+                                 ...[
+                                    {
+                                       title: '',
+                                       render: (_, row) => (
+                                          <>
+                                             <Button
+                                                onClick={() => {
+                                                   setEditMode(true);
+                                                   setIsOpenModal(true);
+                                                   setSelectedData(row);
+                                                }}
+                                             >
+                                                edit
+                                             </Button>
+                                             <Button
+                                                onClick={() => {
+                                                   deleteData(row._id);
+                                                }}
+                                             >
+                                                delete
+                                             </Button>
+                                          </>
+                                       )
+                                    }
+                                 ]
+                              ]}
+                              dataSource={data}
+                              pagination={false}
+                           />
+                        </Panel>
+                        <Panel header="4. Арьс">
+                           <Table
+                              bordered
+                              rowKey="_id"
+                              loading={{
+                                 spinning: isLoading,
+                                 tip: 'Уншиж байна'
+                              }}
+                              scroll={{
+                                 x: 500
+                              }}
+                              columns={[
+                                 ...columns4,
+                                 ...[
+                                    {
+                                       title: '',
+                                       render: (_, row) => (
+                                          <>
+                                             <Button
+                                                onClick={() => {
+                                                   setEditMode(true);
+                                                   setIsOpenModal(true);
+                                                   setSelectedData(row);
+                                                }}
+                                             >
+                                                edit
+                                             </Button>
+                                             <Button
+                                                onClick={() => {
+                                                   deleteData(row._id);
+                                                }}
+                                             >
+                                                delete
+                                             </Button>
+                                          </>
+                                       )
+                                    }
+                                 ]
+                              ]}
+                              dataSource={data}
+                              pagination={false}
+                           />
+                        </Panel>
+                        <Panel header="5. Мэдрэл, сэтгэхүйн байдал">
+                           <Table
+                              bordered
+                              rowKey="_id"
+                              loading={{
+                                 spinning: isLoading,
+                                 tip: 'Уншиж байна'
+                              }}
+                              scroll={{
+                                 x: 500
+                              }}
+                              columns={[
+                                 ...columns5,
+                                 ...[
+                                    {
+                                       title: '',
+                                       render: (_, row) => (
+                                          <>
+                                             <Button
+                                                onClick={() => {
+                                                   setEditMode(true);
+                                                   setIsOpenModal(true);
+                                                   setSelectedData(row);
+                                                }}
+                                             >
+                                                edit
+                                             </Button>
+                                             <Button
+                                                onClick={() => {
+                                                   deleteData(row._id);
+                                                }}
+                                             >
+                                                delete
+                                             </Button>
+                                          </>
+                                       )
+                                    }
+                                 ]
+                              ]}
+                              dataSource={data}
+                              pagination={false}
+                           />
+                        </Panel>
                      </Collapse>
                      <p className="bg-white font-bold">ӨДӨР ТУТМЫН СУВИЛГАА</p>
                      <Collapse>
-                        <Panel header="6. ӨДӨР ТУТМЫН СУВИЛГАА"></Panel>
+                        <Panel header="6. ӨДӨР ТУТМЫН СУВИЛГАА">
+                           <Table
+                              bordered
+                              rowKey="_id"
+                              loading={{
+                                 spinning: isLoading,
+                                 tip: 'Уншиж байна'
+                              }}
+                              scroll={{
+                                 x: 500
+                              }}
+                              columns={[
+                                 ...columns6,
+                                 ...[
+                                    {
+                                       title: '',
+                                       render: (_, row) => (
+                                          <>
+                                             <Button
+                                                onClick={() => {
+                                                   setEditMode(true);
+                                                   setIsOpenModal(true);
+                                                   setSelectedData(row);
+                                                }}
+                                             >
+                                                edit
+                                             </Button>
+                                             <Button
+                                                onClick={() => {
+                                                   deleteData(row._id);
+                                                }}
+                                             >
+                                                delete
+                                             </Button>
+                                          </>
+                                       )
+                                    }
+                                 ]
+                              ]}
+                              dataSource={data}
+                              pagination={false}
+                           />
+                        </Panel>
                      </Collapse>
                   </div>
                </div>

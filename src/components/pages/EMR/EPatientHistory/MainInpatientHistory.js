@@ -4,12 +4,10 @@ import { useSelector } from 'react-redux';
 import { selectCurrentAppId, selectCurrentDepId } from '../../../../features/authReducer';
 import { openNofi } from '../../../comman';
 //
-import Anamnesis from './MainInpatient/Anamnesis';
-import ClinicalDiagnoeMain from './MainInpatient/ClinicalDiagnoseMain';
-import Epicrisis from './MainInpatient/Epicrisis';
 import SentService from '../Insurance/sent-service';
 //
 //services
+import DocumentsFormPatientService from '../../../../services/organization/document';
 import OrganizationDocumentRoleServices from '../../../../services/organization/documentRole';
 //
 import Customized from '../../BeforeAmbulatory/Customized/Index';
@@ -17,58 +15,24 @@ import Customized from '../../BeforeAmbulatory/Customized/Index';
 import ArrowIcon from '../../EMR/NewEmrSupport/document/arrow.svg';
 import DocumentDraft from './DocumentDraft';
 import EmrContext from '../../../../features/EmrContext';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
 
 const MonitorType = {
    List: 'list',
    Document: 'document'
 };
 
-function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serviceId }) {
+function MainInpatientHistory() {
    const AppIds = useSelector(selectCurrentAppId);
    const DepIds = useSelector(selectCurrentDepId);
+   const incomeEmrData = useSelector(selectCurrentEmrData);
    const { countOfDocument, countOfDraft, setDocumentCount } = useContext(EmrContext);
+   const [isLoading, setIsLoading] = useState(false);
    const [currentMonitor, setCurrentMonitor] = useState(MonitorType.List);
    const [selectedDocument, setSelectedDocument] = useState();
    const [documents, setDocuments] = useState([]);
    /** @description insurance connection start => */
    const [isInsuranceModal, setIsInsuranceModal] = useState(false);
-   const testItems = [
-      {
-         key: '1',
-         label: 'Эмчлүүлэгчийн аннамез',
-         children: <Anamnesis PatientId={patientId} InpatientRequestId={inpatientRequestId} />
-      },
-      { key: '2', label: 'Ерөнхий үзлэг', children: <div>Ерөнхий үзлэг</div> },
-      {
-         key: '3',
-         label: 'Эмчийн үзлэг',
-         children: <div>Ерөнхий үзлэг</div>
-      },
-      {
-         key: '4',
-         label: 'КЛИНИКИЙН УРЬДЧИЛСАН ОНОШ',
-         children: <div>Ерөнхий үзлэг</div>
-      },
-      {
-         key: '5',
-         label: 'КЛИНИКИЙН ОНОШИЙН ҮНДЭСЛЭЛ',
-         children: (
-            <ClinicalDiagnoeMain PatientId={patientId} InpatientRequestId={inpatientRequestId} ServiceId={serviceId} />
-         )
-      },
-      {
-         key: '6',
-         label: 'Үзлэгийн тэмдэглэл',
-         children: <div>Ерөнхий үзлэг</div>
-      },
-      {
-         key: '7',
-         label: 'Гарах үеийн эпекриз',
-         children: (
-            <Epicrisis PatientId={patientId} InpatientRequestId={inpatientRequestId} InsuranceServiceId={serviceId} />
-         )
-      }
-   ];
 
    const getDocuments = async () => {
       await OrganizationDocumentRoleServices.getByPageFilterShow({
@@ -94,6 +58,37 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
          }
       });
    };
+
+   const middleware = async (document) => {
+      setIsLoading(true);
+      await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
+         type: 'FORM',
+         usageType: 'IN',
+         saveType: 'Save'
+      }).then((response) => {
+         if (response.status === 200) {
+            setIsLoading(false);
+            const data = response.data?.response?.response;
+            const state = data.some((item) => item.documentId === document.value);
+            if (state) {
+               Modal.info({
+                  content: `Та ${document.docName} маягт бөглөсөн байна`
+               });
+            } else {
+               Modal.confirm({
+                  content: `Та ${document.docName} маягт бөглөх гэж байна итгэлттэй байна уу`,
+                  cancelText: 'Үгүй',
+                  okText: 'Тийм',
+                  onOk: () => {
+                     setCurrentMonitor(MonitorType.Document);
+                     setSelectedDocument(document);
+                  }
+               });
+            }
+         }
+      });
+   };
+
    useEffect(() => {
       getDocuments();
    }, []);
@@ -114,6 +109,7 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                      children: (
                         <Table
                            rowKey="value"
+                           loading={isLoading}
                            columns={[
                               {
                                  title: '№',
@@ -131,21 +127,8 @@ function MainInpatientHistory({ patientId, inpatientRequestId, deparmentId, serv
                               {
                                  title: ' ',
                                  render: (_, row) => (
-                                    <div
-                                       className="hover: cursor-pointer"
-                                       onClick={() => {
-                                          Modal.confirm({
-                                             content: `Та ${row.docName} маягт бөглөх гэж байна итгэлттэй байна уу`,
-                                             cancelText: 'Үгүй',
-                                             okText: 'Тийм',
-                                             onOk: () => {
-                                                setCurrentMonitor(MonitorType.Document);
-                                                setSelectedDocument(row);
-                                             }
-                                          });
-                                       }}
-                                    >
-                                       <img src={ArrowIcon} alt="sda" />
+                                    <div className="hover: cursor-pointer" onClick={() => middleware(row)}>
+                                       <img src={ArrowIcon} alt="ArrowIcon" />
                                     </div>
                                  )
                               }

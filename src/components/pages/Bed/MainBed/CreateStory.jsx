@@ -91,6 +91,7 @@ const CreateStory = () => {
    };
    const onSelectFloor = (id) => {
       const filteredRooms = rooms?.filter((room) => room.floorId === id && room.isInpatient);
+      console.log('filteredRooms', filteredRooms);
       setFilteredRooms(filteredRooms);
       form.resetFields([['roomInfo', 'roomId']]);
    };
@@ -263,7 +264,7 @@ const CreateStory = () => {
                                           }
                                        ]}
                                     >
-                                       <Select onSelect={onSelectRoom}>
+                                       <Select onSelect={(id) => onSelectRoom(id, null)}>
                                           {filteredRooms?.map((room, index) => (
                                              <Option
                                                 key={index}

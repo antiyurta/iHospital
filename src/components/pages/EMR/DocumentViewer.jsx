@@ -5,10 +5,12 @@ import { ReturnById } from '../611/Document/Index';
 import { FilePdfOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useReactToPrint } from 'react-to-print';
 import { Each } from '../../../features/Each';
+
 const DocumentViewer = () => {
    const { setDocumentView, documentType, selectedDocument } = useContext(EmrContext);
    const [printLoading, setPrintLoading] = useState(false);
    const currentRef = useRef();
+
    const handlePrint = useReactToPrint({
       onBeforeGetContent: () => setPrintLoading(true),
       onBeforePrint: () => setPrintLoading(false),
@@ -78,6 +80,7 @@ const DocumentViewer = () => {
                <Button loading={printLoading} icon={<PrinterOutlined />} onClick={() => handlePrint()}>
                   Хэвлэх
                </Button>
+               <Button onClick={() => currentRef.current.save()}>asd</Button>
                <Button
                   disabled
                   icon={

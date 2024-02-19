@@ -160,7 +160,7 @@ function Index({ type, isDoctor }) {
          }
       } else {
          const payment = row.isPayment || row.isInsurance;
-         if (!payment && row.type != 4) {
+         if (!payment && row.type != 1) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
             if (row.startDate === null && isDoctor) {
@@ -200,7 +200,8 @@ function Index({ type, isDoctor }) {
          hicsSeal: row.hicsSeal,
          startDate: row.startDate,
          appointmentType: type,
-         slotId: row.slotId
+         slotId: row.slotId,
+         reasonComming: row.reasonComming
       };
       if (type === 0) {
          data['usageType'] = 'OUT';

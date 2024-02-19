@@ -9,7 +9,7 @@ import { PrinterFilled } from '@ant-design/icons';
 import Page1 from './Page1';
 import Page2 from './Page2';
 import moment from 'moment';
-import Epicriz from '../../../../BeforeAmbulatory/Lists/Epicriz';
+// import Epicriz from '../../../../BeforeAmbulatory/Lists/Epicriz';
 //
 import InternalMedicine from '../InternalMedicine/Index'; // Дотрын эмчийн үзлэг
 import Neurologist from '../Neurologist/Index'; // МЭДРЭЛИЙН ЭМЧИЙН ҮЗЛЭГ
@@ -100,7 +100,7 @@ function Index({ data }) {
                <div ref={printRef}>
                   <Form form={form}>
                      <RenderDoctorInspection />
-                     <Epicriz />
+                     {/* <Epicriz /> */}
                   </Form>
                </div>
             </Spin>

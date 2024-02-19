@@ -36,7 +36,7 @@ const FormRenderHtml = (props) => {
       return root;
    };
    const RenderOptions = ({ item }) => {
-      const answer = Object.entries(documentData).find(([key, value]) => key === item.keyWord)?.[1];
+      const answer = Object.entries(documentData).find(([key, _value]) => key === item.keyWord)?.[1];
       if (item.type == 'other') {
          if (answer) return <span>{answer}</span>;
          return;
@@ -70,34 +70,37 @@ const FormRenderHtml = (props) => {
             );
          }
          const selectedAnswer = item?.options?.find((option) => option.keyWord === answer)?.question;
-         console.log('selectedAnswer', selectedAnswer);
          if (item.type === 'checkbox') {
-            const dd = item.options?.filter((option) => answer?.includes(option.keyWord));
-            const ched = dd.map((d, index) => (
-               <span
-                  key={index}
-                  style={{
-                     paddingRight: 3
-                  }}
-               >
-                  {d.question},
-               </span>
-            ));
+            const checkBoxOptions = item.options?.filter((option) => answer?.includes(option.keyWord));
+            const checkBoxAnswers = checkBoxOptions.map((option) => option.question)?.join(',');
+            console.log('checkBoxAnswers', checkBoxAnswers, item.type, item.question);
+            var text = '';
+            if (item?.question.indexOf('.') !== -1) {
+               let pattern = /\.{1,}/g;
+               text = item.question.replace(pattern, checkBoxAnswers);
+            } else {
+               text = `${item.question} ${checkBoxAnswers}`;
+            }
+            if (checkBoxAnswers) {
+               return (
+                  <span className="flex flex-wrap gap-1">
+                     <span>{text}</span>
+                     <span>{other}</span>
+                  </span>
+               );
+            }
+            return;
+         }
+         if (selectedAnswer) {
             return (
                <span className="flex flex-wrap gap-1">
                   <span>{item.question}</span>
-                  {ched}
+                  <span>{selectedAnswer}</span>
                   <span>{other}</span>
                </span>
             );
          }
-         return (
-            <span className="flex flex-wrap gap-1">
-               <span>{item.question}</span>
-               {selectedAnswer}
-               <span>{other}</span>
-            </span>
-         );
+         return;
       } else if (item.type === 'textarea') {
          return (
             <p>
@@ -106,7 +109,6 @@ const FormRenderHtml = (props) => {
             </p>
          );
       } else if (item.type === 'datepicker') {
-         console.log(item);
          return (
             <p>
                <span className="pr-1">{item.question}</span>
@@ -132,13 +134,12 @@ const FormRenderHtml = (props) => {
    };
 
    const testData = useMemo(() => {
-      console.log('tree', convertTree(documentForm));
       return convertTree(documentForm);
    }, [documentForm]);
 
    useEffect(() => {
       formId && getDocumentForm();
    }, [formId]);
-   return <div>{testData?.map(renderHTML)}</div>;
+   return <div className="font-times flex flex-wrap">{testData?.map(renderHTML)}</div>;
 };
 export default FormRenderHtml;

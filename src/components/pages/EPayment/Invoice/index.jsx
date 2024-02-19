@@ -4,15 +4,14 @@ import { localMn, openNofi } from '../../../comman';
 import PatientInformation from '../../PatientInformation';
 import Order from '../../Order/Order';
 import Schedule from '../../OCS/Schedule';
-import jwtInterceopter from '../../../jwtInterceopter';
-import moment from 'moment';
-import NewModal from '../../../Modal/Modal';
-import NewCard from '../../../Card/Card';
-
-//service uud
-import PaymentService from '../../../../services/payment/payment';
 import EbarimtPrint from '../EbarimtPrint';
 import dayjs from 'dayjs';
+
+//service uud
+import EBarimtService from '../../../../services/ebarimt/ebarimt';
+import ServiceRequest from '../../../../services/serviceRequest';
+import PatientApi from '../../../../services/pms/patient.api';
+import PaymentService from '../../../../services/payment/payment';
 
 function Invoice() {
    const [orderModal, setOrderModal] = useState(false);
@@ -45,14 +44,13 @@ function Invoice() {
    //tolbor urdchilan
    const onSearch = async (_page, _pageSize, value) => {
       setIsLoadingFilter(true);
-      await jwtInterceopter
-         .get('payment/patient', {
-            params: {
-               filter: value
-            }
-         })
+      await PaymentService.getPaymentPatient({
+         params: {
+            filter: value
+         }
+      })
          .then((response) => {
-            setPatientsList(response.data.response);
+            setPatientsList(response.data?.response);
          })
          .catch((error) => {
             console.log(error);
@@ -66,14 +64,13 @@ function Invoice() {
       if (value != undefined) {
          setNotPatientsValue(value);
       }
-      await jwtInterceopter
-         .get('pms/patient', {
-            params: {
-               filter: value,
-               page: page,
-               limit: pageSize
-            }
-         })
+      await PatientApi.getFilter({
+         params: {
+            filter: value,
+            page: page,
+            limit: pageSize
+         }
+      })
          .then((response) => {
             setNotPatientsList(response.data.response.data);
             setNotPatientsMeta(response.data.response.meta);
@@ -87,12 +84,11 @@ function Invoice() {
    };
    const getInvoices = async (id) => {
       setIsLoadingGetPayInfo(true);
-      await jwtInterceopter
-         .get('payment/invoice', {
-            params: {
-               patientId: id
-            }
-         })
+      await PaymentService.get({
+         params: {
+            patientId: id
+         }
+      })
          .then(({ data }) => {
             getPatient(id);
             setInvoices(data.response);
@@ -104,8 +100,7 @@ function Invoice() {
          .finally(setIsLoadingGetPayInfo(false));
    };
    const getPatient = async (id) => {
-      await jwtInterceopter
-         .get('pms/patient/' + id)
+      await PatientApi.getById(id)
          .then((response) => {
             setSelectedPatient(response.data.response);
          })
@@ -123,14 +118,13 @@ function Invoice() {
                stateIsCito = true;
             }
          });
-         await jwtInterceopter
-            .post('service-request', {
-               patientId: selectedPatient.id,
-               requestDate: new Date(),
-               isCito: stateIsCito ? true : false,
-               usageType: 'OUT',
-               services: value
-            })
+         await ServiceRequest.post({
+            patientId: selectedPatient.id,
+            requestDate: new Date(),
+            isCito: stateIsCito ? true : false,
+            usageType: 'OUT',
+            services: value
+         })
             .then((response) => {
                if (response.status === 201) {
                   setOrderModal(false);
@@ -145,7 +139,7 @@ function Invoice() {
       }
    };
    const sendData = async () => {
-      await jwtInterceopter.get('ebarimt/sendData').then((response) => {
+      await EBarimtService.sendData().then((response) => {
          if (response.data.response.status && response.status === 200) {
             openNofi('success', 'Амжиллтай', 'Амжилттай татлаа');
             getInformation();
@@ -155,7 +149,7 @@ function Invoice() {
       });
    };
    const getInformation = async () => {
-      await jwtInterceopter.get('ebarimt/information').then((response) => {
+      await EBarimtService.getInformation().then((response) => {
          setEbarimtInfo(response.data.response.result?.extraInfo);
       });
    };
@@ -177,14 +171,9 @@ function Invoice() {
          label: 'Эмчилгээ'
       },
       {
-         //hagalgaa mes
+         //mes ajilbar
          name: 'Surgery',
-         label: 'Мэс засал'
-      },
-      {
-         //duran
-         name: 'Endo',
-         label: 'Дуран'
+         label: 'Мэс ажилбар'
       },
       {
          //bagts
@@ -337,7 +326,7 @@ function Invoice() {
             </Card>
          </div>
 
-         <NewModal
+         <Modal
             title="Урьдчилгаа төлбөр"
             open={isOpenBeforePaymentModal}
             onCancel={() => setIsOpenBeforePaymentModal(false)}
@@ -444,10 +433,10 @@ function Invoice() {
                   </Form>
                </Card>
             </div>
-         </NewModal>
-         <NewModal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
+         </Modal>
+         <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
             <EbarimtPrint props={ebarimtData} isBackPayment={false} />
-         </NewModal>
+         </Modal>
          <Modal
             title={'Оношилгоо шинжилгээ захиалах'}
             open={orderModal}

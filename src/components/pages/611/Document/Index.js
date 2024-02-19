@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined, EyeOutlined, RightOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { openNofi } from '../../../comman';
 import { NewInput } from '../../../Input/Input';
 import { NewColumn, NewTable } from '../../../Table/Table';
-import NewModal from '../../../Modal/Modal';
 // AM start
 import AM1B from './AM1B';
 import AM_1V from './AM_1V';
@@ -561,7 +560,7 @@ const options = [
    {
       value: 89,
       label: 'CT-1,2 Хавсралт 11',
-      docName: 'Эмчлүүлэгчийн биеийн байдлыг үнэлэх хуудас'
+      docName: 'Биеийн байдлыг үнэлэх хуудас'
    },
    {
       value: 90,
@@ -621,7 +620,7 @@ class ReturnByIdComponent extends React.Component {
                   this.setState({ isOpenModal: true });
                }}
             />
-            <NewModal
+            <Modal
                title={options?.find((e) => e.value === this.props.value)?.label}
                open={this.state.isOpenModal}
                onCancel={() => this.setState({ isOpenModal: false })}
@@ -631,7 +630,7 @@ class ReturnByIdComponent extends React.Component {
                }}
             >
                <ReturnById type={true} id={this.props.value} />
-            </NewModal>
+            </Modal>
          </>
       );
    }

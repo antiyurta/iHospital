@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Form } from 'antd';
 import SetOrder from '../SetOrder';
 import { Examination } from '../Examination';
 import Xray from '../Xray';
 import Treatment from '../Treatment';
 import Medicine from '../Medicine';
 import Surgery from '../Surgery';
+import Operation from '../Operation';
 import Package from '../Package';
 import InpatientRequest from '../InpatientRequest';
 import DoctorInspection from '../DoctorInspection';
 import Reinspection from '../Reinspection';
 import RecentRecipe from '../RecentRecipe';
-import { Button, Form } from 'antd';
 import PackageTable from '../PackageTable/PackageTable';
 import OrderTable from '../OrderTable/OrderTable';
 import { numberToCurrency, openNofi } from '../../../comman';
 import ServiceService from '../../../../services/service/service';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const InternalOrder = (props) => {
    const { isPackage, usageType, selectedPatient, categories, IncomeAppointmentId, save } = props;
@@ -27,6 +28,7 @@ const InternalOrder = (props) => {
    const [showTreatment, setShowTreatment] = useState(false);
    const [showXray, setShowXray] = useState(false);
    const [showSurgery, setShowSurgery] = useState(false);
+   const [showOperation, setShowOperation] = useState(false);
    const [showInpatient, setShowInpatient] = useState(false);
    const [showPackage, setShowPackage] = useState(false);
    const [showSetOrder, setShowSetOrder] = useState(false);
@@ -49,9 +51,8 @@ const InternalOrder = (props) => {
             setShowTreatment(true);
          } else if (category.name === 'Surgery') {
             setShowSurgery(true);
-         } else if (category.name === 'Endo') {
-            // setModalBody(<Endo handleclick={handleclick} />);
-            // setModalTitle('Дуран сонгох');
+         } else if (category.name === 'operation') {
+            setShowOperation(true);
          } else if (category.name === 'Package') {
             setShowPackage(true);
          } else if (category.name === 'Inpatient') {
@@ -141,7 +142,7 @@ const InternalOrder = (props) => {
             } else {
                service.requestDate = new Date();
             }
-            service.requestDate = moment(new Date()).format('YYYY-MM-DD');
+            service.requestDate = dayjs(new Date()).format('YYYY-MM-DD');
             subTotal += service.price;
             services.push(service);
          });
@@ -203,6 +204,7 @@ const InternalOrder = (props) => {
                   handleclick={handleclick}
                />
             )}
+            {showOperation && <Operation />}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
             {showInpatient && (
                <InpatientRequest selectedPatient={selectedPatient} handleClick={inpatientRequestClick} />

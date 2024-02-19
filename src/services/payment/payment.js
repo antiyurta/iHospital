@@ -3,6 +3,9 @@ class Payment {
    async get(conf) {
       return await jwtInterceopter.get('payment/invoice', conf);
    }
+   async getPaymentPatient(conf) {
+      return await jwtInterceopter.get('payment/patient', conf);
+   }
    async getPaymentById(id) {
       return await jwtInterceopter.get('payment/payment/' + id);
    }

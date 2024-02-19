@@ -1,8 +1,7 @@
 import React from 'react';
 import enerehui_logo from './assets/enerehui_logo.png';
-import fb from './assets/fb.png';
-import route from './assets/route.png';
-import marker from './assets/marker.png';
+import fb from './assets/fbIcon.jpg';
+import locationMark from './assets/locationMark.jpg';
 import dayjs from 'dayjs';
 const Template = (props) => {
    const { patient, createdAt, children, serviceName } = props;
@@ -10,18 +9,12 @@ const Template = (props) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
    };
    return (
-      <div
-         style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 12
-         }}
-      >
+      <div className="flex flex-col gap-1">
          <img src={enerehui_logo} style={{ width: 180 }} className="self-center" />
          <div className="border-1 border-black" />
          <div className="flex gap-1 justify-between">
             <div className="flex gap-2">
-               <img src={marker} style={{ width: 30, height: 30, borderRadius: 5 }} />
+               <img src={locationMark} style={{ width: 30, height: 30, borderRadius: 5 }} />
                <p className="text-xs text-black">
                   Хаяг: БЗД, 26-р хороо, Олимп хотхон, 424-р байр, үйлчилгээний хэсэгт.
                </p>
@@ -65,6 +58,9 @@ const Template = (props) => {
             эмнэлзүйн онош, цаашид авах арга хэмжээндээ хэрхэн тусгахаа шийдвэрлэнэ.
          </p>
          <div className="border-1 border-black"></div>
+         <div className="flow-root">
+            <div className="float-right text-xs text-black">Эмч: _________________ /Н.Билгүүн/</div>
+         </div>
       </div>
    );
 };

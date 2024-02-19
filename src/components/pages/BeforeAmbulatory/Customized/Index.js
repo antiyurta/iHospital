@@ -125,7 +125,7 @@ function Index(props) {
       if (isEdit) {
          await jwtInterceopter
             .patch(`${documentForm.url}/${editId}`, {
-               data: values
+               data: { ...document.data, ...values }
             })
             .then((response) => {
                if (response.data.response.success) {

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
+import { NewTable, NewColumn } from '../../Table/Table';
+import { Button, Card, Form, InputNumber, Modal, Select } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
+// service
 import OrganizationBedService from '../../../services/organization/bed';
 import OrganizationRoomService from '../../../services/organization/room';
-
-import { NewTable, NewColumn } from '../../Table/Table';
-import NewModal from '../../Modal/Modal';
-import NewCard from '../../Card/Card';
-import { Button, Form, Select } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { NewInput, NewInputNumber } from '../../Input/Input';
 
 function Bed() {
    const [form] = Form.useForm();
@@ -62,7 +58,7 @@ function Bed() {
 
    return (
       <div className="w-full bg-[#f5f6f7] p-3">
-         <NewCard
+         <Card
             title="Ор"
             extra={
                <>
@@ -91,8 +87,8 @@ function Bed() {
                />
                <NewColumn dataIndex={'bedNumber'} title="Ор дугаар" />
             </NewTable>
-         </NewCard>
-         <NewModal
+         </Card>
+         <Modal
             title="Ор нэмэх"
             open={isOpen}
             onCancel={() => setIsOpen(false)}
@@ -140,10 +136,10 @@ function Bed() {
                      }
                   ]}
                >
-                  <NewInputNumber />
+                  <InputNumber />
                </Form.Item>
             </Form>
-         </NewModal>
+         </Modal>
       </div>
    );
 }

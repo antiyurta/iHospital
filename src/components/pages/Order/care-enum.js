@@ -1,5 +1,5 @@
 export const CARE_TYPE = {
-    /** Шинжилгээ */
+   /** Шинжилгээ */
    Examination: 0,
    /** Оношилгоо */
    Xray: 1,
@@ -22,5 +22,7 @@ export const CARE_TYPE = {
    /** Утасаар эмчийн үзлэг захиалах */
    OrderMobile: 10,
    /** Түргэн тусламж */
-   CallEmergency: 11
+   CallEmergency: 11,
+   /** Мэс засал */
+   Operation: 12
 };

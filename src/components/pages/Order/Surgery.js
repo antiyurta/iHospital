@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Empty, Input, Modal, Form, Table, Select } from 'antd';
-import jwtInterceopter from '../../jwtInterceopter';
+import React, { useState } from 'react';
+import { Button, Empty, Modal, Table } from 'antd';
 import { numberToCurrency, openNofi } from '../../comman';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { ListCareType } from './list-type';
@@ -9,52 +8,20 @@ import { ListSupport } from './list-support';
 
 import surgeryIcon from './NewOrder/surgeryIcon.svg';
 
-const { Search } = Input;
-const { Option } = Select;
-
 function Surgery(props) {
-   const { usageType, appointmentId, handleclick } = props;
-   const [form] = Form.useForm();
+   const { usageType, handleclick } = props;
    const [isOpenModal, setIsOpenModal] = useState(false);
-   const [isOpenSubModal, setIsOpenSubModal] = useState(false);
-   const [surgery, setSurgery] = useState([]);
-   const [diagnosis, setDiagnosis] = useState([]);
-   const [metaSurgery, setMetaSurgery] = useState({});
    const [selectedSurgeries, setSelectedSurgeries] = useState([]);
-   const [selectedTypeId, setSelectedTypeId] = useState(Number);
-   const [surgeryId, setSurgeryId] = useState(Number);
-   const [isLoading, setIsLoading] = useState(false);
-   const getPatientDiagnosis = async () => {
-      await jwtInterceopter
-         .get('emr/patient-diagnose', {
-            params: {
-               appointmentId: appointmentId
-            }
-         })
-         .then((response) => {
-            const data = response.data.response.data;
-            const diagnose = data?.map((diagnose) => {
-               diagnose.diagnose['diagnoseType'] = diagnose.diagnoseType;
-               return diagnose.diagnose;
-            });
-            setDiagnosis(diagnose);
-         });
-   };
-   const onFinishSub = (values) => {
-      const data = surgery.find((e) => e.id === surgeryId);
-      data['diagnose'] = diagnosis;
-      data['surgeryType'] = values.surgeryType;
-      setSelectedSurgeries([...selectedSurgeries, data]);
-   };
+   const [selectedTypeId, setSelectedTypeId] = useState(null);
+
    const add = (surgery) => {
-      const state = selectedSurgeries.includes(surgery);
+      const state = selectedSurgeries.some((surg) => surg.id === surgery.id);
       if (state) {
-         openNofi('warning', 'Анхааруулга', 'Мэс засал сонгогдсон байна');
+         openNofi('warning', 'Анхааруулга', 'Мэс ажилбар сонгогдсон байна');
       } else {
          const clone = { ...surgery };
          clone.type = surgery.type?.type;
-         setSurgeryId(clone.id);
-         setIsOpenSubModal(true);
+         setSelectedSurgeries([...selectedSurgeries, clone]);
       }
    };
    const remove = (index) => {
@@ -62,24 +29,21 @@ function Surgery(props) {
       arr.splice(index, 1);
       setSelectedSurgeries(arr);
    };
-   useEffect(() => {
-      getPatientDiagnosis();
-   }, []);
    return (
       <>
          <button
             className="yellow-order"
-            onClick={() => {
+            onClick={(event) => {
+               event.preventDefault();
                setIsOpenModal(true);
-               setSelectedSurgeryId(null);
                setSelectedSurgeries([]);
             }}
          >
             <img src={surgeryIcon} />
-            Мэс засал
+            Мэс ажилбар
          </button>
          <Modal
-            title="Мэс засал сонгох"
+            title="Мэс ажилбар сонгох"
             width={'80%'}
             open={isOpenModal}
             bodyStyle={{
@@ -140,14 +104,6 @@ function Surgery(props) {
                                  }
                               },
                               {
-                                 title: 'Төрөл',
-                                 dataIndex: 'surgeryType',
-                                 render: (text) => {
-                                    if (text === 1) return 'Төлөвлөгөөт';
-                                    return 'Яаралтай';
-                                 }
-                              },
-                              {
                                  title: 'Үнэ',
                                  dataIndex: usageType === 'OUT' ? 'price' : 'inpatientPrice',
                                  width: 100,
@@ -180,43 +136,6 @@ function Surgery(props) {
                      </div>
                   </div>
                </div>
-            </div>
-         </Modal>
-         <Modal
-            title="sad"
-            open={isOpenSubModal}
-            onCancel={() => setIsOpenSubModal(false)}
-            onOk={() =>
-               form.validateFields().then((values) => {
-                  onFinishSub(values);
-                  setIsOpenSubModal(false);
-               })
-            }
-         >
-            <div className="flex flex-col gap-3">
-               <Form form={form}>
-                  <div className="flex flex-col gap-3">
-                     <Form.Item
-                        name="surgeryType"
-                        label="Мэс заслын төрөл"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Төрөл заавал'
-                           }
-                        ]}
-                     >
-                        <Select
-                           style={{
-                              width: '100%'
-                           }}
-                        >
-                           <Option value={2}>Яаралтай</Option>
-                           <Option value={1}>Төлөвлөгөөт</Option>
-                        </Select>
-                     </Form.Item>
-                  </div>
-               </Form>
             </div>
          </Modal>
       </>

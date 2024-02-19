@@ -30,12 +30,14 @@ const Attachment2 = ({ document }) => {
       {
          title: 'Огноо/цаг',
          dataIndex: 'createdAt',
+         width: 50,
          render: (text) => {
             return dayjs(text).format('YYYY/MM/DD HH:mm');
          }
       },
       {
          title: 'Асуудлын дугаар#',
+         width: 50,
          dataIndex: ['data', 'q1'],
          render: (q1) => q1.join(',')
       },
@@ -62,7 +64,7 @@ const Attachment2 = ({ document }) => {
                   </Button>
                );
             }
-            return q3;
+            return <span className="max-w-[100px] whitespace-pre-wrap">{q3}</span>;
          }
       },
       {
@@ -159,6 +161,7 @@ const Attachment2 = ({ document }) => {
                   </div>
                   <Table
                      rowKey={'_id'}
+                     bordered
                      loading={{
                         spinning: isLoading,
                         tip: 'Уншиж байна'

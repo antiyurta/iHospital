@@ -21,7 +21,6 @@ import { DefaultPatch, Get } from '../../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
 import { useState } from 'react';
-import StoryGeneral from '../../EPatientHistory/StoryGeneral';
 import Step1 from '../../EPatientHistory/story/Step1';
 import Step2 from '../../EPatientHistory/story/Step2';
 import Step3 from '../../EPatientHistory/story/Step3';

@@ -1,9 +1,9 @@
 //EMR -> Явцын үзлэг -> Ерөнхий үзлэг
-import React, { useState, useEffect } from 'react';
-import { Radio, Row, Input, Button, Form, Collapse, InputNumber } from 'antd';
+import React, { useEffect } from 'react';
+import { Radio, Input, Button, Form, Collapse, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, openNofi, Patch, Post } from '../../comman';
+import { Get, openNofi, Post } from '../../comman';
 import { useLocation } from 'react-router-dom';
 const { Panel } = Collapse;
 export default function GeneralInspection({ patientId, inspection }) {
@@ -15,8 +15,6 @@ export default function GeneralInspection({ patientId, inspection }) {
    const location = useLocation();
    const { TextArea } = Input;
    const [form] = Form.useForm();
-   const [historyId, setHistoryId] = useState(Number);
-   const [state, setState] = useState(false);
 
    useEffect(() => {
       getGeneralInspection();

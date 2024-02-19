@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Test from './test';
-
 // БАМБАЙ
 import Doc3 from './doc3';
 // ТҮРҮҮ БУЛЧИРХАЙН ХЭТ АВИАН ОНОШИЛГОО

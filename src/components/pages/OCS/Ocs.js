@@ -39,9 +39,9 @@ export default function Ocs({ selectedPatient, UsageType, handleClick }) {
          label: 'Мэс засал'
       },
       {
-         //duran
-         name: 'Endo',
-         label: 'Дуран'
+         // mes zasal
+         name: 'operation',
+         label: 'Мэс засал'
       },
       {
          //bagts

@@ -1,10 +1,5 @@
 import React from 'react';
-//
-const Home = React.lazy(() => import('./components/Home'));
-// const Privacy = React.lazy(() => import('./privacy/Index'));
 import Privacy from './privacy/Index';
-//
-const BeforeUrgentEnr = React.lazy(() => import('./components/pages/Urgent/BeforeUrgentEnr'));
 
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
 //
@@ -56,7 +51,7 @@ const Room = React.lazy(() => import('./components/pages/Organization/Room'));
 // or
 const Bed = React.lazy(() => import('./components/pages/Organization/Bed'));
 // tolbor tootsoo
-const PaymentCloud = React.lazy(() => import('./components/pages/EPayment/Payments'));
+const PaymentCloud = React.lazy(() => import('./components/pages/EPayment/Invoice/index'));
 // emchin tsag
 const DoctorAppointment = React.lazy(() => import('./components/pages/Appointment/DoctorAppointment'));
 // owchton list
@@ -73,8 +68,10 @@ const Xray = React.lazy(() => import('./components/pages/service/Xray'));
 const Diagnoses = React.lazy(() => import('./components/pages/service/Diagnoses'));
 // emchilge list
 const Treatment = React.lazy(() => import('./components/pages/service/Treatment'));
-// halgaa list
+// mes ajilbar list
 const Surgury = React.lazy(() => import('./components/pages/service/Surgury'));
+// halgaa list
+const Operation = React.lazy(() => import('./components/pages/service/Operation'));
 // emr list
 const BeforeAmbulatoryList = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryList'));
 // emiin bus gasaalt
@@ -90,7 +87,7 @@ const BeforeXrayRequest = React.lazy(() => import('./components/pages/Xray/Befor
 //ornii manegment
 const MainBed = React.lazy(() => import('./components/pages/Bed/Index'));
 // lobarotory
-const RequestAnalys = React.lazy(() => import('./components/pages/Laboratory/RequestAnalys'));
+const RequestAnalys = React.lazy(() => import('./components/pages/Laboratory/RequestAnalys/Index'));
 // hynah sambar
 const Dashboard = React.lazy(() => import('./components/pages/Organization/Dashboard'));
 
@@ -159,9 +156,15 @@ export const ProtectedRoutes = [
    },
    {
       name: 'surgury',
-      mnName: 'Мэс засал/Үйлчилгээ жагсаалт/',
+      mnName: 'Мэс ажилбар/Үйлчилгээ жагсаалт/',
       url: '/surgury',
       element: Surgury
+   },
+   {
+      name: 'surgury',
+      mnName: 'Мэс засал/Үйлчилгээ жагсаалт/',
+      url: '/operation',
+      element: Operation
    },
    {
       name: 'treatment',
@@ -338,12 +341,6 @@ export const ProtectedRoutes = [
       element: InsuranceDoctorList
    },
    {
-      name: 'UrgentEnr',
-      mnName: 'Яаралтай сувилагч',
-      url: '/urgentEnr',
-      element: BeforeUrgentEnr
-   },
-   {
       name: 'documentList',
       mnName: 'Маягт жагсаалт',
       url: '/DocumentList',
@@ -374,7 +371,7 @@ export const ProtectedRoutes = [
       element: SurgeryDashboard
    },
    {
-      name: 'surgeryDashboard',
+      name: 'surgeryDashboardDarga',
       mnName: 'Мэс засал Дарга',
       url: '/SurgeryListStatus',
       element: SurgeryListStatus

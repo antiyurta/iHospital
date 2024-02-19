@@ -1,11 +1,10 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт
-import React, { useEffect, useState } from 'react';
-import { Button, Tabs } from 'antd';
+import React, { useState } from 'react';
+import { Tabs } from 'antd';
 import Ambulatory from './Lists/Ambulatory';
 import PatientList from './Lists/PatientList';
 import PreOrder from './Lists/PreOrder';
 import Surgery from './Lists/Surgery';
-import { SnippetsOutlined } from '@ant-design/icons';
 import DocumentShow from '../611/DocumentShow';
 import { useLocation } from 'react-router-dom';
 

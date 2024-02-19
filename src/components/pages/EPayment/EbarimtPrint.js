@@ -4,7 +4,6 @@ import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
 import moment from 'moment';
 import { numberToCurrency, openNofi } from '../../comman';
-
 import PaymentService from '../../../services/payment/payment';
 import EbarimtService from '../../../services/ebarimt/ebarimt';
 import { useSelector } from 'react-redux';
@@ -15,9 +14,8 @@ function EbarimtPrint(props) {
    const hospitalName = useSelector(selectCurrentHospitalName);
    const handleBack = async (id) => {
       await EbarimtService.ReturnBill(props?.props?.billId).then(async (response) => {
-         console.log(response);
          if (response.data.response.result.errorCode === 0) {
-            await PaymentService.patchPayment(id, { isReturn: true }).then((response) => {
+            await PaymentService.patchPayment(id, { isReturn: true }).then((_response) => {
                openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
             });
          } else {

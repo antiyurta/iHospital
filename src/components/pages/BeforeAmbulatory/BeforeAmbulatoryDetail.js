@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PatientInformation from '../PatientInformation';
 import BeforeAmbulatoryTabs from './BeforeAmbulatoryTabs';
-import { useLocation } from 'react-router-dom';
 import BeforeInPatientTabs from './BeforeInPatientTabs';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../features/emrReducer';
@@ -11,9 +10,7 @@ import DoctorNotes from '../EMR/DoctorNotes';
 import { EmrContextProvider } from '../../../features/EmrContext';
 
 function BeforeAmbulatoryDetail() {
-   let location = useLocation();
    const incomeENRData = useSelector(selectCurrentEmrData);
-   const { reasonComming } = location.state;
    const [selectedPatient, setSelectedPatient] = useState({});
    const getByIdPatient = async () => {
       await PmsPatientServices.getById(incomeENRData.patientId).then((response) => {
@@ -34,21 +31,9 @@ function BeforeAmbulatoryDetail() {
             </div>
             <div className="w-full p-3 overflow-auto bg-[#f5f6f7]">
                {incomeENRData.usageType === 'OUT' ? (
-                  <BeforeAmbulatoryTabs
-                     patientId={incomeENRData.patientId}
-                     patientData={selectedPatient}
-                     structureId={incomeENRData.departmentId}
-                     listId={incomeENRData.appointmentId}
-                     reasonComming={reasonComming}
-                  />
+                  <BeforeAmbulatoryTabs reasonComming={incomeENRData.reasonComming} />
                ) : (
-                  <BeforeInPatientTabs
-                     patientId={incomeENRData.patientId}
-                     listId={incomeENRData.appointmentId}
-                     patientData={selectedPatient}
-                     departmentName={'TEST'}
-                     departmentId={incomeENRData.departmentId}
-                  />
+                  <BeforeInPatientTabs departmentId={incomeENRData.departmentId} />
                )}
             </div>
          </div>

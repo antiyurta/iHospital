@@ -1,6 +1,6 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт -> Эрт сэрэмжлүүлэх үнэлгээ
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Button, Table, Card } from 'antd';
+import { Button, Table, Card, Modal } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
 // import { Table } from 'react-bootstrap';
@@ -41,7 +41,6 @@ import {
 import Customized from '../BeforeAmbulatory/Customized/Index';
 import jwtInterceopter from '../../jwtInterceopter';
 import NewCard from '../../Card/Card';
-import NewModal from '../../Modal/Modal';
 import { ReturnById } from '../611/Document/Index';
 import dayjs from 'dayjs';
 //
@@ -343,12 +342,7 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
                hospitalName={hospitalName}
             />
          </div> */}
-         <NewModal
-            title="Амин үзүүлэлтийг хянах"
-            open={isOpenModal}
-            onCancel={() => setIsOpenModal(false)}
-            footer={false}
-         >
+         <Modal title="Амин үзүүлэлтийг хянах" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={false}>
             <Customized
                usageType={UsageType}
                documentValue={87}
@@ -361,7 +355,7 @@ export default function EarlyWarning({ PatientId, StructureId, PatientData, Usag
                   getData();
                }}
             />
-         </NewModal>
+         </Modal>
       </>
    );
 }

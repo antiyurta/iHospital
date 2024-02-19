@@ -155,6 +155,7 @@ function Patient() {
          if (response.status === 201) {
             setIsOpenUrgent(false);
             openNofi('success', 'Амжиллтай', 'Амжиллтай хадгалагдсан');
+            getData(1, 20);
          }
       });
    };

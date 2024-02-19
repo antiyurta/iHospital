@@ -1,5 +1,4 @@
 import {
-   ArrowLeftOutlined,
    ArrowRightOutlined,
    BarcodeOutlined,
    EditOutlined,
@@ -16,7 +15,7 @@ import { useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import { DefaultPatch, Get, Patch } from '../../../comman';
-import examinationProcess from '../examinationProcess.json';
+import examinationProcess from '../examinationProcess';
 import MonitorCriteria from '../../Insurance/MonitorCriteria';
 
 const { TextArea } = Input;
@@ -371,8 +370,8 @@ function Index() {
       getMeasurements();
    }, []);
    return (
-      <div>
-         <div className="flex flex-wrap">
+      <div className="p-3 w-full bg-[#f5f6f7] overflow-auto">
+         <div className="flex flex-col gap-2">
             <div className="w-full">
                <Card
                   bordered={false}
@@ -402,182 +401,191 @@ function Index() {
                   />
                </Card>
             </div>
-            <div className="md:w-1/2 pt-2 pr-1">
-               <Card
-                  bordered={false}
-                  bodyStyle={{
-                     padding: 7
-                  }}
-                  className="header-solid max-h-max rounded-md"
-               >
-                  <div className="py-2">
-                     <Card
-                        bordered={false}
-                        bodyStyle={{
-                           padding: 7,
-                           backgroundColor: '#fafafa'
-                        }}
-                        className="header-solid max-h-max rounded-md"
-                     >
-                        <Form
-                           onFinish={(e) =>
-                              getErequest(1, 10, e.date ? e.date[0] : null, e.date ? e.date[1] : null, e, statusFilter)
-                           }
-                           form={searchForm}
-                           layout="vertical"
+            <div className="flex flex-row gap-2">
+               <div className="md:w-1/2 pt-2 pr-1">
+                  <Card
+                     bordered={false}
+                     bodyStyle={{
+                        padding: 7
+                     }}
+                     className="header-solid max-h-max rounded-md"
+                  >
+                     <div className="py-2">
+                        <Card
+                           bordered={false}
+                           bodyStyle={{
+                              padding: 7,
+                              backgroundColor: '#fafafa'
+                           }}
+                           className="header-solid max-h-max rounded-md"
                         >
-                           <div
-                              style={{
-                                 display: 'flex',
-                                 flexDirection: 'row',
-                                 gap: 12,
-                                 alignItems: 'flex-end'
-                              }}
+                           <Form
+                              onFinish={(e) =>
+                                 getErequest(
+                                    1,
+                                    10,
+                                    e.date ? e.date[0] : null,
+                                    e.date ? e.date[1] : null,
+                                    e,
+                                    statusFilter
+                                 )
+                              }
+                              form={searchForm}
+                              layout="vertical"
                            >
-                              <Form.Item label="Өдөр:" name="date">
-                                 <RangePicker format="YYYY-MM-DD" locale={mnMN} />
-                              </Form.Item>
-                              <Form.Item label="Регистрийн №:" name="registerNumber">
-                                 <Input />
-                              </Form.Item>
-                              <Form.Item label="Нэр:" name="firstName">
-                                 <Input />
-                              </Form.Item>
-                              <Form.Item>
-                                 <Button
-                                    type="primary"
-                                    style={{
-                                       display: 'flex',
-                                       flexDirection: 'row',
-                                       gap: 4,
-                                       alignItems: 'center'
-                                    }}
-                                    icon={<SearchOutlined />}
-                                    htmlType="submit"
-                                 >
-                                    Хайх
-                                 </Button>
-                              </Form.Item>
+                              <div
+                                 style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    gap: 12,
+                                    alignItems: 'flex-end'
+                                 }}
+                              >
+                                 <Form.Item label="Өдөр:" name="date">
+                                    <RangePicker format="YYYY-MM-DD" locale={mnMN} />
+                                 </Form.Item>
+                                 <Form.Item label="Регистрийн №:" name="registerNumber">
+                                    <Input />
+                                 </Form.Item>
+                                 <Form.Item label="Нэр:" name="firstName">
+                                    <Input />
+                                 </Form.Item>
+                                 <Form.Item>
+                                    <Button
+                                       type="primary"
+                                       style={{
+                                          display: 'flex',
+                                          flexDirection: 'row',
+                                          gap: 4,
+                                          alignItems: 'center'
+                                       }}
+                                       icon={<SearchOutlined />}
+                                       htmlType="submit"
+                                    >
+                                       Хайх
+                                    </Button>
+                                 </Form.Item>
+                              </div>
+                           </Form>
+                        </Card>
+                     </div>
+                     <div className="flow-root py-2">
+                        <div className="flex float-left">
+                           <div
+                              className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                              role="alert"
+                           >
+                              <span className="font-medium mx-1">Яаралтай</span>
                            </div>
-                        </Form>
-                     </Card>
-                  </div>
-                  <div className="flow-root py-2">
-                     <div className="flex float-left">
-                        <div
-                           className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                           role="alert"
-                        >
-                           <span className="font-medium mx-1">Яаралтай</span>
+                           <div
+                              className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                              role="alert"
+                           >
+                              <span className="font-medium mx-1">Хэвийн</span>
+                           </div>
                         </div>
-                        <div
-                           className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                           role="alert"
-                        >
-                           <span className="font-medium mx-1">Хэвийн</span>
+                        <div className="flex float-right">
+                           <Button
+                              title="Сэргээх"
+                              type="primary"
+                              //    onClick={() => getAppointment(1, 20, start, end)}
+                           >
+                              <ReloadOutlined
+                              //    spin={spinner}
+                              />
+                           </Button>
                         </div>
                      </div>
-                     <div className="flex float-right">
-                        <Button
-                           title="Сэргээх"
-                           type="primary"
-                           //    onClick={() => getAppointment(1, 20, start, end)}
-                        >
-                           <ReloadOutlined
-                           //    spin={spinner}
-                           />
-                        </Button>
+                     <div className="py-2">
+                        <Table
+                           rowKey={'erequests_id'}
+                           loading={{
+                              spinning: requestListLoading,
+                              tip: 'Уншиж байна...'
+                           }}
+                           bordered
+                           rowClassName="hover:cursor-pointer"
+                           locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                           columns={statusFilter != 3 ? requestListColumn : requestListColumn2}
+                           dataSource={requestList}
+                           onRow={(row) => {
+                              return {
+                                 onClick: () => {
+                                    getErequestDtl(row);
+                                 }
+                              };
+                           }}
+                           pagination={{
+                              simple: true,
+                              pageSize: 10,
+                              total: requestListMeta.itemCount,
+                              current: requestListMeta.page,
+                              onChange: (page, pageSize) => getErequest(page, pageSize, Dstart, Dend)
+                           }}
+                        />
                      </div>
-                  </div>
-                  <div className="py-2">
+                  </Card>
+               </div>
+               <div className="md:w-1/2 pt-2 pl-1">
+                  <Card
+                     bordered={false}
+                     bodyStyle={{
+                        padding: 7
+                     }}
+                     className="header-solid max-h-max rounded-md"
+                  >
                      <Table
-                        rowKey={'erequests_id'}
+                        rowKey={'id'}
+                        bordered
+                        locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                        rowClassName="hover:cursor-pointer"
                         loading={{
-                           spinning: requestListLoading,
+                           spinning: requestDetailListLoading,
                            tip: 'Уншиж байна...'
                         }}
-                        bordered
-                        rowClassName="hover:cursor-pointer"
-                        locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                        columns={statusFilter != 3 ? requestListColumn : requestListColumn2}
-                        dataSource={requestList}
-                        onRow={(row) => {
-                           return {
-                              onClick: () => {
-                                 getErequestDtl(row);
-                              }
-                           };
+                        rowSelection={{
+                           ...rowSelection
                         }}
+                        columns={requestDetailListColumn}
+                        dataSource={requestDetailList}
                         pagination={{
                            simple: true,
-                           pageSize: 10,
-                           total: requestListMeta.itemCount,
-                           current: requestListMeta.page,
-                           onChange: (page, pageSize) => getErequest(page, pageSize, Dstart, Dend)
+                           pageSize: 5
+                        }}
+                        footer={() => {
+                           if (!barcodeState) {
+                              return;
+                           } else {
+                              return (
+                                 <>
+                                    <Button
+                                       icon={<BarcodeOutlined />}
+                                       loading={barcodeLoading}
+                                       onClick={() => handlePrintBarCode()}
+                                    >
+                                       Баркод хэвлэх
+                                    </Button>
+                                    {statusFilter != 0 && (
+                                       <Button
+                                          icon={<ArrowRightOutlined />}
+                                          className="ml-2"
+                                          onClick={() => changeExaminationProcess()}
+                                       >
+                                          Шилжүүлэх
+                                       </Button>
+                                    )}
+                                    {statusFilter === 4 && (
+                                       <Button icon={<PrinterOutlined />} className="ml-2">
+                                          Хариу хэвлэх
+                                       </Button>
+                                    )}
+                                 </>
+                              );
+                           }
                         }}
                      />
-                  </div>
-               </Card>
-            </div>
-            <div className="md:w-1/2 pt-2 pl-1">
-               <Card
-                  bordered={false}
-                  bodyStyle={{
-                     padding: 7
-                  }}
-                  className="header-solid max-h-max rounded-md"
-               >
-                  <Table
-                     rowKey={'id'}
-                     bordered
-                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                     rowClassName="hover:cursor-pointer"
-                     loading={{
-                        spinning: requestDetailListLoading,
-                        tip: 'Уншиж байна...'
-                     }}
-                     rowSelection={{
-                        ...rowSelection
-                     }}
-                     columns={requestDetailListColumn}
-                     dataSource={requestDetailList}
-                     pagination={{
-                        simple: true,
-                        pageSize: 5
-                     }}
-                     footer={() => {
-                        if (!barcodeState) {
-                           return;
-                        } else {
-                           return (
-                              <>
-                                 <Button
-                                    icon={<BarcodeOutlined />}
-                                    loading={barcodeLoading}
-                                    onClick={() => handlePrintBarCode()}
-                                 >
-                                    Баркод хэвлэх
-                                 </Button>
-                                 {statusFilter != 0 && (
-                                    <Button
-                                       icon={<ArrowRightOutlined />}
-                                       className="ml-2"
-                                       onClick={() => changeExaminationProcess()}
-                                    >
-                                       Шилжүүлэх
-                                    </Button>
-                                 )}
-                                 {statusFilter === 4 && (
-                                    <Button icon={<PrinterOutlined />} className="ml-2">
-                                       Хариу хэвлэх
-                                    </Button>
-                                 )}
-                              </>
-                           );
-                        }
-                     }}
-                  />
-               </Card>
+                  </Card>
+               </div>
             </div>
          </div>
          <div style={{ display: 'none' }}>
