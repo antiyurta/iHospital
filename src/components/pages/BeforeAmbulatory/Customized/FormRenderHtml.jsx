@@ -71,9 +71,8 @@ const FormRenderHtml = (props) => {
          }
          const selectedAnswer = item?.options?.find((option) => option.keyWord === answer)?.question;
          if (item.type === 'checkbox') {
-            const checkBoxOptions = item.options?.filter((option) => answer?.includes(option.keyWord));
-            const checkBoxAnswers = checkBoxOptions.map((option) => option.question)?.join(',');
-            console.log('checkBoxAnswers', checkBoxAnswers, item.type, item.question);
+            const checkBoxOptions = item.options?.filter((option) => answer?.includes?.(option?.keyWord));
+            const checkBoxAnswers = checkBoxOptions.map((option) => option.question)?.join(' ');
             var text = '';
             if (item?.question.indexOf('.') !== -1) {
                let pattern = /\.{1,}/g;
@@ -83,7 +82,7 @@ const FormRenderHtml = (props) => {
             }
             if (checkBoxAnswers) {
                return (
-                  <span className="flex flex-wrap gap-1">
+                  <span className="flex gap-1">
                      <span>{text}</span>
                      <span>{other}</span>
                   </span>
@@ -93,7 +92,7 @@ const FormRenderHtml = (props) => {
          }
          if (selectedAnswer) {
             return (
-               <span className="flex flex-wrap gap-1">
+               <span className="flex gap-1">
                   <span>{item.question}</span>
                   <span>{selectedAnswer}</span>
                   <span>{other}</span>
@@ -124,6 +123,17 @@ const FormRenderHtml = (props) => {
    const renderHTML = (item) => {
       if (!item.options) {
          return <RenderOptions key={item.index} item={item} />;
+      }
+      if (item.type === 'title') {
+         return (
+            <>
+               <p className="w-full"></p>
+               <span className="flex flex-wrap" key={item.index}>
+                  <RenderOptions item={item} />
+                  {item.options.map(renderHTML)}
+               </span>
+            </>
+         );
       }
       return (
          <span className="flex flex-wrap" key={item.index}>

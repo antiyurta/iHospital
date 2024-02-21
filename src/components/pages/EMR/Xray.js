@@ -207,7 +207,6 @@ function Xrays({ PatientId }) {
                      response: { response }
                   }
                }) => {
-                  console.log(response);
                   setDocument(response);
                }
             )
