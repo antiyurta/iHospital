@@ -115,7 +115,12 @@ const FormRenderHtml = (props) => {
             </p>
          );
       } else if (item.type === 'title') {
-         return <span className="font-bold pr-1">{item.question}</span>;
+         return (
+            <>
+               <p className="w-full"></p>
+               <span className="font-bold pr-1">{item.question}</span>
+            </>
+         );
       }
       return;
    };

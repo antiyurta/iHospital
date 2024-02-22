@@ -9,7 +9,7 @@ import { Each } from '../../../../../features/Each';
 import EmrContext from '../../../../../features/EmrContext';
 import { groupedByAppointmentId, groupByDocumentValueIn } from '../../../../documentInjection';
 import { Spin } from 'antd';
-import { Loading3QuartersOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const DocumentHistory = () => {
    const incomeEmrData = useSelector(selectCurrentEmrData);
