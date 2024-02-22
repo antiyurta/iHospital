@@ -3,8 +3,8 @@ class PatientApi {
    async get() {
       return await jwtInterceopter.get('pms/patient');
    }
-   async getFilter() {
-      return await jwtInterceopter.get('pms/patient');
+   async getFilter(config) {
+      return await jwtInterceopter.get('pms/patient', config);
    }
    async getById(id) {
       return await jwtInterceopter.get(`pms/patient/${id}`);

@@ -94,7 +94,11 @@ table.dailyTable tbody > tr > th {
 .story .ant-checkbox-wrapper.test span.ant-checkbox {
    display: none !important;
 }
+.story .ant-checkbox-wrapper.test.ant-checkbox-wrapper span {
+   padding: 0px !important;
+}
 .story .ant-checkbox-wrapper.test.ant-checkbox-wrapper-checked span {
+   padding: 0px !important;
    text-decoration: underline !important;
 }
 .dstory .ant-checkbox-wrapper.test span.ant-checkbox {

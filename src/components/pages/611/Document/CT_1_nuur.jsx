@@ -1,14 +1,21 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import logo from '../../../../assets/logo/logo.png';
 import { Checkbox, Radio } from 'antd';
-import dayjs from 'dayjs';
+import { getAge, regToDate } from '../../../comman';
 
 const CT1Nuur = (props) => {
-   const {
-      data: { formData }
-   } = props;
-   console.log(props);
+   const [formData, setFormData] = useState({});
+   const [history, setHistory] = useState({});
+   useEffect(() => {
+      if (props?.data?.formData) {
+         setFormData(props?.data?.formData);
+      }
+      if (props?.data?.history != null) {
+         setHistory(props?.data?.history);
+      }
+      console.log('props', props);
+   }, [props]);
    return (
       <div className="page">
          <div className="subpage w-full">
@@ -17,7 +24,7 @@ const CT1Nuur = (props) => {
                <p className="text-end">өдрийн А/611 дүгээр тушаалын арваннэгдүгээр хавсралт</p>
                <p className="font-bold text-end">Эрүүл мэндийн бүртгэлийн маягт СТ-1</p>
             </div>
-            <p className="font-bold text-center">ӨВЧНИЙ ТҮҮХ №</p>
+            <p className="font-bold text-center">ӨВЧНИЙ ТҮҮХ № {history?.historyNumber}</p>
             <div className="grid grid-cols-2">
                <div>
                   <img src={logo} />
@@ -25,41 +32,40 @@ const CT1Nuur = (props) => {
                <div className="flex flex-col">
                   <div className="flex flex-row">
                      <div className="border-1 w-12">РД</div>
-                     <div className="border-1 w-full">{formData?.q1}</div>
+                     <div className="border-1 w-full">{history?.patientData?.registerNumber}</div>
                   </div>
                   <div className="flex flex-row">
                      <div className="border-1 w-12">НДД</div>
                      <div className="border-1 w-full">{formData?.q2}</div>
                   </div>
                   <div className="border-1">
-                     Өвчний түүх нээсэн {dayjs(formData?.q3).format('YYYYон MMсар DDөдөр HHцаг mmмин')}
+                     Өвчний түүх нээсэн {dayjs(history?.createdAt).format('YYYYон MMсар DDөдөр HHцаг mmмин')}
                   </div>
                   <div className="border-1">
-                     <span>Тасгийн нэр:</span>
-                     <span>{formData?.q4}</span>
+                     <span>{`Тасгийн нэр: ${history?.cabinetName}`}</span>
                   </div>
                </div>
                <div className="border-1">
                   <span>Эцэг /эх/-ийн нэр: </span>
-                  <span>{formData?.q5}</span>
+                  <span>{history?.patientData?.lastName}</span>
                </div>
                <div className="border-1">
                   <span>Өөрийн нэр: </span>
-                  <span>{formData?.q6}</span>
+                  <span>{history?.patientData?.firstName}</span>
                </div>
             </div>
             <div className="flex flex-row">
                <div className="border-1 w-full">
                   <p>{`Төрсөн    он    сар   өдөр`}</p>
-                  <p>{dayjs(formData?.q7).format('YYYY/MM/DD')}</p>
+                  <p>{dayjs(regToDate(history?.patientData?.registerNumber)).format('YYYY/MM/DD')}</p>
                   <p>
-                     <span>Нас:{formData?.q8}</span>
+                     <span>{`Нас: ${getAge(history?.patientData?.registerNumber)}`}</span>
                   </p>
                </div>
                <div className="border-1">
                   <p className="ml-2">Хүйс:</p>
                   <div className="document">
-                     <Radio.Group value={formData?.q9} disabled className="dstory flex flex-col">
+                     <Radio.Group value={history?.patientData?.genderType} disabled className="dstory flex flex-col">
                         <Radio className="ml-1" value={'MAN'}>
                            <span className="text-black">Эрэгтэй</span>
                         </Radio>
@@ -72,7 +78,11 @@ const CT1Nuur = (props) => {
                <div className="border-1 min-w-max">
                   <p className="font-bold ml-2">Гэрлэлтийн байдал:</p>
                   <div className="document">
-                     <Checkbox.Group value={formData?.q10} disabled className="dstory flex flex-col">
+                     <Checkbox.Group
+                        value={history?.patientData?.marriageStatus?.toString()}
+                        disabled
+                        className="dstory flex flex-col"
+                     >
                         <Checkbox className="ml-2" value={'0'}>
                            <span className="text-black">Огт гэрлээгүй</span>
                         </Checkbox>
@@ -97,7 +107,11 @@ const CT1Nuur = (props) => {
                <div className="border-1 min-w-max">
                   <p className="font-bold ml-2">Боловсролын байдал:</p>
                   <div className="document">
-                     <Checkbox.Group value={formData?.q11} disabled className="dstory flex flex-col">
+                     <Checkbox.Group
+                        value={history?.patientData?.educationType.toString()}
+                        disabled
+                        className="dstory flex flex-col"
+                     >
                         <div className="flex flex-row">
                            <Checkbox className="ml-2" value={'0'}>
                               <span className="text-black">Боловсролгүй</span>
@@ -133,35 +147,35 @@ const CT1Nuur = (props) => {
                   <p>Тогтмол хаяг:</p>
                   <p>
                      <span>
-                        Аймаг/хот:<span className="underline">{formData?.q12}</span>
+                        Аймаг/хот:<span className="underline">{history?.patientData?.aimagName}</span>
                      </span>
                   </p>
                   <p className="flex flex-row justify-between">
                      <span>
-                        Сум/дүүрэг:<span className="underline">{formData?.q13}</span>
+                        Сум/дүүрэг:<span className="underline">{history?.patientData?.soumName}</span>
                      </span>
                      <span>
-                        Баг/хороо:<span className="underline">{formData?.q14}</span>
+                        Баг/хороо:<span className="underline">{history?.patientData?.committee}</span>
                      </span>
                   </p>
                   <p className="flex flex-row justify-between">
                      <span>
-                        Гудамж/Байшин: <span className="underline">{formData?.q15}</span>
+                        Гудамж/Байшин: <span className="underline">{history?.patientData?.building}</span>
                      </span>
                      <span>
-                        тоот: <span className="underline">{formData?.q16}</span>
+                        тоот: <span className="underline">{history?.patientData?.address}</span>
                      </span>
                   </p>
                </div>
                <div className="border-1 px-2 min-w-max">
                   <p>Ажлын газар, албан тушаал:</p>
-                  <p>{formData?.q17}</p>
+                  <p>{history?.patientData?.organization}</p>
                   <p>Мэргэжил:</p>
-                  <p>{formData?.q18}</p>
+                  <p>{history?.patientData?.jobPosition}</p>
                </div>
                <div className="border-1 w-[120px] px-2">
                   <p>Цусны бүлэг:</p>
-                  <p className="underline">{formData?.q19}</p>
+                  <p className="underline">{history?.patientData?.bloodType}</p>
                   <p
                      style={{
                         fontSize: 12
@@ -175,10 +189,11 @@ const CT1Nuur = (props) => {
                <div className="border-1 w-full">
                   <p>Яаралтай үед холбоо барих</p>
                   <p>
-                     Өөрийн утас: <span className="underline">{formData?.q20}</span>
+                     Өөрийн утас: <span className="underline">{history?.patientData?.phoneNo}</span>
                   </p>
                   <p>
-                     Ар гэрийн утас:<span className="underline">{formData?.q21}</span>
+                     Ар гэрийн утас:
+                     <span className="underline">{history?.patientData?.contacts?.[0].contactPhoneNo}</span>
                   </p>
                </div>
                <div className="border-1 min-w-max">

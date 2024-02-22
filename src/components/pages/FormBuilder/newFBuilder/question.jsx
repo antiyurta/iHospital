@@ -88,6 +88,10 @@ const Question = (props) => {
                      value: 'diagnose'
                   },
                   {
+                     label: 'diagnoseMNName',
+                     value: 'diagnoseMNName'
+                  },
+                  {
                      label: 'Human Body',
                      value: 'humanbody'
                   },

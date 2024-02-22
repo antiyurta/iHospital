@@ -3,9 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentAppId, selectCurrentDepId } from '../../../../features/authReducer';
 import { openNofi } from '../../../comman';
-//
-import SentService from '../Insurance/sent-service';
-//
 //services
 import DocumentsFormPatientService from '../../../../services/organization/document';
 import OrganizationDocumentRoleServices from '../../../../services/organization/documentRole';
@@ -26,13 +23,13 @@ function MainInpatientHistory() {
    const AppIds = useSelector(selectCurrentAppId);
    const DepIds = useSelector(selectCurrentDepId);
    const incomeEmrData = useSelector(selectCurrentEmrData);
-   const { countOfDocument, countOfDraft, setDocumentCount } = useContext(EmrContext);
+   const { countOfDocument, countOfDraft, setDocumentCount, draftedDocuments, setIsReloadDocumentHistory } =
+      useContext(EmrContext);
    const [isLoading, setIsLoading] = useState(false);
    const [currentMonitor, setCurrentMonitor] = useState(MonitorType.List);
    const [selectedDocument, setSelectedDocument] = useState();
    const [documents, setDocuments] = useState([]);
-   /** @description insurance connection start => */
-   const [isInsuranceModal, setIsInsuranceModal] = useState(false);
+   const [tabActiveKey, setTabActiveKey] = useState(1);
 
    const getDocuments = async () => {
       await OrganizationDocumentRoleServices.getByPageFilterShow({
@@ -60,33 +57,50 @@ function MainInpatientHistory() {
    };
 
    const middleware = async (document) => {
-      setIsLoading(true);
-      await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
-         type: 'FORM',
-         usageType: 'IN',
-         saveType: 'Save'
-      }).then((response) => {
-         if (response.status === 200) {
-            setIsLoading(false);
-            const data = response.data?.response?.response;
-            const state = data.some((item) => item.documentId === document.value);
-            if (state) {
-               Modal.info({
-                  content: `Та ${document.docName} маягт бөглөсөн байна`
-               });
-            } else {
-               Modal.confirm({
-                  content: `Та ${document.docName} маягт бөглөх гэж байна итгэлттэй байна уу`,
-                  cancelText: 'Үгүй',
-                  okText: 'Тийм',
-                  onOk: () => {
-                     setCurrentMonitor(MonitorType.Document);
-                     setSelectedDocument(document);
-                  }
-               });
+      const isDrafted = draftedDocuments?.some((dD) => dD.documentId === document.value);
+      if (isDrafted) {
+         Modal.info({
+            content: (
+               <>
+                  <p>${document.docName} маягт Ноорог дотор байнa</p>
+                  <p>Ноороглуу шилжих эсэх</p>
+               </>
+            ),
+            cancelText: 'Үгүй',
+            okText: 'Шилжих',
+            onOk: () => {
+               setTabActiveKey(2);
             }
-         }
-      });
+         });
+      } else {
+         setIsLoading(true);
+         await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
+            type: 'FORM',
+            usageType: 'IN',
+            saveType: 'Save'
+         }).then((response) => {
+            if (response.status === 200) {
+               setIsLoading(false);
+               const data = response.data?.response?.response;
+               const state = data.some((item) => item.documentId === document.value);
+               if (state) {
+                  Modal.info({
+                     content: `Та ${document.docName} маягт бөглөсөн байна`
+                  });
+               } else {
+                  Modal.confirm({
+                     content: `Та ${document.docName} маягт бөглөх гэж байна итгэлттэй байна уу`,
+                     cancelText: 'Үгүй',
+                     okText: 'Тийм',
+                     onOk: () => {
+                        setCurrentMonitor(MonitorType.Document);
+                        setSelectedDocument(document);
+                     }
+                  });
+               }
+            }
+         });
+      }
    };
 
    useEffect(() => {
@@ -97,6 +111,8 @@ function MainInpatientHistory() {
          {currentMonitor === MonitorType.List ? (
             <Tabs
                type="card"
+               activeKey={tabActiveKey}
+               onChange={(key) => setTabActiveKey(key)}
                items={[
                   {
                      key: 1,
@@ -164,6 +180,7 @@ function MainInpatientHistory() {
                   onOk={(state) => {
                      if (!state) {
                         setCurrentMonitor(MonitorType.List);
+                        setIsReloadDocumentHistory(true);
                      }
                   }}
                   isBackButton={true}
@@ -175,14 +192,6 @@ function MainInpatientHistory() {
                />
             </div>
          )}
-         <Modal
-            title="Даатгалын сервисүүд"
-            width={1000}
-            open={isInsuranceModal}
-            onCancel={() => setIsInsuranceModal(false)}
-         >
-            <SentService />
-         </Modal>
       </>
    );
 }

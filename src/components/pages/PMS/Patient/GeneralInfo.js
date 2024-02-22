@@ -96,7 +96,7 @@ function GeneralInfo({ form, gbase }) {
                <UploadImage form={form} itemName={'imageId'} />
             </div>
             <div className="w-1/2 p-1">
-               <Statistic title="Картын дугаар" value={form.getFieldValue('cardNumber')} className="antiStatis" />
+               <Statistic title="Картын дугаар" value={form?.getFieldValue('cardNumber')} className="antiStatis" />
                {isXyp ? (
                   <Finger
                      isFinger={true}
@@ -116,15 +116,15 @@ function GeneralInfo({ form, gbase }) {
                ) : null}
                <div className="flex flex-wrap">
                   <div className="basis-1/2">
-                     <Statistic title="Нас" value={form.getFieldValue('age')} className="antiStatis" />
+                     <Statistic title="Нас" value={form?.getFieldValue('age')} className="antiStatis" />
                   </div>
                   <div className="basis-1/2">
                      <Statistic
                         title="Хүйс"
                         value={
-                           form.getFieldValue('genderType') === 'MAN'
+                           form?.getFieldValue('genderType') === 'MAN'
                               ? 'Эр'
-                              : form.getFieldValue('genderType') === 'WOMAN'
+                              : form?.getFieldValue('genderType') === 'WOMAN'
                               ? 'Эм'
                               : ''
                         }

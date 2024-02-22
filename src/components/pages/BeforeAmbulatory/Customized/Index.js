@@ -3,7 +3,6 @@ import { Button, DatePicker, Form, Input, Modal, Progress, Result, Select } from
 import { ReturnById } from '../../611/Document/Index';
 import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
-import { selectCurrentHospitalName } from '../../../../features/authReducer';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 //
@@ -41,7 +40,6 @@ function Index(props) {
    } = props;
    const { appointmentType, usageType, patientId, appointmentId, inpatientRequestId } =
       useSelector(selectCurrentEmrData);
-   const hospitalName = useSelector(selectCurrentHospitalName);
    const printRef = useRef();
    const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
@@ -341,9 +339,6 @@ function Index(props) {
                      id={documentValue}
                      appointmentId={appointmentId || inpatientRequestId}
                      data={data}
-                     hospitalName={hospitalName}
-                     doctorName={selectedEmp}
-                     cabinetName={selectedCabinet}
                   />
                </div>
             </div>

@@ -72,7 +72,7 @@ const FormRenderHtml = (props) => {
          const selectedAnswer = item?.options?.find((option) => option.keyWord === answer)?.question;
          if (item.type === 'checkbox') {
             const checkBoxOptions = item.options?.filter((option) => answer?.includes?.(option?.keyWord));
-            const checkBoxAnswers = checkBoxOptions.map((option) => option.question)?.join(' ');
+            const checkBoxAnswers = checkBoxOptions?.map((option) => option.question)?.join(' ');
             var text = '';
             if (item?.question.indexOf('.') !== -1) {
                let pattern = /\.{1,}/g;

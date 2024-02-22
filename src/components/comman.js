@@ -10,6 +10,26 @@ import { NumericFormat } from 'react-number-format';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+export function regToDate(registerNumber) {
+   if (registerNumber) {
+      const date = new Date();
+      let year = Number(registerNumber.substring(2, 4));
+      let month = Number(registerNumber.substring(4, 6));
+      const day = Number(registerNumber.substring(6, 8));
+      if (month > 20 && month < 33) {
+         year = year + 2000;
+         month = month - 20;
+      } else {
+         year = year + 1900;
+      }
+      date.setFullYear(year);
+      date.setMonth(month - 1);
+      date.setDate(day);
+      return date;
+   }
+   return;
+}
+
 export function formatNameForDoc(lastName, firstName) {
    if (lastName && firstName) {
       return `${lastName.substring(0, 1).toUpperCase()}.${firstName}`;
@@ -288,7 +308,7 @@ export const numberToCurrency = (amount) => {
          displayType={'text'}
          thousandSeparator={true}
          fixedDecimalScale={true}
-         prefix={'₮ '}
+         suffix={' ₮'}
       />
    );
 };

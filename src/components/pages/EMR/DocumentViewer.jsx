@@ -26,10 +26,8 @@ const DocumentViewer = () => {
                   id={document.documentId}
                   appointmentId={document.children[0]?.appointmentId}
                   data={{
-                     formData: document.children,
-                     patientData: {}
+                     formData: document.children
                   }}
-                  hospitalName={'hospitalName'}
                />
             </div>
          ) : (
@@ -40,10 +38,9 @@ const DocumentViewer = () => {
                   appointmentId={document.inpatientRequestId || document.appointmentId}
                   data={{
                      formData: document.data,
-                     createdAt: document.createdAt,
-                     patientData: {}
+                     history: document.history,
+                     createdAt: document.createdAt
                   }}
-                  hospitalName={'hospitalName'}
                />
             </div>
          )}
@@ -80,7 +77,6 @@ const DocumentViewer = () => {
                <Button loading={printLoading} icon={<PrinterOutlined />} onClick={() => handlePrint()}>
                   Хэвлэх
                </Button>
-               <Button onClick={() => currentRef.current.save()}>asd</Button>
                <Button
                   disabled
                   icon={

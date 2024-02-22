@@ -8,6 +8,8 @@ import serviceService from '../../../../../services/service/service';
 import { Each } from '../../../../../features/Each';
 import EmrContext from '../../../../../features/EmrContext';
 import { groupedByAppointmentId, groupByDocumentValueIn } from '../../../../documentInjection';
+import { Spin } from 'antd';
+import { Loading3QuartersOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const DocumentHistory = () => {
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -15,7 +17,9 @@ const DocumentHistory = () => {
    const { usageType } = incomeEmrData;
    const [documentsOut, setDocuments] = useState([]);
    const [documentsIn, setDocumentsIn] = useState([]);
+   const [isLoading, setIsLoading] = useState(false);
    const getDocumentsHistory = async () => {
+      setIsLoading(true);
       await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
          type: 'FORM',
          usageType: usageType,
@@ -43,6 +47,7 @@ const DocumentHistory = () => {
             }
          )
          .finally(() => {
+            setIsLoading(false);
             if (isReloadDocumentHistory) {
                setIsReloadDocumentHistory(false);
             }
@@ -76,22 +81,24 @@ const DocumentHistory = () => {
       isReloadDocumentHistory && getDocumentsHistory();
    }, [isReloadDocumentHistory]);
    return (
-      <div className="list-of-orders">
-         {usageType === 'OUT' ? (
-            documentsOut
-               ?.filter((documentOut) => documentOut.documentId != 87)
-               .map((fDocumentOut, index) => (
-                  <Document key={index} document={fDocumentOut} index={index} incomeEmrData={incomeEmrData} />
-               ))
-         ) : (
-            <div className="documents-in">
-               <Each
-                  of={documentsIn}
-                  render={(documentIn, index) => <GroupDocument key={index} document={documentIn} />}
-               />
-            </div>
-         )}
-      </div>
+      <Spin spinning={isLoading} tip="Уншиж байна..." indicator={<LoadingOutlined spin />}>
+         <div className="list-of-orders">
+            {usageType === 'OUT' ? (
+               documentsOut
+                  ?.filter((documentOut) => documentOut.documentId != 87)
+                  .map((fDocumentOut, index) => (
+                     <Document key={index} document={fDocumentOut} index={index} incomeEmrData={incomeEmrData} />
+                  ))
+            ) : (
+               <div className="documents-in">
+                  <Each
+                     of={documentsIn}
+                     render={(documentIn, index) => <GroupDocument key={index} document={documentIn} />}
+                  />
+               </div>
+            )}
+         </div>
+      </Spin>
    );
 };
 export default DocumentHistory;

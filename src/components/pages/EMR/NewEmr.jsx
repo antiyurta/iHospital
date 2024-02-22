@@ -231,6 +231,7 @@ class NewEmr extends React.Component {
                               }
                            >
                               <OneWindow
+                                 usageType={this.state.usageType}
                                  handleView={(state) => {
                                     this.setState({
                                        isExpandHistory: state ? !this.state.isExpandHistory : true,

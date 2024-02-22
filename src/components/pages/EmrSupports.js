@@ -14,7 +14,7 @@ import Diagnose from './service/Diagnose';
 import jwtInterceopter from '../jwtInterceopter';
 import Finger from '../../features/finger';
 import DocumentShow from './611/DocumentShow';
-import DocumentPrint from './611/DocumentPrint';
+// import DocumentPrint from './611/DocumentPrint';
 //
 
 const { Option } = Select;
@@ -218,7 +218,7 @@ function EmrSupports({ appointmentId, hicsServiceId, usageType, patient, patient
             <div className="flow-root">
                <div className="float-left">
                   <div className="flex justify-between gap-3">
-                     <DocumentPrint usageType={''} patientId={patientId} />
+                     {/* <DocumentPrint usageType={''} patientId={patientId} /> */}
                      <DocumentShow
                         props={{
                            appIds: AppIds,

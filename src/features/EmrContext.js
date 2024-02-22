@@ -8,6 +8,7 @@ export const EmrContextProvider = ({ children }) => {
    const [expandedKeys, setExpandedKeys] = useState(null); // onosh songogdson ued
    const [countOfDocument, setCountOfDocument] = useState(0); // hewten maygtin too
    const [countOfDraft, setCountOfDraft] = useState(0); // hewten draft iin too
+   const [draftedDocuments, setDraftedDocuments] = useState(0);
    const [isReloadDocumentHistory, setIsReloadDocumentHistory] = useState(false); // oorcloltin dara maygt tatah
    // OTS start
    const [countOfPublicSetOrder, setCountOfPublicSetOrder] = useState(0);
@@ -17,6 +18,7 @@ export const EmrContextProvider = ({ children }) => {
    const [isViewDocument, setIsViewDocument] = useState(false);
    const [documentType, setDocumentType] = useState('one'); // one | many
    const [selectedDocument, setSelectedDocument] = useState(false);
+   const [documentTrigger, setDocumentTrigger] = useState([]);
    // Document End
    const setPatient = (patient) => {
       setSelectedPatient(patient);
@@ -36,8 +38,9 @@ export const EmrContextProvider = ({ children }) => {
    const setDocumentCount = (count) => {
       setCountOfDocument(count);
    };
-   const setDocumentDraft = (count) => {
-      setCountOfDraft(count);
+   const setDocumentDraft = (documents) => {
+      setCountOfDraft(documents?.length);
+      setDraftedDocuments(documents);
    };
    // OTS Function start
    const setPublicSetOrderCount = (count) => {
@@ -66,6 +69,7 @@ export const EmrContextProvider = ({ children }) => {
             countOfDocument,
             setDocumentCount,
             countOfDraft,
+            draftedDocuments,
             setDocumentDraft,
             isReloadDocumentHistory,
             setIsReloadDocumentHistory,
@@ -76,7 +80,9 @@ export const EmrContextProvider = ({ children }) => {
             isViewDocument,
             selectedDocument,
             documentType,
-            setDocumentView
+            setDocumentView,
+            documentTrigger,
+            setDocumentTrigger
          }}
       >
          {children}

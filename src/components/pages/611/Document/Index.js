@@ -640,206 +640,115 @@ const NotFound = () => {
    return <div>NotFound</div>;
 };
 
-export function ReturnById({ type, id, appointmentId, data, hospitalName, doctorName, cabinetName }) {
+export function ReturnById({ type, id, appointmentId, data }) {
    //type ni maygt harulah esvel form harulah
-   console.log('end end end2', id);
-   if (id === 1)
-      return (
-         <AM1B
-            type={type}
-            data={data}
-            appointmentId={appointmentId}
-            hospitalName={hospitalName}
-            doctorName={doctorName}
-            cabinetName={cabinetName}
-         />
-      );
-   else if (id === 2)
-      return <AM_1V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 3) return <AM2A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 4) return <AM2B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 5) return <AM3 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 6) return <AM4 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 7) return <AM5 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 8)
-      return <NotFound type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 9) return <AM6 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 10) return <AM7 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 11) return <AM8 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 12)
-      return <AM9A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 13)
-      return <AM9B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 14)
-      return <AM9C type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 15)
-      return <AM9D type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 16)
-      return <AM10 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 17)
-      return <AM11 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 18)
-      return <AM11H1 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 19)
-      return <AM11H1_1 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 20)
-      return <AM11H2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 21)
-      return <AM_12A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 22)
-      return <AM12B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 23)
-      return <AM13A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 24)
-      return <AM13B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 25)
-      return <AM13V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 26)
-      return <AM14A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 27)
-      return <AM14B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 28)
-      return <AM14V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 29)
-      return <AM15 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 30)
-      return <AM16 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 31)
-      return <AM17 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 32)
-      return <AM18 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 33)
-      return <NotFound type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 34)
-      return <AM19 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 35)
-      return <AM20 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 36)
-      return <AM21A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 37)
-      return <AM21B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 38)
-      return <AM21V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 39)
-      return <AM21G type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 40)
-      return <AM22A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 41)
-      return <AM22B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 42)
-      return <AM22V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 43)
-      return <AM22G type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 44)
-      return <AM22D type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 45)
-      return <AM22E type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 46)
-      return <AM22J type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 47)
-      return <AM22Z type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 48)
-      return <AM22II type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 49)
-      return <AM22K type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 50)
-      return <AM22L type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 51)
-      return <AM22M type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 52)
-      return <AM23 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 53)
-      return <AM24A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 54)
-      return <AM24B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 55)
-      return <AM25A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 56)
-      return <AM25B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 57)
-      return <AM26A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 58)
-      return <AM26B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 59)
-      return <AM27 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 60)
-      return <AM28A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 61)
-      return <AM28B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 62)
-      return <AM29A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 63)
-      return <AM29B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 64)
-      return <AM29V type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 65)
-      return <AM30A type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 66)
-      return <AM30B type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 67)
-      return <AM31 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 68)
-      return <AM32 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 69)
-      return <AM33 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 70)
-      return <AM34 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 71)
-      return <AM35 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 72)
-      return <AM36 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 73)
-      return <AM37 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 74)
-      return <AM38 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 75)
-      return <AM39 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 76)
-      return <AM40 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 77)
-      return <AM41 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 78)
-      return <NotFound type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 79)
-      return <EIM4_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 80)
-      return <NotFound type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 81)
-      return <NotFound type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 82)
-      return <EIM5_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 83)
-      return <CT1Nuur type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 84)
-      return <CT1Anamnes type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 85)
-      return <CT1Dotor type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 86)
-      return <A293 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
-   else if (id === 87)
-      return <CT1_2H2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+   if (id === 1) return <AM1B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 2) return <AM_1V type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 3) return <AM2A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 4) return <AM2B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 5) return <AM3 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 6) return <AM4 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 7) return <AM5 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 8) return <NotFound type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 9) return <AM6 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 10) return <AM7 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 11) return <AM8 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 12) return <AM9A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 13) return <AM9B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 14) return <AM9C type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 15) return <AM9D type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 16) return <AM10 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 17) return <AM11 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 18) return <AM11H1 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 19) return <AM11H1_1 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 20) return <AM11H2 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 21) return <AM_12A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 22) return <AM12B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 23) return <AM13A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 24) return <AM13B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 25) return <AM13V type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 26) return <AM14A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 27) return <AM14B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 28) return <AM14V type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 29) return <AM15 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 30) return <AM16 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 31) return <AM17 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 32) return <AM18 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 33) return <NotFound type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 34) return <AM19 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 35) return <AM20 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 36) return <AM21A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 37) return <AM21B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 38) return <AM21V type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 39) return <AM21G type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 40) return <AM22A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 41) return <AM22B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 42) return <AM22V type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 43) return <AM22G type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 44) return <AM22D type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 45) return <AM22E type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 46) return <AM22J type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 47) return <AM22Z type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 48) return <AM22II type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 49) return <AM22K type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 50) return <AM22L type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 51) return <AM22M type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 52) return <AM23 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 53) return <AM24A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 54) return <AM24B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 55) return <AM25A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 56) return <AM25B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 57) return <AM26A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 58) return <AM26B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 59) return <AM27 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 60) return <AM28A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 61) return <AM28B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 62) return <AM29A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 63) return <AM29B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 64) return <AM29V type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 65) return <AM30A type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 66) return <AM30B type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 67) return <AM31 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 68) return <AM32 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 69) return <AM33 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 70) return <AM34 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 71) return <AM35 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 72) return <AM36 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 73) return <AM37 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 74) return <AM38 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 75) return <AM39 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 76) return <AM40 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 77) return <AM41 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 78) return <NotFound type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 79) return <EIM4_2 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 80) return <NotFound type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 81) return <NotFound type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 82) return <EIM5_2 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 83) return <CT1Nuur type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 84) return <CT1Anamnes type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 85) return <CT1Dotor type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 86) return <A293 type={type} data={data} appointmentId={appointmentId} />;
+   else if (id === 87) return <CT1_2H2 type={type} data={data} appointmentId={appointmentId} />;
    else if (id === 88) {
-      return <EMT201_4_2 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <EMT201_4_2 type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 89) {
-      return <CT1_2H11 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1_2H11 type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 90) {
-      return <CT1_2H12 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1_2H12 type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 91) {
-      return <CT1_2H13 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1_2H13 type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 92) {
-      return <CT1ClinalDiagnose type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1ClinalDiagnose type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 93) {
-      return (
-         <CT1BaseOfClinicalDiagnose type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />
-      );
+      return <CT1BaseOfClinicalDiagnose type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 94) {
-      return <CT1Inspection type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1Inspection type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 95) {
-      return <CT1End type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1End type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 96) {
-      return <CT1_2H14 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <CT1_2H14 type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 97) {
-      return <A539H3 type={type} data={data} appointmentId={appointmentId} hospitalName={hospitalName} />;
+      return <A539H3 type={type} data={data} appointmentId={appointmentId} />;
    }
 }
 

@@ -3,7 +3,7 @@ import DocumentsFormPatientService from '../../../../services/organization/docum
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
 import EmrContext from '../../../../features/EmrContext';
-import { Modal, Table } from 'antd';
+import { Modal, Table, Tooltip } from 'antd';
 import { ReturnByIdToName } from '../../611/Document/Index';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -11,14 +11,12 @@ import Customized from '../../BeforeAmbulatory/Customized/Index';
 const DocumentDraft = (props) => {
    const { usageType, handleCount } = props;
    const incomeEmrData = useSelector(selectCurrentEmrData);
-   const { setDocumentDraft, setIsReloadDocumentHistory } = useContext(EmrContext);
+   const { setDocumentDraft, isReloadDocumentHistory, setIsReloadDocumentHistory } = useContext(EmrContext);
    const [isLoading, setIsLoading] = useState(false);
    const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
    const [draftedDocuments, setDraftedDocuments] = useState([]);
-   //
-   const [selectedId, setSelectedId] = useState(null);
    const [selectedDocument, setSelectedDocument] = useState({});
-   //
+
    const getDocumentsInDraft = async () => {
       setIsLoading(true);
       await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
@@ -35,7 +33,7 @@ const DocumentDraft = (props) => {
             }) => {
                setDraftedDocuments(response);
                if (usageType === 'IN') {
-                  setDocumentDraft(response?.length);
+                  setDocumentDraft(response);
                } else {
                   handleCount?.(response?.length);
                }
@@ -75,12 +73,15 @@ const DocumentDraft = (props) => {
       });
    };
    useEffect(() => {
+      isReloadDocumentHistory && getDocumentsInDraft();
+   }, [isReloadDocumentHistory]);
+   useEffect(() => {
       getDocumentsInDraft();
    }, []);
    return (
       <div>
          <Table
-            rowKey="value"
+            rowKey="_id"
             loading={isLoading}
             columns={[
                {
@@ -104,31 +105,37 @@ const DocumentDraft = (props) => {
                   render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD HH:mm')
                },
                {
-                  title: ' ',
+                  title: 'Үйлдэл',
                   render: (_, row) => (
                      <p
                         style={{
                            display: 'flex',
                            flexDirection: 'row',
-                           gap: 8
+                           gap: 8,
+                           justifyContent: 'center'
                         }}
                      >
-                        <EditOutlined
-                           onClick={() => {
-                              setIsOpenModalEdit(true);
-                              setSelectedId(row._id);
-                              setSelectedDocument(row);
-                           }}
-                           className="hover: cursor-pointer text-[#2D8CFF]"
-                        />
-                        <DeleteOutlined
-                           onClick={() => onDeleteDocument(row._id)}
-                           className="hover: cursor-pointer text-red-500"
-                        />
-                        <CheckCircleOutlined
-                           onClick={() => changeSaveStatus(row._id)}
-                           className="hover: cursor-pointer text-green-600"
-                        />
+                        <Tooltip title="Засах">
+                           <EditOutlined
+                              onClick={() => {
+                                 setIsOpenModalEdit(true);
+                                 setSelectedDocument(row);
+                              }}
+                              className="hover: cursor-pointer text-[#2D8CFF]"
+                           />
+                        </Tooltip>
+                        <Tooltip title="Устгах">
+                           <DeleteOutlined
+                              onClick={() => onDeleteDocument(row._id)}
+                              className="hover: cursor-pointer text-red-500"
+                           />
+                        </Tooltip>
+                        <Tooltip title="Маягт болсон">
+                           <CheckCircleOutlined
+                              onClick={() => changeSaveStatus(row._id)}
+                              className="hover: cursor-pointer text-green-600"
+                           />
+                        </Tooltip>
                      </p>
                   )
                }
@@ -149,7 +156,7 @@ const DocumentDraft = (props) => {
             <Customized
                propsUsageType={usageType}
                isEdit={true}
-               editId={selectedId}
+               editId={selectedDocument._id}
                document={selectedDocument}
                documentValue={selectedDocument?.documentId}
                documentType={0}

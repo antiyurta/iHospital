@@ -490,6 +490,9 @@
                border-bottom-right-radius: 0px;
             }
             .document-in-body {
+               display: flex;
+               flex-direction: column;
+               gap: 4px;
                padding: 0px 12px;
             }
          }

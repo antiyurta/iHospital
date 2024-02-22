@@ -10,6 +10,8 @@ import { localMn } from '../../../comman';
 import PatientInformation from '../../PatientInformation';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router-dom';
+//service
+import inpatientService from '../../../../services/service/inpatient.js';
 const { CheckableTag } = Tag;
 const { Search } = Input;
 function InpatientRequests() {
@@ -104,23 +106,21 @@ function InpatientRequests() {
       setPatientInBedLoading(false);
    };
    const setPatientOutBed = async (bedId, rowId) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const data = {
-         isOut: true,
-         process: 2,
-         bedId: bedId
-      };
       Modal.info({
          title: 'Эмнэлгээс гаргах',
          okText: 'Гаргах',
          closable: true,
          content: <div>Та эмнэлгээс гаргахдаа итгэлтэй байна уу</div>,
          async onOk() {
-            await Patch(`service/inpatient-request/bed/${rowId}`, token, conf, data);
-            getInpatientRequests(inpatientRequsetsMeta.page, inpatientRequsetsMeta.limit, checkedKey);
+            await inpatientService
+               .patch(rowId, {
+                  isOut: true,
+                  process: 2,
+                  bedId: bedId
+               })
+               .then(() => {
+                  getInpatientRequests(inpatientRequsetsMeta.page, inpatientRequsetsMeta.limit, checkedKey);
+               });
          }
       });
    };
@@ -291,7 +291,6 @@ function InpatientRequests() {
    }, [checkedKey]);
    useEffect(() => {
       getRooms(selectedDepartment);
-      console.log(selectedDepartment);
    }, [selectedDepartment]);
    useEffect(() => {
       getDepartments();

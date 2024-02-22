@@ -243,6 +243,34 @@ const NewFormRender = (props) => {
                </Form.List>
             </>
          );
+      } else if (item.type === 'diagnoseMNName') {
+         return (
+            <div key={item.index} className="document-form">
+               <div className="form-left" />
+               <div className="form-inputs">
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Form.Item
+                        tooltip={!state ? message : null}
+                        className="mb-0"
+                        label={item.question}
+                        name={configNames(item.keyWord)}
+                     >
+                        <Input disabled placeholder={item.question} />
+                     </Form.Item>
+                     <DiagnoseWindow
+                        handleClick={(diagnose) => {
+                           useForm.setFieldValue(configNames(item.keyWord), `${diagnose.code}-${diagnose.nameMn}`);
+                           useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
+                        }}
+                        disabled={!state}
+                     />
+                     <Form.Item className="hidden" label="sada" name={`${item.keyWord}CreatedAt`}>
+                        <Input />
+                     </Form.Item>
+                  </div>
+               </div>
+            </div>
+         );
       } else if (item.type === 'diagnose') {
          return (
             <div key={item.index} className="document-form">

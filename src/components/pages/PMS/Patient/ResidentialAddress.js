@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import ReferenceCountryApi from '../../../../services/reference/country';
 
-function ResidentialAddress({ form }) {
+function ResidentialAddress() {
    const { Option } = Select;
    const [towns, setTowns] = useState([]);
    const [provices, setProvices] = useState([]);

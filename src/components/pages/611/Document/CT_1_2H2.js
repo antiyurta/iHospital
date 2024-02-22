@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import VSCanvas from './VSCanvas';
 import dayjs from 'dayjs';
-import { formatNameForDoc, getAge } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
 
 function CT_1_2H2(props) {
    const {
-      type,
-      data: { formData, patientData },
-      appointmentId,
-      hospitalName
+      data: { formData }
    } = props;
+   console.log(props);
    const [chunks, setChunks] = useState();
    function sliceIntoChunks(arr, chunkSize, secondSize) {
       const slices = [];
@@ -108,17 +106,22 @@ function CT_1_2H2(props) {
                         <div className="flow-root">
                            <div className="float-left inline-flex">
                               <p>Эмчлүүлэгчийн овог, нэр:</p>
-                              <p>{formatNameForDoc(patientData?.lastName, patientData?.firstName)}</p>
+                              <p>
+                                 {formatNameForDoc(
+                                    chunk[0]?.[0]?.history?.patientData?.lastName,
+                                    chunk[0]?.[0]?.history?.patientData?.firstName
+                                 )}
+                              </p>
                            </div>
-                           <div className="float-right inline-flex">
+                           <div className="float-right inline-flex gap-1">
                               <p>Нас:</p>
-                              <p>{getAge(patientData?.registerNumber)}</p>
+                              <p>{getAge(chunk[0]?.[0]?.history?.patientData?.registerNumber)}</p>
                               <p className="pl-1">Хүйс:</p>
-                              <p>{patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}</p>
+                              <p>{getGenderInType(chunk[0]?.[0]?.history?.patientData?.genderType)}</p>
                               <p className="pl-1">Тасаг:</p>
-                              {/* <p>{location?.state?.departmentName}</p> */}
+                              <p>{chunk[0]?.[0]?.history?.cabinetName}</p>
                               <p className="pl-1">Өрөө:</p>
-                              {/* <p>{location?.state?.roomNumber}</p> */}
+                              <p>{chunk[0]?.[0]?.history?.roomNumber}</p>
                            </div>
                         </div>
                      </div>

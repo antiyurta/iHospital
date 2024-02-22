@@ -2,8 +2,8 @@ import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Select } from 'antd';
 import ContactPerson from '../ContactPerson.js';
-function Contact({ form }) {
-   const { Option } = Select;
+const { Option } = Select;
+function Contact() {
    return (
       <div className="flex flex-wrap">
          <Form.List name="contacts">

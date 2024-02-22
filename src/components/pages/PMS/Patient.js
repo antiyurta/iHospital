@@ -16,6 +16,7 @@ import mnMN from 'antd/es/locale/mn_MN';
 import UPatient from './Urgent/UPatient';
 import patientApi from '../../../services/pms/patient.api';
 import { selectHospitalIsXyp } from '../../../features/hospitalReducer';
+import PatientSupport from './patientSupport';
 const { Search } = Input;
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -109,9 +110,8 @@ function Patient() {
       setSpinner(false);
    };
    const showModal = () => {
-      setIsModalVisible(true);
-      form.resetFields();
       setEditMode(false);
+      setIsModalVisible(true);
    };
    const showModalUrgent = () => {
       setIsOpenUrgent(true);
@@ -130,16 +130,6 @@ function Patient() {
       setIsViewModalVisible(true);
    };
    const editModal = async (id) => {
-      await patientApi
-         .getById(id)
-         .then((response) => {
-            response.data.response['birthDay'] = moment(response.data.response['birthDay']);
-            filterTowns(response.data.response.aimagId);
-            form.setFieldsValue(response.data.response);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
       setId(id);
       setEditMode(true);
       setIsModalVisible(true);
@@ -161,11 +151,7 @@ function Patient() {
    };
    const onFinish = async (data) => {
       setIsConfirmLoading(true);
-      if (isGlobalDb) {
-         data.isGlobalDb = true;
-      } else {
-         data.isGlobalDb = false;
-      }
+      data['isGlobalDb'] = isGlobalDb;
       data['isEmergency'] = false;
       const conf = {
          headers: {},
@@ -243,25 +229,25 @@ function Patient() {
          });
    };
    const ddcitizen = (id) => {
-      const citizen = citizens.filter((citizen) => citizen.id === id);
-      if (citizen.length > 0) {
-         return citizen[0].name;
+      const citizen = citizens.find((citizen) => citizen.id === id);
+      if (citizen) {
+         return citizen.name;
       } else {
          return 'Байхгүй';
       }
    };
    const ddprovices = (id) => {
-      const provice = provices.filter((provice) => provice.id === id);
-      if (provice.length > 0) {
-         return provice[0].name;
+      const provice = provices.find((provice) => provice.id === id);
+      if (provice) {
+         return provice.name;
       } else {
          return 'Байхгүй';
       }
    };
    const ddtowns = (id) => {
-      const town = towns.filter((town) => town.id === id);
-      if (town.length > 0) {
-         return town[0].name;
+      const town = towns.find((town) => town.id === id);
+      if (town) {
+         return town.name;
       } else {
          return 'Байхгүй';
       }
@@ -452,31 +438,21 @@ function Patient() {
          <Modal
             title={editMode ? 'Өвчтөн засах' : 'Өвчтөн бүртгэх'}
             open={isModalVisible}
-            forceRender={true}
-            okText="Хадгалах"
-            onOk={() => {
-               form
-                  .validateFields()
-                  .then((values) => {
-                     onFinish(values);
-                  })
-                  .catch((error) => {
-                     onFinishFailed(error);
-                  });
-            }}
-            cancelText="Болих"
             onCancel={handleCancel}
             width="18cm"
+            footer={null}
          >
-            <Form
-               form={form}
-               layout="horizontal"
-               initialValues={{
-                  contacts: [{}]
+            <PatientSupport
+               editMode={editMode}
+               patientId={id}
+               setGlobalDb={(state) => {
+                  setIsGlobalDb(state);
                }}
-            >
-               <Tabs tabPosition="left" destroyInactiveTabPane items={items} />
-            </Form>
+               filterTowns={(result) => {
+                  filterTowns(result);
+               }}
+               onFinish={onFinish}
+            />
          </Modal>
          <Modal
             title="Өвчтөн"

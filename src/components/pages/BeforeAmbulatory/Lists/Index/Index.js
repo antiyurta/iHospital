@@ -141,7 +141,7 @@ function Index({ type, isDoctor }) {
             data['departmentId'] = row.inDepartmentId;
             data['serviceId'] = row.insuranceServiceId;
          }
-         if (row.startDate === null && isDoctor) {
+         if (row.startDate === null && isDoctor && type === 0) {
             data['startDate'] = new Date();
             AppointmentService.patchPreOrder(row.id, {
                slotId: row.slotId,
@@ -624,7 +624,7 @@ function Index({ type, isDoctor }) {
    const InPatientColumns = [
       {
          title: '№',
-         render: (_, record, index) => {
+         render: (_, _record, index) => {
             return meta.page * meta.limit - (meta.limit - index - 1);
          },
          width: 40
@@ -652,7 +652,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Эмч',
-         dataIndex: 'employee',
+         dataIndex: 'doctor',
          width: 170,
          render: (object) => {
             return (

@@ -154,6 +154,7 @@ const CreateStory = () => {
       setFloorIds(floorIds);
       onSelectRoom(roomInfo.roomId, rooms);
       form.setFieldValue('roomInfo', roomInfo);
+      getDoctors(roomInfo?.depId);
    };
 
    useEffect(() => {
@@ -369,9 +370,6 @@ const CreateStory = () => {
                                  Хэвтэн эмчлүүлэхийн мэдээлэл
                               </p>
                               <div className="h-[1px] w-full bg-[#C9CDD4]" />
-                              <Form.Item className="mb-1" label="Түүхийн дугаар:" name={['inpatientInfo', 'number']}>
-                                 <InputNumber />
-                              </Form.Item>
                               <Form.Item
                                  className="mb-1"
                                  label="Эмчлэгч эмч:"

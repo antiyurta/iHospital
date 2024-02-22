@@ -101,16 +101,16 @@ const BedInformation = () => {
       })
          .then(({ data: { success } }) => {
             if (success) {
-               openNofi('success', 'Амжилттай', 'Өвчтөнг амжиллтай шилжүүллээ');
-               setIsModalOpen(false);
-               getRooms(null);
-               setIsTransfer(false);
-               setSelectedBed({});
-               setPatientInfoOfBed(null);
-               getOrderedPatient();
+               openNofi('success', 'Амжилттай', 'Өвчтөнг амжиллтай гаргалаа');
             }
          })
          .finally(() => {
+            setIsModalOpen(false);
+            getRooms(null);
+            setIsTransfer(false);
+            setSelectedBed({});
+            setPatientInfoOfBed(null);
+            getOrderedPatient();
             setIsLoadingModal(false);
          });
    };
@@ -336,7 +336,7 @@ const BedInformation = () => {
                                        - {numberToCurrency(room.price)}
                                     </p>
                                  </div>
-                                 <p style={styles.total}>Орны тоо: {room.beds.length}</p>
+                                 <p style={styles.total}>{`Орны тоо: ${room.beds.length}`}</p>
                               </div>
                               <div style={styles.statusRowContainer}>
                                  <Tag color="success" className="rounded-xl">

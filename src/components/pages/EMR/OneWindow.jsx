@@ -4,8 +4,6 @@ import { useState } from 'react';
 import ListOfIssues from './ListOfIssues';
 import OrderHistory from './OrderHistory';
 import DocumentHistroy from '../EMR/NewEmrSupport/history/DocumentHistory';
-import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../features/emrReducer';
 import Icon from './docIcon.svg';
 import EmrContext from '../../../features/EmrContext';
 import DocumentViewer from './DocumentViewer';
@@ -14,9 +12,8 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 
 const OneWindow = (props) => {
-   const { handleView } = props;
+   const { usageType, handleView } = props;
    const { isViewDocument } = useContext(EmrContext);
-   const { usageType } = useSelector(selectCurrentEmrData);
    const [activeKey, setActiveKey] = useState(usageType === 'OUT' ? 0 : 2);
    const Render = useMemo(() => {
       if (activeKey === 0) {
@@ -27,6 +24,9 @@ const OneWindow = (props) => {
          return DocumentHistroy;
       }
    }, [activeKey]);
+   useEffect(() => {
+      setActiveKey(usageType === 'OUT' ? 0 : 2);
+   }, [usageType]);
    useEffect(() => {
       handleView(isViewDocument);
    }, [isViewDocument]);
