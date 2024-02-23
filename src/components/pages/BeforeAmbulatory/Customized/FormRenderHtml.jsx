@@ -132,7 +132,7 @@ const FormRenderHtml = (props) => {
       if (item.type === 'title') {
          return (
             <>
-               <p className="w-full"></p>
+               <p className="w-full" key={item.index}></p>
                <span className="flex flex-wrap" key={item.index}>
                   <RenderOptions item={item} />
                   {item.options.map(renderHTML)}

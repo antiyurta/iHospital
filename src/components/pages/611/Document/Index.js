@@ -85,6 +85,18 @@ import AM41 from './AM41';
 import CT1Nuur from './CT_1_nuur';
 import CT1Anamnes from './CT_1_ana';
 import CT1Dotor from './CT_1_Dotor';
+import CT1Nud from './CT_1_Nud';
+import CT1Ulamjlalt from './CT_1_Ulamjlalt';
+import CT1Medrel from './CT_1_Medrel';
+import CT1Chih from './CT_1_Chih';
+import CT1Aris from './CT_1_Aris';
+import CT1Dotood from './CT_1_Dotood';
+import CT1Gemtel from './CT_1_Gemtel';
+import CT1Emegtei from './CT_1_Emegtei';
+import CT1Tsus from './CT_1_Tsus';
+import CT1Setgets from './CT_1_Setgets';
+import CT1Hool from './CT_1_Hool';
+import CT1Zurh from './CT_1_Zurh';
 import CT1ClinalDiagnose from './CT_1_ClinicalDiagnose';
 import CT1BaseOfClinicalDiagnose from './CT_1_BaseOfClinicalDiagnose';
 import CT1Inspection from './CT_1_Inspection';
@@ -107,6 +119,8 @@ import EMT201_4_2 from '../EMT/EMT201_4_2';
 import A539H3 from './A539_H3';
 //
 
+import options from './options';
+
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 
 // nemelt tushaal
@@ -114,495 +128,6 @@ const C537M1 = React.lazy(() => import('../Command/537M1')); // tushaal maygt
 const A293 = React.lazy(() => import('../Command/A293')); // ert seremjulleg yaralta
 const FC537M1 = React.lazy(() => import('../Forms/Command/537M1')); // form
 // nemelt tushaal
-
-const options = [
-   {
-      value: 1,
-      label: 'A/611 AM-1Б',
-      docName: 'Эмчийн үзлэгийн бүртгэл'
-   },
-   {
-      value: 2,
-      label: 'A/611 АМ-1В',
-      docName: 'БЗДХ кабинетын эмчийн үзлэгийн бүртгэл'
-   },
-   {
-      value: 3,
-      label: 'A/611 АМ-2A',
-      docName: 'Халдварт өвчний хамшинж, сэжигтэй тохиолдлыг мэдээлэх хуудас'
-   },
-   {
-      value: 4,
-      label: 'A/611 АМ-2Б',
-      docName: 'Вирүст хепатитийн сэжигтэй тохиолдлыг мэдээлэх хуудас'
-   },
-   {
-      value: 5,
-      label: 'A/611 АМ-3',
-      docName: 'БЗДХ-ыг мэдээлэх хуудас'
-   },
-   {
-      value: 6,
-      label: 'A/611 АМ-4',
-      docName: 'Сүрьеэгийн тохиолдлыг мэдээлэх хуудас'
-   },
-   {
-      value: 7,
-      label: 'A/611 АМ-5',
-      docName: 'Хорт хавдрыг мэдээлэх хуудас'
-   },
-   {
-      value: 8,
-      label: 'A/611 АМ-5 Хавсралт 1',
-      docName: 'Эмгэг судлалаас хортой хавдрыг мэдээлэх хуудас'
-   },
-   {
-      value: 9,
-      label: 'A/611 АМ-6',
-      docName: 'Гемодиализ хяналтын карт'
-   },
-   {
-      value: 10,
-      label: 'A/611 АМ-7',
-      docName: 'Нас барсан тухай эмнэлгийн гэрчилгээ'
-   },
-   {
-      value: 11,
-      label: 'A/611 АМ-8',
-      docName: 'Эмнэлгийн магадлагаа'
-   },
-   {
-      value: 12,
-      label: 'A/611 АМ-9A',
-      docName: 'Энгийн эмийн жорын маягт'
-   },
-   {
-      value: 13,
-      label: 'A/611 АМ-9В',
-      docName: 'Сэтгэцэд нөлөөт эмийн жорын маягт'
-   },
-   {
-      value: 14,
-      label: 'A/611 АМ-9C',
-      docName: 'Мансууруулах эмийн жорын маягт'
-   },
-   {
-      value: 15,
-      label: 'A/611 АМ-9D',
-      docName: 'Уламжлалт эмийн жорын маягт'
-   },
-   {
-      value: 16,
-      label: 'A/611 АМ-10',
-      docName: 'Эрүүл мэндийн хуудас'
-   },
-   {
-      value: 17,
-      label: 'A/611 АМ-11',
-      docName: 'Хяналтын карт'
-   },
-   {
-      value: 18,
-      label: 'A/611 АМ-11 Хавсралт-1',
-      docName: 'Артерийн гипертензийн хяналт'
-   },
-   {
-      value: 19,
-      label: 'A/611 АМ-11 Хавсралт-1.1',
-      docName: 'Чихрийн шижингийн хяналтын карт'
-   },
-   {
-      value: 20,
-      label: 'A/611 АМ-11 Хавсралт-2',
-      docName: 'Нүдний эмчийн хяналт'
-   },
-   {
-      value: 21,
-      label: 'A/611 АМ-12A',
-      docName: 'Эмнэлэг хяналтын комиссоор орогчдын бүртгэл'
-   },
-   {
-      value: 22,
-      label: 'A/611 АМ-12Б',
-      docName: 'Комиссын шийдвэр'
-   },
-   {
-      value: 23,
-      label: 'A/611 АМ-13A',
-      docName: 'Эмнэлэгт өвчтөн илгээх хуудас'
-   },
-   {
-      value: 24,
-      label: 'A/611 АМ-13Б',
-      docName: 'Эмнэлэгт өвчтөн илгээх хуудас'
-   },
-   {
-      value: 25,
-      label: 'A/611 АМ-13В',
-      docName: 'Эмнэлэгт иргэнийг илгээх цахим бүртгэлийн маягт'
-   },
-   {
-      value: 26,
-      label: 'A/611 АМ-14A',
-      docName: 'Жирэмсэн эмэгтэйчүүдийн бүртгэл'
-   },
-   {
-      value: 27,
-      label: 'A/611 АМ-14Б',
-      docName: 'Тэмбүүгийн халдвартай жирэмсэн эмэгтэйн хяналтын бүртгэл'
-   },
-   {
-      value: 28,
-      label: 'A/611 АМ-14В',
-      docName: 'Амаржих газар /төрөх тасаг/ тэмбүү илрүүлэх шинжилгээний бүртгэл'
-   },
-   {
-      value: 29,
-      label: 'A/611 АМ-15',
-      docName: 'Жирэмсэн эмэгтэйн хяналтын хөтөч карт №'
-   },
-   {
-      value: 30,
-      label: 'A/611 АМ-16',
-      docName: 'Солилцох хуудас A'
-   },
-   {
-      value: 31,
-      label: 'A/611 АМ-17',
-      docName: 'Эхийн эндэгдэл, ноцтой хүндрэлийг мэдээлэх маягт'
-   },
-   {
-      value: 32,
-      label: 'A/611 АМ-18',
-      docName: 'Үр хөндөлтийн түүх'
-   },
-   {
-      value: 33,
-      label: 'A/611 АМ-18 Хавсралт 01',
-      docName: 'Үр хөндөлтийн түүхийн хавсралт /эмийн/'
-   },
-   {
-      value: 34,
-      label: 'A/611 АМ-19',
-      docName: 'Үр хөндөлтийн бүртгэл'
-   },
-   {
-      value: 35,
-      label: 'A/611 АМ-20',
-      docName: 'Амбулаториор эмчлүүлэгсдийн карт №'
-   },
-   {
-      value: 36,
-      label: 'A/611 АМ-21A',
-      docName: 'Шинжилгээнд явуулах бичиг'
-   },
-   {
-      value: 37,
-      label: 'A/611 АМ-21Б',
-      docName: 'Шинжилгээнд явуулах бичиг'
-   },
-   {
-      value: 38,
-      label: 'A/611 АМ-21В',
-      docName: 'Шинжилгээнд явуулах бичиг'
-   },
-   {
-      value: 39,
-      label: 'A/611 АМ-21Г',
-      docName: 'Шинжилгээнд явуулах бичиг'
-   },
-   {
-      value: 40,
-      label: 'A/611 АМ-22A',
-      docName: 'Лабораторийн шинжилгээний хуудсууд'
-   },
-   {
-      value: 41,
-      label: 'A/611 АМ-22Б',
-      docName: 'Лабораторийн шинжилгээний хуудсууд'
-   },
-   {
-      value: 42,
-      label: 'A/611 АМ-22В',
-      docName: 'Лабораторийн шинжилгээний хуудсууд'
-   },
-   {
-      value: 43,
-      label: 'A/611 АМ-22Г',
-      docName: 'Иммунологийн шинжилгээ №'
-   },
-   {
-      value: 44,
-      label: 'A/611 АМ-22Д',
-      docName: 'Цөсний шинжилгээ №'
-   },
-   {
-      value: 45,
-      label: 'A/611 АМ-22E',
-      docName: 'Хоногийн шээсэнд уураг тодорхойлох'
-   },
-   {
-      value: 46,
-      label: 'A/611 АМ-22Ж',
-      docName: 'Цэрийг микроскопоор шинжлэх'
-   },
-   {
-      value: 47,
-      label: 'A/611 АМ-22 З',
-      docName: 'Ничепоренкийн сорилоор шээсийг шинжлэх'
-   },
-   {
-      value: 48,
-      label: 'A/611 АМ-22Й',
-      docName: 'Зимницкийн сорил'
-   },
-   {
-      value: 49,
-      label: 'A/611 АМ-22К',
-      docName: 'Шинжилгээний хариуны маягт Нян судлалын лабораторийн шинжилгээний дүн'
-   },
-   {
-      value: 50,
-      label: 'A/611 АМ-22Л',
-      docName: 'Шинжилгээний хариуны маягт ХДХВ-ийн халдвар илрүүлэх шинжилгээний дүн'
-   },
-   {
-      value: 51,
-      label: 'A/611 АМ-22M',
-      docName: 'Шинжилгээний хариуны маягт тэмбүүгийн үүсгэгч илрүүлэх шинжилгээний дүн'
-   },
-   {
-      value: 52,
-      label: 'A/611 АМ-23',
-      docName: 'Лабораторийн шинжилгээний бүртгэл'
-   },
-   {
-      value: 53,
-      label: 'A/611 АМ-24A',
-      docName: 'Үйл оношийн шинжилгээний бүртгэл'
-   },
-   {
-      value: 54,
-      label: 'A/611 АМ-24Б',
-      docName: 'Хэвлийн хөндийн эрхтнүүдийн хэт авиан оношилгоо'
-   },
-   {
-      value: 55,
-      label: 'A/611 АМ-25A',
-      docName: 'Сэргээн засах эмчилгээний карт'
-   },
-   {
-      value: 56,
-      label: 'A/611 АМ-25Б',
-      docName: 'Сэргээн засах эмчилгээний бүртгэл'
-   },
-   {
-      value: 57,
-      label: 'A/611 АМ-26A',
-      docName: 'Хөнгөвчлөх эмчилгээнд хамрагсдын бүртгэл /амбулаторит/'
-   },
-   {
-      value: 58,
-      label: 'A/611 АМ-26Б',
-      docName: 'Хөнгөвчлөх эмчилгээнд хамрагсдын бүртгэл /стационарт/'
-   },
-   {
-      value: 59,
-      label: 'A/611 АМ-27',
-      docName: 'Настны эрүүл мэндийн бүртгэл'
-   },
-   {
-      value: 60,
-      label: 'A/611 АМ-28A',
-      docName: 'Зүү засал эмчилгээний карт'
-   },
-   {
-      value: 61,
-      label: 'A/611 АМ-28Б',
-      docName: 'Төөнө засал эмчилгээний карт'
-   },
-   {
-      value: 62,
-      label: 'A/611 АМ-29A',
-      docName: 'Дэвтээлгэ засал эмчилгээний карт'
-   },
-   {
-      value: 63,
-      label: 'A/611 АМ-29Б',
-      docName: 'Бариа засал эмчилгээний карт'
-   },
-   {
-      value: 64,
-      label: 'A/611 АМ-29В',
-      docName: 'Хатгах засал эмчилгээний карт'
-   },
-   {
-      value: 65,
-      label: 'A/611 АМ-30A',
-      docName: 'Өдрийн эмчилгээний бүртгэл /хүүхэд/'
-   },
-   {
-      value: 66,
-      label: 'A/611 АМ-30Б',
-      docName: 'Өдрийн эмчилгээний бүртгэл /насанд хүрэгчид/'
-   },
-   {
-      value: 67,
-      label: 'A/611 АМ-31',
-      docName: '29 хоногоос 5 хүртэлх насны хүүхдийн эндэгдлийг мэдээлэх хуудас'
-   },
-   {
-      value: 68,
-      label: 'A/611 АМ-32',
-      docName: '29 хоногоос 5 хүртэлх насны хүүхдийн төрөлхийн хөгжлийн гажгийг мэдээлэх хуудас'
-   },
-   {
-      value: 69,
-      label: 'A/611 АМ-33',
-      docName: 'Осол гэмтлийн тохиолдлыг бүртгэх хуудас'
-   },
-   {
-      value: 70,
-      label: 'A/611 АМ-34',
-      docName: 'Хөдөлгөөн засал эмчилгээний үнэлгээний хуудас'
-   },
-   {
-      value: 71,
-      label: 'A/611 АМ-35',
-      docName: 'Хөдөлмөр заслын үнэлгээний хуудас'
-   },
-   {
-      value: 72,
-      label: 'A/611 АМ-36',
-      docName:
-         'Бүх нийтээр тэмдэглэх баяр, тэмдэглэлт өдрийн амралтын үеийн эмнэлгийн тусламж, үйлчилгээг мэдээлэх бүртгэл'
-   },
-   {
-      value: 73,
-      label: 'A/611 АМ-37',
-      docName: 'Нүүр амны эмчлэгч эмчийн эмчилгээний бүртгэл'
-   },
-   {
-      value: 74,
-      label: 'A/611 АМ-38',
-      docName: 'Нүүр амны мэс заслын эмчийн эмчилгээний бүртгэл'
-   },
-   {
-      value: 75,
-      label: 'A/611 АМ-39',
-      docName: 'Нүүр амны согог заслын эмчийн эмчилгээний бүртгэл'
-   },
-   {
-      value: 76,
-      label: 'A/611 АМ-40',
-      docName: 'Нүүр амны гажиг заслын эмчийн эмчилгээний бүртгэл'
-   },
-   {
-      value: 77,
-      label: 'A/611 АМ-41',
-      docName: 'Нүүр амны урьдчилан сэргийлэх үзлэгийн бүртгэл'
-   },
-   {
-      value: 78,
-      label: 'A/611 ЭИМ-4.1',
-      docName: 'Хөхний хорт хавдрын эрт илрүүлэг үзлэгийн хуудаc'
-   },
-   {
-      value: 79,
-      label: 'A/611 ЭИМ-4.2',
-      docName: 'Хөхний хорт хавдрын эрт илрүүлэг үзлэгийн хуудаc'
-   },
-   {
-      value: 80,
-      label: 'A/611 ЭИМ-4.3',
-      docName: 'Маммографи шинжилгээний маягт'
-   },
-   {
-      value: 81,
-      label: 'A/611 ЭИМ-5.1',
-      docName: 'Умайн хүзүүний хорт хавдрын эрт илрүүлэг үзлэгийн хуудас'
-   },
-   {
-      value: 82,
-      label: 'A/611 ЭИМ-5.2',
-      docName: 'Умайн хүзүүний хорт хавдрын эрт илрүүлэг үзлэгийн хуудас'
-   },
-   {
-      value: 83,
-      label: 'A/611 СТ-1 /НҮҮР/',
-      docName: 'Өвчний түүх /нүүр/'
-   },
-   {
-      value: 84,
-      label: 'A/611 СТ-1 Эмчлүүлэгчийн анамнез',
-      docName: 'Эмчлүүлэгчийн анамнез'
-   },
-   {
-      value: 85,
-      label: 'A/611 СТ-1 Дотрын эмчийн үзлэг',
-      docName: 'Дотрын эмчийн үзлэг'
-   },
-   {
-      value: 86,
-      label: 'А/293',
-      docName: 'Яаралтай үнэлэх'
-   },
-   {
-      value: 87,
-      label: 'CT-1,2 Хавсралт 2',
-      docName: 'Амин үзүүлэлт'
-   },
-   {
-      value: 88,
-      label: 'ЭМТ- 201.4.2',
-      docName: 'Амбулаторын үзлэгт хамрагдсан хүний тоо насны бүлэг, хүйсээр'
-   },
-   {
-      value: 89,
-      label: 'CT-1,2 Хавсралт 11',
-      docName: 'Биеийн байдлыг үнэлэх хуудас'
-   },
-   {
-      value: 90,
-      label: 'CT-1,2 Хавсралт 12',
-      docName: 'Сувилгааны тэмдэглэл'
-   },
-   {
-      value: 91,
-      label: 'CT-1,2 Хавсралт 13',
-      docName: 'Шингэний баланс хянах хуудас'
-   },
-   {
-      value: 92,
-      label: 'CT-1 Клиникийн урьдчилсан онош',
-      docName: 'Клиникийн урьдчилсан онош'
-   },
-   {
-      value: 93,
-      label: 'CT-1 Клиникийн оношийн үндэслэл',
-      docName: 'Клиникийн оношийн үндэслэл'
-   },
-   {
-      value: 94,
-      label: 'CT-1 Үзлэгийн тэмдэглэл',
-      docName: 'Үзлэгийн тэмдэглэл'
-   },
-   {
-      value: 95,
-      label: 'CT-1 Эмнэлгээс гарах, шилжих үеийн дүгнэлт',
-      docName: 'Эмнэлгээс гарах, шилжих үеийн дүгнэлт'
-   },
-   {
-      value: 96,
-      label: 'CT-1,2 Хавсралт 14',
-      docName: 'Өвдөлтийг хянах хуудас'
-   },
-   {
-      value: 97,
-      label: 'A539 Хавсралт 3',
-      docName: 'Судасны гуурстай холбоотой тандалт'
-   }
-];
 
 class ReturnByIdComponent extends React.Component {
    constructor(props) {
@@ -749,6 +274,30 @@ export function ReturnById({ type, id, appointmentId, data }) {
       return <CT1_2H14 type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 97) {
       return <A539H3 type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 98) {
+      return <CT1Nud type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 99) {
+      return <CT1Ulamjlalt type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 100) {
+      return <CT1Medrel type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 101) {
+      return <CT1Chih type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 102) {
+      return <CT1Aris type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 103) {
+      return <CT1Dotood type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 104) {
+      return <CT1Gemtel type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 105) {
+      return <CT1Emegtei type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 106) {
+      return <CT1Tsus type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 107) {
+      return <CT1Setgets type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 108) {
+      return <CT1Hool type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 109) {
+      return <CT1Zurh type={type} data={data} appointmentId={appointmentId} />;
    }
 }
 
