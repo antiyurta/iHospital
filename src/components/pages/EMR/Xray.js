@@ -18,7 +18,6 @@ import PmsPatientServices from '../../../services/pms/patient.api';
 import DocumentsFormPatientServices from '../../../services/organization/document';
 import ReactToPrint from 'react-to-print';
 import dayjs from 'dayjs';
-import { FolderAddFilled } from '@ant-design/icons';
 import FormRenderHtml from '../BeforeAmbulatory/Customized/FormRenderHtml';
 //
 
@@ -192,7 +191,6 @@ function Xrays({ PatientId }) {
    //EXO
    const Exo = () => {
       const printRef = useRef();
-      const bodyRef = useRef();
       const [spinner, setSpinner] = useState(false);
       const [spinerInfo, setSpinnerInfo] = useState(false);
       const [document, setDocument] = useState();

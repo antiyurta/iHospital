@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { formatNameForDoc, getAge } from '../../../comman';
+import React, { useEffect, useState } from 'react';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
 import { Table } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
@@ -8,7 +8,7 @@ import { tubeAreaOptions, tubeChild } from '../../BeforeAmbulatory/OtherCustomiz
 //
 const A539H3 = (props) => {
    const {
-      data: { formData, patientData }
+      data: { formData }
    } = props;
    const findTubeChild = (value) => {
       return tubeChild.find((item) => item.value === value)?.label;
@@ -53,31 +53,37 @@ const A539H3 = (props) => {
                   </p>
                   <div className="flex flex-wrap py-1 text-center">
                      <div className="basis-1/5">
-                        <p style={{ fontSize: 10 }}>Эмнэлэг: UNIVERSAL MED</p>
+                        <p style={{ fontSize: 10 }}>Эмнэлэг: {chunk[0]?.history?.hospitalName}</p>
                      </div>
                      <div className="basis-1/5">
-                        <p style={{ fontSize: 10 }}>Тасаг: ДОТОР</p>
+                        <p style={{ fontSize: 10 }}>Тасаг: {chunk[0]?.history?.cabinetName}</p>
                      </div>
                      <div className="basis-2/5">
+                        <div className="inline-flex gap-1">
+                           <p className="text-[10px]">Эмчлүүлэгчийн овог, нэр:</p>
+                           <p className="underline text-[10px]">
+                              {`${chunk[0]?.history?.patientData?.lastName} ${chunk[0]?.history?.patientData?.firstName}`}
+                           </p>
+                        </div>
+                     </div>
+                     <div className="basis-1/5">
                         <p style={{ fontSize: 10 }}>
-                           Үйлчлүүлэгчийн овог нэр:{' '}
-                           {patientData?.lastName?.substring(0, 1) + '.' + patientData?.firstName}
+                           Нас: {getAge(chunk[0]?.history?.patientData?.registerNumber)} Хүйс:
+                           {getGenderInType(chunk[0]?.history?.patientData?.genderType)}
                         </p>
                      </div>
                      <div className="basis-1/5">
                         <p style={{ fontSize: 10 }}>
-                           Нас: {getAge(patientData?.registerNumber)} Хүйс:
-                           {patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}
+                           Регистрийн дугаар: {chunk[0]?.history?.patientData?.registerNumber}
                         </p>
-                     </div>
-                     <div className="basis-1/5">
-                        <p style={{ fontSize: 10 }}>Регистрийн дугаар: {patientData?.registerNumber}</p>
                      </div>
                      <div className="basis-1/5">
                         <p style={{ fontSize: 10 }}>Үндсэн онош:</p>
                      </div>
                      <div className="basis-2/5">
-                        <p style={{ fontSize: 10 }}>Эмнэлэг хэвтсэн огноо: 2022-01-01</p>
+                        <p style={{ fontSize: 10 }}>
+                           Эмнэлэг хэвтсэн огноо: {dayjs(chunk[0]?.history.createdAt).format('YYYY/MM/DD')}
+                        </p>
                      </div>
                      <div className="basis-1/5">
                         <p style={{ fontSize: 10 }}>Судасны гуурс төрөл: {tubeType(chunk[0]?.data?.q0)}</p>

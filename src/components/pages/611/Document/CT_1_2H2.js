@@ -7,7 +7,6 @@ function CT_1_2H2(props) {
    const {
       data: { formData }
    } = props;
-   console.log(props);
    const [chunks, setChunks] = useState();
    function sliceIntoChunks(arr, chunkSize, secondSize) {
       const slices = [];
@@ -103,25 +102,30 @@ function CT_1_2H2(props) {
                            </p>
                         </div>
                         <p className="font-bold text-center">ЭМЧЛҮҮЛЭГЧИЙН АМИН ҮЗҮҮЛЭЛТИЙГ ХЯНАХ ХУУДАС</p>
-                        <div className="flow-root">
-                           <div className="float-left inline-flex">
-                              <p>Эмчлүүлэгчийн овог, нэр:</p>
-                              <p>
-                                 {formatNameForDoc(
-                                    chunk[0]?.[0]?.history?.patientData?.lastName,
-                                    chunk[0]?.[0]?.history?.patientData?.firstName
-                                 )}
+                        <div className="flex flex-row gap-1 justify-between">
+                           <div className="inline-flex gap-1">
+                              <p className="text-[12px]">Эмчлүүлэгчийн овог, нэр:</p>
+                              <p className="underline text-[12px]">
+                                 {`${chunk[0]?.[0]?.history?.patientData?.lastName} ${chunk[0]?.[0]?.history?.patientData?.firstName}`}
                               </p>
                            </div>
-                           <div className="float-right inline-flex gap-1">
-                              <p>Нас:</p>
-                              <p>{getAge(chunk[0]?.[0]?.history?.patientData?.registerNumber)}</p>
-                              <p className="pl-1">Хүйс:</p>
-                              <p>{getGenderInType(chunk[0]?.[0]?.history?.patientData?.genderType)}</p>
-                              <p className="pl-1">Тасаг:</p>
-                              <p>{chunk[0]?.[0]?.history?.cabinetName}</p>
-                              <p className="pl-1">Өрөө:</p>
-                              <p>{chunk[0]?.[0]?.history?.roomNumber}</p>
+                           <div className="flex flex-row gap-1">
+                              <p className="text-[12px]">Өвчний түүх №:</p>
+                              <p className="underline text-[12px]">{chunk[0]?.[0]?.history?.historyNumber}</p>
+                           </div>
+                           <div className="inline-flex gap-1">
+                              <p className="text-[12px]">Нас:</p>
+                              <p className="underline text-[12px]">
+                                 {getAge(chunk[0]?.[0]?.history?.patientData?.registerNumber)}
+                              </p>
+                              <p className="pl-1 text-[12px]">Хүйс:</p>
+                              <p className="underline text-[12px]">
+                                 {getGenderInType(chunk[0]?.[0]?.history?.patientData?.genderType)}
+                              </p>
+                              <p className="pl-1 text-[12px]">Тасаг:</p>
+                              <p className="underline text-[12px]">{chunk[0]?.[0]?.history?.cabinetName}</p>
+                              <p className="pl-1 text-[12px]">Өрөө:</p>
+                              <p className="underline text-[12px]">{chunk[0]?.[0]?.history?.roomNumber}</p>
                            </div>
                         </div>
                      </div>
@@ -739,7 +743,7 @@ function CT_1_2H2(props) {
                                  <p
                                     style={{
                                        fontSize: 12,
-                                       textAlign: 'center'
+                                       textAlign: 'start'
                                     }}
                                  >
                                     Цусны даралт
@@ -749,7 +753,7 @@ function CT_1_2H2(props) {
                                  <p
                                     style={{
                                        fontSize: 12,
-                                       textAlign: 'center'
+                                       textAlign: 'start'
                                     }}
                                  >
                                     Хоол №
@@ -759,7 +763,7 @@ function CT_1_2H2(props) {
                                  <p
                                     style={{
                                        fontSize: 12,
-                                       textAlign: 'center'
+                                       textAlign: 'start'
                                     }}
                                  >
                                     Биеийн жин
@@ -771,7 +775,7 @@ function CT_1_2H2(props) {
                                        <p
                                           style={{
                                              fontSize: 12,
-                                             textAlign: 'center'
+                                             textAlign: 'start'
                                           }}
                                        >
                                           ялгаруулалт давтамж /хэдэн удаа/
@@ -862,7 +866,6 @@ function CT_1_2H2(props) {
                         <div className="basis-2/3">
                            <div className="flex flex-wrap">
                               {chunk?.map((firstChunk, index) => {
-                                 console.log('firstChunk', firstChunk);
                                  return (
                                     <div key={index} className="basis-1/5">
                                        <div className="w-full amaraDeer amaraBaruun">
@@ -895,7 +898,7 @@ function CT_1_2H2(props) {
                                                 fontWeight: 'bold'
                                              }}
                                           >
-                                             {firstChunk[0]?.data?.q2}
+                                             {firstChunk[0]?.data?.q2 || '----'}
                                           </p>
                                        </div>
                                        <div className="w-full">
@@ -923,7 +926,7 @@ function CT_1_2H2(props) {
                                                       fontWeight: 'bold'
                                                    }}
                                                 >
-                                                   {'|'}
+                                                   {'Ө | О'}
                                                 </p>
                                              </div>
                                              {line.map((el) => {

@@ -66,7 +66,7 @@ const DocumentViewer = () => {
                   padding: 10
                }}
             >
-               <div ref={currentRef}>
+               <div ref={currentRef} className="print-remove-p">
                   {documentType === 'one' ? <Body document={selectedDocument} /> : null}
                   {documentType === 'many' ? (
                      <Each of={selectedDocument} render={(document) => <Body document={document} />} />

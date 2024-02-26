@@ -82,7 +82,11 @@ function MainInpatientHistory() {
             if (response.status === 200) {
                setIsLoading(false);
                const data = response.data?.response?.response;
-               const state = data.some((item) => item.documentId === document.value);
+               const state = data.some(
+                  (item) =>
+                     (item.documentId === document.value && item.appointmentId === incomeEmrData.inpatientRequestId) ||
+                     (item.documentId === document.value && item.appointmentId === incomeEmrData.appointmentId)
+               );
                if (state) {
                   Modal.info({
                      content: `Та ${document.docName} маягт бөглөсөн байна`

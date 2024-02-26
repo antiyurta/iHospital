@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { formatNameForDoc, getAge } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
 import bodyImg from './611Body.jpg';
 import dayjs from 'dayjs';
 import ImageMarker from 'react-image-marker';
 import { CheckOutlined } from '@ant-design/icons';
 const CT_1_2H14 = (props) => {
    const {
-      data: { formData, patientData }
+      data: { formData }
    } = props;
    const [chunks, setChunks] = useState();
    function sliceIntoChunks(arr, chunkSize) {
@@ -15,7 +15,6 @@ const CT_1_2H14 = (props) => {
          const chunk = arr.slice(i, i + chunkSize);
          res.push(chunk);
       }
-      console.log('res', res);
       return res;
    }
    const renderOtherImg = (chunkSize) => {
@@ -53,28 +52,30 @@ const CT_1_2H14 = (props) => {
                   <p className="font-bold text-center" style={{ fontSize: 16 }}>
                      ӨВДӨЛТИЙГ ХЯНАХ ХУУДАС
                   </p>
-                  <div className="flow-root py-1">
-                     <div className="float-left inline-flex">
-                        <p style={{ fontSize: 14 }}>Эмчлүүлэгчийн овог, нэр:</p>
-                        <p style={{ fontSize: 14 }}>
-                           {formatNameForDoc(patientData?.lastName, patientData?.firstName)}
+                  <div className="flex flex-row gap-1 justify-between">
+                     <div className="inline-flex gap-1">
+                        <p className="text-[12px]">Эмчлүүлэгчийн овог, нэр:</p>
+                        <p className="underline text-[12px]">
+                           {`${chunk[0]?.history?.patientData?.lastName} ${chunk[0]?.history?.patientData?.firstName}`}
                         </p>
                      </div>
-                     <div className="float-right inline-flex">
-                        <p style={{ fontSize: 14 }}>Нас:</p>
-                        <p style={{ fontSize: 14 }}>{getAge(patientData?.registerNumber)}</p>
-                        <p style={{ fontSize: 14 }} className="pl-1">
-                           Хүйс:
+                     <div className="flex flex-row gap-1">
+                        <p className="text-[12px]">Өвчний түүх №:</p>
+                        <p className="underline text-[12px]">{chunk[0]?.history?.historyNumber}</p>
+                     </div>
+                     <div className="inline-flex gap-1">
+                        <p className="text-[12px]">Нас:</p>
+                        <p className="underline text-[12px]">
+                           {getAge(chunk[0]?.history?.patientData?.registerNumber)}
                         </p>
-                        <p style={{ fontSize: 14 }}>{patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}</p>
-                        <p style={{ fontSize: 14 }} className="pl-1">
-                           Тасаг:
+                        <p className="pl-1 text-[12px]">Хүйс:</p>
+                        <p className="underline text-[12px]">
+                           {getGenderInType(chunk[0]?.history?.patientData?.genderType)}
                         </p>
-                        {/* <p style={{ fontSize: 14 }}>{location?.state?.departmentName}</p> */}
-                        <p style={{ fontSize: 14 }} className="pl-1">
-                           Өрөө:
-                        </p>
-                        {/* <p style={{ fontSize: 14 }}>{location?.state?.roomNumber}</p> */}
+                        <p className="pl-1 text-[12px]">Тасаг:</p>
+                        <p className="underline text-[12px]">{chunk[0]?.history?.cabinetName}</p>
+                        <p className="pl-1 text-[12px]">Өрөө:</p>
+                        <p className="underline text-[12px]">{chunk[0]?.history?.roomNumber}</p>
                      </div>
                   </div>
                   <table className="table table-bordered attac14">
@@ -111,14 +112,14 @@ const CT_1_2H14 = (props) => {
                                  />
                               </th>
                            ))}
-                           {renderOtherImg(chunk?.length)?.map((img) => (
-                              <th>
+                           {renderOtherImg(chunk?.length)?.map((img, indx) => (
+                              <th key={indx}>
                                  <img
                                     style={{
                                        minWidth: 150
                                     }}
                                     src={img.src}
-                                    alt="asd"
+                                    alt="img"
                                  />
                               </th>
                            ))}

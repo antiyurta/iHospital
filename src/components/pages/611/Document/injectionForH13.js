@@ -6,7 +6,7 @@ const StatusIo = {
    Evening: 'q2-3' // Орой
 };
 
-const calcPageCount = (items, pageInSize) => {
+const calcPageCount = (items, history, pageInSize) => {
    let data = [];
    const datas = [];
    items.map((item, index) => {
@@ -18,7 +18,7 @@ const calcPageCount = (items, pageInSize) => {
          datas.push(data);
       }
    });
-   return datas;
+   return { data: datas, history: history };
 };
 
 export const calcTotal = (data) => {
@@ -51,6 +51,7 @@ export const calcTotal = (data) => {
    return data;
 };
 export const configureData = (formData) => {
+   const history = formData?.find((data) => data.history._id)?.history;
    const result = [];
    formData?.map((item) => {
       const date = dayjs(item.createdAt).format('YYYY/MM/DD');
@@ -148,7 +149,7 @@ export const configureData = (formData) => {
          outputs.push(urineBalance, pooBalance, outTubeBalance, vomitBalance);
          result.push({ date: date, inputs: inputs, outputs: outputs, nurses: nurses });
       }
-      return calcPageCount(result, 3);
+      return calcPageCount(result, history, 3);
    });
-   return calcPageCount(result, 3);
+   return calcPageCount(result, history, 3);
 };

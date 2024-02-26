@@ -10,7 +10,6 @@ import DocumentViewer from './DocumentViewer';
 
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
-
 const OneWindow = (props) => {
    const { usageType, handleView } = props;
    const { isViewDocument } = useContext(EmrContext);
@@ -40,10 +39,10 @@ const OneWindow = (props) => {
                   <Splide
                      options={{
                         pagination: false,
-                        arrows: false,
                         autoWidth: true,
                         autoHeight: true,
-                        gap: 10
+                        gap: 10,
+                        padding: 28
                      }}
                   >
                      {usageType === 'OUT' ? (
@@ -85,7 +84,7 @@ const OneWindow = (props) => {
                      )}
                   </Splide>
                </div>
-               <div className="content">
+               <div className="content overflow-auto">
                   <Render />
                </div>
             </div>

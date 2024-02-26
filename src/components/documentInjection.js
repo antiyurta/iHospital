@@ -76,6 +76,7 @@ export const groupByDocumentValueIn = (groupedDocuments) => {
                result[key].push({
                   unikey: index,
                   isExpand: true,
+                  position: document.position,
                   documentId: documentId,
                   children: [document]
                });

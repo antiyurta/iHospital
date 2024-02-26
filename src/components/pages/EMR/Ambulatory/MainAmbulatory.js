@@ -59,10 +59,10 @@ export default function MainAmbulatory({ patientId }) {
             <Splide
                options={{
                   pagination: false,
-                  arrows: false,
                   autoWidth: true,
                   autoHeight: true,
-                  gap: 10
+                  gap: 10,
+                  padding: 30
                }}
             >
                {items?.map((item) => (

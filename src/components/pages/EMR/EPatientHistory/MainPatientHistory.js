@@ -311,10 +311,10 @@ function MainPatientHistory({ handleClick }) {
                   <Splide
                      options={{
                         pagination: false,
-                        arrows: false,
                         autoWidth: true,
                         autoHeight: true,
-                        gap: 10
+                        gap: 10,
+                        padding: 28
                      }}
                   >
                      {items?.map((item) => (

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
 import dayjs from 'dayjs';
 
@@ -43,10 +42,7 @@ const FormRenderHtml = (props) => {
       } else if (item.type === 'input' || item.type === 'inputNumber') {
          if (answer) {
             let pattern = /\.{1,}/g;
-            const text = item.question.replace(
-               pattern,
-               `<span style="text-decoration: underline; font-weight: 300;"> ${answer} </span>`
-            );
+            const text = item.question.replace(pattern, `<span style="font-weight: 300;"> ${answer} </span>`);
             return (
                <span
                   dangerouslySetInnerHTML={{ __html: text }}
@@ -131,13 +127,13 @@ const FormRenderHtml = (props) => {
       }
       if (item.type === 'title') {
          return (
-            <>
-               <p className="w-full" key={item.index}></p>
-               <span className="flex flex-wrap" key={item.index}>
+            <React.Fragment key={item.index}>
+               <p className="w-full"></p>
+               <span className="flex flex-wrap">
                   <RenderOptions item={item} />
                   {item.options.map(renderHTML)}
                </span>
-            </>
+            </React.Fragment>
          );
       }
       return (

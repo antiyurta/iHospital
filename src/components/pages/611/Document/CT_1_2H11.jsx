@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { formatNameForDoc, getAge } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
 import { Table } from 'react-bootstrap';
-import moment from 'moment';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
@@ -14,9 +13,8 @@ function CT_1_2H11(props) {
       </span>
    );
    const {
-      data: { formData, patientData }
+      data: { formData }
    } = props;
-   const location = {};
    const form = [];
    const [chunks, setChunks] = useState();
    function sliceIntoChunks(arr, chunkSize) {
@@ -28,7 +26,6 @@ function CT_1_2H11(props) {
       return res;
    }
    useEffect(() => {
-      console.log('formData', formData);
       setChunks(sliceIntoChunks(formData, 8));
    }, [formData]);
    return (
@@ -45,28 +42,30 @@ function CT_1_2H11(props) {
                      <p className="font-bold text-center" style={{ fontSize: 16 }}>
                         СУВИЛАГЧ ЭМЧЛҮҮЛЭГЧИЙН БИЕИЙН БАЙДЛЫГ ҮНЭЛЭХ ХУУДАС
                      </p>
-                     <div className="flow-root py-1">
-                        <div className="float-left inline-flex">
-                           <p style={{ fontSize: 10 }}>Эмчлүүлэгчийн овог, нэр:</p>
-                           <p style={{ fontSize: 10 }}>
-                              {formatNameForDoc(patientData?.lastName, patientData?.firstName)}
+                     <div className="flex flex-row gap-1 justify-between">
+                        <div className="inline-flex gap-1">
+                           <p className="text-[12px]">Эмчлүүлэгчийн овог, нэр:</p>
+                           <p className="underline text-[12px]">
+                              {`${chunk[0]?.history?.patientData?.lastName} ${chunk[0]?.history?.patientData?.firstName}`}
                            </p>
                         </div>
-                        <div className="float-right inline-flex">
-                           <p style={{ fontSize: 10 }}>Нас:</p>
-                           <p style={{ fontSize: 10 }}>{getAge(patientData?.registerNumber)}</p>
-                           <p style={{ fontSize: 10 }} className="pl-1">
-                              Хүйс:
+                        <div className="flex flex-row gap-1">
+                           <p className="text-[12px]">Өвчний түүх №:</p>
+                           <p className="underline text-[12px]">{chunk[0]?.history?.historyNumber}</p>
+                        </div>
+                        <div className="inline-flex gap-1">
+                           <p className="text-[12px]">Нас:</p>
+                           <p className="underline text-[12px]">
+                              {getAge(chunk[0]?.history?.patientData?.registerNumber)}
                            </p>
-                           <p style={{ fontSize: 10 }}>{patientData?.genderType === 'MAN' ? 'Эр' : 'Эм'}</p>
-                           <p style={{ fontSize: 10 }} className="pl-1">
-                              Тасаг:
+                           <p className="pl-1 text-[12px]">Хүйс:</p>
+                           <p className="underline text-[12px]">
+                              {getGenderInType(chunk[0]?.history?.patientData?.genderType)}
                            </p>
-                           <p style={{ fontSize: 10 }}>{location?.state?.departmentName}</p>
-                           <p style={{ fontSize: 10 }} className="pl-1">
-                              Өрөө:
-                           </p>
-                           <p style={{ fontSize: 10 }}>{location?.state?.roomNumber}</p>
+                           <p className="pl-1 text-[12px]">Тасаг:</p>
+                           <p className="underline text-[12px]">{chunk[0]?.history?.cabinetName}</p>
+                           <p className="pl-1 text-[12px]">Өрөө:</p>
+                           <p className="underline text-[12px]">{chunk[0]?.history?.roomNumber}</p>
                         </div>
                      </div>
                      <Table bordered className="bcp">

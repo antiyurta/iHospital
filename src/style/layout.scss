@@ -363,6 +363,12 @@ section.ant-layout {
                position: relative;
                width: 100%;
                height: 30px;
+               button.splide__arrow.splide__arrow--prev {
+                  left: 0 !important;
+               }
+               button.splide__arrow.splide__arrow--next {
+                  right: 0 !important;
+               }
                > .swiper-group {
                   position: absolute;
                   height: 26px;

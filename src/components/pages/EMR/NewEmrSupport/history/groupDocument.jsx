@@ -28,7 +28,7 @@ const RenderDate = ({ date }) => {
    }
    return <p className="text-[#4E5969] text-sm font-medium">{`Яаралтай - Яаралтай`}</p>;
 };
-const includeIds = [83, 84, 92, 93, 94, 95];
+
 const DocumentIn = (props) => {
    const { setDocumentView, setIsReloadDocumentHistory } = useContext(EmrContext);
    const checkStatus = (id) => {
@@ -55,13 +55,20 @@ const DocumentIn = (props) => {
       });
    };
 
+   const ReturnNameByColor = ({ document }) => {
+      if (document.children) {
+         return <p className="text-sm font-medium text-[#EC7A09]">{ReturnByIdToName(props.document.documentId)}</p>;
+      }
+      return <p className="text-sm font-medium text-[#22A06B]">{ReturnByIdToName(props.document.documentId)}</p>;
+   };
+
    return (
       <div className="flex flex-col gap-1 hover:cursor-pointer">
          <div className="flex flex-row justify-between gap-3 items-center" onClick={() => setExpanded(!expanded)}>
             <div className="flex flex-row gap-2 items-center">
                {checkStatus(props.document?.documentId)}
                <p className="text-sm font-medium">{props.index + 1}.</p>
-               <p className="text-sm font-medium text-[#22A06B]">{ReturnByIdToName(props.document.documentId)}</p>
+               <ReturnNameByColor document={props.document} />
             </div>
             {expanded ? <img src={expandIcon} alt="icon" /> : <img src={expandedIcon} alt="icon" />}
          </div>
@@ -103,7 +110,13 @@ const GroupDocument = (props) => {
    const [patientId, setPatientId] = useState(null);
    const [isGlobalDb, setIsGlobalDb] = useState(null);
    const findHistory = (documents) => {
-      const histories = documents?.map((document) => document.history).filter(Boolean);
+      const histories = documents?.map((document) => {
+         if (document.isExpand) {
+            return document.children?.find((child) => child.history._id)?.history;
+         } else {
+            return document?.history;
+         }
+      });
       if (histories?.length > 0) {
          const history = histories[0];
          setHistory(history);

@@ -1,9 +1,9 @@
-import { Input } from 'antd';
+import { Input, Popconfirm } from 'antd';
 import notePublic from '../../../../src/assets/images/notePublic.svg';
 
 import React, { useEffect, useState } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
-import { SendOutlined } from '@ant-design/icons';
+import { CloseOutlined, SendOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { formatNameForDoc } from '../../comman';
 
@@ -45,12 +45,28 @@ const DoctorNotes = (props) => {
             setIsLoading(false);
          });
    };
+
+   const onDelete = async (id) => {
+      setIsLoading(true);
+      await jwtInterceopter
+         .delete('organization/note/' + id)
+         .then((response) => {
+            if (response.status === 200) {
+               setMessage('');
+               getNotes();
+            }
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
+   };
+
    useEffect(() => {
       patientId && getNotes();
    }, [isPublic]);
 
    const Note = ({ data }) => {
-      const { noteType, note } = data;
+      const { noteType, note, id } = data;
       return (
          <div className="note">
             <div className="header">
@@ -65,7 +81,22 @@ const DoctorNotes = (props) => {
                   </p>
                   <p className="doctor">Эмч: {formatNameForDoc(data.createdLastName, data.createdFirstName)}</p>
                </div>
-               <p className="date">{dayjs(data.createdAt).format('YYYY/MM/DD HH:mm')}</p>
+               <div className="flex flex-row gap-1">
+                  <p className="date">{dayjs(data.createdAt).format('YYYY/MM/DD HH:mm')}</p>
+                  <Popconfirm
+                     title="Устгах"
+                     description="Та устгахдаа итгэлттэй байна уу?"
+                     onConfirm={() => onDelete(id)}
+                     okText="Тийм"
+                     cancelText="Үгүй"
+                  >
+                     <CloseOutlined
+                        style={{
+                           color: 'red'
+                        }}
+                     />
+                  </Popconfirm>
+               </div>
             </div>
             <p
                style={{

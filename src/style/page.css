@@ -276,6 +276,16 @@ table.dailyTable tbody > tr > th {
    position: absolute;
 }
 
+.new-form {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.new-form p span {
+   font-size: 13px;
+}
+
 .print-remove-p {
    display: flex;
    flex-direction: column;
@@ -283,6 +293,9 @@ table.dailyTable tbody > tr > th {
 }
 
 @media print {
+   .new-form {
+      display: block !important;
+   }
    .print-remove-p {
       gap: 0px !important;
    }
