@@ -21,7 +21,6 @@ import CreateStory from './components/pages/Bed/MainBed/CreateStory';
 import { PublicRoutes, ProtectedRoutes } from './Routes';
 //
 
-const ExaminationParams = React.lazy(() => import('./components/pages/service/ExaminationParams'));
 const Medicine = React.lazy(() => import('./components/pages/service/Medicine/Medicine'));
 const EMR = React.lazy(() => import('./components/pages/EMR/NewEmr'));
 const BeforeAmbulatoryDetail = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryDetail'));
@@ -88,7 +87,6 @@ function App() {
                   {/* ene heregtei */}
                   <Route path="/medicine" element={<Medicine />} />
                   <Route path="/medicineSupport" element={<MedicineSupport />} />
-                  <Route path="/examinationParams" element={<ExaminationParams />} />
                   <Route path="/acting" element={<Acting />} />
                   <Route path="/depBalance" element={<DepBalance />} />
                   <Route path="/finance" element={<Finance />} />

@@ -76,6 +76,13 @@ const column = [
       col: 8
    },
    {
+      index: 'isXyp',
+      label: 'Xyp-тай эсэх',
+      isView: true,
+      input: 'switch',
+      col: 8
+   },
+   {
       index: 'isInsurance',
       label: 'Даатгалтай эсэх',
       isView: false,

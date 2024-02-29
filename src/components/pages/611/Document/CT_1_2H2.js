@@ -534,7 +534,7 @@ function CT_1_2H2(props) {
                                        paddingTop: 40
                                     }}
                                  >
-                                    25
+                                    20
                                  </p>
                               </div>
                               <div

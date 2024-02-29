@@ -339,7 +339,7 @@ function List(props) {
                                                 render: (isActive, row) => {
                                                    if (
                                                       isExtraGrud.isChange &&
-                                                      isActive &&
+                                                      !isActive &&
                                                       row.appointment &&
                                                       row.slotStatus === 0
                                                    ) {
@@ -429,6 +429,8 @@ function List(props) {
                   onFinishChangeSlot(values);
                })
             }
+            cancelText="Болих"
+            okText="Цаг солих"
             confirmLoading={isLoadingChangeLoading}
          >
             <Form form={changeForm} layout="vertical">

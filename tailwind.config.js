@@ -2,9 +2,7 @@
 module.exports = {
    important: true,
    theme: {
-      fontFamily: {
-         times: ['Times New Roman', 'serif']
-      }
+      fontFamily: {}
    },
    content: ['./src/**/*.{js,ts,jsx,tsx}'],
    plugins: [require('tailwindcss/nesting'), require('tailwindcss')]

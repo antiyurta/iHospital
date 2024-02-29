@@ -110,9 +110,9 @@ section.ant-layout {
                   }
                }
                .menu-item-sub-body {
+                  border-radius: 15px;
                   display: flex;
                   flex-direction: column;
-                  padding-left: 6px;
                   gap: 3px;
                   height: auto;
                   .before {

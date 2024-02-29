@@ -147,7 +147,10 @@ const GroupDocument = (props) => {
                patientId: patientId
             }
          }
-      ).then(() => {
+      ).then((res) => {
+         if (res.status === 200) {
+            openNofi('success', 'Амжилттай', 'Амжилттай өвчтөний мэдээлэл заслаа');
+         }
          setIsReloadDocumentHistory(true);
       });
    };

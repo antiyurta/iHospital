@@ -27,5 +27,28 @@ class Service {
    async deleteSetOrder(id) {
       return await jwtInterceopter.delete('service/setorder/' + id);
    }
+   async getServiceErequest(conf) {
+      return await jwtInterceopter.get('service/erequest', conf);
+   }
+   async getErequestDetail(params) {
+      return await jwtInterceopter.get('service/examination-request-detail', {
+         params: params
+      });
+   }
+   async patchErequestDetail(id, body) {
+      return await jwtInterceopter.patch('service/examination-request-detail/' + id, body);
+   }
+   async getErequestParameter(conf) {
+      return await jwtInterceopter.get('service/parameter', conf);
+   }
+   async postErequestParameter(body) {
+      return await jwtInterceopter.post('service/parameter', body);
+   }
+   async patchErequestParameter(id, body) {
+      return await jwtInterceopter.patch('service/parameter/' + id, body);
+   }
+   async getResultForExamination(conf) {
+      return await jwtInterceopter.get('laboratory', conf);
+   }
 }
 export default new Service();

@@ -141,13 +141,6 @@ function Index({ type, isDoctor }) {
             data['departmentId'] = row.inDepartmentId;
             data['serviceId'] = row.insuranceServiceId;
          }
-         if (row.startDate === null && isDoctor && type === 0) {
-            data['startDate'] = new Date();
-            AppointmentService.patchPreOrder(row.id, {
-               slotId: row.slotId,
-               startDate: new Date()
-            });
-         }
          dispatch(setEmrData(data));
          if (isDoctor) {
             navigate(`/main/emr`, {
@@ -160,7 +153,7 @@ function Index({ type, isDoctor }) {
          }
       } else {
          const payment = row.isPayment || row.isInsurance;
-         if (!payment && row.type != 1) {
+         if (!payment && row.type === 3) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
             if (row.startDate === null && isDoctor) {
@@ -219,7 +212,14 @@ function Index({ type, isDoctor }) {
          data['departmentId'] = row.inDepartmentId;
       }
       // uzleg ehleh tsag
-      if (row.startDate === null && isDoctor) {
+      if (row.startDate === null && isDoctor && type === 1) {
+         data['startDate'] = new Date();
+         AppointmentService.patchPreOrder(row.id, {
+            slotId: row.slotId,
+            startDate: new Date()
+         });
+      }
+      if (row.startDate === null && isDoctor && type === 0) {
          data['startDate'] = new Date();
          AppointmentService.patchAppointment(row.id, {
             startDate: new Date(),

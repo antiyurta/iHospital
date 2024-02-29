@@ -7,6 +7,9 @@ import { checkNumber, Delete, Get, Patch, Post } from '../../comman';
 import UTable from '../../UTable';
 const { Search } = Input;
 const { Option } = Select;
+//
+import ServiceApi from '../../../services/service/service';
+import examinationApi from '../../../services/service/examination.api';
 function ExaminationParams() {
    const token = useSelector(selectCurrentToken);
    const [editMode, setEditMode] = useState(false);
@@ -22,57 +25,57 @@ function ExaminationParams() {
    const [isOpenModalPara, setIsOpenModalPara] = useState(false);
    const getExamination = async () => {
       setExaminationLoading(true);
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('service/examination', token, conf);
-      setExaminations(response.data);
-      setExaminationLoading(false);
+      await examinationApi
+         .get()
+         .then(({ data: { response } }) => {
+            setExaminations(response.data);
+         })
+         .finally(() => {
+            setExaminationLoading(false);
+         });
    };
    const getMeasurement = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('reference/measurement', token, conf);
-      setMeasurements(response.data);
+      setExaminationLoading(true);
+      await ServiceApi.getErequestParameter()
+         .then(({ data: { response } }) => {
+            console.log(response);
+            setMeasurements(response.data);
+         })
+         .finally(() => {
+            setExaminationLoading(false);
+         });
    };
    const getParams = async (id) => {
       setSelectedExaId(id);
       setExaminationParaLoading(true);
-      const conf = {
-         headers: {},
+      await ServiceApi.getErequestParameter({
          params: {
             examinationId: id
          }
-      };
-      const response = await Get('service/parameter', token, conf);
-      setExaminationPara(response.data);
-      setExaminationParaLoading(false);
+      })
+         .then(({ data: { response } }) => {
+            setExaminationPara(response.data);
+         })
+         .finally(() => {
+            setExaminationParaLoading(false);
+         });
    };
    const filteredExamination = examinations.filter((examination) => {
       return examination.name.toLowerCase().includes(searchText.toLowerCase());
    });
    const onFinish = async (values) => {
       values['examinationId'] = selectedExaId;
-      const conf = {
-         headers: {},
-         params: {}
-      };
       if (editMode) {
-         const response = await Patch('service/parameter/' + editId, token, conf, values);
-         if (response === 200) {
+         await ServiceApi.patchErequestParameter(editId, values).then(() => {
             setEditMode(false);
             setIsOpenModalPara(false);
             getParams(selectedExaId);
-         }
+         });
       } else {
-         const response = await Post('service/parameter', token, conf, values);
-         if (response === 201) {
+         await ServiceApi.postErequestParameter(values).then((response) => {
             setIsOpenModalPara(false);
             getParams(selectedExaId);
-         }
+         });
       }
    };
    const deleteModal = (id) => {
@@ -94,7 +97,8 @@ function ExaminationParams() {
    const columnExam = [
       {
          title: '№',
-         render: (_, row, rowIndex) => {
+         width: 80,
+         render: (_, _row, rowIndex) => {
             return rowIndex + 1;
          }
       },
@@ -108,6 +112,7 @@ function ExaminationParams() {
       {
          title: 'Үйлдэл',
          dataIndex: 'id',
+         width: 100,
          render: (text) => {
             return (
                <>
@@ -145,10 +150,7 @@ function ExaminationParams() {
       },
       {
          title: 'Хэмжих нэгж',
-         dataIndex: 'measurementId',
-         render: (text) => {
-            return measurements.find((e) => e.id === text)?.name;
-         }
+         dataIndex: 'measurement'
       },
       {
          title: <span className="whitespace-normal">Ердийн лавлах хэмжээ Их</span>,
@@ -220,9 +222,9 @@ function ExaminationParams() {
       getMeasurement();
    }, []);
    return (
-      <div>
-         <div className="flex flex-wrap">
-            <div className="w-1/3 p-1">
+      <div className="p-3 w-full h-full bg-[#f5f6f7]">
+         <div className="flex flex-col gap-3">
+            <div className="flex flex-row gap-3">
                <Card bordered={false} className="header-solid max-h-max rounded-md" title="Шинжилгээ жагсаалт">
                   <Search
                      placeholder="Нэрээр хайх"
@@ -242,7 +244,7 @@ function ExaminationParams() {
                      }}
                      scroll={{
                         y: 300,
-                        x: null
+                        x: 400
                      }}
                      rowClassName={(record, index) => {
                         if (!record.isActive) {
@@ -255,29 +257,6 @@ function ExaminationParams() {
                      pagination={false}
                   />
                </Card>
-               <div className="pt-2">
-                  <UTable
-                     title={'Хэмжих нэгж'}
-                     url={'reference/measurement'}
-                     column={[
-                        {
-                           index: 'name',
-                           label: 'Нэр',
-                           isView: true,
-                           isSearch: false,
-                           input: 'input',
-                           col: 12
-                        }
-                     ]}
-                     isCreate={true}
-                     isRead={false}
-                     isUpdate={true}
-                     isDelete={true}
-                     width="40%"
-                  />
-               </div>
-            </div>
-            <div className="w-2/3 p-1">
                <Card
                   bordered={false}
                   className="header-solid max-h-max rounded-md"
@@ -291,6 +270,9 @@ function ExaminationParams() {
                         spinning: examinationParaLoading,
                         tip: 'Уншиж байна....'
                      }}
+                     scroll={{
+                        x: 400
+                     }}
                      bordered
                      columns={columnExamPara}
                      dataSource={examinationPara}
@@ -298,7 +280,25 @@ function ExaminationParams() {
                   />
                </Card>
             </div>
-            <div className="w-full pt-2"></div>
+            <UTable
+               title={'Хэмжих нэгж'}
+               url={'reference/measurement'}
+               column={[
+                  {
+                     index: 'name',
+                     label: 'Нэр',
+                     isView: true,
+                     isSearch: false,
+                     input: 'input',
+                     col: 12
+                  }
+               ]}
+               isCreate={true}
+               isRead={false}
+               isUpdate={true}
+               isDelete={true}
+               width="40%"
+            />
          </div>
          <Modal
             title={!editMode ? 'Үзүүлэлт нэмэх' : 'Үзүүлэлт засах'}
@@ -345,7 +345,7 @@ function ExaminationParams() {
                   <div className="w-full">
                      <Form.Item
                         label="Хэмжих нэгж"
-                        name="measurementId"
+                        name="measurement"
                         rules={[
                            {
                               required: true,
@@ -353,15 +353,7 @@ function ExaminationParams() {
                            }
                         ]}
                      >
-                        <Select>
-                           {measurements?.map((measurement, index) => {
-                              return (
-                                 <Option key={index} value={measurement.id}>
-                                    {measurement.name}
-                                 </Option>
-                              );
-                           })}
-                        </Select>
+                        <Input />
                      </Form.Item>
                   </div>
                   <div className="w-1/2 pr-1">

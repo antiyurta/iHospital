@@ -38,13 +38,12 @@ function Bed() {
             isInpatient: true
          }
       }).then((response) => {
-         console.log(response);
          setRooms(response.data.response.data);
       });
    };
    const onFinish = async (data) => {
       await OrganizationBedService.post(data).then((response) => {
-         if (response.status == 200) {
+         if (response.status == 201) {
             getBeds();
             form.resetFields();
             setIsOpen(false);

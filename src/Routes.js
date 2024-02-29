@@ -88,6 +88,8 @@ const BeforeXrayRequest = React.lazy(() => import('./components/pages/Xray/Befor
 const MainBed = React.lazy(() => import('./components/pages/Bed/Index'));
 // lobarotory
 const RequestAnalys = React.lazy(() => import('./components/pages/Laboratory/RequestAnalys/Index'));
+// lawlah utga orulah
+const ExaminationParams = React.lazy(() => import('./components/pages/service/ExaminationParams'));
 // hynah sambar
 const Dashboard = React.lazy(() => import('./components/pages/Organization/Dashboard'));
 
@@ -111,6 +113,12 @@ export const ProtectedRoutes = [
       mnName: 'Лаборатори',
       url: '/request_analys',
       element: RequestAnalys
+   },
+   {
+      name: 'analys_params',
+      mnName: 'Лаборатори-params',
+      url: '/request_analys_params',
+      element: ExaminationParams
    },
    {
       name: 'bed_management',

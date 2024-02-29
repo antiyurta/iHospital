@@ -1,22 +1,22 @@
 module.exports = [
    {
       label: 'Захиалга өгсөн',
-      value: 0
+      value: 'ORDER'
    },
    {
       label: 'Сорьц авсан',
-      value: 1
+      value: 'SAMPLED'
    },
    {
       label: 'Хүлээн авсан',
-      value: 2
+      value: 'TESTED'
    },
    {
       label: 'Хариу гарсан',
-      value: 3
+      value: 'ANSWERED'
    },
    {
       label: 'Хариу баталгаажсан',
-      value: 4
+      value: 'CONFIRMED'
    }
 ];
