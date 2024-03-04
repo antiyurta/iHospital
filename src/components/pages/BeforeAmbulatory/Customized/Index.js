@@ -44,6 +44,7 @@ function Index(props) {
    const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
    const [data, setData] = useState([]);
+   const [answeredKeyWords, setAnsweredKeyWords] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
@@ -224,6 +225,8 @@ function Index(props) {
    useEffect(() => {
       if (isEdit) {
          form.setFieldsValue(document.data);
+         const keyWords = Object.keys(document.data).filter((key) => document.data[key] !== '');
+         setAnsweredKeyWords(keyWords);
       }
    }, [isEdit]);
    useEffect(() => {
@@ -234,6 +237,9 @@ function Index(props) {
    }, [documentForm]);
 
    const checkProgress = (_current, all) => {
+      if (answeredKeyWords?.length > 0) {
+         Object.keys(all).forEach((key) => (all[key] === undefined ? delete all[key] : {}));
+      }
       const length = Object.keys(all)?.length - 1;
       const selected = Object.entries(all)
          ?.map(([key, value]) => {
@@ -359,7 +365,14 @@ function Index(props) {
                         <Input />
                      </ProgressBar>
                      <div className="h-[500px] overflow-auto p-3">
-                        <NewFormRender useForm={form} form={documentForm} formOptionIds={[]} isCheck={true} />
+                        <NewFormRender
+                           useForm={form}
+                           form={documentForm}
+                           formOptionIds={[]}
+                           isCheck={true}
+                           formName={null}
+                           incomeKeyWords={answeredKeyWords}
+                        />
                      </div>
                   </Form>
                   <div className="flex flex-row gap-2 justify-between">

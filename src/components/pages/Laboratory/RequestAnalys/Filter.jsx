@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, ConfigProvider, DatePicker, Input, Segmented, Select, Space } from 'antd';
+import { Card, ConfigProvider, DatePicker, Input, Segmented, Select } from 'antd';
 import locale from 'antd/es/locale/mn_MN';
 import examinationProcess from '../examinationProcess';
 import dayjs from 'dayjs';

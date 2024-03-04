@@ -1,3 +1,4 @@
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import {
    ArrowLeftOutlined,
    ArrowRightOutlined,
@@ -5,26 +6,21 @@ import {
    EditOutlined,
    PrinterOutlined
 } from '@ant-design/icons';
-import { Avatar, Button, Card, Divider, Empty, Form, Input, Modal, Space, Table, Tabs, Tag } from 'antd';
-import moment from 'moment';
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { Button, Card, Empty, Form, Input, Modal, Space, Table, Tag } from 'antd';
 import Barcode from 'react-barcode';
-import { useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, formatNameForDoc } from '../../../comman';
-import examinationProcess from '../examinationProcess';
-import MonitorCriteria from '../../Insurance/MonitorCriteria';
-
-//
-import FilterIndex from './Filter';
-
-import 'moment/locale/mn';
-
-import ServiceApi from '../../../../services/service/service';
 import dayjs from 'dayjs';
 
+//
+import examinationProcess from '../examinationProcess';
+import MonitorCriteria from '../../Insurance/MonitorCriteria';
+import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../comman';
+import FilterIndex from './Filter';
+import Body from '../Template/Body';
+import { ReturnById } from '../Template/index';
 import AnswerBody from './AnswerBody';
+import { ListPatientInfo, TypeInfo } from '../../../ListInjection';
+import ServiceApi from '../../../../services/service/service';
 
 const ProcessEnum = {
    order: 'ORDER',
@@ -39,23 +35,36 @@ function Index() {
    const today = new Date();
    const [isRefresh, setIsRefresh] = useState(false);
    const barcodeRef = useRef();
+   const printRef = useRef();
    const [callbackForm] = Form.useForm();
    const [resultForm] = Form.useForm();
-   const [statusFilter, setStatusFilter] = useState(0);
+   const [editMode, setEditMode] = useState(false);
+   const [statusFilter, setStatusFilter] = useState('ORDER');
    const [requestList, setRequestList] = useState([]);
    const [requestListMeta, setRequestListMeta] = useState({});
    const [requestListLoading, setRequestListLoading] = useState(false);
    const [requestDetailList, setRequestDetailList] = useState([]);
    const [requestDetailListLoading, setRequestDetailListLoading] = useState(false);
    const [barcodeState, setBarCodeState] = useState(false);
+   const [confirmState, setConfirmState] = useState(false);
    const [selectedRequest, setSelectedRequest] = useState({});
    const [selectedRequestDtl, setSelectedRequestDtl] = useState([]);
    const [barcodeLoading, setBarcodeLoading] = useState(false);
    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
    const [isOpenCallBack, setIsOpenCallBack] = useState(false);
+   const [isOpenConfirmed, setIsOpenConfirmed] = useState(false);
    const [callback, setCallback] = useState(Number);
    const [isOpenResult, setIsOpenResult] = useState(false);
    const [selectedResult, setSelectedResult] = useState([]);
+   //
+
+   const handlePrint = useReactToPrint({
+      // onBeforeGetContent: () => setPrintLoading(true),
+      // onBeforePrint: () => setPrintLoading(false),
+      // onPrintError: () => console.log('asda'),
+      content: () => printRef.current
+   });
+
    //
    const processUpper = (currentProcess) => {
       return examinationProcess
@@ -84,13 +93,60 @@ function Index() {
          getErequestDtl(callback.examinationRequest);
       });
    };
+   const onFinish = async (values) => {
+      if (editMode) {
+         const id = selectedRequest.examinationResult.id;
+         await ServiceApi.patchResultForExamination(id, {
+            result: values
+         })
+            .then((_response) => {
+               openNofi('success', 'Амжилттай', 'Шинжилгээний хариу амжиллтай хадгалагдлаа');
+               setIsOpenResult(false);
+            })
+            .finally(() => {
+               setIsRefresh(!isRefresh);
+            });
+      } else {
+         await ServiceApi.postResultForExamination({
+            result: values,
+            patientId: selectedRequest?.patientId,
+            examinationRequestId: selectedRequest?.id
+         })
+            .then((_response) => {
+               openNofi('success', 'Амжилттай', 'Шинжилгээний хариу амжиллтай хадгалагдлаа');
+               setIsOpenResult(false);
+            })
+            .finally(() => {
+               setIsRefresh(!isRefresh);
+            });
+      }
+   };
+   const getTypeInfo = (isCito, usageType) => {
+      const string = usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори';
+      if (isCito) {
+         return <TypeInfo bgColor="#dd4b39" textColor="white" text={string} />;
+      }
+      return <TypeInfo bgColor="#5cb85c" textColor="white" text={string} />;
+   };
+
+   const onClickAddResult = (row) => {
+      if (row?.examinationResult?.hasOwnProperty('id')) {
+         setEditMode(true);
+         resultForm.setFieldsValue(row.examinationResult.result);
+      } else {
+         setEditMode(false);
+         resultForm.resetFields();
+      }
+      setSelectedResult(row);
+      setIsOpenResult(true);
+   };
+
    // columns
    const requestListColumn = [
       {
          title: '№',
-         render: (_, _record, index) => {
-            return requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1);
-         }
+         render: (_, _record, index) =>
+            requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1)
       },
       {
          width: 250,
@@ -100,28 +156,12 @@ function Index() {
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
-               </div>
-            );
-         }
+         render: (patient) => <ListPatientInfo patientData={patient} />
       },
       {
          title: 'Огноо',
          dataIndex: 'createdAt',
-         render: (createdAt) => {
-            return dayjs(createdAt).format('YYYY-MM-DD HH:mm');
-         }
+         render: (createdAt) => dayjs(createdAt).format('YYYY-MM-DD HH:mm')
       },
       {
          title: 'Хяналт',
@@ -133,21 +173,14 @@ function Index() {
       {
          title: 'Төлөв',
          dataIndex: 'isCito',
-         render: (isCito, row) => {
-            if (isCito) {
-               return <p className="bg-[#dd4b39] text-white">{row.usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>;
-            } else {
-               return <p className="bg-[#5cb85c] text-white">{row.usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>;
-            }
-         }
+         render: (isCito, row) => getTypeInfo(isCito, row.usageType)
       }
    ];
    const requestListColumn2 = [
       {
          title: '№',
-         render: (_, _record, index) => {
-            return requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1);
-         }
+         render: (_, _record, index) =>
+            requestListMeta.page * requestListMeta.limit - (requestListMeta.limit - index - 1)
       },
       {
          width: 250,
@@ -157,57 +190,21 @@ function Index() {
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
-               </div>
-            );
-         }
+         render: (patient) => <ListPatientInfo patientData={patient} />
       },
       {
          title: 'Огноо',
-         dataIndex: 'erequests_requestDate',
-         render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
-         }
+         dataIndex: 'createdAt',
+         render: (createdAt) => dayjs(createdAt).format('YYYY-MM-DD HH:mm')
       },
       {
          title: 'Төлөв',
-         render: (_, row) => {
-            if (row.erequests_isCito) {
-               return (
-                  <p className="bg-[#dd4b39] text-white">{row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>
-               );
-            } else {
-               return (
-                  <p className="bg-[#5cb85c] text-white">{row.erequests_usageType == 'IN' ? 'Хэвтэн' : 'Амбулатори'}</p>
-               );
-            }
-         }
+         render: (isCito, row) => getTypeInfo(isCito, row.usageType)
       },
       {
          title: 'Хариу оруулах',
          render: (_, row) => {
-            return (
-               <Button
-                  type="primary"
-                  icon={<EditOutlined />}
-                  onClick={() => {
-                     setSelectedResult(row);
-                     resultForm.resetFields();
-                     setIsOpenResult(true);
-                  }}
-               />
-            );
+            return <Button type="primary" icon={<EditOutlined />} onClick={() => onClickAddResult(row)} />;
          }
       }
    ];
@@ -274,6 +271,9 @@ function Index() {
 
    // columns end
    const getErequest = async (page, limit, startDate, endDate, process, depId, type, searchValue) => {
+      if (process != statusFilter) {
+         setSelectedRequest({});
+      }
       setRequestListLoading(true);
       await ServiceApi.getServiceErequest({
          params: {
@@ -374,7 +374,7 @@ function Index() {
 
    const groupResult = useMemo(() => {
       if (selectedResult?.details?.length > 0) {
-         const { details } = selectedResult;
+         const { details, examinationResults } = selectedResult;
          const results = new Set();
          details.map((detail) =>
             results.add(`${detail.barcode}-${detail.examination.examinationTypeId}-${detail.examination.type.name}`)
@@ -385,12 +385,38 @@ function Index() {
                name: name,
                barcode: barcode,
                typeId: Number(typeId),
-               data: details.filter((detail) => detail.examination.examinationTypeId === Number(typeId))
+               data: details.filter((detail) => detail.examination.examinationTypeId === Number(typeId)),
+               result: examinationResults
             };
          });
       }
       return {};
    }, [selectedResult]);
+
+   // hariu hewleh ued
+   const middleware = () => {
+      // request={selectedRequest} keys={selectedRowKeys}
+      console.log(selectedRequest);
+      const unDupKeys = selectedRowKeys.filter((key, index) => selectedRowKeys.indexOf(key) === index);
+      console.log(unDupKeys);
+      const d = unDupKeys?.map((key) => {
+         return selectedRequest.details?.map((detail) => {
+            if (detail.id === key) {
+               const typeId = detail.examination.examinationTypeId;
+               return selectedRequest.examinationResult?.result[typeId];
+            }
+         });
+      });
+      console.log('dd', d);
+
+      // const selectedDetails = selectedRowKeys?.map((key) =>
+      //    selectedRequest.details?.find((detail) => detail.id == key)
+      // );
+      // const selectedTypeIds = selectedDetails?.map((detail) => detail.examination.examinationTypeId);
+      // const unDup = selectedTypeIds.filter((typeId, index) => selectedTypeIds.indexOf(typeId) === index);
+      // console.log('unDup', unDup);
+   };
+
    useEffect(() => {
       getErequest(1, 10, today, today, ProcessEnum.order);
    }, []);
@@ -437,6 +463,11 @@ function Index() {
                         onRow={(row) => {
                            return {
                               onClick: () => {
+                                 if (statusFilter === ProcessEnum.confirmed) {
+                                    setConfirmState(true);
+                                 } else {
+                                    setConfirmState(false);
+                                 }
                                  getErequestDtl(row);
                               }
                            };
@@ -468,14 +499,23 @@ function Index() {
                      }}
                      locale={{ emptyText: <Empty description={'Хоосон'} /> }}
                      rowClassName="hover:cursor-pointer"
-                     rowSelection={{
-                        ...rowSelection
-                     }}
+                     rowSelection={statusFilter != ProcessEnum.confirmed ? { ...rowSelection } : null}
                      columns={requestDetailListColumn}
                      dataSource={requestDetailList}
                      pagination={false}
                      footer={() => {
                         if (!barcodeState) {
+                           if (confirmState && !isObjectEmpty(selectedRequest)) {
+                              return (
+                                 <Button
+                                    icon={<PrinterOutlined />}
+                                    className="ml-2"
+                                    onClick={() => setIsOpenConfirmed(true)}
+                                 >
+                                    Хариу хэвлэх
+                                 </Button>
+                              );
+                           }
                            return;
                         } else {
                            return (
@@ -487,18 +527,15 @@ function Index() {
                                  >
                                     Баркод хэвлэх
                                  </Button>
-                                 {statusFilter != 0 && (
+                                 {statusFilter != ProcessEnum.confirmed && (
                                     <Button
                                        icon={<ArrowRightOutlined />}
                                        className="ml-2"
-                                       onClick={() => changeExaminationProcess()}
+                                       onClick={() => {
+                                          changeExaminationProcess();
+                                       }}
                                     >
                                        Шилжүүлэх
-                                    </Button>
-                                 )}
-                                 {statusFilter === 4 && (
-                                    <Button icon={<PrinterOutlined />} className="ml-2">
-                                       Хариу хэвлэх
                                     </Button>
                                  )}
                               </>
@@ -509,8 +546,7 @@ function Index() {
                </Card>
             </div>
          </div>
-
-         <div>
+         <div className="hidden">
             <div ref={barcodeRef} className="mt-4">
                {Object.entries(groupBarcode).map(([key, value]) => {
                   return (
@@ -546,12 +582,32 @@ function Index() {
             title="Хариу оруулах хэсэг"
             open={isOpenResult}
             onCancel={() => setIsOpenResult(false)}
+            onOk={() => {
+               resultForm.validateFields().then(onFinish);
+            }}
+            okText="Хадгалах"
+            cancelText="Болих"
             destroyOnClose
-            footer={null}
          >
             <Form form={resultForm} layout="vertical">
-               <AnswerBody form={resultForm} data={groupResult || {}} patientId={selectedRequest?.patientId} />
+               <AnswerBody form={resultForm} data={groupResult || {}} />
             </Form>
+         </Modal>
+         <Modal
+            title="Шинжилгээний хариу харах цонх"
+            open={isOpenConfirmed}
+            onCancel={() => setIsOpenConfirmed(false)}
+            onOk={() => {
+               handlePrint();
+            }}
+            bodyStyle={{
+               width: '19cm'
+            }}
+            width={'21cm'}
+         >
+            <div ref={printRef}>
+               <ReturnById hospitalId={selectedRequest.examinationResult?.hospital?.id} request={selectedRequest} />
+            </div>
          </Modal>
       </div>
    );

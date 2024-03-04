@@ -30,7 +30,7 @@ const Sidebar = ({ collapsed }) => {
                            key: `${indx}-${idx}`,
                            icon: (
                               <p
-                                 style={{ width: 20, marginBottom: 0 }}
+                                 style={{ width: 20, minWidth: 20, maxWidth: 20, marginBottom: 0 }}
                                  dangerouslySetInnerHTML={{ __html: subMenu.icon }}
                               ></p>
                            ),
@@ -48,7 +48,7 @@ const Sidebar = ({ collapsed }) => {
                         key: indx,
                         icon: (
                            <p
-                              style={{ width: 20, marginBottom: 0 }}
+                              style={{ width: 20, minWidth: 20, maxWidth: 20, marginBottom: 0 }}
                               dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
                            ></p>
                         ),
@@ -60,7 +60,7 @@ const Sidebar = ({ collapsed }) => {
                         key: menu.id,
                         icon: (
                            <p
-                              style={{ width: 20, marginBottom: 0 }}
+                              style={{ width: 20, minWidth: 20, maxWidth: 20, marginBottom: 0 }}
                               dangerouslySetInnerHTML={{ __html: menu.menu.icon }}
                            ></p>
                         ),

@@ -666,6 +666,12 @@
    background: #e5e6eb;
 }
 
+.document-forms {
+   .form-child {
+      padding-left: 24px;
+   }
+}
+
 .document-form {
    display: flex;
    flex-direction: row;
@@ -719,6 +725,9 @@
    .form-inputs {
       background: #ecf5ff;
    }
+}
+.document-form.disabled {
+   opacity: 0.6;
 }
 
 .ant-tabs-content {
@@ -857,6 +866,150 @@
    .ant-select {
       .ant-select-selector {
          height: 38px !important;
+      }
+   }
+}
+
+table.table-611 {
+   width: 100%;
+   thead {
+      font-size: 12px;
+      tr {
+         th {
+            border: 1px solid black;
+            padding: 2px 6px;
+         }
+      }
+   }
+   tbody {
+      font-size: 12px;
+      tr {
+         th {
+            border: 1px solid black;
+            padding: 2px 6px;
+         }
+         td {
+            vertical-align: baseline;
+            border: 1px solid black;
+            padding: 2px 6px;
+            span {
+               color: black;
+            }
+         }
+      }
+   }
+}
+
+.exo {
+   .exo-header,
+   .exo-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      display: none;
+   }
+   .exo-page {
+      page-break-after: auto;
+   }
+   @media print {
+      .exo-page {
+         padding-left: 1cm;
+         padding-right: 1cm;
+      }
+      .exo-header,
+      .exo-header-space {
+         padding-top: 5px;
+         padding-left: 1cm;
+         padding-right: 1cm;
+         height: 120px;
+      }
+      .exo-footer,
+      .exo-footer-space {
+         padding-left: 1cm;
+         padding-right: 1cm;
+         height: 95px;
+      }
+      .exo-header {
+         display: flex;
+         position: fixed;
+         top: 0mm;
+         width: 100%;
+      }
+      .exo-footer {
+         display: flex;
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+      }
+      thead {
+         display: table-header-group;
+      }
+      tfoot {
+         display: table-footer-group;
+      }
+   }
+}
+
+.laboratory {
+   table.lab {
+      thead,
+      tbody {
+         tr {
+            th,
+            td {
+               text-align: center;
+               border: 1px solid black;
+            }
+         }
+      }
+   }
+   .lab-header {
+      height: 230px;
+   }
+   .lab-footer {
+      height: 100px;
+   }
+   .lab-page {
+      width: 100%;
+      page-break-before: always;
+      :last-child {
+         page-break-before: avoid;
+      }
+   }
+   @media print {
+      .lab-page {
+         padding-left: 1.25cm;
+         padding-right: 1.25cm;
+      }
+      .lab-header,
+      .lab-header-space {
+         padding-top: 1.7526cm;
+         padding-left: 1.25cm;
+         padding-right: 1.25cm;
+         height: 230px;
+      }
+      .lab-footer,
+      .lab-footer-space {
+         padding-bottom: 1.7526cm;
+         padding-left: 1.25cm;
+         padding-right: 1.25cm;
+         height: 100px;
+      }
+      .lab-header {
+         position: fixed;
+         top: 0;
+         width: 100%;
+      }
+      .lab-footer {
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+      }
+      thead {
+         display: table-header-group;
+      }
+      tfoot {
+         display: table-footer-group;
       }
    }
 }

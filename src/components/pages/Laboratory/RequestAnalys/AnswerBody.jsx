@@ -1,12 +1,12 @@
 import { Button, Form, Input, InputNumber, Radio, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ServiceApi from '../../../../services/service/service';
 import { DownloadOutlined } from '@ant-design/icons';
 import { openNofi } from '../../../comman';
 
 const AnswerBody = (props) => {
-   const { form, data, patientId } = props;
+   const { form, data } = props;
    const [isLoading, setIsLoading] = useState(false);
 
    const getExaminationDetailResult = async (barcode, data, nameIndex) => {
@@ -97,12 +97,10 @@ const AnswerBody = (props) => {
       );
    };
 
-   const onFinish = (values) => {
-      const data = {
-         result: values,
-         patientId: patientId
-      };
-      console.log('data', data);
+   const isCheck = (name) => {
+      const results = form.getFieldValue(name);
+      if (results?.length > 0) return true;
+      return false;
    };
 
    return (
@@ -112,6 +110,7 @@ const AnswerBody = (props) => {
                <div className="flex flex-row gap-1 items-center justify-between">
                   <p className="text-sm text-black font-bold">{item.name}</p>
                   <Button
+                     disabled={isCheck(item.typeId)}
                      type="primary"
                      icon={<DownloadOutlined />}
                      onClick={() => {
@@ -197,16 +196,6 @@ const AnswerBody = (props) => {
                </Form.List>
             </div>
          ))}
-         <Button
-            type="primary"
-            onClick={() => {
-               form.validateFields().then((values) => {
-                  onFinish(values);
-               });
-            }}
-         >
-            Хадгалах
-         </Button>
       </div>
    );
 };

@@ -50,5 +50,11 @@ class Service {
    async getResultForExamination(conf) {
       return await jwtInterceopter.get('laboratory', conf);
    }
+   async postResultForExamination(body) {
+      return await jwtInterceopter.post('service/examinationResult', body);
+   }
+   async patchResultForExamination(id, body) {
+      return await jwtInterceopter.patch('service/examinationResult/' + id, body);
+   }
 }
 export default new Service();

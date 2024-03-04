@@ -315,18 +315,14 @@ function Xrays({ PatientId }) {
                                     }}
                                     content={() => printRef.current}
                                  />
-                                 <div ref={printRef} className="page-a5 w-full m-auto">
-                                    <div className="subpage">
-                                       <XrayDocumentReturnById
-                                          serviceName={serviceName}
-                                          hospitalId={hospitalId}
-                                          document={document}
-                                          patient={patient}
-                                          body={
-                                             <FormRenderHtml formId={document.formId} documentData={document.data} />
-                                          }
-                                       />
-                                    </div>
+                                 <div ref={printRef}>
+                                    <XrayDocumentReturnById
+                                       serviceName={serviceName}
+                                       hospitalId={hospitalId}
+                                       document={document}
+                                       patient={patient}
+                                       body={<FormRenderHtml formId={document.formId} documentData={document.data} />}
+                                    />
                                  </div>
                               </div>
                            ) : (

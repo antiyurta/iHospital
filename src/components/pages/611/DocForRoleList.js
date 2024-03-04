@@ -185,7 +185,7 @@ function DocForRoleList() {
          title: 'Тасаг',
          dataIndex: 'departments',
          render: (departments) => {
-            return departments?.map((departments) => departments.name);
+            return departments?.map((departments) => departments.name).join('|');
          }
       },
       {

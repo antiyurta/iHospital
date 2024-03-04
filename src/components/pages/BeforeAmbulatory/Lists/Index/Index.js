@@ -1,14 +1,13 @@
 import React from 'react';
 import { CheckOutlined, CloseOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
-import 'moment/locale/mn';
+import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentDepId, selectCurrentInsurance, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import { formatNameForDoc, getAge, getGenderInType, inspectionTOJSON, openNofi } from '../../../../comman';
+import { getAge, getGenderInType, inspectionTOJSON, openNofi } from '../../../../comman';
 import orderType from './orderType.js';
 import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 import MonitorCriteria from '../../../Insurance/MonitorCriteria';
@@ -27,6 +26,7 @@ import { NewInput } from '../../../../Input/Input';
 import ScheduleTypeInfo from './scheduleTypeInfo';
 import ListFilter from './listFilter';
 import InpatientTypeInfo from './inpatientTypeInfo';
+import { ListPatientInfo, TypeInfo } from '../../../../ListInjection.jsx';
 const { TextArea } = Input;
 
 function Index({ type, isDoctor }) {
@@ -286,114 +286,31 @@ function Index({ type, isDoctor }) {
       //3 urdcilsan
       //4 uridcilsan sergiileh
       if (type === 1) {
-         return (
-            <p
-               className="bg-red-500 text-white"
-               style={{
-                  padding: '4px 8px',
-                  borderRadius: 15
-               }}
-            >
-               Яаралтай
-            </p>
-         );
+         return <TypeInfo bgColor="#ef4444" textColor="white" text={'Яаралтай'} />;
       } else if (type === 2) {
-         return 'sadasd';
+         return <TypeInfo bgColor="#eab308" textColor="black" text={'Шууд'} />;
       } else if (type === 3) {
-         const beginTime = begin?.split(':');
-         const endTime = end?.split(':');
-         if ((beginTime, endTime)) {
-            return (
-               <p
-                  className="bg-[#5cb85c] text-white"
-                  style={{
-                     borderRadius: 15
-                  }}
-               >
-                  {beginTime[0] + ':' + beginTime[1] + '-' + endTime[0] + ':' + endTime[1]}
-               </p>
-            );
+         const beginTime = begin.substring(0, 5);
+         const endTime = end.substring(0, 5);
+         if (beginTime && endTime) {
+            return <TypeInfo bgColor="#5cb85c" textColor="white" text={beginTime + '-' + endTime} />;
          }
          return;
       } else {
-         return (
-            <p
-               className="bg-[#5bc0de] text-white"
-               style={{
-                  padding: '4px 8px',
-                  borderRadius: 15
-               }}
-            >
-               Урьдчилан сэргийлэх
-            </p>
-         );
+         return <TypeInfo bgColor="#5bc0de" textColor="white" text={'Урьдчилан сэргийлэх'} />;
       }
    };
-   const getEWSInfo = (assesment) => (
-      <p
-         style={{
-            backgroundColor: assesment?.color,
-            margin: '4px 8px',
-            borderRadius: 15,
-            color: 'white'
-         }}
-      >
-         {assesment?.total}
-      </p>
-   );
-   const getPaymentInfo = (isPayment) => {
-      if (isPayment) {
-         return (
-            <p
-               className="bg-[#5cb85c] text-white"
-               style={{
-                  borderRadius: 15
-               }}
-            >
-               Төлсөн
-            </p>
-         );
-      } else {
-         return (
-            <p
-               className="bg-red-500 text-white"
-               style={{
-                  borderRadius: 15
-               }}
-            >
-               Төлөгдөөгүй
-            </p>
-         );
+   const getPaymentInfo = (state) => {
+      if (state) {
+         return <TypeInfo bgColor="#5cb85c" textColor="white" text={'Төлсөн'} />;
       }
+      return <TypeInfo bgColor="#ef4444" textColor="white" text={'Төлөгдөөгүй'} />;
    };
    const getInPatientType = (type) => {
       if (type === 'EMERGENCY') {
-         return (
-            <p
-               className="bg-red-500 text-white"
-               style={{
-                  padding: '4px 8px',
-                  fontSize: 12,
-                  borderRadius: 15
-               }}
-            >
-               Яаралтай
-            </p>
-         );
-      } else {
-         return (
-            <p
-               className="bg-green-500 text-white"
-               style={{
-                  padding: '4px 8px',
-                  fontSize: 12,
-                  borderRadius: 15
-               }}
-            >
-               Төлөвлөгөөт
-            </p>
-         );
+         return <TypeInfo bgColor="#ef4444" textColor="white" text={'Яаралтай'} />;
       }
+      return <TypeInfo bgColor="#84cc16" textColor="white" text={'Төлөвлөгөөт'} />;
    };
    const getInspectionInfo = (inspectionType) => {
       if (inspectionType === 1) {
@@ -450,19 +367,7 @@ function Index({ type, isDoctor }) {
          title: 'Эмч',
          dataIndex: 'employee',
          width: 150,
-         render: (employee) => (
-            <div className="ambo-list-user">
-               <Avatar
-                  style={{
-                     minWidth: 32
-                  }}
-               />
-               <div className="info">
-                  <p className="name">{formatNameForDoc(employee?.lastName, employee?.firstName)}</p>
-                  <p>{employee?.registerNumber}</p>
-               </div>
-            </div>
-         )
+         render: (employee) => <ListPatientInfo patientData={employee} />
       },
       {
          title: 'Он сар',
@@ -483,7 +388,7 @@ function Index({ type, isDoctor }) {
          // яаралтай байвал эсвэл энгийн
          dataIndex: 'assesment',
          width: 50,
-         render: (assesment) => getEWSInfo(assesment)
+         render: (assesment) => <TypeInfo bgColor={assesment?.color} textColor={'white'} text={assesment?.total} />
       },
       {
          title: 'Үзлэг',
@@ -495,19 +400,7 @@ function Index({ type, isDoctor }) {
          title: 'Өвчтөн',
          dataIndex: 'patient',
          width: 170,
-         render: (patient) => (
-            <div className="ambo-list-user">
-               <Avatar
-                  style={{
-                     minWidth: 32
-                  }}
-               />
-               <div className="info">
-                  <p className="name">{formatNameForDoc(patient.lastName, patient.firstName)}</p>
-                  <p>{patient?.registerNumber}</p>
-               </div>
-            </div>
-         )
+         render: (patient) => <ListPatientInfo patientData={patient} />
       },
       {
          title: 'Нас',
@@ -624,26 +517,20 @@ function Index({ type, isDoctor }) {
    const InPatientColumns = [
       {
          title: '№',
-         render: (_, _record, index) => {
-            return meta.page * meta.limit - (meta.limit - index - 1);
-         },
+         render: (_, _record, index) => meta.page * meta.limit - (meta.limit - index - 1),
          width: 40
       },
       {
          title: 'Төрөл',
          dataIndex: 'type',
          width: 100,
-         render: (text) => {
-            return getInPatientType(text);
-         }
+         render: (type) => getInPatientType(type)
       },
       {
          title: 'Тасаг',
          width: 160,
          dataIndex: ['structure', 'name'],
-         render: (text) => {
-            return <span className="whitespace-break-spaces">{text}</span>;
-         }
+         render: (name) => <span className="whitespace-break-spaces">{name}</span>
       },
       {
          title: 'Өрөө',
@@ -654,57 +541,25 @@ function Index({ type, isDoctor }) {
          title: 'Эмч',
          dataIndex: 'doctor',
          width: 170,
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
-               </div>
-            );
-         }
+         render: (doctor) => <ListPatientInfo patientData={doctor} />
       },
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
          width: 170,
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
-               </div>
-            );
-         }
+         render: (patient) => <ListPatientInfo patientData={patient} />
       },
       {
          title: 'Нас',
          width: 40,
          dataIndex: ['patient', 'registerNumber'],
-         render: (text) => {
-            return getAge(text);
-         }
+         render: (registerNumber) => getAge(registerNumber)
       },
       {
          title: 'Хүйс',
          width: 40,
          dataIndex: ['patient', 'genderType'],
-         render: (text) => {
-            return getGenderInType(text);
-         }
+         render: (genderType) => getGenderInType(genderType)
       },
       {
          title: 'Хэвтэх өдөр',
@@ -814,35 +669,19 @@ function Index({ type, isDoctor }) {
       {
          title: '№',
          width: 40,
-         render: (_, record, index) => {
-            return meta.page * meta.limit - (meta.limit - index - 1);
-         }
+         render: (_, record, index) => meta.page * meta.limit - (meta.limit - index - 1)
       },
       {
          title: 'Эмч',
          dataIndex: 'employee',
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object?.lastName, object?.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
-               </div>
-            );
-         }
+         render: (employee) => <ListPatientInfo patientData={employee} />
       },
       {
          title: 'Он сар',
          dataIndex: ['slot', 'schedule', 'workDate'],
-         render: (text, row) => {
-            if (text != null) {
-               return dayjs(text).format('YYYY-MM-DD');
+         render: (workDate, row) => {
+            if (workDate != null) {
+               return dayjs(workDate).format('YYYY-MM-DD');
             } else {
                return dayjs(row.createdAt).format('YYYY-MM-DD');
             }
@@ -851,81 +690,51 @@ function Index({ type, isDoctor }) {
       {
          title: 'Үзлэгийн цаг',
          dataIndex: 'slot',
-         render: (slot, row) => {
-            return getTypeInfo(row.type, slot?.startTime, slot?.endTime);
-         }
+         render: (slot, row) => getTypeInfo(row.type, slot?.startTime, slot?.endTime)
       },
       {
          title: 'Үзлэг',
          dataIndex: 'inspectionType',
-         render: (inspectionType) => {
-            return getInspectionInfo(inspectionType);
-         }
+         render: (inspectionType) => getInspectionInfo(inspectionType)
       },
       {
          title: 'Өвчтөн',
          dataIndex: 'patient',
-         render: (object) => {
-            return (
-               <div className="ambo-list-user">
-                  <Avatar
-                     style={{
-                        minWidth: 32
-                     }}
-                  />
-                  <div className="info">
-                     <p className="name">{formatNameForDoc(object.lastName, object.firstName)}</p>
-                     <p>{object?.registerNumber}</p>
-                  </div>
-               </div>
-            );
-         }
+         render: (patient) => <ListPatientInfo patientData={patient} />
       },
       {
          title: 'Нас',
          width: 40,
          dataIndex: ['patient', 'registerNumber'],
-         render: (text) => {
-            return getAge(text);
-         }
+         render: (registerNumber) => getAge(registerNumber)
       },
       {
          title: 'Хүйс',
          width: 40,
          dataIndex: ['patient', 'genderType'],
-         render: (text) => {
-            return getGenderInType(text);
-         }
+         render: (genderType) => getGenderInType(genderType)
       },
       {
          title: 'Захиалсан огноо',
-         dataIndex: ['createdAt'],
-         render: (text) => {
-            return dayjs(text).format('YYYY-MM-DD HH:mm');
-         }
+         dataIndex: 'createdAt',
+         render: (createdAt) => dayjs(createdAt).format('YYYY-MM-DD HH:mm')
       },
       {
          title: 'Төлбөр',
-         width: 60,
-         dataIndex: ['isPayment'],
-         render: (text) => {
-            return getPaymentInfo(text);
-         }
+         width: 100,
+         dataIndex: 'isPayment',
+         render: (isPayment) => getPaymentInfo(isPayment)
       },
       {
          title: 'Даатгал',
-         width: 60,
+         width: 100,
          dataIndex: 'isInsurance',
-         render: (text) => {
-            return getPaymentInfo(text);
-         }
+         render: (isInsurance) => getPaymentInfo(isInsurance)
       },
       {
          title: 'ЭСҮ',
          dataIndex: 'assesment',
-         render: (assesment) => {
-            return getEWSInfo(assesment?.color, assesment?.total);
-         }
+         render: (assesment) => <TypeInfo bgColor={assesment?.color} textColor={'white'} text={assesment?.total} />
       },
       {
          title: 'Үйлдэл',
