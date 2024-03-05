@@ -148,10 +148,7 @@ const Index = (props) => {
 
    const getCheckParentType = (parentIndex) => {
       const item = items.find((item) => item.index === parentIndex);
-      if (item && item.type === 'table') {
-         return true;
-      }
-      return false;
+      return item.type;
    };
 
    const renderHTML = (item) => {

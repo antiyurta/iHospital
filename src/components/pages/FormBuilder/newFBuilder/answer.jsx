@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 const Answer = (props) => {
    const { item, handleClick, handleRemove, handleChange, handleCheckParentType } = props;
    const [isAddType, setIsAddType] = useState(false);
+   const [isExpand, setIsExpand] = useState(false);
    const [type, setType] = useState(item.type);
    const [question, setQuestion] = useState(item.question);
    const [keyWord, setKeyWord] = useState(item.keyWord);
@@ -15,7 +16,14 @@ const Answer = (props) => {
       });
    }, [question, keyWord]);
    useEffect(() => {
-      setIsAddType(handleCheckParentType(item.parentIndex));
+      const parentType = handleCheckParentType(item.parentIndex);
+      if (parentType === 'checkbox') {
+         setIsExpand(false);
+      } else if (parentType === 'table') {
+         setIsAddType(true);
+      } else {
+         setIsExpand(true);
+      }
    }, []);
    return (
       <div
@@ -89,7 +97,7 @@ const Answer = (props) => {
                }}
             />
          </div>
-         <Button title="Задрах" onClick={() => handleClick(item.index)} icon={<PlusOutlined />} />
+         {isExpand ? <Button title="Задрах" onClick={() => handleClick(item.index)} icon={<PlusOutlined />} /> : null}
          <Popconfirm
             title="Асуулт устгах?"
             description="Та устгахдаа итгэлтэй байна уу доторх бүр агууллага устана?"

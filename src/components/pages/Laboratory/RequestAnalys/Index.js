@@ -603,7 +603,7 @@ function Index() {
             bodyStyle={{
                width: '19cm'
             }}
-            width={'21cm'}
+            width={'max-content'}
          >
             <div ref={printRef}>
                <ReturnById hospitalId={selectedRequest.examinationResult?.hospital?.id} request={selectedRequest} />

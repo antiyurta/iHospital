@@ -36,7 +36,7 @@ function MainPatientHistory({ handleClick }) {
    const [confirmModal, setConfirmModal] = useState(false);
    const [loading, setLoading] = useState(false);
    const Tab1Content = useCallback(() => {
-      return <HistoryTab patientId={patientId} inspection={inspection} />;
+      return <HistoryTab />;
    }, []);
    const Tab2Content = useCallback(() => {
       return <GeneralInspection patientId={patientId} inspection={inspection} />;
@@ -106,7 +106,15 @@ function MainPatientHistory({ handleClick }) {
                   height: 520
                }}
             >
-               <NewFormRender useForm={xrayForm} form={props.data} formOptionIds={[]} isCheck={true} />
+               <NewFormRender
+                  useForm={xrayForm}
+                  form={props.data}
+                  formOptionIds={[]}
+                  isCheck={true}
+                  formName={null}
+                  incomeKeyWords={[]}
+                  checkProgress={(_keyWords) => null}
+               />
             </div>
             <Button type="primary" htmlType="submit">
                Хадгалах

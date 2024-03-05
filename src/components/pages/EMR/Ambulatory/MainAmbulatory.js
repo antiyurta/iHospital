@@ -3,6 +3,7 @@ import ProgressNotes from './ProgressNotes';
 import NurseNote from '../NurseNote';
 import ProgressCheck from './ProgressCheck';
 import Xray from '../Xray';
+import ErequestList from './ErequestList';
 
 import Assesments from './Nurse/Assesments';
 
@@ -20,7 +21,7 @@ export default function MainAmbulatory({ patientId }) {
       {
          label: 'Амьдралын түүх',
          key: 'item-2',
-         children: <ProgressCheck PatientId={patientId} />
+         children: <ProgressCheck />
       },
       {
          label: 'Амин үзүүлэлт',
@@ -33,8 +34,13 @@ export default function MainAmbulatory({ patientId }) {
       //    children: <NurseNote PatientId={patientId} />
       // },
       {
-         label: 'Оношилгоо',
+         label: 'Шинжилгээний хариу',
          key: 'item-4',
+         children: <ErequestList />
+      },
+      {
+         label: 'Оношилгоо',
+         key: 'item-5',
          children: <Xray PatientId={patientId} />
       }
       // {
@@ -42,11 +48,7 @@ export default function MainAmbulatory({ patientId }) {
       //   key: "item-3",
       //   // children: <ProgressNotes />,
       // },
-      // {
-      //   label: "Шинжилгээний хариу",
-      //   key: "item-4",
-      //   // children: <ProgressNotes />,
-      // },
+
       // {
       //   label: "Эмийн бус эмчилгээ",
       //   key: "item-5",
@@ -61,7 +63,7 @@ export default function MainAmbulatory({ patientId }) {
                   pagination: false,
                   autoWidth: true,
                   autoHeight: true,
-                  gap: 10,
+                  gap: 20,
                   padding: 30
                }}
             >

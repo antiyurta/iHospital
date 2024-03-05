@@ -223,6 +223,8 @@ function DynamicContent({
                         formOptionIds={[]}
                         isCheck={false}
                         formName="pain"
+                        incomeKeyWords={[]}
+                        checkProgress={(_keyWords) => null}
                      />
                   </Soap>
                   <Soap
@@ -240,6 +242,8 @@ function DynamicContent({
                         formOptionIds={[]}
                         isCheck={false}
                         formName="question"
+                        incomeKeyWords={[]}
+                        checkProgress={(_keyWords) => null}
                      />
                   </Soap>
                   <Soap
@@ -257,6 +261,8 @@ function DynamicContent({
                         formOptionIds={[]}
                         isCheck={false}
                         formName="inspection"
+                        incomeKeyWords={[]}
+                        checkProgress={(_keyWords) => null}
                      />
                   </Soap>
                   {!isEditFromList ? (
@@ -360,6 +366,8 @@ function DynamicContent({
                         formOptionIds={[]}
                         isCheck={false}
                         formName="plan"
+                        incomeKeyWords={[]}
+                        checkProgress={(_keyWords) => null}
                      />
                      <Form.List name="services">
                         {(services) => (

@@ -54,3 +54,6 @@
    font-size: 19px !important;
    font-weight: bold !important;
 }
+.ant-collapse-content > .ant-collapse-content-box {
+   padding: 8px !important;
+}

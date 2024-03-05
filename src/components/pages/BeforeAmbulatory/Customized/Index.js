@@ -236,18 +236,11 @@ function Index(props) {
       }
    }, [documentForm]);
 
-   const checkProgress = (_current, all) => {
-      if (answeredKeyWords?.length > 0) {
-         Object.keys(all).forEach((key) => (all[key] === undefined ? delete all[key] : {}));
-      }
-      const length = Object.keys(all)?.length - 1;
-      const selected = Object.entries(all)
-         ?.map(([key, value]) => {
-            if (key != 'documentPercent') {
-               return value;
-            }
-         })
-         .filter(Boolean).length;
+   const checkProgress = (keyWords) => {
+      const values = form.getFieldsValue();
+      const length = keyWords?.filter((keyWord) => keyWord != '').length - 1 || 0;
+      Object.keys(values).forEach((key) => (values[key] === undefined || values[key] === '' ? delete values[key] : {}));
+      const selected = Object.keys(values)?.length - 1 || 0;
       return (selected / length) * 100;
    };
 
@@ -354,9 +347,6 @@ function Index(props) {
                   <Form
                      form={form}
                      layout="vertical"
-                     onValuesChange={(c, a) => {
-                        form.setFieldValue('documentPercent', checkProgress(c, a));
-                     }}
                      initialValues={{
                         documentPercent: 0
                      }}
@@ -372,6 +362,9 @@ function Index(props) {
                            isCheck={true}
                            formName={null}
                            incomeKeyWords={answeredKeyWords}
+                           checkProgress={(keyWords) => {
+                              form.setFieldValue('documentPercent', checkProgress(keyWords));
+                           }}
                         />
                      </div>
                   </Form>

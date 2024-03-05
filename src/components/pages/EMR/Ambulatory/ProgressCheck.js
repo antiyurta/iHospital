@@ -1,8 +1,5 @@
-import { Collapse } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+import { Collapse } from 'antd';
 import Allergy from '../Problems/Allergy';
 import Birth from '../Problems/Birth';
 import EpidemicQuestion from '../Problems/EpidemicQuestion';
@@ -11,26 +8,28 @@ import HealthRecord from '../Problems/HealthRecord';
 import LifeCondition from '../Problems/LifeCondition';
 import LifeStyle from '../Problems/LifeStyle';
 import UsuallyMedicine from '../Problems/UsuallyMedicine';
+import { useSelector } from 'react-redux';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
+import patientHistoryService from '../../../../services/emr/patientHistory';
+
 const { Panel } = Collapse;
-function ProgressCheck({ PatientId }) {
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
+function ProgressCheck() {
+   const incomeEMRData = useSelector(selectCurrentEmrData);
    const [history, setHistory] = useState([]);
-   const getProgressChecks = async (id) => {
-      config.params.patientId = id;
-      const response = await Get('emr/patient-history', token, config);
-      if (response.data?.length > 0) {
-         setHistory(response.data.slice(-1)[0]);
-      }
+   const getProgressChecks = async () => {
+      await patientHistoryService
+         .getPatientHistory({
+            params: {
+               patientId: incomeEMRData.patientId
+            }
+         })
+         .then(({ data: { response } }) => {
+            setHistory(response);
+         });
    };
    useEffect(() => {
-      if (PatientId) {
-         getProgressChecks(PatientId);
-      }
-   }, [PatientId]);
+      incomeEMRData && getProgressChecks();
+   }, []);
    return (
       <>
          {history != '' ? (

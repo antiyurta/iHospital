@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Collapse, Button, Form } from 'antd';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -9,43 +9,63 @@ import Step6 from './Step6';
 import Step7 from './Step7';
 import Step8 from './Step8';
 
-import patientHistoryService from '../../../../services/emr/patientHistory';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
+
+import patientHistoryService from '../../../../services/emr/patientHistory';
+import { openNofi } from '../../../comman';
 
 const { Panel } = Collapse;
 
-export default function HistoryTab({ patientId, inspection }) {
+export default function HistoryTab() {
+   const incomeEMRData = useSelector(selectCurrentEmrData);
    const [historyForm] = Form.useForm();
-   const saveHistory = () => {
-      historyForm.validateFields().then(async (values) => {
-         values['patientId'] = patientId;
-         await patientHistoryService.postPatientHistory(values).then((response) => {
-            console.log(response);
+   const [id, setId] = useState(null);
+   const [editMode, setEditMode] = useState(false);
+   const saveHistory = async (values) => {
+      await patientHistoryService
+         .postPatientHistory({
+            patientId: incomeEMRData.patientId,
+            ...values
+         })
+         .then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'Амьдралын түүр амжиллтай хадгалагдлаа');
+            }
          });
-         // const response = await Post('emr/patient-history', token, config, values);
-         // if (response === 201) {
-         //    getPatientHistory(patientId);
-         // }
-      });
    };
-   const getPatientHistory = async (id) => {
+   const updateHistory = async (values) => {
+      await patientHistoryService
+         .patchPatientHistory(id, values)
+         .then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'Амьдралын түүр амжиллтай засагдлаа');
+            }
+         })
+         .finally(() => {
+            getPatientHistory();
+         });
+   };
+   const getPatientHistory = async () => {
       await patientHistoryService
          .getPatientHistory({
             params: {
-               patientId: id
+               patientId: incomeEMRData.patientId
             }
          })
          .then(({ data: { response } }) => {
-            console.log(response);
             if (Object.keys(response)?.length > 0) {
+               setEditMode(true);
+               setId(response.id);
                response['birth'].birthDate = dayjs(response.birth?.birthDate);
             }
             historyForm.setFieldsValue(response);
          });
    };
    useEffect(() => {
-      getPatientHistory(patientId);
-   }, [inspection]);
+      incomeEMRData && getPatientHistory();
+   }, []);
 
    return (
       <Form
@@ -61,30 +81,38 @@ export default function HistoryTab({ patientId, inspection }) {
                <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
                   <Step1 />
                </Panel>
-               <Panel header="Өвчний түүх" key="2">
+               <Panel header="Өвчний түүх" key="2" forceRender={true}>
                   <Step2 />
                </Panel>
-               <Panel header="Амьдралын хэв маяг" key="3">
+               <Panel header="Амьдралын хэв маяг" key="3" forceRender={true}>
                   <Step3 />
                </Panel>
-               <Panel header="Амьдралын нөхцөл" key="14">
+               <Panel header="Амьдралын нөхцөл" key="14" forceRender={true}>
                   <Step4 />
                </Panel>
-               <Panel header="Харшил" key="5">
+               <Panel header="Харшил" key="5" forceRender={true}>
                   <Step5 />
                </Panel>
-               <Panel header="Эмийн хэрэглээ" key="6">
+               <Panel header="Эмийн хэрэглээ" key="6" forceRender={true}>
                   <Step6 />
                </Panel>
-               <Panel header="Тархвар зүйн асуумж" key="7">
+               <Panel header="Тархвар зүйн асуумж" key="7" forceRender={true}>
                   <Step7 />
                </Panel>
-               <Panel header="Удамшлын асуумж" key="8">
+               <Panel header="Удамшлын асуумж" key="8" forceRender={true}>
                   <Step8 />
                </Panel>
             </Collapse>
             <Form.Item noStyle>
-               <Button type="primary" htmlType="submit" onClick={() => saveHistory()}>
+               <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={() => {
+                     historyForm.validateFields().then((values) => {
+                        editMode ? updateHistory(values) : saveHistory(values);
+                     });
+                  }}
+               >
                   Амьдралын түүх xадгалах
                </Button>
             </Form.Item>

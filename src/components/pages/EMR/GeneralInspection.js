@@ -1,51 +1,66 @@
 //EMR -> Явцын үзлэг -> Ерөнхий үзлэг
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Radio, Input, Button, Form, Collapse, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, openNofi, Post } from '../../comman';
-import { useLocation } from 'react-router-dom';
+import { selectCurrentEmrData } from '../../../features/emrReducer';
+import { openNofi } from '../../comman';
+
+import generalInspectionService from '../../../services/emr/generalInspection';
+
 const { Panel } = Collapse;
-export default function GeneralInspection({ patientId, inspection }) {
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
-   const location = useLocation();
-   const { TextArea } = Input;
+const { TextArea } = Input;
+export default function GeneralInspection() {
+   const incomeEMRData = useSelector(selectCurrentEmrData);
    const [form] = Form.useForm();
+   const [id, setId] = useState(null);
+   const [editMode, setEditMode] = useState(false);
 
-   useEffect(() => {
-      getGeneralInspection();
-   }, [inspection]);
-
-   const saveGeneralInspection = () => {
-      form
-         .validateFields()
-         .then(async (values) => {
-            values['patientId'] = patientId;
-            values['appointmentId'] = location?.state?.appointmentId;
-            const response = await Post('emr/general-inspection', token, config, values);
-            if (response === 201) {
-               getGeneralInspection();
+   const saveGeneralInspection = async (values) => {
+      await generalInspectionService
+         .postGeneralInspection({
+            patientId: incomeEMRData.patientId,
+            appointmentId: incomeEMRData.appointmentId,
+            ...values
+         })
+         .then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'Ерөнхий үзлэг амжиллтай хадгалагдлаа');
             }
          })
-         .catch((error) => {
-            openNofi('error', '611 маягт', 'Заавал бөглөгдөх ёстой');
+         .finally(() => {
+            getGeneralInspection();
          });
    };
-
-   const getGeneralInspection = async () => {
-      const conf = {
-         headers: {},
-         params: {
-            appointmentId: location?.state?.appointmentId
-         }
-      };
-      const response = await Get('emr/general-inspection', token, conf);
-      form.setFieldsValue(response);
+   const updateGeneralInspection = async (values) => {
+      await generalInspectionService
+         .patchGeneralInspection(id, values)
+         .then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'Ерөнхий үзлэг амжиллтай засагдлаа');
+            }
+         })
+         .finally(() => {
+            getGeneralInspection();
+         });
    };
+   const getGeneralInspection = async () => {
+      await generalInspectionService
+         .getGeneralInspection({
+            params: {
+               patientId: incomeEMRData.patientId,
+               appointmentId: incomeEMRData.appointmentId
+            }
+         })
+         .then(({ data: { response } }) => {
+            setEditMode(true);
+            setId(response.id);
+            form.setFieldsValue(response);
+         });
+   };
+   useEffect(() => {
+      incomeEMRData && getGeneralInspection();
+   }, []);
+
    return (
       <Form
          name="basic"
@@ -436,7 +451,15 @@ export default function GeneralInspection({ patientId, inspection }) {
             </Panel>
          </Collapse>
          <Form.Item noStyle>
-            <Button type="primary" htmlType="submit" onClick={() => saveGeneralInspection()}>
+            <Button
+               type="primary"
+               htmlType="submit"
+               onClick={() => {
+                  form.validateFields().then((values) => {
+                     editMode ? updateGeneralInspection(values) : saveGeneralInspection(values);
+                  });
+               }}
+            >
                Ерөнхий үзлэг хадгалах
             </Button>
          </Form.Item>

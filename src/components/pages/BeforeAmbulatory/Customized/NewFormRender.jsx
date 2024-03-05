@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import NewFormTable from './NewFormTable';
 import TextArea from 'antd/lib/input/TextArea';
@@ -6,8 +6,9 @@ import HumanParts from './human-parts';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
+import { CloseOutlined } from '@ant-design/icons';
 const NewFormRender = (props) => {
-   const { useForm, form, formOptionIds, isCheck, formName, incomeKeyWords } = props;
+   const { useForm, form, formOptionIds, isCheck, formName, incomeKeyWords, checkProgress } = props;
    const [treeData, setTreeData] = useState();
    const message = 'Тань бөглөх эрх байхгүй';
    const [keyWords, setKeyWords] = useState([]);
@@ -63,30 +64,51 @@ const NewFormRender = (props) => {
       }
       return option.options?.flatMap((fOption) => findKeyWords(option.keyWord, fOption));
    };
-   const handleChangeRadio = (keyWord, options) => {
-      const selectedOption = options?.find((option) => option.keyWord === keyWord);
-      const unSelectedOption = options?.find((option) => option.keyWord != keyWord);
+   const handleChangeRadio = (keyWord, options, currentIndex) => {
       var newKeyWords = [...keyWords];
-      var unDup = [];
-      if (selectedOption?.options?.length > 0) {
-         const keyWords = selectedOption.options.map((option) => option.keyWord);
-         const allKeyWords = [...newKeyWords, ...keyWords];
-         unDup = allKeyWords.filter((item, index) => allKeyWords.indexOf(item) === index);
-         newKeyWords = unDup;
+      if (keyWord != null) {
+         const selectedOption = options?.find((option) => option.keyWord === keyWord);
+         const unSelectedOption = options?.find((option) => option.keyWord != keyWord);
+         var unDup = [];
+         if (selectedOption?.options?.length > 0) {
+            const keyWords = selectedOption.options.map((option) => option.keyWord);
+            const allKeyWords = [...newKeyWords, ...keyWords];
+            unDup = allKeyWords.filter((item, index) => allKeyWords.indexOf(item) === index);
+            newKeyWords = unDup;
+         }
+         if (unSelectedOption?.options?.length > 0) {
+            const unSelectedKeyWords = unSelectedOption?.options?.flatMap((fOption) =>
+               findKeyWords(unSelectedOption.keyWord, fOption)
+            );
+            unSelectedKeyWords?.map((keyWord) => {
+               const index = newKeyWords.indexOf(keyWord);
+               if (index > 0) {
+                  newKeyWords.splice(index, 1);
+                  useForm.resetFields([keyWord]);
+               }
+            });
+         }
+      } else {
+         const unSelectedOption = {
+            options: options
+         };
+         if (unSelectedOption?.options?.length > 0) {
+            const unSelectedKeyWords = unSelectedOption?.options?.flatMap((fOption) =>
+               findKeyWords(unSelectedOption.keyWord, fOption)
+            );
+            unSelectedKeyWords?.map((keyWord) => {
+               const index = newKeyWords.indexOf(keyWord);
+               if (index > 0) {
+                  newKeyWords.splice(index, 1);
+                  useForm.resetFields([keyWord]);
+               }
+            });
+         }
+         useForm.resetFields([currentIndex]);
       }
-      if (unSelectedOption?.options?.length > 0) {
-         const unSelectedKeyWords = unSelectedOption?.options?.flatMap((fOption) =>
-            findKeyWords(unSelectedOption.keyWord, fOption)
-         );
-         unSelectedKeyWords?.map((keyWord) => {
-            const index = newKeyWords.indexOf(keyWord);
-            if (index > 0) {
-               newKeyWords.splice(index, 1);
-               useForm.resetFields([keyWord]);
-            }
-         });
-      }
+      checkProgress(newKeyWords);
       setKeyWords(newKeyWords);
+
       // if (options?.length > 0) {
       //    const selectedIndexes = options
       //       .map((option) => {
@@ -139,16 +161,31 @@ const NewFormRender = (props) => {
                   <div className="document-form">
                      <div className="form-left" />
                      <div className="form-inputs">
+                        <div className="flex flex-row gap-1 justify-between items-end">
+                           <p className="font-bold">{item.question}</p>
+                           <Button
+                              danger
+                              icon={<CloseOutlined />}
+                              onClick={() => {
+                                 handleChangeRadio(null, item?.options, configNames(item.keyWord));
+                              }}
+                           >
+                              Хариу арилгах
+                           </Button>
+                        </div>
                         <Form.Item
                            tooltip={!state ? message : null}
                            className="mb-0"
-                           label={item.question}
+                           labelCol={{
+                              style: {
+                                 width: '100%'
+                              }
+                           }}
                            name={configNames(item.keyWord)}
                         >
                            <Radio.Group
-                              disabled={keyWords?.includes(configNames(item.keyWord)) ? false : true}
                               onChange={(e) => {
-                                 handleChangeRadio(e.target.value, item?.options);
+                                 handleChangeRadio(e.target.value, item?.options, configNames(item.keyWord));
                               }}
                               style={{
                                  padding: 2,
@@ -168,8 +205,10 @@ const NewFormRender = (props) => {
                         <CheckIsOther item={item} />
                      </div>
                   </div>
-                  {children?.map((child) => (
-                     <div className="form-child">{child}</div>
+                  {children?.map((child, index) => (
+                     <div key={index} className="form-child">
+                        {child}
+                     </div>
                   ))}
                </div>
             );
@@ -209,8 +248,10 @@ const NewFormRender = (props) => {
                         <CheckIsOther item={item} />
                      </div>
                   </div>
-                  {children?.map((child) => (
-                     <div className="pl-2">{child}</div>
+                  {children?.map((child, index) => (
+                     <div key={index} className="pl-2">
+                        {child}
+                     </div>
                   ))}
                </div>
             );
@@ -225,7 +266,12 @@ const NewFormRender = (props) => {
                         name={configNames(item.keyWord)}
                         tooltip={!state ? message : null}
                      >
-                        <Input placeholder={item.question || 'Бичих'} />
+                        <Input
+                           placeholder={item.question || 'Бичих'}
+                           onChange={() => {
+                              checkProgress(keyWords);
+                           }}
+                        />
                      </Form.Item>
                   </div>
                </div>
@@ -331,15 +377,22 @@ const NewFormRender = (props) => {
             );
          } else if (item.type === 'title') {
             return (
-               <p
-                  style={{
-                     paddingTop: 12,
-                     fontSize: 15,
-                     fontWeight: 'bold'
-                  }}
-               >
-                  {item.question}
-               </p>
+               <>
+                  <p
+                     style={{
+                        paddingTop: 12,
+                        fontSize: 15,
+                        fontWeight: 'bold'
+                     }}
+                  >
+                     {item.question}
+                  </p>
+                  {children?.map((child, index) => (
+                     <div key={index} className="pl-2">
+                        {child}
+                     </div>
+                  ))}
+               </>
             );
          } else if (item.type === 'timepicker') {
             return (
@@ -500,27 +553,38 @@ const NewFormRender = (props) => {
       }
       return;
    };
-   const renderHTML = (item) => {
-      if (!item.options) {
-         return <RenderFormInType key={item.index} item={item} />;
+   const renderHTML = (item, indx) => {
+      var children;
+      if (item.type === 'radio') {
+         const newOptions = item.options?.flatMap((option) => option.options).filter(Boolean);
+         children = newOptions?.map(renderHTML);
+      } else {
+         children = item.options?.map(renderHTML);
       }
-      const newOptions = item.options?.flatMap((option) => option.options).filter(Boolean);
-      const children = newOptions.map(renderHTML);
       return (
-         <RenderFormInType key={item.index} item={item}>
-            {children}
-         </RenderFormInType>
+         <React.Fragment key={indx}>
+            <RenderFormInType item={item}>{children}</RenderFormInType>
+         </React.Fragment>
       );
+   };
+
+   const findTitleChildrens = (items, firstKeyWords) => {
+      const titleIndexes = items?.filter((item) => item.type === 'title')?.map((fItem) => fItem.index);
+      const childrenKeyWords = items
+         ?.filter((item) => titleIndexes?.includes(item.parentIndex))
+         ?.map((fItem) => fItem.keyWord);
+      setKeyWords([...firstKeyWords, ...(childrenKeyWords || []), ...['']]);
    };
 
    useEffect(() => {
       if (incomeKeyWords?.length > 0) {
-         setKeyWords(incomeKeyWords);
+         findTitleChildrens(form.documentForm, incomeKeyWords || []);
       } else {
          const firstKeyWords = form?.documentForm
             ?.filter((item) => item.parentIndex === null)
-            ?.map((fItem) => fItem.keyWord);
-         setKeyWords(firstKeyWords);
+            ?.map((fItem) => fItem.keyWord)
+            ?.filter(Boolean);
+         findTitleChildrens(form.documentForm, firstKeyWords || []);
       }
       const data = convertTree(form.documentForm);
       setTreeData(data);
