@@ -81,12 +81,20 @@ function MainInpatientHistory() {
          }).then((response) => {
             if (response.status === 200) {
                setIsLoading(false);
+               var state = false;
                const data = response.data?.response?.response;
-               const state = data.some(
+               const currentDocument = data?.find(
                   (item) =>
                      (item.documentId === document.value && item.appointmentId === incomeEmrData.inpatientRequestId) ||
                      (item.documentId === document.value && item.appointmentId === incomeEmrData.appointmentId)
                );
+               if (currentDocument) {
+                  if (currentDocument.formType === 1) {
+                     state = false;
+                  } else {
+                     state = true;
+                  }
+               }
                if (state) {
                   Modal.info({
                      content: `Та ${document.docName} маягт бөглөсөн байна`

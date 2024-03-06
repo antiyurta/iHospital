@@ -39,7 +39,17 @@ const NewFormRender = (props) => {
       });
       return root;
    };
-
+   const findKeyWords = (parentKey, option) => {
+      if (!option.isHead && option.options) {
+         return option.options?.flatMap((fOption) => findKeyWords(parentKey, fOption));
+      } else if (option.isHead && option.options)
+         return option.options?.flatMap((fOption) => findKeyWords(option.keyWord, fOption));
+      return [parentKey || '', option.keyWord];
+      // if (!option.options) {
+      //    return [parentKey, option.keyWord];
+      // }
+      // return option.options?.flatMap((fOption) => findKeyWords(option.keyWord, fOption));
+   };
    const handleChangeInput = (value, question) => {
       let pattern = /\.{1,}/g;
       const text = question.replace(pattern, value);
@@ -55,56 +65,65 @@ const NewFormRender = (props) => {
       // const newEditorState = addHelloText();
       // setEditorState(newEditorState);
    };
-   const handleChangeCheckbox = (keyWords, options, currentIndex) => {
-      // console.log(keyWords, options, currentIndex);
-   };
-   const findKeyWords = (parentKey, option) => {
-      if (!option.options) {
-         return [option.keyWord, parentKey];
-      }
-      return option.options?.flatMap((fOption) => findKeyWords(option.keyWord, fOption));
-   };
-   const handleChangeRadio = (keyWord, options, currentIndex) => {
+   const handleChangeCheckbox = (iKeyWords, options, currentIndex) => {
       var newKeyWords = [...keyWords];
-      if (keyWord != null) {
-         const selectedOption = options?.find((option) => option.keyWord === keyWord);
-         const unSelectedOption = options?.find((option) => option.keyWord != keyWord);
+      var unSelectedOptions = [];
+      if (iKeyWords?.length > 0) {
+         const selectedOptions = options?.filter((option) => iKeyWords?.includes(option.keyWord));
+         unSelectedOptions = options?.filter((option) => !iKeyWords?.includes(option.keyWord));
          var unDup = [];
-         if (selectedOption?.options?.length > 0) {
-            const keyWords = selectedOption.options.map((option) => option.keyWord);
+         if (selectedOptions?.length > 0) {
+            const keyWords = selectedOptions?.flatMap((option) => option?.options?.map((cOption) => cOption.keyWord));
             const allKeyWords = [...newKeyWords, ...keyWords];
             unDup = allKeyWords.filter((item, index) => allKeyWords.indexOf(item) === index);
             newKeyWords = unDup;
          }
-         if (unSelectedOption?.options?.length > 0) {
-            const unSelectedKeyWords = unSelectedOption?.options?.flatMap((fOption) =>
-               findKeyWords(unSelectedOption.keyWord, fOption)
-            );
-            unSelectedKeyWords?.map((keyWord) => {
-               const index = newKeyWords.indexOf(keyWord);
-               if (index > 0) {
-                  newKeyWords.splice(index, 1);
-                  useForm.resetFields([keyWord]);
-               }
-            });
+      } else {
+         unSelectedOptions = options;
+         useForm.resetFields([currentIndex]);
+      }
+      if (unSelectedOptions?.length > 0) {
+         const unSelectedKeyWords = unSelectedOptions?.flatMap((fOption) => findKeyWords(null, fOption));
+         const unDupunSelected = unSelectedKeyWords.filter((item, index) => unSelectedKeyWords.indexOf(item) === index);
+         useForm.resetFields(unDupunSelected);
+         unDupunSelected?.map((keyWord) => {
+            const index = newKeyWords.indexOf(keyWord);
+            if (index > 0) {
+               newKeyWords.splice(index, 1);
+            }
+         });
+      }
+      checkProgress(newKeyWords);
+      setKeyWords(newKeyWords);
+   };
+
+   const handleChangeRadio = (keyWord, options, currentIndex) => {
+      var newKeyWords = [...keyWords];
+      var unSelectedOptions = [];
+      if (keyWord != null) {
+         const selectedOption = options?.find((option) => option.keyWord === keyWord);
+         unSelectedOptions = options?.filter((option) => option.keyWord != keyWord);
+         var unDup = [];
+         if (selectedOption?.options?.length > 0) {
+            const keyWords = selectedOption.options?.map((option) => option.keyWord);
+            const allKeyWords = [...newKeyWords, ...keyWords];
+            unDup = allKeyWords.filter((item, index) => allKeyWords.indexOf(item) === index);
+            newKeyWords = unDup;
          }
       } else {
-         const unSelectedOption = {
-            options: options
-         };
-         if (unSelectedOption?.options?.length > 0) {
-            const unSelectedKeyWords = unSelectedOption?.options?.flatMap((fOption) =>
-               findKeyWords(unSelectedOption.keyWord, fOption)
-            );
-            unSelectedKeyWords?.map((keyWord) => {
-               const index = newKeyWords.indexOf(keyWord);
-               if (index > 0) {
-                  newKeyWords.splice(index, 1);
-                  useForm.resetFields([keyWord]);
-               }
-            });
-         }
+         unSelectedOptions = options;
          useForm.resetFields([currentIndex]);
+      }
+      if (unSelectedOptions?.length > 0) {
+         const unSelectedKeyWords = unSelectedOptions?.flatMap((fOption) => findKeyWords(null, fOption));
+         const unDupunSelected = unSelectedKeyWords.filter((item, index) => unSelectedKeyWords.indexOf(item) === index);
+         useForm.resetFields(unDupunSelected);
+         unDupunSelected?.map((keyWord) => {
+            const index = newKeyWords.indexOf(keyWord);
+            if (index > 0) {
+               newKeyWords.splice(index, 1);
+            }
+         });
       }
       checkProgress(newKeyWords);
       setKeyWords(newKeyWords);
@@ -145,7 +164,11 @@ const NewFormRender = (props) => {
       if (item.isOther) {
          return (
             <Form.Item className="mb-0 pl-3" label={'Бусад'} name={`${item.keyWord}Other`}>
-               <Input />
+               <Input
+                  onChange={() => {
+                     checkProgress(keyWords);
+                  }}
+               />
             </Form.Item>
          );
       }
@@ -227,7 +250,7 @@ const NewFormRender = (props) => {
                         >
                            <Checkbox.Group
                               onChange={(e) => {
-                                 handleChangeCheckbox(e, item?.options, item?.index);
+                                 handleChangeCheckbox(e, item?.options, configNames(item.keyWord));
                               }}
                               disabled={!state}
                               className="bg-transparent"
@@ -287,7 +310,13 @@ const NewFormRender = (props) => {
                         name={configNames(item.keyWord)}
                         tooltip={!state ? message : null}
                      >
-                        <InputNumber disabled={!state} placeholder={item.question || 'Бичих'} />
+                        <InputNumber
+                           onChange={() => {
+                              checkProgress(keyWords);
+                           }}
+                           disabled={!state}
+                           placeholder={item.question || 'Бичих'}
+                        />
                      </Form.Item>
                   </div>
                </div>
@@ -303,7 +332,14 @@ const NewFormRender = (props) => {
                         label={item.question}
                         name={configNames(item.keyWord)}
                      >
-                        <TextArea rows={7} disabled={!state} placeholder={item.question || 'Энд бичнэ үү'} />
+                        <TextArea
+                           onChange={() => {
+                              checkProgress(keyWords);
+                           }}
+                           rows={7}
+                           disabled={!state}
+                           placeholder={item.question || 'Энд бичнэ үү'}
+                        />
                      </Form.Item>
                   </div>
                </div>
@@ -337,6 +373,7 @@ const NewFormRender = (props) => {
                            handleClick={(diagnose) => {
                               useForm.setFieldValue(configNames(item.keyWord), `${diagnose.code}-${diagnose.nameMn}`);
                               useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
+                              checkProgress(keyWords);
                            }}
                            disabled={!state}
                         />
@@ -365,6 +402,7 @@ const NewFormRender = (props) => {
                            handleClick={(diagnose) => {
                               useForm.setFieldValue(configNames(item.keyWord), diagnose.code);
                               useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
+                              checkProgress(keyWords);
                            }}
                            disabled={!state}
                         />
@@ -555,7 +593,7 @@ const NewFormRender = (props) => {
    };
    const renderHTML = (item, indx) => {
       var children;
-      if (item.type === 'radio') {
+      if (item.type === 'radio' || item.type === 'checkbox') {
          const newOptions = item.options?.flatMap((option) => option.options).filter(Boolean);
          children = newOptions?.map(renderHTML);
       } else {
@@ -577,13 +615,15 @@ const NewFormRender = (props) => {
    };
 
    useEffect(() => {
+      const firstKeyWords = form?.documentForm
+         ?.filter((item) => item.parentIndex === null)
+         ?.map((fItem) => fItem.keyWord)
+         ?.filter(Boolean);
       if (incomeKeyWords?.length > 0) {
-         findTitleChildrens(form.documentForm, incomeKeyWords || []);
+         const allKeyWords = [...firstKeyWords, ...incomeKeyWords];
+         const unDup = allKeyWords.filter((item, index) => allKeyWords.indexOf(item) === index);
+         findTitleChildrens(form.documentForm, unDup || []);
       } else {
-         const firstKeyWords = form?.documentForm
-            ?.filter((item) => item.parentIndex === null)
-            ?.map((fItem) => fItem.keyWord)
-            ?.filter(Boolean);
          findTitleChildrens(form.documentForm, firstKeyWords || []);
       }
       const data = convertTree(form.documentForm);

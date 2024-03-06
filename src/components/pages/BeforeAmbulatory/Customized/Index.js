@@ -124,7 +124,7 @@ function Index(props) {
       if (isEdit) {
          await jwtInterceopter
             .patch(`${documentForm.url}/${editId}`, {
-               data: { ...document.data, ...values }
+               data: { ...values }
             })
             .then((response) => {
                if (response.data.response.success) {
@@ -225,7 +225,9 @@ function Index(props) {
    useEffect(() => {
       if (isEdit) {
          form.setFieldsValue(document.data);
-         const keyWords = Object.keys(document.data).filter((key) => document.data[key] !== '');
+         const keyWords = Object.keys(document.data).filter(
+            (key) => document.data[key] !== '' && document.data[key]?.length > 0
+         );
          setAnsweredKeyWords(keyWords);
       }
    }, [isEdit]);
@@ -236,12 +238,19 @@ function Index(props) {
       }
    }, [documentForm]);
 
-   const checkProgress = (keyWords) => {
-      const values = form.getFieldsValue();
-      const length = keyWords?.filter((keyWord) => keyWord != '').length - 1 || 0;
-      Object.keys(values).forEach((key) => (values[key] === undefined || values[key] === '' ? delete values[key] : {}));
-      const selected = Object.keys(values)?.length - 1 || 0;
-      return (selected / length) * 100;
+   const checkProgress = (displayedKeyWords) => {
+      const fKeyWordsLength = displayedKeyWords?.filter((keyWord) => keyWord != '' && keyWord != undefined)?.length;
+      const currentAnsweredData = form.getFieldsValue();
+      Object.keys(currentAnsweredData).forEach((key) =>
+         currentAnsweredData[key] === undefined ||
+         currentAnsweredData[key] === '' ||
+         currentAnsweredData[key]?.length === 0 ||
+         currentAnsweredData[key] === null
+            ? delete currentAnsweredData[key]
+            : {}
+      );
+      const currentAnswerLength = Object.keys(currentAnsweredData)?.length - 1 || 0;
+      return (currentAnswerLength / fKeyWordsLength) * 100;
    };
 
    const ProgressBar = (props) => {

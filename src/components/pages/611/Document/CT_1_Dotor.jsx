@@ -52,71 +52,66 @@ const CT1Dotor = (props) => {
                         <th>
                            <p>Амьсгалд туслах булчингууд оролцож</p>
                            <p>байгаа эсэх:</p>
-                           <Form.Item name={['doctorInspection', 'ct1IM1.1.4']} shouldUpdate className="mb-0" noStyle>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData.q3} className="ml-0">
+                              <Checkbox className="ml-2" value={'q3-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q3-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>Амьсгалын тоо 1:</p>
                            <p>
                               минутанд
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM1.1.5']}
-                              >
-                                 <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
-                              </Form.Item>{' '}
+                              <Input value={formData?.q4} className="amaraInput w-10" style={{ textAlign: 'center' }} />
                               удаа:
                            </p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.6']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэм жигд
-                                 </Checkbox>
-                                 <Checkbox value={1}>Жигд бус</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q5} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q5-1'}>
+                                 Хэм жигд
+                              </Checkbox>
+                              <Checkbox value={'q5-2'}>Жигд бус</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Цээжний хэлбэр:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.7']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Зөв
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмгэг</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q6} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q6-1'}>
+                                 Зөв
+                              </Checkbox>
+                              <Checkbox value={'q6-2'}>Эмгэг</Checkbox>
+                           </Checkbox.Group>
                            <p>Амьсгалын хэлбэр:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.8']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Цээжний
-                                 </Checkbox>
-                                 <Checkbox className="ml-2 w-full" value={1}>
-                                    Хэвлийн
-                                 </Checkbox>
-                                 <Checkbox value={2}>Холимог</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q7} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q7-1'}>
+                                 Цээжний
+                              </Checkbox>
+                              <Checkbox className="ml-2 w-full" value={'q7-2'}>
+                                 Хэвлийн
+                              </Checkbox>
+                              <Checkbox value={'q7-3'}>Холимог</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Цээжний 2 талд</p>
                            <p>амьсгал жигд оролцох</p>
                            <p>байдал:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.1.9']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Жигд(баруун/зүүн)
-                                 </Checkbox>
-                                 <Checkbox value={1}>Хоцорно</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q8} className="ml-0">
+                              <Checkbox className="ml-2" value={'q8-1'}>
+                                 Жигд(
+                                 {formData?.['q8-1-1']?.includes('q8-1-1-1') ? (
+                                    <span className="underline">баруун</span>
+                                 ) : (
+                                    'баруун'
+                                 )}
+                                 /
+                                 {formData?.['q8-1-1']?.includes('q8-1-1-2') ? (
+                                    <span className="underline">зүүн</span>
+                                 ) : (
+                                    'зүүн'
+                                 )}
+                                 )
+                              </Checkbox>
+                              <Checkbox value={'q8-2'}>Хоцорно</Checkbox>
+                           </Checkbox.Group>
                         </th>
                      </tr>
                      <tr>
@@ -126,70 +121,52 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th>
                            <p>Эмзэглэлтэй эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q9} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q9-1'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q9-2'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>
                               [
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM1.2.2']}
-                              >
-                                 <Input className="w-32" />
-                              </Form.Item>
-                              ]
+                              <Input value={formData?.q9Other} className="w-32" />]
                            </p>
                            <p>Уян чанар:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.3']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Буурсан</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q10} className="ml-0">
+                              <Checkbox className="ml-2" value={'q10-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q10-2'}>Буурсан</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Дууны доргион:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.2.4']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хэвийн Суларсан
-                                 </Checkbox>
-                                 <Checkbox value={1}>Тодорхойлогдохгүй</Checkbox>
-                                 <Checkbox value={2}>Хүчтэй болсон</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q11} className="ml-0">
+                              <Checkbox className="ml-2" value={'q11-1'}>
+                                 Хэвийн Суларсан
+                              </Checkbox>
+                              <Checkbox value={'q11-2'}>Тодорхойлогдохгүй</Checkbox>
+                              <Checkbox value={'q11-3'}>Хүчтэй болсон</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Тогшилтын дуу:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.3.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    2 талд ижил
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ижил бус</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q12} className="ml-0">
+                              <Checkbox className="ml-2" value={'q12-1'}>
+                                 2 талд ижил
+                              </Checkbox>
+                              <Checkbox value={'q12-2'}>Ижил бус</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Хэсэгт тогшилтын дуу:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.3.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Бүдгэрсэн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Тодорсон</Checkbox>
-                                 <Checkbox value={2}>Дүлий болсон</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q13} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q13-1'}>
+                                 Бүдгэрсэн
+                              </Checkbox>
+                              <Checkbox value={'q13-2'}>Тодорсон</Checkbox>
+                              <Checkbox value={'q13-3'}>Дүлий болсон</Checkbox>
+                           </Checkbox.Group>
                         </th>
                      </tr>
                      <tr>
@@ -198,138 +175,95 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th colSpan={2}>
                            <p>Амьсгал 2 талд:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Ижил
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ижил буc</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q14} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q14-1'}>
+                                 Ижил
+                              </Checkbox>
+                              <Checkbox value={'q14-2'}>Ижил буc</Checkbox>
+                           </Checkbox.Group>
                            <span>
                               (
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM1.4.2']}
-                              >
-                                 <Input className="amaraInput w-12" />
-                              </Form.Item>
+                              <Input className="amaraInput w-12" value={formData?.['q14-2-1']} />
                               хэсэгт )
                            </span>
                            <p>Эмгэг амьсгалтай:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.3']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q15} className="ml-0">
+                              <Checkbox className="ml-2" value={'q15-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q15-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  Тийм бол:(
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM1.4.4']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          цулцангийн суларсан
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          цулцангийн ширүүссэн
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          гуурсан хоолойн эмгэг
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={3}>
-                                          стенозын
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={4}>
-                                          амьсгал сонсогдохгүй
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.['q15-1-1']} className="inline">
+                                    <Checkbox className="test" value={'q15-1-1-1'}>
+                                       <span className="text-[11px]">{`цулцангийн суларсан ,`}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q15-1-1-2'}>
+                                       <span className="text-[11px]">{`цулцангийн ширүүссэн , `}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q15-1-1-3'}>
+                                       <span className="text-[11px]">{`гуурсан хоолойн эмгэг , `}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q15-1-1-4'}>
+                                       <span className="text-[11px]">{`стенозын , `}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q15-1-1-5'}>
+                                       <span className="text-[11px]">{`амьсгал сонсогдохгүй`}</span>
+                                    </Checkbox>
+                                 </Checkbox.Group>
                                  )
                               </span>
                            </p>
                         </th>
                         <th colSpan={2}>
                            <p>Нэмэлт шуугиантай эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.5']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q16} className="ml-0">
+                              <Checkbox className="ml-2" value={'q16-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q16-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  Тийм бол:(
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM1.4.6']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          нойтон хэржигнүүр
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          шажигнуур
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          хуурай хэржигнүүр
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={3}>
-                                          гялтангийн шүргэлцэх
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.['q16-1-1']} className="inline">
+                                    <Checkbox className="test" value={'q16-1-1-1'}>
+                                       <span className="text-[11px]">{`нойтон хэржигнүүр ,`}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q16-1-1-2'}>
+                                       <span className="text-[11px]">{`шажигнуур ,`}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q16-1-1-3'}>
+                                       <span className="text-[11px]">{`хуурай хэржигнүүр ,`}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q16-1-1-4'}>
+                                       <span className="text-[11px]">{`гялтангийн шүргэлцэх`}</span>
+                                    </Checkbox>
+                                 </Checkbox.Group>{' '}
                                  чимээ
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM1.4.7']}
-                                 >
-                                    <Input className="amaraInput w-20" />
-                                 </Form.Item>
+                                 <Input value={formData?.['q16-1-2']} className="amaraInput w-20" />
                                  хэсэгт )
                               </span>
                            </p>
                            <p>Бронхофони</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM1.4.8']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={1}>
-                                    Тодорсон
-                                 </Checkbox>
-                                 <Checkbox className="w-auto" value={2}>
-                                    Суларсан
-                                 </Checkbox>
-                                 <p className="inline">
-                                    (
-                                    <Form.Item
-                                       shouldUpdate
-                                       className="mb-0"
-                                       noStyle
-                                       name={['doctorInspection', 'ct1IM1.4.9']}
-                                    >
-                                       <Input className="amaraInput w-28" />
-                                    </Form.Item>
-                                    хэсэгт )
-                                 </p>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q17} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q17-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q17-2'}>
+                                 Тодорсон
+                              </Checkbox>
+                              <Checkbox className="w-auto" value={'q17-3'}>
+                                 Суларсан
+                              </Checkbox>
+                              <p className="inline">
+                                 (
+                                 <Input value={formData?.['q17-3-1']} className="amaraInput w-28" />
+                                 хэсэгт )
+                              </p>
+                           </Checkbox.Group>
                         </th>
                      </tr>
                      <tr>
@@ -341,130 +275,91 @@ const CT1Dotor = (props) => {
                      </tr>
                      <tr>
                         <th>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.1.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Зохисгүй хооллолт
-                                 </Checkbox>
-                                 <Checkbox value={1}>Хөдөлгөөний хомсдол</Checkbox>
-                                 <Checkbox className="w-full" value={2}>
-                                    Стресс
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={3}>
-                                    Таргалалт
-                                 </Checkbox>
-                                 <Checkbox value={4}>Тамхидалт</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q18} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q18-1'}>
+                                 Зохисгүй хооллолт
+                              </Checkbox>
+                              <Checkbox value={'q18-2'}>Хөдөлгөөний хомсдол</Checkbox>
+                              <Checkbox className="w-full" value={'q18-3'}>
+                                 Стресс
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q18-4'}>
+                                 Таргалалт
+                              </Checkbox>
+                              <Checkbox value={'q18-5'}>Тамхидалт</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th className="w-20">
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.1.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Архины зохисгүй хэрэглээ
-                                 </Checkbox>
-                                 <Checkbox value={1}>Удамшил</Checkbox>
-                                 <Checkbox className="w-full" value={2}>
-                                    Артерийн гипертензи
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={3}>
-                                    Гиперхолестеринеми
-                                 </Checkbox>
-                                 <Checkbox value={4}>Чихрийн шижин</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q18} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q18-6'}>
+                                 Архины зохисгүй хэрэглээ
+                              </Checkbox>
+                              <Checkbox value={'q18-7'}>Удамшил</Checkbox>
+                              <Checkbox className="w-full" value={'q18-8'}>
+                                 Артерийн гипертензи
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q18-9'}>
+                                 Гиперхолестеринеми
+                              </Checkbox>
+                              <Checkbox value={'q18-10'}>Чихрийн шижин</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th colSpan={2}>
                            <div className="inline-flex">
                               <div>
                                  <p>Арьсны хөхрөлттэй эсэх:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.2.1']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2" value={0}>
-                                          Тийм
-                                       </Checkbox>
-                                       <Checkbox value={1}>Үгүй</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q19} className="ml-0">
+                                    <Checkbox className="ml-2" value={'q19-1'}>
+                                       Тийм
+                                    </Checkbox>
+                                    <Checkbox value={'q19-2'}>Үгүй</Checkbox>
+                                 </Checkbox.Group>
                               </div>
                               <div>
                                  <p>Захын хавантай эсэх:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.2.2']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2" value={0}>
-                                          Тийм
-                                       </Checkbox>
-                                       <Checkbox value={1}>Үгүй</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q20} className="ml-0">
+                                    <Checkbox className="ml-2" value={'q20-1'}>
+                                       Тийм
+                                    </Checkbox>
+                                    <Checkbox value={'q20-2'}>Үгүй</Checkbox>
+                                 </Checkbox.Group>
                               </div>
                            </div>
                            <div className="inline-flex">
                               <div>
                                  <p>Гүрээний венийн лугшилт:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.2.3']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2" value={0}>
-                                          Ажиглагдахгүй
-                                       </Checkbox>
-                                       <Checkbox value={1}>Ажиглагдана</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q21} className="ml-0">
+                                    <Checkbox className="ml-2" value={'q21-1'}>
+                                       Ажиглагдахгүй
+                                    </Checkbox>
+                                    <Checkbox value={'q21-2'}>Ажиглагдана</Checkbox>
+                                 </Checkbox.Group>
                                  <p>
                                     <span>
                                        (
-                                       <Form.Item
-                                          shouldUpdate
-                                          className="mb-0"
-                                          noStyle
-                                          name={['doctorInspection', 'ct1IM2.2.4']}
-                                       >
-                                          <Checkbox.Group className="inline">
-                                             <Checkbox className="test" value={0}>
-                                                хүчтэй
-                                             </Checkbox>
-                                             <Checkbox className="ml-0 test" value={1}>
-                                                дунд
-                                             </Checkbox>
-                                             <Checkbox className="ml-0 test" value={2}>
-                                                сул
-                                             </Checkbox>
-                                          </Checkbox.Group>
-                                       </Form.Item>
+                                       <Checkbox.Group value={formData?.['q21-2-1']} className="inline">
+                                          <Checkbox className="test" value={'q21-2-1-1'}>
+                                             <span className="text-[11px]">{`хүчтэй ,`}</span>
+                                          </Checkbox>
+                                          <Checkbox className="ml-0 test" value={'q21-2-1-2'}>
+                                             <span className="text-[11px]">{`дунд ,`}</span>
+                                          </Checkbox>
+                                          <Checkbox className="ml-0 test" value={'q21-2-1-3'}>
+                                             <span className="text-[11px]">{`сул`}</span>
+                                          </Checkbox>
+                                       </Checkbox.Group>
                                        )
                                     </span>
                                  </p>
                               </div>
                               <div>
                                  <p>Зүрхний оройн түлхэлт:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.2.5']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2" value={0}>
-                                          Ажиглагдана
-                                       </Checkbox>
-                                       <Checkbox value={1}>Ажиглагдахгүй</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q22} className="ml-0">
+                                    <Checkbox className="ml-2" value={'q22-1'}>
+                                       Ажиглагдана
+                                    </Checkbox>
+                                    <Checkbox value={'q22-2'}>Ажиглагдахгүй</Checkbox>
+                                 </Checkbox.Group>
                               </div>
                            </div>
                         </th>
@@ -480,129 +375,86 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th className="w-72">
                            <p>Зүрхний оройн түлхэлт Байрлал:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Хэвийн бус</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q23} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q23-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q23-2'}>Хэвийн бус</Checkbox>
+                           </Checkbox.Group>
                            <div className="inline-flex">
                               <p>Хүч:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.3.2']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-2" value={0}>
-                                       Дунд зэрэг
-                                    </Checkbox>
-                                    <Checkbox value={1}>Хүчтэй</Checkbox>
-                                    <Checkbox value={2}>Сул</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q24} className="ml-0">
+                                 <Checkbox className="ml-2" value={'q24-1'}>
+                                    Дунд зэрэг
+                                 </Checkbox>
+                                 <Checkbox value={'q24-2'}>Хүчтэй</Checkbox>
+                                 <Checkbox value={'q24-3'}>Сул</Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <p>Шууны артерийн лугшилт</p>
                            <div className="inline-flex">
                               <p>Хэмнэл:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.3.3']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-2" value={0}>
-                                       Жигд
-                                    </Checkbox>
-                                    <Checkbox value={1}>Жигд бус</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q25} className="ml-0">
+                                 <Checkbox className="ml-2" value={'q25-1'}>
+                                    Жигд
+                                 </Checkbox>
+                                 <Checkbox value={'q25-2'}>Жигд бус</Checkbox>
+                              </Checkbox.Group>
                            </div>
                         </th>
                         <th>
                            <p>
                               Давтамж:
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.3.4']}
-                              >
-                                 <Input className="amaraInput w-28" />
-                              </Form.Item>
+                              <Input value={formData?.q26} className="amaraInput w-28" />
                               /мин/
                            </p>
                            <p>Хүчдэл:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.5']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Дунд зэрэг
-                                 </Checkbox>
-                                 <Checkbox value={1}>Их</Checkbox>
-                                 <Checkbox value={2}>Бага</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q27} className="ml-0">
+                              <Checkbox className="ml-2" value={'q27-1'}>
+                                 Дунд зэрэг
+                              </Checkbox>
+                              <Checkbox value={'q27-2'}>Их</Checkbox>
+                              <Checkbox value={'q27-3'}>Бага</Checkbox>
+                           </Checkbox.Group>
                            <div className="inline-flex">
                               <p>Дүүрэлт:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.3.6']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-2" value={0}>
-                                       Дунд зэрэг
-                                    </Checkbox>
-                                    <Checkbox value={1}>Cул</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q28} className="ml-0">
+                                 <Checkbox className="ml-2" value={'q28-1'}>
+                                    Дунд зэрэг
+                                 </Checkbox>
+                                 <Checkbox value={'q28-2'}>Cул</Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <p>2 талд ижил эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.3.7']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Ижил
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ижил бус</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q29} className="ml-0">
+                              <Checkbox className="ml-2" value={'q29-1'}>
+                                 Ижил
+                              </Checkbox>
+                              <Checkbox value={'q29-2'}>Ижил бус</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Зүрхний (харьцангүй) хил хязгаар:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.4.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Томорсон</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q30} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q30-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q30-1'}>Томорсон</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  (
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.4.2']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          дээд
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          баруун
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          зүүн
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.['q30-2-1']} className="inline">
+                                    <Checkbox className="test" value={'q30-2-1-1'}>
+                                       <span className="text-[11px]">{`дээд ,`}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q30-2-1-2'}>
+                                       <span className="text-[11px]">{`баруун ,`}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q30-2-1-3'}>
+                                       <span className="text-[11px]">{`зүүн `}</span>
+                                    </Checkbox>
+                                 </Checkbox.Group>{' '}
                                  хил )
                               </span>
                            </p>
@@ -620,253 +472,235 @@ const CT1Dotor = (props) => {
                            <p>Зүрхний авиа:</p>
                            <div className="inline-flex">
                               <p>Хэмнэл:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.1']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-2" value={0}>
-                                       Жигд
-                                    </Checkbox>
-                                    <Checkbox value={1}>Жигд бус</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q31} className="ml-0">
+                                 <Checkbox className="ml-2" value={'q31-1'}>
+                                    Жигд
+                                 </Checkbox>
+                                 <Checkbox value={'q31-2'}>Жигд бус</Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <p>
                               Давтамж:
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.2']}
-                              >
-                                 <Input className="amaraInput w-28" />
-                              </Form.Item>
+                              <Input value={formData?.q32} className="amaraInput w-28" />
                               /мин
                            </p>
                            <div className="inline-flex">
                               <p>I авиа:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.3']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-3" value={0}>
-                                       Тод
-                                    </Checkbox>
-                                    <Checkbox value={1}>Бүдгэвтэр(I,IV цэгт)</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q33} className="ml-0">
+                                 <Checkbox className="ml-3" value={'q33-1'}>
+                                    Тод
+                                 </Checkbox>
+                                 <Checkbox value={'q33-2'}>
+                                    Бүдгэвтэр(
+                                    {formData?.['q33-2-1']?.includes('q33-2-1-1') ? (
+                                       <span className="underline">{` I `}</span>
+                                    ) : (
+                                       ` I `
+                                    )}
+                                    /
+                                    {formData?.['q33-2-1']?.includes('q33-2-1-2') ? (
+                                       <span className="underline">{` IV `}</span>
+                                    ) : (
+                                       ` IV `
+                                    )}
+                                    <span>цэгт</span>)
+                                 </Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <div>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.3']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-14" value={2}>
-                                       Бүдэг(I,V)
-                                    </Checkbox>
-                                    <Checkbox value={3}>Чангарсан(I,IV цэгт)</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q33} className="ml-0">
+                                 <Checkbox className="ml-14" value={'q33-3'}>
+                                    Бүдэг(
+                                    {formData?.['q33-3-1']?.includes('q33-3-1-1') ? (
+                                       <span className="underline">{` I `}</span>
+                                    ) : (
+                                       ` I `
+                                    )}
+                                    /
+                                    {formData?.['q33-3-1']?.includes('q33-3-1-2') ? (
+                                       <span className="underline">{` IV `}</span>
+                                    ) : (
+                                       ` IV `
+                                    )}
+                                    )
+                                 </Checkbox>
+                                 <Checkbox value={'q33-4'}>
+                                    Чангарсан(
+                                    {formData?.['q33-4-1']?.includes('q33-4-1-1') ? (
+                                       <span className="underline">{` I `}</span>
+                                    ) : (
+                                       ` I `
+                                    )}
+                                    /
+                                    {formData?.['q33-4-1']?.includes('q33-4-1-2') ? (
+                                       <span className="underline">{` IV `}</span>
+                                    ) : (
+                                       ` IV `
+                                    )}
+                                    <span>цэгт</span>)
+                                 </Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <div className="inline-flex">
                               <p>II авиа:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.4']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-2" value={0}>
-                                       Тод
-                                    </Checkbox>
-                                    <Checkbox value={1}>Бүдэг(II, III,V цэгт)</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q34} className="ml-0">
+                                 <Checkbox className="ml-2" value={'q34-1'}>
+                                    Тод
+                                 </Checkbox>
+                                 <Checkbox value={'q34-2'}>
+                                    Бүдэг(
+                                    {formData?.['q34-2-1']?.includes('q34-2-1-1') ? (
+                                       <span className="underline">{` II `}</span>
+                                    ) : (
+                                       ` II `
+                                    )}
+                                    ,
+                                    {formData?.['q34-2-1']?.includes('q34-2-1-2') ? (
+                                       <span className="underline">{` III `}</span>
+                                    ) : (
+                                       ` III `
+                                    )}
+                                    ,
+                                    {formData?.['q34-2-1']?.includes('q34-2-1-3') ? (
+                                       <span className="underline">{` V `}</span>
+                                    ) : (
+                                       ` V `
+                                    )}
+                                    <span>цэгт</span>)
+                                 </Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <div>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.4']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-14" value={2}>
-                                       Өргөгдсөн(II,III цэгт)
-                                    </Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q34} className="ml-0">
+                                 <Checkbox className="ml-14" value={'q34-3'}>
+                                    Өргөгдсөн(
+                                    {formData?.['q34-3-1']?.includes('q34-3-1-1') ? (
+                                       <span className="underline">{` II `}</span>
+                                    ) : (
+                                       ` II `
+                                    )}
+                                    /
+                                    {formData?.['q34-3-1']?.includes('q34-3-1-2') ? (
+                                       <span className="underline">{` III `}</span>
+                                    ) : (
+                                       ` III `
+                                    )}
+                                    <span>цэгт</span>)
+                                 </Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <div className="inline-flex">
                               <p>III авиа:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.5']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-1" value={0}>
-                                       Сонсогдоно
-                                    </Checkbox>
-                                    <Checkbox value={1}>Сонсогдохгүй</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q35} className="ml-0">
+                                 <Checkbox className="ml-1" value={'q35-1'}>
+                                    Сонсогдоно
+                                 </Checkbox>
+                                 <Checkbox value={'q35-2'}>Сонсогдохгүй</Checkbox>
+                              </Checkbox.Group>
                            </div>
                         </th>
                         <th className="w-1/2">
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.5']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={2}>
-                                    Шуугиангүй
-                                 </Checkbox>
-                                 <Checkbox value={3}>шуугиантай</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.['q35-1-1']} className="ml-0">
+                              <Checkbox className="ml-2" value={'q35-1-1-1'}>
+                                 Шуугиангүй
+                              </Checkbox>
+                              <Checkbox value={'q35-1-1-2'}>шуугиантай</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="flex gap-2 text-[11px]">
                                  Байрлал:
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.5.6']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          I
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          II
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          III
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={3}>
-                                          IV
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={4}>
-                                          V
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.['q35-1-1-2-1']} className="flex gap-4">
+                                    <Checkbox className="test" value={'q35-1-1-2-1-1'}>
+                                       I;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-1-2'}>
+                                       II;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-1-3'}>
+                                       III;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-1-4'}>
+                                       IV;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-1-5'}>
+                                       V;
+                                    </Checkbox>
+                                 </Checkbox.Group>
                                  цэг
                               </span>
                            </p>
                            <p>
-                              <span>
-                                 Систолын:(
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.5.7']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          I
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          II
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          III
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={3}>
-                                          IV
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={4}>
-                                          V
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
-                                 цэгт)
+                              <span className="flex gap-2 text-[11px]">
+                                 Систолын:
+                                 <Checkbox.Group value={formData?.['q35-1-1-2-2']} className="flex gap-4">
+                                    <Checkbox className="test" value={'q35-1-1-2-2-1'}>
+                                       I;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-2-2'}>
+                                       II;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-2-3'}>
+                                       III;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-2-4'}>
+                                       IV;
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-2-5'}>
+                                       V;
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                                 цэгт
                               </span>
                            </p>
                            <p>
-                              <span>
-                                 Систолын:(
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM2.5.8']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          I
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          II
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          III
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={3}>
-                                          IV
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={4}>
-                                          V
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
-                                 цэгт)
+                              <span className="flex gap-2 text-[11px]">
+                                 Систолын:
+                                 <Checkbox.Group value={formData?.['q35-1-1-2-3']} className="flex gap-4">
+                                    <Checkbox className="test" value={'q35-1-1-2-3-1'}>
+                                       I
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-3-2'}>
+                                       II
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-3-3'}>
+                                       III
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-3-4'}>
+                                       IV
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q35-1-1-2-3-5'}>
+                                       V
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                                 цэгт
                               </span>
                            </p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.9']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Үл дамжина
-                                 </Checkbox>
-                                 <Checkbox value={1}>Дамжина</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q35} className="ml-0">
+                              <Checkbox className="ml-2" value={'q35-3'}>
+                                 Үл дамжина
+                              </Checkbox>
+                              <Checkbox value={'q35-4'}>Дамжина</Checkbox>
+                           </Checkbox.Group>
                            <span>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.10']}
-                              >
-                                 <Input className="amaraInput w-28" />
-                              </Form.Item>
+                              <Input value={formData?.['q35-4-1']} className="amaraInput w-28" />
                            </span>
-                           <div className="inline-flex">
+                           <div className="inline-flex items-end">
                               <p>Хүч:</p>
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM2.5.11']}
-                              >
-                                 <Checkbox.Group className="ml-0">
-                                    <Checkbox className="ml-2" value={0}>
-                                       Сул
-                                    </Checkbox>
-                                    <Checkbox value={1}>Дунд зэрэг</Checkbox>
-                                    <Checkbox value={2}>Хүчтэй</Checkbox>
-                                 </Checkbox.Group>
-                              </Form.Item>
+                              <Checkbox.Group value={formData?.q36} className="ml-0">
+                                 <Checkbox className="ml-2" value={'q36-1'}>
+                                    Сул
+                                 </Checkbox>
+                                 <Checkbox value={'q36-2'}>Дунд зэрэг</Checkbox>
+                                 <Checkbox value={'q36-3'}>Хүчтэй</Checkbox>
+                              </Checkbox.Group>
                            </div>
                            <p>Перикардын шүргэлцэх чимээ бий эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM2.5.12']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q37} className="ml-0">
+                              <Checkbox className="ml-2" value={'q37-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q37-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                      </tr>
                   </thead>
@@ -889,112 +723,80 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th>
                            <p>Хэл өнгөртэй эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.1.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q38} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q38-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q38-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>Арьс, салст-чийлэг:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.1.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q39} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q39-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q39-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              Өнгө
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM3.1.3']}
-                              >
-                                 <Input className="amaraInput w-28" />
-                              </Form.Item>
+                              Өнгө <Input value={formData?.q40} className="amaraInput w-28" />
                            </p>
                            <p>Хэвлийн - хэм</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.1.4']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Жигд
-                                 </Checkbox>
-                                 <Checkbox value={1}>Жигд бус</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q41} className="ml-0">
+                              <Checkbox className="ml-2" value={'q41-1'}>
+                                 Жигд
+                              </Checkbox>
+                              <Checkbox value={'q41-2'}>Жигд бус</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              Хэлбэр
-                              <Form.Item
-                                 shouldUpdate
-                                 className="mb-0"
-                                 noStyle
-                                 name={['doctorInspection', 'ct1IM3.1.5']}
-                              >
-                                 <Input className="amaraInput w-28" />
-                              </Form.Item>
+                              Хэлбэр <Input value={formData?.q42} className="amaraInput w-28" />
                            </p>
                         </th>
                         <th>
                            <p>Хэвлий эмзэглэлтэй эсэх</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.2.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q43} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q43-1'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q43-2'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>Булчингийн чангарал байгаа эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.2.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q44} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q44-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q44-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Хэвлийн хэнгэрэгэн чимээ:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.3.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ихэссэн</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q45} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q45-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q45-2'}>Ихэссэн</Checkbox>
+                           </Checkbox.Group>
                            <p>Ихэссэн хэсэгт тогшилтын дуу:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.3.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Бүдгэрсэн
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={1}>
-                                    Тодорсон
-                                 </Checkbox>
-                                 <Checkbox value={2}>Дүлий болсон</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q46} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q46-1'}>
+                                 Бүдгэрсэн
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q46-2'}>
+                                 Тодорсон
+                              </Checkbox>
+                              <Checkbox value={'q46-3'}>Дүлий болсон</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Гэдэсний гүрвэлзэх хөдөлгөөн:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.4.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ихэссэн</Checkbox>
-                                 <Checkbox className="ml-2 w-full" value={2}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={3}>Дүлий</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q47} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q47-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q47-2'}>Ихэссэн</Checkbox>
+                              <Checkbox className="ml-2 w-full" value={'q47-3'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q47-4'}>Дүлий</Checkbox>
+                           </Checkbox.Group>
                         </th>
                      </tr>
                      <tr>
@@ -1003,119 +805,95 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th>
                            <p>Тахир гэдэс - байрлал</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q48} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q48-1'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q48-2'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>Тогтоц</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хатуу
-                                 </Checkbox>
-                                 <Checkbox value={1}>Зөөлөн</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q49} className="ml-0">
+                              <Checkbox className="ml-2" value={'q49-1'}>
+                                 Хатуу
+                              </Checkbox>
+                              <Checkbox value={'q49-2'}>Зөөлөн</Checkbox>
+                           </Checkbox.Group>
                            <p>Хөдөлгөөн</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.3']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q50} className="ml-0">
+                              <Checkbox className="ml-2" value={'q50-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q50-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Өгсөх болон уруудах гэдэс: - Байрлал</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.4']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q51} className="ml-0">
+                              <Checkbox className="ml-2" value={'q51-1'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q51-2'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>Тогтоц</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.5']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хатуу
-                                 </Checkbox>
-                                 <Checkbox value={1}>Зөөлөн</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q52} className="ml-0">
+                              <Checkbox className="ml-2" value={'q52-1'}>
+                                 Хатуу
+                              </Checkbox>
+                              <Checkbox value={'q52-2'}>Зөөлөн</Checkbox>
+                           </Checkbox.Group>
                            <p>Хөдөлгөөнтэй</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.6']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q53} className="ml-0">
+                              <Checkbox className="ml-2" value={'q53-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q53-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Хөндлөн гэдэс: Байрлал</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.7']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q54} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q54-1'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q54-2'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>Тогтоц</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.8']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хатуу
-                                 </Checkbox>
-                                 <Checkbox value={1}>Зөөлөн</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q55} className="ml-0">
+                              <Checkbox className="ml-2" value={'q55-1'}>
+                                 Хатуу
+                              </Checkbox>
+                              <Checkbox value={'q55-2'}>Зөөлөн</Checkbox>
+                           </Checkbox.Group>
                            <p>Хөдөлгөөн</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.9']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q56} className="ml-0">
+                              <Checkbox className="ml-2" value={'q56-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q56-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Цутгалан гэдэс: Байрлал</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.10']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q57} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q57-1'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q57-2'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>Тогтоц</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.11']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хатуу
-                                 </Checkbox>
-                                 <Checkbox value={1}>Зөөлөн</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q58} className="ml-0">
+                              <Checkbox className="ml-2" value={'q58-1'}>
+                                 Хатуу
+                              </Checkbox>
+                              <Checkbox value={'q58-2'}>Зөөлөн</Checkbox>
+                           </Checkbox.Group>
                            <p>Хөдөлгөөн</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.5.12']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q59} className="ml-0">
+                              <Checkbox className="ml-2" value={'q59-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q59-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                      </tr>
                      <tr>
@@ -1124,124 +902,86 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th>
                            <p>Элэгний шинж тэмдгүүд:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.6.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Мэдрэл сульдал
-                                 </Checkbox>
-                                 <Checkbox value={1}>Биж хам шинж</Checkbox>
-                                 <Checkbox value={2}>Иммуни-үрэвслийн шинж</Checkbox>
-                                 <Checkbox value={3}>Өвдөх хам шинж:</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q60} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q60-1'}>
+                                 Мэдрэл сульдал
+                              </Checkbox>
+                              <Checkbox value={'q60-2'}>Биж хам шинж</Checkbox>
+                              <Checkbox value={'q60-3'}>Иммуни-үрэвслийн шинж</Checkbox>
+                              <Checkbox value={'q60-4'}>Өвдөх хам шинж:</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  Хүч:
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM3.6.2']}
-                                 >
-                                    <Input className="amaraInput w-14" />
-                                 </Form.Item>
+                                 <Input value={formData?.q61} className="amaraInput w-14" />
                               </span>
-                              <span>
+                              <span className="text-[11px]">
                                  Хугацаа &nbsp; [
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM3.6.3']}
-                                 >
-                                    <Input className="amaraInput w-14" />
-                                 </Form.Item>
-                                 ]
+                                 <Input value={formData?.q62} className="amaraInput w-12" />]
                               </span>
                            </p>
                         </th>
                         <th>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.6.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={4}>
-                                    Шарлах хам шинж
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={5}>
-                                    Загатналт
-                                 </Checkbox>
-                                 <Checkbox value={6}>Цусархаг хам шинж</Checkbox>
-                                 <Checkbox value={7}>Элэгний их шинж</Checkbox>
-                                 <Checkbox value={8}>Элэгний бага шинж</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q60} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q60-5'}>
+                                 Шарлах хам шинж
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q60-6'}>
+                                 Загатналт
+                              </Checkbox>
+                              <Checkbox value={'q60-7'}>Цусархаг хам шинж</Checkbox>
+                              <Checkbox value={'q60-8'}>Элэгний их шинж</Checkbox>
+                              <Checkbox value={'q60-9'}>Элэгний бага шинж</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Элэгний хэмжээ тэмтрэлтээр:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.6.4']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Томорсон</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
-                           <p>(баруун, зүүн дэлбэн, зур)</p>
+                           <Checkbox.Group value={formData?.q63} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q63-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q63-2'}>Томорсон</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  (
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM3.6.5']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          баруун
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          зүүн дэлбэн
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
-                                 зур)
+                                 <Checkbox.Group value={formData?.['q63-2-1']} className="inline">
+                                    <Checkbox className="test" value={'q63-2-1-1'}>
+                                       <span className="text-[11px]">{` баруун, `}</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q63-2-1-2'}>
+                                       <span className="text-[11px]">{` зүүн дэлбэн `}</span>
+                                    </Checkbox>
+                                 </Checkbox.Group>
+                                 &nbsp; зур)
                               </span>
                            </p>
                         </th>
                         <th>
                            <p>Дэлүүний хэмжээ тэмтрэлтээр:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM3.6.6']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Томорсон</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q64} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q64-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q64-2'}>Томорсон</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  (
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM3.6.7']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          I
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          II
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={2}>
-                                          III
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={3}>
-                                          IV
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.['q64-2-1']} className="inline">
+                                    <Checkbox className="test" value={'q64-2-1-1'}>
+                                       <span className="text-[11px]">{` I,`}&nbsp;</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q64-2-1-2'}>
+                                       <span className="text-[11px]">{` II,`}&nbsp;</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q64-2-1-3'}>
+                                       <span className="text-[11px]">{` III,`}&nbsp;</span>
+                                    </Checkbox>
+                                    <Checkbox className="ml-0 test" value={'q64-2-1-4'}>
+                                       <span className="text-[11px]">{` IV`}&nbsp;</span>
+                                    </Checkbox>
+                                 </Checkbox.Group>
                                  зур)
                               </span>
                            </p>
@@ -1257,159 +997,112 @@ const CT1Dotor = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <p>Хоногийн шээсний гарц:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ихэссэн</Checkbox>
-                                 <Checkbox value={2}>Багассан</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q65} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q65-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q65-2'}>Ихэссэн</Checkbox>
+                              <Checkbox value={'q65-3'}>Багассан</Checkbox>
+                           </Checkbox.Group>
                         </th>
-                        <th>
+                        <th className="w-[110px]">
                            <p>Шээсний өнгө:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Сүрлэн шар
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={1}>
-                                    Улаан шар
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={2}>
-                                    Өнгөргүй
-                                 </Checkbox>
-                                 <Checkbox className="w-full" value={3}>
-                                    Тундастай
-                                 </Checkbox>
-                                 <Checkbox value={4}>Тундасгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q66} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q66-1'}>
+                                 Сүрлэн шар
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q66-2'}>
+                                 Улаан шар
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q66-3'}>
+                                 Өнгөргүй
+                              </Checkbox>
+                              <Checkbox className="w-full" value={'q66-4'}>
+                                 Тундастай
+                              </Checkbox>
+                              <Checkbox value={'q66-5'}>Тундасгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
-                        <th className="w-40">
+                        <th className="w-[140px]">
                            <p>Шөнө шээдэг эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.3']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Үгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>
-                                    Тийм ,
-                                    <span>
-                                       тоо
-                                       <Form.Item
-                                          shouldUpdate
-                                          className="mb-0"
-                                          noStyle
-                                          name={['doctorInspection', 'ct1IM4.4']}
-                                       >
-                                          <Input className="amaraInput w-10" />
-                                       </Form.Item>
-                                    </span>
-                                 </Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
-
+                           <Checkbox.Group value={formData?.q67} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q67-2'}>
+                                 Үгүй
+                              </Checkbox>
+                              <Checkbox value={'q67-1'}>
+                                 Тийм ,
+                                 <span>
+                                    тоо <Input value={formData?.['q67-1-1']} className="amaraInput w-10" />
+                                 </span>
+                              </Checkbox>
+                           </Checkbox.Group>
                            <p>Шээс тассалддаг эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.5']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q68} className="ml-0">
+                              <Checkbox className="ml-2" value={'q68-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q68-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>Дутуу шээдэг эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.6']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q69} className="ml-0">
+                              <Checkbox className="ml-2" value={'q69-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q69-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
-                        <th className="w-40">
+                        <th className="w-[150px]">
                            <p>Дүлж шээдэг эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.7']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q70} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q70-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q70-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>Шээхэд давсгаар өвддөг эсэх:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.8']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Тийм
-                                 </Checkbox>
-                                 <Checkbox value={1}>Үгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q71} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q71-1'}>
+                                 Тийм
+                              </Checkbox>
+                              <Checkbox value={'q71-2'}>Үгүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Бөөр тэмтрэлтээр:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM4.9']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Эмзэглэлгүй
-                                 </Checkbox>
-                                 <Checkbox value={1}>Эмзэглэлтэй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q72} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q72-2'}>
+                                 Эмзэглэлгүй
+                              </Checkbox>
+                              <Checkbox value={'q72-1'}>Эмзэглэлтэй</Checkbox>
+                           </Checkbox.Group>
                            <p>
-                              <span>
+                              <span className="text-[11px]">
                                  (
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM4.10']}
-                                 >
-                                    <Checkbox.Group className="inline">
-                                       <Checkbox className="test" value={0}>
-                                          Баруун
-                                       </Checkbox>
-                                       <Checkbox className="ml-0 test" value={1}>
-                                          зүүн
-                                       </Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.['q72-1-1']} className="inline">
+                                    <Checkbox className="test" value={'q72-1-1-1'}>
+                                       <span className="text-[11px]">Баруун,</span>
+                                    </Checkbox>
+                                    &nbsp;
+                                    <Checkbox className="ml-0 test" value={'q72-1-1-2'}>
+                                       <span className="text-[11px]">зүүн,</span>
+                                    </Checkbox>
+                                    &nbsp;
+                                 </Checkbox.Group>
                                  зур)
                               </span>
                            </p>
                            <p>Пастернацкий</p>
-                           <p>
-                              Баруун (
-                              <span>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM4.11']}
-                                 >
-                                    <Input className="amaraInput w-10" />
-                                 </Form.Item>
-                              </span>
-                              )
-                           </p>
-                           <p>
-                              Зүүн (
-                              <span>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM4.12']}
-                                 >
-                                    <Input className="amaraInput w-10" />
-                                 </Form.Item>
-                              </span>
-                              )
-                           </p>
+                           <Checkbox.Group value={formData?.q73} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q73-1'}>
+                                 <span className="text-[11px]">
+                                    Баруун:<span className="text-[11px]">{`(${formData?.['q73-1-1']})`}</span>
+                                 </span>
+                              </Checkbox>
+                              <Checkbox className="ml-2 w-full" value={'q73-2'}>
+                                 зүүн:<span className="text-[11px]">{`(${formData?.['q73-2-1']})`}</span>
+                              </Checkbox>
+                              &nbsp;
+                           </Checkbox.Group>
                         </th>
                      </tr>
                   </thead>
@@ -1422,99 +1115,70 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th className="w-64">
                            <p>Үнэрлэх мэдрэмж:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM5.1']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Буурсан</Checkbox>
-                                 <Checkbox value={2}>Ялгахгүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q74} className="ml-0">
+                              <Checkbox className="ml-2" value={'q74-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q74-2'}>Буурсан</Checkbox>
+                              <Checkbox value={'q74-3'}>Ялгахгүй</Checkbox>
+                           </Checkbox.Group>
                            <p>Сонсголын мэдрэмж:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM5.2']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2" value={0}>
-                                    Хэвийн
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ихэссэн</Checkbox>
-                                 <Checkbox value={2}>Буурсан</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q75} className="ml-0">
+                              <Checkbox className="ml-2" value={'q75-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q75-2'}>Ихэссэн</Checkbox>
+                              <Checkbox value={'q75-3'}>Буурсан</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Нүүрний 2 тал:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM5.3']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Ижил
-                                 </Checkbox>
-                                 <Checkbox value={1}>Ижил бус</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q76} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q76-1'}>
+                                 Ижил
+                              </Checkbox>
+                              <Checkbox value={'q76-2'}>Ижил бус</Checkbox>
+                           </Checkbox.Group>
                            <p>Рефлексүүд:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM5.4']}>
-                              <Checkbox.Group className="ml-0">
-                                 <Checkbox className="ml-2 w-full" value={0}>
-                                    Хадгалагдана
-                                 </Checkbox>
-                                 <Checkbox value={1}>Хадгалагдаагүй</Checkbox>
-                              </Checkbox.Group>
-                           </Form.Item>
+                           <Checkbox.Group value={formData?.q77} className="ml-0">
+                              <Checkbox className="ml-2 w-full" value={'q77-1'}>
+                                 Хадгалагдана
+                              </Checkbox>
+                              <Checkbox value={'q77-2'}>Хадгалагдаагүй</Checkbox>
+                           </Checkbox.Group>
                         </th>
                         <th>
                            <p>Мэдрэхүй:</p>
                            <div className="inline-flex">
                               <div>
                                  <p>Өнгөц:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM5.5']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2 w-full" value={0}>
-                                          Хэвийн
-                                       </Checkbox>
-                                       <Checkbox value={1}>Ихэссэн</Checkbox>
-                                       <Checkbox value={2}>Буурсан</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q78} className="ml-0">
+                                    <Checkbox className="ml-2 w-full" value={'q78-1'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'q78-2'}>Ихэссэн</Checkbox>
+                                    <Checkbox value={'q78-3'}>Буурсан</Checkbox>
+                                 </Checkbox.Group>
                               </div>
                               <div>
                                  <p>Гүн:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM5.6']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2 w-full" value={0}>
-                                          Хэвийн
-                                       </Checkbox>
-                                       <Checkbox value={1}>Ихэссэн</Checkbox>
-                                       <Checkbox value={2}>Буурсан</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q79} className="ml-0">
+                                    <Checkbox className="ml-2 w-full" value={'q79-1'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'q79-2'}>Ихэссэн</Checkbox>
+                                    <Checkbox value={'q79-3'}>Буурсан</Checkbox>
+                                 </Checkbox.Group>
                               </div>
                               <div>
                                  <p>Хэт мэдрэгшил:</p>
-                                 <Form.Item
-                                    shouldUpdate
-                                    className="mb-0"
-                                    noStyle
-                                    name={['doctorInspection', 'ct1IM5.7']}
-                                 >
-                                    <Checkbox.Group className="ml-0">
-                                       <Checkbox className="ml-2 w-full" value={0}>
-                                          Хэвийн
-                                       </Checkbox>
-                                       <Checkbox value={1}>Ихэссэн</Checkbox>
-                                       <Checkbox value={2}>Буурсан</Checkbox>
-                                    </Checkbox.Group>
-                                 </Form.Item>
+                                 <Checkbox.Group value={formData?.q80} className="ml-0">
+                                    <Checkbox className="ml-2 w-full" value={'q80-1'}>
+                                       Хэвийн
+                                    </Checkbox>
+                                    <Checkbox value={'q80-2'}>Ихэссэн</Checkbox>
+                                    <Checkbox value={'q80-3'}>Буурсан</Checkbox>
+                                 </Checkbox.Group>
                               </div>
                            </div>
                         </th>
@@ -1522,17 +1186,13 @@ const CT1Dotor = (props) => {
                      <tr>
                         <th colSpan={3}>
                            <p>Сэтгэцийн байдал:</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM5.8']}>
-                              <TextArea className="amaraInputTextArea w-full" />
-                           </Form.Item>
+                           <p>{formData?.q81}</p>
                         </th>
                      </tr>
                      <tr>
                         <th colSpan={3}>
                            <p>Бусад: (Арьс, үе мөч, тунгалагийн тогтолцоо)</p>
-                           <Form.Item shouldUpdate className="mb-0" noStyle name={['doctorInspection', 'ct1IM5.9']}>
-                              <TextArea className="amaraInputTextArea w-full" />
-                           </Form.Item>
+                           <p>{formData?.q82}</p>
                         </th>
                      </tr>
                   </thead>

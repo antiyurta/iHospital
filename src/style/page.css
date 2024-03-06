@@ -170,6 +170,7 @@ table.dailyTable tbody > tr > th {
    resize: none !important;
    height: 18px !important;
    text-align: center !important;
+   pointer-events: none !important;
 }
 .story .ant-input {
    border: none !important;

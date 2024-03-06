@@ -18,7 +18,7 @@ const Answer = (props) => {
    useEffect(() => {
       const parentType = handleCheckParentType(item.parentIndex);
       if (parentType === 'checkbox') {
-         setIsExpand(false);
+         setIsExpand(true);
       } else if (parentType === 'table') {
          setIsAddType(true);
       } else {

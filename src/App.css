@@ -966,6 +966,7 @@ table .formTable tr > td {
 .document .amaraInput.ant-input {
    resize: none !important;
    height: 18px !important;
+   pointer-events: none !important;
 }
 .document2 .ant-input {
    border: none !important;
