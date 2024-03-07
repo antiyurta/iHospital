@@ -13,7 +13,7 @@ const AnswerBody = (props) => {
       const parameters = data?.flatMap((first) => first.examination.parameters ?? []);
       if (parameters?.length > 0) {
          setIsLoading(true);
-         await ServiceApi.getResultForExamination({
+         await ServiceApi.getResultForExaminationByBarcode({
             params: {
                analysisId: barcode
             }

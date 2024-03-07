@@ -3,7 +3,7 @@ import ProgressNotes from './ProgressNotes';
 import NurseNote from '../NurseNote';
 import ProgressCheck from './ProgressCheck';
 import Xray from '../Xray';
-import ErequestList from './ErequestList';
+import ErequestList from './Erequest/ErequestList';
 
 import Assesments from './Nurse/Assesments';
 

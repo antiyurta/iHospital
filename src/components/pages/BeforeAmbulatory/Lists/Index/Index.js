@@ -212,14 +212,17 @@ function Index({ type, isDoctor }) {
          data['departmentId'] = row.inDepartmentId;
       }
       // uzleg ehleh tsag
+      console.log('end orow1s', type);
       if (row.startDate === null && isDoctor && type === 1) {
          data['startDate'] = new Date();
+
          AppointmentService.patchPreOrder(row.id, {
             slotId: row.slotId,
             startDate: new Date()
          });
       }
       if (row.startDate === null && isDoctor && type === 0) {
+         console.log('end orow');
          data['startDate'] = new Date();
          AppointmentService.patchAppointment(row.id, {
             startDate: new Date(),

@@ -94,7 +94,7 @@ const NewFormRender = (props) => {
          });
       }
       checkProgress(newKeyWords);
-      setKeyWords(newKeyWords);
+      setKeyWords([...newKeyWords, ...['']]);
    };
 
    const handleChangeRadio = (keyWord, options, currentIndex) => {
@@ -126,7 +126,7 @@ const NewFormRender = (props) => {
          });
       }
       checkProgress(newKeyWords);
-      setKeyWords(newKeyWords);
+      setKeyWords([...newKeyWords, ...['']]);
 
       // if (options?.length > 0) {
       //    const selectedIndexes = options
