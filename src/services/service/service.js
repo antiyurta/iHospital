@@ -47,6 +47,9 @@ class Service {
    async patchErequestParameter(id, body) {
       return await jwtInterceopter.patch('service/parameter/' + id, body);
    }
+   async getResultForExamination(conf) {
+      return await jwtInterceopter.get('service/examinationResult', conf);
+   }
    async getResultForExaminationByBarcode(conf) {
       return await jwtInterceopter.get('laboratory', conf);
    }

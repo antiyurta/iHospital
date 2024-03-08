@@ -51,7 +51,9 @@ const ErequestList = () => {
             height: 'calc(100% - 110px)'
          }}
       >
-         {displayType === DisplayTypeEnum.DESC ? <ErequestViewer /> : null}
+         {displayType === DisplayTypeEnum.DESC ? (
+            <ErequestViewer patientId={IncomeEMRData.patientId} setDisplayType={setDisplayType} />
+         ) : null}
          {displayType === DisplayTypeEnum.list ? (
             <div className="erequest-list">
                <div className="erequest-top">
