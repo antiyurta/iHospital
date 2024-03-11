@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Button } from 'antd';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
-import moment from 'moment';
 import { numberToCurrency, openNofi } from '../../comman';
 import PaymentService from '../../../services/payment/payment';
 import EbarimtService from '../../../services/ebarimt/ebarimt';
@@ -34,7 +33,7 @@ function EbarimtPrint(props) {
    });
    return (
       <div className="pt-6">
-         <div ref={printRef} className="px-[0.5cm] m-auto" style={{ width: '80mm' }}>
+         <div ref={printRef} className="px-[0.5cm] m-auto" style={{ maxWidth: '80mm' }}>
             <div className="ebarimt">
                <div className="flex flex-row gap-2 justify-end">
                   <img src={buildingSvg} alt="building" />
@@ -104,7 +103,7 @@ function EbarimtPrint(props) {
                   >
                      <QRCode
                         style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                        value={props?.props?.qrData ? props?.props?.qrData : 0}
+                        value={props?.props?.qrData ? props?.props?.qrData?.toString() : ''}
                         viewBox={`0 0 256 256`}
                      />
                   </div>

@@ -16,6 +16,7 @@ import PaymentService from '../../../../services/payment/payment';
 function Invoice() {
    const [orderModal, setOrderModal] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
+   const [isLoadingEbarimt, setIsLoadingEbarimt] = useState(false);
    // owchton haih ued
    const [isLoadingFilter, setIsLoadingFilter] = useState(false);
    // owchton haih ued
@@ -139,14 +140,19 @@ function Invoice() {
       }
    };
    const sendData = async () => {
-      await EBarimtService.sendData().then((response) => {
-         if (response.data.response.status && response.status === 200) {
-            openNofi('success', 'Амжиллтай', 'Амжилттай татлаа');
-            getInformation();
-         } else {
-            openNofi('error', 'Алдаа', 'Татах үед алдаа гарлаа');
-         }
-      });
+      setIsLoadingEbarimt(true);
+      await EBarimtService.sendData()
+         .then(({ data: { response } }) => {
+            if (response === 'success') {
+               openNofi('success', 'Амжиллтай', 'Амжилттай И-Баримт илгээгдлээ');
+               getInformation();
+            } else {
+               openNofi('error', 'Алдаа', 'Татах үед алдаа гарлаа');
+            }
+         })
+         .finally(() => {
+            setIsLoadingEbarimt(false);
+         });
    };
    const getInformation = async () => {
       await EBarimtService.getInformation().then((response) => {
@@ -276,7 +282,7 @@ function Invoice() {
                   <p className="font-bold">Сүүлд татсан огноо:</p>
                   <p className="font-bold">{`${dayjs(ebarimtInfo?.lastSentdate).format('YYYY/MM/DD')}`}</p>
                </div>
-               <Button onClick={() => sendData()} type="primary">
+               <Button loading={isLoadingEbarimt} onClick={() => sendData()} type="primary">
                   И-баримт илгээх
                </Button>
                <div className="h-[1px] w-full bg-black" />

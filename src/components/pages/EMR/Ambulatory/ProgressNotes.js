@@ -1,9 +1,7 @@
 //Явцын тэмдэглэл
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Input, Modal, Result, Spin } from 'antd';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Button, Input, Result, Spin } from 'antd';
 import male from '../../../../assets/images/maleAvatar.svg';
-import Prescription from '../PrescriptionPrint';
-import Magadlaga from '../MagadlagaPrint';
 import DiagnoseTypes from '../../service/DiagnoseTypes.js';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
@@ -13,9 +11,16 @@ import dayjs from 'dayjs';
 import EmrContext from '../../../../features/EmrContext';
 import { Each } from '../../../../features/Each';
 import { SearchOutlined } from '@ant-design/icons';
+import ReactToPrint from 'react-to-print';
+
+//document
+import * as InspectionDocumentIndex from './Document/Index';
+import { capitalizeFirstLetter, formatNameForDoc } from '../../../comman';
+const InspectionDocumentReturnById = InspectionDocumentIndex.ReturnById;
 
 export default function ProgressNotes() {
    const { selectedAppoitmentId, expandedKeys, setKeys } = useContext(EmrContext);
+   const printRef = useRef();
    const [searchValue, setSearchValue] = useState('');
    const [activeKeyId, setActiveKeyId] = useState(null);
    const incomeEMRData = useSelector(selectCurrentEmrData);
@@ -99,6 +104,7 @@ export default function ProgressNotes() {
       return diagnosis?.map((diagnose, index) => {
          return (
             <div key={index} className="flex">
+               <span>Онош:</span>
                <p className="font-semibold mx-2">{diagnoseTypeInfo(diagnose.diagnoseType)}: </p>
                <p>{'[' + diagnose.diagnose?.code + ']' + diagnose.diagnose?.nameMn}</p>
             </div>
@@ -114,11 +120,6 @@ export default function ProgressNotes() {
          );
       });
    };
-   const [printPrescription, setPrintPrescription] = useState([]);
-   const [printMagadlaga, setPrintMagadlaga] = useState({});
-   const [isOpenModalPrescription, setIsOpenModalPrescription] = useState(false);
-   const [isOpenModalMagadlaga, setIsOpenModalMagadlaga] = useState(false);
-   //
    const configure = (state, key) => {
       if (state && !expandedKeys?.includes(key)) {
          if (expandedKeys) {
@@ -327,17 +328,60 @@ export default function ProgressNotes() {
                                        </div>
                                     </div>
                                  </div>
-                                 <div className="regular-divider">Зовиур</div>
-                                 <RenderHTML data={inspectionNote?.pain} />
-                                 <div className="regular-divider">Асуумж</div>
-                                 <RenderHTML data={inspectionNote?.question} />
-                                 <div className="regular-divider">Бодит үзлэг</div>
-                                 <RenderHTML data={inspectionNote?.inspection} />
-                                 <div className="regular-divider">Онош</div>
-                                 <RenderHTMLDiagnose diagnosis={diagnosis} />
-                                 <div className="regular-divider">Төлөвлөгөө</div>
-                                 <RenderHTML data={inspectionNote?.plan} />
-                                 <RenderHTMLServices services={services} />
+                                 <ReactToPrint
+                                    trigger={() => {
+                                       return <Button type="primary">Хэвлэх</Button>;
+                                    }}
+                                    content={() => printRef.current}
+                                 />
+                                 <div ref={printRef}>
+                                    <InspectionDocumentReturnById
+                                       hospitalId={inspectionNote.hospitalId}
+                                       body={
+                                          <div className="flex flex-col gap-1">
+                                             <table className="table table-bordered">
+                                                <tbody>
+                                                   <tr>
+                                                      <td className="text-center">{`${capitalizeFirstLetter(
+                                                         info.cabinetName
+                                                      )} үзлэг`}</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>
+                                                         <RenderHTML data={inspectionNote?.pain} />
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>
+                                                         <RenderHTML data={inspectionNote?.question} />
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>
+                                                         <RenderHTML data={inspectionNote?.inspection} />
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>
+                                                         <RenderHTMLDiagnose diagnosis={diagnosis} />
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>
+                                                         <RenderHTML data={inspectionNote?.plan} />
+                                                         <RenderHTMLServices services={services} />
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                             <p className="text-center">
+                                                Эмч: ........................
+                                                {formatNameForDoc(info?.lastName, info?.firstName)}
+                                             </p>
+                                          </div>
+                                       }
+                                    />
+                                 </div>
                               </div>
                            ) : (
                               <Result title={'Хугацаа сонгох'} />
@@ -348,24 +392,6 @@ export default function ProgressNotes() {
                </div>
             </div>
          </div>
-         <Modal
-            open={isOpenModalPrescription}
-            onCancel={() => setIsOpenModalPrescription(false)}
-            footer={null}
-            width={845}
-            title={'CT-1'}
-         >
-            <Prescription props={printPrescription} />
-         </Modal>
-         <Modal
-            open={isOpenModalMagadlaga}
-            onCancel={() => setIsOpenModalMagadlaga(false)}
-            footer={null}
-            width={860}
-            title={'Эмнэлэгийн магадлагаа'}
-         >
-            <Magadlaga data={printMagadlaga} />
-         </Modal>
       </>
    );
 }

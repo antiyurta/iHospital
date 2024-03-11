@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { useState } from 'react';
-import { numberToCurrency } from '../../../comman';
+import { formatNameForDoc, numberToCurrency } from '../../../comman';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../../features/authReducer';
 import { useEffect } from 'react';
@@ -75,7 +75,7 @@ function PrintIndex() {
       return paymentShape.find((e) => e.id === id)?.name;
    };
    useEffect(() => {
-      getEmployees(50);
+      getEmployees(null);
       // getEmployees(1);
       getDiscounts();
       getPaymentType();
@@ -109,15 +109,18 @@ function PrintIndex() {
                         }
                      ]}
                   >
-                     <Select onChange={() => setIncomes([])}>
-                        {employees.map((employee, index) => {
-                           return (
-                              <Option key={index} value={employee.userId}>
-                                 {employee.lastName.substring(0, 1) + '.' + employee.firstName}
-                              </Option>
-                           );
-                        })}
-                     </Select>
+                     <Select
+                        allowClear
+                        showSearch
+                        filterOption={(input, option) =>
+                           (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
+                        }
+                        onChange={() => setIncomes([])}
+                        options={employees?.map((employee) => ({
+                           label: formatNameForDoc(employee.lastName, employee.firstName),
+                           value: employee.userId
+                        }))}
+                     />
                   </Form.Item>
                </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import ProgressNotes from './ProgressNotes';
 import NurseNote from '../NurseNote';
 import ProgressCheck from './ProgressCheck';

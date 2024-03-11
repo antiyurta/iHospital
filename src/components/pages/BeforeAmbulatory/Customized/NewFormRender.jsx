@@ -622,13 +622,13 @@ const NewFormRender = (props) => {
       if (incomeKeyWords?.length > 0) {
          const allKeyWords = [...firstKeyWords, ...incomeKeyWords];
          const unDup = allKeyWords.filter((item, index) => allKeyWords.indexOf(item) === index);
-         findTitleChildrens(form.documentForm, unDup || []);
+         findTitleChildrens(form?.documentForm || [], unDup || []);
       } else {
-         findTitleChildrens(form.documentForm, firstKeyWords || []);
+         findTitleChildrens(form?.documentForm || [], firstKeyWords || []);
       }
-      const data = convertTree(form.documentForm);
+      const data = convertTree(form?.documentForm || []);
       setTreeData(data);
-   }, [form.documentForm]);
+   }, [form]);
 
    return treeData?.map(renderHTML);
 };

@@ -1,23 +1,28 @@
+import React, { useRef, useState, useEffect } from 'react';
 import {
    CheckOutlined,
-   ClockCircleOutlined,
    MinusOutlined,
    PlusOutlined,
    UploadOutlined,
    DeleteOutlined,
-   ReloadOutlined
+   BarcodeOutlined
 } from '@ant-design/icons';
-import { Button, Card, Form, Modal, Upload, Select, InputNumber, Table, DatePicker } from 'antd';
-import moment from 'moment';
-import React, { useRef, useState, useEffect } from 'react';
+import { Button, Card, Form, Modal, Upload, Select, InputNumber, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
-import mnMN from 'antd/es/calendar/locale/mn_MN';
+import { Get, getAge, getGenderInType, openNofi, Post, ScrollRef } from '../../comman';
 import jwtInterceopter from '../../jwtInterceopter';
+import { ListPatientInfo, TypeInfo } from '../../ListInjection';
+import dayjs from 'dayjs';
+import Barcode from 'react-barcode';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
-const { RangePicker } = DatePicker;
+
+import ServiceApi from '../../../services/service/service';
+import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
+import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
+import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
+
 function IndexBefore({ type }) {
    const today = new Date();
    const token = useSelector(selectCurrentToken);
@@ -50,50 +55,23 @@ function IndexBefore({ type }) {
    };
    const getXrayRequest = async (page, pageSize, start, end) => {
       setSpinner(true);
-      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
-      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
-      const conf = {
-         headers: {},
+      await ServiceApi.getXrayRequest({
          params: {
             xrayProcess: '0,1',
             page: page,
             limit: pageSize,
             deviceType: type,
-            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
-            endDate: moment(end).format('YYYY-MM-DD HH:mm')
+            startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+            endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
          }
-      };
-      setStart(start);
-      setEnd(end);
-      const response = await Get('service/xrayRequest', token, conf);
-      setXrayLists(response.data);
-      setMeta(response.meta);
-      setSpinner(false);
-   };
-   const getGenderInfo = (gender) => {
-      if (gender === 'MAN') {
-         return 'Эр';
-      } else {
-         return 'Эмэгтэй';
-      }
-   };
-   const getAge = (registerNumber) => {
-      if (registerNumber != undefined) {
-         const date = new Date();
-         let year = parseInt(registerNumber.substring(2, 4));
-         let month = parseInt(registerNumber.substring(4, 6));
-         if (month > 20 && month < 33) {
-            year += 2000;
-            month -= 20;
-         } else {
-            year += 1900;
-         }
-         const currentYear = date.getFullYear();
-         const age = currentYear - year;
-         return age;
-      } else {
-         return null;
-      }
+      })
+         .then(({ data: { response } }) => {
+            setXrayLists(response.data);
+            setMeta(response.meta);
+         })
+         .finally(() => {
+            setSpinner(false);
+         });
    };
    const headers = {
       Authorization: `Bearer ${token}`,
@@ -146,11 +124,12 @@ function IndexBefore({ type }) {
       }
    };
    const onFinish = async (values) => {
-      const response = await Patch('service/xrayRequest/' + id, token, config, values);
-      if (response === 200) {
-         setXrayModal(false);
-         getXrayRequest(1, 10, start, end);
-      }
+      await ServiceApi.patchXrayRequest(id, values).then(({ data: { success } }) => {
+         if (success) {
+            setXrayModal(false);
+            getXrayRequest(1, 10, today, today);
+         }
+      });
    };
    const checkType = (process) => {
       if (process === 0) {
@@ -161,12 +140,11 @@ function IndexBefore({ type }) {
          return <CheckOutlined style={{ color: 'green' }} />;
       }
    };
-   const getPaymentInfo = (isPayment) => {
-      if (isPayment) {
-         return <PlusOutlined style={{ color: 'green' }} />;
-      } else {
-         return <MinusOutlined style={{ color: 'red' }} />;
+   const getPaymentInfo = (state) => {
+      if (state) {
+         return <TypeInfo bgColor="#5cb85c" textColor="white" text={'Төлсөн'} />;
       }
+      return <TypeInfo bgColor="#ef4444" textColor="white" text={'Төлөгдөөгүй'} />;
    };
    useEffect(() => {
       getXrayRequest(1, 10, today, today);
@@ -219,113 +197,102 @@ function IndexBefore({ type }) {
    const getTypeInfo = (begin, end, usageType) => {
       if (begin === undefined && end === undefined) {
          if (usageType === 'OUT') {
-            return <p className="bg-[#ffbb00] text-black">Цаг оруулаагүй</p>;
+            return <TypeInfo bgColor="#ffbb00" textColor="black" text={'Цаг оруулаагүй'} />;
          }
-         return <p className="bg-[#f0ad4e] text-white">Шууд</p>;
+         return <TypeInfo bgColor="#f0ad4e" textColor="white" text={'Шууд'} />;
       } else {
-         return (
-            <div className="bg-[#5cb85c] text-white">
-               <span>{begin}</span>
-               <ClockCircleOutlined className="mx-1.5" />
-               <span>{end}</span>
-            </div>
-         );
+         const beginTime = begin.substring(0, 5);
+         const endTime = end.substring(0, 5);
+         return <TypeInfo bgColor="#5cb85c" textColor="white" text={beginTime + '-' + endTime} />;
       }
    };
    const getUsageTypeInfo = (type) => {
       if (type === 'IN') {
-         return <p className="bg-[#5bc0de] text-white">Хэвтэн</p>;
+         return <TypeInfo bgColor="#5bc0de" textColor="white" text={'Хэвтэн'} />;
       } else {
-         return <p className="bg-[#5cb85c] text-white">Амбулатори</p>;
+         return <TypeInfo bgColor="#5cb85c" textColor="white" text={'Амбулатори'} />;
       }
    };
    const xrayRequestColumns = [
       {
+         title: 'Он сар',
+         dataIndex: 'requestDate',
+         render: (requestDate) => dayjs(requestDate).format('YYYY-MM-DD')
+      },
+      {
          title: 'Төрөл',
          dataIndex: 'usageType',
-         render: (text) => {
-            return getUsageTypeInfo(text);
-         }
+         width: 100,
+         render: (usageType) => getUsageTypeInfo(usageType)
+      },
+      {
+         title: 'Өвчтөн',
+         dataIndex: 'patient',
+         width: 170,
+         render: (patient) => <ListPatientInfo patientData={patient} />
+      },
+      {
+         title: 'Нас',
+         width: 40,
+         dataIndex: ['patient', 'registerNumber'],
+         render: (registerNumber) => getAge(registerNumber)
+      },
+      {
+         title: 'Хүйс',
+         width: 40,
+         dataIndex: ['patient', 'genderType'],
+         render: (genderType) => getGenderInType(genderType)
       },
       {
          title: 'Оношилгооны нэр',
          dataIndex: ['xray', 'name'],
-         render: (text) => {
-            return <div className="whitespace-pre-wrap">{text}</div>;
-         }
-      },
-      {
-         title: 'Он сар',
-         dataIndex: 'requestDate',
-         render: (text) => {
-            return moment(text).format('YYYY-MM-DD');
-         }
+         render: (name) => <div className="whitespace-pre-wrap">{name}</div>
       },
       {
          title: 'Орох цаг',
-         render: (_, row) => {
-            return getTypeInfo(
-               row.deviceSlots?.startTime?.substr(0, 5),
-               row.deviceSlots?.endTime?.substr(0, 5),
-               row.usageType
-            );
-         }
+         width: 90,
+         render: (_, row) => getTypeInfo(row.deviceSlot?.startTime, row.deviceSlot?.endTime, row.usageType)
       },
       {
-         title: 'Үзлэг хийгдсэн эсэх',
+         title: 'Үзлэг',
          dataIndex: 'xrayProcess',
-         render: (text) => {
-            return checkType(text);
-         }
-      },
-      {
-         title: 'Картын №',
-         dataIndex: ['patient', 'cardNumber']
-      },
-      {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName']
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName']
-      },
-      {
-         title: 'Регистр №',
-         dataIndex: ['patient', 'registerNumber']
-      },
-      {
-         title: 'Нас',
-         render: (_, row) => {
-            return getAge(row.patient?.registerNumber);
-         }
-      },
-      {
-         title: 'Хүйс',
-         render: (_, row) => {
-            return getGenderInfo(row.patient?.genderType);
-         }
-      },
-      {
-         title: 'Илгээсэн',
-         dataIndex: 'createdBy'
+         render: (xrayProcess) => checkType(xrayProcess)
       },
       {
          title: 'Эмч',
-         dataIndex: ['employees', 'firstName']
+         dataIndex: 'employee',
+         width: 170,
+         render: (employee) => <ListPatientInfo patientData={employee} />
       },
       {
          title: 'Даатгал',
+         width: 100,
          dataIndex: 'isInsurance',
-         render: (text) => {
-            return getPaymentInfo(text);
-         }
+         render: (text) => getPaymentInfo(text)
       },
       {
          title: 'Төлбөр',
+         width: 60,
          dataIndex: 'isPayment',
-         render: (text) => {
-            return getPaymentInfo(text);
+         render: (text) => getPaymentInfo(text)
+      },
+      {
+         title: 'Бар код',
+         dataIndex: 'serialNumber',
+         render: (barcode) => {
+            if (barcode) {
+               return (
+                  <Button
+                     icon={<BarcodeOutlined />}
+                     onClick={() => {
+                        Modal.info({
+                           content: <Barcode value={barcode?.toString()} height={40} fontSize={10} width={3} />
+                        });
+                     }}
+                  />
+               );
+            }
+            return;
          }
       },
       {
@@ -347,16 +314,6 @@ function IndexBefore({ type }) {
             );
          }
       }
-      // {
-      //    title: 'Материал',
-      //    render: () => {
-      //       return (
-      //          <Button type="primary" onClick={showModal}>
-      //             Зарлагадах
-      //          </Button>
-      //       );
-      //    }
-      // }
    ];
    const normFile = (e) => {
       if (Array.isArray(e)) {
@@ -365,76 +322,43 @@ function IndexBefore({ type }) {
       return e && e.fileList;
    };
    return (
-      <div className="w-full bg-[#f5f6f7] p-3">
-         <Card
-            title={type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'}
-            bordered={false}
-            className="header-solid max-h-max rounded-md"
-         >
-            <div className="flex flex-wrap">
-               <div className="basis-1/3">
-                  <RangePicker
-                     onChange={(e) => {
-                        if (e != null) {
-                           getXrayRequest(1, 10, e[0], e[1]);
-                        }
-                     }}
-                     locale={mnMN}
-                  />
-               </div>
-               <div className="w-full py-2">
-                  <div className="flex float-left">
-                     {/* <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                                        <span className="font-medium mx-1">Яаралтай</span>
-                                    </div> */}
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Шууд</span>
-                     </div>
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Урьдчилсан захиалга</span>
-                     </div>
-                     {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                                        <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
-                                    </div> */}
-                  </div>
-                  <div className="float-right">
-                     <Button title="Сэргээх" type="primary" onClick={() => getXrayRequest(1, 10, start, end)}>
-                        <ReloadOutlined
-                        // spin={!spinner}
-                        />
-                     </Button>
-                  </div>
-               </div>
-               <div className="w-full py-2">
-                  <div>
-                     <Table
-                        rowKey={'id'}
-                        locale={{ emptyText: 'Мэдээлэл байхгүй' }}
-                        bordered
-                        columns={xrayRequestColumns}
-                        dataSource={xrayLists}
-                        scroll={{
-                           x: 1500
-                        }}
-                        loading={spinner}
-                        pagination={{
-                           simple: true,
-                           pageSize: 10,
-                           total: meta.itemCount,
-                           current: meta.page,
-                           onChange: (page, pageSize) => getXrayRequest(page, pageSize, start, end)
-                        }}
-                     />
-                  </div>
-               </div>
-            </div>
-         </Card>
+      <div className="w-full h-screen bg-[#f5f6f7] p-3">
+         <div className="flex flex-col gap-2">
+            <ScheduleTypeInfo />
+            <InspectionTypeInfo />
+            <ListFilter
+               meta={meta}
+               appointmentsLength={xrayLists?.length || 0}
+               selectedTags={0}
+               getList={getXrayRequest}
+            />
+            <Card
+               title={type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'}
+               bordered={false}
+               className="header-solid rounded-md"
+               bodyStyle={{
+                  padding: 8
+               }}
+            >
+               <Table
+                  rowKey={'id'}
+                  locale={{ emptyText: 'Мэдээлэл байхгүй' }}
+                  columns={xrayRequestColumns}
+                  dataSource={xrayLists}
+                  scroll={{
+                     x: 1500
+                  }}
+                  loading={spinner}
+                  pagination={{
+                     simple: true,
+                     pageSize: 10,
+                     total: meta.itemCount,
+                     current: meta.page,
+                     onChange: (page, pageSize) => getXrayRequest(page, pageSize, start, end)
+                  }}
+               />
+            </Card>
+         </div>
          <Modal
             title="Зураг оруулах"
             open={xrayModal}

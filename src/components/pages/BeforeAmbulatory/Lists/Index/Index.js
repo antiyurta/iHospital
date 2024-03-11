@@ -446,7 +446,11 @@ function Index({ type, isDoctor }) {
          title: 'Онош',
          dataIndex: 'patientDiagnosis',
          width: 100,
-         render: (patientDiagnosis) => patientDiagnosis?.map((diagnose) => diagnose.diagnose.code)?.join('|')
+         render: (patientDiagnosis) => (
+            <p className="whitespace-pre-wrap text-black">
+               {patientDiagnosis?.map((diagnose) => diagnose.diagnose.code)?.join(',')}
+            </p>
+         )
       },
       {
          title: 'Хяналт',
@@ -843,8 +847,11 @@ function Index({ type, isDoctor }) {
                   usageType: 'OUT',
                   patientId: selectedRowPatientId
                }}
+               handleClick={() => null}
                editForm={formData}
                isEditFromList={true}
+               hicsServiceId={null}
+               appointmentType={type}
                triggerForModal={(state) => setIsOpenEditForm(state)}
             />
          </Modal>

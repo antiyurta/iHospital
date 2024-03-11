@@ -55,6 +55,8 @@ function MainPatientHistory({ handleClick }) {
                usageType: usageType
             }}
             handleClick={handleClick}
+            editForm={null}
+            isEditFromList={false}
             hicsServiceId={hicsServiceId}
             appointmentType={type}
             triggerForModal={(state) => {}}

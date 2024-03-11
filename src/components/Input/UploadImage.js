@@ -41,7 +41,6 @@ export const UploadImage = ({ form, itemName }) => {
          info.fileList?.map((file) => {
             setImageIds(file.response.response.id);
          });
-         
       }
    };
    const handleRemove = async (info) => {

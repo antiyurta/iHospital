@@ -10,6 +10,13 @@ import { NumericFormat } from 'react-number-format';
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+export function capitalizeFirstLetter(str) {
+   if (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+   }
+   return;
+}
+
 export function regToDate(registerNumber) {
    if (registerNumber) {
       const date = new Date();

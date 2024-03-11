@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { EyeOutlined, RollbackOutlined, DownloadOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Modal } from 'antd';
-import moment from 'moment';
+import { Button, Card, DatePicker, Modal } from 'antd';
 import { numberToCurrency, openNofi } from '../../../comman';
-import EbarimtPrint from '../EbarimtPrint';
+
 import mnMN from 'antd/es/calendar/locale/mn_MN';
+
+import EbarimtPrint from '../EbarimtPrint';
+import { NewColumn, NewSummaryCell, NewSummaryRow, NewTable } from '../../../Table/Table';
 import PrintIndex from './PrintIndex';
 
 import PaymentServices from '../../../../services/payment/payment';
-import NewCard from '../../../Card/Card';
-import { NewColumn, NewSummaryCell, NewSummaryRow, NewTable } from '../../../Table/Table';
+import dayjs from 'dayjs';
 
 const { RangePicker } = DatePicker;
 function DailyIncome() {
@@ -27,16 +28,16 @@ function DailyIncome() {
    const [paymentShape, setPaymentShape] = useState([]);
    const getDailyIncome = async (page, pageSize, start, end) => {
       setSpinner(true);
-      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
-      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
+      start = dayjs(start).set('hour', 0).set('minute', 0).set('second', 0);
+      end = dayjs(end).set('hour', 23).set('minute', 59).set('second', 59);
       setStart(start);
       setEnd(end);
       await PaymentServices.getPayment({
          params: {
             page: page,
             limit: pageSize,
-            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
-            endDate: moment(end).format('YYYY-MM-DD HH:mm')
+            startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+            endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
          }
       }).then((response) => {
          const data = response.data.response.data;
@@ -82,15 +83,15 @@ function DailyIncome() {
       getDiscount();
    }, []);
    return (
-      <div className="w-full bg-[#f5f6f7] p-3">
-         <NewCard
+      <div className="w-full h-screen bg-[#f5f6f7] p-3">
+         <Card
+            bordered={false}
+            className="header-solid rounded-md"
             title="Өдрийн орлогын тайлан"
             extra={
-               <>
-                  <Button type="primary" onClick={() => setPrintOneDay(true)}>
-                     Өдрийн орлого
-                  </Button>
-               </>
+               <Button type="primary" onClick={() => setPrintOneDay(true)}>
+                  Өдрийн орлого
+               </Button>
             }
          >
             <div className="flex flex-col gap-3">
@@ -201,11 +202,11 @@ function DailyIncome() {
                      render={(text, row) => {
                         if (row?.customerNo) {
                            return (
-                              <div className="bg-[#5cb85c] text-white">{moment(text).format('YYYY/MM/DD HH:mm')}</div>
+                              <div className="bg-[#5cb85c] text-white">{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
                            );
                         } else {
                            return (
-                              <div className="bg-[#f0ad4e] text-white">{moment(text).format('YYYY/MM/DD HH:mm')}</div>
+                              <div className="bg-[#f0ad4e] text-white">{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
                            );
                         }
                      }}
@@ -286,11 +287,20 @@ function DailyIncome() {
                      dataIndex={'id'}
                      title="Буцаалт"
                      width={50}
-                     render={(text) => {
+                     render={(text, row) => {
                         return (
                            <Button
                               type="link"
-                              onClick={() => viewModal(text, true)}
+                              onClick={() => {
+                                 if (row.isEbarimtSend) {
+                                    Modal.error({
+                                       okText: 'За',
+                                       content: 'Илгээгдсэн баримт буцаах боломжгүй'
+                                    });
+                                 } else {
+                                    viewModal(text, true);
+                                 }
+                              }}
                               title="Харах"
                               style={{ paddingRight: 5, color: 'red' }}
                            >
@@ -301,7 +311,7 @@ function DailyIncome() {
                   />
                </NewTable>
             </div>
-         </NewCard>
+         </Card>
          <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
             <EbarimtPrint props={ebarimtData} isBackPayment={isBackPayment} />
          </Modal>

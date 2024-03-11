@@ -1,10 +1,25 @@
 import { Avatar } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatNameForDoc } from './comman';
+
+import localFileApi from '../services/file/local-file/local-file.api';
+
 export const ListPatientInfo = ({ patientData }) => {
+   const [imgSrc, setImgSrc] = useState('');
+   const getImage = async () => {
+      await localFileApi.getFile(patientData.imageId).then((response) => {
+         setImgSrc(response);
+      });
+   };
+   useEffect(() => {
+      if (patientData && patientData.imageId != null) {
+         getImage();
+      }
+   }, [patientData]);
    return (
       <div className="ambo-list-user">
          <Avatar
+            src={imgSrc || null}
             style={{
                minWidth: 32
             }}

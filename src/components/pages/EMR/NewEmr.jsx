@@ -21,6 +21,7 @@ import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import MainInPatient from './InPatient/MainInPatient';
 import NewEmrSupport from './NewEmrSupport';
 import { EmrContextProvider } from '../../../features/EmrContext';
+import Barcode from 'react-barcode';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -130,6 +131,23 @@ class NewEmr extends React.Component {
                         <DoctorNotes patientId={this.props.IncomeEMRData.patientId} />
                         {this.props.IncomeEMRData.usageType === 'OUT' ? (
                            <EmrTimer startDate={this.props.IncomeEMRData.startDate} />
+                        ) : null}
+                     </div>
+                     <div
+                        style={{
+                           position: 'absolute',
+                           left: '50%',
+                           top: '10%',
+                           transform: 'translate(-50%, -50%)'
+                        }}
+                     >
+                        {this.props.IncomeEMRData.serialNumber ? (
+                           <Barcode
+                              value={this.props.IncomeEMRData.serialNumber?.toString() || 'CODE128AUTO'}
+                              height={40}
+                              fontSize={10}
+                              width={3}
+                           />
                         ) : null}
                      </div>
                   </div>

@@ -1,22 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Tabs, Empty, ConfigProvider } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Empty, ConfigProvider } from 'antd';
 import { EyeOutlined, EditOutlined, SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Get, openNofi, Patch, Post, ScrollRef } from '../../comman';
+import { Get, openNofi, Patch, Post } from '../../comman';
 import axios from 'axios';
-import 'moment/locale/mn';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import moment from 'moment';
-import GeneralInfo from './Patient/GeneralInfo';
-import MoreInfo from './Patient/MoreInfo';
-import ResidentialAddress from './Patient/ResidentialAddress';
-import Insurance from './Patient/Insurance';
-import Contact from './Patient/Contact';
 import mnMN from 'antd/es/locale/mn_MN';
 import UPatient from './Urgent/UPatient';
 import patientApi from '../../../services/pms/patient.api';
 import { selectHospitalIsXyp } from '../../../features/hospitalReducer';
 import PatientSupport from './patientSupport';
+import dayjs from 'dayjs';
 const { Search } = Input;
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
@@ -32,54 +26,18 @@ function Patient() {
    const [editMode, setEditMode] = useState(false);
    const [pIndex, setPindex] = useState('');
    const [pValue, setPvalue] = useState('');
-   //
    const [id, setId] = useState([]);
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState([]);
    const [view, setView] = useState([]);
-   //
    const [citizens, setCitizens] = useState([]);
    const [provices, setProvices] = useState([]);
    const [towns, setTowns] = useState([]);
-   //
-   const [form] = Form.useForm();
-   const scrollRef = useRef();
    // urgent
    const [urgentForm] = Form.useForm();
    const [urgentEditMode, setUrgentEditMode] = useState(false);
    const [isOpenUrgent, setIsOpenUrgent] = useState(false);
-   //
-   const dd = (value) => {
-      setIsGlobalDb(value);
-   };
-   const items = [
-      {
-         forceRender: true,
-         label: 'Ерөнхий мэдээлэл',
-         key: 1,
-         children: <GeneralInfo form={form} gbase={dd} />
-      },
-      { label: 'Нэмэлт мэдээлэл', key: 2, children: <MoreInfo form={form} /> },
-      {
-         forceRender: true,
-         label: 'Оршин суугаа хаяг',
-         key: 3,
-         children: <ResidentialAddress form={form} />
-      },
-      {
-         forceRender: true,
-         label: 'Даатгал',
-         key: 4,
-         children: <Insurance form={form} />
-      },
-      {
-         forceRender: true,
-         label: 'Холбоо барих хүний мэдээлэл',
-         key: 5,
-         children: <Contact form={form} />
-      }
-   ];
-   //
+
    const config = {
       headers: {
          Authorization: `Bearer ${token}`,
@@ -229,28 +187,22 @@ function Patient() {
          });
    };
    const ddcitizen = (id) => {
-      const citizen = citizens.find((citizen) => citizen.id === id);
-      if (citizen) {
-         return citizen.name;
-      } else {
-         return 'Байхгүй';
+      if (id != null) {
+         return citizens.find((citizen) => citizen.id === id)?.name || 'Байхгүй';
       }
+      return 'Байхгүй';
    };
    const ddprovices = (id) => {
-      const provice = provices.find((provice) => provice.id === id);
-      if (provice) {
-         return provice.name;
-      } else {
-         return 'Байхгүй';
+      if (id != null) {
+         return provices.find((provice) => provice.id === id)?.name || 'Байхгүй';
       }
+      return 'Байхгүй';
    };
    const ddtowns = (id) => {
-      const town = towns.find((town) => town.id === id);
-      if (town) {
-         return town.name;
-      } else {
-         return 'Байхгүй';
+      if (id != null) {
+         return towns.find((town) => town.id === id)?.name || 'Байхгүй';
       }
+      return 'Байхгүй';
    };
    //
    const getColumnSearchProps = (dataIndex) => ({
@@ -269,9 +221,7 @@ function Patient() {
    const colums = [
       {
          title: '№',
-         render: (_, record, index) => {
-            return meta.page * meta.limit - (meta.limit - index - 1);
-         }
+         render: (_, _record, index) => meta.page * meta.limit - (meta.limit - index - 1)
       },
       {
          title: 'Картын №',
@@ -304,33 +254,17 @@ function Patient() {
             {
                title: 'Улс',
                dataIndex: 'countryId',
-               render: (text) => {
-                  if (text != null) {
-                     return ddcitizen(text);
-                  }
-               }
+               render: (countryId) => ddcitizen(countryId)
             },
             {
                title: 'Аймаг/Хот',
                dataIndex: 'aimagId',
-               render: (text) => {
-                  if (text != null) {
-                     return ddprovices(text);
-                  } else {
-                     return 'Байхгүй';
-                  }
-               }
+               render: (aimagId) => ddprovices(aimagId)
             },
             {
                title: 'Сум/Дүүрэг',
                dataIndex: 'soumId',
-               render: (text) => {
-                  if (text != null) {
-                     return ddtowns(text);
-                  } else {
-                     return 'Байхгүй';
-                  }
-               }
+               render: (soumId) => ddtowns(soumId)
             },
             {
                title: 'Баг/Хороо',
@@ -349,9 +283,7 @@ function Patient() {
       {
          title: 'Карт нээлгэсэн огноо',
          dataIndex: 'createdAt',
-         render: (text) => {
-            return moment(text).format('YYYY/MM/DD HH:mm');
-         }
+         render: (createdAt) => dayjs(createdAt).format('YYYY/MM/DD HH:mm')
       },
       {
          title: 'Үйлдэл',
@@ -381,10 +313,9 @@ function Patient() {
       getCitizens();
       getProvices();
       getTowns();
-      ScrollRef(scrollRef);
    }, []);
    return (
-      <div className="p-3 w-full bg-[#f5f6f7] overflow-auto">
+      <div className="p-3 w-full h-screen bg-[#f5f6f7] overflow-auto">
          <Card
             bordered={false}
             className="header-solid max-h-max rounded-md"
@@ -441,6 +372,7 @@ function Patient() {
             onCancel={handleCancel}
             width="18cm"
             footer={null}
+            confirmLoading={isConfirmLoading}
          >
             <PatientSupport
                editMode={editMode}
@@ -470,7 +402,7 @@ function Patient() {
                <Descriptions.Item label="Нэр">{view.firstName}</Descriptions.Item>
                <Descriptions.Item label="Иргэншил">{view.countryId}</Descriptions.Item>
                <Descriptions.Item label="Регистр дугаар">{view.registerNumber}</Descriptions.Item>
-               <Descriptions.Item label="Төрсөн огноо">{moment(view.birthDate).format('YYYY-MM-DD')}</Descriptions.Item>
+               <Descriptions.Item label="Төрсөн огноо">{dayjs(view.birthDate).format('YYYY-MM-DD')}</Descriptions.Item>
                <Descriptions.Item label="Утас">{view.phoneNo}</Descriptions.Item>
                <Descriptions.Item label="Гэрийн утас">{view.homePhoneNo}</Descriptions.Item>
                <Descriptions.Item label="И-мэйл">{view.email}</Descriptions.Item>
@@ -505,8 +437,8 @@ function Patient() {
                }}
                initialValues={{
                   lastName: 'EMERGENCY',
-                  firstName: `EMERGENCY ${moment(new Date()).format('HH:mm:ss')}`,
-                  birthDate: moment(new Date())
+                  firstName: `EMERGENCY ${dayjs(new Date()).format('HH:mm:ss')}`,
+                  birthDate: dayjs(new Date())
                }}
             >
                <UPatient />

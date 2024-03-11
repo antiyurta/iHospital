@@ -900,6 +900,52 @@ table.table-611 {
    }
 }
 
+.inspection {
+   .inspection-header,
+   .inspection-footer {
+      display: none;
+   }
+   .inspection-page {
+      page-break-after: auto;
+   }
+   @media print {
+      .inspection-page {
+         padding: 1cm;
+      }
+      .inspection-header {
+         display: flex;
+         position: fixed;
+         top: 0mm;
+         width: 100%;
+      }
+      .inspection-footer {
+         display: flex;
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+      }
+      .inspection-header,
+      .inspection-header-space {
+         padding-top: 1cm;
+         padding-left: 1cm;
+         padding-right: 1cm;
+         height: 80px;
+      }
+      .inspection-footer,
+      .inspection-footer-space {
+         padding-left: 1cm;
+         padding-right: 1cm;
+         height: 40px;
+      }
+      thead {
+         display: table-header-group;
+      }
+      tfoot {
+         display: table-footer-group;
+      }
+   }
+}
+
 .exo {
    .exo-header,
    .exo-footer {
