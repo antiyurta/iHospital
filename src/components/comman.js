@@ -335,10 +335,10 @@ export const getAge = (registerNumber) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const diff = new Date(today.getTime() - birth.getTime());
-      const years = diff.getUTCFullYear() - 1970;
-      const months = diff.getUTCMonth();
-      const days = diff.getUTCDate() - 1;
-      return `${years} Нас, ${months} Сар, ${days} Өдөр`;
+      const years = diff.getFullYear() - 1970;
+      const months = diff.getMonth();
+      const days = diff.getDate() - 1;
+      return `${years} Нас,${months} сар,${days} Өдөр`;
    } else {
       return '';
    }

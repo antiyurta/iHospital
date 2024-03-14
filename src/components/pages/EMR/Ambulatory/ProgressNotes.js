@@ -104,7 +104,6 @@ export default function ProgressNotes() {
       return diagnosis?.map((diagnose, index) => {
          return (
             <div key={index} className="flex">
-               <span>Онош:</span>
                <p className="font-semibold mx-2">{diagnoseTypeInfo(diagnose.diagnoseType)}: </p>
                <p>{'[' + diagnose.diagnose?.code + ']' + diagnose.diagnose?.nameMn}</p>
             </div>
@@ -336,7 +335,7 @@ export default function ProgressNotes() {
                                  />
                                  <div ref={printRef}>
                                     <InspectionDocumentReturnById
-                                       hospitalId={inspectionNote.hospitalId}
+                                       hospitalId={inspectionNote?.hospitalId || 0}
                                        body={
                                           <div className="flex flex-col gap-1">
                                              <table className="table table-bordered">
@@ -363,6 +362,7 @@ export default function ProgressNotes() {
                                                    </tr>
                                                    <tr>
                                                       <td>
+                                                         <span>Онош:</span>
                                                          <RenderHTMLDiagnose diagnosis={diagnosis} />
                                                       </td>
                                                    </tr>

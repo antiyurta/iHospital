@@ -171,7 +171,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      />
                      <p>{`${getGenderFullName(patient?.registerNumber || undefined)} | ${getAge(
                         patient?.registerNumber || undefined
-                     )} Нас`}</p>
+                     )}`}</p>
                   </div>
                   <div className="flex flex-row gap-3">
                      <img src={addressSymbol} alt="Addres" />

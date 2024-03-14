@@ -130,9 +130,17 @@ function IndexAfter({ type, params }) {
       },
       {
          title: 'Нас',
-         width: 40,
+         width: 100,
          dataIndex: ['patient', 'registerNumber'],
-         render: (registerNumber) => getAge(registerNumber)
+         render: (text) => (
+            <span
+               style={{
+                  whiteSpace: 'normal'
+               }}
+            >
+               {getAge(text)}
+            </span>
+         )
       },
       {
          title: 'Хүйс',

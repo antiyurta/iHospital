@@ -141,9 +141,17 @@ function BeforeTreatmentRequest() {
       },
       {
          title: 'Нас',
-         render: (_, row) => {
-            return getAge(row.patient?.registerNumber);
-         }
+         width: 100,
+         dataIndex: ['patient', 'registerNumber'],
+         render: (text) => (
+            <span
+               style={{
+                  whiteSpace: 'normal'
+               }}
+            >
+               {getAge(text)}
+            </span>
+         )
       },
       {
          title: 'Хүйс',

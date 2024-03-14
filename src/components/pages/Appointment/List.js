@@ -249,11 +249,17 @@ function List(props) {
                                        },
                                        {
                                           title: 'Нас',
-                                          width: 40,
+                                          width: 100,
                                           dataIndex: ['appointment', 'patient', 'registerNumber'],
-                                          render: (registerNumber) => {
-                                             return getAge(registerNumber);
-                                          }
+                                          render: (text) => (
+                                             <span
+                                                style={{
+                                                   whiteSpace: 'normal'
+                                                }}
+                                             >
+                                                {getAge(text)}
+                                             </span>
+                                          )
                                        },
                                        {
                                           title: 'Хүйс',

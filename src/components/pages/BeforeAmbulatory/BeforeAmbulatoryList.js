@@ -4,7 +4,7 @@ import { Tabs } from 'antd';
 import Ambulatory from './Lists/Ambulatory';
 import PatientList from './Lists/PatientList';
 import PreOrder from './Lists/PreOrder';
-import Surgery from './Lists/Surgery';
+// import Surgery from './Lists/Surgery';
 import DocumentShow from '../611/DocumentShow';
 import { useLocation } from 'react-router-dom';
 
@@ -41,12 +41,12 @@ export default function BeforeAmbulatoryList() {
          label: 'Хэвтэн',
          key: '3',
          children: <PatientList />
-      },
-      {
-         label: 'Мэс засал',
-         key: 4,
-         children: <Surgery />
       }
+      // {
+      //    label: 'Мэс засал',
+      //    key: 4,
+      //    children: <Surgery />
+      // }
    ];
    const [currentActiveKey, setActiveKey] = useState(activeKey);
    return (

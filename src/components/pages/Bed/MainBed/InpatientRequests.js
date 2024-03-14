@@ -197,11 +197,17 @@ function InpatientRequests() {
       },
       {
          title: 'Нас',
-         width: 40,
+         width: 100,
          dataIndex: ['patient', 'registerNumber'],
-         render: (text) => {
-            return getAge(text);
-         }
+         render: (text) => (
+            <span
+               style={{
+                  whiteSpace: 'normal'
+               }}
+            >
+               {getAge(text)}
+            </span>
+         )
       },
       {
          title: 'Хүйс',
