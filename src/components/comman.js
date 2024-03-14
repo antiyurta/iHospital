@@ -322,18 +322,23 @@ export const numberToCurrency = (amount) => {
 
 export const getAge = (registerNumber) => {
    if (registerNumber != undefined) {
-      const date = new Date();
       let year = parseInt(registerNumber.substring(2, 4));
       let month = parseInt(registerNumber.substring(4, 6));
+      let day = parseInt(registerNumber.substring(6, 8));
       if (month > 20 && month < 33) {
          year += 2000;
          month -= 20;
       } else {
          year += 1900;
       }
-      const currentYear = date.getFullYear();
-      const age = currentYear - year;
-      return age;
+      const birth = new Date(year, month - 1, day);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const diff = new Date(today.getTime() - birth.getTime());
+      const years = diff.getUTCFullYear() - 1970;
+      const months = diff.getUTCMonth();
+      const days = diff.getUTCDate() - 1;
+      return `${years} Нас, ${months} Сар, ${days} Өдөр`;
    } else {
       return '';
    }
