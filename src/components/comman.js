@@ -6,6 +6,7 @@ import mnMnn from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseTypes from '../components/pages/service/DiagnoseTypes.js';
 import moment from 'moment';
 import { NumericFormat } from 'react-number-format';
+import dayjs from 'dayjs';
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -319,7 +320,6 @@ export const numberToCurrency = (amount) => {
       />
    );
 };
-
 export const getAge = (registerNumber) => {
    if (registerNumber != undefined) {
       let year = parseInt(registerNumber.substring(2, 4));
@@ -331,14 +331,21 @@ export const getAge = (registerNumber) => {
       } else {
          year += 1900;
       }
-      const birth = new Date(year, month - 1, day);
+      const birthDate = new Date(year, month - 1, day);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      const diff = new Date(today.getTime() - birth.getTime());
-      const years = diff.getFullYear() - 1970;
-      const months = diff.getMonth();
-      const days = diff.getDate() - 1;
-      return `${years} Нас,${months} сар,${days} Өдөр`;
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+      let days = today.getDate() - birthDate.getDate();
+      if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+         years--;
+         months += 12;
+      }
+      if (days < 0) {
+         months--;
+         days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+      }
+      return `${years} жил, ${months} сар, ${days} өдөр`;
    } else {
       return '';
    }
