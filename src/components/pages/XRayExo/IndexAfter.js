@@ -77,6 +77,7 @@ function IndexAfter({ type, params }) {
             patientId: row.patientId,
             cabinetId: row.cabinetId,
             serialNumber: row.serialNumber,
+            inspectionNoteId: row.inspectionNoteId,
             inspection: row.deviceType === 0 ? 11 : 12,
             xrayId: row.xrayId,
             startDate: row.startAt || new Date()

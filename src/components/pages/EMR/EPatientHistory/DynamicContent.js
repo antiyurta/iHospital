@@ -47,9 +47,9 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
       await EmrInspectionNoteServices.getById(incomeData.inspectionNoteId).then(({ data: { response } }) => {
          if (response.hasOwnProperty('id')) {
             setEditMode(true);
+            const data = inspectionTOJSON(response);
+            form.setFieldsValue(data);
          }
-         const data = inspectionTOJSON(response);
-         form.setFieldsValue(data);
       });
    };
 

@@ -229,6 +229,7 @@ function Xrays({ PatientId }) {
          await pacsApi
             .getBySerialNumber(serialNumber.toString())
             .then(({ data: { response } }) => {
+               setIsViewPacs(true);
                if (response) {
                   setOsimisViewerUrl(response?.osimisViewerUrl);
                   setImageUrls(response?.series[0]?.instances);
@@ -248,7 +249,6 @@ function Xrays({ PatientId }) {
                   }
                }) => {
                   if (response.serialNumber) {
-                     setIsViewPacs(true);
                      getImages(response.serialNumber);
                   } else {
                      setOsimisViewerUrl('');
