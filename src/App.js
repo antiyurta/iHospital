@@ -94,7 +94,6 @@ function App() {
                   <Route path="/financeMaterialXray" element={<FinanceMaterialXray />} />
                   <Route path="/financeMaterialTreatment" element={<FinanceMaterialTreatment />} />
                   <Route path="/financeMaterialSurgery" element={<FinanceMaterialSurgery />} />
-                  <Route path="/report" element={<Report />} />
                   {/* yacij magad */}
                   <Route path="/roomDtl" element={<RoomtDtl />} />
                </Route>
