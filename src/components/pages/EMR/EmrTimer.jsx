@@ -1,12 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Modal, Radio } from 'antd';
 import dayjs from 'dayjs';
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData, selectCurrentHicsService } from '../../../features/emrReducer';
-import { selectCurrentInsurance } from '../../../features/authReducer';
+import { selectCurrentInsurance, selectCurrentUserId } from '../../../features/authReducer';
 import Finger from '../../../features/finger';
 
 //
@@ -21,9 +19,10 @@ const EmrTimer = (props) => {
    const {
       state: { slotId }
    } = useLocation();
-   const { startDate } = props;
+   const { startDate, endDate } = props;
    const emrHicsService = useSelector(selectCurrentHicsService);
-   const { hicsServiceId, appointmentId, listIndexType } = useSelector(selectCurrentEmrData);
+   const { hicsServiceId, appointmentId, appointmentType } = useSelector(selectCurrentEmrData);
+   const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [count, setCount] = useState(0);
@@ -73,36 +72,49 @@ const EmrTimer = (props) => {
                console.log(error);
             });
       } else {
-         if (listIndexType === 0) {
-            await AppointmentService.patchAppointment(appointmentId, {
+         var newResponse;
+         if (appointmentType === 0) {
+            newResponse = await AppointmentService.patchAppointment(appointmentId, {
                slotId: slotId,
                endDate: new Date()
-            }).then((response) => {
-               console.log(response);
-               setIsOpenModal(false);
-               openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-               navigate('/main/ambulatoryList', {
-                  state: {
-                     isRead: true
-                  }
-               });
+            }).then(({ data: { success } }) => success);
+         } else if (appointmentType === 1) {
+            newResponse = await AppointmentService.patchPreOrder(appointmentId, {
+               endDate: new Date(),
+               doctorId: userId
+            }).then(({ data: { success } }) => success);
+         }
+         if (newResponse) {
+            setIsOpenModal(false);
+            openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+            navigate('/main/ambulatoryList', {
+               state: {
+                  isRead: true
+               }
             });
          }
       }
    };
-   //
-   //
    useEffect(() => {
-      var id = setInterval(() => {
-         var left = count + (new Date() - new Date(startDate));
-         setCount(left);
-         showTimer(left);
-         if (left <= 0) {
-            setTime('00:00');
-            clearInterval(id);
-         }
-      }, 1);
-      return () => clearInterval(id);
+      if (!endDate) {
+         var id = setInterval(() => {
+            var left = count + (new Date() - new Date(startDate));
+            setCount(left);
+            showTimer(left);
+            if (left <= 0) {
+               setTime('00:00');
+               clearInterval(id);
+            }
+         }, 1);
+         return () => clearInterval(id);
+      } else {
+         const date1 = new Date(startDate);
+         const date2 = new Date(endDate);
+         const diff = date2 - date1;
+         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+         setTime(`${minutes}:${seconds}`);
+      }
    }, []);
    return (
       <>
@@ -110,7 +122,9 @@ const EmrTimer = (props) => {
             <p>Үзлэгийн хугацаа</p>
             <p className="timer">{time}</p>
             <p>{`${dayjs(startDate).format('YYYY/MM/DD hh:mm')} эхэлсэн`}</p>
+            {endDate ? <p>{`${dayjs(endDate).format('YYYY/MM/DD hh:mm')} дууссан`}</p> : null}
             <Button
+               disabled={endDate ? true : false}
                danger
                onClick={() => {
                   setIsOpenModal(true);

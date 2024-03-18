@@ -1,22 +1,16 @@
-import { Card, Empty, Input, Pagination, Table } from 'antd';
-import { Get, ScrollRef } from '../../comman';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { Empty, Input, Table } from 'antd';
 import PatientInformation from '../PatientInformation';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import Index from './Doctor/Index';
 import { SearchOutlined } from '@ant-design/icons';
 
 import Appointment from './Index';
+import patientApi from '../../../services/pms/patient.api';
 
 const { Search } = Input;
 
 function DoctorAppointment() {
-   const token = useSelector(selectCurrentToken);
-   const scrollRef = useRef();
    const [selectedPatient, setSelectedPatient] = useState([]);
-   //
    const [notPatientsList, setNotPatientsList] = useState([]);
    const [notPatientsListLoading, setNotPatientListLoading] = useState(false);
    const [notPatientsMeta, setNotPatientsMeta] = useState({
@@ -24,39 +18,35 @@ function DoctorAppointment() {
       limit: 10
    });
    const [notPatientsValue, setNotPatientsValue] = useState('');
-   //
    const getPatientById = async (id) => {
-      console.log(id);
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      await Get('pms/patient/' + id, token, conf)
-         .then((res) => {
-            setSelectedPatient(res);
-         })
-         .catch((err) => {
-            console.log(err);
-         });
+      await patientApi.getById(id).then(({ data: { response } }) => {
+         setSelectedPatient(response);
+      });
    };
    const onSearchSchedule = async (page, pageSize, value, value1, index) => {
+      setNotPatientListLoading(true);
       if (value != undefined) {
          setNotPatientsValue(value);
       }
-      const conf = {
-         headers: {},
-         params: {
-            filter: value,
-            page: page,
-            limit: pageSize
-         }
+      const params = {
+         filter: value,
+         page: page,
+         limit: pageSize
       };
       if ((value1, index)) {
-         conf.params[index] = value1;
+         params[index] = value1;
       }
-      const response = await Get('pms/patient', token, conf);
-      setNotPatientsList(response.data);
-      setNotPatientsMeta(response.meta);
+      await patientApi
+         .getFilter({
+            params: params
+         })
+         .then(({ data: { response } }) => {
+            setNotPatientsList(response.data);
+            setNotPatientsMeta(response.meta);
+         })
+         .finally(() => {
+            setNotPatientListLoading(false);
+         });
    };
    const getColumnSearchProps = (dataIndex) => ({
       filterDropdown: ({}) => (
@@ -88,21 +78,17 @@ function DoctorAppointment() {
          ...getColumnSearchProps('registerNumber')
       }
    ];
-   //
-   useEffect(() => {
-      ScrollRef(scrollRef);
-   }, []);
    return (
       <div className="w-full flex flex-col">
          <div
-            className="flex flex-row gap-3 justify-between p-3"
+            className="flex xl:flex-row md:flex-col gap-10 justify-between p-3"
             style={{
                borderBottom: '1px solid #e5e6eb'
             }}
          >
             <PatientInformation patient={selectedPatient} handlesearch={onSearchSchedule} />
-            <div className="flex flex-row gap-2">
-               <div className="bg-[#e5e6eb] max-w-[350px] rounded-xl p-2">
+            <div className="grid grid-cols-2 gap-2">
+               <div className="bg-[#e5e6eb] rounded-xl p-2">
                   <Table
                      rowKey={'id'}
                      loading={{
@@ -110,7 +96,7 @@ function DoctorAppointment() {
                         tip: 'Уншиж байна...'
                      }}
                      scroll={{
-                        y: 100
+                        y: 150
                      }}
                      bordered
                      onRow={(row) => {
@@ -138,7 +124,7 @@ function DoctorAppointment() {
                      }}
                   />
                </div>
-               <div className="bg-[#e5e6eb] max-w-[300px] rounded-xl p-2">
+               <div className="bg-[#e5e6eb] rounded-xl p-2">
                   <Index PatientId={selectedPatient.id} RegisterNumber={selectedPatient.registerNumber} />
                </div>
             </div>

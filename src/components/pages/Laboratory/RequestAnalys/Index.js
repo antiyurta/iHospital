@@ -95,6 +95,7 @@ function Index() {
    };
    const onFinish = async (values) => {
       if (editMode) {
+         console.log('selec', selectedRequest);
          const id = selectedRequest.examinationResult.id;
          await ServiceApi.patchResultForExamination(id, {
             result: values
@@ -132,7 +133,13 @@ function Index() {
    const onClickAddResult = (row) => {
       if (row?.examinationResult?.hasOwnProperty('id')) {
          setEditMode(true);
-         resultForm.setFieldsValue(row.examinationResult.result);
+         const result = row.examinationResult.result;
+         const conclusions = row.examinationResult.conclusions;
+         const customizedConslusion = {};
+         conclusions?.map((conclusion) => {
+            customizedConslusion[`${conclusion.examinationTypeId}`] = conclusion.conclusion;
+         });
+         resultForm.setFieldsValue({ ...result, conclusion: customizedConslusion });
       } else {
          setEditMode(false);
          resultForm.resetFields();

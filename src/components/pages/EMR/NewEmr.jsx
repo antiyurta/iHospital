@@ -7,12 +7,9 @@ import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import { Button, Card, Modal, Radio } from 'antd';
 import MainPatientHistory from './EPatientHistory/MainPatientHistory';
-import Schedule from '../OCS/Schedule';
 import { delEmrData } from '../../../features/emrReducer';
-import { delNote } from '../../../features/noteReducer';
 import PmsPatientServices from '../../../services/pms/patient.api';
 import ServiceRequestService from '../../../services/serviceRequest';
-import PaymentService from '../../../services/payment/payment';
 import DoctorNotes from './DoctorNotes';
 import EmrTimer from './EmrTimer';
 import OneWindow from './OneWindow';
@@ -31,8 +28,7 @@ const getReduxDatas = (state) => {
 };
 const dispatchReduxDatas = (dispatch) => {
    return {
-      delEmrData: () => dispatch(delEmrData()),
-      delNoteData: () => dispatch(delNote())
+      delEmrData: () => dispatch(delEmrData())
    };
 };
 class NewEmr extends React.Component {
@@ -44,8 +40,6 @@ class NewEmr extends React.Component {
          isOpenWarningModal: false,
          selectedPatient: {},
          usageType: this.props.IncomeEMRData.usageType,
-         isOpen: false,
-         payments: [],
          isExpandHistory: true,
          isExpandInspection: true,
          isExpandOneWindow: true
@@ -58,12 +52,19 @@ class NewEmr extends React.Component {
       });
    }
    handleTypeChange = ({ target: { value } }) => {
-      this.setState({
-         isOpenWarningModal: true
-      });
-      this.setState({
-         temporarilyType: value
-      });
+      if (this.props.IncomeEMRData.endDate) {
+         Modal.error({
+            content: 'Дууссан үзлэгт OTS ашиглах боломжгүй',
+            okText: 'За'
+         });
+      } else {
+         this.setState({
+            isOpenWarningModal: true
+         });
+         this.setState({
+            temporarilyType: value
+         });
+      }
    };
    saveOrder = async (value) => {
       if (value?.length > 0 || value) {
@@ -81,17 +82,9 @@ class NewEmr extends React.Component {
          data['requestDate'] = new Date();
          data['usageType'] = this.props.IncomeEMRData.usageType;
          data['services'] = value;
-         await ServiceRequestService.post(data).then(async (response) => {
-            if (response.status === 201) {
-               const res = await PaymentService.get({
-                  params: {
-                     patientId: this.state.selectedPatient.id
-                  }
-               });
-               this.setState({
-                  payments: res.data?.response?.data,
-                  isOpen: true
-               });
+         await ServiceRequestService.post(data).then(({ data: { success } }) => {
+            if (success) {
+               openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');
             }
          });
       } else {
@@ -102,7 +95,6 @@ class NewEmr extends React.Component {
       await this.getByIdPatient();
    }
    async componentWillUnmount() {
-      this.props.delNoteData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -130,7 +122,10 @@ class NewEmr extends React.Component {
                      <div className="note-timer">
                         <DoctorNotes patientId={this.props.IncomeEMRData.patientId} />
                         {this.props.IncomeEMRData.usageType === 'OUT' ? (
-                           <EmrTimer startDate={this.props.IncomeEMRData.startDate} />
+                           <EmrTimer
+                              startDate={this.props.IncomeEMRData.startDate}
+                              endDate={this.props.IncomeEMRData.endDate}
+                           />
                         ) : null}
                      </div>
                      <div
@@ -146,7 +141,7 @@ class NewEmr extends React.Component {
                               value={this.props.IncomeEMRData.serialNumber?.toString() || 'CODE128AUTO'}
                               height={40}
                               fontSize={10}
-                              width={3}
+                              width={2}
                            />
                         ) : null}
                      </div>
@@ -279,13 +274,6 @@ class NewEmr extends React.Component {
                   )}
                </div>
             </div>
-            <Schedule
-               isOpen={this.state.isOpen}
-               isOCS={true}
-               incomeData={this.state.payments}
-               selectedPatient={this.state.selectedPatient}
-               isClose={() => this.setState({ isOpen: false })}
-            />
             <Modal
                title={<br />}
                open={this.state.isOpenWarningModal}

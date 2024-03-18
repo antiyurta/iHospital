@@ -3,6 +3,9 @@ class InspectionForm {
    async get(config) {
       return await jwtInterceopter.get('emr/inspection-form', config);
    }
+   async getById(id) {
+      return await jwtInterceopter.get('emr/inspection-form/' + id, config);
+   }
    async post(data) {
       return await jwtInterceopter.post('emr/inspection-form', data);
    }

@@ -7,6 +7,9 @@ class InspectionNote {
          }
       });
    }
+   async getById(id) {
+      return await jwtInterceopter.get('emr/inspectionNote/' + id);
+   }
    async post(data) {
       return await jwtInterceopter.post('emr/inspectionNote', data);
    }

@@ -14,11 +14,8 @@ import CountryServices from '../../services/reference/country';
 import { NewSearch, NewRadioGroup, NewRadio } from '../Input/Input';
 import { getAge, getGenderFullName } from '../comman';
 import { Spin } from 'antd';
-import { useDispatch } from 'react-redux';
-import { setPatient } from '../../features/emrReducer';
 
 function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type }) {
-   const dispatch = useDispatch();
    const [citizens, setCitizens] = useState([]);
    const [provices, setProvices] = useState([]);
    const [towns, setTowns] = useState([]);
@@ -141,13 +138,10 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
-      if (patient) {
-         dispatch(setPatient(patient));
-      }
    }, [patient]);
    return (
       <>
-         <div className="patient-info">
+         <div className="patient-info xl:min-w-[500px]">
             <div className="picture">
                <Spin spinning={isLoadingImage}>
                   <img src={imageUrl || ImageIcon} alt="pation" />
@@ -174,7 +168,13 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      )}`}</p>
                   </div>
                   <div className="flex flex-row gap-3">
-                     <img src={addressSymbol} alt="Addres" />
+                     <img
+                        src={addressSymbol}
+                        alt="Addres"
+                        style={{
+                           height: 16
+                        }}
+                     />
                      <p>{patient?.registerNumber}</p>
                   </div>
                   <div className="flex flex-row gap-3">

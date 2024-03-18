@@ -1,96 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Select, Spin, Table } from 'antd';
-import Diagnose from '../../service/Diagnose';
-import EditableFormItem from '../../611/Support/EditableFormItem';
-import EditableFormItemSelect from '../../611/Support/EditableFormItemSelect';
+import { Button, Form, Input, Spin, Table } from 'antd';
+// import Diagnose from '../../service/Diagnose';
 import jwtInterceopter from '../../../jwtInterceopter';
 import { inspectionTOJSON, openNofi } from '../../../comman';
-import { useSelector } from 'react-redux';
-import { selectCurrentNote } from '../../../../features/noteReducer';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import Soap from './Soap';
 
-import EmrPatientDiagnoseServices from '../../../../services/emr/patientDiagnose';
 import EmrInspectionNoteServices from '../../../../services/emr/inspectionNote';
+import apiAppointmentService from '../../../../services/appointment/api-appointment-service';
+import ServiceRequestApi from '../../../../services/serviceRequest';
+import NewDiagnose from '../../service/NewDiagnose';
 
 const { TextArea } = Input;
-const { Column } = Table;
-function DynamicContent({
-   props,
-   incomeData,
-   handleClick,
-   editForm,
-   isEditFromList = false,
-   hicsServiceId,
-   appointmentType,
-   triggerForModal
-}) {
+function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsServiceId }) {
    const [form] = Form.useForm();
+   const [editMode, setEditMode] = useState(false);
    const [expandedIndex, setExpandedIndex] = useState(null);
-   const notes = useSelector(selectCurrentNote);
    const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(Number);
-   const [editModeInspectionNote, setEditModeInspectionNote] = useState(false);
-   const [selectedDiagnoseIds, setSelectedDiagnoseIds] = useState([]);
-   const [editModeDiagnosis, setEditModeDiagnosis] = useState(false);
    const [loading, setLoading] = useState(false);
-   const DiagnoseHandleClick = (diagnosis, cost) => {
-      if (incomeData.usageType === 'OUT') {
-         if (cost?.length > 0) {
-            var data = {
-               hicsServiceId: hicsServiceId,
-               serviceId: incomeData.appointmentId,
-               serviceType: 5,
-               icdCode: cost[0]?.icd10Code,
-               icdCodeName: cost[0]?.icd10Name,
-               icd9Code: cost[0]?.icd9Code,
-               icd9Name: cost[0]?.icd9Name,
-               drgCode: cost[0]?.drgCode,
-               discountAmount: cost[0]?.amountHi,
-               payedAmount: cost[0]?.amountCit,
-               totalAmount: cost[0]?.amountTotal
-            };
-            const AddCode = diagnosis?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
-            data['icdAddCode'] = AddCode;
-            jwtInterceopter.patch('insurance-seal', data);
+   const [serviceRequest, setServiceRequest] = useState([]);
+   // const DiagnoseHandleClick = (diagnosis, cost) => {
+   //    if (incomeData.usageType === 'OUT') {
+   //       if (cost?.length > 0) {
+   //          var data = {
+   //             hicsServiceId: hicsServiceId,
+   //             serviceId: incomeData.appointmentId,
+   //             serviceType: 5,
+   //             icdCode: cost[0]?.icd10Code,
+   //             icdCodeName: cost[0]?.icd10Name,
+   //             icd9Code: cost[0]?.icd9Code,
+   //             icd9Name: cost[0]?.icd9Name,
+   //             drgCode: cost[0]?.drgCode,
+   //             discountAmount: cost[0]?.amountHi,
+   //             payedAmount: cost[0]?.amountCit,
+   //             totalAmount: cost[0]?.amountTotal
+   //          };
+   //          const AddCode = diagnosis?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
+   //          data['icdAddCode'] = AddCode;
+   //          jwtInterceopter.patch('insurance-seal', data);
+   //       }
+   //    }
+   //    form.setFieldValue('diagnosis', diagnosis);
+   // };
+
+   const getInspectionNote = async () => {
+      await EmrInspectionNoteServices.getById(incomeData.inspectionNoteId).then(({ data: { response } }) => {
+         if (response.hasOwnProperty('id')) {
+            setEditMode(true);
          }
-      }
-      form.setFieldValue('diagnosis', diagnosis);
+         const data = inspectionTOJSON(response);
+         form.setFieldsValue(data);
+      });
    };
-   const saveDynamicTab = async (values, key) => {
-      // setLoading(true);
-      if ((selectedInspectionNoteId && editModeInspectionNote) || isEditFromList) {
-         const diagnosis = values.diagnosis?.map((diagnose) => ({
-            patientId: incomeData.patientId,
-            type: diagnose.type,
-            usageType: incomeData.usageType,
-            diagnoseId: diagnose.id,
-            diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
-            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
-         }));
-         if (!isEditFromList) {
-            if (editModeDiagnosis && incomeData.inspection != 11 && incomeData.inspection != 12) {
-               selectedDiagnoseIds?.map((id) => {
-                  EmrPatientDiagnoseServices.delete(id);
-               });
-            }
+
+   const getServiceRequest = async () => {
+      await ServiceRequestApi.get({
+         params: {
+            appointmentId: incomeData.appointmentId
          }
-         const id = isEditFromList ? props.formKey : selectedInspectionNoteId;
+      }).then(({ data: { response } }) => {
+         const data = response.data?.flatMap((res) => res.services);
+         setServiceRequest(data);
+      });
+   };
+
+   const saveDynamicTab = async (values, key) => {
+      setLoading(true);
+      if (editMode) {
+         const id = incomeData.inspectionNoteId || selectedInspectionNoteId;
          await EmrInspectionNoteServices.patch(id, {
-            description: isEditFromList ? values['description'] : null,
             pain: JSON.stringify(values['pain']),
             question: JSON.stringify(values['question']),
             inspection: JSON.stringify(values['inspection']),
-            plan: JSON.stringify(values['plan']),
-            diagnosis: !isEditFromList ? diagnosis : null
+            plan: JSON.stringify(values['plan'])
          })
-            .then((response) => {
-               openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
-               //gadnaas zassan ued modal iin haah uuregtei
-               if (isEditFromList) {
-                  triggerForModal(false);
-               } else {
-                  handleClick({ target: { value: 'OCS' } });
+            .then(async ({ data: { response, success } }) => {
+               if (success) {
+                  const data = inspectionTOJSON(response);
+                  form.setFieldsValue(data);
+                  openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+                  handleClick({ target: { value: 'OTS' } });
                }
             })
             .finally(() => {
@@ -101,88 +90,62 @@ function DynamicContent({
             cabinetId: incomeData.cabinetId,
             patientId: incomeData.patientId,
             doctorId: incomeData.doctorId,
-            description: values.description
+            formId: key,
+            appointmentId: incomeData.appointmentId,
+            pain: JSON.stringify(values['pain']),
+            question: JSON.stringify(values['question']),
+            inspection: JSON.stringify(values['inspection']),
+            plan: JSON.stringify(values['plan'])
          };
-         data['formId'] = key;
-         data['diagnosis'] = values.diagnosis?.map((diagnose) => ({
-            patientId: incomeData.patientId,
-            type: diagnose.type,
-            usageType: incomeData.usageType,
-            diagnoseId: diagnose.id,
-            diagnoseType: diagnose.diagnoseType,
-            inpatientRequestId: incomeData.usageType === 'IN' ? incomeData.inpatientRequestId : null,
-            appointmentId: incomeData.usageType === 'OUT' ? incomeData.appointmentId : null
-         }));
-         data['appointmentId'] = incomeData.appointmentId;
-         data['pain'] = JSON.stringify(values['pain']);
-         data['question'] = JSON.stringify(values['question']);
-         data['inspection'] = JSON.stringify(values['inspection']);
-         data['plan'] = JSON.stringify(values['plan']);
-         if (!editModeDiagnosis && !editModeInspectionNote) {
-            await EmrInspectionNoteServices.post(data)
-               .then((response) => {
-                  if (response.status === 201) {
-                     openNofi('success', 'Амжилттай', 'Үзлэгийн тэмдэглэл амжиллтай хадгалагдлаа');
+         await EmrInspectionNoteServices.post(data)
+            .then(async ({ data: { response, success } }) => {
+               if (success) {
+                  setSelectedInspectionNoteId(response.id);
+                  var newResponse;
+                  if (incomeData.appointmentType === 0) {
+                     newResponse = await apiAppointmentService
+                        .patchAppointment(incomeData.appointmentId, {
+                           inspectionNoteId: response.id
+                        })
+                        .then(({ data: { success } }) => success);
+                  } else if (incomeData.appointmentType === 1) {
+                     newResponse = await apiAppointmentService
+                        .patchPreOrder(incomeData.appointmentId, {
+                           inspectionNoteId: response.id
+                        })
+                        .then(({ data: { success } }) => success);
+                  }
+                  if (newResponse) {
+                     setEditMode(true);
                      if (incomeData.inspection === 11 || incomeData.inspection === 12) {
                         jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
                            xrayProcess: 2
                         });
                      } else {
-                        if (!isEditFromList) {
-                           handleClick({ target: { value: 'OCS' } });
-                        }
+                        handleClick({ target: { value: 'OTS' } });
                      }
                   }
-               })
-               .catch((error) => {
-                  if (error.response.status === 409) {
-                     openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
-                  }
-               })
-               .finally(() => {
-                  setLoading(false);
-               });
-         }
+               }
+            })
+            .catch((error) => {
+               if (error.response.status === 409) {
+                  openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
+               }
+            })
+            .finally(() => {
+               setLoading(false);
+            });
       }
    };
 
    const onFinishFailed = (errorInfo) => {
       setValidStep(false);
    };
+
    useEffect(() => {
-      if (editForm != undefined && editForm != null) {
-         if (Object.keys(editForm)?.length > 0 && editForm?.constructor === Object) {
-            form.setFieldsValue(editForm);
-         } else {
-            form.resetFields();
-         }
-      } else {
-         let data = {};
-         if (notes.inspectionNote) {
-            data = inspectionTOJSON(notes.inspectionNote);
-            setEditModeInspectionNote(true);
-            setSelectedInspectionNoteId(notes.inspectionNote.id);
-         }
-         if (notes.diagnosis?.length > 0) {
-            var diagnoseIds = [];
-            const diagnosis = notes.diagnosis?.map((diagnose) => {
-               diagnoseIds.push(diagnose.id);
-               return {
-                  code: diagnose.diagnose.code,
-                  nameMn: diagnose.diagnose.nameMn,
-                  diagnoseType: diagnose.diagnoseType,
-                  type: diagnose.diagnose.type,
-                  id: diagnose.diagnose.id
-               };
-            });
-            setEditModeDiagnosis(true);
-            setSelectedDiagnoseIds(diagnoseIds);
-            data['diagnosis'] = diagnosis;
-            data['services'] = notes.services;
-         }
-         form.setFieldsValue(data);
-      }
-   }, [editForm]);
+      incomeData.inspectionNoteId && getInspectionNote();
+      incomeData.appointmentId && getServiceRequest();
+   }, []);
    const handleSoapClick = (key) => {
       if (key === expandedIndex) {
          setExpandedIndex(null);
@@ -199,73 +162,116 @@ function DynamicContent({
             scrollToFirstError
             onFinish={(e) => saveDynamicTab(e, props.formKey)}
             onFinishFailed={onFinishFailed}
-            onFieldsChange={(e) => console.log(e)}
+            onFieldsChange={(_e) => null}
          >
             <div className="flex flex-col gap-2">
                <div className="flex flex-col pr-3 gap-2">
-                  <div className="hidden">
-                     <Form.Item name="description">
-                        <TextArea disabled={true} />
-                     </Form.Item>
-                  </div>
-                  <Soap
-                     title="Зовиур"
-                     subTitle="(Subject)"
-                     soapKey={1}
-                     expandedKey={expandedIndex}
-                     handleClick={handleSoapClick}
-                  >
-                     <NewFormRender
-                        useForm={form}
-                        form={{
-                           documentForm: props.data.pain
-                        }}
-                        formOptionIds={[]}
-                        isCheck={false}
-                        formName="pain"
-                        incomeKeyWords={[]}
-                        checkProgress={(_keyWords) => null}
-                     />
-                  </Soap>
-                  <Soap
-                     title="Асуумж"
-                     subTitle="(Q)"
-                     soapKey={2}
-                     expandedKey={expandedIndex}
-                     handleClick={handleSoapClick}
-                  >
-                     <NewFormRender
-                        useForm={form}
-                        form={{
-                           documentForm: props.data.question
-                        }}
-                        formOptionIds={[]}
-                        isCheck={false}
-                        formName="question"
-                        incomeKeyWords={[]}
-                        checkProgress={(_keyWords) => null}
-                     />
-                  </Soap>
-                  <Soap
-                     title="Бодит үзлэг"
-                     subTitle="(O)"
-                     soapKey={3}
-                     expandedKey={expandedIndex}
-                     handleClick={handleSoapClick}
-                  >
-                     <NewFormRender
-                        useForm={form}
-                        form={{
-                           documentForm: props.data.inspection
-                        }}
-                        formOptionIds={[]}
-                        isCheck={false}
-                        formName="inspection"
-                        incomeKeyWords={[]}
-                        checkProgress={(_keyWords) => null}
-                     />
-                  </Soap>
-                  {!isEditFromList ? (
+                  {props.data?.hasOwnProperty('conclusion') ? (
+                     <Soap
+                        title="Дүгнэлт"
+                        subTitle="(Дүгнэлт)"
+                        soapKey={6}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <NewFormRender
+                           useForm={form}
+                           form={{
+                              documentForm: props.data.conclusion
+                           }}
+                           formOptionIds={[]}
+                           isCheck={false}
+                           formName="conclusion"
+                           incomeKeyWords={[]}
+                           checkProgress={(_keyWords) => null}
+                        />
+                     </Soap>
+                  ) : null}
+                  {props.data?.hasOwnProperty('advice') ? (
+                     <Soap
+                        title="Зөвлөгөө"
+                        subTitle="(Зөвлөгөө)"
+                        soapKey={7}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <NewFormRender
+                           useForm={form}
+                           form={{
+                              documentForm: props.data.advice
+                           }}
+                           formOptionIds={[]}
+                           isCheck={false}
+                           formName="advice"
+                           incomeKeyWords={[]}
+                           checkProgress={(_keyWords) => null}
+                        />
+                     </Soap>
+                  ) : null}
+                  {props.data?.hasOwnProperty('pain') ? (
+                     <Soap
+                        title="Зовиур"
+                        subTitle="(Subject)"
+                        soapKey={1}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <NewFormRender
+                           useForm={form}
+                           form={{
+                              documentForm: props.data.pain
+                           }}
+                           formOptionIds={[]}
+                           isCheck={false}
+                           formName="pain"
+                           incomeKeyWords={[]}
+                           checkProgress={(_keyWords) => null}
+                        />
+                     </Soap>
+                  ) : null}
+                  {props.data?.hasOwnProperty('question') ? (
+                     <Soap
+                        title="Асуумж"
+                        subTitle="(Q)"
+                        soapKey={2}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <NewFormRender
+                           useForm={form}
+                           form={{
+                              documentForm: props.data.question
+                           }}
+                           formOptionIds={[]}
+                           isCheck={false}
+                           formName="question"
+                           incomeKeyWords={[]}
+                           checkProgress={(_keyWords) => null}
+                        />
+                     </Soap>
+                  ) : null}
+                  {props.data?.hasOwnProperty('inspection') ? (
+                     <Soap
+                        title="Бодит үзлэг"
+                        subTitle="(O)"
+                        soapKey={3}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <NewFormRender
+                           useForm={form}
+                           form={{
+                              documentForm: props.data.inspection
+                           }}
+                           formOptionIds={[]}
+                           isCheck={false}
+                           formName="inspection"
+                           incomeKeyWords={[]}
+                           checkProgress={(_keyWords) => null}
+                        />
+                     </Soap>
+                  ) : null}
+                  {isViewDiagnose ? (
                      <Soap
                         title="Онош"
                         subTitle="(A)"
@@ -274,7 +280,13 @@ function DynamicContent({
                         handleClick={handleSoapClick}
                      >
                         <div className="flex flex-col gap-2">
-                           <Diagnose
+                           <NewDiagnose
+                              patientId={incomeData.patientId}
+                              appointmentId={incomeData.appointmentId}
+                              hicsServiceId={hicsServiceId}
+                              usageType={incomeData.usageType}
+                           />
+                           {/* <Diagnose
                               form={form}
                               handleClick={DiagnoseHandleClick}
                               types={[0, 1, 2]}
@@ -347,66 +359,51 @@ function DynamicContent({
                                     />
                                  </Table>
                               )}
-                           </Form.List>
+                           </Form.List> */}
                         </div>
                      </Soap>
                   ) : null}
-                  <Soap
-                     title="Төлөвлөгөө"
-                     subTitle="(P)"
-                     soapKey={5}
-                     expandedKey={expandedIndex}
-                     handleClick={handleSoapClick}
-                  >
-                     <NewFormRender
-                        useForm={form}
-                        form={{
-                           documentForm: props.data.plan
-                        }}
-                        formOptionIds={[]}
-                        isCheck={false}
-                        formName="plan"
-                        incomeKeyWords={[]}
-                        checkProgress={(_keyWords) => null}
-                     />
-                     <Form.List name="services">
-                        {(services) => (
-                           <Table
-                              className="emr-plan-table"
-                              size="small"
-                              pagination={false}
-                              columns={[
-                                 {
-                                    title: '№',
-                                    render: (_, _row, index) => {
-                                       return index + 1;
-                                    }
-                                 },
-                                 {
-                                    title: 'Үйлчилгээ',
-                                    dataIndex: 'name',
-                                    align: 'left',
-                                    render: (_, _row, index) => (
-                                       <EditableFormItem name={[index, 'name']}>
-                                          <Input />
-                                       </EditableFormItem>
-                                    )
-                                 },
-                                 {
-                                    title: 'Тоо',
-                                    dataIndex: 'total',
-                                    render: (_, _row, index) => (
-                                       <EditableFormItem name={[index, 'total']}>
-                                          <Input />
-                                       </EditableFormItem>
-                                    )
-                                 }
-                              ]}
-                              dataSource={services}
-                           />
-                        )}
-                     </Form.List>
-                  </Soap>
+                  {props.data?.hasOwnProperty('plan') ? (
+                     <Soap
+                        title="Төлөвлөгөө"
+                        subTitle="(P)"
+                        soapKey={5}
+                        expandedKey={expandedIndex}
+                        handleClick={handleSoapClick}
+                     >
+                        <NewFormRender
+                           useForm={form}
+                           form={{
+                              documentForm: props.data.plan
+                           }}
+                           formOptionIds={[]}
+                           isCheck={false}
+                           formName="plan"
+                           incomeKeyWords={[]}
+                           checkProgress={(_keyWords) => null}
+                        />
+                        <Table
+                           rowKey="id"
+                           columns={[
+                              {
+                                 title: '№',
+                                 width: 50,
+                                 render: (_, _row, index) => index + 1
+                              },
+                              {
+                                 title: 'Үйлчилгээ',
+                                 dataIndex: 'name'
+                              },
+                              {
+                                 title: 'Тоо',
+                                 dataIndex: 'total'
+                              }
+                           ]}
+                           pagination={false}
+                           dataSource={serviceRequest}
+                        />
+                     </Soap>
+                  ) : null}
                </div>
                <Button type="primary" htmlType="submit" loading={loading}>
                   EMR хадгалах

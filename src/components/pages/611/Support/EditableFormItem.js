@@ -3,7 +3,7 @@ import { Form } from 'antd';
 
 function EditableFormItem(props) {
    const { editing, ...rest } = props;
-   const Dummy = (props) => <div>{props.value}</div>;
+   const Dummy = (props) => <div className="bg-transparent whitespace-normal">{props.value}</div>;
    return (
       <Form.Item className="mb-0" {...rest}>
          {editing ? props.children : <Dummy />}

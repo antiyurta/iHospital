@@ -1,12 +1,13 @@
 import React from 'react';
 
 export default function HealthRecord(props) {
+   console.log(props);
    return (
       <div>
-         {props.data?.hasOwnProperty('infection') ? (
+         {props.data?.hasOwnProperty('contagious') ? (
             <div className="flex">
                <p className="font-semibold mr-2">Халдварт өвчин: </p>
-               <p className="">{props.data['infection']}</p>
+               <p className="">{props.data['contagious']}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('chronic') ? (

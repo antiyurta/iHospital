@@ -1,9 +1,11 @@
+import React, { useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
-
-import ServiceApi from '../../../../services/service/service';
 import { DownloadOutlined } from '@ant-design/icons';
 import { openNofi } from '../../../comman';
+
+import ServiceApi from '../../../../services/service/service';
+
+const { TextArea } = Input;
 
 const AnswerBody = (props) => {
    const { form, data } = props;
@@ -19,9 +21,10 @@ const AnswerBody = (props) => {
             }
          })
             .then(({ data: { response } }) => {
+               var incomeResults = [];
                if (response.response.data.length > 0) {
                   const systemResult = response.response.data[0]?.observations;
-                  const incomeResults = parameters?.map((parameter, index) => ({
+                  incomeResults = parameters?.map((parameter, index) => ({
                      parameterName: parameter.parameterName,
                      low: parameter.low,
                      high: parameter.high,
@@ -40,10 +43,19 @@ const AnswerBody = (props) => {
                      ),
                      PN: null
                   }));
-                  form.setFieldValue(nameIndex, incomeResults);
                } else {
+                  incomeResults = parameters?.map((parameter) => ({
+                     parameterName: parameter.parameterName,
+                     low: parameter.low,
+                     high: parameter.high,
+                     measurement: parameter.measurement,
+                     value: null,
+                     HL: null,
+                     PN: null
+                  }));
                   openNofi('warning', 'Алдаа', 'Хариу олдсонгүй');
                }
+               form.setFieldValue(nameIndex, incomeResults);
             })
             .finally(() => {
                setIsLoading(false);
@@ -99,7 +111,8 @@ const AnswerBody = (props) => {
 
    const isCheck = (name) => {
       const results = form.getFieldValue(name);
-      if (results?.length > 0) return true;
+      const state = results?.some((result) => result.value);
+      if (state) return true;
       return false;
    };
 
@@ -121,79 +134,84 @@ const AnswerBody = (props) => {
                      Хариу татах
                   </Button>
                </div>
-               <Form.List name={item.typeId}>
-                  {(results) => (
-                     <Table
-                        rowKey={'name'}
-                        bordered
-                        columns={[
-                           {
-                              title: 'Нэр',
-                              dataIndex: 'parameterName',
-                              render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'parameterName'])
-                           },
-                           {
-                              title: 'Лавлах хэмжээ',
-                              children: [
-                                 {
-                                    title: 'Бага',
-                                    render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'low'])
-                                 },
-                                 {
-                                    title: 'Их',
-                                    render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'high'])
+               <div className="bg-[#e5e6eb] rounded-xl p-2">
+                  <Form.Item label="Дүгнэлт" name={['conclusion', item.typeId]}>
+                     <TextArea placeholder={`${item.name} дүгнэлт бичих`} />
+                  </Form.Item>
+                  <Form.List name={item.typeId}>
+                     {(results) => (
+                        <Table
+                           rowKey={'name'}
+                           bordered
+                           columns={[
+                              {
+                                 title: 'Нэр',
+                                 dataIndex: 'parameterName',
+                                 render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'parameterName'])
+                              },
+                              {
+                                 title: 'Лавлах хэмжээ',
+                                 children: [
+                                    {
+                                       title: 'Бага',
+                                       render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'low'])
+                                    },
+                                    {
+                                       title: 'Их',
+                                       render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'high'])
+                                    }
+                                 ]
+                              },
+                              {
+                                 title: 'Хэмжих нэгж',
+                                 dataIndex: 'measurement',
+                                 render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'measurement'])
+                              },
+                              {
+                                 title: 'Хариу',
+                                 dataIndex: 'value',
+                                 render: (_, _row, index) => (
+                                    <EditableFormItem editing={true} name={[index, 'value']}>
+                                       <InputNumber
+                                          onChange={(e) => {
+                                             calHighLow(e, null, null, [item.typeId, index]);
+                                          }}
+                                       />
+                                    </EditableFormItem>
+                                 )
+                              },
+                              {
+                                 title: 'H/L',
+                                 dataIndex: 'HL',
+                                 render: (_, _row, index) => {
+                                    return (
+                                       <EditableFormItemForHL editing={false} name={[index, 'HL']}>
+                                          <Input />
+                                       </EditableFormItemForHL>
+                                    );
                                  }
-                              ]
-                           },
-                           {
-                              title: 'Хэмжих нэгж',
-                              dataIndex: 'measurement',
-                              render: (_, _row, index) => form.getFieldValue([item.typeId, index, 'measurement'])
-                           },
-                           {
-                              title: 'Хариу',
-                              dataIndex: 'value',
-                              render: (_, _row, index) => (
-                                 <EditableFormItem editing={true} name={[index, 'value']}>
-                                    <InputNumber
-                                       onChange={(e) => {
-                                          calHighLow(e, null, null, [item.typeId, index]);
-                                       }}
-                                    />
-                                 </EditableFormItem>
-                              )
-                           },
-                           {
-                              title: 'H/L',
-                              dataIndex: 'HL',
-                              render: (_, _row, index) => {
-                                 return (
-                                    <EditableFormItemForHL editing={false} name={[index, 'HL']}>
-                                       <Input />
-                                    </EditableFormItemForHL>
-                                 );
+                              },
+                              {
+                                 title: '',
+                                 dataIndex: '',
+                                 render: (_, _row, index) => {
+                                    return (
+                                       <Form.Item className="mb-0" name={[index, 'PN']}>
+                                          <Radio.Group>
+                                             <Radio value="P">P</Radio>
+                                             <Radio value="N">N</Radio>
+                                          </Radio.Group>
+                                       </Form.Item>
+                                    );
+                                 }
                               }
-                           },
-                           {
-                              title: '',
-                              dataIndex: '',
-                              render: (_, _row, index) => {
-                                 return (
-                                    <Form.Item className="mb-0" name={[index, 'PN']}>
-                                       <Radio.Group>
-                                          <Radio value="P">P</Radio>
-                                          <Radio value="N">N</Radio>
-                                       </Radio.Group>
-                                    </Form.Item>
-                                 );
-                              }
-                           }
-                        ]}
-                        dataSource={results}
-                        pagination={false}
-                     />
-                  )}
-               </Form.List>
+                           ]}
+                           dataSource={results}
+                           pagination={false}
+                        />
+                     )}
+                  </Form.List>
+               </div>
             </div>
          ))}
       </div>

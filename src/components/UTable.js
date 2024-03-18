@@ -119,7 +119,6 @@ function UTable(props) {
          config.params = { ...config.params, ...props.params.params };
       }
       const response = await Get(props.url, token, config);
-      console.log('Res', response);
       if (response.status === 401) {
          navigate('/login');
       } else {

@@ -629,7 +629,7 @@ input::-webkit-inner-spin-button {
 
 .ant-image-preview-img {
    margin: auto;
-   width: 20%;
+   /* width: 20%; */
 }
 
 .ant-image-preview-img-wrapper {

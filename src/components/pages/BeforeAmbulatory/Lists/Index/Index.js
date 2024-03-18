@@ -1,19 +1,14 @@
-import React from 'react';
-import { CheckOutlined, CloseOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { CheckOutlined, CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentDepId, selectCurrentInsurance, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import { getAge, getGenderInType, inspectionTOJSON, openNofi } from '../../../../comman';
+import { getAge, getGenderInType, openNofi } from '../../../../comman';
 import orderType from './orderType.js';
-import DynamicContent from '../../../EMR/EPatientHistory/DynamicContent';
 import MonitorCriteria from '../../../Insurance/MonitorCriteria';
-import { setNote } from '../../../../../features/noteReducer';
-import jwtInterceopter from '../../../../jwtInterceopter';
-import { defaultForm } from '../../../EMR/EPatientHistory/DefualtForms';
 import { setPatient } from '../../../../../features/patientReducer';
 //
 import Finger from '../../../../../features/finger';
@@ -22,19 +17,16 @@ import healthInsuranceService from '../../../../../services/healt-insurance/heal
 import apiInsuranceService from '../../../../../services/healt-insurance/insurance';
 import ScheduleService from '../../../../../services/schedule';
 import ServiceService from '../../../../../services/service/service';
-import { NewInput } from '../../../../Input/Input';
 import ScheduleTypeInfo from './scheduleTypeInfo';
 import ListFilter from './listFilter';
 import InpatientTypeInfo from './inpatientTypeInfo';
 import { ListPatientInfo, TypeInfo } from '../../../../ListInjection.jsx';
-const { TextArea } = Input;
 
 function Index({ type, isDoctor }) {
    //type 0 bol ambultor
    //1 bol urdcilsan sergiileh
    //2 bol hewten
    //3 bol mes zasal
-   const [editFormDesc] = Form.useForm();
    const [startFormHics] = Form.useForm();
    const isInsurance = useSelector(selectCurrentInsurance);
    const employeeId = useSelector(selectCurrentUserId);
@@ -47,12 +39,6 @@ function Index({ type, isDoctor }) {
       limit: 10
    });
    const [spinner, setSpinner] = useState(false);
-   const [isOpenEditForm, setIsOpenEditForm] = useState(false); // uzleg zasah ued
-   const [isOpenEditFormDesc, setIsOpenEditFormDesc] = useState(false); // uzleg zasagdhin omnoh desc
-   const [formStyle, setFormStyle] = useState({});
-   const [formData, setFormData] = useState({});
-   //
-   const [selectedRowPatientId, setSelectedRowPatientId] = useState(Number);
    const [selectedTags, setSelectedTags] = useState(0);
    // suul newew 8.1
    const [selectedRow, setSelectedRow] = useState();
@@ -189,10 +175,11 @@ function Index({ type, isDoctor }) {
          patientId: row.patientId,
          inspection: inspectionType === undefined ? 1 : inspectionType,
          type: row.type,
-         listIndexType: type,
          hicsSeal: row.hicsSeal,
-         startDate: row.startDate,
+         startDate: row.startDate || new Date(),
+         endDate: row.endDate,
          appointmentType: type,
+         inspectionNoteId: row.inspectionNoteId,
          slotId: row.slotId,
          reasonComming: row.reasonComming
       };
@@ -212,18 +199,13 @@ function Index({ type, isDoctor }) {
          data['departmentId'] = row.inDepartmentId;
       }
       // uzleg ehleh tsag
-      console.log('end orow1s', type);
       if (row.startDate === null && isDoctor && type === 1) {
-         data['startDate'] = new Date();
-
          AppointmentService.patchPreOrder(row.id, {
             slotId: row.slotId,
             startDate: new Date()
          });
       }
       if (row.startDate === null && isDoctor && type === 0) {
-         console.log('end orow');
-         data['startDate'] = new Date();
          AppointmentService.patchAppointment(row.id, {
             startDate: new Date(),
             slotId: row.slotId
@@ -236,13 +218,6 @@ function Index({ type, isDoctor }) {
             slotStatus: 1
          });
       }
-      dispatch(
-         setNote({
-            inspectionNote: row.inspectionNote,
-            diagnosis: row.patientDiagnosis,
-            services: [].concat(...row.serviceRequests?.map((request) => request.services))
-         })
-      );
       dispatch(setEmrData(data));
       if (isDoctor) {
          navigate(`/main/emr`, {
@@ -313,7 +288,7 @@ function Index({ type, isDoctor }) {
       if (type === 'EMERGENCY') {
          return <TypeInfo bgColor="#ef4444" textColor="white" text={'Яаралтай'} />;
       }
-      return <TypeInfo bgColor="#84cc16" textColor="white" text={'Төлөвлөгөөт'} />;
+      return <TypeInfo bgColor="#5cb85c" textColor="white" text={'Төлөвлөгөөт'} />;
    };
    const getInspectionInfo = (inspectionType) => {
       if (inspectionType === 1) {
@@ -331,35 +306,6 @@ function Index({ type, isDoctor }) {
       }
    };
 
-   // uzleg zasah ued uzleg er bhgu bol depId gar inspection awchrah uzleg baiwal formId gar formAwcirah
-   const getInspectionFormDesc = async (inspectionNote, patientId) => {
-      if (inspectionNote) {
-         const data = inspectionTOJSON(inspectionNote);
-         data['formId'] = inspectionNote.formId;
-         data['id'] = inspectionNote.id;
-         setFormData(data);
-         setSelectedRowPatientId(patientId);
-      } else {
-         setFormData(null);
-      }
-      editFormDesc.resetFields();
-      setIsOpenEditFormDesc(true);
-   };
-   const createDescription = async (values) => {
-      setIsOpenEditFormDesc(false);
-      if (formData.formId) {
-         await jwtInterceopter.get('emr/inspection-form/' + formData.formId).then((response) => {
-            setFormStyle(response.data.response);
-         });
-      } else {
-         setFormStyle({
-            formItem: defaultForm()
-         });
-      }
-      formData['description'] = values.description;
-      setIsOpenEditForm(true);
-   };
-   //
    const columns = [
       {
          title: '№',
@@ -381,7 +327,7 @@ function Index({ type, isDoctor }) {
       {
          title: 'Үзлэгийн цаг',
          dataIndex: 'slot',
-         width: 90,
+         width: type === 0 ? 90 : 150,
          render: (slot, row) => getTypeInfo(row.type, slot?.startTime, slot?.endTime)
       },
       {
@@ -407,9 +353,17 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Нас',
-         width: 40,
+         width: 100,
          dataIndex: ['patient', 'registerNumber'],
-         render: (text) => getAge(text)
+         render: (text) => (
+            <span
+               style={{
+                  whiteSpace: 'normal'
+               }}
+            >
+               {getAge(text)}
+            </span>
+         )
       },
       {
          title: 'Хүйс',
@@ -466,7 +420,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Төлбөр',
-         width: 60,
+         width: 100,
          dataIndex: 'isPayment',
          render: (isPayment) => getPaymentInfo(isPayment)
       },
@@ -474,51 +428,27 @@ function Index({ type, isDoctor }) {
          title: 'Үйлдэл',
          dataIndex: 'endDate',
          width: 120,
-         render: (text, row) => {
-            if (text) {
-               return (
-                  <Button
-                     className="hover:border-[#2D8CFF]"
-                     style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: 'white',
-                        color: '#2D8CFF',
-                        border: '1px solid #2D8CFF',
-                        height: 'auto',
-                        margin: 8,
-                        width: '100%'
-                     }}
-                     onClick={() => getInspectionFormDesc(row.inspectionNote, row.patientId)}
-                     icon={<EditOutlined />}
-                  >
-                     Тэмдэглэл засах
-                  </Button>
-               );
-            } else {
-               return (
-                  <Button
-                     className="hover:border-[#2D8CFF]"
-                     style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: 'white',
-                        color: '#2D8CFF',
-                        border: '1px solid #2D8CFF',
-                        height: 'auto',
-                        margin: 8,
-                        width: '100%'
-                     }}
-                     onClick={() => {
-                        getEMRorENR(row);
-                     }}
-                     icon={<PlusCircleOutlined />}
-                  >
-                     Үзлэг хийх
-                  </Button>
-               );
-            }
-         }
+         render: (text, row) => (
+            <Button
+               className="hover:border-[#2D8CFF]"
+               style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  color: '#2D8CFF',
+                  border: '1px solid #2D8CFF',
+                  height: 'auto',
+                  margin: 8,
+                  width: '100%'
+               }}
+               onClick={() => {
+                  getEMRorENR(row);
+               }}
+               icon={<PlusCircleOutlined />}
+            >
+               {text ? 'Тэмдэглэл засах' : 'Үзлэг хийх'}
+            </Button>
+         )
       }
    ];
    const InPatientColumns = [
@@ -558,9 +488,17 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Нас',
-         width: 40,
+         width: 100,
          dataIndex: ['patient', 'registerNumber'],
-         render: (registerNumber) => getAge(registerNumber)
+         render: (text) => (
+            <span
+               style={{
+                  whiteSpace: 'normal'
+               }}
+            >
+               {getAge(text)}
+            </span>
+         )
       },
       {
          title: 'Хүйс',
@@ -711,9 +649,17 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Нас',
-         width: 40,
+         width: 100,
          dataIndex: ['patient', 'registerNumber'],
-         render: (registerNumber) => getAge(registerNumber)
+         render: (text) => (
+            <span
+               style={{
+                  whiteSpace: 'normal'
+               }}
+            >
+               {getAge(text)}
+            </span>
+         )
       },
       {
          title: 'Хүйс',
@@ -832,57 +778,6 @@ function Index({ type, isDoctor }) {
             </Card>
          </div>
          <Modal
-            title="Тэмдэглэл засах хэсэг"
-            open={isOpenEditForm}
-            onCancel={() => setIsOpenEditForm(false)}
-            footer={false}
-         >
-            <DynamicContent
-               props={{
-                  data: formStyle.formItem,
-                  formKey: formData?.formId != null ? formData?.formId : formData?.id,
-                  formName: formData?.name
-               }}
-               incomeData={{
-                  usageType: 'OUT',
-                  patientId: selectedRowPatientId
-               }}
-               handleClick={() => null}
-               editForm={formData}
-               isEditFromList={true}
-               hicsServiceId={null}
-               appointmentType={type}
-               triggerForModal={(state) => setIsOpenEditForm(state)}
-            />
-         </Modal>
-         <Modal
-            title="Засах болсон шалтгаан"
-            open={isOpenEditFormDesc}
-            onCancel={() => setIsOpenEditFormDesc(false)}
-            onOk={() =>
-               editFormDesc.validateFields().then((values) => {
-                  createDescription(values);
-               })
-            }
-            okText="Хадгалах"
-            cancelText="Болих"
-         >
-            <Form form={editFormDesc} layout="vertical">
-               <Form.Item
-                  label="Тайлбар"
-                  name={'description'}
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Заавал'
-                     }
-                  ]}
-               >
-                  <TextArea />
-               </Form.Item>
-            </Form>
-         </Modal>
-         <Modal
             title="Тусламж үйлчилгээг эхлүүлэх"
             open={isOpenModalStartService}
             onCancel={() => setIsOpenModalStartService(false)}
@@ -932,7 +827,7 @@ function Index({ type, isDoctor }) {
                         ]}
                         name="fingerprint"
                      >
-                        <NewInput />
+                        <Input />
                      </Form.Item>
                   </div>
                   <Form.Item

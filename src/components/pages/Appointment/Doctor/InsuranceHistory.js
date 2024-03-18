@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { openNofi } from '../../../comman';
-import jwtInterceopter from '../../../jwtInterceopter';
 import { Spin, Table } from 'antd';
-import moment from 'moment';
+import HealthInsuranceApi from '../../../../services/healt-insurance/healtInsurance';
+import { useSelector } from 'react-redux';
+import { selectCurrentInsurance } from '../../../../features/authReducer';
+import dayjs from 'dayjs';
+
 function InsuranceHistory(props) {
    const { registerNumber, isFull } = props;
+   const isInsurance = useSelector(selectCurrentInsurance);
    const [data, setData] = useState(null);
    const [isLoading, setIsloading] = useState(false);
    const getData = async () => {
       setIsloading(true);
-      await jwtInterceopter
-         .get('health-insurance/patient-data/' + registerNumber)
+      await HealthInsuranceApi.getPatientData(registerNumber)
          .then((response) => {
             if (response.data.code === 200 && response.data.result != null) {
                openNofi('success', 'Амжилттай', response.data.description);
@@ -27,7 +30,7 @@ function InsuranceHistory(props) {
          });
    };
    useEffect(() => {
-      if (registerNumber) {
+      if (registerNumber && isInsurance) {
          getData();
       }
    }, [registerNumber]);
@@ -45,7 +48,7 @@ function InsuranceHistory(props) {
                   dataIndex: 'createdDate',
                   width: 100,
                   render: (text) => {
-                     return moment(text).format('YYYY-MM-DD');
+                     return dayjs(text).format('YYYY-MM-DD');
                   }
                },
                {

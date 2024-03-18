@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Card, Modal, Result, Segmented, Tabs } from 'antd';
+import { Button, Card, Segmented } from 'antd';
 import { useState } from 'react';
 import InspectionHistory from './InspectionHistory';
 import PaymentHistory from './PaymentHistory';
 import InsuranceHistory from './InsuranceHistory';
 import { FullscreenExitOutlined, FullscreenOutlined, OrderedListOutlined } from '@ant-design/icons';
 function Index({ PatientId, RegisterNumber }) {
-   const [filter, setFilter] = useState(Number);
+   const [filter, setFilter] = useState(0);
    const [isFull, setIsFull] = useState(false);
    const items = [
       {
@@ -32,80 +32,6 @@ function Index({ PatientId, RegisterNumber }) {
          icon={isFull ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
       />
    );
-   const Segment = () => (
-      <Segmented
-         className="department-bed-segment"
-         size="small"
-         options={[
-            {
-               label: 'Даатгал',
-               value: 0,
-               icon: <OrderedListOutlined />
-            },
-            {
-               label: 'Үзлэгийн түүх',
-               value: 1,
-               icon: <OrderedListOutlined />
-            },
-            {
-               label: 'Төлбөрийн мэдээлэл',
-               value: 2,
-               icon: <OrderedListOutlined />
-            }
-         ]}
-         value={filter}
-         onChange={(e) => setFilter(e)}
-      />
-   );
-   const Render = () => (
-      <Card
-         bordered={false}
-         bodyStyle={{
-            padding: 10,
-            overflow: 'auto'
-         }}
-      >
-         <Tabs type="card" items={items} tabBarExtraContent={<FullScreen />} />
-      </Card>
-   );
-   if (PatientId && RegisterNumber) {
-      return (
-         <>
-            <Render />
-            <Modal title={'Мэдээлэл'} open={isFull} onCancel={() => setIsFull(false)} width={'60%'} footer={null}>
-               <Render />
-            </Modal>
-            {/* <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               title={<FullScreen />}
-               bodyStyle={{
-                  paddingTop: 0,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  paddingBottom: 10
-               }}
-               extra={<Segment />}
-            >
-               {PatientId ? <Render /> : <div>Өвчтөн сонгогдоогүй</div>}
-            </Card>
-            <Modal title={'Мэдээлэл'} open={isFull} onCancel={() => setIsFull(false)} width={'60%'} footer={null}>
-               <Card
-                  bordered={false}
-                  className="header-solid max-h-max rounded-md"
-                  title={<FullScreen />}
-                  bodyStyle={{
-                     paddingTop: 0,
-                     paddingLeft: 10,
-                     paddingRight: 10,
-                     paddingBottom: 10
-                  }}
-                  extra={<Segment />}
-               ></Card>
-            </Modal> */}
-         </>
-      );
-   }
    return (
       <Card
          className="h-full"
@@ -117,12 +43,32 @@ function Index({ PatientId, RegisterNumber }) {
             paddingBottom: 10
          }}
       >
-         <Result
-            style={{
-               padding: 0
-            }}
-            title="Тун удахгүй"
-         />
+         <div className="flex flex-col gap-2">
+            <Segmented
+               className="department-bed-segment"
+               size="small"
+               options={[
+                  {
+                     label: 'Даатгал',
+                     value: 0,
+                     icon: <OrderedListOutlined />
+                  },
+                  {
+                     label: 'Үзлэгийн түүх',
+                     value: 1,
+                     icon: <OrderedListOutlined />
+                  },
+                  {
+                     label: 'Төлбөрийн түүх',
+                     value: 2,
+                     icon: <OrderedListOutlined />
+                  }
+               ]}
+               value={filter}
+               onChange={setFilter}
+            />
+            {items[filter]?.children}
+         </div>
       </Card>
    );
 }

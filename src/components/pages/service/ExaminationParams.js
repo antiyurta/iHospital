@@ -1,12 +1,10 @@
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Form, Input, InputNumber, Modal, Select, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { checkNumber, Delete, Get, Patch, Post } from '../../comman';
-import UTable from '../../UTable';
+import { checkNumber, Delete } from '../../comman';
 const { Search } = Input;
-const { Option } = Select;
 //
 import ServiceApi from '../../../services/service/service';
 import examinationApi from '../../../services/service/examination.api';
@@ -15,7 +13,6 @@ function ExaminationParams() {
    const [editMode, setEditMode] = useState(false);
    const [editId, setEditId] = useState(Number);
    const [paraForm] = Form.useForm();
-   const [measurements, setMeasurements] = useState([]);
    const [examinations, setExaminations] = useState([]);
    const [examinationPara, setExaminationPara] = useState([]);
    const [examinationParaLoading, setExaminationParaLoading] = useState(false);
@@ -29,17 +26,6 @@ function ExaminationParams() {
          .get()
          .then(({ data: { response } }) => {
             setExaminations(response.data);
-         })
-         .finally(() => {
-            setExaminationLoading(false);
-         });
-   };
-   const getMeasurement = async () => {
-      setExaminationLoading(true);
-      await ServiceApi.getErequestParameter()
-         .then(({ data: { response } }) => {
-            console.log(response);
-            setMeasurements(response.data);
          })
          .finally(() => {
             setExaminationLoading(false);
@@ -219,7 +205,6 @@ function ExaminationParams() {
    ];
    useEffect(() => {
       getExamination();
-      getMeasurement();
    }, []);
    return (
       <div className="p-3 w-full h-full bg-[#f5f6f7]">
@@ -280,25 +265,6 @@ function ExaminationParams() {
                   />
                </Card>
             </div>
-            <UTable
-               title={'Хэмжих нэгж'}
-               url={'reference/measurement'}
-               column={[
-                  {
-                     index: 'name',
-                     label: 'Нэр',
-                     isView: true,
-                     isSearch: false,
-                     input: 'input',
-                     col: 12
-                  }
-               ]}
-               isCreate={true}
-               isRead={false}
-               isUpdate={true}
-               isDelete={true}
-               width="40%"
-            />
          </div>
          <Modal
             title={!editMode ? 'Үзүүлэлт нэмэх' : 'Үзүүлэлт засах'}

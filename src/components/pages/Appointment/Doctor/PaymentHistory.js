@@ -1,32 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Empty, Table } from 'antd';
-import moment from 'moment';
-import { useState } from 'react';
-import { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, numberToCurrency, ScrollRef } from '../../../comman';
+import { numberToCurrency } from '../../../comman';
+import dayjs from 'dayjs';
+
+import paymentApi from '../../../../services/payment/payment';
 
 function PaymentHistory({ patientId }) {
-   const scrollRef = useRef();
-   const token = useSelector(selectCurrentToken);
    const [spinner, setSpinner] = useState(false);
    const [pays, setPays] = useState([]);
-   useEffect(() => {
-      ScrollRef(scrollRef);
-   }, []);
    const getPayments = async () => {
       setSpinner(true);
-      const conf = {
-         headers: {},
-         params: {
-            patientId: patientId,
-            isPay: true
-         }
-      };
-      const response = await Get('payment/invoice', token, conf);
-      setPays(response.data);
-      setSpinner(false);
+      await paymentApi
+         .get({
+            params: {
+               patientId: patientId,
+               isPay: true
+            }
+         })
+         .then(({ data: { response } }) => {
+            setPays(response.data);
+         })
+         .finally(() => {
+            setSpinner(false);
+         });
    };
    const columns = [
       {
@@ -34,7 +30,7 @@ function PaymentHistory({ patientId }) {
          dataIndex: 'updatedAt',
          className: 'whitespace-normal',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
+            return dayjs(text).format('YYYY-MM-DD HH:mm');
          }
       },
       {
@@ -67,7 +63,7 @@ function PaymentHistory({ patientId }) {
                tip: 'Уншиж байна...'
             }}
             scroll={{
-               y: 150
+               y: 100
             }}
             locale={{ emptyText: <Empty description={'Хоосон'} /> }}
             columns={columns}

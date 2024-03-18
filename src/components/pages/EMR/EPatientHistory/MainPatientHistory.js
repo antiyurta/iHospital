@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Button, Form, Modal, Result } from 'antd';
+import { Button, Form, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from '../../../../features/authReducer';
@@ -7,7 +7,6 @@ import HistoryTab from './HistoryTab';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
 import jwtInterceopter from '../../../jwtInterceopter';
-import EmrInspectionFormServices from '../../../../services/emr/inspectionForm';
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
@@ -27,13 +26,14 @@ function MainPatientHistory({ handleClick }) {
       inspection,
       usageType,
       patientId,
-      type,
-      xrayId
+      xrayId,
+      inspectionNoteId,
+      appointmentType,
+      serialNumber
    } = useSelector(selectCurrentEmrData);
    const userId = useSelector(selectCurrentUserId);
    const [xrayForm] = Form.useForm();
    const [activeKey, setActiveKey] = useState('item-history');
-   const [confirmModal, setConfirmModal] = useState(false);
    const [loading, setLoading] = useState(false);
    const Tab1Content = useCallback(() => {
       return <HistoryTab />;
@@ -46,6 +46,8 @@ function MainPatientHistory({ handleClick }) {
          <DynamicContent
             props={props}
             incomeData={{
+               inspectionNoteId: inspectionNoteId,
+               appointmentType: appointmentType,
                appointmentId: appointmentId,
                cabinetId: cabinetId,
                patientId: patientId,
@@ -55,11 +57,8 @@ function MainPatientHistory({ handleClick }) {
                usageType: usageType
             }}
             handleClick={handleClick}
-            editForm={null}
-            isEditFromList={false}
+            isViewDiagnose={inspection === 11 || inspection === 12 ? false : true}
             hicsServiceId={hicsServiceId}
-            appointmentType={type}
-            triggerForModal={(state) => {}}
          />
       );
    }, []);
@@ -70,6 +69,7 @@ function MainPatientHistory({ handleClick }) {
          formId: data.id,
          documentId: data.documentValue,
          patientId: patientId,
+         serialNumber: serialNumber,
          formType: 0,
          saveType: 'Save',
          type: 'XRAY',
@@ -170,6 +170,7 @@ function MainPatientHistory({ handleClick }) {
             children: <DynamicTabContent data={defualtForm} />
          }
       ]);
+      setLoading(false);
       // Түр commit hiwe
       // await EmrInspectionFormServices.get({
       //    params: {
@@ -301,6 +302,7 @@ function MainPatientHistory({ handleClick }) {
       ]);
    };
    useEffect(() => {
+      console.log('inspe', inspection);
       if (usageType === 'OUT') {
          if (inspection === 1) {
             getInspectionTabs();
@@ -336,7 +338,7 @@ function MainPatientHistory({ handleClick }) {
                      ))}
                   </Splide>
                </div>
-               {items?.find((item) => item.key === activeKey)?.children}
+               <Spin spinning={loading}>{items?.find((item) => item.key === activeKey)?.children}</Spin>
             </>
          ) : null}
          {usageType === 'IN' ? (
@@ -347,20 +349,6 @@ function MainPatientHistory({ handleClick }) {
                hicsServiceId={hicsServiceId}
             />
          ) : null}
-         <Modal open={confirmModal} onCancel={() => setConfirmModal(false)} footer={null}>
-            <Result
-               status="success"
-               title="EMR амжилттай хадгалагдлаа та OT руу шилжих үү"
-               extra={
-                  <>
-                     <Button type="primary" key="console" onClick={() => handleClick({ target: { value: 'OCS' } })}>
-                        Тийм
-                     </Button>
-                     <Button onClick={() => setConfirmModal(false)}>Үгүй</Button>
-                  </>
-               }
-            />
-         </Modal>
       </>
    );
 }

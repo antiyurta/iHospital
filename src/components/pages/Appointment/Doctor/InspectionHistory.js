@@ -23,7 +23,7 @@ function InspectionHistory({ patientId }) {
       {
          title: 'Огноо',
          dataIndex: 'createdAt',
-         className: 'whitespace-normal',
+         width: 110,
          render: (text) => {
             return moment(text).format('YYYY-MM-DD HH:mm');
          }
@@ -44,14 +44,14 @@ function InspectionHistory({ patientId }) {
             return <p className="whitespace-normal text-black">{text}</p>;
          }
       },
-      {
-         title: 'Тайлбар',
-         dataIndex: 'description',
-         className: 'whitespace-normal text-black',
-         render: (text) => {
-            return <p className="whitespace-normal text-black">{text}</p>;
-         }
-      },
+      // {
+      //    title: 'Тайлбар',
+      //    dataIndex: 'description',
+      //    className: 'whitespace-normal text-black',
+      //    render: (text) => {
+      //       return <p className="whitespace-normal text-black">{text}</p>;
+      //    }
+      // },
       {
          title: 'Төлөв',
          dataIndex: 'status',

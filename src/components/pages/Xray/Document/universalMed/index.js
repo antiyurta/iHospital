@@ -17,9 +17,12 @@ export function ReturnByIdToName(id) {
    return options.find((option) => option.value === id)?.label;
 }
 
-export function ReturnById(document, patient) {
-   if (document.documentId === 1) {
-      return <Test data={document.data} patient={patient} />;
-   }
-   return;
+export function ReturnById(props) {
+   const { serviceName, document, patient, body } = props;
+   return <div>{body}</div>;
+   // return (
+   //    <Template patient={patient} createdAt={document.createdAt} serviceName={serviceName}>
+   //       {body}
+   //    </Template>
+   // );
 }

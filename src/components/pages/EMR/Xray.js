@@ -1,6 +1,6 @@
-import { Tree, Image, Modal, Spin, Card, Result, Tabs, Button } from 'antd';
+import { Tree, Image, Modal, Spin, Card, Result, Tabs, Button, Divider, Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { dataToTree } from '../../comman';
+import { dataToTree, openNofi } from '../../comman';
 import FormXray from './FormPrint/Xray';
 import XrayImg from './FormPrint/XrayImg';
 import male from '../../../assets/images/maleAvatar.svg';
@@ -16,10 +16,12 @@ import { useSelector } from 'react-redux';
 //
 import PmsPatientServices from '../../../services/pms/patient.api';
 import DocumentsFormPatientServices from '../../../services/organization/document';
-import ReactToPrint from 'react-to-print';
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import dayjs from 'dayjs';
 import FormRenderHtml from '../BeforeAmbulatory/Customized/FormRenderHtml';
 //
+import pacsApi from '../../../services/pacs/pacs.api';
+import ImagePicker from './Xray/ImagePicker';
 
 const { DirectoryTree } = Tree;
 function Xrays({ PatientId }) {
@@ -189,13 +191,53 @@ function Xrays({ PatientId }) {
       </>
    );
    //EXO
+
    const Exo = () => {
+      const options = [
+         {
+            label: 1,
+            value: 1
+         },
+         {
+            label: 2,
+            value: 2
+         },
+         {
+            label: 3,
+            value: 3
+         }
+      ];
       const printRef = useRef();
+      const printRefPicture = useRef();
       const [spinner, setSpinner] = useState(false);
       const [spinerInfo, setSpinnerInfo] = useState(false);
       const [document, setDocument] = useState();
       const [test, setTest] = useState({});
       const [serviceName, setServiceName] = useState('');
+      const [isViewPacs, setIsViewPacs] = useState(false);
+      const [pages, setPages] = useState([
+         {
+            rows: 1,
+            cols: 1
+         }
+      ]);
+      const [isOpenModal, setIsOpenModal] = useState(false);
+      const [imageUrls, setImageUrls] = useState([]);
+      const [osimisViewerUrl, setOsimisViewerUrl] = useState('');
+      //
+      const getImages = async (serialNumber) => {
+         await pacsApi
+            .getBySerialNumber(serialNumber.toString())
+            .then(({ data: { response } }) => {
+               if (response) {
+                  setOsimisViewerUrl(response?.osimisViewerUrl);
+                  setImageUrls(response?.series[0]?.instances);
+               }
+            })
+            .catch((error) => {
+               openNofi('error', 'Алдаа', 'Рентгэн зураг байхгүй байна.');
+            });
+      };
       const getDocumentData = async (id) => {
          setSpinnerInfo(true);
          await DocumentsFormPatientServices.getById(id)
@@ -205,6 +247,13 @@ function Xrays({ PatientId }) {
                      response: { response }
                   }
                }) => {
+                  if (response.serialNumber) {
+                     setIsViewPacs(true);
+                     getImages(response.serialNumber);
+                  } else {
+                     setOsimisViewerUrl('');
+                     setImageUrls([]);
+                  }
                   setDocument(response);
                }
             )
@@ -256,6 +305,23 @@ function Xrays({ PatientId }) {
             );
          });
       };
+
+      const handleChange = (type, value, index) => {
+         const clone = [...pages];
+         clone[index] = {
+            ...clone[index],
+            [`${type}`]: value
+         };
+         setPages(clone);
+      };
+      const removePage = (index) => {
+         const clone = [...pages];
+         clone.splice(index, 1);
+         setPages(clone);
+      };
+      const handlePrint = useReactToPrint({
+         content: () => printRefPicture.current
+      });
       useEffect(() => {
          getExos();
       }, []);
@@ -271,6 +337,7 @@ function Xrays({ PatientId }) {
                               if (info?.node?.isLeaf) {
                                  setServiceName(info.node?.title);
                                  getDocumentData(info?.node?.key);
+                                 setIsViewPacs(false);
                               }
                            }}
                            showLine
@@ -324,6 +391,35 @@ function Xrays({ PatientId }) {
                                        body={<FormRenderHtml formId={document.formId} documentData={document.data} />}
                                     />
                                  </div>
+                                 {isViewPacs ? (
+                                    <div className="flex flex-col gap-2">
+                                       <Divider>Зураг</Divider>
+                                       <div className="grid grid-cols-2 gap-2">
+                                          <Button
+                                             onClick={() => {
+                                                window.open(osimisViewerUrl, '_blank');
+                                             }}
+                                          >
+                                             Дэлгэрэнгүй харах (VIEWER)
+                                          </Button>
+                                          <Button
+                                             type="primary"
+                                             onClick={() => {
+                                                setIsOpenModal(true);
+                                             }}
+                                          >
+                                             Зураг хэвлэх
+                                          </Button>
+                                       </div>
+                                       <Image.PreviewGroup>
+                                          <div className="grid grid-cols-4 gap-2">
+                                             {imageUrls?.map((url, index) => (
+                                                <Image key={index} src={url} alt={index} />
+                                             ))}
+                                          </div>
+                                       </Image.PreviewGroup>
+                                    </div>
+                                 ) : null}
                               </div>
                            ) : (
                               <Result title={'Хугацаа сонгох'} />
@@ -333,6 +429,89 @@ function Xrays({ PatientId }) {
                   </Spin>
                </div>
             </div>
+            <Modal
+               title="Зураг хэвлэх хэсэг"
+               open={isOpenModal}
+               onCancel={() => setIsOpenModal(false)}
+               width={'23cm'}
+               bodyStyle={{
+                  position: 'relative',
+                  overflow: 'auto',
+                  width: '22cm',
+                  margin: 'auto',
+                  maxHeight: 900
+               }}
+               cancelText="Болих"
+               okText="Хэвлэх"
+               onOk={() => {
+                  handlePrint();
+               }}
+               destroyOnClose
+            >
+               <div ref={printRefPicture}>
+                  {pages?.map((page, index) => (
+                     <React.Fragment key={index}>
+                        <div className="flex flex-row gap-3 px-[1cm] xray-selector">
+                           <div>
+                              <label>Багана:</label>
+                              <Select
+                                 options={options}
+                                 defaultValue={1}
+                                 onChange={(value) => handleChange('rows', value, index)}
+                              />
+                           </div>
+                           <div>
+                              <label>Мөр:</label>
+                              <Select
+                                 options={options}
+                                 defaultValue={1}
+                                 onChange={(value) => handleChange('cols', value, index)}
+                              />
+                           </div>
+                           <Button danger onClick={() => removePage(index)}>
+                              Хуудас устгах
+                           </Button>
+                        </div>
+                        <div className="page">
+                           <div
+                              className="subpage"
+                              style={{
+                                 height: 'inherit'
+                              }}
+                           >
+                              <table className="table table-bordered h-full">
+                                 <tbody>
+                                    {[...Array(page.cols)]?.map((_col, colIndex) => (
+                                       <tr key={colIndex}>
+                                          {[...Array(page.rows)]?.map((_row, rowIndex) => (
+                                             <td key={rowIndex}>
+                                                <ImagePicker rows={page.rows} cols={page.cols} images={imageUrls} />
+                                             </td>
+                                          ))}
+                                       </tr>
+                                    ))}
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </React.Fragment>
+                  ))}
+               </div>
+               <Button
+                  type="primary"
+                  onClick={() => {
+                     setPages([
+                        ...pages,
+                        {
+                           rows: 1,
+                           cols: 1
+                        }
+                     ]);
+                  }}
+               >
+                  Хуудас нэмэх
+               </Button>
+            </Modal>
          </div>
       );
    };

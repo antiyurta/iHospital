@@ -457,7 +457,7 @@ function Invoice() {
                padding: 10
             }}
          >
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 p-3">
                <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
                   <PatientInformation patient={selectedPatient} handlesearch={onSearchPayment} />
                   <Card

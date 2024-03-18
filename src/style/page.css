@@ -293,7 +293,16 @@ table.dailyTable tbody > tr > th {
    gap: 8px;
 }
 
+.xray-selector {
+   border: 1px solid #d3d3d3;
+   border-radius: 15px;
+   padding: 6px;
+}
+
 @media print {
+   .xray-selector {
+      display: none !important;
+   }
    .new-form {
       display: block !important;
    }
