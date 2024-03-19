@@ -1,6 +1,6 @@
 //EMR -> Явцын үзлэг -> Ерөнхий үзлэг
 import React, { useEffect, useState } from 'react';
-import { Radio, Input, Button, Form, Collapse, InputNumber } from 'antd';
+import { Radio, Input, Button, Form, Collapse, InputNumber, Checkbox } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../features/emrReducer';
 import { openNofi } from '../../comman';
@@ -52,8 +52,10 @@ export default function GeneralInspection() {
             }
          })
          .then(({ data: { response } }) => {
-            setEditMode(true);
-            setId(response.id);
+            if (Object.keys(response)?.length > 0) {
+               setEditMode(true);
+               setId(response.id);
+            }
             form.setFieldsValue(response);
          });
    };
@@ -87,7 +89,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Биеийн ерөнхий байдал заавал'
                         }
                      ]}
                      className="mb-0"
@@ -113,7 +115,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Ухаан санаа заавал'
                         }
                      ]}
                      className="mb-0"
@@ -136,7 +138,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Арьс салст заавал'
                         }
                      ]}
                      className="mb-0"
@@ -166,7 +168,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Амьсгал 1 минутанд заавал'
                         }
                      ]}
                      className="mb-0"
@@ -179,7 +181,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Чагналтаар заавал'
                         }
                      ]}
                      className="mb-0"
@@ -215,7 +217,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Судасны цохилт 1 минутанд заавал'
                         }
                      ]}
                      className="mb-0"
@@ -228,7 +230,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Хүчдэл дүүрэлт заавал'
                         }
                      ]}
                      className="mb-0"
@@ -241,7 +243,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Тогшилтоор /Зүрхний хил/ заавал'
                         }
                      ]}
                      className="mb-0"
@@ -261,7 +263,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Чагналтаар /Зүрхний авиа/ заавал'
                         }
                      ]}
                      className="mb-0"
@@ -293,7 +295,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'АД баруун талд заавал'
                         }
                      ]}
                      className="mb-0"
@@ -306,7 +308,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Зүүн талд заавал'
                         }
                      ]}
                      className="mb-0"
@@ -319,7 +321,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Хэл заавал'
                         }
                      ]}
                      className="mb-0"
@@ -345,7 +347,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Хэвлийн үзлэг заавал'
                         }
                      ]}
                      className="mb-0"
@@ -387,7 +389,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Сонсох чадвар заавал'
                         }
                      ]}
                      className="mb-0"
@@ -407,7 +409,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Рефлексүүд заавал'
                         }
                      ]}
                      className="mb-0"
@@ -427,7 +429,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Бусад заавал'
                         }
                      ]}
                      className="mb-0"
@@ -440,7 +442,7 @@ export default function GeneralInspection() {
                      rules={[
                         {
                            required: true,
-                           message: 'Заавал бөглөнө 611 маяг'
+                           message: 'Cэтгэцийн байдал заавал'
                         }
                      ]}
                      className="mb-0"
@@ -455,9 +457,16 @@ export default function GeneralInspection() {
                type="primary"
                htmlType="submit"
                onClick={() => {
-                  form.validateFields().then((values) => {
-                     editMode ? updateGeneralInspection(values) : saveGeneralInspection(values);
-                  });
+                  form
+                     .validateFields()
+                     .then((values) => {
+                        editMode ? updateGeneralInspection(values) : saveGeneralInspection(values);
+                     })
+                     .catch((error) => {
+                        error.errorFields?.map((errorField) => {
+                           openNofi('error', 'Алдаа', `${errorField.errors[0]}`);
+                        });
+                     });
                }}
             >
                Ерөнхий үзлэг хадгалах

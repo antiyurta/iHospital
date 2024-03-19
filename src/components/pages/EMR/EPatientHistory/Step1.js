@@ -114,7 +114,6 @@ export default function Step1() {
                      className="mb-0"
                      label="Товлолын дагуу вакцинууддаа хамрагдсан эсэх"
                      name={['birth', 'isVaccination']}
-                     rules={[{ required: false, message: 'Заавал сонгоно уу' }]}
                   >
                      <Radio.Group className="flex flex-col gap-1">
                         <Radio value={true}>Тийм</Radio>
@@ -131,12 +130,7 @@ export default function Step1() {
             <div className="document-form">
                <div className="form-left" />
                <div className="form-inputs">
-                  <Form.Item
-                     label=""
-                     name={['birth', 'painChildhood']}
-                     rules={[{ required: false, message: '' }]}
-                     className="mb-0"
-                  >
+                  <Form.Item label="" name={['birth', 'painChildhood']} className="mb-0">
                      <TextArea rows={2} style={{ padding: 2 }} />
                   </Form.Item>
                </div>
@@ -153,7 +147,7 @@ export default function Step1() {
                      className="mb-0"
                      label="Биеийн өндөр (см)"
                      name={['birth', 'height']}
-                     rules={[{ required: true, message: 'Заавал' }]}
+                     rules={[{ required: true, message: 'Биеийн өндөр (см) заавал' }]}
                   >
                      <InputNumber />
                   </Form.Item>
@@ -166,7 +160,7 @@ export default function Step1() {
                      className="mb-0"
                      label="Биеийн жин (кг)"
                      name={['birth', 'weight']}
-                     rules={[{ required: true, message: 'Заавал' }]}
+                     rules={[{ required: true, message: 'Биеийн жин (кг) заавал' }]}
                   >
                      <InputNumber />
                   </Form.Item>
@@ -179,7 +173,7 @@ export default function Step1() {
                      className="mb-0"
                      label="Систол даралт"
                      name={['birth', 'systol']}
-                     rules={[{ required: true, message: 'Заавал' }]}
+                     rules={[{ required: true, message: 'Систол даралт заавал' }]}
                   >
                      <InputNumber />
                   </Form.Item>
@@ -192,7 +186,7 @@ export default function Step1() {
                      className="mb-0"
                      label="Диастол даралт"
                      name={['birth', 'distol']}
-                     rules={[{ required: true, message: 'Заавал' }]}
+                     rules={[{ required: true, message: 'Диастол даралт заавал' }]}
                   >
                      <InputNumber />
                   </Form.Item>

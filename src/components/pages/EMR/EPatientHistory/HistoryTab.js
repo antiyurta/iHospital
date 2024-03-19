@@ -108,9 +108,16 @@ export default function HistoryTab() {
                   type="primary"
                   htmlType="submit"
                   onClick={() => {
-                     historyForm.validateFields().then((values) => {
-                        editMode ? updateHistory(values) : saveHistory(values);
-                     });
+                     historyForm
+                        .validateFields()
+                        .then((values) => {
+                           editMode ? updateHistory(values) : saveHistory(values);
+                        })
+                        .catch((error) => {
+                           error.errorFields?.map((errorField) => {
+                              openNofi('error', 'Алдаа', `${errorField.errors[0]}`);
+                           });
+                        });
                   }}
                >
                   Амьдралын түүх xадгалах

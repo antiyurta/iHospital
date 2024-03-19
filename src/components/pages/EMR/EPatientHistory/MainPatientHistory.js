@@ -41,7 +41,7 @@ function MainPatientHistory({ handleClick }) {
       return <HistoryTab />;
    }, []);
    const Tab2Content = useCallback(() => {
-      return <GeneralInspection patientId={patientId} inspection={inspection} />;
+      return <GeneralInspection />;
    }, []);
    const DynamicTabContent = useCallback((props) => {
       return (

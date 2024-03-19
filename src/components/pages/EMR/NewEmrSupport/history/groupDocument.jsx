@@ -28,9 +28,9 @@ const RenderDate = ({ date }) => {
    }
    return <p className="text-[#4E5969] text-sm font-medium">{`Яаралтай - Яаралтай`}</p>;
 };
-
 const DocumentIn = (props) => {
    const { setDocumentView, setIsReloadDocumentHistory } = useContext(EmrContext);
+   const [isOpenModal, setIsOpenModal] = useState(false);
    const checkStatus = (id) => {
       // if (percent > 10) {
       return <img src={checkIcon} alt="icon" />;
@@ -39,6 +39,13 @@ const DocumentIn = (props) => {
       // }
    };
    const [expanded, setExpanded] = useState(false);
+
+   const ReturnNameByColor = ({ document }) => {
+      if (document.children) {
+         return <p className="text-sm font-medium text-[#EC7A09]">{ReturnByIdToName(props.document.documentId)}</p>;
+      }
+      return <p className="text-sm font-medium text-[#22A06B]">{ReturnByIdToName(props.document.documentId)}</p>;
+   };
 
    const changeSaveStatus = (_id) => {
       Modal.confirm({
@@ -54,14 +61,6 @@ const DocumentIn = (props) => {
          }
       });
    };
-
-   const ReturnNameByColor = ({ document }) => {
-      if (document.children) {
-         return <p className="text-sm font-medium text-[#EC7A09]">{ReturnByIdToName(props.document.documentId)}</p>;
-      }
-      return <p className="text-sm font-medium text-[#22A06B]">{ReturnByIdToName(props.document.documentId)}</p>;
-   };
-
    return (
       <div className="flex flex-col gap-1 hover:cursor-pointer">
          <div className="flex flex-row justify-between gap-3 items-center" onClick={() => setExpanded(!expanded)}>
@@ -75,7 +74,11 @@ const DocumentIn = (props) => {
          {expanded ? (
             <div className="flex flex-col gap-1 px-6">
                <p>{`Огноо: ${dayjs(props.document.createdAt)?.format('YYYY/MM/DD')}`}</p>
-               <p>{`Цаг: ${dayjs(props.document.createdAt)?.format('HH:mm:ss')}`}</p>
+               {!props.document.children ? (
+                  <p>{`Цаг: ${dayjs(props.document.createdAt)?.format('HH:mm:ss')}`}</p>
+               ) : (
+                  <p>Цаг:</p>
+               )}
                <p>{`Давтамж: ${props.document.isExpand ? props.document.children.length : 1}`}</p>
                <div className="flex flex-row gap-1">
                   <button
@@ -89,7 +92,12 @@ const DocumentIn = (props) => {
                   <button
                      className="flex bg-white rounded-lg items-center justify-center px-3 py-[6px]"
                      onClick={() => {
-                        changeSaveStatus(props.document?._id);
+                        if (props.document?.children?.length > 0) {
+                           console.log('sda', props);
+                           props.isOpen(props.document.children);
+                        } else {
+                           changeSaveStatus(props.document?._id);
+                        }
                      }}
                   >
                      Ноорогруу оруулах
@@ -106,6 +114,8 @@ const GroupDocument = (props) => {
    const { setDocumentView, setIsReloadDocumentHistory, setDocumentTrigger } = useContext(EmrContext);
    const [expanded, setExpanded] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [isOpenModalChild, setIsOpenModalChild] = useState(false);
+   const [childrenDocs, setChildrenDocs] = useState([]);
    const [history, setHistory] = useState({});
    const [patientId, setPatientId] = useState(null);
    const [isGlobalDb, setIsGlobalDb] = useState(null);
@@ -154,7 +164,13 @@ const GroupDocument = (props) => {
          setIsReloadDocumentHistory(true);
       });
    };
-
+   const changeSaveStatus = async (_id) => {
+      await DocumentsFormPatientService.patch(_id, {
+         saveType: 'Draft'
+      }).then(() => {
+         setIsReloadDocumentHistory(true);
+      });
+   };
    const groupDocument = () => {
       const documents = props.document.documents;
       const result = documents.reduce((r, a) => {
@@ -202,11 +218,43 @@ const GroupDocument = (props) => {
                   </div>
                   <Each
                      of={props.document?.documents}
-                     render={(document, index) => <DocumentIn key={index} document={document} index={index} />}
+                     render={(document, index) => (
+                        <DocumentIn
+                           key={index}
+                           document={document}
+                           index={index}
+                           isOpen={(docs) => {
+                              setChildrenDocs(docs);
+                              setIsOpenModalChild(true);
+                           }}
+                        />
+                     )}
                   />
                </div>
             </>
          ) : null}
+         <Modal
+            title="Ноорогруу оруулах"
+            open={isOpenModalChild}
+            onCancel={() => setIsOpenModalChild(false)}
+            footer={null}
+            width={300}
+         >
+            <div className="flex flex-col gap-3">
+               {childrenDocs?.map((doc, index) => (
+                  <Button
+                     key={index}
+                     type="primary"
+                     onClick={() => {
+                        changeSaveStatus(doc._id);
+                        setIsOpenModalChild(false);
+                     }}
+                  >
+                     {dayjs(doc.createdAt).format('YYYY/MM/DD HH:mm')}
+                  </Button>
+               ))}
+            </div>
+         </Modal>
          <Modal
             title={'Өвчтөн засах'}
             open={isOpenModal}

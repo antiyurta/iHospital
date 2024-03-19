@@ -36,42 +36,98 @@ function ProgressCheck() {
             <Collapse accordion>
                {history?.hasOwnProperty('birth') ? (
                   <Panel header="Төрөлт, өсөлт бойжилт" key="1">
-                     <Birth data={history?.birth} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <Birth data={history?.birth} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('healthRecord') ? (
                   <Panel header="Өвчний түүх" key="2">
-                     <HealthRecord data={history.healthRecord} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <HealthRecord data={history.healthRecord} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('lifeStyle') ? (
                   <Panel header="Амьдралын хэв маяг" key="3">
-                     <LifeStyle data={history['lifeStyle']} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <LifeStyle data={history['lifeStyle']} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('lifeCondition') ? (
                   <Panel header="Амьдралын нөхцөл" key="14">
-                     <LifeCondition data={history['lifeCondition']} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <LifeCondition data={history['lifeCondition']} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('allergy') ? (
                   <Panel header="Харшил" key="5">
-                     <Allergy data={history['allergy']} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <Allergy data={history['allergy']} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('usuallyMedicine') ? (
                   <Panel header="Эмийн хэрэглээ" key="6">
-                     <UsuallyMedicine data={history['usuallyMedicine']} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <UsuallyMedicine data={history['usuallyMedicine']} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('epidemicQuestion') ? (
                   <Panel header="Тархвар зүйн асуумж" key="7">
-                     <EpidemicQuestion data={history['epidemicQuestion']} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <EpidemicQuestion data={history['epidemicQuestion']} />
+                     </div>
                   </Panel>
                ) : null}
                {history?.hasOwnProperty('geneticQuestion') ? (
                   <Panel header="Удамшлын асуумж" key="8">
-                     <GeneticQuestion data={history['geneticQuestion']} />
+                     <div
+                        style={{
+                           height: 200,
+                           overflow: 'auto'
+                        }}
+                     >
+                        <GeneticQuestion data={history['geneticQuestion']} />
+                     </div>
                   </Panel>
                ) : null}
             </Collapse>

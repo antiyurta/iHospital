@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Spin, Table } from 'antd';
+import { Button, Form, Spin, Table } from 'antd';
 // import Diagnose from '../../service/Diagnose';
 import jwtInterceopter from '../../../jwtInterceopter';
 import { inspectionTOJSON, openNofi } from '../../../comman';
@@ -11,7 +11,6 @@ import apiAppointmentService from '../../../../services/appointment/api-appointm
 import ServiceRequestApi from '../../../../services/serviceRequest';
 import NewDiagnose from '../../service/NewDiagnose';
 
-const { TextArea } = Input;
 function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsServiceId }) {
    const [form] = Form.useForm();
    const [editMode, setEditMode] = useState(false);

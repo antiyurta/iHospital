@@ -1,13 +1,21 @@
 import React from 'react';
 
 export default function HealthRecord(props) {
-   console.log(props);
+   const contagiousName = (data) => {
+      if (data === 'MEASLES') return 'Улаан бурхан';
+      else if (data === 'VARICELLA') return 'Салхин цэцэг';
+      else if (data === 'AVIRUS') return 'Вирус хепатит A';
+      else if (data === 'BVIRUS') return 'Вирус хепатит B';
+      else if (data === 'CVIRUS') return 'Вирус хепатит C';
+      else if (data === 'TUBERCULOSIS') return 'Сүрьеэ';
+      return 'Бусад';
+   };
    return (
       <div>
          {props.data?.hasOwnProperty('contagious') ? (
             <div className="flex">
                <p className="font-semibold mr-2">Халдварт өвчин: </p>
-               <p className="">{props.data['contagious']}</p>
+               <p className="">{props.data['contagious']?.map((item) => contagiousName(item))?.join(',')}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('chronic') ? (
@@ -16,10 +24,10 @@ export default function HealthRecord(props) {
                <p className="">{props.data['chronic']}</p>
             </div>
          ) : null}
-         {props.data?.hasOwnProperty('peril') ? (
+         {props.data?.hasOwnProperty('accidents') ? (
             <div className="flex">
                <p className="font-semibold mr-2">Осол гэмтэл: </p>
-               <p className="">{props.data['peril']}</p>
+               <p className="">{props.data['accidents']}</p>
             </div>
          ) : null}
          {props.data?.hasOwnProperty('heartDisease') ? (
