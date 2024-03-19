@@ -39,10 +39,9 @@ function Package({ registerNumber, handleclick }) {
          });
    };
    const add = (packge) => {
-      console.log(packge);
       if (packge && registerNumber) {
-         const age = getAge(registerNumber);
-         console.log(age);
+         const ageString = getAge(registerNumber);
+         const age = parseInt(ageString);
          if (packge.minAge <= age && packge.maxAge >= age) {
             const state = selectedPackages.includes(packge);
             if (state) {
