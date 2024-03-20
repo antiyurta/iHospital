@@ -177,7 +177,7 @@ function MainPatientHistory({ handleClick }) {
          .then((response) => {
             setItems([
                {
-                  key: response.data.response[0]?.id,
+                  key: `item-${response.data.response[0]?.id}`,
                   label: response.data.response[0]?.name,
                   children: <XrayDocumentShow data={response.data.response[0]} />
                }

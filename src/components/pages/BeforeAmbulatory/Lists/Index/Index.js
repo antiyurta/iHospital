@@ -393,6 +393,8 @@ function Index({ type, isDoctor }) {
                );
             } else if (status === 3) {
                return <div className="text-start">Цаг цуцалсан</div>;
+            } else if (status === 4) {
+               return <div className="text-start">Үзлэг дууссан</div>;
             }
          }
       },

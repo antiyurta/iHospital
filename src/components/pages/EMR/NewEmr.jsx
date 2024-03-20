@@ -10,6 +10,7 @@ import MainPatientHistory from './EPatientHistory/MainPatientHistory';
 import { delEmrData } from '../../../features/emrReducer';
 import PmsPatientServices from '../../../services/pms/patient.api';
 import ServiceRequestService from '../../../services/serviceRequest';
+import PaymentService from '../../../services/payment/payment';
 import DoctorNotes from './DoctorNotes';
 import EmrTimer from './EmrTimer';
 import OneWindow from './OneWindow';
@@ -19,6 +20,7 @@ import MainInPatient from './InPatient/MainInPatient';
 import NewEmrSupport from './NewEmrSupport';
 import { EmrContextProvider } from '../../../features/EmrContext';
 import Barcode from 'react-barcode';
+import Schedule from '../OCS/Schedule';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -42,7 +44,9 @@ class NewEmr extends React.Component {
          usageType: this.props.IncomeEMRData.usageType,
          isExpandHistory: true,
          isExpandInspection: true,
-         isExpandOneWindow: true
+         isExpandOneWindow: true,
+         isOpen: false,
+         payments: []
       };
    }
 
@@ -52,19 +56,17 @@ class NewEmr extends React.Component {
       });
    }
    handleTypeChange = ({ target: { value } }) => {
-      if (this.props.IncomeEMRData.endDate) {
-         Modal.error({
-            content: 'Дууссан үзлэгт OTS ашиглах боломжгүй',
-            okText: 'За'
-         });
-      } else {
-         this.setState({
-            isOpenWarningModal: true
-         });
-         this.setState({
-            temporarilyType: value
-         });
-      }
+      // if (this.props.IncomeEMRData.endDate) {
+      //    Modal.error({
+      //       content: 'Дууссан үзлэгт OTS ашиглах боломжгүй',
+      //       okText: 'За'
+      //    });
+      // } else {
+      this.setState({
+         isOpenWarningModal: true,
+         temporarilyType: value
+      });
+      // }
    };
    saveOrder = async (value) => {
       if (value?.length > 0 || value) {
@@ -82,9 +84,19 @@ class NewEmr extends React.Component {
          data['requestDate'] = new Date();
          data['usageType'] = this.props.IncomeEMRData.usageType;
          data['services'] = value;
-         await ServiceRequestService.post(data).then(({ data: { success } }) => {
-            if (success) {
+         await ServiceRequestService.post(data).then(async (response) => {
+            if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');
+               await PaymentService.get({
+                  params: {
+                     patientId: this.state.selectedPatient.id
+                  }
+               }).then((res) => {
+                  this.setState({
+                     payments: res.data?.response?.data,
+                     isOpen: true
+                  });
+               });
             }
          });
       } else {
@@ -95,6 +107,7 @@ class NewEmr extends React.Component {
       await this.getByIdPatient();
    }
    async componentWillUnmount() {
+      this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -274,6 +287,13 @@ class NewEmr extends React.Component {
                   )}
                </div>
             </div>
+            <Schedule
+               isOpen={this.state.isOpen}
+               isOCS={true}
+               incomeData={this.state.payments}
+               selectedPatient={this.state.selectedPatient}
+               isClose={() => this.setState({ isOpen: false })}
+            />
             <Modal
                title={<br />}
                open={this.state.isOpenWarningModal}

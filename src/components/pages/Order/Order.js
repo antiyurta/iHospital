@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import InternalOrder from './NewOrder/InternalOrder';
 import PartnerOrder from './NewOrder/PartnerOrder';
 //
 function Order({ isPackage, selectedPatient, usageType, categories, save }) {
    const [activeKey, setActiveKey] = useState(0);
-   const IncomeAppointmentId = useLocation()?.state?.appointmentId;
    const components = [
       <InternalOrder
          isPackage={isPackage}
          usageType={usageType}
          selectedPatient={selectedPatient}
          categories={categories}
-         IncomeAppointmentId={IncomeAppointmentId}
          save={save}
       />,
       <PartnerOrder />

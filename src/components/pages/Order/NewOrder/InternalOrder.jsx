@@ -17,9 +17,12 @@ import OrderTable from '../OrderTable/OrderTable';
 import { numberToCurrency, openNofi } from '../../../comman';
 import ServiceService from '../../../../services/service/service';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { selectCurrentEmrData } from '../../../../features/emrReducer';
 
 const InternalOrder = (props) => {
-   const { isPackage, usageType, selectedPatient, categories, IncomeAppointmentId, save } = props;
+   const { isPackage, usageType, selectedPatient, categories, save } = props;
+   const IncomeEMRData = useSelector(selectCurrentEmrData);
    const [total, setTotal] = useState(0);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();
@@ -200,7 +203,7 @@ const InternalOrder = (props) => {
                <Surgery
                   usageType={usageType}
                   selectedPatient={selectedPatient}
-                  appointmentId={IncomeAppointmentId}
+                  appointmentId={IncomeEMRData?.appointmentId}
                   handleclick={handleclick}
                />
             )}
@@ -210,7 +213,9 @@ const InternalOrder = (props) => {
                <InpatientRequest selectedPatient={selectedPatient} handleClick={inpatientRequestClick} />
             )}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
-            {showReinspection && <Reinspection selectedPatient={selectedPatient} appointmentId={IncomeAppointmentId} />}
+            {showReinspection && (
+               <Reinspection selectedPatient={selectedPatient} appointmentId={IncomeEMRData?.appointmentId} />
+            )}
          </div>
          <div className="flex flex-wrap">
             <div className="w-full">

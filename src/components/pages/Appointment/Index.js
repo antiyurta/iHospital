@@ -18,9 +18,12 @@ import ScheduleService from '../../../services/schedule';
 import HealtInsuranceService from '../../../services/healt-insurance/healtInsurance';
 import AppointmentService from '../../../services/appointment/api-appointment-service';
 import serviceRequest from '../../../services/serviceRequest';
+import { selectCurrentEmrData } from '../../../features/emrReducer';
 
 function Index(props) {
    const { selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud } = props;
+   const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
+   const incomeEmrData = useSelector(selectCurrentEmrData);
    const isInsurance = useSelector(selectCurrentInsurance);
    const today = new Date();
    const [selectedDate, setSelectedDate] = useState('');
@@ -140,7 +143,33 @@ function Index(props) {
       }
    };
    // engin tsag zahialga
-   const createAppointment = async () => {
+   const createAppointment = async ({ inspectionType }) => {
+      setIsOpenModalInspectionType(false);
+      await AppointmentService.postAppointment({
+         ...selectedInfo,
+         inspectionType: inspectionType, // uzlegiin torol anhan dawtan
+         isPayment: incomeEmrData.usageType === 'IN' ? true : null,
+         usageType: incomeEmrData.usageType,
+         doctorId: selectedDoctor.id,
+         patientId: selectedPatient.id,
+         type: 3, // 1 bol yaralta 2 bol shuud 3 urdcilsan zahialga 4 bol urdcilsan segiileh
+         status: 1, // 1 bol tsag zahilsn 2 bol odor solison 3 tsutsalsn 4 uzleh higed duussan
+         isInsurance: stateInsurance,
+         appointmentId: prevAppointmentId
+      }).then(async (response) => {
+         if (response.status === 201) {
+            setAppointmentModal(false);
+            await onFinish({
+               date: selectedDate,
+               structureId: selectedDep.id,
+               doctorId: selectedDoctor.id,
+               type: type
+            });
+            setGetIsSlot({ state: true, slotType: 0 });
+         }
+      });
+   };
+   const appointmentRequest = async () => {
       setIsConfirmLoading(true);
       setGetIsSlot({ state: false, slotType: 0 });
       if (type === 2 || type === 3) {
@@ -159,26 +188,13 @@ function Index(props) {
                }
             });
       } else {
-         await AppointmentService.postAppointment({
-            ...selectedInfo,
-            doctorId: selectedDoctor.id,
-            patientId: selectedPatient.id,
-            type: 3,
-            status: 1,
-            isInsurance: stateInsurance,
-            appointmentId: prevAppointmentId
-         }).then(async (response) => {
-            if (response.status === 201) {
-               setAppointmentModal(false);
-               await onFinish({
-                  date: selectedDate,
-                  structureId: selectedDep.id,
-                  doctorId: selectedDoctor.id,
-                  type: type
-               });
-               setGetIsSlot({ state: true, slotType: 0 });
-            }
-         });
+         if (incomeEmrData.usageType === 'IN') {
+            setIsOpenModalInspectionType(true);
+         } else {
+            createAppointment({
+               inspectionType: null
+            });
+         }
       }
       setIsConfirmLoading(false);
    };
@@ -304,13 +320,48 @@ function Index(props) {
             />
          </div>
          <Modal
+            title="Үзлэгийн төрөл сонгох"
+            open={isOpenModalInspectionType}
+            onCancel={() => setIsOpenModalInspectionType(false)}
+            footer={null}
+            width={300}
+         >
+            <div className="flex flex-col gap-3">
+               <p className="text-black font-bold text-base">
+                  Үзлэгийн төрлөөс хамаарч үзлэгийн төлбөр өөр байх тул та сонголтоо зөв хийнэ үү !!!
+               </p>
+               <div className="flex flex-row gap-3 items-center">
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        createAppointment({
+                           inspectionType: 1
+                        });
+                     }}
+                  >
+                     Анхан үзлэг
+                  </Button>
+                  <Button
+                     type="primary"
+                     onClick={() => {
+                        createAppointment({
+                           inspectionType: 2
+                        });
+                     }}
+                  >
+                     Давтан үзлэг
+                  </Button>
+               </div>
+            </div>
+         </Modal>
+         <Modal
             title="Цаг захиалах"
             open={appointmentModal}
             okButtonProps={{
                disabled: isSent
             }}
             onOk={() => {
-               isUrgent ? urgentRequest() : createAppointment();
+               isUrgent ? urgentRequest() : appointmentRequest();
             }}
             onCancel={() => {
                setAppointmentModal(false);

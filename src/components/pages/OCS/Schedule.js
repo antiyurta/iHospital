@@ -189,8 +189,8 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    };
    //
    useEffect(() => {
-      if (incomeData.data) {
-         getFilterInvoices(incomeData.data);
+      if (incomeData) {
+         getFilterInvoices(incomeData);
       }
       getDiscounts();
       getPaymentType();

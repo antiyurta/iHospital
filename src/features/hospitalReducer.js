@@ -13,7 +13,7 @@ export const hospital = createSlice({
       registerNumber: '',
       isXyp: false,
       isActive: false,
-      isInsurance: false,
+      isInsurance: false
    },
    reducers: {
       set: (state, action) => {
@@ -39,7 +39,7 @@ export const hospital = createSlice({
          state.isXyp = false;
          state.isActive = false;
          state.isInsurance = false;
-      },
+      }
    }
 });
 

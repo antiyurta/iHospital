@@ -44,15 +44,11 @@ const EmrTimer = (props) => {
          values['patientFinger'] = 'test2';
          values['appointmentId'] = appointmentId;
       }
-      var data = {
-         appointmentId: appointmentId
-      };
       if (isInsurance && hicsServiceId) {
          await insuranceServices
             .appointmentSeal(values)
             .post('insurance/appointment-seal', values)
             .then((response) => {
-               console.log(response);
                if (response.data.code === 400) {
                   openNofi('error', 'Алдаа', response.data.description);
                } else {
@@ -69,7 +65,6 @@ const EmrTimer = (props) => {
                   const message = error.response.data.message.replaceAll('HttpException:', '');
                   openNofi('error', 'Алдаа', message);
                }
-               console.log(error);
             });
       } else {
          var newResponse;

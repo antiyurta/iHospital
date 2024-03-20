@@ -57,7 +57,7 @@ function MainInpatientHistory() {
    };
 
    const middleware = async (document) => {
-      const isDrafted = draftedDocuments?.some((dD) => dD.documentId === document.value);
+      const isDrafted = draftedDocuments?.some((dD) => dD.documentId === document.value) || false;
       if (isDrafted) {
          Modal.info({
             content: (

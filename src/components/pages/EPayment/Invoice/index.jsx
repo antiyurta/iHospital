@@ -90,9 +90,9 @@ function Invoice() {
             patientId: id
          }
       })
-         .then(({ data }) => {
+         .then(({ data: { response } }) => {
             getPatient(id);
-            setInvoices(data.response);
+            setInvoices(response.data);
             setIsOpen(true);
          })
          .catch((error) => {

@@ -8,10 +8,13 @@ export const patientSlice = createSlice({
    reducers: {
       setPatient: (state, action) => {
          state.patient = action.payload;
+      },
+      removePatient: (state) => {
+         state.patient = null;
       }
    }
 });
-export const { setPatient } = patientSlice.actions;
+export const { setPatient, removePatient } = patientSlice.actions;
 export default patientSlice.reducer;
 
 export const selectPatient = (state) => state.patientReducer.patient;

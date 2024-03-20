@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import FullScreenLoader from '../../FullScreenLoader';
 import AuthContext from '../../../features/AuthContext';
 import { Button, Layout } from 'antd';
+import { removePatient } from '../../../features/patientReducer';
+import { remove as removeHospital } from '../../../features/hospitalReducer';
 
 const { Sider } = Layout;
 
@@ -22,8 +24,10 @@ const MainLayout = () => {
    const firstName = useSelector(selectCurrentFirstName);
    const lastName = useSelector(selectCurrentLastName);
    const handelLogOut = async () => {
+      dispatch(removePatient());
       dispatch(Delete());
       dispatch(logout()); // tur bicew jwtBugdin ajilah ued ustagna
+      dispatch(removeHospital());
       await logoutt();
       navigate('/');
    };

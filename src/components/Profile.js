@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentToken, selectCurrentInsurance, set as setAuth, Delete, logout } from '../features/authReducer';
 import bg from '../assets/images/background/bg-profile.jpg';
@@ -10,10 +10,10 @@ import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
 import authenticationApi from '../services/authentication/authentication.api';
-import { set as setHospital } from '../features/hospitalReducer';
-import { useContext } from 'react';
+import { set as setHospital, remove as removeHospital } from '../features/hospitalReducer';
 import AuthContext from '../features/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { removePatient } from '../features/patientReducer';
 
 function Profile() {
    const { logoutt } = useContext(AuthContext);
@@ -36,8 +36,10 @@ function Profile() {
    };
 
    const handelLogOut = async () => {
+      dispatch(removePatient());
       dispatch(Delete());
       dispatch(logout()); // tur bicew jwtBugdin ajilah ued ustagna
+      dispatch(removeHospital());
       await logoutt();
       navigate('/');
    };
