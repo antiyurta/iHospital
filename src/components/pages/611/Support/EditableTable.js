@@ -4,7 +4,7 @@ import { Button, Checkbox, Collapse, Form, Input, Modal, Popconfirm, Table } fro
 
 import EditableFormItem from './EditableFormItem';
 import { ReturnDetails } from '../Document/Index';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 
 import DocumentFormServices from '../../../../services/organization/documentForm';
 import DocumentOptionServices from '../../../../services/organization/documentOption';

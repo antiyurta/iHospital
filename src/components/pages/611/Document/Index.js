@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined, EyeOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 import { NewInput } from '../../../Input/Input';
 import { NewColumn, NewTable } from '../../../Table/Table';
 // AM start
@@ -101,6 +101,7 @@ import CT1ClinalDiagnose from './CT_1_ClinicalDiagnose';
 import CT1BaseOfClinicalDiagnose from './CT_1_BaseOfClinicalDiagnose';
 import CT1Inspection from './CT_1_Inspection';
 import CT1End from './CT_1_End';
+import CT32A from './CT32A';
 // EIM start
 import EIM4_2 from './../EIM/EIM4_2';
 import EIM5_2 from './../EIM/EIM5_2';
@@ -298,6 +299,10 @@ export function ReturnById({ type, id, appointmentId, data }) {
       return <CT1Hool type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 109) {
       return <CT1Zurh type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 110) {
+      return <NotFound />;
+   } else if (id === 111) {
+      return <CT32A type={type} data={data} appointmentId={appointmentId} />;
    }
 }
 

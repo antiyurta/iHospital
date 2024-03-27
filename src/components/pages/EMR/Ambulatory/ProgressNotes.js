@@ -15,7 +15,7 @@ import ReactToPrint from 'react-to-print';
 
 //document
 import * as InspectionDocumentIndex from './Document/Index';
-import { capitalizeFirstLetter, formatNameForDoc } from '../../../comman';
+import { capitalizeFirstLetter, formatNameForDoc } from '../../../common';
 const InspectionDocumentReturnById = InspectionDocumentIndex.ReturnById;
 
 export default function ProgressNotes() {

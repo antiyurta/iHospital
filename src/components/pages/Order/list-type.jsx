@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import careTypeApi from '../../../services/reference/care-type.api';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { useMemo } from 'react';
+//api
+import careTypeApi from '@ApiServices/reference/care-type.api';
 
 export const ListCareType = ({ type, getTypeById }) => {
-   console.log(type);
    const [searchValue, setSearchValue] = useState('');
    const [activeKey, setActiveKey] = useState();
    const [types, setTypes] = useState([]);

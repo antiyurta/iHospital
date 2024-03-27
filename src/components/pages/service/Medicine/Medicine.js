@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 // import { Spinner, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Delete, Get, Patch, Post } from '../../../comman';
+import { Delete, Get, Patch, Post } from '../../../common';
 import DURCriteria from './DURCriteria';
 import GeneralDrugInformation from './GeneralDrugInformation';
 import PurchaseInformation from './PurchaseInformation';

@@ -1,31 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, DatePicker, Form, Input, Modal, Progress, Result, Select } from 'antd';
-import { ReturnById } from '../../611/Document/Index';
-import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../comman';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
-//
-import jwtInterceopter from '../../../jwtInterceopter';
-import DocumentFormServices from '../../../../services/organization/documentForm';
-import DocumentOptionServices from '../../../../services/organization/documentOption';
-import OrganizationStructureService from '../../../../services/organization/structure';
-import OrganizationEmployeeService from '../../../../services/organization/employee';
-import { colorTotal, totalCalculator } from '../../../injection';
-import NewFormRender from './NewFormRender';
-//
 import { FormType } from './enum-utils';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
-import apiAppointmentService from '../../../../services/appointment/api-appointment-service';
-import { useLocation } from 'react-router-dom';
+//comp
+import NewFormRender from './NewFormRender';
+import { ReturnById } from '@Pages/611/Document/Index';
+//common
+import { formatNameForDoc, isObjectEmpty, openNofi } from '@Comman/common';
+//redux
+import { selectCurrentEmrData } from '@Features/emrReducer';
+//api
+import RegularApi from '@ApiServices/regular.api';
+import DocumentFormApi from '@ApiServices/organization/documentForm';
+import DocumentOptionApi from '@ApiServices/organization/documentOption';
+import OrganizationEmployeeApi from '@ApiServices/organization/employee';
+import OrganizationStructureApi from '@ApiServices/organization/structure';
 //
 const { RangePicker } = DatePicker;
 
 function Index(props) {
-   const {
-      state: { slotId }
-   } = useLocation();
-   // slotId ni appointment ruu patchlah ued heregtei
    const {
       propsUsageType,
       isEdit,
@@ -38,8 +33,7 @@ function Index(props) {
       handleBackButton,
       extraData
    } = props;
-   const { appointmentType, usageType, patientId, appointmentId, inpatientRequestId } =
-      useSelector(selectCurrentEmrData);
+   const { usageType, patientId, appointmentId, inpatientRequestId } = useSelector(selectCurrentEmrData);
    const printRef = useRef();
    const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
@@ -53,7 +47,7 @@ function Index(props) {
    const [selectedCabinet, setSelectedCabinet] = useState('');
    const [selectedEmp, setSelectedEmp] = useState('');
    const getCabinets = async () => {
-      await OrganizationStructureService.get({
+      await OrganizationStructureApi.get({
          params: {
             type: 2
          }
@@ -62,7 +56,7 @@ function Index(props) {
       });
    };
    const getEmployees = async (e) => {
-      await OrganizationEmployeeService.getEmployee({
+      await OrganizationEmployeeApi.getEmployee({
          params: {
             depId: e
          }
@@ -89,10 +83,9 @@ function Index(props) {
             patientId: patientId
          };
       }
-      await jwtInterceopter
-         .get(documentForm.url, {
-            params: params
-         })
+      await RegularApi.get(documentForm.url, {
+         params: params
+      })
          .then((response) => {
             const data = response.data.response;
             setData(data);
@@ -102,7 +95,7 @@ function Index(props) {
          });
    };
    const getDocumentForm = async () => {
-      await DocumentFormServices.getById(document.formId)
+      await DocumentFormApi.getById(document.formId)
          .then(({ data: { response } }) => {
             setDocumentForm(response);
          })
@@ -111,7 +104,7 @@ function Index(props) {
          });
    };
    const getDocumentOption = async () => {
-      await DocumentOptionServices.getById(document.optionId)
+      await DocumentOptionApi.getById(document.optionId)
          .then(({ data: { response } }) => {
             setDocumentOptions(response.formOptionIds);
          })
@@ -122,10 +115,15 @@ function Index(props) {
    const onFinish = async (values, saveType) => {
       setIsLoading(true);
       if (isEdit) {
-         await jwtInterceopter
-            .patch(`${documentForm.url}/${editId}`, {
+         var patchData = {};
+         if (documentValue === 110) {
+            patchData = values;
+         } else {
+            patchData = {
                data: { ...values }
-            })
+            };
+         }
+         await RegularApi.patch(`${documentForm.url}/${editId}`, patchData)
             .then((response) => {
                if (response.data.response.success) {
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
@@ -136,32 +134,14 @@ function Index(props) {
                onOk(false);
             });
       } else {
-         if (documentValue === 87) {
-            const { total, message } = totalCalculator(values);
-            const color = colorTotal(values);
-            if (message) {
-               openNofi('error', 'Анхааруулга', message);
-            }
-            if (appointmentType === 0) {
-               apiAppointmentService.patchAppointment(appointmentId || inpatientRequestId, {
-                  slotId: slotId,
-                  assesment: {
-                     color: color,
-                     total: total
-                  }
-               });
-            } else if (appointmentType === 1) {
-               apiAppointmentService.patchPreOrder(appointmentId || inpatientRequestId, {
-                  slotId: slotId,
-                  assesment: {
-                     color: color,
-                     total: total
-                  }
-               });
-            }
-         }
-         await jwtInterceopter
-            .post(documentForm.url, {
+         var sendData = {};
+         if (documentValue === 110) {
+            sendData = {
+               appointmentId: appointmentId || inpatientRequestId,
+               ...values
+            };
+         } else {
+            sendData = {
                position: documentForm.position,
                formId: document.formId,
                formType: document.formType,
@@ -173,10 +153,17 @@ function Index(props) {
                patientId: patientId,
                data: { ...extraData, ...values },
                type: 'FORM'
-            })
+            };
+         }
+         await RegularApi.post(documentForm.url, sendData)
             .then((res) => {
                if (res.data.response.success) {
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+               }
+            })
+            .catch((error) => {
+               if (error.response?.status === 409) {
+                  openNofi('warning', 'Алдаа', 'Үнэлгээ бөгдөгдсөн байна');
                }
             })
             .finally(() => {
@@ -196,10 +183,9 @@ function Index(props) {
          startDate: moment(start).format('YYYY-MM-DD HH:mm'),
          endDate: moment(end).format('YYYY-MM-DD HH:mm')
       };
-      await jwtInterceopter
-         .get(documentForm.url, {
-            params: params
-         })
+      await RegularApi.get(documentForm.url, {
+         params: params
+      })
          .then((response) => {
             const data = response.data.response;
             setData(data);
@@ -224,11 +210,15 @@ function Index(props) {
    }, [documentValue]);
    useEffect(() => {
       if (isEdit) {
-         form.setFieldsValue(document.data);
-         const keyWords = Object.keys(document.data).filter(
-            (key) => document.data[key] !== '' && document.data[key]?.length > 0
-         );
-         setAnsweredKeyWords(keyWords);
+         if (documentValue === 110) {
+            form.setFieldsValue(document);
+         } else {
+            form.setFieldsValue(document.data);
+            const keyWords = Object.keys(document.data).filter(
+               (key) => document.data[key] !== '' && document.data[key]?.length > 0
+            );
+            setAnsweredKeyWords(keyWords);
+         }
       }
    }, [isEdit]);
    useEffect(() => {

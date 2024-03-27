@@ -19,7 +19,7 @@ const SetApproval = (props) => {
       });
    }, []);
    const getHicsServices = async () => {
-      await healtInsurance.getHicsService().then(({ data}) => {
+      await healtInsurance.getHicsService().then(({ data }) => {
          if (data.code == 200) {
             setHicsServices(data.result);
          }

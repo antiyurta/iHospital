@@ -1,7 +1,7 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Empty, Modal, Table } from 'antd';
 import React, { useState } from 'react';
-import { numberToCurrency, openNofi } from '../../comman';
+import { numberToCurrency, openNofi } from '../../common';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';

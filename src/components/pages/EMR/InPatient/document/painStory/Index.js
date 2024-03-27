@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../../../features/authReducer';
-import { DefaultPatch, Get } from '../../../../../comman';
+import { DefaultPatch, Get } from '../../../../../common';
 import { PrinterFilled } from '@ant-design/icons';
 import Page1 from './Page1';
 import Page2 from './Page2';

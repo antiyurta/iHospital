@@ -17,7 +17,7 @@ import Rebuild from './Rebuild/Index';
 import { Button, Checkbox, Collapse, Form, Input } from 'antd';
 import Painstory from './painStory/Index';
 import React, { useEffect } from 'react';
-import { DefaultPatch, Get } from '../../../../comman';
+import { DefaultPatch, Get } from '../../../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
 import { useState } from 'react';

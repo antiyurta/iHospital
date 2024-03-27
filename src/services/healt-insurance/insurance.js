@@ -4,7 +4,9 @@ class ApiInsurance {
       return await jwtInterceopter.get('insurance/hics-service' + id);
    }
    async getInsuranceService(params) {
-      return await jwtInterceopter.get('insurance/hics-service-group', params);
+      return await jwtInterceopter.get('insurance/hics-service-group', {
+         params
+      });
    }
    /** 4.24 Оношилгоо, шинжилгээний кодын сан дуудах */
    async getAllHicsExams() {

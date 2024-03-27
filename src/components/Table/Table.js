@@ -1,6 +1,6 @@
 import React from 'react';
 import { ConfigProvider, Table } from 'antd';
-import { localMn } from '../comman';
+import { localMn } from '../common';
 
 const { Column, ColumnGroup } = Table;
 

@@ -5,7 +5,7 @@ import { Button, Form, Modal, Table, Input } from 'antd';
 import jwtInterceopter from '../../../../jwtInterceopter';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../../../comman';
+import { formatNameForDoc } from '../../../../common';
 import { ArrowRightOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import EmrContext from '../../../../../features/EmrContext';
 import DocumentViewer from '../../../EMR/DocumentViewer';

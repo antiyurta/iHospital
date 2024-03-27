@@ -2,7 +2,7 @@ import React from 'react';
 import { SnippetsOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
 import { useState } from 'react';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 
 import Customized from '../BeforeAmbulatory/Customized/Index';
 import { NewColumn, NewTable } from '../../Table/Table';

@@ -14,7 +14,7 @@ import EmrContext from '../../../../../features/EmrContext';
 import { ArrowRightOutlined, UserOutlined } from '@ant-design/icons';
 
 import PatientSupport from '../../../PMS/patientSupport';
-import { openNofi } from '../../../../comman';
+import { openNofi } from '../../../../common';
 //service
 import patientApi from '../../../../../services/pms/patient.api';
 import DocumentHistoryApi from '../../../../../services/organization/documentHistory';

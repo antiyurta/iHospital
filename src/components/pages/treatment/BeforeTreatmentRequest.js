@@ -12,7 +12,7 @@ import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, getAge, openNofi, Patch } from '../../comman';
+import { Get, getAge, openNofi, Patch } from '../../common';
 const { RangePicker } = DatePicker;
 function BeforeTreatmentRequest() {
    const today = new Date();

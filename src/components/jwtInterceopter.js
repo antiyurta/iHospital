@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { openNofi } from './comman';
+import { openNofi } from './common';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const DEV_URL = process.env.REACT_APP_DEV_URL;

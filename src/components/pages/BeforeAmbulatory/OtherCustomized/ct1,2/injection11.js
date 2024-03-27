@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../../../comman';
+import { formatNameForDoc } from '../../../../common';
 
 const Slash = () => (
    <span role="img" className="flex justify-center">

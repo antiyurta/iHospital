@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useMemo } from 'react';
-
-import maleSymbol from '../../../src/assets/images/male.svg';
-import femaleSymbol from '../../../src/assets/images/female.svg';
-import addressSymbol from '../../../src/assets/images/address.svg';
-import mailSymbol from '../../../src/assets/images/mail.svg';
-import phoneSymbol from '../../../src/assets/images/phone.svg';
-import mapSymbol from '../../../src/assets/images/map.svg';
-
-import manIcon from '../../assets/images/maleAvatar.svg';
-import womanIcon from '../../assets/images/womanAvatar.svg';
-import localFileApi from '../../services/file/local-file/local-file.api';
-import CountryServices from '../../services/reference/country';
-import { NewSearch, NewRadioGroup, NewRadio } from '../Input/Input';
-import { getAge, getGenderFullName } from '../comman';
-import { Spin } from 'antd';
+import { Input, Radio, Spin } from 'antd';
+//images
+import {
+   manIcon,
+   manSymbol,
+   womanIcon,
+   womanSymbol,
+   addressSymbol,
+   mailSymbol,
+   phoneSymbol,
+   mapSymbol
+} from '@Assets/index';
+// common
+import { getAge, getGenderInType } from '@Comman/common';
+//apiF
+import localFileApi from '@ApiServices/file/local-file/local-file.api';
+import CountryApi from '@ApiServices/reference/country';
+//extends
+const { Search } = Input;
 
 function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type }) {
    const [citizens, setCitizens] = useState([]);
@@ -61,7 +65,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
       return;
    };
    const getCitizens = async () => {
-      await CountryServices.getByPageFilter({
+      await CountryApi.getByPageFilter({
          params: {
             type: 1
          }
@@ -74,7 +78,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
          });
    };
    const getProvices = async () => {
-      await CountryServices.getByPageFilter({
+      await CountryApi.getByPageFilter({
          params: {
             type: 2
          }
@@ -87,7 +91,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
          });
    };
    const getTowns = async () => {
-      await CountryServices.getByPageFilter({
+      await CountryApi.getByPageFilter({
          params: {
             type: 3
          }
@@ -125,9 +129,9 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
 
    const genderSymbolIcon = useMemo(() => {
       if (patient.genderType === 'WOMAN') {
-         return maleSymbol;
+         return manSymbol;
       } else {
-         return femaleSymbol;
+         return womanSymbol;
       }
    }, [patient]);
 
@@ -150,7 +154,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
             <div className="info">
                {handlesearch ? (
                   <div className="w-full">
-                     <NewSearch placeholder="Регистр/Нэрээр хайх" onSearch={onSearch} enterButton="Хайх" />
+                     <Search placeholder="Регистр/Нэрээр хайх" onSearch={onSearch} enterButton="Хайх" />
                   </div>
                ) : null}
                <p className="names">{`Овог: ${patient?.lastName || ''} | Нэр: ${patient?.firstName || ''}`}</p>
@@ -163,7 +167,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         src={genderSymbolIcon}
                         alt="symbol"
                      />
-                     <p>{`${getGenderFullName(patient?.registerNumber || undefined)} | ${getAge(
+                     <p>{`${getGenderInType(patient?.genderType || undefined)} | ${getAge(
                         patient?.registerNumber || undefined
                      )}`}</p>
                   </div>
@@ -198,7 +202,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                   )}
                </div>
                {OCS ? (
-                  <NewRadioGroup
+                  <Radio.Group
                      className="flex"
                      size="small"
                      onChange={handleTypeChangePatient}
@@ -206,7 +210,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      optionType="button"
                      buttonStyle="solid"
                   >
-                     <NewRadio
+                     <Radio
                         style={{
                            fontSize: 14,
                            fontWeight: 700,
@@ -215,8 +219,8 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         value="OTS"
                      >
                         OTS
-                     </NewRadio>
-                     <NewRadio
+                     </Radio>
+                     <Radio
                         style={{
                            fontSize: 14,
                            fontWeight: 700,
@@ -225,8 +229,8 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         value="EMR"
                      >
                         EMR
-                     </NewRadio>
-                  </NewRadioGroup>
+                     </Radio>
+                  </Radio.Group>
                ) : null}
             </div>
          </div>

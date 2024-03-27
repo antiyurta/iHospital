@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get } from '../../comman';
+import { DefualtGet, Get } from '../../common';
 import UTable from '../../UTable';
 
 function Treatment() {

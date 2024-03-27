@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { getGender } from '../../../comman';
+import { getGender } from '../../../common';
 import { useSelector } from 'react-redux';
 import {
    selectCurrentFirstName,

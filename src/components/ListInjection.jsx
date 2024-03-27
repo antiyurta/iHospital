@@ -1,8 +1,8 @@
 import { Avatar } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { formatNameForDoc } from './comman';
-
-import localFileApi from '../services/file/local-file/local-file.api';
+import { formatNameForDoc } from './common';
+//api
+import localFileApi from '@ApiServices/file/local-file/local-file.api';
 
 export const ListPatientInfo = ({ patientData }) => {
    const [imgSrc, setImgSrc] = useState('');

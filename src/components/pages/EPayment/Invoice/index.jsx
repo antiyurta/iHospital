@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal, Pagination, Table, Result, ConfigProvider, Form, Select, Radio, InputNumber } from 'antd';
-import { localMn, openNofi } from '../../../comman';
-import PatientInformation from '../../PatientInformation';
-import Order from '../../Order/Order';
-import Schedule from '../../OCS/Schedule';
-import EbarimtPrint from '../EbarimtPrint';
 import dayjs from 'dayjs';
-
-//service uud
-import EBarimtService from '../../../../services/ebarimt/ebarimt';
-import ServiceRequest from '../../../../services/serviceRequest';
-import PatientApi from '../../../../services/pms/patient.api';
-import PaymentService from '../../../../services/payment/payment';
+//common
+import { localMn, openNofi } from '@Comman/common';
+//comp
+import Order from '@Pages/Order/Order';
+import EbarimtPrint from '../EbarimtPrint';
+import Schedule from '@Pages/OCS/Schedule';
+import PatientInformation from '@Pages/PatientInformation';
+//api
+import EBarimtApi from '@ApiServices/ebarimt/ebarimt';
+import PatientApi from '@ApiServices/pms/patient.api';
+import PaymentApi from '@ApiServices/payment/payment';
+import ServiceRequestApi from '@ApiServices/serviceRequest';
 
 function Invoice() {
    const [orderModal, setOrderModal] = useState(false);
@@ -45,7 +46,7 @@ function Invoice() {
    //tolbor urdchilan
    const onSearch = async (_page, _pageSize, value) => {
       setIsLoadingFilter(true);
-      await PaymentService.getPaymentPatient({
+      await PaymentApi.getPaymentPatient({
          params: {
             filter: value
          }
@@ -85,7 +86,7 @@ function Invoice() {
    };
    const getInvoices = async (id) => {
       setIsLoadingGetPayInfo(true);
-      await PaymentService.get({
+      await PaymentApi.get({
          params: {
             patientId: id
          }
@@ -119,7 +120,7 @@ function Invoice() {
                stateIsCito = true;
             }
          });
-         await ServiceRequest.post({
+         await ServiceRequestApi.post({
             patientId: selectedPatient.id,
             requestDate: new Date(),
             isCito: stateIsCito ? true : false,
@@ -139,9 +140,9 @@ function Invoice() {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       }
    };
-   const sendData = async () => {
+   const sendDataButton = async () => {
       setIsLoadingEbarimt(true);
-      await EBarimtService.sendData()
+      await EBarimtApi.sendData()
          .then(({ data: { response } }) => {
             if (response === 'success') {
                openNofi('success', 'Амжиллтай', 'Амжилттай И-Баримт илгээгдлээ');
@@ -155,7 +156,7 @@ function Invoice() {
          });
    };
    const getInformation = async () => {
-      await EBarimtService.getInformation().then((response) => {
+      await EBarimtApi.getInformation().then((response) => {
          setEbarimtInfo(response.data.response.result?.extraInfo);
       });
    };
@@ -178,7 +179,7 @@ function Invoice() {
       },
       {
          //mes ajilbar
-         name: 'Surgery',
+         name: 'Operation',
          label: 'Мэс ажилбар'
       },
       {
@@ -242,14 +243,14 @@ function Invoice() {
    ];
    //
    const getPaymentType = async () => {
-      await PaymentService.getPaymentType().then((response) => {
+      await PaymentApi.getPaymentType().then((response) => {
          setPaymentShape(response.data.response);
       });
    };
    const beforePay = async (values) => {
       values['patientId'] = selectedPatient.id;
       values['invoiceIds'] = [];
-      await PaymentService.postPrePayment(values).then((response) => {
+      await PaymentApi.postPrePayment(values).then((response) => {
          if (values.isEbarimt) {
             setEbarimtData(response.data.response);
             setEbarimtModal(true);
@@ -282,7 +283,7 @@ function Invoice() {
                   <p className="font-bold">Сүүлд татсан огноо:</p>
                   <p className="font-bold">{`${dayjs(ebarimtInfo?.lastSentdate).format('YYYY/MM/DD')}`}</p>
                </div>
-               <Button loading={isLoadingEbarimt} onClick={() => sendData()} type="primary">
+               <Button loading={isLoadingEbarimt} onClick={() => sendDataButton()} type="primary">
                   И-баримт илгээх
                </Button>
                <div className="h-[1px] w-full bg-black" />

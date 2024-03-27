@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch, Post } from '../../comman';
+import { Get, Patch, Post } from '../../common';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { Col, Row, Table, Input, Empty, DatePicker } from 'antd';

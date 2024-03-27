@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Result, Select } from 'antd';
-import jwtInterceopter from '../../../jwtInterceopter';
 import { useSelector } from 'react-redux';
-import { selectCurrentInsurance } from '../../../../features/authReducer';
+//redux
+import { selectCurrentInsurance } from '@Features/authReducer';
+//api
+import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
-const { Option } = Select;
-
-function Insurance({ form }) {
+function Insurance() {
    const isInsurance = useSelector(selectCurrentInsurance);
    const [socialStatus, setSocialStatus] = useState([]);
    const getFreeType = async () => {
-      await jwtInterceopter.get('health-insurance/free-type').then((response) => {
+      await healtInsuranceApi.getFreeType().then((response) => {
          if (response.data.code === 200) {
             setSocialStatus(response.data.result);
          }
       });
    };
    useEffect(() => {
-      if (isInsurance) {
-         getFreeType();
-      }
+      isInsurance && getFreeType();
    }, []);
    if (!isInsurance) {
       return <Result title="Эмнэлэг даатгалгүй байна" />;
@@ -34,15 +32,12 @@ function Insurance({ form }) {
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >
-               <Select>
-                  {socialStatus.map((status, index) => {
-                     return (
-                        <Option key={index} value={status.id}>
-                           {status.name}
-                        </Option>
-                     );
-                  })}
-               </Select>
+               <Select
+                  options={socialStatus.map((status) => ({
+                     label: status.name,
+                     value: status.id
+                  }))}
+               />
             </Form.Item>
             <Form.Item label="Харьяа хороо эсэх:" name="isLiver" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                <Select

@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
-import { DefualtGet, Get, Post } from '../../../../comman';
+import { DefualtGet, Get, Post } from '../../../../common';
 import FullScreenLoader from '../../../../FullScreenLoader';
 import MiddleTable from './MiddleTable';
 const { Option } = Select;

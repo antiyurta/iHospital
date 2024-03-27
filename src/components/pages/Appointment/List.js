@@ -20,7 +20,7 @@ import dayjs from 'dayjs';
 import { ClockCircleOutlined, DeleteOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import mn from 'antd/es/calendar/locale/mn_MN';
 // components
-import { formatNameForDoc, getAge, getGenderInType, openNofi } from '../../comman';
+import { formatNameForDoc, getAge, getGenderInType, openNofi } from '../../common';
 import { AppointmentStatus } from './appointment-enum';
 const { Panel } = Collapse;
 const { TextArea } = Input;

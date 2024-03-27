@@ -9,7 +9,7 @@ import DocumentsFormServices from '../../../../../services/organization/document
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../../../comman';
+import { formatNameForDoc } from '../../../../common';
 
 export const tubeChild = [
    {

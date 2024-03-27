@@ -14,7 +14,6 @@ const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists
 const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryList'));
 const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
 const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
-// mes zasal
 
 // tsagiin huwiar
 const Schedule = React.lazy(() => import('./components/pages/Appointment/Schedule/Schedule'));
@@ -68,10 +67,11 @@ const Xray = React.lazy(() => import('./components/pages/service/Xray'));
 const Diagnoses = React.lazy(() => import('./components/pages/service/Diagnoses'));
 // emchilge list
 const Treatment = React.lazy(() => import('./components/pages/service/Treatment'));
-// mes ajilbar list
-const Surgury = React.lazy(() => import('./components/pages/service/Surgury'));
 // halgaa list
+const Surgury = React.lazy(() => import('./components/pages/service/Surgury'));
+// mes ajilbar list
 const Operation = React.lazy(() => import('./components/pages/service/Operation'));
+const OperationRequests = React.lazy(() => import('@Pages/Operation/OperationRequest'));
 // emr list
 const BeforeAmbulatoryList = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryList'));
 // emiin bus gasaalt
@@ -171,15 +171,21 @@ export const ProtectedRoutes = [
    },
    {
       name: 'surgury',
-      mnName: 'Мэс ажилбар/Үйлчилгээ жагсаалт/',
+      mnName: 'Мэс засал/Үйлчилгээ жагсаалт/',
       url: '/surgury',
       element: Surgury
    },
    {
-      name: 'surgury',
-      mnName: 'Мэс засал/Үйлчилгээ жагсаалт/',
+      name: 'Operation',
+      mnName: 'Мэс ажилбар/Үйлчилгээ жагсаалт/',
       url: '/operation',
       element: Operation
+   },
+   {
+      name: 'OperationList',
+      mnName: 'Мэс ажилбар',
+      url: '/operiationRequest',
+      element: OperationRequests
    },
    {
       name: 'treatment',

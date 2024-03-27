@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { EyeOutlined, RollbackOutlined, DownloadOutlined } from '@ant-design/icons';
 import { Button, Card, DatePicker, Modal } from 'antd';
-import { numberToCurrency, openNofi } from '../../../comman';
+import { numberToCurrency, openNofi } from '../../../common';
 
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 

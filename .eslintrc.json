@@ -3,8 +3,16 @@
       "browser": true,
       "es2021": true
    },
-   "extends": ["prettier"],
-   "overrides": [],
+   // "extends": ["prettier"],
+   "extends": ["plugin:prettier/recommended"],
+   "overrides": [
+      {
+         "files": ["postcss.config.js", "prettier.config.js"],
+         "rules": {
+            "prettier/prettier": "off"
+         }
+      }
+   ],
    "parserOptions": {
       "ecmaFeatures": {
          "jsx": true
@@ -12,7 +20,8 @@
       "ecmaVersion": "latest",
       "sourceType": "module"
    },
-   "plugins": ["prettier", "react", "react-hooks"],
+   "ignorePatterns": ["postcss.config.js", "prettier.config.js"],
+   "plugins": ["prettier", "react", "react-hooks", "import"],
    "rules": {
       "prettier/prettier": [
          "error",
@@ -20,5 +29,12 @@
             "endOfLine": "auto"
          }
       ]
+   },
+   "settings": {
+      "import/resolver": {
+         "webpack": {
+            "config": "webpack.config.js"
+         }
+      }
    }
 }

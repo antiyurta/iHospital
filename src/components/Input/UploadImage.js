@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Form, Upload } from 'antd';
 import localFileApi from '../../services/file/local-file/local-file.api';
-import { openNofi } from '../comman';
+import { openNofi } from '../common';
 import axios from 'axios';
 
 export const UploadImage = ({ form, itemName }) => {

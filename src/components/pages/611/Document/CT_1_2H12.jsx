@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../common';
 import dayjs from 'dayjs';
 function CT_1_2H12(props) {
    const {

@@ -1,48 +1,69 @@
 import React, { useState } from 'react';
 import { BarcodeOutlined, CheckOutlined, MinusOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Modal, Table } from 'antd';
+import { Button, Card, Empty, Modal, Table } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAge, getGender, openNofi } from '../../comman';
-import { setEmrData } from '../../../features/emrReducer';
-import MonitorCriteria from '../Insurance/MonitorCriteria';
-import DocumentShow from '../611/DocumentShow';
-import ServiceService from '../../../services/service/service';
-import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
-import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
 import dayjs from 'dayjs';
-import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
-import { ListPatientInfo, TypeInfo } from '../../ListInjection';
 import Barcode from 'react-barcode';
+//comp
+// import DocumentShow from '../611/DocumentShow';
+// import MonitorCriteria from '../Insurance/MonitorCriteria';
+import { ListPatientInfo, TypeInfo } from '../../ListInjection';
+import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
+import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
+import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
+//comman
+import { getAge, getGender, openNofi } from '@Comman/common';
+//redux
+import { setEmrData } from '@Features/emrReducer';
+//api
+import ServiceApi from '@ApiServices/service/service';
 
 function IndexAfter({ type, params }) {
+   // type 0 bol Xray 1 bol exo 2r bol ekg 3r operation
    const dispatch = useDispatch();
    const navigate = useNavigate();
-   const [xrayLists, setXrayLists] = useState([]);
+   const [requestLists, setRequestLists] = useState([]);
    const [meta, setMeta] = useState({
       page: 1,
       limit: 10
    });
    const [spinner, setSpinner] = useState(false);
-   const getXrayRequest = async (page, pageSize, start, end) => {
+   const getRequest = async (page, pageSize, start, end) => {
       setSpinner(true);
-      await ServiceService.getXrayRequest({
-         params: {
-            xrayProcess: params,
+      if (type === 3) {
+         await ServiceApi.getOperation({
             page: page,
             limit: pageSize,
-            deviceType: type,
             startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
             endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
-         }
-      })
-         .then(({ data: { response } }) => {
-            setXrayLists(response.data);
-            setMeta(response.meta);
          })
-         .finally(() => {
-            setSpinner(false);
-         });
+            .then(({ data: { response } }) => {
+               setRequestLists(response.data);
+               setMeta(response.meta);
+            })
+            .finally(() => {
+               setSpinner(false);
+            });
+      } else {
+         await ServiceApi.getXrayRequest({
+            params: {
+               xrayProcess: params,
+               page: page,
+               limit: pageSize,
+               deviceType: type,
+               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+            }
+         })
+            .then(({ data: { response } }) => {
+               setRequestLists(response.data);
+               setMeta(response.meta);
+            })
+            .finally(() => {
+               setSpinner(false);
+            });
+      }
    };
    const checkType = (process) => {
       if (process === 0) {
@@ -61,24 +82,25 @@ function IndexAfter({ type, params }) {
       } else if (!row.isPayment && row.usageType === 'OUT') {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
-         if (row.confirmedDate === null) {
-            ServiceService.patchXrayRequest({
+         if (row.confirmedDate === null && type != 3) {
+            ServiceApi.patchXrayRequest({
                confirmedDate: new Date()
             });
          }
-         if (row.startAt === null) {
-            ServiceService.patchXrayRequest(row.id, {
+         if (row.startAt === null && type != 3) {
+            ServiceApi.patchXrayRequest(row.id, {
                startAt: new Date()
             });
          }
          const data = {
-            usageType: 'OUT',
-            xrayRequestId: row.id,
+            usageType: row.usageType,
+            xrayRequestId: type != 3 ? row.id : null,
+            operationRequestId: type === 3 ? row.id : null,
             patientId: row.patientId,
             cabinetId: row.cabinetId,
             serialNumber: row.serialNumber,
             inspectionNoteId: row.inspectionNoteId,
-            inspection: row.deviceType === 0 ? 11 : 12,
+            inspection: type === 3 ? 13 : row.deviceType === 0 ? 11 : 12,
             xrayId: row.xrayId,
             startDate: row.startAt || new Date()
          };
@@ -110,7 +132,7 @@ function IndexAfter({ type, params }) {
       }
       return <TypeInfo bgColor="#ef4444" textColor="white" text={'Төлөгдөөгүй'} />;
    };
-   const xrayRequestColumns = [
+   const requestColumns = [
       {
          title: 'Он сар',
          width: 150,
@@ -149,8 +171,8 @@ function IndexAfter({ type, params }) {
          render: (genderType) => getGender(genderType)
       },
       {
-         title: 'Оношилгооны нэр',
-         dataIndex: ['xray', 'name'],
+         title: type === 3 ? 'Ажилбарын нэр' : 'Оношилгооны нэр',
+         dataIndex: type == 3 ? ['operation', 'name'] : ['xray', 'name'],
          render: (name) => <div className="whitespace-pre-wrap">{name}</div>
       },
       {
@@ -233,9 +255,9 @@ function IndexAfter({ type, params }) {
             <InspectionTypeInfo />
             <ListFilter
                meta={meta}
-               appointmentsLength={xrayLists?.length || 0}
+               appointmentsLength={requestLists?.length || 0}
                selectedTags={null}
-               getList={getXrayRequest}
+               getList={getRequest}
             />
             <div className="w-full">
                <Card
@@ -251,8 +273,8 @@ function IndexAfter({ type, params }) {
                         emptyText: <Empty description={'Хоосон'} />
                      }}
                      rowClassName="hover: cursor-pointer"
-                     columns={xrayRequestColumns}
-                     dataSource={xrayLists}
+                     columns={requestColumns}
+                     dataSource={requestLists}
                      scroll={{
                         x: 1000
                      }}

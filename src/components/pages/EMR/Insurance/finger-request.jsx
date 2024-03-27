@@ -16,7 +16,7 @@ const FingerRequest = (props) => {
       form.setFieldsValue({
          regNo: patient.registerNumber,
          lastName: patient.lastName,
-         firstName: patient.firstName,
+         firstName: patient.firstName
       });
    }, []);
    const getHicsServices = async () => {
@@ -27,7 +27,7 @@ const FingerRequest = (props) => {
       });
    };
    const getStatePayments = async () => {
-      await healthInsurance.getFreeType().then(({ data}) => {
+      await healthInsurance.getFreeType().then(({ data }) => {
          if (data.code == 200) {
             setStatePayments(data.result);
          }

@@ -14,7 +14,7 @@ import Reinspection from '../Reinspection';
 import RecentRecipe from '../RecentRecipe';
 import PackageTable from '../PackageTable/PackageTable';
 import OrderTable from '../OrderTable/OrderTable';
-import { numberToCurrency, openNofi } from '../../../comman';
+import { numberToCurrency, openNofi } from '../../../common';
 import ServiceService from '../../../../services/service/service';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
@@ -54,7 +54,7 @@ const InternalOrder = (props) => {
             setShowTreatment(true);
          } else if (category.name === 'Surgery') {
             setShowSurgery(true);
-         } else if (category.name === 'operation') {
+         } else if (category.name === 'Operation') {
             setShowOperation(true);
          } else if (category.name === 'Package') {
             setShowPackage(true);
@@ -207,7 +207,7 @@ const InternalOrder = (props) => {
                   handleclick={handleclick}
                />
             )}
-            {showOperation && <Operation />}
+            {showOperation && <Operation usageType={usageType} handleclick={handleclick} />}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
             {showInpatient && (
                <InpatientRequest selectedPatient={selectedPatient} handleClick={inpatientRequestClick} />

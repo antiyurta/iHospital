@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../common';
 import bodyImg from './611Body.jpg';
 import dayjs from 'dayjs';
 import ImageMarker from 'react-image-marker';

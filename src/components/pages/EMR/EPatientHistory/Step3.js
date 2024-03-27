@@ -1,7 +1,7 @@
 //EMR -> Явцын үзлэг -> Өвчтөний түүх -> Амьдралын хэв маяг
 import React from 'react';
 import { Col, Radio, Row, Divider, Input, Form, InputNumber } from 'antd';
-import { checkNumber } from '../../../comman';
+import { checkNumber } from '../../../common';
 
 export default function Step3() {
    return (

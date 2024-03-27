@@ -4,7 +4,7 @@ import { selectPatient } from '../../../../features/patientReducer';
 import { useSelector } from 'react-redux';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
 import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
-import { getAge } from '../../../comman';
+import { getAge } from '../../../common';
 const { Option } = Select;
 const { TextArea } = Input;
 const SetPatientReturn = (props) => {

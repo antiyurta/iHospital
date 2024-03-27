@@ -1,18 +1,20 @@
-import { ConfigProvider, Empty, Table } from 'antd';
-import Search from 'antd/lib/input/Search';
-import React from 'react';
-import { localMn, numberToCurrency } from '../../comman';
+import React, { useState, useEffect } from 'react';
+import { ConfigProvider, Empty, Input, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+//enum
 import { CARE_TYPE } from './care-enum';
-import { useState } from 'react';
-import examinationApi from '../../../services/service/examination.api';
-import { useEffect } from 'react';
-import xrayApi from '../../../services/service/xray.api';
-import treatmentApi from '../../../services/service/treatment.api';
-import surgeryApi from '../../../services/service/surgery.api';
-
+//img
 import addButtonIcon from './addButton.svg';
-
+//comman
+import { localMn, numberToCurrency } from '@Comman/common';
+//api
+import examinationApi from '@ApiServices/service/examination.api';
+import xrayApi from '@ApiServices/service/xray.api';
+import treatmentApi from '@ApiServices/service/treatment.api';
+import surgeryApi from '@ApiServices/service/surgery.api';
+import operationApi from '@ApiServices/service/operation.api';
+//extends
+const { Search } = Input;
 /** Захиалгын тусламж үйлчилгээний  */
 export const ListSupport = ({ careType, careTypeId, add }) => {
    const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +54,14 @@ export const ListSupport = ({ careType, careTypeId, add }) => {
       } else if (careType == CARE_TYPE.Surgery) {
          await surgeryApi
             .get({ surgeryTypeId: careTypeId, isActive: true, page, limit, name: filter })
+            .then(({ data }) => {
+               setSupports(data.response.data);
+               setSupMeta(data.response.meta);
+            })
+            .finally(() => setIsLoading(false));
+      } else if (careType == CARE_TYPE.Operation) {
+         await operationApi
+            .get({ operationTypeId: careTypeId, isActive: true, page, limit, name: filter })
             .then(({ data }) => {
                setSupports(data.response.data);
                setSupMeta(data.response.meta);

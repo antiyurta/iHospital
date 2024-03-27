@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 
 import inpatientIcon from './NewOrder/inpatientIcon.svg';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 
 function InpatientRequest({ selectedPatient, handleClick }) {
    const [InpatientRequestForm] = Form.useForm();

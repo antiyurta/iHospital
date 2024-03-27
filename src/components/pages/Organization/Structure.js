@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
+import { Get } from '../../common';
 import UTable from '../../UTable';
 
 function Structure() {

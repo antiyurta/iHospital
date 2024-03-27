@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 import { CloseOutlined, SendOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../comman';
+import { formatNameForDoc } from '../../common';
 
 const { TextArea } = Input;
 

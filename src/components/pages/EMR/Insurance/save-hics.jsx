@@ -1,6 +1,6 @@
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select, message } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { localMn } from '../../../comman';
+import { localMn } from '../../../common';
 import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
 import apiInsurance from '../../../../services/healt-insurance/insurance';
 import { selectPatient } from '../../../../features/patientReducer';

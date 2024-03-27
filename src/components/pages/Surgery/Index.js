@@ -13,7 +13,7 @@ import {
    Space,
    Table
 } from 'antd';
-import { diagnoseTypeInfo, getAge, getGender, localMn, localMnC, openNofi } from '../../comman';
+import { diagnoseTypeInfo, getAge, getGender, localMn, localMnC, openNofi } from '../../common';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import {
    CheckOutlined,

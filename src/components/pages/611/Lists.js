@@ -2,7 +2,7 @@ import { Card, ConfigProvider, Table } from 'antd';
 import React from 'react';
 
 import { ReturnAll, ReturnByIdComponent } from './Document/Index';
-import { localMn } from '../../comman';
+import { localMn } from '../../common';
 
 function Lists() {
    const columns = [

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import UTable from '../../UTable';
-import { Get } from '../../comman';
+import { Get } from '../../common';
 
 function Surgery() {
    const token = useSelector(selectCurrentToken);

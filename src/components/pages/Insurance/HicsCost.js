@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get, Patch, Post, numberToCurrency } from '../../comman';
+import { DefualtGet, Get, Patch, Post, numberToCurrency } from '../../common';
 import UTable from '../../UTable';
 import { Button, Card, Form, Input, InputNumber, Modal, Select, Table } from 'antd';
 import Support from './Support';

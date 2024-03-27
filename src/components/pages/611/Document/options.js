@@ -544,5 +544,15 @@ module.exports = [
       value: 109,
       label: 'A/611 CT-1 Зүрх',
       docName: 'Зүрхний эмчийн үзлэг'
+   },
+   {
+      value: 110,
+      label: 'A/611 emergency-sorters',
+      docName: 'Эрэмблэн ангилалт'
+   },
+   {
+      value: 111,
+      label: 'A/611 СТ-32а',
+      docName: 'Яаралтай тусламжийн хуудас /насанд хүрэгчид/'
    }
 ];

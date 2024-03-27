@@ -1,6 +1,6 @@
 import { Button, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Get, Post } from '../../../comman';
+import { Get, Post } from '../../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import moment from 'moment';

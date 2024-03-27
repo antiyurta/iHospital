@@ -1,19 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentToken, selectCurrentInsurance, set as setAuth, Delete, logout } from '../features/authReducer';
-import bg from '../assets/images/background/bg-profile.jpg';
-import profile from '../assets/images/maleAvatar.svg';
 import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
-import { openNofi, Patch } from './comman';
 import { KeyOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
-import authenticationApi from '../services/authentication/authentication.api';
-import { set as setHospital, remove as removeHospital } from '../features/hospitalReducer';
-import AuthContext from '../features/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { removePatient } from '../features/patientReducer';
+// comman
+import { openNofi } from '@Comman/common';
+//img
+import { profileBg, manIcon } from '@Assets/index';
+// api
+import OrganizationEmployeeApi from '@ApiServices/organization/employee';
+import authenticationApi from '@ApiServices/authentication/authentication.api';
+//context
+import AuthContext from '@Features/AuthContext';
+//redux
+import { removePatient } from '@Features/patientReducer';
+import { set as setHospital, remove as removeHospital } from '@Features/hospitalReducer';
+import { selectCurrentToken, selectCurrentInsurance, set as setAuth, Delete, logout } from '@Features/authReducer';
 
 function Profile() {
    const { logoutt } = useContext(AuthContext);
@@ -29,11 +33,6 @@ function Profile() {
    const [passwordValid, setPasswordValid] = useState(false);
    const [password, setPassword] = useState('');
    const [cookies, setCookie] = useCookies();
-
-   const config = {
-      headers: {},
-      params: {}
-   };
 
    const handelLogOut = async () => {
       dispatch(removePatient());
@@ -74,28 +73,27 @@ function Profile() {
    };
    const onFinish = async (values) => {
       setIsLoading(true);
-      const response = await Patch('organization/employee/' + user.employee.id, token, config, values.employee);
-      if (response === 200) {
-         profileForm.resetFields();
-         getProfile();
-         setProfileModal(false);
-      }
-      setIsLoading(false);
+      await OrganizationEmployeeApi.patchEmployee(user.employee.id, values.employee)
+         .then((response) => {
+            if (response.status === 200) {
+               openNofi('success', 'Амжилттай', 'Хувийн мэдээлэл амжилттай солигдлоо');
+               profileForm.resetFields();
+               getProfile();
+               setProfileModal(false);
+            }
+         })
+         .finally(() => {
+            setIsLoading(false);
+         });
    };
    const onFinishPassword = async () => {
       setIsLoading(true);
       if (passwordValid) {
-         await axios
-            .post(
-               process.env.REACT_APP_DEV_URL + 'authentication/change-password',
-               { password: password, token: token },
-               {
-                  headers: {
-                     Authorization: `Bearer ${token}`,
-                     'X-API-KEY': process.env.REACT_APP_API_KEY
-                  }
-               }
-            )
+         await authenticationApi
+            .changePassword({
+               password: password,
+               token: token
+            })
             .then((response) => {
                if (response.status === 200) {
                   setPasswordModal(false);
@@ -122,7 +120,7 @@ function Profile() {
    };
    return (
       <div className="flex flex-col gap-2">
-         <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + bg + ')' }}></div>
+         <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + profileBg + ')' }}></div>
          <Card
             className="card-profile-head rounded-md h-28"
             bodyStyle={{ display: 'none' }}
@@ -130,7 +128,7 @@ function Profile() {
                <Row justify="space-between" align="middle" gutter={[24, 0]}>
                   <Col span={24} md={12} className="col-info">
                      <Avatar.Group>
-                        <Avatar size={74} shape="square" src={profile} />
+                        <Avatar size={74} shape="square" src={manIcon} />
                         <div className="avatar-info">
                            <h4 className="font-semibold m-0">
                               {user.employee?.lastName + ' ' + user.employee?.firstName}

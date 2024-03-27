@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../../features/authReducer';
-import { Get } from '../../../../comman';
+import { Get } from '../../../../common';
 import FullScreenLoader from '../../../../FullScreenLoader';
 const { Panel } = Collapse;
 function Requests() {

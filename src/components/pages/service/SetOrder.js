@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Delete, Get, Patch, Post } from '../../comman';
+import { Delete, Get, Patch, Post } from '../../common';
 import Order from '../Order/Order';
 
 function SetOrder() {

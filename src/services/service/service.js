@@ -62,5 +62,14 @@ class Service {
    async patchResultForExamination(id, body) {
       return await jwtInterceopter.patch('service/examinationResult/' + id, body);
    }
+   //
+   async getOperation(params) {
+      return await jwtInterceopter.get('service/operation-request', {
+         params: params
+      });
+   }
+   async patchOperation(id, body) {
+      return await jwtInterceopter.patch('service/operation-request/' + id, body);
+   }
 }
 export default new Service();

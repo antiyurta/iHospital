@@ -3,7 +3,7 @@ import { Button, Card, Empty, Modal, Select, Row, Col } from 'antd';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch, Post, Delete } from '../../comman';
+import { Get, Patch, Post, Delete } from '../../common';
 import { DeleteOutlined } from '@ant-design/icons';
 
 function FinanceMaterialXray() {

@@ -1,14 +1,15 @@
 import { Form, Input, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
-
-import ReferenceCountryApi from '../../../../services/reference/country';
+//api
+import CountryApi from '@ApiServices/reference/country';
+//extends
+const { Option } = Select;
 
 function ResidentialAddress() {
-   const { Option } = Select;
    const [towns, setTowns] = useState([]);
    const [provices, setProvices] = useState([]);
    const filterTowns = async (value) => {
-      await ReferenceCountryApi.getByPageFilter({
+      await CountryApi.getByPageFilter({
          params: {
             type: 3,
             parentId: value
@@ -18,7 +19,7 @@ function ResidentialAddress() {
       });
    };
    const getProvices = async () => {
-      await ReferenceCountryApi.getByPageFilter({
+      await CountryApi.getByPageFilter({
          params: {
             type: 2
          }
@@ -27,7 +28,7 @@ function ResidentialAddress() {
       });
    };
    const getTowns = async () => {
-      await ReferenceCountryApi.getByPageFilter({
+      await CountryApi.getByPageFilter({
          params: {
             type: 3
          }

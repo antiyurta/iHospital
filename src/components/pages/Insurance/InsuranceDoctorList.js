@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table, message } from 'antd';
-import { localMn, numberToCurrency, openNofi } from '../../comman';
+import { localMn, numberToCurrency, openNofi } from '../../common';
 import { EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
@@ -66,7 +66,7 @@ function InsuranceDocterList() {
          patientRegno: data.patient.registerNumber,
          serviceNumber: data.hicsSealCode,
          icdCode: data.icdCode,
-         icd9Code: data.icd9Code,
+         icd9Code: data.icd9Code
       });
       setIsOpenEditModal(true);
    };

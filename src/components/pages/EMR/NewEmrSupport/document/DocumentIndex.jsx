@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentAppId } from '../../../../../features/authReducer';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import { Empty, Modal, Table } from 'antd';
-import { openNofi } from '../../../../comman';
+import { openNofi } from '../../../../common';
 //service
 import OrganizationDocumentRoleServices from '../../../../../services/organization/documentRole';
 //img
@@ -15,6 +15,7 @@ const DocumentIndex = (props) => {
    const { usageType, handleCount } = props;
    const AppIds = useSelector(selectCurrentAppId);
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   console.log(incomeEmrData);
    const [current, setCurrent] = useState(1);
    const [pageSize, setPageSize] = useState(10);
    const [isOpenRenderModal, setIsOpenRenderModal] = useState(false);
@@ -26,7 +27,8 @@ const DocumentIndex = (props) => {
       await OrganizationDocumentRoleServices.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureIds: [incomeEmrData.departmentId],
+            // structureIds: [incomeEmrData.departmentId],
+            structureIds: [incomeEmrData.cabinetId],
             usageType: usageType,
             documentType: 0
          }

@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
-import { Get } from '../../../../comman';
+import { Get } from '../../../../common';
 function MiddleTable({ typeId }) {
    const token = useSelector(selectCurrentToken);
    const [spinner, setSpinner] = useState(false);

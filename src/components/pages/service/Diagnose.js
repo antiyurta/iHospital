@@ -1,7 +1,7 @@
 import { ArrowRightOutlined, CloseOutlined, EditOutlined, MinusOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Form, Input, Modal, Popconfirm, Select, Table, message } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { localMn, openNofi } from '../../comman';
+import { localMn, openNofi } from '../../common';
 import EditableFormItem from '../611/Support/EditableFormItem';
 import EditableFormItemSelect from '../611/Support/EditableFormItemSelect';
 //

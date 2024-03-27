@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PatientInformation from '../../PatientInformation';
 import DoctorNotes from '../../EMR/DoctorNotes';
 //
-import { formatNameForDoc, numberToCurrency, openNofi } from '../../../comman';
+import { formatNameForDoc, numberToCurrency, openNofi } from '../../../common';
 import dayjs from 'dayjs';
 import { RollbackOutlined } from '@ant-design/icons';
 import locale from 'antd/es/locale/mn_MN';

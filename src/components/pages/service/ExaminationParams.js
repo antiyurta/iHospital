@@ -3,7 +3,7 @@ import { Button, Card, Empty, Form, Input, InputNumber, Modal, Select, Space, Ta
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { checkNumber, Delete } from '../../comman';
+import { checkNumber, Delete } from '../../common';
 const { Search } = Input;
 //
 import ServiceApi from '../../../services/service/service';

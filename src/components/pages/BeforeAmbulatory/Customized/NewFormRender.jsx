@@ -219,7 +219,7 @@ const NewFormRender = (props) => {
                               }}
                            >
                               {options.map((option, index) => (
-                                 <Radio key={index} value={option.keyWord}>
+                                 <Radio key={index} value={item.isInteger ? Number(option.keyWord) : option.keyWord}>
                                     {option.question}
                                  </Radio>
                               ))}

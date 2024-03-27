@@ -75,15 +75,13 @@ function AM25A(props) {
                </span>
             </div>
             <div style={styles.rowStyle}>
-               3. Эмчилгээ эхэлсэн {dayjs(formData.q2)?.format('YYYY он MM сар DD өдөр')},{"  "}
+               3. Эмчилгээ эхэлсэн {dayjs(formData.q2)?.format('YYYY он MM сар DD өдөр')},{'  '}
                <span style={styles.rowStyle}>
                   Эмчилгээ дууссан {dayjs(formData.q3)?.format('YYYY он MM сар DD өдөр')},
                </span>
             </div>
 
-            <div style={styles.rowStyle}>
-               4. Ажлын газар, албан тушаал {formData?.q4}
-            </div>
+            <div style={styles.rowStyle}>4. Ажлын газар, албан тушаал {formData?.q4}</div>
             <div
                style={{
                   ...styles.rowStyle,
@@ -287,7 +285,7 @@ function AM25A(props) {
                   {formData?.q14?.map((el, index) => {
                      return (
                         <tr style={{ height: 30 }} key={index}>
-                           <td style={{width: 80}}>{dayjs(formData['q14-1'])?.format('YYYY-MM-DD')}</td>
+                           <td style={{ width: 80 }}>{dayjs(formData['q14-1'])?.format('YYYY-MM-DD')}</td>
                            <td>{el['q14-2']}</td>
                            <td>{el['q14-3']}</td>
                            <td>{el['q14-4']}</td>

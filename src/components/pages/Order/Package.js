@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAge, localMn, openNofi } from '../../comman';
+import { getAge, localMn, openNofi } from '../../common';
 import { CloseCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Table } from 'antd';
 import jwtInterceopter from '../../jwtInterceopter';

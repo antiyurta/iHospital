@@ -1,7 +1,7 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { localMn } from '../../comman';
+import { localMn } from '../../common';
 const { Search } = Input;
 import ReferenceDiagnoseServices from '../../../services/reference/diagnose';
 const DiagnoseWindow = (props) => {

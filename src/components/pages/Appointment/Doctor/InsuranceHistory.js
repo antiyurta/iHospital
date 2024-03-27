@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 import { Spin, Table } from 'antd';
 import HealthInsuranceApi from '../../../../services/healt-insurance/healtInsurance';
 import { useSelector } from 'react-redux';
@@ -42,6 +42,9 @@ function InsuranceHistory(props) {
          <Table
             rowKey={'serviceNumber'}
             bordered
+            scroll={{
+               y: 100
+            }}
             columns={[
                {
                   title: 'Огноо',

@@ -75,7 +75,7 @@ const SendHics = (props) => {
       form.setFields([
          {
             name: 'patientId',
-            value: patient.id,
+            value: patient.id
          },
          {
             name: ['paymentCares', index, 'hicsAmount'],

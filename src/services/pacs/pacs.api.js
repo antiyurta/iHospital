@@ -8,4 +8,3 @@ class PacsService {
    }
 }
 export default new PacsService();
-11;

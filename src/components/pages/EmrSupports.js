@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { selectCurrentAppId, selectCurrentInsurance, selectCurrentToken } from '../../features/authReducer';
 import { selectCurrentHicsService } from '../../features/emrReducer';
-import { DefaultPost, DefualtGet, Get, localMn, localMnC, openNofi, Post } from '../comman';
+import { DefaultPost, DefualtGet, Get, localMn, localMnC, openNofi, Post } from '../common';
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 import Diagnose from './service/Diagnose';

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch, Post, ScrollRef } from '../../comman';
+import { Get, Patch, Post, ScrollRef } from '../../common';
 import Spinner from 'react-bootstrap/Spinner';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';

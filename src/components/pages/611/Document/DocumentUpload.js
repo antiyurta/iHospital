@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Input, InputNumber, Modal, Popconfirm, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 import { ReturnAll } from './Index';
 // services
 import OrganizationDocumentFormService from '../../../../services/organization/documentForm';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, ConfigProvider, Modal, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { localMn, openNofi } from '../../comman';
+import { localMn, openNofi } from '../../common';
 import jwtInterceopter from '../../jwtInterceopter';
 import { CloseCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 

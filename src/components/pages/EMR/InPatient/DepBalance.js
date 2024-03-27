@@ -2,7 +2,7 @@ import { Card, Empty, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { DefualtGet, Get } from '../../../comman';
+import { DefualtGet, Get } from '../../../common';
 const { Option } = Select;
 function DepBalance() {
    const token = useSelector(selectCurrentToken);

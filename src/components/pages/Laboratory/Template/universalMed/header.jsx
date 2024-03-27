@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import localFileApi from '../../../../../services/file/local-file/local-file.api';
-import { getAge, getGenderFullName } from '../../../../comman';
+import { getAge, getGenderFullName } from '../../../../common';
 
 const Header = ({ hospital, patientData }) => {
    const [logoScr, setImageUrl] = useState(null);

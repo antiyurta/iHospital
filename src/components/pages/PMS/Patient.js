@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Empty, ConfigProvider } from 'antd';
 import { EyeOutlined, EditOutlined, SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Get, openNofi, Patch, Post } from '../../comman';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
 import mnMN from 'antd/es/locale/mn_MN';
 import UPatient from './Urgent/UPatient';
-import patientApi from '../../../services/pms/patient.api';
-import { selectHospitalIsXyp } from '../../../features/hospitalReducer';
 import PatientSupport from './patientSupport';
 import dayjs from 'dayjs';
+//common
+import { openNofi } from '@Comman/common';
+//redux
+import { selectHospitalIsXyp } from '@Features/hospitalReducer';
+//api
+import CountryApi from '@ApiServices/reference/country';
+import PatientApi from '@ApiServices/pms/patient.api';
+//extends
 const { Search } = Input;
 
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
-
 function Patient() {
-   const token = useSelector(selectCurrentToken);
    const [isGlobalDb, setIsGlobalDb] = useState(false);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [isViewModalVisible, setIsViewModalVisible] = useState(false);
@@ -38,34 +36,24 @@ function Patient() {
    const [urgentEditMode, setUrgentEditMode] = useState(false);
    const [isOpenUrgent, setIsOpenUrgent] = useState(false);
 
-   const config = {
-      headers: {
-         Authorization: `Bearer ${token}`,
-         'x-api-key': API_KEY
-      },
-      params: {
-         page: 1,
-         limit: 5
-      }
-   };
    const getData = async (page, pageSize, value, index) => {
       setSpinner(true);
-      const conf = {
-         headers: {},
+      setPindex(index);
+      setPvalue(value);
+      await PatientApi.getFilter({
          params: {
             page: page,
-            limit: pageSize
+            limit: pageSize,
+            [index]: value
          }
-      };
-      if ((value, index)) {
-         conf.params[index] = value;
-         setPindex(index);
-         setPvalue(value);
-      }
-      const response = await Get('pms/patient', token, conf);
-      setData(response.data);
-      setMeta(response.meta);
-      setSpinner(false);
+      })
+         .then(({ data: { response } }) => {
+            setData(response.data);
+            setMeta(response.meta);
+         })
+         .finally(() => {
+            setSpinner(false);
+         });
    };
    const showModal = () => {
       setEditMode(false);
@@ -77,8 +65,7 @@ function Patient() {
       setUrgentEditMode(false);
    };
    const viewModal = async (id) => {
-      await patientApi
-         .getById(id)
+      await PatientApi.getById(id)
          .then((response) => {
             setView(response.data.response);
          })
@@ -87,44 +74,56 @@ function Patient() {
          });
       setIsViewModalVisible(true);
    };
-   const editModal = async (id) => {
+   const editModal = async (id, isEmergency) => {
       setId(id);
-      setEditMode(true);
-      setIsModalVisible(true);
-   };
-   const handleCancel = () => {
-      setIsModalVisible(false);
+      if (isEmergency) {
+         setUrgentEditMode(true);
+         setIsOpenUrgent(true);
+      } else {
+         setEditMode(true);
+         setIsModalVisible(true);
+      }
    };
    const onFinishUrgent = async (data) => {
       data['isEmergency'] = true;
       data['isGlobalDb'] = false;
-      await patientApi.post(data).then((response) => {
-         console.log(response);
-         if (response.status === 201) {
-            setIsOpenUrgent(false);
-            openNofi('success', 'Амжиллтай', 'Амжиллтай хадгалагдсан');
-            getData(1, 20);
-         }
-      });
+      if (!data.isMind) data['registerNumber'] = null;
+      if (urgentEditMode) {
+         await PatientApi.patch(id, data).then((response) => {
+            if (response.status === 200) {
+               setIsOpenUrgent(false);
+               openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
+               getData(1, 20);
+            }
+         });
+      } else {
+         await PatientApi.post(data)
+            .then((response) => {
+               if (response.status === 201) {
+                  setIsOpenUrgent(false);
+                  openNofi('success', 'Амжилттай', 'Амжиллтай хадгалагдсан');
+                  getData(1, 20);
+               }
+            })
+            .catch((error) => {
+               openNofi('error', 'Амжилтгүй', `${error.response?.data?.message}`);
+            });
+      }
    };
    const onFinish = async (data) => {
       setIsConfirmLoading(true);
       data['isGlobalDb'] = isGlobalDb;
       data['isEmergency'] = false;
-      const conf = {
-         headers: {},
-         params: {}
-      };
       if (data?.contacts === undefined || data?.contacts === null || data?.contacts.length === 0) {
          openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
       } else {
          var response;
          if (editMode) {
-            response = await Patch('pms/patient/' + id, token, conf, data);
+            response = await PatientApi.patch(id, data).then(({ data: { success } }) => success);
          } else {
-            response = await Post('pms/patient', token, conf, data);
+            response = await PatientApi.post(data).then(({ data: { success } }) => success);
          }
-         if (response === 200 || response === 201) {
+         if (response) {
             getData(1, 20);
             setIsConfirmLoading(false);
             setIsModalVisible(false);
@@ -137,54 +136,41 @@ function Patient() {
       });
    };
    const getCitizens = async () => {
-      config.params.type = 1;
-      config.params.limit = null;
-      config.params.page = null;
-      await axios
-         .get(DEV_URL + 'reference/country', config)
-         .then((response) => {
-            setCitizens(response.data.response.data);
-         })
-         .catch(() => {
-            console.log('dasd');
-         });
+      await CountryApi.getByPageFilter({
+         params: {
+            type: 1
+         }
+      }).then(({ data: { response } }) => {
+         setCitizens(response.data);
+      });
    };
    const getProvices = async () => {
-      config.params.type = 2;
-      config.params.limit = null;
-      config.params.page = null;
-      await axios
-         .get(DEV_URL + 'reference/country', config)
-         .then((response) => {
-            setProvices(response.data.response.data);
-         })
-         .catch(() => {
-            console.log('dasd');
-         });
+      await CountryApi.getByPageFilter({
+         params: {
+            type: 2
+         }
+      }).then(({ data: { response } }) => {
+         setProvices(response.data);
+      });
    };
    const getTowns = async () => {
-      const conf = {
-         headers: {},
+      await CountryApi.getByPageFilter({
          params: {
             type: 3
          }
-      };
-      const response = await Get('reference/country', token, conf);
-      setTowns(response.data);
+      }).then(({ data: { response } }) => {
+         setTowns(response.data);
+      });
    };
    const filterTowns = async (value) => {
-      config.params.type = 3;
-      config.params.parentId = value;
-      config.params.limit = null;
-      config.params.page = null;
-      await axios
-         .get(DEV_URL + 'reference/country', config)
-         .then((response) => {
-            setTowns(response.data.response.data);
-         })
-         .catch(() => {
-            console.log('dasd');
-         });
+      await CountryApi.getByPageFilter({
+         params: {
+            type: 3,
+            parentId: value
+         }
+      }).then(({ data: { response } }) => {
+         setTowns(response.data);
+      });
    };
    const ddcitizen = (id) => {
       if (id != null) {
@@ -288,7 +274,7 @@ function Patient() {
       {
          title: 'Үйлдэл',
          dataIndex: 'id',
-         render: (text) => {
+         render: (text, row) => {
             return (
                <Space>
                   <Button type="link" onClick={() => viewModal(text)} title="Харах" style={{ paddingRight: 5 }}>
@@ -296,7 +282,7 @@ function Patient() {
                   </Button>
                   <Button
                      type="link"
-                     onClick={() => editModal(text)}
+                     onClick={() => editModal(text, row.isEmergency)}
                      title="Засах"
                      style={{ paddingRight: 5, paddingLeft: 5 }}
                   >
@@ -367,26 +353,6 @@ function Patient() {
             </ConfigProvider>
          </Card>
          <Modal
-            title={editMode ? 'Өвчтөн засах' : 'Өвчтөн бүртгэх'}
-            open={isModalVisible}
-            onCancel={handleCancel}
-            width="18cm"
-            footer={null}
-            confirmLoading={isConfirmLoading}
-         >
-            <PatientSupport
-               editMode={editMode}
-               patientId={id}
-               setGlobalDb={(state) => {
-                  setIsGlobalDb(state);
-               }}
-               filterTowns={(result) => {
-                  filterTowns(result);
-               }}
-               onFinish={onFinish}
-            />
-         </Modal>
-         <Modal
             title="Өвчтөн"
             width="80%"
             open={isViewModalVisible}
@@ -411,67 +377,33 @@ function Patient() {
             </Descriptions>
          </Modal>
          <Modal
+            title={editMode ? 'Өвчтөн засах' : 'Өвчтөн бүртгэх'}
+            open={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            width="18cm"
+            footer={null}
+            confirmLoading={isConfirmLoading}
+         >
+            <PatientSupport
+               editMode={editMode}
+               patientId={id}
+               setGlobalDb={(state) => {
+                  setIsGlobalDb(state);
+               }}
+               filterTowns={(result) => {
+                  filterTowns(result);
+               }}
+               onFinish={onFinish}
+            />
+         </Modal>
+         <Modal
             title="Яаралтай бүртгэл"
             open={isOpenUrgent}
+            width="10cm"
             onCancel={() => setIsOpenUrgent(false)}
-            okText="Хадгалах"
-            cancelText="Болих"
-            onOk={() => {
-               urgentForm
-                  .validateFields()
-                  .then((values) => {
-                     onFinishUrgent(values);
-                  })
-                  .catch((error) => {
-                     onFinishFailed(error);
-                  });
-            }}
+            footer={null}
          >
-            <Form
-               form={urgentForm}
-               labelCol={{
-                  span: 8
-               }}
-               wrapperCol={{
-                  span: 14
-               }}
-               initialValues={{
-                  lastName: 'EMERGENCY',
-                  firstName: `EMERGENCY ${dayjs(new Date()).format('HH:mm:ss')}`,
-                  birthDate: dayjs(new Date())
-               }}
-            >
-               <UPatient />
-            </Form>
-            <div className="flex flex-row gap-3">
-               {/* <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                  <div className="p-3">
-                     <div className="flow-root">
-                        <div className="float-left">
-                           <p
-                              style={{
-                                 fontWeight: 600
-                              }}
-                           ></p>
-                        </div>
-                        <div className="float-right">
-                           <Switch
-                              className="bg-[#4a7fc1]"
-                              checkedChildren="Тийм"
-                              unCheckedChildren="Үгүй"
-                              defaultChecked={false}
-                              checked={stateInsurance}
-                              onChange={(e) => {
-                                 setStateInsurance(e);
-                                 setIsSent(e);
-                                 setNotInsuranceInfo([]);
-                              }}
-                           />
-                        </div>
-                     </div>
-                  </div>
-               </div> */}
-            </div>
+            <UPatient editMode={urgentEditMode} patientId={id} onFinish={onFinishUrgent} />
          </Modal>
       </div>
    );

@@ -67,9 +67,7 @@ function AM24Б(props) {
                <span style={{ fontWeight: 'bold', fontSize: 16 }}>ХЭВЛИЙН ХӨНДИЙН ЭРХТНҮҮДИЙН ХЭТ АВИАН ОНОШИЛГОО</span>
             </div>
             <div style={{ ...styles.generalText, ...{ marginLeft: 550 } }}>
-               <div>
-               {dayjs(formData.q1)?.format('YYYY он MM сар DD өдөр')}
-               </div>
+               <div>{dayjs(formData.q1)?.format('YYYY он MM сар DD өдөр')}</div>
             </div>
             <div style={styles.rowStyle}>
                Эцэг /эх/-ийн нэр: {patientData?.lastName} Нас: {patientData?.age} Хүйс: /зур/{' '}
@@ -84,17 +82,19 @@ function AM24Б(props) {
                <span style={{ fontWeight: 'bold' }}>Элэг:</span> Хэмжээ {formData?.q2}
                <span style={{ fontWeight: 'bold' }}> Гадаргуу:</span>
                <span className={formData?.q3 === 'q3-1' ? 'underline mr-1' : 'mr-1'}> тэгш, </span>
-               <span className={formData?.q3=== 'q3-2' ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
+               <span className={formData?.q3 === 'q3-2' ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
                <span style={{ fontWeight: 'bold' }}> Бүтэц: {formData?.['q4-2-1']}</span>
                <span className={formData?.q4 === 'q4-1' ? 'underline mr-1' : 'mr-1'}> жигд, </span>
                <span className={formData?.q4 === 'q4-2' ? 'underline mr-1' : 'mr-1'}> жигд бус </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}>Эхо ойлт: </span>{formData?.['q5-3-1']}
+               <span style={{ fontWeight: 'bold' }}>Эхо ойлт: </span>
+               {formData?.['q5-3-1']}
                <span className={formData?.q5 === 'q5-1' ? 'underline mr-1' : 'mr-1'}> хэвийн, </span>
                <span className={formData?.q5 === 'q5-2' ? 'underline mr-1' : 'mr-1'}> ихэссэн, </span>
                <span className={formData?.q5 === 'q5-3' ? 'underline mr-1' : 'mr-1'}> багассан </span>
-               <span style={{ fontWeight: 'bold' }}> Үүдэн венийн голч: </span>{formData?.q6}
+               <span style={{ fontWeight: 'bold' }}> Үүдэн венийн голч: </span>
+               {formData?.q6}
                {formData?.['AM24B.6']}
             </div>
             <div style={styles.rowStyle}>
@@ -120,13 +120,14 @@ function AM24Б(props) {
                <span className={formData?.q10 === 'q10-2' ? 'underline mr-1' : 'mr-1'}> цөс өтгөрсөн, </span>
                <span className={formData?.q10 === 'q10-3' ? 'underline mr-1' : 'mr-1'}> тунадастай, </span>
                <span className={formData?.q10 === 'q10-4' ? 'underline mr-1' : 'mr-1'}> чулуутай, </span>
-               <span className={formData?.q10 === 'q10-5' ? 'underline mr-1' : 'mr-1'}> ургацагтай </span>{formData?.['q10-4-1']}
+               <span className={formData?.q10 === 'q10-5' ? 'underline mr-1' : 'mr-1'}> ургацагтай </span>
+               {formData?.['q10-4-1']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Цөсний ерөнхий цорго:</span>
                <span className={formData?.q11 === 'q11-1' ? 'underline mr-1' : 'mr-1'}> өргөсөөгүй, </span>
                <span className={formData?.q11 === 'q11-2' ? 'underline mr-1' : 'mr-1'}> өргөссөн голч</span>
-                {formData?.['q11-2-1']},
+               {formData?.['q11-2-1']},
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Нойр булчирхай:</span>
@@ -135,7 +136,8 @@ function AM24Б(props) {
                <span className={formData?.q13 === 'q13-2' ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}> Бүтэц: </span>{formData?.['q14-2-1']}
+               <span style={{ fontWeight: 'bold' }}> Бүтэц: </span>
+               {formData?.['q14-2-1']}
                <span className={formData?.q14 === 'q14-1' ? 'underline mr-1' : 'mr-1'}> жигд, </span>
                <span className={formData?.q14 === 'q14-2' ? 'underline mr-1' : 'mr-1'}> жигд бус </span>
             </div>
@@ -146,7 +148,8 @@ function AM24Б(props) {
                <span className={formData?.q15 === 'q15-3' ? 'underline mr-1' : 'mr-1'}> багассан, </span>
                <span style={{ fontWeight: 'bold' }}> Голомтот:</span>
                <span className={formData?.q16 === 'q16-1' ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
-               <span className={formData?.q16 === 'q16-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>{formData?.['q16-2-1']}
+               <span className={formData?.q16 === 'q16-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
+               {formData?.['q16-2-1']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}> Бусад: {formData?.q17}</span>
@@ -175,7 +178,8 @@ function AM24Б(props) {
                <span className={formData?.q24 === 'q24-3' ? 'underline mr-1' : 'mr-1'}> сийрэгжсэн </span>
                <span style={{ fontWeight: 'bold' }}> Голомтот:</span>
                <span className={formData?.q25 === 'q25-1' ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
-               <span className={formData?.q25 === 'q25-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй </span>{formData?.['q25-2-1']}
+               <span className={formData?.q25 === 'q25-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй </span>
+               {formData?.['q25-2-1']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Зүүн-байрлал:</span>
@@ -185,7 +189,8 @@ function AM24Б(props) {
                <span style={{ fontWeight: 'bold' }}> Хэмжээ: {formData?.q27}</span>
                <span style={{ fontWeight: 'bold' }}> Хүрээ:</span>
                <span className={formData?.q28 === 'q28-1' ? 'underline mr-1' : 'mr-1'}> тэгш, </span>
-               <span className={formData?.q28 === 'q28-2' ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>{formData?.['q28-2-1']}
+               <span className={formData?.q28 === 'q28-2' ? 'underline mr-1' : 'mr-1'}> тэгш бус </span>
+               {formData?.['q28-2-1']}
                <span style={{ fontWeight: 'bold' }}> АТ:</span>
                <span className={formData?.q29 === 'q29-1' ? 'underline mr-1' : 'mr-1'}> өргөсөөгүй, </span>
                <span className={formData?.q29 === 'q29-2' ? 'underline mr-1' : 'mr-1'}> өргөссөн, </span>
@@ -194,27 +199,30 @@ function AM24Б(props) {
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Голомтот:</span>
                <span className={formData?.q30 === 'q30-1' ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
-               <span className={formData?.q30 === 'q30-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>{formData?.['q30-2-1']}
+               <span className={formData?.q30 === 'q30-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
+               {formData?.['q30-2-1']}
                <span style={{ fontWeight: 'bold' }}> Бусад: {formData?.q31}</span>
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Давсаг: </span>
                Хана: {formData?.q32},<span style={{ fontWeight: 'bold' }}> Голомтот: </span>
                <span className={formData?.q33 === 'q33-1' ? 'underline mr-1' : 'mr-1'}> өөрчлөлтгүй, </span>
-               <span className={formData?.q33 === 'q33-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>{formData?.['q33-2-1']}
+               <span className={formData?.q33 === 'q33-2' ? 'underline mr-1' : 'mr-1'}> өөрчлөлттэй, </span>
+               {formData?.['q33-2-1']}
             </div>
             <div style={styles.rowStyle}>
                <span style={{ fontWeight: 'bold' }}>Хэвлийн хөндийд:</span>
                <span className={formData?.q34 === 'q34-1' ? 'underline mr-1' : 'mr-1'}> сул шингэнгүй, </span>
-               <span className={formData?.q34 === 'q34-2' ? 'underline mr-1' : 'mr-1'}> шингэнтэй, </span>{formData?.['q34-2-1']}
+               <span className={formData?.q34 === 'q34-2' ? 'underline mr-1' : 'mr-1'}> шингэнтэй, </span>
+               {formData?.['q34-2-1']}
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold' }}> Бусад: </span>{formData?.q35}
+               <span style={{ fontWeight: 'bold' }}> Бусад: </span>
+               {formData?.q35}
             </div>
             <div style={styles.rowStyle}>
-               <span style={{ fontWeight: 'bold', marginLeft: '40%' }}>
-                  Эмчийн нэр: {" "}
-               </span>{formData?.q36}/_______________________
+               <span style={{ fontWeight: 'bold', marginLeft: '40%' }}>Эмчийн нэр: </span>
+               {formData?.q36}/_______________________
             </div>
          </div>
       </div>

@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { useState } from 'react';
-import { formatNameForDoc, numberToCurrency } from '../../../comman';
+import { formatNameForDoc, numberToCurrency } from '../../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../../features/authReducer';
 import { useEffect } from 'react';
@@ -46,10 +46,10 @@ function PrintIndex() {
          setIncomes(response.data.response.data);
       });
    };
-   const getEmployees = async (id) => {
+   const getEmployees = async () => {
       await OrganizationEmployeeService.getEmployee({
          params: {
-            depId: id
+            isRegistration: true
          }
       }).then((response) => {
          setEmployees(response.data.response.data);

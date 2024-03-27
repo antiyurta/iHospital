@@ -2,7 +2,7 @@ import { Form, Input, Select, Switch } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+import { Get } from '../../../common';
 const { Option } = Select;
 function GeneralDrugInformation() {
    // state

@@ -20,7 +20,7 @@ import {
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, Post } from '../../../comman';
+import { Get, Post } from '../../../common';
 import {
    Chart as ChartJS,
    CategoryScale,

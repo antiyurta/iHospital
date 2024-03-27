@@ -7,7 +7,7 @@ import { selectCurrentInsurance } from '../../../features/authReducer';
 
 // components
 import List from './List';
-import { formatNameForDoc, openNofi } from '../../comman';
+import { formatNameForDoc, openNofi } from '../../common';
 import { NewColumn, NewTable } from '../../Table/Table';
 import Finger from '../../../features/finger';
 
@@ -459,7 +459,7 @@ function Index(props) {
                            }}
                            meta={{
                               page: 1,
-                              limit: notInsuranceInfo.length
+                              limit: notInsuranceInfo?.length
                            }}
                            isLoading={isLoadingCheckPatientInsurance}
                            isPagination={false}

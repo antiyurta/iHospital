@@ -11,16 +11,16 @@ function Acting() {
             items={[
                {
                   label: 'Зарлага',
-                  key: 1,
-                  children: <Expenses />
+                  key: 1
+                  // children: <Expenses />
                },
                {
                   label: 'Захиалга',
-                  key: 2,
-                  children: <Orders />
+                  key: 2
+                  // children: <Orders />
                },
                {
-                  label: 'Дотоод гүйлгээ',
+                  label: 'Дотоод захилга',
                   key: 3,
                   children: <Transfers />
                }

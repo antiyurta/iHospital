@@ -75,6 +75,13 @@ function Position() {
          isView: true,
          input: 'numberInput',
          col: 24
+      },
+      {
+         index: 'isRegistration',
+         label: 'Бүртгэл эсэх',
+         isView: true,
+         input: 'switch',
+         col: 24
       }
    ];
    return (

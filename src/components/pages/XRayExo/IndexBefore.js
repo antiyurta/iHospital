@@ -10,7 +10,7 @@ import {
 import { Button, Card, Form, Modal, Upload, Select, InputNumber, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, getAge, getGenderInType, openNofi, Post, ScrollRef } from '../../comman';
+import { Get, getAge, getGenderInType, openNofi, Post, ScrollRef } from '../../common';
 import jwtInterceopter from '../../jwtInterceopter';
 import { ListPatientInfo, TypeInfo } from '../../ListInjection';
 import dayjs from 'dayjs';

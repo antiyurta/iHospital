@@ -72,7 +72,7 @@ function InspectionHistory({ patientId }) {
       }
    ];
    useEffect(() => {
-      getAllStatusHistories();
+      patientId && getAllStatusHistories();
    }, []);
    return (
       <>

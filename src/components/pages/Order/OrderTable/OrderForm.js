@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import { numberToCurrency } from '../../../comman';
+import { numberToCurrency } from '../../../common';
 
 function OrderForm(props) {
    const { editing, isNumber, ...rest } = props;

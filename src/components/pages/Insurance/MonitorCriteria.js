@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, Progress } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 
 //request service uud
 import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';

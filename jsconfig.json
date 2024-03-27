@@ -5,7 +5,16 @@
       "target": "ES2022",
       "jsx": "react",
       "strictNullChecks": true,
-      "strictFunctionTypes": true
+      "strictFunctionTypes": true,
+      "baseUrl": "./",
+      "paths": {
+         "@ApiServices/*": ["src/services/*"],
+         "@Comman/*": ["src/components/*"],
+         "@Pages/*": ["src/components/pages/*"],
+         "@Features/*": ["src/features/*"],
+         "@Assets/*": ["src/assets/*"],
+         "@Utils/*": ["src/utils/*"]
+      }
    },
    "exclude": ["**/node_modules/*"]
 }

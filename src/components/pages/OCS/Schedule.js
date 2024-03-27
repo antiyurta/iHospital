@@ -3,7 +3,7 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentIsAfterPay } from '../../../features/authReducer';
-import { numberToCurrency, openNofi } from '../../comman';
+import { numberToCurrency, openNofi } from '../../common';
 import dayjs from 'dayjs';
 import Appointment from '../Appointment/Index';
 import EbarimtPrint from '../EPayment/EbarimtPrint';

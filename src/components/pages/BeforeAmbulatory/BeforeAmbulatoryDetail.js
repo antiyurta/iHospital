@@ -31,7 +31,10 @@ function BeforeAmbulatoryDetail() {
             </div>
             <div className="w-full p-3 overflow-auto bg-[#f5f6f7]">
                {incomeENRData.usageType === 'OUT' ? (
-                  <BeforeAmbulatoryTabs reasonComming={incomeENRData.reasonComming} />
+                  <BeforeAmbulatoryTabs
+                     appointmentType={incomeENRData.type}
+                     reasonComming={incomeENRData.reasonComming}
+                  />
                ) : (
                   <BeforeInPatientTabs departmentId={incomeENRData.departmentId} />
                )}

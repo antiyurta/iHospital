@@ -32,7 +32,7 @@ import {
    tempCalculator,
    totalCalculator
 } from '../../../../injection';
-import { formatNameForDoc } from '../../../../comman';
+import { formatNameForDoc } from '../../../../common';
 import { ArrowRightOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { regularByDocumentValueIn } from '../../../../documentInjection';
 import EmrContext from '../../../../../features/EmrContext';

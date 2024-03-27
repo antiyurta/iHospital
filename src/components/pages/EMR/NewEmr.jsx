@@ -2,7 +2,7 @@ import React from 'react';
 import Ocs from '../OCS/Ocs';
 import { connect } from 'react-redux';
 import WarningIcon from '../../../assets/images/warning.svg';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 import EmrSupports from '../EmrSupports';
 import PatientInformation from '../PatientInformation';
 import { Button, Card, Modal, Radio } from 'antd';
@@ -121,11 +121,12 @@ class NewEmr extends React.Component {
                         patient={this.state.selectedPatient}
                         handlesearch={false}
                         handleTypeChange={this.handleTypeChange}
-                        OCS={
-                           this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
-                              ? true
-                              : false
-                        }
+                        // OCS={
+                        //    this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId
+                        //       ? true
+                        //       : false
+                        // }
+                        OCS={true}
                         type={this.state.type}
                         appointmentId={
                            this.props.IncomeEMRData.appointmentId || this.props.IncomeEMRData.inpatientRequestId

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Radio, Input, Button, Form, Collapse, InputNumber, Checkbox } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../features/emrReducer';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 
 import generalInspectionService from '../../../services/emr/generalInspection';
 

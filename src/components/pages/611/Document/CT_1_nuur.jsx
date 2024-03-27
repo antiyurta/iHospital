@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import logo from '../../../../assets/logo/logo.png';
 import { Checkbox, Radio } from 'antd';
-import { getAge, regToDate } from '../../../comman';
+import { getAge, regToDate } from '../../../common';
 
 const CT1Nuur = (props) => {
    const [formData, setFormData] = useState({});

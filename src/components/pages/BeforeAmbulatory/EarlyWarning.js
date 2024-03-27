@@ -4,7 +4,7 @@ import { Button, Table, Card, Modal } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
 // import { Table } from 'react-bootstrap';
-import { formatNameForDoc } from '../../comman';
+import { formatNameForDoc } from '../../common';
 //
 import {
    Chart as ChartJS,

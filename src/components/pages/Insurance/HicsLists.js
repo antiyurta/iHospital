@@ -2,7 +2,7 @@ import { Button, Card, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Post, numberToCurrency } from '../../comman';
+import { Get, Post, numberToCurrency } from '../../common';
 import { ArrowRightOutlined } from '@ant-design/icons';
 
 function HicsLists() {

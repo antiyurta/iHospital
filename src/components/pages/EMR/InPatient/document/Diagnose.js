@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
-import { Get, openNofi } from '../../../../comman';
+import { Get, openNofi } from '../../../../common';
 const { Search } = Input;
 function Diagnose({ type, form, name, multiple, formCode, formName, index }) {
    const token = useSelector(selectCurrentToken);

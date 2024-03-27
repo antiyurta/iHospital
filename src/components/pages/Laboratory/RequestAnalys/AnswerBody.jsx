@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Table } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 
 import ServiceApi from '../../../../services/service/service';
 

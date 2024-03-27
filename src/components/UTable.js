@@ -25,7 +25,7 @@ import {
    CheckOutlined,
    CloseOutlined
 } from '@ant-design/icons';
-import { Get, Post, Patch, Delete, ScrollRef } from './comman';
+import { Get, Post, Patch, Delete, ScrollRef } from './common';
 import TextArea from 'antd/lib/input/TextArea';
 import mn from 'antd/es/calendar/locale/mn_MN';
 import { useNavigate } from 'react-router-dom';
@@ -306,9 +306,9 @@ function UTable(props) {
       <>
          <Card
             bordered={false}
-            className="header-solid max-h-max rounded-md"
+            className="header-solid rounded-md"
             title={props.title}
-            bodyStyle={{ padding: 0 }}
+            bodyStyle={{ padding: 8 }}
             extra={
                props.isCreate && (
                   <Button onClick={showModal} type="primary">
@@ -618,88 +618,6 @@ function UTable(props) {
                               </Button>
                            )}
                            {getInputs(element, element.input)}
-                           {/* {element.input === 'select' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <Select
-                                    allowClear
-                                    showSearch
-                                    placeholder={element.label}
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) => {
-                                       return (option?.children ?? '').toLowerCase().includes(input?.toLowerCase());
-                                    }}
-                                 >
-                                    {element.inputData?.map((data, index) => {
-                                       return (
-                                          <Option
-                                             key={index}
-                                             value={element.relValueIndex ? data[`${element.relValueIndex}`] : data.id}
-                                          >
-                                             {data[`${element.relIndex}`]}
-                                          </Option>
-                                       );
-                                    })}
-                                 </Select>
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'multipleSelect' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <Select mode="multiple" allowClear placeholder={element.label}>
-                                    {element.inputData?.map((data, index) => {
-                                       return (
-                                          <Option
-                                             key={index}
-                                             value={element.relValueIndex ? data[`${element.relValueIndex}`] : data.id}
-                                          >
-                                             {data[`${element.relIndex}`]}
-                                          </Option>
-                                       );
-                                    })}
-                                 </Select>
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'switch' ? (
-                              <Form.Item
-                                 label={element.label}
-                                 name={element.index}
-                                 rules={element.rules}
-                                 valuePropName="checked"
-                              >
-                                 <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'inputNumber' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'input' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <Input placeholder={element.label} />
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'inputDefValueHide' ? (
-                              <Form.Item
-                                 style={{
-                                    display: 'none'
-                                 }}
-                                 label={element.label}
-                                 name={element.index}
-                                 rules={element.rules}
-                              >
-                                 <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'textarea' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <TextArea />
-                              </Form.Item>
-                           ) : null}
-                           {element.input === 'date' ? (
-                              <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                                 <DatePicker locale={mn} />
-                              </Form.Item>
-                           ) : null} */}
                         </Col>
                      );
                   })}
@@ -766,7 +684,7 @@ function UTable(props) {
                                  <Popconfirm
                                     title="Устгасан дохиолдолд сэргээх боломжгүй"
                                     onConfirm={async () => {
-                                       const response = await Delete('service/type/' + data.id, token, config);
+                                       const response = await Delete('reference-care-type/' + data.id, token, config);
                                        if (response === 200) {
                                           getTypesDatas(data.type);
                                        }

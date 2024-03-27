@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
-import { formatNameForDoc } from '../../../../comman';
+import { formatNameForDoc } from '../../../../common';
 import { ArrowRightOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { regularByDocumentValueIn } from '../../../../documentInjection';
 import EmrContext from '../../../../../features/EmrContext';

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Empty, Table } from 'antd';
-import { numberToCurrency } from '../../../comman';
 import dayjs from 'dayjs';
-
-import paymentApi from '../../../../services/payment/payment';
+//comman
+import { numberToCurrency } from '@Comman/common';
+//api
+import paymentApi from '@ApiServices/payment/payment';
 
 function PaymentHistory({ patientId }) {
    const [spinner, setSpinner] = useState(false);
@@ -51,7 +52,7 @@ function PaymentHistory({ patientId }) {
       }
    ];
    useEffect(() => {
-      getPayments();
+      patientId && getPayments();
    }, [patientId]);
    return (
       <>

@@ -2,7 +2,7 @@ import React from 'react';
 import { DatePicker, Divider, Form, Select, Table, TimePicker } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { labelStyle, contentStyle } from './Index';
-import { diagnoseTypeInfo, numberToCurrency, openNofi } from '../../comman';
+import { diagnoseTypeInfo, numberToCurrency, openNofi } from '../../common';
 import { useEffect, useState } from 'react';
 import jwtInterceopter from '../../jwtInterceopter';
 

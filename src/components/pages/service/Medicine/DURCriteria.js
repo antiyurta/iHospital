@@ -4,7 +4,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+import { Get } from '../../../common';
 const { Option } = Select;
 function DURCriteria() {
    // state

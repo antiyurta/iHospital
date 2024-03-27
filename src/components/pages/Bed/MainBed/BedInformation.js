@@ -24,7 +24,7 @@ import {
    ToolOutlined,
    UnorderedListOutlined
 } from '@ant-design/icons';
-import { numberToCurrency, openNofi } from '../../../comman';
+import { numberToCurrency, openNofi } from '../../../common';
 import orderType from '../orderType.js';
 import roomType from '../roomType.js';
 //

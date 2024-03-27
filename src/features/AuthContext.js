@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { createContext, useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { openNofi } from '../components/comman';
+import { openNofi } from '../components/common';
 import jwtInterceopter from '../components/jwtInterceopter';
 import { useDispatch } from 'react-redux';
 import { login } from './authReducer';

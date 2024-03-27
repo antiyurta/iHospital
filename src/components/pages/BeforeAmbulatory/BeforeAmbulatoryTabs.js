@@ -1,24 +1,28 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалтын доор байрлах TAB ууд
 import React, { useEffect, useMemo, useState } from 'react';
-import OtherCustomized from './OtherCustomized/Index';
-
-import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentDepId } from '../../../features/authReducer';
-import { openNofi } from '../../comman';
+//comp
+import OtherCustomized from './OtherCustomized/Index';
+//api
+import OrganizationDocumentRoleApi from '@ApiServices/organization/documentRole';
+//common
+import { openNofi } from '@Comman/common';
+//redix
+import { selectCurrentAppId } from '@Features/authReducer';
+import { selectCurrentEmrData } from '@Features/emrReducer';
 
-export default function BeforeAmbulatoryTabs({ reasonComming }) {
+export default function BeforeAmbulatoryTabs({ appointmentType, reasonComming }) {
    const AppIds = useSelector(selectCurrentAppId);
-   const DepIds = useSelector(selectCurrentDepId);
+   const incomeENRData = useSelector(selectCurrentEmrData);
    const [documents, setDocuments] = useState([]);
    const [activeKey, setActiveKey] = useState(Number);
    const [selectedDocument, setSelectedDocument] = useState(Number);
 
    const getDocuments = async () => {
-      await OrganizationDocumentRoleServices.getByPageFilterShow({
+      await OrganizationDocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureIds: DepIds,
+            structureIds: [incomeENRData.cabinetId],
             usageType: 'OUT',
             documentType: 0
          }
@@ -33,7 +37,17 @@ export default function BeforeAmbulatoryTabs({ reasonComming }) {
                      data.push(document);
                   })
                );
-               setDocuments(data);
+               if (reasonComming === 2) {
+                  setDocuments([
+                     {
+                        docName: 'Яаралтай дуудлага',
+                        value: 'callEmergency'
+                     },
+                     ...data
+                  ]);
+               } else {
+                  setDocuments(data);
+               }
             }
          })
          .catch((error) => {
@@ -43,26 +57,20 @@ export default function BeforeAmbulatoryTabs({ reasonComming }) {
 
    const Render = useMemo(() => {
       if (activeKey > 0) {
-         return <OtherCustomized document={selectedDocument} />;
+         return (
+            <OtherCustomized
+               document={selectedDocument}
+               extraData={{
+                  appointmentType: appointmentType,
+                  reasonComming: reasonComming
+               }}
+            />
+         );
       }
       return;
    }, [activeKey]);
-
    useEffect(() => {
-      console.log('reasonComming', reasonComming);
-      if (reasonComming) {
-         setDocuments([
-            {
-               docName: 'Яаралтай үнэлэх',
-               formId: null,
-               formType: 1,
-               label: 'CT-1,2 Хавсралт 12',
-               value: 90
-            }
-         ]);
-      } else {
-         getDocuments();
-      }
+      getDocuments();
    }, [reasonComming]);
 
    return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import VSCanvas from './VSCanvas';
 import dayjs from 'dayjs';
-import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../common';
 
 function CT_1_2H2(props) {
    const {

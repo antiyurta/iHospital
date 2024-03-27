@@ -2,18 +2,25 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Button, Form, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
-import { selectCurrentUserId } from '../../../../features/authReducer';
 import HistoryTab from './HistoryTab';
 import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
-import jwtInterceopter from '../../../jwtInterceopter';
-import DocumentFormServices from '../../../../services/organization/documentForm';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
-import { openNofi } from '../../../comman';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
+//comman
+import { openNofi } from '@Comman/common';
+// redux
+import { selectCurrentUserId } from '@Features/authReducer';
+import { selectCurrentEmrData } from '@Features/emrReducer';
+// api
+import RegularApi from '@ApiServices/regular.api';
+import ServiceApi from '@ApiServices/service/service';
+import DocumentFormApi from '@ApiServices/organization/documentForm';
+import DocumentMiddlewareApi from '@ApiServices/organization/document';
+// enum
+import { UsageTypeEnum, InspectionEnum, InspectionTypeEnum } from '@Utils/enum';
 
 function MainPatientHistory({ handleClick }) {
    const {
@@ -22,6 +29,7 @@ function MainPatientHistory({ handleClick }) {
       hicsServiceId,
       departmentId,
       xrayRequestId,
+      operationRequestId,
       cabinetId,
       inspection,
       usageType,
@@ -37,6 +45,14 @@ function MainPatientHistory({ handleClick }) {
    const [loading, setLoading] = useState(false);
    const [editMode, setEditMode] = useState(false);
    const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(String);
+
+   const isViewDiagnose = (inspection) => {
+      if (inspection === InspectionEnum.Xray) return false;
+      else if (inspection === InspectionEnum.Exo) return false;
+      else if (inspection === InspectionEnum.Operation) return false;
+      return true;
+   };
+
    const Tab1Content = useCallback(() => {
       return <HistoryTab />;
    }, []);
@@ -55,11 +71,12 @@ function MainPatientHistory({ handleClick }) {
                patientId: patientId,
                doctorId: userId,
                xrayRequestId: xrayRequestId,
+               operationRequestId: operationRequestId,
                inspection: inspection,
                usageType: usageType
             }}
             handleClick={handleClick}
-            isViewDiagnose={inspection === 11 || inspection === 12 ? false : true}
+            isViewDiagnose={isViewDiagnose(inspection)}
             hicsServiceId={hicsServiceId}
          />
       );
@@ -67,13 +84,9 @@ function MainPatientHistory({ handleClick }) {
    const onFinishXray = async (values, { data }) => {
       if (inspectionNoteId || editMode) {
          const id = inspectionNoteId || selectedInspectionNoteId;
-         await jwtInterceopter
-            .patch('document-middleware/' + id, {
-               data: values
-            })
-            .then(() => {
-               openNofi('success', 'Амжилттай', 'Дүгнэлт амжилттай хадгалагдсан');
-            });
+         await DocumentMiddlewareApi.patch(id, { data: values }).then(() => {
+            openNofi('success', 'Амжилттай', 'Дүгнэлт амжилттай хадгалагдсан');
+         });
       } else {
          const body = {
             appointmentId: xrayRequestId,
@@ -91,25 +104,18 @@ function MainPatientHistory({ handleClick }) {
                createdAt: dayjs()
             }
          };
-         await jwtInterceopter.post(data.url, body).then(async ({ data: { response, success } }) => {
+         await RegularApi.post(data.url, body).then(async ({ data: { response, success } }) => {
             if (success) {
-               var newResponse;
                setSelectedInspectionNoteId(response.response._id);
-               newResponse = await jwtInterceopter
-                  .patch('service/xrayRequest/' + xrayRequestId, {
-                     inspectionNoteId: response.response._id
-                  })
-                  .then(({ data: { success } }) => success);
-               if (newResponse) {
-                  setEditMode(true);
-                  jwtInterceopter
-                     .patch('service/xrayRequest/' + xrayRequestId, {
-                        xrayProcess: 2
-                     })
-                     .then(() => {
-                        openNofi('success', 'Амжилттай', 'Дүгнэлт амжилттай хадгалагдсан');
-                     });
-               }
+               await ServiceApi.patchXrayRequest(xrayRequestId, {
+                  xrayProcess: 2,
+                  inspectionNoteId: response.response._id
+               }).then(({ data: { success } }) => {
+                  if (success) {
+                     setEditMode(true);
+                     openNofi('success', 'Амжилттай', 'Дүгнэлт амжилттай хадгалагдсан');
+                  }
+               });
             }
          });
       }
@@ -160,7 +166,7 @@ function MainPatientHistory({ handleClick }) {
    ]);
 
    const getExoInspectionNote = async () => {
-      await jwtInterceopter.get('document-middleware/' + inspectionNoteId).then(({ data: { response } }) => {
+      await DocumentMiddlewareApi.getById(inspectionNoteId).then(({ data: { response } }) => {
          setEditMode(true);
          xrayForm.setFieldsValue(response.response.data);
       });
@@ -168,7 +174,7 @@ function MainPatientHistory({ handleClick }) {
 
    const getExoInspectionTabs = async () => {
       setLoading(true);
-      DocumentFormServices.getByPageFilter({
+      DocumentFormApi.getByPageFilter({
          params: {
             type: 'XRAY',
             serviceId: xrayId
@@ -284,7 +290,7 @@ function MainPatientHistory({ handleClick }) {
          }
       ]
    };
-   const xrayDefualtForm = {
+   const ConAndAdForm = {
       conclusion: [
          {
             type: 'textarea',
@@ -326,21 +332,33 @@ function MainPatientHistory({ handleClick }) {
          {
             label: 'Дүгнэлт',
             key: `item-xray`,
-            children: <DynamicTabContent data={xrayDefualtForm} />
+            children: <DynamicTabContent data={ConAndAdForm} />
+         }
+      ]);
+   };
+   const getOperationDefualtTab = () => {
+      setActiveKey('item-operation');
+      setItems([
+         {
+            label: 'Дүгнэлт',
+            key: `item-operation`,
+            children: <DynamicTabContent data={ConAndAdForm} />
          }
       ]);
    };
    useEffect(() => {
-      if (usageType === 'OUT') {
-         if (inspection === 1) {
+      if (usageType === UsageTypeEnum.OUT) {
+         if (inspection == InspectionTypeEnum.first) {
             getInspectionTabs();
-         } else if (inspection === 2) {
+         } else if (inspection === InspectionTypeEnum.second) {
             getDefualtTab();
-         } else if (inspection === 11) {
+         } else if (inspection === InspectionEnum.Xray) {
             getXrayDefualtTab();
-         } else if (inspection === 12) {
+         } else if (inspection === InspectionEnum.Exo) {
             getExoInspectionTabs();
             inspectionNoteId && getExoInspectionNote();
+         } else if (inspection === InspectionEnum.Operation) {
+            getOperationDefualtTab();
          }
       }
    }, [usageType]);

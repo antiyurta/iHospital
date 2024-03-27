@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import ChatService from '../services/chat/chat';
 import AuthContext from '../features/AuthContext';
-import { formatNameForDoc } from '../components/comman';
+import { formatNameForDoc } from '../components/common';
 import { Avatar, Badge, Button } from 'antd';
 import { CloseOutlined, MinusOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';

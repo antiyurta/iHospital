@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 //
 import examinationProcess from '../examinationProcess';
 import MonitorCriteria from '../../Insurance/MonitorCriteria';
-import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../comman';
+import { formatNameForDoc, isObjectEmpty, openNofi } from '../../../common';
 import FilterIndex from './Filter';
 import Body from '../Template/Body';
 import { ReturnById } from '../Template/index';

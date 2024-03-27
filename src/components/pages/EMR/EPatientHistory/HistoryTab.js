@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../features/emrReducer';
 
 import patientHistoryService from '../../../../services/emr/patientHistory';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 
 const { Panel } = Collapse;
 

@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, openNofi } from '../../../comman';
+import { Get, openNofi } from '../../../common';
 import { selectHospitalIsXyp } from '../../../../features/hospitalReducer';
 import Finger from '../../../../features/finger';
 import xypApi from '../../../../services/xyp/xyp.api';

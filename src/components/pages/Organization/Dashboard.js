@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, T
 import { Pie, Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../comman';
+import { Get } from '../../common';
 import { BarChartOutlined } from '@ant-design/icons';
 
 export default function Dashboard() {

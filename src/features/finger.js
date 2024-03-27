@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Form, Input, Modal, Select, Steps } from 'antd';
-import { openNofi } from '../components/comman';
+import { openNofi } from '../components/common';
 import jwtInterceopter from '../components/jwtInterceopter';
 
 const { Step } = Steps;

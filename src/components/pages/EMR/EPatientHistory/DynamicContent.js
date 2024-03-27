@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Spin, Table } from 'antd';
-// import Diagnose from '../../service/Diagnose';
-import jwtInterceopter from '../../../jwtInterceopter';
-import { inspectionTOJSON, openNofi } from '../../../comman';
-import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
-import Soap from './Soap';
 
-import EmrInspectionNoteServices from '../../../../services/emr/inspectionNote';
-import apiAppointmentService from '../../../../services/appointment/api-appointment-service';
-import ServiceRequestApi from '../../../../services/serviceRequest';
+//comp
+import Soap from './Soap';
+// import Diagnose from '../../service/Diagnose';
 import NewDiagnose from '../../service/NewDiagnose';
+import { inspectionTOJSON, openNofi } from '@Comman/common';
+import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
+//api
+import EmrInspectionNoteApi from '@ApiServices/emr/inspectionNote';
+import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
+import ServiceRequestApi from '@ApiServices/serviceRequest';
+// enum
+import { InspectionEnum, ListIndexEnum } from '@Utils/enum';
+import { useSelector } from 'react-redux';
+import { selectCurrentUserId } from '@Features/authReducer';
 
 function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsServiceId }) {
+   const employeeId = useSelector(selectCurrentUserId);
    const [form] = Form.useForm();
    const [editMode, setEditMode] = useState(false);
    const [expandedIndex, setExpandedIndex] = useState(null);
@@ -43,7 +49,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
    // };
 
    const getInspectionNote = async () => {
-      await EmrInspectionNoteServices.getById(incomeData.inspectionNoteId).then(({ data: { response } }) => {
+      await EmrInspectionNoteApi.getById(incomeData.inspectionNoteId).then(({ data: { response } }) => {
          if (response.hasOwnProperty('id')) {
             setEditMode(true);
             const data = inspectionTOJSON(response);
@@ -67,7 +73,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
       setLoading(true);
       if (editMode) {
          const id = incomeData.inspectionNoteId || selectedInspectionNoteId;
-         await EmrInspectionNoteServices.patch(id, {
+         await EmrInspectionNoteApi.patch(id, {
             pain: JSON.stringify(values['pain']),
             question: JSON.stringify(values['question']),
             inspection: JSON.stringify(values['inspection']),
@@ -91,38 +97,42 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
             doctorId: incomeData.doctorId,
             formId: key,
             appointmentId: incomeData.appointmentId,
+            xrayRequestId: incomeData.xrayRequestId,
+            operationRequestId: incomeData.operationRequestId,
             pain: JSON.stringify(values['pain']),
             question: JSON.stringify(values['question']),
             inspection: JSON.stringify(values['inspection']),
-            plan: JSON.stringify(values['plan'])
+            plan: JSON.stringify(values['plan']),
+            conclusion: JSON.stringify(values['conclusion']),
+            advice: JSON.stringify(values['advice'])
          };
-         await EmrInspectionNoteServices.post(data)
+         await EmrInspectionNoteApi.post(data)
             .then(async ({ data: { response, success } }) => {
                if (success) {
                   setSelectedInspectionNoteId(response.id);
                   var newResponse;
-                  if (incomeData.appointmentType === 0) {
-                     newResponse = await apiAppointmentService
-                        .patchAppointment(incomeData.appointmentId, {
-                           inspectionNoteId: response.id
-                        })
-                        .then(({ data: { success } }) => success);
-                  } else if (incomeData.appointmentType === 1) {
-                     newResponse = await apiAppointmentService
-                        .patchPreOrder(incomeData.appointmentId, {
-                           inspectionNoteId: response.id
-                        })
-                        .then(({ data: { success } }) => success);
+                  if (incomeData.appointmentType === ListIndexEnum.Ambulatory) {
+                     newResponse = await AppointmentApi.patchAppointment(incomeData.appointmentId, {
+                        inspectionNoteId: response.id
+                     }).then(({ data: { success } }) => success);
+                  } else if (incomeData.appointmentType === ListIndexEnum.PreOrder) {
+                     newResponse = await AppointmentApi.patchPreOrder(incomeData.appointmentId, {
+                        inspectionNoteId: response.id
+                     }).then(({ data: { success } }) => success);
+                  } else if (incomeData.inspection === InspectionEnum.Xray) {
+                     newResponse = await ServiceRequestApi.patchXrayRequest(incomeData.xrayRequestId, {
+                        inspectionNoteId: response.id.toString(),
+                        xrayProcess: 2
+                     });
+                  } else if (incomeData.inspection === InspectionEnum.Operation) {
+                     newResponse = await ServiceRequestApi.patchOperation(incomeData.operationRequestId, {
+                        inspectionNoteId: response.id,
+                        doctorId: employeeId
+                     });
                   }
                   if (newResponse) {
                      setEditMode(true);
-                     if (incomeData.inspection === 11 || incomeData.inspection === 12) {
-                        jwtInterceopter.patch('service/xrayRequest/' + incomeData.xrayRequestId, {
-                           xrayProcess: 2
-                        });
-                     } else {
-                        handleClick({ target: { value: 'OTS' } });
-                     }
+                     handleClick({ target: { value: 'OTS' } });
                   }
                }
             })
@@ -138,7 +148,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
    };
 
    const onFinishFailed = (errorInfo) => {
-      setValidStep(false);
+      console.log(errorInfo);
    };
 
    useEffect(() => {
@@ -161,7 +171,6 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
             scrollToFirstError
             onFinish={(e) => saveDynamicTab(e, props.formKey)}
             onFinishFailed={onFinishFailed}
-            onFieldsChange={(_e) => null}
          >
             <div className="flex flex-col gap-2">
                <div className="flex flex-col pr-3 gap-2">

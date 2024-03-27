@@ -83,11 +83,18 @@ function AM20(props) {
                   <div style={{ width: '50%' }}>
                      <div style={{ fontSize: 12 }}>1. Эцэг /эх/-ийн нэр: {patientData?.lastName}</div>
                      <div style={{ fontSize: 12 }}>2. Нэр: {patientData?.firstName}</div>
-                     <div style={{ fontSize: 12 }}>3. Нас: {patientData?.age} 4. Хүйс /зур/ 
-                  <span style={{ marginLeft: 30 }}>
-                     <span className={patientData?.genderType === 'MAN' ? 'underline font-bold' : ''}> эрэгтэй, </span>
-                     <span className={patientData?.genderType === 'WOMAN' ? 'underline font-bold' : ''}>эмэгтэй</span>
-                  </span></div>
+                     <div style={{ fontSize: 12 }}>
+                        3. Нас: {patientData?.age} 4. Хүйс /зур/
+                        <span style={{ marginLeft: 30 }}>
+                           <span className={patientData?.genderType === 'MAN' ? 'underline font-bold' : ''}>
+                              {' '}
+                              эрэгтэй,{' '}
+                           </span>
+                           <span className={patientData?.genderType === 'WOMAN' ? 'underline font-bold' : ''}>
+                              эмэгтэй
+                           </span>
+                        </span>
+                     </div>
                      <div style={{ fontSize: 12 }}>5. Яс үндэс _______________________________________________</div>
                      <div style={{ fontSize: 12 }}>6. Тогтмол хаяг __________________________________________</div>
                      <div style={{ fontSize: 12 }}>___________________________________________________________</div>
@@ -97,13 +104,8 @@ function AM20(props) {
                <div style={{ marginTop: 200, marginBottom: 30 }}>
                   <span style={styles.generalTextBold}>2-р тал</span>
                </div>
-               <div style={{ fontSize: 12, marginTop: 5 }}>
-                  7. Ажлын газар: {formData?.q1}
-               </div>
-               <div style={{ fontSize: 12, marginTop: 5 }}>
-                  8. Албан тушаал:  {formData?.q2}
-                  
-               </div>
+               <div style={{ fontSize: 12, marginTop: 5 }}>7. Ажлын газар: {formData?.q1}</div>
+               <div style={{ fontSize: 12, marginTop: 5 }}>8. Албан тушаал: {formData?.q2}</div>
                <div style={{ fontSize: 12, marginTop: 5 }}>
                   9. Мэргэжил: {formData?.q3} 10. Боловсрол: /зур/
                   <NewCheckboxGroup value={formData?.['q4']} className="dstory">
@@ -131,10 +133,11 @@ function AM20(props) {
                      <NewCheckbox value={'q4-08'} className="test">
                         <span style={{ fontSize: 10 }}> Доктор</span>
                      </NewCheckbox>
-                  </NewCheckboxGroup>       
+                  </NewCheckboxGroup>
                </div>
                <div style={{ fontSize: 12, marginTop: 5 }}>
-                  10. Карт нээсэн {dayjs(formData.q5)?.format('YYYY он MM сар DD өдөр')} хаасан {dayjs(formData.q6)?.format('YYYY он MM сар DD өдөр')}
+                  10. Карт нээсэн {dayjs(formData.q5)?.format('YYYY он MM сар DD өдөр')} хаасан{' '}
+                  {dayjs(formData.q6)?.format('YYYY он MM сар DD өдөр')}
                </div>
                <Table bordered style={{ marginTop: 20 }} className="document">
                   <thead>

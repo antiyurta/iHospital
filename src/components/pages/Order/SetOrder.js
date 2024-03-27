@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { formatNameForDoc, openNofi } from '../../comman';
+import { formatNameForDoc, openNofi } from '../../common';
 import {
    Badge,
    Button,

@@ -1,6 +1,6 @@
 import { Tree, Image, Modal, Spin, Card, Result, Tabs, Button, Divider, Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { dataToTree, openNofi } from '../../comman';
+import { dataToTree, openNofi } from '../../common';
 import FormXray from './FormPrint/Xray';
 import XrayImg from './FormPrint/XrayImg';
 import male from '../../../assets/images/maleAvatar.svg';

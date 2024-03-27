@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, message } from 'antd';
 
 import UTable from '../../UTable';
-import { Patch } from '../../comman';
+import { Patch } from '../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import apiInsuranceService from '../../../services/healt-insurance/insurance';

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Button } from 'antd';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
-import { numberToCurrency, openNofi } from '../../comman';
+import { numberToCurrency, openNofi } from '../../common';
 import PaymentService from '../../../services/payment/payment';
 import EbarimtService from '../../../services/ebarimt/ebarimt';
 import { useSelector } from 'react-redux';

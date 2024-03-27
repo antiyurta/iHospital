@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Empty, Input, Table } from 'antd';
-import PatientInformation from '../PatientInformation';
-import Index from './Doctor/Index';
 import { SearchOutlined } from '@ant-design/icons';
-
+//comp
 import Appointment from './Index';
-import patientApi from '../../../services/pms/patient.api';
-
+import Index from './Doctor/Index';
+import PatientInformation from '../PatientInformation';
+//api
+import patientApi from '@ApiServices/pms/patient.api';
+//extends
 const { Search } = Input;
 
 function DoctorAppointment() {

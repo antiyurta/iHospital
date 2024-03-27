@@ -5,7 +5,7 @@ import locale from 'antd/es/locale/mn_MN';
 //service
 import ReferenceDiagnoseServices from '../../../services/reference/diagnose';
 import EmrPatientDiagnoseServices from '../../../services/emr/patientDiagnose';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 import EditableFormItem from '../611/Support/EditableFormItem';
 
 const DiagnoseTypeEnum = {
@@ -51,9 +51,7 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
    const getPatientDiagnosis = async () => {
       setIsLoading(true);
       await EmrPatientDiagnoseServices.getByPageFilter({
-         params: {
-            appointmentId: appointmentId
-         }
+         appointmentId: appointmentId
       })
          .then(({ data: { response } }) => {
             setPatientDiagnosis(response.data);

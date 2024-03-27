@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
-import { Button, Row, Col, Typography, Form, Input } from 'antd';
-import signinbg from '../assets/images/background/front.svg';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import AuthContext from '../features/AuthContext';
+import { Button, Row, Col, Typography, Form, Input } from 'antd';
+//img
+import { loginBg } from '@Assets/index';
+//context
+import AuthContext from '@Features/AuthContext';
 
 const { Title } = Typography;
 function Login() {
    const navigate = useNavigate();
-   const [loginLoading, setLoginLoading] = useState(false);
    const { loginn, user } = useContext(AuthContext);
+   const [loginLoading, setLoginLoading] = useState(false);
 
    const onFinish = async (values) => {
       setLoginLoading(true);
@@ -74,7 +75,7 @@ function Login() {
                </Form>
             </Col>
             <Col className="sign-img" style={{ padding: 12 }} xs={{ span: 24 }} lg={{ span: 12 }} md={{ span: 12 }}>
-               <img src={signinbg} alt="" />
+               <img src={loginBg} alt="" />
             </Col>
          </Row>
       </div>

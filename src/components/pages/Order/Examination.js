@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Empty, Modal, Table } from 'antd';
-import { numberToCurrency, openNofi } from '../../comman';
+import { numberToCurrency, openNofi } from '../../common';
 
 import examIcon from './NewOrder/examIcon.svg';
 import removeButtonIcon from './removeButton.svg';

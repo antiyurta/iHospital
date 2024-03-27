@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
-import DocumentsFormPatientService from '../../../../services/organization/document';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
-import EmrContext from '../../../../features/EmrContext';
 import { Modal, Table, Tooltip } from 'antd';
-import { ReturnByIdToName } from '../../611/Document/Index';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import Customized from '../../BeforeAmbulatory/Customized/Index';
+//context
+import EmrContext from '@Features/EmrContext';
+//redux
+import { selectCurrentEmrData } from '@Features/emrReducer';
+//comp
+import { ReturnByIdToName } from '@Pages/611/Document/Index';
+import Customized from '@Pages/BeforeAmbulatory/Customized/Index';
+//api
+import DocumentsFormPatientApi from '@ApiServices/organization/document';
 const DocumentDraft = (props) => {
    const { usageType, handleCount } = props;
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -19,7 +23,7 @@ const DocumentDraft = (props) => {
 
    const getDocumentsInDraft = async () => {
       setIsLoading(true);
-      await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
+      await DocumentsFormPatientApi.getByDocument(incomeEmrData.patientId, {
          appointmentId: incomeEmrData.inpatientRequestId,
          type: 'FORM',
          usageType: usageType,
@@ -49,7 +53,7 @@ const DocumentDraft = (props) => {
          cancelText: 'Болих',
          okText: 'Тийм',
          onOk: async () => {
-            return await DocumentsFormPatientService.patch(_id, {
+            return await DocumentsFormPatientApi.patch(_id, {
                saveType: 'Save'
             }).then(() => {
                getDocumentsInDraft();
@@ -66,7 +70,7 @@ const DocumentDraft = (props) => {
          okText: 'Тийм',
          okType: 'danger',
          onOk: async () => {
-            return await DocumentsFormPatientService.deleteDocument(_id).then(() => {
+            return await DocumentsFormPatientApi.deleteDocument(_id).then(() => {
                getDocumentsInDraft();
             });
          }
@@ -97,7 +101,7 @@ const DocumentDraft = (props) => {
                {
                   title: 'Нэр',
                   dataIndex: 'documentId',
-                  render: (documentId) => ReturnByIdToName(documentId)
+                  render: (documentId) => <div className="whitespace-break-spaces">{ReturnByIdToName(documentId)}</div>
                },
                {
                   title: 'Огноо',

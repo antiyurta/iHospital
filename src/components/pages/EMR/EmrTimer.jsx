@@ -10,7 +10,7 @@ import Finger from '../../../features/finger';
 //
 import AppointmentService from '../../../services/appointment/api-appointment-service';
 import insuranceServices from '../../../services/healt-insurance/insurance';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 import { useLocation, useNavigate } from 'react-router-dom';
 //
 

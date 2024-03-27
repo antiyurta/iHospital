@@ -4,7 +4,7 @@ import Cardex from './BeforeInPatientTabs/Cardex';
 import MedicineRequests from './BeforeInPatientTabs/MedicineRequests';
 import Acting from './BeforeInPatientTabs/Acting';
 import NursingLog from './BeforeInPatientTabs/NursingLog';
-import { openNofi } from '../../comman';
+import { openNofi } from '../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentAppId } from '../../../features/authReducer';
 

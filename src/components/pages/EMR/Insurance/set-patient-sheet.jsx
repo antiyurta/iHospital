@@ -4,7 +4,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import insurance from '../../../../services/healt-insurance/insurance';
 import { useState } from 'react';
-import { getAge, localMn } from '../../../comman';
+import { getAge, localMn } from '../../../common';
 import patientDiagnose from '../../../../services/emr/patientDiagnose';
 import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
 import { useSelector } from 'react-redux';

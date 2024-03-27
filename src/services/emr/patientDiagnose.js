@@ -1,7 +1,9 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
 class PatientDiagnose {
    async getByPageFilter(params) {
-      return await jwtInterceopter.get('emr/patient-diagnose', params);
+      return await jwtInterceopter.get('emr/patient-diagnose', {
+         params: params
+      });
    }
    async post(body) {
       return await jwtInterceopter.post('emr/patient-diagnose', body);

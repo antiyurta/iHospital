@@ -13,7 +13,7 @@ import ErequestApi from '../../../../../services/service/service';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../../../comman';
+import { formatNameForDoc } from '../../../../common';
 
 const ErequestList = () => {
    const IncomeEMRData = useSelector(selectCurrentEmrData);

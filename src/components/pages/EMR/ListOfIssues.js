@@ -10,9 +10,7 @@ function ListOfIssues() {
    const [data, setData] = useState([]);
    const getProblems = async (patientId) => {
       await PatientDiagnoseSerivce.getByPageFilter({
-         params: {
-            patientId: patientId
-         }
+         patientId: patientId
       }).then(({ data: { response } }) => {
          const data = response?.data?.map((appointment) => ({
             appointmentId: appointment.appointmentId,

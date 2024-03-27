@@ -44,10 +44,10 @@ const RepairHics = (props) => {
    const setFields = (value) => {
       const hicsService = hicsServices.find((hicsService) => hicsService.serviceNumber == value);
       form.setFieldsValue({
-        drgCode: hicsService.drgCode,
-        icdCode: hicsService.icdCode,
-        icdCodeName: hicsService.icdCodeName,
-        icd9Code: hicsService.icd9Code,
+         drgCode: hicsService.drgCode,
+         icdCode: hicsService.icdCode,
+         icdCodeName: hicsService.icdCodeName,
+         icd9Code: hicsService.icd9Code
       });
    };
    const setIcdCodeName = (value) => {

@@ -1,6 +1,5 @@
 import { Button } from 'antd';
-import React, { useEffect, useMemo } from 'react';
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import Question from './question';
 import Answer from './answer';
@@ -64,7 +63,7 @@ const Index = (props) => {
                type: '',
                keyWord: '',
                question: '',
-               isNumber: false,
+               isInteger: false,
                isOther: false
             }
          ])
@@ -88,7 +87,7 @@ const Index = (props) => {
                   type: '',
                   keyWord: '',
                   question: '',
-                  isNumber: false,
+                  isInteger: false,
                   isOther: false
                }
             ],

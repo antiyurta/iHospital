@@ -19,7 +19,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../comman';
+import { Get } from '../../../common';
 
 function Cardex() {
    const today = new Date();

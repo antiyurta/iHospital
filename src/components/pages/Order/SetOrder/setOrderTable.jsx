@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import EmrContext from '../../../../features/EmrContext';
 import { Table } from 'antd';
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../../comman';
+import { formatNameForDoc } from '../../../common';
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const SetOrderTable = (props) => {

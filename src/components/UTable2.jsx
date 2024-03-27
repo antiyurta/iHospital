@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../features/authReducer';
 import mnMN from 'antd/es/locale/mn_MN';
-import { Get, Post, Patch, Delete, ScrollRef } from './comman';
+import { Get, Post, Patch, Delete, ScrollRef } from './common';
 const { Search } = Input;
 function UTable2({ title, url, column, action }) {
    const token = useSelector(selectCurrentToken);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { formatNameForDoc, getAge, getGenderInType } from '../../../comman';
+import { formatNameForDoc, getAge, getGenderInType } from '../../../common';
 import { Table } from 'react-bootstrap';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';

@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Select, Button, Slider, Card, Collapse, DatePicker, Row, Col, TimePicker } from 'antd';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
 import mn from 'antd/es/calendar/locale/mn_MN';
-import { formatNameForDoc, openNofi } from '../../../comman';
+import { formatNameForDoc, openNofi } from '@Comman/common';
 import { Table } from 'react-bootstrap';
 import { EditOutlined } from '@ant-design/icons';
 
 //
-import OrganizationEmployeeApi from '../../../../services/organization/employee';
-import OrganizationStructureApi from '../../../../services/organization/structure';
-import OrganizationRoomApi from '../../../../services/organization/room';
-import ReferenceSettingsApi from '../../../../services/reference/settings';
-import ReferenceDevicesApi from '../../../../services/reference/devices';
-import ScheduleApi from '../../../../services/schedule';
+import OrganizationEmployeeApi from '@ApiServices/organization/employee';
+import OrganizationStructureApi from '@ApiServices/organization/structure';
+import OrganizationRoomApi from '@ApiServices/organization/room';
+import ReferenceSettingsApi from '@ApiServices/reference/settings';
+import ReferenceDevicesApi from '@ApiServices/reference/devices';
+import ScheduleApi from '@ApiServices/schedule';
 //
 const { Panel } = Collapse;
 const TimeFormat = 'HH:mm';

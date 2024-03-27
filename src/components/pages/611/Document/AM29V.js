@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { NewCheckbox, NewCheckboxGroup } from '../../../Input/Input';
-import { formatNameForDoc } from '../../../comman';
+import { formatNameForDoc } from '../../../common';
 
 //маягт АМ-29В
 function AM29V(props) {

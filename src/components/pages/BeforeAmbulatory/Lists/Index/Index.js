@@ -4,9 +4,9 @@ import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectCurrentDepId, selectCurrentInsurance, selectCurrentUserId } from '../../../../../features/authReducer';
+import { selectCurrentDepId, selectCurrentUserId } from '../../../../../features/authReducer';
 import { setEmrData } from '../../../../../features/emrReducer';
-import { getAge, getGenderInType, openNofi } from '../../../../comman';
+import { getAge, getGenderInType, openNofi } from '../../../../common';
 import orderType from './orderType.js';
 import MonitorCriteria from '../../../Insurance/MonitorCriteria';
 import { setPatient } from '../../../../../features/patientReducer';
@@ -28,7 +28,6 @@ function Index({ type, isDoctor }) {
    //2 bol hewten
    //3 bol mes zasal
    const [startFormHics] = Form.useForm();
-   const isInsurance = useSelector(selectCurrentInsurance);
    const employeeId = useSelector(selectCurrentUserId);
    const depIds = useSelector(selectCurrentDepId);
    const navigate = useNavigate();
@@ -144,15 +143,23 @@ function Index({ type, isDoctor }) {
          } else {
             if (row.startDate === null && isDoctor) {
                if (row.isInsurance) {
-                  await healthInsuranceService
-                     .getHicsService()
-                     .then(({ data }) =>
-                        setHicsSupports(data.result.filter((hicsService) => hicsService.groupId == 201))
-                     )
-                     .catch(() => {
-                        openNofi('error', 'Алдаа', 'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу');
-                     });
-                  setIsOpenModalStartService(true);
+                  if (row.type != 1) {
+                     await healthInsuranceService
+                        .getHicsService()
+                        .then(({ data }) =>
+                           setHicsSupports(data.result.filter((hicsService) => hicsService.groupId == 201))
+                        )
+                        .catch(() => {
+                           openNofi(
+                              'error',
+                              'Алдаа',
+                              'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу'
+                           );
+                        });
+                     setIsOpenModalStartService(true);
+                  } else {
+                     CreateHicsSeal(row, {}, 209);
+                  }
                } else {
                   hrefEMR(row);
                }
@@ -173,7 +180,7 @@ function Index({ type, isDoctor }) {
       const inspectionType = type === 2 ? 1 : row.inspectionType;
       const data = {
          patientId: row.patientId,
-         inspection: inspectionType === undefined ? 1 : inspectionType,
+         inspection: inspectionType || 1,
          type: row.type,
          hicsSeal: row.hicsSeal,
          startDate: row.startDate || new Date(),
@@ -181,6 +188,7 @@ function Index({ type, isDoctor }) {
          appointmentType: type,
          inspectionNoteId: row.inspectionNoteId,
          slotId: row.slotId,
+         hicsServiceId: row.hicsSeal?.hicsServiceId,
          reasonComming: row.reasonComming
       };
       if (type === 0) {
@@ -199,17 +207,18 @@ function Index({ type, isDoctor }) {
          data['departmentId'] = row.inDepartmentId;
       }
       // uzleg ehleh tsag
-      if (row.startDate === null && isDoctor && type === 1) {
-         AppointmentService.patchPreOrder(row.id, {
-            slotId: row.slotId,
-            startDate: new Date()
-         });
-      }
-      if (row.startDate === null && isDoctor && type === 0) {
-         AppointmentService.patchAppointment(row.id, {
-            startDate: new Date(),
-            slotId: row.slotId
-         });
+      if (row.startDate === null && isDoctor) {
+         if (type === 1) {
+            AppointmentService.patchPreOrder(row.id, {
+               slotId: row.slotId,
+               startDate: new Date()
+            });
+         } else if (type === 0) {
+            AppointmentService.patchAppointment(row.id, {
+               startDate: new Date(),
+               slotId: row.slotId
+            });
+         }
       }
       // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
       if (type != 1 && row.slotId && isDoctor && row.slot?.incomeDate === null) {
@@ -230,29 +239,32 @@ function Index({ type, isDoctor }) {
       }
       dispatch(setPatient(row.patient));
    };
-   const startHics = async (values) => {
+   const CreateHicsSeal = async (row, data, groupId) => {
+      await apiInsuranceService
+         .createHicsSeal({
+            appointmentId: row.id,
+            patientId: row.patientId,
+            departmentId: row.cabinetId,
+            startAt: data.result?.createdDate || new Date(),
+            hicsAmbulatoryStartId: data.result?.id,
+            hicsServiceId: data.result?.hicsServiceId,
+            groupId: groupId
+         })
+         .then((response) => {
+            if (response.status != 201) {
+               openNofi('error', 'Амжилтгүй', response);
+            }
+         });
+      hrefEMR(null);
+   };
+   const startAmbulatory = async (values) => {
       await apiInsuranceService
          .hicsAmbulatoryStart(values.fingerprint, selectedRow.patientId, values.hicsServiceId)
          .then(async ({ data }) => {
             if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);
             } else if (data.code === 200) {
-               await apiInsuranceService
-                  .createHicsSeal({
-                     appointmentId: selectedRow.id,
-                     patientId: selectedRow.patientId,
-                     departmentId: selectedRow.cabinetId,
-                     startAt: data.result.createdDate,
-                     hicsAmbulatoryStartId: data.result.id,
-                     hicsServiceId: data.result.hicsServiceId,
-                     groupId: 201
-                  })
-                  .then((response) => {
-                     if (response.status != 200) {
-                        openNofi('error', 'Амжилтгүй', response);
-                     }
-                  });
-               hrefEMR(null);
+               CreateHicsSeal(selectedRow, data, 201);
             }
          });
    };
@@ -332,12 +344,14 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'ЭСҮ',
-         // dataIndex: 'emergencySorter',
+         dataIndex: 'emergencySorter',
          // dataIndex: 'assesment',
          // яаралтай байвал эсвэл энгийн
-         dataIndex: 'assesment',
-         width: 50,
-         render: (assesment) => <TypeInfo bgColor={assesment?.color} textColor={'white'} text={assesment?.total} />
+         // dataIndex: 'assesment',
+         width: 100,
+         render: (emergencySorter) => (
+            <TypeInfo bgColor={emergencySorter?.color} textColor={'black'} text={emergencySorter?.supportTime} />
+         )
       },
       {
          title: 'Үзлэг',
@@ -367,7 +381,7 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'Хүйс',
-         width: 40,
+         width: 50,
          dataIndex: ['patient', 'genderType'],
          render: (text) => getGenderInType(text)
       },
@@ -688,8 +702,11 @@ function Index({ type, isDoctor }) {
       },
       {
          title: 'ЭСҮ',
-         dataIndex: 'assesment',
-         render: (assesment) => <TypeInfo bgColor={assesment?.color} textColor={'white'} text={assesment?.total} />
+         width: 100,
+         dataIndex: 'emergencySorter',
+         render: (emergencySorter) => (
+            <TypeInfo bgColor={emergencySorter?.color} textColor={'black'} text={emergencySorter?.supportTime} />
+         )
       },
       {
          title: 'Үйлдэл',
@@ -787,7 +804,7 @@ function Index({ type, isDoctor }) {
                startFormHics
                   .validateFields()
                   .then((values) => {
-                     startHics(values);
+                     startAmbulatory(values);
                   })
                   .catch(({ errorFields }) => {
                      errorFields?.map((error) => message.error(error.errors[0]));

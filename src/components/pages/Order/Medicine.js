@@ -1,11 +1,12 @@
 import { CloseCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Input, Modal, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, localMn, openNofi } from '../../comman';
+import { Get, localMn, openNofi } from '@Comman/common';
 
 import medicineIcon from './NewOrder/medicineIcon.svg';
+import ScheduleApi from '@ApiServices/schedule';
 
 const { Search } = Input;
 function Medicine({ usageType, handleclick }) {
@@ -19,6 +20,7 @@ function Medicine({ usageType, handleclick }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
    //
    const getMedicine = async (page, pageSize, value, index) => {
+      await ScheduleApi.get();
       setLoading(true);
       const conf = {
          headers: {},

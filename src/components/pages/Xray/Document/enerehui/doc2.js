@@ -85,4 +85,3 @@ const Doc2 = (props) => {
    );
 };
 export default Doc2;
-

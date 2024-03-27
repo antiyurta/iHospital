@@ -8,7 +8,7 @@ import {
    EditOutlined
 } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { Get, Patch } from '../../../comman';
+import { Get, Patch } from '../../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../features/authReducer';
 import moment from 'moment';

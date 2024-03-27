@@ -1,6 +1,6 @@
 import { Checkbox, Col, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { getAge, numberToCurrency } from '../../../comman';
+import { getAge, numberToCurrency } from '../../../common';
 import dayjs from 'dayjs';
 import EmrContext from '../../../../features/EmrContext';
 const CT1End = (props) => {

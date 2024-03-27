@@ -2,7 +2,7 @@ import { Badge, Modal, Table, Tabs } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentAppId, selectCurrentDepId } from '../../../../features/authReducer';
-import { openNofi } from '../../../comman';
+import { openNofi } from '../../../common';
 //services
 import DocumentsFormPatientService from '../../../../services/organization/document';
 import OrganizationDocumentRoleServices from '../../../../services/organization/documentRole';

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { formatNameForDoc } from '../../../comman';
+import { formatNameForDoc } from '../../../common';
 const StatusIo = {
    Morning: 'q2-1', // Өглөө
    Afternoon: 'q2-2', // Өдөр
