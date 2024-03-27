@@ -414,7 +414,7 @@ function Xrays({ PatientId }) {
                                        <Image.PreviewGroup>
                                           <div className="grid grid-cols-4 gap-2">
                                              {imageUrls?.map((url, index) => (
-                                                <Image key={index} src={url} alt={index} />
+                                                <Image key={index} src={url} alt={index} crossOrigin="anonymous" />
                                              ))}
                                           </div>
                                        </Image.PreviewGroup>
