@@ -232,7 +232,10 @@ function Xrays({ PatientId }) {
                setIsViewPacs(true);
                if (response) {
                   setOsimisViewerUrl(response?.osimisViewerUrl);
-                  setImageUrls(response?.series[0]?.instances);
+                  const newUrls = response?.series[0]?.instances?.map((url) =>
+                     url.replace('http://192.82.92.168', 'https://ihospital.mn/pacs')
+                  );
+                  setImageUrls(newUrls);
                }
             })
             .catch((error) => {
