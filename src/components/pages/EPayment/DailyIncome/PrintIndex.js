@@ -49,7 +49,8 @@ function PrintIndex() {
    const getEmployees = async () => {
       await OrganizationEmployeeService.getEmployee({
          params: {
-            isRegistration: true
+            isRegistration: true,
+            isWorking: true
          }
       }).then((response) => {
          setEmployees(response.data.response.data);
@@ -75,8 +76,7 @@ function PrintIndex() {
       return paymentShape.find((e) => e.id === id)?.name;
    };
    useEffect(() => {
-      getEmployees(null);
-      // getEmployees(1);
+      getEmployees();
       getDiscounts();
       getPaymentType();
    }, []);

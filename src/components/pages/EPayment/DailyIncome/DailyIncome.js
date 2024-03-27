@@ -321,6 +321,7 @@ function DailyIncome() {
             footer={null}
             width={'1200px'}
             onCancel={() => setPrintOneDay(false)}
+            destroyOnClose
          >
             <PrintIndex />
          </Modal>
