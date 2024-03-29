@@ -106,10 +106,7 @@ function Footer() {
                               <img src={AppText} alt="playStore" />
                            </div>
                         </div>
-                        <a
-                           href="https://www.freecodecamp.org/"
-                           target="_blank"
-                           rel="noopener noreferrer"
+                        <div
                            className="flex flex-col gap-2 items-center p-2 bg-white"
                            style={{
                               border: '2px solid #E8E8E8',
@@ -124,7 +121,7 @@ function Footer() {
                               <img src={PlayStore} alt="playStore" />
                               <img src={PlayStoreText} alt="playStore" />
                            </div>
-                        </a>
+                        </div>
                      </div>
                   </menu>
                </section>
