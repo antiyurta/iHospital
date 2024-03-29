@@ -12,6 +12,7 @@ import twitter from '../../assets/landing/twitter.png';
 import linkin from '../../assets/landing/linkin.png';
 import logo from '../../assets/logo/test.svg';
 import { Link, NavLink } from 'react-router-dom';
+import QRCode from 'react-qr-code';
 //
 function Footer() {
    return (
@@ -89,34 +90,39 @@ function Footer() {
                   <menu>
                      <h2>Апп татах</h2>
                      <div className="flex flex-row justify-between gap-3">
-                        <a
-                           href="https://www.freecodecamp.org/"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="flex flex-row items-center p-2 bg-white"
+                        <div
+                           className="flex flex-col gap-2 items-center p-2 bg-white"
                            style={{
                               border: '2px solid #E8E8E8',
                               borderRadius: '6px'
                            }}
                         >
+                           <QRCode
+                              value="https://apps.apple.com/us/app/ihospital-mn-cloud-hospital/id6448801282"
+                              size={100}
+                           />
+                           <div className="flex gap-2">
+                              <img className="h-[24px] w-[18px]" src={AppLogo} alt="playStore" />
+                              <img src={AppText} alt="playStore" />
+                           </div>
+                        </div>
+                        <a
+                           href="https://www.freecodecamp.org/"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="flex flex-col gap-2 items-center p-2 bg-white"
+                           style={{
+                              border: '2px solid #E8E8E8',
+                              borderRadius: '6px'
+                           }}
+                        >
+                           <QRCode
+                              value="https://play.google.com/store/apps/details?id=com.ihospitalmn.app"
+                              size={100}
+                           />
                            <div className="flex gap-2">
                               <img src={PlayStore} alt="playStore" />
                               <img src={PlayStoreText} alt="playStore" />
-                           </div>
-                        </a>
-                        <a
-                           href="https://www.freecodecamp.org/"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="flex flex-row items-center p-2 bg-white"
-                           style={{
-                              border: '2px solid #E8E8E8',
-                              borderRadius: '6px'
-                           }}
-                        >
-                           <div className="flex gap-2">
-                              <img src={AppLogo} alt="playStore" />
-                              <img src={AppText} alt="playStore" />
                            </div>
                         </a>
                      </div>
