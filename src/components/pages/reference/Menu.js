@@ -60,13 +60,10 @@ function Menu() {
          parentEl.menus = [...(parentEl.menus || []), el];
       });
       setMenus(root);
-      console.log(root);
    };
    const getMenus = async () => {
       await MenuService.get().then((response) => {
-         console.log(response.data);
          generateData(response.data.response.data);
-         // setMeta(response.data.response.meta);
       });
    };
 
@@ -151,6 +148,14 @@ function Menu() {
          if (response.data.success) {
             form.setFieldsValue(response.data.response);
             setIsOpenModal(true);
+         }
+      });
+   };
+
+   const removeMenu = async (id) => {
+      await MenuService.remove(id).then((response) => {
+         if (response.data.success) {
+            getMenus();
          }
       });
    };
@@ -417,33 +422,54 @@ function Menu() {
                   {
                      title: 'Агуулагдах цэснүүд',
                      dataIndex: 'menus',
-                     render: (text) => {
-                        if (text?.length > 0) {
-                           return (
-                              <ul className="list-inside list-decimal">
-                                 {text?.map((item, index) => (
-                                    <li
-                                       key={index}
-                                       style={{
-                                          display: 'flex',
-                                          flexDirection: 'row',
-                                          gap: 12
-                                       }}
-                                    >
-                                       {item.title}
+                     render: (menus) => (
+                        <Table
+                           rowKey="id"
+                           bordered
+                           columns={[
+                              {
+                                 title: 'Нэр',
+                                 width: 100,
+                                 dataIndex: 'title'
+                              },
+                              {
+                                 title: 'Зураг',
+                                 width: 40,
+                                 dataIndex: 'icon',
+                                 render: (text) => {
+                                    return (
                                        <p
                                           style={{
                                              width: 40
                                           }}
-                                          dangerouslySetInnerHTML={{ __html: item.icon }}
+                                          dangerouslySetInnerHTML={{ __html: text }}
                                        />
-                                    </li>
-                                 ))}
-                              </ul>
-                           );
-                        }
-                        return 'Байхгүй /Дэд цэс байхгүй/';
-                     }
+                                    );
+                                 }
+                              },
+                              {
+                                 title: 'Үйлдэл',
+                                 width: 10,
+                                 dataIndex: 'id',
+                                 render: (text) => (
+                                    <Button
+                                       type="link"
+                                       icon={
+                                          <DeleteOutlined
+                                             style={{
+                                                color: 'red'
+                                             }}
+                                          />
+                                       }
+                                       onClick={() => removeMenu(text)}
+                                    />
+                                 )
+                              }
+                           ]}
+                           dataSource={menus}
+                           pagination={false}
+                        />
+                     )
                   },
                   {
                      width: 50,
