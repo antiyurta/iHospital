@@ -11,3 +11,8 @@ export const mapSymbol = require('./images/map.svg');
 
 export const profileBg = require('./images/background/bg-profile.jpg');
 export const loginBg = require('./images/background/front.svg');
+
+export const companyLogo = require('./logo/iHospital.png');
+export const logoCollapsed = require('./logo/logoCollapsed.svg');
+
+export const WarningIcon = require('./images/warning.svg');

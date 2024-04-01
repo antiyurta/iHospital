@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { CheckOutlined, CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
+import { CheckOutlined, CloseOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Card, Empty, Form, Input, Modal, Result, Select, Table, message } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -170,23 +170,17 @@ function Index({ type, isDoctor }) {
       }
    };
    // 8.1
-   const hrefEMR = (sRow) => {
-      var row;
-      if (sRow) {
-         row = sRow;
-      } else {
-         row = selectedRow;
-      }
-      const inspectionType = type === 2 ? 1 : row.inspectionType;
+   const hrefEMR = (row) => {
       const data = {
          patientId: row.patientId,
-         inspection: inspectionType || 1,
+         inspection: type === 2 ? 1 : row.inspectionType,
          type: row.type,
          hicsSeal: row.hicsSeal,
          startDate: row.startDate || new Date(),
          endDate: row.endDate,
          appointmentType: type,
          inspectionNoteId: row.inspectionNoteId,
+         urgentInspectionNoteId: row.urgentInspectionNoteId,
          slotId: row.slotId,
          hicsServiceId: row.hicsSeal?.hicsServiceId,
          reasonComming: row.reasonComming
@@ -255,7 +249,7 @@ function Index({ type, isDoctor }) {
                openNofi('error', 'Амжилтгүй', response);
             }
          });
-      hrefEMR(null);
+      hrefEMR(row);
    };
    const startAmbulatory = async (values) => {
       await apiInsuranceService
@@ -313,9 +307,12 @@ function Index({ type, isDoctor }) {
          return 'Гэрийн эргэлт';
       } else if (inspectionType === 5) {
          return 'Идэвхтэй хяналт';
-      } else {
+      } else if (inspectionType === 6) {
          return 'Дуудлагаа';
+      } else if (inspectionType === 99) {
+         return 'Шийдвэрлэсэн';
       }
+      return;
    };
 
    const columns = [

@@ -1,26 +1,31 @@
 import React from 'react';
-import Ocs from '../OCS/Ocs';
 import { connect } from 'react-redux';
-import WarningIcon from '../../../assets/images/warning.svg';
-import { openNofi } from '../../common';
-import EmrSupports from '../EmrSupports';
-import PatientInformation from '../PatientInformation';
 import { Button, Card, Modal, Radio } from 'antd';
-import MainPatientHistory from './EPatientHistory/MainPatientHistory';
-import { delEmrData } from '../../../features/emrReducer';
-import PmsPatientServices from '../../../services/pms/patient.api';
-import ServiceRequestService from '../../../services/serviceRequest';
-import PaymentService from '../../../services/payment/payment';
-import DoctorNotes from './DoctorNotes';
+import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import Barcode from 'react-barcode';
+//img
+import { WarningIcon } from '@Assets/index';
+//context
+import { EmrContextProvider } from '@Features/EmrContext';
+//redux
+import { delEmrData } from '@Features/emrReducer';
+//common
+import { openNofi } from '@Comman/common';
+//comp
+import Ocs from '@Pages/OCS/Ocs';
 import EmrTimer from './EmrTimer';
 import OneWindow from './OneWindow';
-import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
-import MainAmbulatory from './Ambulatory/MainAmbulatory';
-import MainInPatient from './InPatient/MainInPatient';
+import DoctorNotes from './DoctorNotes';
+import Schedule from '@Pages/OCS/Schedule';
 import NewEmrSupport from './NewEmrSupport';
-import { EmrContextProvider } from '../../../features/EmrContext';
-import Barcode from 'react-barcode';
-import Schedule from '../OCS/Schedule';
+import MainInPatient from './InPatient/MainInPatient';
+import MainAmbulatory from './Ambulatory/MainAmbulatory';
+import PatientInformation from '@Pages/PatientInformation';
+import MainPatientHistory from '@Pages/EMR/EPatientHistory/MainPatientHistory';
+//api
+import PaymentApi from '@ApiServices/payment/payment';
+import PmsPatientApi from '@ApiServices/pms/patient.api';
+import ServiceRequestApi from '@ApiServices/serviceRequest';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -51,7 +56,7 @@ class NewEmr extends React.Component {
    }
 
    async getByIdPatient() {
-      await PmsPatientServices.getById(this.props.IncomeEMRData.patientId).then((response) => {
+      await PmsPatientApi.getById(this.props.IncomeEMRData.patientId).then((response) => {
          this.setState({ selectedPatient: response.data?.response });
       });
    }
@@ -84,10 +89,10 @@ class NewEmr extends React.Component {
          data['requestDate'] = new Date();
          data['usageType'] = this.props.IncomeEMRData.usageType;
          data['services'] = value;
-         await ServiceRequestService.post(data).then(async (response) => {
+         await ServiceRequestApi.post(data).then(async (response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');
-               await PaymentService.get({
+               await PaymentApi.get({
                   params: {
                      patientId: this.state.selectedPatient.id
                   }
@@ -139,6 +144,7 @@ class NewEmr extends React.Component {
                            <EmrTimer
                               startDate={this.props.IncomeEMRData.startDate}
                               endDate={this.props.IncomeEMRData.endDate}
+                              inspection={this.props.IncomeEMRData.inspection}
                            />
                         ) : null}
                      </div>

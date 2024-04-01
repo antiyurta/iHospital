@@ -1,126 +1,62 @@
-import jwtInterceopter from '@Comman/jwtInterceopter';
-import { Button, Form, Modal, Select, Table } from 'antd';
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import Customized from '../../../BeforeAmbulatory/Customized/Index';
-const { Option } = Select;
-const ct32a = ({ document, reasonComming }) => {
-   //medku
+import { Button, Modal, Table } from 'antd';
+import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+//comp
+import Customized from '@Pages/BeforeAmbulatory/Customized/Index';
+//api
+import DocumentsFormApi from '@ApiServices/organization/document';
+import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
+//feature
+import { selectCurrentEmrData } from '@Features/emrReducer';
+const ct32a = ({ document }) => {
+   const incomeEmrData = useSelector(selectCurrentEmrData);
    const [isOpenModal, setIsOpenModal] = useState(false);
-   //medku
-   //    yaralta duudlaga
-   const [emergencyForm] = Form.useForm();
-   const [emergencies, setEmergencies] = useState([]);
-   const [emergenciesMeta, setEmergenciesMeta] = useState({});
+   const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
-   const [isConfirmLoading, setIsConfirmLoading] = useState(false);
-   const [callServices, setCallServices] = useState([]);
-   const [patientDiagnosis, setPatientDiagnosis] = useState([]);
-   const [hicsCostByField, setHicsCostByField] = useState([]);
-   const [isOpenEmergencyModal, setIsOpenEmergyncyModal] = useState(false);
    // yaralta duudlaga
-   const getData = async (page, pageSize) => {
+   const getData = async () => {
       setIsLoading(true);
-      await jwtInterceopter
-         .get('call-emergency', {
-            patientId: patientId,
-            appointmentId,
-            page: page,
-            limit: pageSize
-         })
-         .then((response) => {
-            setEmergencies(response.data.response.data);
-            setEmergenciesMeta(response.data.response.meta);
-         })
-         .finally(() => {
+      await DocumentsFormApi.get({
+         params: {
+            documentId: 111,
+            patientId: incomeEmrData.patientId,
+            usageType: incomeEmrData.usageType,
+            appointmentId: incomeEmrData.appointmentId
+         }
+      })
+         .then(({ data: { response } }) => {
+            setData(response);
             setIsLoading(false);
-         });
+         })
+         .catch((error) => {});
    };
-   const getHicsServices = async () => {
-      await jwtInterceopter
-         .get('insurance/hics-service', {
-            params: {
-               groupId: 210
-            }
-         })
-         .then((response) => {
-            setCallServices(response.data.data);
-         });
+
+   const patchAppointment = async (id) => {
+      await AppointmentApi.patchAppointment(incomeEmrData.appointmentId, {
+         urgentInspectionNoteId: id
+      }).then(() => {
+         getData();
+      });
    };
-   const getPatientDiagnosis = async () => {
-      await jwtInterceopter
-         .get('emr/patient-diagnose', {
-            params: {
-               appointmentId: appointmentId,
-               patientId: patientId
-            }
-         })
-         .then((response) => {
-            setPatientDiagnosis(response.data.response.data);
-         });
+
+   const deleteD = async (id) => {
+      DocumentsFormApi.deleteDocument(id);
    };
-   const getHicsCostByField = async (value) => {
-      const serviceId = emergencyForm.getFieldValue('hicsServiceId');
-      await jwtInterceopter
-         .get('health-insurance/hics-cost-by-field', {
-            params: {
-               serviceId: serviceId,
-               icdCode: value
-            }
-         })
-         .then((response) => {
-            console.log(response);
-            setHicsCostByField(response.data.result);
-         })
-         .catch((error) => {
-            console.log('=======>', error);
-            if (error.response.status === 400) {
-               openNofi('error', 'Алдаа', error.response.data.message);
-            }
-         });
-   };
-   const onFinishEmergyncy = async (values) => {
-      setIsConfirmLoading(true);
-      const data = {
-         patientId: patientId,
-         appointmentId: appointmentId,
-         drgCode: values.drgCode,
-         hicsServiceId: values.hicsServiceId,
-         icdCode: values.icdCode
-      };
-      await jwtInterceopter
-         .post('call-emergency', data)
-         .then((response) => {
-            console.log(response);
-            if (response.status === 201) {
-               setIsOpenEmergyncyModal(false);
-               openNofi('success', 'Амжилттай', 'Амжилттай хадгалагдсан');
-            }
-         })
-         .catch((error) => {
-            console.log(error);
-         })
-         .finally(() => {
-            setIsConfirmLoading(false);
-         });
-   };
-   //
+
    useEffect(() => {
-      //   if (reasonComming === 2) {
-      //      getData(1, 10);
-      //      getHicsServices();
-      //      getPatientDiagnosis();
-      //   }
-   }, [reasonComming]);
+      getData();
+   }, []);
    return (
       <div>
          <div className="flex flex-col gap-3">
             <div className="flow-root">
                <div className="float-left">
                   <Button
+                     disabled={data?.length > 0 ? true : false}
                      type="primary"
                      onClick={() => {
-                        setIsOpenEmergyncyModal(true);
+                        setIsOpenModal(true);
                      }}
                   >
                      Бөглөх
@@ -129,13 +65,13 @@ const ct32a = ({ document, reasonComming }) => {
             </div>
             <div>
                <Table
-                  rowKey={'id'}
+                  rowKey={'_id'}
                   bordered
                   loading={isLoading}
                   columns={[
                      {
                         title: 'Огноо',
-                        dataIndex: 'createAt',
+                        dataIndex: 'createdAt',
                         render: (text) => {
                            return dayjs(text).format('YYYY-MM-DD HH:mm:ss');
                         }
@@ -144,7 +80,7 @@ const ct32a = ({ document, reasonComming }) => {
                         title: 'Дуудлагын төрөл',
                         dataIndex: 'hicsServiceId',
                         render: (text) => {
-                           return callServices?.find((e) => e.id === text)?.name;
+                           // return callServices?.find((e) => e.id === text)?.name;
                         }
                      },
                      {
@@ -154,106 +90,34 @@ const ct32a = ({ document, reasonComming }) => {
                      {
                         title: 'ICD Код',
                         dataIndex: 'icdCode'
+                     },
+                     {
+                        title: 'sada',
+                        dataIndex: '_id',
+                        render: (id) => <Button onClick={() => deleteD(id)}>sd</Button>
                      }
                   ]}
-                  dataSource={emergencies}
-                  pagination={{
-                     position: ['bottomCenter'],
-                     size: 'small',
-                     current: emergenciesMeta.page,
-                     total: emergenciesMeta.itemCount,
-                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                     pageSize: emergenciesMeta.limit,
-                     showSizeChanger: true,
-                     pageSizeOptions: ['5', '10', '20', '50'],
-                     showQuickJumper: true,
-                     onChange: (page, pageSize) => getData(page, pageSize)
-                  }}
+                  dataSource={data}
+                  pagination={false}
                />
             </div>
          </div>
-         <Modal title="asda" open={isOpenModal} onCancel={() => setIsOpenModal(false)} destroyOnClose>
+         <Modal title="CT32A" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null} destroyOnClose>
             <Customized
-               propsUsageType={'IN'}
+               propsUsageType={'OUT'}
                isEdit={false}
                editId={null}
                document={document}
-               documentValue={110}
+               documentValue={document.value}
                documentType={0}
-               onOk={(state) => {
-                  //   getData();
+               onOk={(state, response) => {
+                  patchAppointment(response._id);
                   setIsOpenModal(state);
                }}
                isBackButton={false}
-               handleBackButton={() => null}
+               handleIsReload={(_state) => null}
+               handleBackButton={(_state) => null}
             />
-         </Modal>
-         <Modal
-            title="asdas"
-            open={isOpenEmergencyModal}
-            confirmLoading={isConfirmLoading}
-            onCancel={() => setIsOpenEmergyncyModal(false)}
-            onOk={() =>
-               emergencyForm.validateFields().then((values) => {
-                  onFinishEmergyncy(values);
-               })
-            }
-         >
-            <Form form={emergencyForm} layout="vertical">
-               {reasonComming === 2 ? (
-                  <Form.Item
-                     label="Дуудлагын төрөл"
-                     name="hicsServiceId"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Дуудлагын төрөл заавал'
-                        }
-                     ]}
-                  >
-                     <Select>
-                        {callServices?.map((service, index) => {
-                           return (
-                              <Option key={index} value={service.id}>
-                                 {service.name}
-                              </Option>
-                           );
-                        })}
-                     </Select>
-                  </Form.Item>
-               ) : null}
-               <Form.Item label="Эмчийн сонгосон онош" name={'icdCode'}>
-                  <Select onChange={(e) => getHicsCostByField(e)}>
-                     {patientDiagnosis?.map((diagnose, index) => {
-                        return (
-                           <Option key={index} value={diagnose.diagnose?.code}>
-                              {diagnose.diagnose?.code + '=> ' + diagnose.diagnose?.nameMn}
-                           </Option>
-                        );
-                     })}
-                  </Select>
-               </Form.Item>
-               <Form.Item
-                  label="Оношийн хамааралтай бүлэг"
-                  name="drgCode"
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Оношийн хамааралтай бүлэг заавал'
-                     }
-                  ]}
-               >
-                  <Select disabled={hicsCostByField?.length > 0 ? false : true}>
-                     {hicsCostByField?.map((cost, index) => {
-                        return (
-                           <Option key={index} value={cost.drgCode}>
-                              {cost.drgName + '=>' + cost.amountHi}
-                           </Option>
-                        );
-                     })}
-                  </Select>
-               </Form.Item>
-            </Form>
          </Modal>
       </div>
    );

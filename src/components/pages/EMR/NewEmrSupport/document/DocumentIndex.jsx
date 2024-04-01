@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId } from '../../../../../features/authReducer';
-import { selectCurrentEmrData } from '../../../../../features/emrReducer';
 import { Empty, Modal, Table } from 'antd';
-import { openNofi } from '../../../../common';
+//common
+import { openNofi } from '@Comman/common';
+//context
+import EmrContext from '@Features/EmrContext';
+//redux
+import { selectCurrentAppId } from '@Features/authReducer';
+import { selectCurrentEmrData } from '@Features/emrReducer';
 //service
-import OrganizationDocumentRoleServices from '../../../../../services/organization/documentRole';
+import OrganizationDocumentRoleApi from '@ApiServices/organization/documentRole';
 //img
 import Arrow from './arrow.svg';
 // compon
@@ -13,9 +17,9 @@ import Customized from '../../../BeforeAmbulatory/Customized/Index';
 
 const DocumentIndex = (props) => {
    const { usageType, handleCount } = props;
+   const { setIsReloadDocumentHistory } = useContext(EmrContext);
    const AppIds = useSelector(selectCurrentAppId);
    const incomeEmrData = useSelector(selectCurrentEmrData);
-   console.log(incomeEmrData);
    const [current, setCurrent] = useState(1);
    const [pageSize, setPageSize] = useState(10);
    const [isOpenRenderModal, setIsOpenRenderModal] = useState(false);
@@ -24,7 +28,7 @@ const DocumentIndex = (props) => {
    const [selectedDocument, setSelectedDocument] = useState({});
    const getDocuments = async () => {
       setIsLoading(true);
-      await OrganizationDocumentRoleServices.getByPageFilterShow({
+      await OrganizationDocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
             // structureIds: [incomeEmrData.departmentId],
@@ -116,6 +120,7 @@ const DocumentIndex = (props) => {
             onCancel={() => setIsOpenRenderModal(false)}
             width={700}
             footer={null}
+            destroyOnClose
          >
             <Customized
                propsUsageType={usageType}
@@ -126,6 +131,7 @@ const DocumentIndex = (props) => {
                documentType={0}
                onOk={(state) => setIsOpenRenderModal(state)}
                isBackButton={true}
+               handleIsReload={(state) => setIsReloadDocumentHistory(state)}
                handleBackButton={(state) => setIsOpenRenderModal(!state)}
             />
          </Modal>

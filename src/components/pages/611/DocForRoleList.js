@@ -59,6 +59,7 @@ function DocForRoleList() {
       form.resetFields();
       if (row != null) {
          setSelectedId(row.id);
+         selectDepartment(row.departmentIds);
          form.setFieldsValue(row);
       }
       setEditMode(state);

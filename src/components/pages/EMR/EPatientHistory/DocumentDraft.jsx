@@ -14,13 +14,12 @@ import Customized from '@Pages/BeforeAmbulatory/Customized/Index';
 import DocumentsFormPatientApi from '@ApiServices/organization/document';
 const DocumentDraft = (props) => {
    const { usageType, handleCount } = props;
-   const incomeEmrData = useSelector(selectCurrentEmrData);
-   const { setDocumentDraft, isReloadDocumentHistory, setIsReloadDocumentHistory } = useContext(EmrContext);
    const [isLoading, setIsLoading] = useState(false);
-   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+   const incomeEmrData = useSelector(selectCurrentEmrData);
    const [draftedDocuments, setDraftedDocuments] = useState([]);
    const [selectedDocument, setSelectedDocument] = useState({});
-
+   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+   const { setDocumentDraft, isReloadDocumentHistory, setIsReloadDocumentHistory } = useContext(EmrContext);
    const getDocumentsInDraft = async () => {
       setIsLoading(true);
       await DocumentsFormPatientApi.getByDocument(incomeEmrData.patientId, {

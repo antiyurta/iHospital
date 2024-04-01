@@ -300,7 +300,7 @@ export function ReturnById({ type, id, appointmentId, data }) {
    } else if (id === 109) {
       return <CT1Zurh type={type} data={data} appointmentId={appointmentId} />;
    } else if (id === 110) {
-      return <NotFound />;
+      return <NotFound />; // yaraltai duudlaga
    } else if (id === 111) {
       return <CT32A type={type} data={data} appointmentId={appointmentId} />;
    }

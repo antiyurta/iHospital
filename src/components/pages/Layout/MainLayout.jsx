@@ -1,19 +1,22 @@
 import React, { Fragment, Suspense, useContext, useState } from 'react';
-import companyLogo from '../../../assets/logo/iHospital.png';
-import logoCollapsed from '../../../assets/logo/logoCollapsed.svg';
-import male from '../../../assets/images/maleAvatar.svg';
-import { Outlet } from 'react-router-dom';
-import { LogoutOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { Delete, logout, selectCurrentFirstName, selectCurrentLastName } from '../../../features/authReducer';
-import Sidebar from './NewSidebar';
-import { useNavigate } from 'react-router-dom';
-import FullScreenLoader from '../../FullScreenLoader';
-import AuthContext from '../../../features/AuthContext';
 import { Button, Layout } from 'antd';
-import { removePatient } from '../../../features/patientReducer';
-import { remove as removeHospital } from '../../../features/hospitalReducer';
-
+import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { LogoutOutlined, MenuFoldOutlined } from '@ant-design/icons';
+//common
+import FullScreenLoader from '@Comman/FullScreenLoader';
+//comp
+import Sidebar from './NewSidebar';
+//img
+import { manIcon, companyLogo, logoCollapsed } from '@Assets/index';
+//context
+import AuthContext from '@Features/AuthContext';
+//redux
+import { removePatient } from '@Features/patientReducer';
+import { remove as removeHospital } from '@Features/hospitalReducer';
+import { Delete, logout, selectCurrentFirstName, selectCurrentLastName } from '@Features/authReducer';
+//extends
 const { Sider } = Layout;
 
 const MainLayout = () => {
@@ -47,9 +50,9 @@ const MainLayout = () => {
                   <Sidebar collapsed={collapsed} />
                   <div className="sidebar-footer">
                      <div className="image-cropper" onClick={() => navigate('/profile')}>
-                        <img src={male} className="profile-pic" alt="profile" />
+                        <img src={manIcon} className="profile-pic" alt="profile" />
                      </div>
-                     <div className="profile-info">
+                     <div className="profile-info" onClick={() => navigate('/profile')}>
                         <p className="profile-lastname">{lastName}</p>
                         <p className="profile-firstname">{firstName}</p>
                      </div>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentRoleId, selectCurrentUserId } from '../../../features/authReducer';
 import { Spin } from 'antd';
+import { useSelector } from 'react-redux';
 import { LoadingOutlined } from '@ant-design/icons';
-import PermissionServices from '../../../services/organization/permission';
+//comp
 import MenuItem from './MenuItem';
 import MenuItemChildren from './MenuItemChildren';
+//redux
+import { selectCurrentRoleId, selectCurrentUserId } from '@Features/authReducer';
+//api
+import PermissionApi from '@ApiServices/organization/permission';
 const Sidebar = ({ collapsed }) => {
    const [userMenu, setMenus] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +16,7 @@ const Sidebar = ({ collapsed }) => {
    const RoleId = useSelector(selectCurrentRoleId);
    const getMenus = async () => {
       setIsLoading(true);
-      await PermissionServices.getUserMenu({
+      await PermissionApi.getUserMenu({
          params: {
             roleId: RoleId,
             userId: UserId

@@ -133,6 +133,7 @@ function Index(props) {
             .then((response) => {
                if (response.status === 201) {
                   setAppointmentModal(false);
+                  openNofi('success', 'Амжилттай', 'Яаралтай амжилттай');
                }
             })
             .finally(() => {
@@ -225,7 +226,7 @@ function Index(props) {
                                        orderAppointment({
                                           isUrgent: true,
                                           roomNumber: '',
-                                          structureName: 'TEST',
+                                          structureName: 'Яаралтай тасаг',
                                           time: {
                                              start: dayjs(today).format('HH:mm'),
                                              end: dayjs(today).format('HH:mm')

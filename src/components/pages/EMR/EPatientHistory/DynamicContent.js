@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Form, Spin, Table } from 'antd';
 
+//redux
+import { selectCurrentUserId } from '@Features/authReducer';
 //comp
 import Soap from './Soap';
 // import Diagnose from '../../service/Diagnose';
@@ -8,13 +11,11 @@ import NewDiagnose from '../../service/NewDiagnose';
 import { inspectionTOJSON, openNofi } from '@Comman/common';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 //api
+import ServiceRequestApi from '@ApiServices/serviceRequest';
 import EmrInspectionNoteApi from '@ApiServices/emr/inspectionNote';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
-import ServiceRequestApi from '@ApiServices/serviceRequest';
 // enum
 import { InspectionEnum, ListIndexEnum } from '@Utils/enum';
-import { useSelector } from 'react-redux';
-import { selectCurrentUserId } from '@Features/authReducer';
 
 function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsServiceId }) {
    const employeeId = useSelector(selectCurrentUserId);
@@ -192,6 +193,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            formName="conclusion"
                            incomeKeyWords={[]}
                            checkProgress={(_keyWords) => null}
+                           isDisabledButton={(_state) => null}
                         />
                      </Soap>
                   ) : null}
@@ -213,6 +215,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            formName="advice"
                            incomeKeyWords={[]}
                            checkProgress={(_keyWords) => null}
+                           isDisabledButton={(_state) => null}
                         />
                      </Soap>
                   ) : null}
@@ -234,6 +237,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            formName="pain"
                            incomeKeyWords={[]}
                            checkProgress={(_keyWords) => null}
+                           isDisabledButton={(_state) => null}
                         />
                      </Soap>
                   ) : null}
@@ -255,6 +259,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            formName="question"
                            incomeKeyWords={[]}
                            checkProgress={(_keyWords) => null}
+                           isDisabledButton={(_state) => null}
                         />
                      </Soap>
                   ) : null}
@@ -276,6 +281,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            formName="inspection"
                            incomeKeyWords={[]}
                            checkProgress={(_keyWords) => null}
+                           isDisabledButton={(_state) => null}
                         />
                      </Soap>
                   ) : null}
@@ -389,6 +395,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            formName="plan"
                            incomeKeyWords={[]}
                            checkProgress={(_keyWords) => null}
+                           isDisabledButton={(_state) => null}
                         />
                         <Table
                            rowKey="id"

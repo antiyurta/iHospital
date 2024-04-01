@@ -9,6 +9,8 @@ import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
+//comp
+import UrgentDocument from './Urgent/UrgentDocument';
 //comman
 import { openNofi } from '@Comman/common';
 // redux
@@ -21,9 +23,11 @@ import DocumentFormApi from '@ApiServices/organization/documentForm';
 import DocumentMiddlewareApi from '@ApiServices/organization/document';
 // enum
 import { UsageTypeEnum, InspectionEnum, InspectionTypeEnum } from '@Utils/enum';
-
+// forms
+import { defualtForm, ConAndAdForm } from './DefualtForms';
 function MainPatientHistory({ handleClick }) {
    const {
+      type,
       appointmentId,
       inpatientRequestId,
       hicsServiceId,
@@ -46,8 +50,9 @@ function MainPatientHistory({ handleClick }) {
    const [editMode, setEditMode] = useState(false);
    const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(String);
 
-   const isViewDiagnose = (inspection) => {
-      if (inspection === InspectionEnum.Xray) return false;
+   const isViewDiagnose = (inspection, type) => {
+      if (type === 1) return false;
+      else if (inspection === InspectionEnum.Xray) return false;
       else if (inspection === InspectionEnum.Exo) return false;
       else if (inspection === InspectionEnum.Operation) return false;
       return true;
@@ -76,7 +81,7 @@ function MainPatientHistory({ handleClick }) {
                usageType: usageType
             }}
             handleClick={handleClick}
-            isViewDiagnose={isViewDiagnose(inspection)}
+            isViewDiagnose={isViewDiagnose(inspection, type)}
             hicsServiceId={hicsServiceId}
          />
       );
@@ -144,6 +149,7 @@ function MainPatientHistory({ handleClick }) {
                   formName={null}
                   incomeKeyWords={[]}
                   checkProgress={(_keyWords) => null}
+                  isDisabledButton={(_state) => null}
                />
             </div>
             <Button type="primary" htmlType="submit">
@@ -240,82 +246,6 @@ function MainPatientHistory({ handleClick }) {
       //    });
       // Түр commit hiwe
    };
-   const defualtForm = {
-      pain: [
-         {
-            type: 'textarea',
-            index: 1,
-            isHead: true,
-            isOther: false,
-            keyWord: 'Зовиур',
-            isNumber: false,
-            question: '',
-            parentIndex: null
-         }
-      ],
-      question: [
-         {
-            type: 'textarea',
-            index: 1,
-            isHead: true,
-            isOther: false,
-            keyWord: 'Асуумж',
-            isNumber: false,
-            question: '',
-            parentIndex: null
-         }
-      ],
-      inspection: [
-         {
-            type: 'textarea',
-            index: 1,
-            isHead: true,
-            isOther: false,
-            keyWord: 'Бодит үзлэг',
-            isNumber: false,
-            question: '',
-            parentIndex: null
-         }
-      ],
-      plan: [
-         {
-            type: 'textarea',
-            index: 1,
-            isHead: true,
-            isOther: false,
-            keyWord: 'Төлөвлөгөө',
-            isNumber: false,
-            question: '',
-            parentIndex: null
-         }
-      ]
-   };
-   const ConAndAdForm = {
-      conclusion: [
-         {
-            type: 'textarea',
-            index: 1,
-            isHead: true,
-            isOther: false,
-            keyWord: 'Дүгнэлт',
-            isNumber: false,
-            question: 'Дүгнэлт',
-            parentIndex: null
-         }
-      ],
-      advice: [
-         {
-            type: 'textarea',
-            index: 1,
-            isHead: true,
-            isOther: false,
-            keyWord: 'Зөвлөгөө',
-            isNumber: false,
-            question: 'Зөвлөгөө',
-            parentIndex: null
-         }
-      ]
-   };
    const getDefualtTab = () => {
       setActiveKey('item-second');
       setItems([
@@ -346,19 +276,33 @@ function MainPatientHistory({ handleClick }) {
          }
       ]);
    };
+   const getUrgentTab = () => {
+      setActiveKey('item-urgent');
+      setItems([
+         {
+            label: 'Яаралтай үзлэг',
+            key: `item-urgent`,
+            children: <UrgentDocument handleClick={handleClick} />
+         }
+      ]);
+   };
    useEffect(() => {
-      if (usageType === UsageTypeEnum.OUT) {
-         if (inspection == InspectionTypeEnum.first) {
-            getInspectionTabs();
-         } else if (inspection === InspectionTypeEnum.second) {
-            getDefualtTab();
-         } else if (inspection === InspectionEnum.Xray) {
-            getXrayDefualtTab();
-         } else if (inspection === InspectionEnum.Exo) {
-            getExoInspectionTabs();
-            inspectionNoteId && getExoInspectionNote();
-         } else if (inspection === InspectionEnum.Operation) {
-            getOperationDefualtTab();
+      if (type === 1) {
+         getUrgentTab();
+      } else {
+         if (usageType === UsageTypeEnum.OUT) {
+            if (inspection == InspectionTypeEnum.first) {
+               getInspectionTabs();
+            } else if (inspection === InspectionTypeEnum.second) {
+               getDefualtTab();
+            } else if (inspection === InspectionEnum.Xray) {
+               getXrayDefualtTab();
+            } else if (inspection === InspectionEnum.Exo) {
+               getExoInspectionTabs();
+               inspectionNoteId && getExoInspectionNote();
+            } else if (inspection === InspectionEnum.Operation) {
+               getOperationDefualtTab();
+            }
          }
       }
    }, [usageType]);
@@ -385,7 +329,9 @@ function MainPatientHistory({ handleClick }) {
                      ))}
                   </Splide>
                </div>
-               <Spin spinning={loading}>{items?.find((item) => item.key === activeKey)?.children}</Spin>
+               <Spin wrapperClassName="h-full" spinning={loading}>
+                  {items?.find((item) => item.key === activeKey)?.children}
+               </Spin>
             </>
          ) : null}
          {usageType === 'IN' ? (

@@ -8,13 +8,13 @@ import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
 import { CloseOutlined } from '@ant-design/icons';
 const NewFormRender = (props) => {
-   const { useForm, form, formOptionIds, isCheck, formName, incomeKeyWords, checkProgress } = props;
+   const { useForm, form, formOptionIds, isCheck, formName, incomeKeyWords, checkProgress, isDisabledButton } = props;
    const [treeData, setTreeData] = useState();
    const message = 'Тань бөглөх эрх байхгүй';
    const [keyWords, setKeyWords] = useState([]);
 
    const configNames = (name) => {
-      if (!isCheck) {
+      if (!isCheck && formName) {
          return [formName, name];
       }
       return name;
@@ -175,7 +175,10 @@ const NewFormRender = (props) => {
    };
    const RenderFormInType = (RFITProps) => {
       const { item, children } = RFITProps;
-      var state = true;
+      var state = false;
+      if (isCheck) {
+         state = !formOptionIds.includes(item.keyWord);
+      }
       if (keyWords.includes(item.keyWord)) {
          if (item.type === 'radio') {
             const options = form.documentForm.filter((form) => form.parentIndex === item.index);
@@ -188,6 +191,7 @@ const NewFormRender = (props) => {
                            <p className="font-bold">{item.question}</p>
                            <Button
                               danger
+                              disabled={state}
                               icon={<CloseOutlined />}
                               onClick={() => {
                                  handleChangeRadio(null, item?.options, configNames(item.keyWord));
@@ -197,7 +201,8 @@ const NewFormRender = (props) => {
                            </Button>
                         </div>
                         <Form.Item
-                           tooltip={!state ? message : null}
+                           tooltip={state ? message : null}
+                           label={state ? ' ' : null}
                            className="mb-0"
                            labelCol={{
                               style: {
@@ -217,6 +222,7 @@ const NewFormRender = (props) => {
                                  display: 'flex',
                                  flexDirection: 'column'
                               }}
+                              disabled={state}
                            >
                               {options.map((option, index) => (
                                  <Radio key={index} value={item.isInteger ? Number(option.keyWord) : option.keyWord}>
@@ -243,7 +249,7 @@ const NewFormRender = (props) => {
                      <div className="form-left" />
                      <div className="form-inputs">
                         <Form.Item
-                           tooltip={!state ? message : null}
+                           tooltip={state ? message : null}
                            className="mb-0"
                            label={item.question}
                            name={configNames(item.keyWord)}
@@ -252,7 +258,7 @@ const NewFormRender = (props) => {
                               onChange={(e) => {
                                  handleChangeCheckbox(e, item?.options, configNames(item.keyWord));
                               }}
-                              disabled={!state}
+                              disabled={state}
                               className="bg-transparent"
                               style={{
                                  padding: 2,
@@ -287,7 +293,7 @@ const NewFormRender = (props) => {
                         className="mb-0"
                         label={item.question}
                         name={configNames(item.keyWord)}
-                        tooltip={!state ? message : null}
+                        tooltip={state ? message : null}
                      >
                         <Input
                            placeholder={item.question || 'Бичих'}
@@ -308,13 +314,13 @@ const NewFormRender = (props) => {
                         className="mb-0"
                         label={item.question}
                         name={configNames(item.keyWord)}
-                        tooltip={!state ? message : null}
+                        tooltip={state ? message : null}
                      >
                         <InputNumber
                            onChange={() => {
                               checkProgress(keyWords);
                            }}
-                           disabled={!state}
+                           disabled={state}
                            placeholder={item.question || 'Бичих'}
                         />
                      </Form.Item>
@@ -327,7 +333,7 @@ const NewFormRender = (props) => {
                   <div className="form-left" />
                   <div className="form-inputs">
                      <Form.Item
-                        tooltip={!state ? message : null}
+                        tooltip={state ? message : null}
                         className="mb-0"
                         label={item.question}
                         name={configNames(item.keyWord)}
@@ -337,7 +343,7 @@ const NewFormRender = (props) => {
                               checkProgress(keyWords);
                            }}
                            rows={7}
-                           disabled={!state}
+                           disabled={state}
                            placeholder={item.question || 'Энд бичнэ үү'}
                         />
                      </Form.Item>
@@ -362,7 +368,7 @@ const NewFormRender = (props) => {
                   <div className="form-inputs">
                      <div className="flex flex-row gap-2 justify-between">
                         <Form.Item
-                           tooltip={!state ? message : null}
+                           tooltip={state ? message : null}
                            className="mb-0"
                            label={item.question}
                            name={configNames(item.keyWord)}
@@ -375,7 +381,7 @@ const NewFormRender = (props) => {
                               useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
                               checkProgress(keyWords);
                            }}
-                           disabled={!state}
+                           disabled={state}
                         />
                         <Form.Item className="hidden" label="sada" name={`${item.keyWord}CreatedAt`}>
                            <Input />
@@ -391,7 +397,7 @@ const NewFormRender = (props) => {
                   <div className="form-inputs">
                      <div className="flex flex-row gap-2 justify-between">
                         <Form.Item
-                           tooltip={!state ? message : null}
+                           tooltip={state ? message : null}
                            className="mb-0"
                            label={item.question}
                            name={configNames(item.keyWord)}
@@ -404,7 +410,7 @@ const NewFormRender = (props) => {
                               useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
                               checkProgress(keyWords);
                            }}
-                           disabled={!state}
+                           disabled={state}
                         />
                         <Form.Item className="hidden" label="sada" name={`${item.keyWord}CreatedAt`}>
                            <Input />
@@ -438,7 +444,7 @@ const NewFormRender = (props) => {
                   <div className="form-left" />
                   <div className="form-inputs">
                      <Form.Item
-                        tooltip={!state ? message : null}
+                        tooltip={state ? message : null}
                         className="mb-0"
                         label={item.question}
                         name={configNames(item.keyWord)}
@@ -450,7 +456,7 @@ const NewFormRender = (props) => {
                            }
                         }}
                      >
-                        <TimePicker locale={mnMN} disabled={!state} placeholder={item.question} />
+                        <TimePicker locale={mnMN} disabled={state} placeholder={item.question} />
                      </Form.Item>
                   </div>
                </div>
@@ -461,7 +467,7 @@ const NewFormRender = (props) => {
                   <div className="form-left" />
                   <div className="form-inputs">
                      <Form.Item
-                        tooltip={!state ? message : null}
+                        tooltip={state ? message : null}
                         className="mb-0"
                         label={item.question}
                         name={configNames(item.keyWord)}
@@ -473,7 +479,7 @@ const NewFormRender = (props) => {
                            }
                         }}
                      >
-                        <DatePicker locale={mnMN} format={'YYYY/MM/DD'} disabled={!state} placeholder={item.question} />
+                        <DatePicker locale={mnMN} format={'YYYY/MM/DD'} disabled={state} placeholder={item.question} />
                      </Form.Item>
                   </div>
                </div>
@@ -484,7 +490,7 @@ const NewFormRender = (props) => {
                   <div className="form-left" />
                   <div className="form-inputs">
                      <Form.Item
-                        tooltip={!state ? message : null}
+                        tooltip={state ? message : null}
                         className="mb-0"
                         label={item.question}
                         name={configNames(item.keyWord)}
@@ -500,7 +506,7 @@ const NewFormRender = (props) => {
                            showTime
                            locale={mnMN}
                            format={'YYYY/MM/DD HH:mm'}
-                           disabled={!state}
+                           disabled={state}
                            placeholder={item.question}
                         />
                      </Form.Item>
@@ -614,6 +620,12 @@ const NewFormRender = (props) => {
       setKeyWords([...firstKeyWords, ...(childrenKeyWords || []), ...['']]);
    };
 
+   //
+   const hasCommonElement = (parentKeys, keys) => {
+      if (keys?.length === 0) return true;
+      return !keys.some((key) => parentKeys.some((parentKey) => key.includes(parentKey)));
+   };
+   //
    useEffect(() => {
       const firstKeyWords = form?.documentForm
          ?.filter((item) => item.parentIndex === null)
@@ -625,6 +637,12 @@ const NewFormRender = (props) => {
          findTitleChildrens(form?.documentForm || [], unDup || []);
       } else {
          findTitleChildrens(form?.documentForm || [], firstKeyWords || []);
+      }
+      const parentKeys = form?.documentForm?.filter((item) => item.isHead)?.map((fItem) => fItem.keyWord);
+      if (isCheck) {
+         isDisabledButton(hasCommonElement(parentKeys, formOptionIds));
+      } else {
+         isDisabledButton(false);
       }
       const data = convertTree(form?.documentForm || []);
       setTreeData(data);

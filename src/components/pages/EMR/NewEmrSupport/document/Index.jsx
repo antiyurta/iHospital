@@ -27,6 +27,7 @@ const Index = () => {
                <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
             </div>
          ),
+         forceRender: true,
          children: <DocumentDraft usageType="OUT" handleCount={(count) => setCountOfDraft(count)} />
       }
    ];
@@ -39,8 +40,9 @@ const Index = () => {
             onCancel={() => setIsOpen(false)}
             cancelText="Болих"
             okButtonProps={{ style: { display: 'none' } }}
+            destroyOnClose
          >
-            <Tabs destroyInactiveTabPane type="card" items={items} />
+            <Tabs type="card" items={items} />
          </Modal>
       </>
    );

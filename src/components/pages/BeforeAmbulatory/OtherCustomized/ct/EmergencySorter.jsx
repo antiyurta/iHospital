@@ -150,7 +150,7 @@ const EmergencySorter = ({ document }) => {
                   </div>
                </div>
                <Table
-                  rowKey={'_id'}
+                  rowKey="id"
                   loading={{
                      spinning: isLoading,
                      tip: 'Уншиж байна'

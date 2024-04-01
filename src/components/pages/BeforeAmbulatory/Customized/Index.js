@@ -10,6 +10,7 @@ import { ReturnById } from '@Pages/611/Document/Index';
 //common
 import { formatNameForDoc, isObjectEmpty, openNofi } from '@Comman/common';
 //redux
+import { selectCurrentAppId } from '@Features/authReducer';
 import { selectCurrentEmrData } from '@Features/emrReducer';
 //api
 import RegularApi from '@ApiServices/regular.api';
@@ -30,18 +31,24 @@ function Index(props) {
       documentType,
       onOk,
       isBackButton,
+      handleIsReload,
       handleBackButton,
       extraData
    } = props;
-   const { usageType, patientId, appointmentId, inpatientRequestId } = useSelector(selectCurrentEmrData);
+   // documentType = 0 bol filter hereggu 1 bol heregtei
    const printRef = useRef();
+   const appIds = useSelector(selectCurrentAppId);
+   const { usageType, patientId, appointmentId, inpatientRequestId } = useSelector(selectCurrentEmrData);
+   const [currentIsEdit, setCurrentIsEdit] = useState(isEdit);
    const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
    const [data, setData] = useState([]);
    const [answeredKeyWords, setAnsweredKeyWords] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
+   const [isDisabledButton, setIsDisabledButton] = useState(false);
    const [documentForm, setDocumentForm] = useState([]);
    const [documentOptions, setDocumentOptions] = useState([]);
+   const [newOptionIds, setNewOptionIds] = useState([]);
    const [cabinets, setCabinets] = useState([]);
    const [employees, setEmployees] = useState([]);
    const [selectedCabinet, setSelectedCabinet] = useState('');
@@ -104,9 +111,18 @@ function Index(props) {
          });
    };
    const getDocumentOption = async () => {
-      await DocumentOptionApi.getById(document.optionId)
+      await DocumentOptionApi.getByPageFilter({
+         params: {
+            ids: document.optionIds
+         }
+      })
          .then(({ data: { response } }) => {
-            setDocumentOptions(response.formOptionIds);
+            const data = response.data;
+            const hasOptions = data?.filter((item) => appIds.includes(item.employeePositionId));
+            setNewOptionIds(hasOptions?.map((option) => option.id));
+            const formOptions = hasOptions?.flatMap((option) => option.formOptionIds);
+            const unDup = formOptions.filter((item, index) => formOptions.indexOf(item) === index);
+            setDocumentOptions(unDup);
          })
          .catch((error) => {
             console.log(error);
@@ -126,6 +142,7 @@ function Index(props) {
          await RegularApi.patch(`${documentForm.url}/${editId}`, patchData)
             .then((response) => {
                if (response.data.response.success) {
+                  handleIsReload(true);
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
@@ -145,7 +162,7 @@ function Index(props) {
                position: documentForm.position,
                formId: document.formId,
                formType: document.formType,
-               optionId: document.optionId,
+               optionIds: newOptionIds,
                appointmentId: appointmentId || inpatientRequestId,
                usageType: propsUsageType,
                saveType: saveType || 'Save',
@@ -156,8 +173,12 @@ function Index(props) {
             };
          }
          await RegularApi.post(documentForm.url, sendData)
-            .then((res) => {
-               if (res.data.response.success) {
+            .then(({ data: { response } }) => {
+               if (response.success) {
+                  onOk(false, response.response);
+                  if (saveType === 'Draft') {
+                     handleIsReload(true);
+                  }
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
                }
             })
@@ -168,7 +189,6 @@ function Index(props) {
             })
             .finally(() => {
                setIsLoading(false);
-               onOk(false);
             });
       }
    };
@@ -200,34 +220,6 @@ function Index(props) {
       // onPrintError: () => console.log('asda'),
       content: () => printRef.current
    });
-   useEffect(() => {
-      if (documentValue != 0) {
-         if (documentType != 1) {
-            // getDocumentOption();
-         }
-         getDocumentForm();
-      }
-   }, [documentValue]);
-   useEffect(() => {
-      if (isEdit) {
-         if (documentValue === 110) {
-            form.setFieldsValue(document);
-         } else {
-            form.setFieldsValue(document.data);
-            const keyWords = Object.keys(document.data).filter(
-               (key) => document.data[key] !== '' && document.data[key]?.length > 0
-            );
-            setAnsweredKeyWords(keyWords);
-         }
-      }
-   }, [isEdit]);
-   useEffect(() => {
-      if (!isObjectEmpty(documentForm)) {
-         getData();
-         getCabinets();
-      }
-   }, [documentForm]);
-
    const checkProgress = (displayedKeyWords) => {
       const fKeyWordsLength = displayedKeyWords?.filter((keyWord) => keyWord != '' && keyWord != undefined)?.length;
       const currentAnsweredData = form.getFieldsValue();
@@ -254,6 +246,34 @@ function Index(props) {
          </Form.Item>
       );
    };
+   useEffect(() => {
+      if (documentValue != 0) {
+         if (documentType != 1) {
+            getDocumentOption();
+         }
+         getDocumentForm();
+      }
+   }, [documentValue]);
+   useEffect(() => {
+      if (isEdit) {
+         if (documentValue === 110) {
+            form.setFieldsValue(document);
+         } else {
+            form.setFieldsValue(document.data);
+            const keyWords = Object.keys(document.data).filter(
+               (key) => document.data[key] !== '' && document.data[key]?.length > 0
+            );
+            setAnsweredKeyWords(keyWords);
+         }
+      }
+   }, [isEdit]);
+   useEffect(() => {
+      if (!isObjectEmpty(documentForm)) {
+         getData();
+         getCabinets();
+      }
+   }, [documentForm]);
+   useEffect(() => {}, [document]);
 
    if (documentValue === 0) {
       return <Result title="Маягт сонгоно уу" />;
@@ -357,13 +377,14 @@ function Index(props) {
                         <NewFormRender
                            useForm={form}
                            form={documentForm}
-                           formOptionIds={[]}
+                           formOptionIds={documentOptions}
                            isCheck={true}
                            formName={null}
                            incomeKeyWords={answeredKeyWords}
                            checkProgress={(keyWords) => {
                               form.setFieldValue('documentPercent', checkProgress(keyWords));
                            }}
+                           isDisabledButton={setIsDisabledButton}
                         />
                      </div>
                   </Form>
@@ -389,6 +410,8 @@ function Index(props) {
                      >
                         {isBackButton ? (
                            <Button
+                              disabled={isDisabledButton}
+                              loading={isLoading}
                               onClick={() => {
                                  Modal.confirm({
                                     content: 'Та маягтаа ноороглох гэж байна',
@@ -400,6 +423,7 @@ function Index(props) {
                            </Button>
                         ) : null}
                         <Button
+                           disabled={isDisabledButton}
                            loading={isLoading}
                            onClick={() => form.validateFields().then((values) => onFinish(values, 'Save'))}
                            type="primary"

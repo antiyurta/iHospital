@@ -1,3 +1,10 @@
+.fingerImg {
+   height: 22px;
+}
+.fingerImg.disabled {
+   opacity: 0.6;
+}
+
 .ant-card-head {
    max-height: 48px !important;
 }
