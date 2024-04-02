@@ -145,7 +145,7 @@ function MainPatientHistory({ handleClick }) {
                   useForm={xrayForm}
                   form={props.data}
                   formOptionIds={[]}
-                  isCheck={true}
+                  isCheck={false}
                   formName={null}
                   incomeKeyWords={[]}
                   checkProgress={(_keyWords) => null}
