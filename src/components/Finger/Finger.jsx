@@ -1,21 +1,22 @@
-import { Badge, Button, Result, Spin } from 'antd';
+import { Badge, Button, Form, Result, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 //img
-import FingerIcon from './fingerIcon.svg';
+import { biometerIcon } from '@Assets/index';
 //common
 import { openNofi } from '@Comman/common';
+import Viewer from './Viewer';
 //externals
 const socketUrl = process.env.REACT_APP_FINGER_SOCKET_URL;
 //string
 const messageIsNotInsurance = 'Даатгалгүй эмнэлэгт хамааралгүй';
-const Finger = ({ isInsurance }) => {
+const Finger = (props) => {
+   const { insurance, form, ...rest } = props;
    const [socket, setSocket] = useState(null);
    const [isLoading, setLoading] = useState(false);
    const [isConnected, setConnected] = useState(false);
-   const [receivedData, setReceivedData] = useState('');
    //socket sent data
    const handleSendData = () => {
-      setReceivedData('');
+      form.resetFields([[rest.name]]);
       setLoading(true);
       if (socket && socket.readyState === WebSocket.OPEN) {
          const message = {
@@ -60,7 +61,7 @@ const Finger = ({ isInsurance }) => {
          socket.addEventListener('close', handleClose);
          socket.addEventListener('message', async (event) => {
             const message = JSON.parse(event.data);
-            setReceivedData(message.result.image);
+            form.setFieldValue(`${rest.name}`, message.result.image);
             setLoading(false);
          });
       }
@@ -73,16 +74,15 @@ const Finger = ({ isInsurance }) => {
          }
       };
    }, [socket]);
-   if (isInsurance) {
+   const Dummy = (props) => {
       return (
          <div className="flex flex-col gap-2">
             <div className="flex flex-row gap-2 justify-between">
                <div className="flex justify-between items-center">
-                  {isConnected ? (
-                     <Badge status="success" text="Холбогдсон" />
-                  ) : (
-                     <Badge status="error" text="Холбогдоогүй" />
-                  )}
+                  <Badge
+                     status={isConnected ? 'success' : 'error'}
+                     text={isConnected ? 'Холбогдсон' : 'Холбогдоогүй'}
+                  />
                </div>
                <Button
                   type="primary"
@@ -97,16 +97,7 @@ const Finger = ({ isInsurance }) => {
             </div>
             <Spin spinning={isLoading} tip="Уншиж байна...">
                <div className="flex flex-col gap-2 items-center">
-                  {receivedData ? (
-                     <img
-                        style={{
-                           height: 160,
-                           width: 120
-                        }}
-                        src={`data:image/jpeg;base64,${receivedData}`}
-                        alt="fingerTouch"
-                     />
-                  ) : null}
+                  <Viewer receivedData={props.value} />
                   <Button
                      className="w-full flex flex-row gap-2 justify-center items-center"
                      disabled={!isConnected}
@@ -115,12 +106,23 @@ const Finger = ({ isInsurance }) => {
                         handleSendData();
                      }}
                   >
-                     <img src={FingerIcon} className={!isConnected ? 'fingerImg disabled' : 'fingerImg'} alt="finger" />
+                     <img
+                        src={biometerIcon}
+                        className={!isConnected ? 'fingerImg disabled' : 'fingerImg'}
+                        alt="finger"
+                     />
                      <p className="font-bold">Хуруу уншуулах</p>
                   </Button>
                </div>
             </Spin>
          </div>
+      );
+   };
+   if (insurance) {
+      return (
+         <Form.Item {...rest}>
+            <Dummy />
+         </Form.Item>
       );
    }
    return (

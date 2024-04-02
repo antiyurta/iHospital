@@ -1,12 +1,13 @@
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
 import NewFormTable from './NewFormTable';
-import TextArea from 'antd/lib/input/TextArea';
 import HumanParts from './human-parts';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
 import { CloseOutlined } from '@ant-design/icons';
+//extends
+const { TextArea } = Input;
 const NewFormRender = (props) => {
    const { useForm, form, formOptionIds, isCheck, formName, incomeKeyWords, checkProgress, isDisabledButton } = props;
    const [treeData, setTreeData] = useState();
@@ -296,6 +297,7 @@ const NewFormRender = (props) => {
                         tooltip={state ? message : null}
                      >
                         <Input
+                           disabled={state}
                            placeholder={item.question || 'Бичих'}
                            onChange={() => {
                               checkProgress(keyWords);
@@ -513,7 +515,12 @@ const NewFormRender = (props) => {
                   </div>
                </div>
             );
-         } else if (item.type === 'humanhead') {
+         } else if (item.type === 'humanhead' || item.type === 'humanbody' || item.type === 'human32a') {
+            const Part = () => {
+               if (item.type === 'humanhead') return 'head';
+               else if (item.type === 'humanbody') return 'body';
+               else if (item.type === 'human32a') return '32a';
+            };
             return (
                <div key={item.index} className="document-form">
                   <div className="form-left" />
@@ -541,47 +548,7 @@ const NewFormRender = (props) => {
                         </Form.List>
                         <div>
                            <HumanParts
-                              part="head"
-                              name={configNames(item.keyWord)}
-                              currentData={useForm.getFieldValue(configNames(item.keyWord))}
-                              handleClick={(data) => {
-                                 useForm.setFieldValue(configNames(item.keyWord), data[`${configNames(item.keyWord)}`]);
-                              }}
-                           />
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            );
-         } else if (item.type === 'humanbody') {
-            return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <p className="font-bold pb-2">{item.question}</p>
-                     <div className="flex flex-row gap-2 justify-between">
-                        <Form.List name={configNames(item.keyWord)}>
-                           {(fields, index) => (
-                              <div key={index}>
-                                 {fields.map((field) => (
-                                    <div key={field.key} className="flex flex-row gap-1">
-                                       <Form.Item shouldUpdate name={[field.name, 'desc']}>
-                                          <Input disabled />
-                                       </Form.Item>
-                                       <Form.Item shouldUpdate name={[field.name, 'top']}>
-                                          <Input disabled />
-                                       </Form.Item>
-                                       <Form.Item shouldUpdate name={[field.name, 'left']}>
-                                          <Input disabled />
-                                       </Form.Item>
-                                    </div>
-                                 ))}
-                              </div>
-                           )}
-                        </Form.List>
-                        <div>
-                           <HumanParts
-                              part="body"
+                              part={Part()}
                               name={configNames(item.keyWord)}
                               currentData={useForm.getFieldValue(configNames(item.keyWord))}
                               handleClick={(data) => {
@@ -620,12 +587,6 @@ const NewFormRender = (props) => {
       setKeyWords([...firstKeyWords, ...(childrenKeyWords || []), ...['']]);
    };
 
-   //
-   const hasCommonElement = (parentKeys, keys) => {
-      if (keys?.length === 0) return true;
-      return !keys.some((key) => parentKeys.some((parentKey) => key.includes(parentKey)));
-   };
-   //
    useEffect(() => {
       const firstKeyWords = form?.documentForm
          ?.filter((item) => item.parentIndex === null)
@@ -640,7 +601,10 @@ const NewFormRender = (props) => {
       }
       const parentKeys = form?.documentForm?.filter((item) => item.isHead)?.map((fItem) => fItem.keyWord);
       if (isCheck) {
-         isDisabledButton(hasCommonElement(parentKeys, formOptionIds));
+         const unionSet = new Set([...(parentKeys || []), ...(formOptionIds || [])]);
+         const unionArray = Array.from(unionSet);
+         if (unionArray.length > 0) isDisabledButton(false);
+         else isDisabledButton(true);
       } else {
          isDisabledButton(false);
       }

@@ -16,3 +16,10 @@ export const companyLogo = require('./logo/iHospital.png');
 export const logoCollapsed = require('./logo/logoCollapsed.svg');
 
 export const WarningIcon = require('./images/warning.svg');
+
+export const biometerImg = require('./images/biometerImg.png');
+export const biometerIcon = require('./images/biemeter.svg');
+
+export const humanHeadImg = require('./images/humanHead.png');
+export const humanBodyImg = require('./images/humanBody.jpg');
+export const human32AImg = require('./images/32a.png');

@@ -3,8 +3,7 @@
       "browser": true,
       "es2021": true
    },
-   // "extends": ["prettier"],
-   "extends": ["plugin:prettier/recommended"],
+   "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
    "overrides": [
       {
          "files": ["postcss.config.js", "prettier.config.js"],
@@ -13,6 +12,7 @@
          }
       }
    ],
+   "parser": "babel-eslint",
    "parserOptions": {
       "ecmaFeatures": {
          "jsx": true
@@ -23,6 +23,15 @@
    "ignorePatterns": ["postcss.config.js", "prettier.config.js"],
    "plugins": ["prettier", "react", "react-hooks", "import"],
    "rules": {
+      "react/prop-types": "error",
+      "perfectionist/sort-jsx-props": [
+         "error",
+         {
+            "type": "natural",
+            "order": "asc",
+            "groups": ["multiline", "unknown", "shorthand"]
+         }
+      ],
       "prettier/prettier": [
          "error",
          {

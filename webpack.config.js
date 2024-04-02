@@ -6,6 +6,8 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const WebpackBar = require('webpackbar');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = (_env, argv) => {
    const isDevelopment = argv.mode !== 'production';
@@ -18,8 +20,9 @@ module.exports = (_env, argv) => {
       output: {
          filename: '[name].js',
          chunkFilename: '[name].bundle.js',
-         path: path.resolve(__dirname, './build'),
-         publicPath: '/'
+         path: path.resolve(__dirname, '../build'),
+         publicPath: '/',
+         clean: true
       },
       devServer: {
          compress: true,
@@ -59,7 +62,7 @@ module.exports = (_env, argv) => {
             },
             {
                test: /\.(sa|sc|c)ss$/, // styles files
-               use: ['style-loader', 'css-loader', 'postcss-loader']
+               use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
             },
             {
                test: /\.less$/,
@@ -74,7 +77,7 @@ module.exports = (_env, argv) => {
       optimization: {
          runtimeChunk: 'single',
          minimize: !isDevelopment,
-         minimizer: [new TerserPlugin()],
+         minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
          splitChunks: {
             cacheGroups: {
                vendor: {
@@ -86,6 +89,13 @@ module.exports = (_env, argv) => {
          }
       },
       plugins: [
+         new webpack.ProgressPlugin(),
+         new WebpackBar({
+            name: 'Уншиж байна ...',
+            color: '#00FF00',
+            reporters: ['basic', 'fancy', 'profile', 'stats'],
+            profile: true
+         }),
          new ReactRefreshPlugin({
             overlay: false
          }),

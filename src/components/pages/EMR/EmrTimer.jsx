@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ClockCircleOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Modal, Radio } from 'antd';
+import { Button, Checkbox, Form, Input, Modal, Radio } from 'antd';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData, selectCurrentHicsService } from '../../../features/emrReducer';
@@ -14,29 +14,18 @@ import { useLocation, useNavigate } from 'react-router-dom';
 //
 //comp
 import Finger from '@Comman/Finger/Finger';
+import Clock from './Clock';
 
 const EmrTimer = (props) => {
    const navigate = useNavigate();
-   const {
-      state: { slotId }
-   } = useLocation();
+   const location = useLocation();
    const { startDate, endDate, inspection } = props;
+   const [form] = Form.useForm();
    const emrHicsService = useSelector(selectCurrentHicsService);
    const { hicsServiceId, appointmentId, appointmentType } = useSelector(selectCurrentEmrData);
    const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
-   const [count, setCount] = useState(0);
-   const [time, setTime] = useState('00:00');
-   const showTimer = (ms) => {
-      const second = Math.floor((ms / 1000) % 60)
-         .toString()
-         .padStart(2, '0');
-      const minute = Math.floor((ms / 1000 / 60) % 60)
-         .toString()
-         .padStart(2, '0');
-      setTime(minute + ':' + second);
-   };
 
    // uzleg duusgah
    const endInspection = async (values) => {
@@ -72,7 +61,7 @@ const EmrTimer = (props) => {
       //    var newResponse;
       //    if (appointmentType === 0) {
       //       newResponse = await AppointmentService.patchAppointment(appointmentId, {
-      //          slotId: slotId,
+      //          slotId: location?.state?.slotId,
       //          endDate: new Date()
       //       }).then(({ data: { success } }) => success);
       //    } else if (appointmentType === 1) {
@@ -92,32 +81,12 @@ const EmrTimer = (props) => {
       //    }
       // }
    };
-   useEffect(() => {
-      if (!endDate) {
-         var id = setInterval(() => {
-            var left = count + (new Date() - new Date(startDate));
-            setCount(left);
-            showTimer(left);
-            if (left <= 0) {
-               setTime('00:00');
-               clearInterval(id);
-            }
-         }, 1);
-         return () => clearInterval(id);
-      } else {
-         const date1 = new Date(startDate);
-         const date2 = new Date(endDate);
-         const diff = date2 - date1;
-         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-         setTime(`${minutes}:${seconds}`);
-      }
-   }, []);
+
    return (
       <>
          <div className="emr-timer">
             <p>Үзлэгийн хугацаа</p>
-            <p className="timer">{time}</p>
+            <Clock startDate={props.startDate} endDate={props.endDate} />
             <p>{`${dayjs(startDate).format('YYYY/MM/DD hh:mm')} эхэлсэн`}</p>
             {endDate ? <p>{`${dayjs(endDate).format('YYYY/MM/DD hh:mm')} дууссан`}</p> : null}
             <Button
@@ -136,41 +105,6 @@ const EmrTimer = (props) => {
             >
                Үзлэг дуусах
             </Button>
-            {/* {isInsurance && hicsServiceId ? (
-               <Finger
-                  text={'Үзлэг дуусгах'}
-                  isDanger={true}
-                  isFinger={emrHicsService?.isFinger}
-                  steps={[
-                     {
-                        title: 'Эмчийн',
-                        path: 'doctorFinger'
-                     },
-                     {
-                        title: 'Өвтний',
-                        path: 'patientFinger'
-                     }
-                  ]}
-                  isPatientSheet={emrHicsService?.isPatientSheet}
-                  handleClick={endInspection}
-               />
-            ) : (
-               <Button
-                  danger
-                  onClick={() => {
-                     endInspection();
-                  }}
-                  icon={
-                     <ClockCircleOutlined
-                        style={{
-                           fontWeight: 700
-                        }}
-                     />
-                  }
-               >
-                  Үзлэг дуусах
-               </Button>
-            )} */}
          </div>
          <Modal
             title="Үзлэгийн төрөл"
@@ -179,11 +113,14 @@ const EmrTimer = (props) => {
                setIsOpenModal(false);
             }}
             footer={null}
+            destroyOnClose
          >
             <Form
+               form={form}
                onFinish={endInspection}
                initialValues={{
-                  inspection: inspection
+                  inspection: inspection,
+                  finger: ''
                }}
             >
                <div className="flex flex-col gap-3 p-4">
@@ -247,7 +184,9 @@ const EmrTimer = (props) => {
                            Үйлчлүүлэгчийн хурууны хээ
                         </p>
                         <div className="h-[1px] w-full bg-[#C9CDD4]" />
-                        <Finger isInsurance={true} />
+                        <Finger form={form} insurance={isInsurance} noStyle name="finger">
+                           <Input />
+                        </Finger>
                      </div>
                   </div>
                   <div className="flex flex-row justify-end">

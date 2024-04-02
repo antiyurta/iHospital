@@ -1,10 +1,12 @@
-import { Button, Form, Input, Modal } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Form, Input, Modal } from 'antd';
 import ImageMarker from 'react-image-marker';
-import humanHeadImg from '../../../../assets/images/humanHead.png';
-import humanBodyImg from '../../../../assets/images/humanBody.jpg';
 import { DeleteOutlined } from '@ant-design/icons';
+
+//img
+import { humanHeadImg, humanBodyImg, human32AImg } from '@Assets/index';
+//extends
+const { TextArea } = Input;
 
 const HumanParts = (props) => {
    const { part, name, currentData, handleClick, disabled } = props;
@@ -15,6 +17,7 @@ const HumanParts = (props) => {
    const configureImg = useMemo(() => {
       if (part === 'body') return humanBodyImg;
       else if (part === 'head') return humanHeadImg;
+      else if (part === '32a') return human32AImg;
    }, [part]);
 
    const handleRemoveMarker = (index) => {

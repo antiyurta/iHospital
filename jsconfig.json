@@ -4,6 +4,7 @@
       "moduleResolution": "Node",
       "target": "ES2022",
       "jsx": "react",
+      "strict": true,
       "strictNullChecks": true,
       "strictFunctionTypes": true,
       "baseUrl": "./",
@@ -13,7 +14,7 @@
          "@Pages/*": ["src/components/pages/*"],
          "@Features/*": ["src/features/*"],
          "@Assets/*": ["src/assets/*"],
-         "@Utils/*": ["src/utils/*"]
+         "@Utils/*": ["src/utils/*"],
       }
    },
    "exclude": ["**/node_modules/*"]

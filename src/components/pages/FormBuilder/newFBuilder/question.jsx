@@ -98,6 +98,10 @@ const Question = (props) => {
                   {
                      label: 'Human Head',
                      value: 'humanhead'
+                  },
+                  {
+                     label: 'Human ct-32a',
+                     value: 'human32a'
                   }
                ]}
             />
