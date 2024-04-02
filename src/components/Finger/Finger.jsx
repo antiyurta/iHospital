@@ -16,7 +16,7 @@ const Finger = ({ isInsurance }) => {
    //socket sent data
    const handleSendData = () => {
       setReceivedData('');
-      setLoading(true)
+      setLoading(true);
       if (socket && socket.readyState === WebSocket.OPEN) {
          const message = {
             deviceId: 123456789,
@@ -48,7 +48,7 @@ const Finger = ({ isInsurance }) => {
    const handleClose = () => {
       console.log('WebSocket closed');
       if (socket) {
-         socket.close()
+         socket.close();
       }
       setLoading(false);
       setConnected(false);
@@ -61,7 +61,7 @@ const Finger = ({ isInsurance }) => {
          socket.addEventListener('message', async (event) => {
             const message = JSON.parse(event.data);
             setReceivedData(message.result.image);
-            setLoading(false)
+            setLoading(false);
          });
       }
 
@@ -74,37 +74,54 @@ const Finger = ({ isInsurance }) => {
       };
    }, [socket]);
    if (isInsurance) {
-      return <div className="flex flex-col gap-2">
-         <div className="flex flex-row gap-2 justify-between">
-            <div className="flex justify-between items-center">
-               {isConnected ? (
-                  <Badge status="success" text="Холбогдсон" />
-               ) : (
-                  <Badge status="error" text="Холбогдоогүй" />
-               )}
-            </div>
-            <Button type="primary" loading={isLoading} onClick={() => {
-               if (isConnected) handleClose()
-               else handleConnect()
-            }} >
-               {isConnected ? "Салгах" : "Холбох"}
-            </Button>
-         </div>
-         <Spin spinning={isLoading} tip="Уншиж байна...">
-            <div className='flex flex-col gap-2 items-center'>
-               {receivedData ? <img style={{
-                  height: 160,
-                  width: 120
-               }} src={`data:image/jpeg;base64,${receivedData}`} alt="fingerTouch" /> : null}
-               <Button className="w-full flex flex-row gap-2 justify-center items-center" disabled={!isConnected} loading={isLoading} onClick={() => {
-                  handleSendData()
-               }}>
-                  <img src={FingerIcon} className={!isConnected ? 'fingerImg disabled' : 'fingerImg'} alt="finger" />
-                  <p className="font-bold">Хуруу уншуулах</p>
+      return (
+         <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2 justify-between">
+               <div className="flex justify-between items-center">
+                  {isConnected ? (
+                     <Badge status="success" text="Холбогдсон" />
+                  ) : (
+                     <Badge status="error" text="Холбогдоогүй" />
+                  )}
+               </div>
+               <Button
+                  type="primary"
+                  loading={isLoading}
+                  onClick={() => {
+                     if (isConnected) handleClose();
+                     else handleConnect();
+                  }}
+               >
+                  {isConnected ? 'Салгах' : 'Холбох'}
                </Button>
             </div>
-         </Spin>
-      </div>
+            <Spin spinning={isLoading} tip="Уншиж байна...">
+               <div className="flex flex-col gap-2 items-center">
+                  {receivedData ? (
+                     <img
+                        style={{
+                           height: 160,
+                           width: 120
+                        }}
+                        src={`data:image/jpeg;base64,${receivedData}`}
+                        alt="fingerTouch"
+                     />
+                  ) : null}
+                  <Button
+                     className="w-full flex flex-row gap-2 justify-center items-center"
+                     disabled={!isConnected}
+                     loading={isLoading}
+                     onClick={() => {
+                        handleSendData();
+                     }}
+                  >
+                     <img src={FingerIcon} className={!isConnected ? 'fingerImg disabled' : 'fingerImg'} alt="finger" />
+                     <p className="font-bold">Хуруу уншуулах</p>
+                  </Button>
+               </div>
+            </Spin>
+         </div>
+      );
    }
    return (
       <Result
