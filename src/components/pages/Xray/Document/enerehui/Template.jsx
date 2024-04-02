@@ -7,7 +7,7 @@ const Template = (props) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
    };
    return (
-      <div className="exo flex flex-col gap-1">
+      <div className="font-times exo flex flex-col gap-1">
          <Header patient={patient} createdAt={createdAt} />
          <table>
             <thead>
