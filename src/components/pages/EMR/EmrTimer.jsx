@@ -29,57 +29,58 @@ const EmrTimer = (props) => {
 
    // uzleg duusgah
    const endInspection = async (values) => {
-      console.log(values);
       // if (isInsurance && hicsServiceId) {
       //    values['doctorFinger'] = 'test';
       //    values['patientFinger'] = 'test2';
       //    values['appointmentId'] = appointmentId;
       // }
-      // if (isInsurance && hicsServiceId) {
-      //    await insuranceServices
-      //       .appointmentSeal(values)
-      //       .post('insurance/appointment-seal', values)
-      //       .then((response) => {
-      //          if (response.data.code === 400) {
-      //             openNofi('error', 'Алдаа', response.data.description);
-      //          } else {
-      //             openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-      //             navigate('/ambulatoryList', {
-      //                state: {
-      //                   isRead: true
-      //                }
-      //             });
-      //          }
-      //       })
-      //       .catch((error) => {
-      //          if (error.response.status === 400) {
-      //             const message = error.response.data.message.replaceAll('HttpException:', '');
-      //             openNofi('error', 'Алдаа', message);
-      //          }
-      //       });
-      // } else {
-      //    var newResponse;
-      //    if (appointmentType === 0) {
-      //       newResponse = await AppointmentService.patchAppointment(appointmentId, {
-      //          slotId: location?.state?.slotId,
-      //          endDate: new Date()
-      //       }).then(({ data: { success } }) => success);
-      //    } else if (appointmentType === 1) {
-      //       newResponse = await AppointmentService.patchPreOrder(appointmentId, {
-      //          endDate: new Date(),
-      //          doctorId: userId
-      //       }).then(({ data: { success } }) => success);
-      //    }
-      //    if (newResponse) {
-      //       setIsOpenModal(false);
-      //       openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-      //       navigate('/main/ambulatoryList', {
-      //          state: {
-      //             isRead: true
-      //          }
-      //       });
-      //    }
-      // }
+      if (isInsurance && hicsServiceId) {
+         // await insuranceServices
+         //    .appointmentSeal(values)
+         //    .post('insurance/appointment-seal', values)
+         //    .then((response) => {
+         //       if (response.data.code === 400) {
+         //          openNofi('error', 'Алдаа', response.data.description);
+         //       } else {
+         //          openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+         //          navigate('/ambulatoryList', {
+         //             state: {
+         //                isRead: true
+         //             }
+         //          });
+         //       }
+         //    })
+         //    .catch((error) => {
+         //       if (error.response.status === 400) {
+         //          const message = error.response.data.message.replaceAll('HttpException:', '');
+         //          openNofi('error', 'Алдаа', message);
+         //       }
+         //    });
+      } else {
+         var newResponse;
+         if (appointmentType === 0) {
+            newResponse = await AppointmentService.patchAppointment(appointmentId, {
+               slotId: location?.state?.slotId,
+               endDate: new Date(),
+               status: values?.conclusion?.includes('confirmed') ? 5 : 4
+            }).then(({ data: { success } }) => success);
+         } else if (appointmentType === 1) {
+            newResponse = await AppointmentService.patchPreOrder(appointmentId, {
+               endDate: new Date(),
+               doctorId: userId,
+               status: values?.conclusion?.includes('confirmed') ? 5 : 4
+            }).then(({ data: { success } }) => success);
+         }
+         if (newResponse) {
+            setIsOpenModal(false);
+            openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+            navigate('/main/ambulatoryList', {
+               state: {
+                  isRead: true
+               }
+            });
+         }
+      }
    };
 
    return (

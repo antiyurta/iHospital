@@ -14,7 +14,7 @@
          "@Pages/*": ["src/components/pages/*"],
          "@Features/*": ["src/features/*"],
          "@Assets/*": ["src/assets/*"],
-         "@Utils/*": ["src/utils/*"],
+         "@Utils/*": ["src/utils/*"]
       }
    },
    "exclude": ["**/node_modules/*"]

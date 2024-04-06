@@ -1,7 +1,8 @@
 {
-   "name": "hospital",
+   "name": "hospitalEE",
    "version": "1.1.0",
    "private": true,
+   "license": "LICENSED",
    "dependencies": {
       "@ant-design/icons": "^4.7.0",
       "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
@@ -44,13 +45,14 @@
       "scss": "^0.2.4",
       "scss-loader": "^0.0.1",
       "socket.io-client": "^4.7.0",
-      "web-vitals": "^3.3.2"
+      "web-vitals": "^3.3.2",
+      "webpack-merge": "^5.10.0"
    },
    "scripts": {
       "start:analyze": "npm run dev -- --env.addons=bundleanalyzer",
-      "start": "webpack-dev-server --mode=development",
+      "start": "webpack serve --config webpack.dev.js",
       "watch": "webpack --watch --mode development",
-      "build": "set NODE_OPTIONS=--max_old_space_size=4096 && webpack --mode=production",
+      "build": "webpack --config webpack.prod.js",
       "analyze": "webpack-bundle-analyzer build/bundle-stats.json",
       "test": "react-scripts test",
       "lint": "eslint --fix --ext .js,.jsx .",
@@ -76,6 +78,7 @@
       ]
    },
    "devDependencies": {
+      "@babel/plugin-proposal-optional-chaining": "^7.21.0",
       "@babel/preset-env": "^7.22.4",
       "@babel/preset-react": "^7.22.3",
       "babel-loader": "^9.1.2",

@@ -183,7 +183,8 @@ function Index({ type, isDoctor }) {
          urgentInspectionNoteId: row.urgentInspectionNoteId,
          slotId: row.slotId,
          hicsServiceId: row.hicsSeal?.hicsServiceId,
-         reasonComming: row.reasonComming
+         reasonComming: row.reasonComming,
+         status: row.status
       };
       if (type === 0) {
          data['usageType'] = 'OUT';
@@ -406,6 +407,8 @@ function Index({ type, isDoctor }) {
                return <div className="text-start">Цаг цуцалсан</div>;
             } else if (status === 4) {
                return <div className="text-start">Үзлэг дууссан</div>;
+            } else if (status === 5) {
+               return <div className="text-start">Шийдвэрлэсэн</div>;
             }
          }
       },

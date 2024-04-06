@@ -6,6 +6,8 @@ import mnMN from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
 import { CloseOutlined } from '@ant-design/icons';
+//form
+import AForm from './AForm';
 //extends
 const { TextArea } = Input;
 const NewFormRender = (props) => {
@@ -46,25 +48,6 @@ const NewFormRender = (props) => {
       } else if (option.isHead && option.options)
          return option.options?.flatMap((fOption) => findKeyWords(option.keyWord, fOption));
       return [parentKey || '', option.keyWord];
-      // if (!option.options) {
-      //    return [parentKey, option.keyWord];
-      // }
-      // return option.options?.flatMap((fOption) => findKeyWords(option.keyWord, fOption));
-   };
-   const handleChangeInput = (value, question) => {
-      let pattern = /\.{1,}/g;
-      const text = question.replace(pattern, value);
-      // const getCurrentContent = () => editorState.getCurrentContent();
-      // const addHelloText = () => {
-      //    const currentContent = getCurrentContent();
-      //    const contentStateWithHello = ContentState.createFromText(text);
-      //    const newContentState = ContentState.createFromBlockArray(
-      //       currentContent.getBlockMap().toArray().concat(contentStateWithHello.getBlockMap().toArray())
-      //    );
-      //    return EditorState.push(editorState, newContentState, 'insert-characters');
-      // };
-      // const newEditorState = addHelloText();
-      // setEditorState(newEditorState);
    };
    const handleChangeCheckbox = (iKeyWords, options, currentIndex) => {
       var newKeyWords = [...keyWords];
@@ -128,54 +111,29 @@ const NewFormRender = (props) => {
       }
       checkProgress(newKeyWords);
       setKeyWords([...newKeyWords, ...['']]);
-
-      // if (options?.length > 0) {
-      //    const selectedIndexes = options
-      //       .map((option) => {
-      //          if (option.keyWord === keyWord) {
-      //             return option.index;
-      //          }
-      //       })
-      //       .filter(Boolean);
-      //    const selectedIndexChildrenIds = findChildrensIds(selectedIndexes);
-      //    const unSelectedIndex = options
-      //       .map((option) => {
-      //          if (option.keyWord != keyWord) {
-      //             return option.index;
-      //          }
-      //       })
-      //       .filter(Boolean);
-      //    const unSelectedIndexChildrenIds = findChildrensIds(unSelectedIndex);
-      //    const resetKeyWords = form?.documentForm
-      //       .filter((form) => unSelectedIndexChildrenIds.includes(form.index))
-      //       .map((filtred) => filtred.keyWord);
-      //    useForm.resetFields(resetKeyWords);
-      //    var newIndexes = indexes.filter((index) => !unSelectedIndexChildrenIds.includes(index));
-      //    newIndexes = [...newIndexes, ...selectedIndexChildrenIds];
-      //    const unDup = newIndexes.filter((item, index) => newIndexes.indexOf(item) === index);
-      //    setIndexes(unDup);
-      // } else {
-      //    const findIndex = form.documentForm.find((form) => form.keyWord === keyWord)?.index;
-      //    const childrenIds = findChildrensIds([findIndex]);
-      //    setIndexes([...indexes, currentIndex, ...childrenIds]);
-      // }
    };
-   const CheckIsOther = (CIOProps) => {
-      const { item } = CIOProps;
-      if (item.isOther) {
-         return (
-            <Form.Item className="mb-0 pl-3" label={'Бусад'} name={`${item.keyWord}Other`}>
-               <Input
-                  onChange={() => {
-                     checkProgress(keyWords);
-                  }}
-               />
-            </Form.Item>
-         );
-      }
-   };
-   const RenderFormInType = (RFITProps) => {
-      const { item, children } = RFITProps;
+   const RenderChildren = ({ children }) =>
+      children?.map((child, index) => (
+         <div key={index} className="form-child">
+            {child}
+         </div>
+      ));
+   const IsOther = ({ item }) => (
+      <Form.Item className="mb-0 pl-3" label={'Бусад'} name={`${item.keyWord}Other`}>
+         <Input
+            onChange={() => {
+               checkProgress(keyWords);
+            }}
+         />
+      </Form.Item>
+   );
+   const RenderFormInType = ({ item, children }) => {
+      const restItem = {
+         className: 'mb-0',
+         label: item.question,
+         name: configNames(item.keyWord),
+         tooltip: state ? message : null
+      };
       var state = false;
       if (isCheck) {
          state = !formOptionIds.includes(item.keyWord);
@@ -185,172 +143,111 @@ const NewFormRender = (props) => {
             const options = form.documentForm.filter((form) => form.parentIndex === item.index);
             return (
                <div key={item.index} className="document-forms">
-                  <div className="document-form">
-                     <div className="form-left" />
-                     <div className="form-inputs">
-                        <div className="flex flex-row gap-1 justify-between items-end">
-                           <p className="font-bold">{item.question}</p>
-                           <Button
-                              danger
-                              disabled={state}
-                              icon={<CloseOutlined />}
-                              onClick={() => {
-                                 handleChangeRadio(null, item?.options, configNames(item.keyWord));
-                              }}
-                           >
-                              Хариу арилгах
-                           </Button>
-                        </div>
-                        <Form.Item
-                           tooltip={state ? message : null}
-                           label={state ? ' ' : null}
-                           className="mb-0"
-                           labelCol={{
-                              style: {
-                                 width: '100%'
-                              }
+                  <AForm>
+                     <div className="flex flex-row gap-1 justify-between items-end">
+                        <p className="font-bold">{item.question}</p>
+                        <Button
+                           danger
+                           disabled={state}
+                           icon={<CloseOutlined />}
+                           onClick={() => {
+                              handleChangeRadio(null, item?.options, configNames(item.keyWord));
                            }}
-                           name={configNames(item.keyWord)}
                         >
-                           <Radio.Group
-                              onChange={(e) => {
-                                 handleChangeRadio(e.target.value, item?.options, configNames(item.keyWord));
-                              }}
-                              style={{
-                                 padding: 2,
-                                 background: '#fafafa',
-                                 width: '100%',
-                                 display: 'flex',
-                                 flexDirection: 'column'
-                              }}
-                              disabled={state}
-                           >
-                              {options.map((option, index) => (
-                                 <Radio key={index} value={item.isInteger ? Number(option.keyWord) : option.keyWord}>
-                                    {option.question}
-                                 </Radio>
-                              ))}
-                           </Radio.Group>
-                        </Form.Item>
-                        <CheckIsOther item={item} />
+                           Хариу арилгах
+                        </Button>
                      </div>
-                  </div>
-                  {children?.map((child, index) => (
-                     <div key={index} className="form-child">
-                        {child}
-                     </div>
-                  ))}
+                     <Form.Item
+                        tooltip={state ? message : null}
+                        label={state ? ' ' : null}
+                        className="mb-0"
+                        labelCol={{
+                           style: {
+                              width: '100%'
+                           }
+                        }}
+                        name={configNames(item.keyWord)}
+                     >
+                        <Radio.Group
+                           className="p-[2px] bg-[#fafafa] w-full flex flex-col"
+                           onChange={(e) => {
+                              handleChangeRadio(e.target.value, item?.options, configNames(item.keyWord));
+                           }}
+                           disabled={state}
+                        >
+                           {options.map((option, index) => (
+                              <Radio key={index} value={item.isInteger ? Number(option.keyWord) : option.keyWord}>
+                                 {option.question}
+                              </Radio>
+                           ))}
+                        </Radio.Group>
+                     </Form.Item>
+                     {item.isOther ? <IsOther item={item} /> : null}
+                  </AForm>
+                  <RenderChildren children={children} />
                </div>
             );
          } else if (item.type === 'checkbox') {
+            const style = {
+               padding: 2,
+               width: '100%',
+               display: 'flex',
+               flexDirection: 'column'
+            };
+            const otherStyle = {
+               padding: 2,
+               width: '100%',
+               display: 'grid',
+               gridTemplateColumns: `repeat(${item.grid?.cols || 1}, minmax(0, 1fr))`
+            };
             const options = form.documentForm.filter((form) => form.parentIndex === item.index);
             return (
-               <div key={item.index}>
-                  <div className="document-form">
-                     <div className="form-left" />
-                     <div className="form-inputs">
-                        <Form.Item
-                           tooltip={state ? message : null}
-                           className="mb-0"
-                           label={item.question}
-                           name={configNames(item.keyWord)}
+               <div key={item.index} className="document-forms">
+                  <AForm>
+                     <Form.Item {...restItem}>
+                        <Checkbox.Group
+                           onChange={(e) => {
+                              handleChangeCheckbox(e, item?.options, configNames(item.keyWord));
+                           }}
+                           disabled={state}
+                           className="bg-transparent"
+                           style={item.grid?.state ? otherStyle : style}
                         >
-                           <Checkbox.Group
-                              onChange={(e) => {
-                                 handleChangeCheckbox(e, item?.options, configNames(item.keyWord));
-                              }}
-                              disabled={state}
-                              className="bg-transparent"
-                              style={{
-                                 padding: 2,
-                                 width: '100%',
-                                 display: 'flex',
-                                 flexDirection: 'column'
-                              }}
-                           >
-                              {options.map((option, index) => (
-                                 <Checkbox className="ml-0" key={index} value={option.keyWord}>
-                                    {option.question}
-                                 </Checkbox>
-                              ))}
-                           </Checkbox.Group>
-                        </Form.Item>
-                        <CheckIsOther item={item} />
-                     </div>
-                  </div>
-                  {children?.map((child, index) => (
-                     <div key={index} className="pl-2">
-                        {child}
-                     </div>
-                  ))}
+                           {options.map((option, index) => (
+                              <Checkbox
+                                 className="ml-0"
+                                 key={index}
+                                 value={item.isInteger ? Number(option.keyWord) : option.keyWord}
+                              >
+                                 {option.question}
+                              </Checkbox>
+                           ))}
+                        </Checkbox.Group>
+                     </Form.Item>
+                     {item.isOther ? <IsOther item={item} /> : null}
+                  </AForm>
+                  <RenderChildren children={children} />
                </div>
             );
-         } else if (item.type === 'input') {
+         } else if (item.type === 'input' || item.type === 'inputNumber' || item.type === 'textarea') {
+            const rest = {
+               disabled: state,
+               placeholder: item.question || 'Бичих',
+               onChange: () => {
+                  checkProgress(keyWords);
+               }
+            };
+            const InputN = () => {
+               if (item.type === 'input') return <Input {...rest} />;
+               else if (item.type === 'inputNumber') return <InputNumber {...rest} />;
+               else if (item.type === 'textarea') return <TextArea {...rest} rows={7} />;
+            };
             return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <Form.Item
-                        className="mb-0"
-                        label={item.question}
-                        name={configNames(item.keyWord)}
-                        tooltip={state ? message : null}
-                     >
-                        <Input
-                           disabled={state}
-                           placeholder={item.question || 'Бичих'}
-                           onChange={() => {
-                              checkProgress(keyWords);
-                           }}
-                        />
-                     </Form.Item>
-                  </div>
-               </div>
-            );
-         } else if (item.type === 'inputNumber') {
-            return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <Form.Item
-                        className="mb-0"
-                        label={item.question}
-                        name={configNames(item.keyWord)}
-                        tooltip={state ? message : null}
-                     >
-                        <InputNumber
-                           onChange={() => {
-                              checkProgress(keyWords);
-                           }}
-                           disabled={state}
-                           placeholder={item.question || 'Бичих'}
-                        />
-                     </Form.Item>
-                  </div>
-               </div>
-            );
-         } else if (item.type === 'textarea') {
-            return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <Form.Item
-                        tooltip={state ? message : null}
-                        className="mb-0"
-                        label={item.question}
-                        name={configNames(item.keyWord)}
-                     >
-                        <TextArea
-                           onChange={() => {
-                              checkProgress(keyWords);
-                           }}
-                           rows={7}
-                           disabled={state}
-                           placeholder={item.question || 'Энд бичнэ үү'}
-                        />
-                     </Form.Item>
-                  </div>
-               </div>
+               <AForm key={item.index}>
+                  <Form.Item {...restItem}>
+                     <InputN />
+                  </Form.Item>
+               </AForm>
             );
          } else if (item.type === 'table') {
             return (
@@ -363,157 +260,82 @@ const NewFormRender = (props) => {
                   </Form.List>
                </>
             );
-         } else if (item.type === 'diagnoseMNName') {
+         } else if (item.type === 'diagnose' || item.type === 'diagnoseMNName') {
+            const value = (diagnose) => {
+               if (item.type === 'diagnose') {
+                  return diagnose.code;
+               } else if (item.type === 'diagnoseMNName') {
+                  return `${diagnose.code}-${diagnose.nameMn}`;
+               }
+            };
             return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <div className="flex flex-row gap-2 justify-between">
-                        <Form.Item
-                           tooltip={state ? message : null}
-                           className="mb-0"
-                           label={item.question}
-                           name={configNames(item.keyWord)}
-                        >
-                           <Input disabled placeholder={item.question} />
-                        </Form.Item>
-                        <DiagnoseWindow
-                           handleClick={(diagnose) => {
-                              useForm.setFieldValue(configNames(item.keyWord), `${diagnose.code}-${diagnose.nameMn}`);
-                              useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
-                              checkProgress(keyWords);
-                           }}
-                           disabled={state}
-                        />
-                        <Form.Item className="hidden" label="sada" name={`${item.keyWord}CreatedAt`}>
-                           <Input />
-                        </Form.Item>
-                     </div>
+               <AForm key={item.index}>
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Form.Item {...restItem}>
+                        <Input disabled placeholder={item.question} />
+                     </Form.Item>
+                     <DiagnoseWindow
+                        handleClick={(diagnose) => {
+                           useForm.setFieldsValue({
+                              [`${item.keyWord}Id`]: diagnose.id,
+                              [`${configNames(item.keyWord)}`]: value(diagnose),
+                              [`${item.keyWord}CreatedAt`]: new Date()
+                           });
+                           checkProgress(keyWords);
+                        }}
+                        disabled={state}
+                     />
+                     <Form.Item className="hidden" name={`${item.keyWord}CreatedAt`}>
+                        <Input />
+                     </Form.Item>
+                     <Form.Item className="hidden" name={`${item.keyWord}Id`}>
+                        <InputNumber />
+                     </Form.Item>
                   </div>
-               </div>
-            );
-         } else if (item.type === 'diagnose') {
-            return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <div className="flex flex-row gap-2 justify-between">
-                        <Form.Item
-                           tooltip={state ? message : null}
-                           className="mb-0"
-                           label={item.question}
-                           name={configNames(item.keyWord)}
-                        >
-                           <Input disabled placeholder={item.question} />
-                        </Form.Item>
-                        <DiagnoseWindow
-                           handleClick={(diagnose) => {
-                              useForm.setFieldValue(configNames(item.keyWord), diagnose.code);
-                              useForm.setFieldValue(`${item.keyWord}CreatedAt`, new Date());
-                              checkProgress(keyWords);
-                           }}
-                           disabled={state}
-                        />
-                        <Form.Item className="hidden" label="sada" name={`${item.keyWord}CreatedAt`}>
-                           <Input />
-                        </Form.Item>
-                     </div>
-                  </div>
-               </div>
+               </AForm>
             );
          } else if (item.type === 'title') {
             return (
                <>
-                  <p
-                     style={{
-                        paddingTop: 12,
-                        fontSize: 15,
-                        fontWeight: 'bold'
-                     }}
-                  >
-                     {item.question}
-                  </p>
-                  {children?.map((child, index) => (
-                     <div key={index} className="pl-2">
-                        {child}
-                     </div>
-                  ))}
+                  <p className="pt-3 text-sm font-bold">{item.question}</p>
+                  <RenderChildren children={children} />
                </>
             );
-         } else if (item.type === 'timepicker') {
+         } else if (item.type === 'timepicker' || item.type === 'datepicker' || item.type === 'dateTime') {
+            const Picker = () => {
+               if (item.type === 'timepicker') {
+                  return <TimePicker locale={mnMN} disabled={state} placeholder={item.question} />;
+               } else if (item.type === 'datepicker') {
+                  return (
+                     <DatePicker locale={mnMN} format={'YYYY/MM/DD'} disabled={state} placeholder={item.question} />
+                  );
+               } else if (item.type === 'dateTime') {
+                  return (
+                     <DatePicker
+                        showTime
+                        locale={mnMN}
+                        format={'YYYY/MM/DD HH:mm'}
+                        disabled={state}
+                        placeholder={item.question}
+                     />
+                  );
+               }
+            };
             return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <Form.Item
-                        tooltip={state ? message : null}
-                        className="mb-0"
-                        label={item.question}
-                        name={configNames(item.keyWord)}
-                        getValueProps={(i) => {
-                           if (i) {
-                              return { value: moment(i) };
-                           } else {
-                              return;
-                           }
-                        }}
-                     >
-                        <TimePicker locale={mnMN} disabled={state} placeholder={item.question} />
-                     </Form.Item>
-                  </div>
-               </div>
-            );
-         } else if (item.type === 'datepicker') {
-            return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <Form.Item
-                        tooltip={state ? message : null}
-                        className="mb-0"
-                        label={item.question}
-                        name={configNames(item.keyWord)}
-                        getValueProps={(i) => {
-                           if (i) {
-                              return { value: moment(i) };
-                           } else {
-                              return;
-                           }
-                        }}
-                     >
-                        <DatePicker locale={mnMN} format={'YYYY/MM/DD'} disabled={state} placeholder={item.question} />
-                     </Form.Item>
-                  </div>
-               </div>
-            );
-         } else if (item.type === 'dateTime') {
-            return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <Form.Item
-                        tooltip={state ? message : null}
-                        className="mb-0"
-                        label={item.question}
-                        name={configNames(item.keyWord)}
-                        getValueProps={(i) => {
-                           if (i) {
-                              return { value: moment(i) };
-                           } else {
-                              return;
-                           }
-                        }}
-                     >
-                        <DatePicker
-                           showTime
-                           locale={mnMN}
-                           format={'YYYY/MM/DD HH:mm'}
-                           disabled={state}
-                           placeholder={item.question}
-                        />
-                     </Form.Item>
-                  </div>
-               </div>
+               <AForm key={item.index}>
+                  <Form.Item
+                     {...restItem}
+                     getValueProps={(i) => {
+                        if (i) {
+                           return { value: moment(i) };
+                        } else {
+                           return;
+                        }
+                     }}
+                  >
+                     <Picker />
+                  </Form.Item>
+               </AForm>
             );
          } else if (item.type === 'humanhead' || item.type === 'humanbody' || item.type === 'human32a') {
             const Part = () => {
@@ -522,43 +344,40 @@ const NewFormRender = (props) => {
                else if (item.type === 'human32a') return '32a';
             };
             return (
-               <div key={item.index} className="document-form">
-                  <div className="form-left" />
-                  <div className="form-inputs">
-                     <p className="font-bold pb-2">{item.question}</p>
-                     <div className="flex flex-row gap-2 justify-between">
-                        <Form.List name={configNames(item.keyWord)}>
-                           {(fields, index) => (
-                              <div key={index}>
-                                 {fields.map((field) => (
-                                    <div key={field.key} className="flex flex-row gap-1">
-                                       <Form.Item shouldUpdate name={[field.name, 'desc']}>
-                                          <Input disabled />
-                                       </Form.Item>
-                                       <Form.Item shouldUpdate name={[field.name, 'top']}>
-                                          <Input disabled />
-                                       </Form.Item>
-                                       <Form.Item shouldUpdate name={[field.name, 'left']}>
-                                          <Input disabled />
-                                       </Form.Item>
-                                    </div>
-                                 ))}
-                              </div>
-                           )}
-                        </Form.List>
-                        <div>
-                           <HumanParts
-                              part={Part()}
-                              name={configNames(item.keyWord)}
-                              currentData={useForm.getFieldValue(configNames(item.keyWord))}
-                              handleClick={(data) => {
-                                 useForm.setFieldValue(configNames(item.keyWord), data[`${configNames(item.keyWord)}`]);
-                              }}
-                           />
-                        </div>
+               <AForm key={item.index}>
+                  <p className="font-bold pb-2">{item.question}</p>
+                  <div className="flex flex-row gap-2 justify-between">
+                     <Form.List name={configNames(item.keyWord)}>
+                        {(fields, index) => (
+                           <div key={index}>
+                              {fields.map((field) => (
+                                 <div key={field.key} className="flex flex-row gap-1">
+                                    <Form.Item shouldUpdate name={[field.name, 'desc']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item shouldUpdate name={[field.name, 'top']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item shouldUpdate name={[field.name, 'left']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                 </div>
+                              ))}
+                           </div>
+                        )}
+                     </Form.List>
+                     <div>
+                        <HumanParts
+                           part={Part()}
+                           name={configNames(item.keyWord)}
+                           currentData={useForm.getFieldValue(configNames(item.keyWord))}
+                           handleClick={(data) => {
+                              useForm.setFieldValue(configNames(item.keyWord), data[`${configNames(item.keyWord)}`]);
+                           }}
+                        />
                      </div>
                   </div>
-               </div>
+               </AForm>
             );
          }
       }

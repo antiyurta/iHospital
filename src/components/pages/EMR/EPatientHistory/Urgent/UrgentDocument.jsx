@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Result, Spin } from 'antd';
+import { Button, Result } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 //comp
-import First from './First';
-import Last from './Last';
+import UrgentIndex from './UrgentIndex';
 
 const UrgentDocument = ({ handleClick }) => {
    const [currentInspection, setInspection] = useState(null);
@@ -23,8 +22,8 @@ const UrgentDocument = ({ handleClick }) => {
                </Button>
             ) : null}
          </div>
-         {currentInspection === 'first' ? <First handleClick={handleClick} /> : null}
-         {currentInspection === 'last' ? <Last /> : null}
+         {currentInspection === 'first' ? <UrgentIndex type={'first'} handleClick={handleClick} /> : null}
+         {currentInspection === 'last' ? <UrgentIndex type={'last'} handleClick={handleClick} /> : null}
          {currentInspection === null ? (
             <Result
                className="bg-[#eff4fa] h-full rounded-xl"
