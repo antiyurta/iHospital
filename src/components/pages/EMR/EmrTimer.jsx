@@ -86,7 +86,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       <>
          <div className="emr-timer">
             <p>Үзлэгийн хугацаа</p>
-            <Clock startDate={props.startDate} endDate={props.endDate} />
+            <Clock startDate={startDate} endDate={endDate} />
             <p>{`${dayjs(startDate).format('YYYY/MM/DD hh:mm')} эхэлсэн`}</p>
             {endDate ? <p>{`${dayjs(endDate).format('YYYY/MM/DD hh:mm')} дууссан`}</p> : null}
             <Button
