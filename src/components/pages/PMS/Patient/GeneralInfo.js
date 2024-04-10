@@ -192,17 +192,14 @@ function GeneralInfo({ form, gbase }) {
                      message: 'Заавал'
                   }
                ]}
-               initialValue={43}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >
                <Select
-                  // defaultValue={43}
                   showSearch
                   optionFilterProp="children"
                   filterOption={(input, option) => (option?.children ?? '').toLowerCase().includes(input.toLowerCase())}
                >
-                  {/* Монголын ID === 43 */}
                   {citizens.map((citizen, index) => {
                      return (
                         <Option key={index} value={citizen.id}>

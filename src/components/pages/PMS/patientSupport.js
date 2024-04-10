@@ -72,6 +72,7 @@ const PatientSupport = (props) => {
          form={form}
          layout="horizontal"
          initialValues={{
+            countryId: 1,
             contacts: [{}]
          }}
       >

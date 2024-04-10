@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Radio } from 'antd';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData, selectCurrentHicsService } from '../../../features/emrReducer';
-import { selectCurrentInsurance, selectCurrentUserId } from '../../../features/authReducer';
-
-//
-import AppointmentService from '../../../services/appointment/api-appointment-service';
-import insuranceServices from '../../../services/healt-insurance/insurance';
-import { openNofi } from '../../common';
-import { useLocation, useNavigate } from 'react-router-dom';
-//
+//redux
+import { selectCurrentEmrData, selectCurrentHicsService } from '@Features/emrReducer';
+import { selectCurrentInsurance, selectCurrentUserId } from '@Features/authReducer';
+//common
+import { openNofi } from '@Comman/common';
+//api
+import insuranceApi from '@ApiServices/healt-insurance/insurance';
+import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //comp
 import Finger from '@Comman/Finger/Finger';
 import Clock from './Clock';
 
-const EmrTimer = (props) => {
+const EmrTimer = ({ startDate, endDate, inspection }) => {
    const navigate = useNavigate();
    const location = useLocation();
-   const { startDate, endDate, inspection } = props;
    const [form] = Form.useForm();
    const emrHicsService = useSelector(selectCurrentHicsService);
    const { hicsServiceId, appointmentId, appointmentType } = useSelector(selectCurrentEmrData);
@@ -35,7 +34,7 @@ const EmrTimer = (props) => {
       //    values['appointmentId'] = appointmentId;
       // }
       if (isInsurance && hicsServiceId) {
-         // await insuranceServices
+         // await insuranceApi
          //    .appointmentSeal(values)
          //    .post('insurance/appointment-seal', values)
          //    .then((response) => {
@@ -59,13 +58,13 @@ const EmrTimer = (props) => {
       } else {
          var newResponse;
          if (appointmentType === 0) {
-            newResponse = await AppointmentService.patchAppointment(appointmentId, {
+            newResponse = await AppointmentApi.patchAppointment(appointmentId, {
                slotId: location?.state?.slotId,
                endDate: new Date(),
                status: values?.conclusion?.includes('confirmed') ? 5 : 4
             }).then(({ data: { success } }) => success);
          } else if (appointmentType === 1) {
-            newResponse = await AppointmentService.patchPreOrder(appointmentId, {
+            newResponse = await AppointmentApi.patchPreOrder(appointmentId, {
                endDate: new Date(),
                doctorId: userId,
                status: values?.conclusion?.includes('confirmed') ? 5 : 4

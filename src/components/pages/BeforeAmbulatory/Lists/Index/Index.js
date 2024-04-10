@@ -196,6 +196,7 @@ function Index({ type, isDoctor }) {
          data['appointmentId'] = row.id;
          data['cabinetId'] = row.cabinetId;
          data['EWSColor'] = row.emergencySorter?.color;
+         data['departmentId'] = row.cabinet?.parentId;
       } else if (type === 2) {
          data['usageType'] = 'IN';
          data['inpatientRequestId'] = row.id;

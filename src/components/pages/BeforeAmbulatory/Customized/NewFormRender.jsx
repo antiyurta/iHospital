@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
-import NewFormTable from './NewFormTable';
-import HumanParts from './human-parts';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-import DiagnoseWindow from '../../service/DiagnoseWindow';
 import moment from 'moment';
 import { CloseOutlined } from '@ant-design/icons';
+//comp
+import HumanParts from './human-parts';
+import NewFormTable from './NewFormTable';
+import DiagnoseWindow from '../../service/DiagnoseWindow';
 //form
 import AForm from './AForm';
 //extends
 const { TextArea } = Input;
-const NewFormRender = (props) => {
-   const { useForm, form, formOptionIds, isCheck, formName, incomeKeyWords, checkProgress, isDisabledButton } = props;
+//
+const NewFormRender = (
+   useForm,
+   form,
+   formOptionIds,
+   isCheck,
+   formName,
+   incomeKeyWords,
+   checkProgress,
+   isDisabledButton
+) => {
    const [treeData, setTreeData] = useState();
    const message = 'Тань бөглөх эрх байхгүй';
    const [keyWords, setKeyWords] = useState([]);
@@ -302,23 +312,18 @@ const NewFormRender = (props) => {
                </>
             );
          } else if (item.type === 'timepicker' || item.type === 'datepicker' || item.type === 'dateTime') {
+            const rest = {
+               disabled: state,
+               placeholder: item.question || 'Бичих',
+               locale: mnMN
+            };
             const Picker = () => {
                if (item.type === 'timepicker') {
-                  return <TimePicker locale={mnMN} disabled={state} placeholder={item.question} />;
+                  return <TimePicker {...rest} />;
                } else if (item.type === 'datepicker') {
-                  return (
-                     <DatePicker locale={mnMN} format={'YYYY/MM/DD'} disabled={state} placeholder={item.question} />
-                  );
+                  return <DatePicker {...rest} format={'YYYY/MM/DD'} />;
                } else if (item.type === 'dateTime') {
-                  return (
-                     <DatePicker
-                        showTime
-                        locale={mnMN}
-                        format={'YYYY/MM/DD HH:mm'}
-                        disabled={state}
-                        placeholder={item.question}
-                     />
-                  );
+                  return <DatePicker {...rest} showTime format={'YYYY/MM/DD HH:mm'} />;
                }
             };
             return (
