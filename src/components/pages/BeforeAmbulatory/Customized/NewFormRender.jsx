@@ -12,7 +12,7 @@ import AForm from './AForm';
 //extends
 const { TextArea } = Input;
 //
-const NewFormRender = (
+const NewFormRender = ({
    useForm,
    form,
    formOptionIds,
@@ -21,7 +21,7 @@ const NewFormRender = (
    incomeKeyWords,
    checkProgress,
    isDisabledButton
-) => {
+}) => {
    const [treeData, setTreeData] = useState();
    const message = 'Тань бөглөх эрх байхгүй';
    const [keyWords, setKeyWords] = useState([]);
@@ -427,6 +427,7 @@ const NewFormRender = (
       if (isCheck) {
          const unionSet = new Set([...(parentKeys || []), ...(formOptionIds || [])]);
          const unionArray = Array.from(unionSet);
+         console.log(unionArray);
          if (unionArray.length > 0) isDisabledButton(false);
          else isDisabledButton(true);
       } else {
