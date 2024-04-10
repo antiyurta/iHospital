@@ -104,7 +104,7 @@ const ct32a = ({ document }) => {
          </div>
          <Modal title="CT32A" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null} destroyOnClose>
             <Customized
-               propsUsageType={'OUT'}
+               propsUsageType={incomeEmrData.usageType}
                isEdit={false}
                editId={null}
                document={document}

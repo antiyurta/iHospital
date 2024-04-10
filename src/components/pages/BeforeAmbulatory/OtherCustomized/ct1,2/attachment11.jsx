@@ -355,7 +355,7 @@ const Attachment11 = ({ document }) => {
             footer={null}
          >
             <Customized
-               propsUsageType="IN"
+               propsUsageType={incomeEmrData.usageType}
                isEdit={editMode}
                editId={editMode ? selectedData._id : null}
                document={editMode ? selectedData : document}

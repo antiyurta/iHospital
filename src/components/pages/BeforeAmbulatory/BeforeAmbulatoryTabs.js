@@ -22,7 +22,7 @@ export default function BeforeAmbulatoryTabs({ appointmentType, reasonComming })
       await OrganizationDocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            structureIds: [incomeENRData.departmentId],
+            structureIds: [incomeENRData.departmentId, incomeENRData.cabinetId],
             usageType: 'OUT',
             documentType: 0
          }

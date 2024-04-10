@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Table } from 'antd';
 import { useSelector } from 'react-redux';
-import React, { useEffect, useState } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
 //comp
 import Customized from '@Pages/BeforeAmbulatory/Customized/Index';
@@ -97,7 +97,7 @@ const EmergencySorter = ({ document }) => {
                </Button>
                <Button
                   onClick={() => {
-                     deleteData(row._id);
+                     deleteData(row.id);
                   }}
                >
                   delete
@@ -172,7 +172,7 @@ const EmergencySorter = ({ document }) => {
             footer={null}
          >
             <Customized
-               propsUsageType={'OUT'}
+               propsUsageType={incomeENRData.usageType}
                isEdit={editMode}
                editId={editMode ? selectedData.id : null}
                document={editMode ? { ...selectedData, formId: document.formId } : document}

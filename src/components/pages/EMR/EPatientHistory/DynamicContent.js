@@ -172,6 +172,9 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
             scrollToFirstError
             onFinish={(e) => saveDynamicTab(e, props.formKey)}
             onFinishFailed={onFinishFailed}
+            onFieldsChange={(e) => {
+               console.log(e);
+            }}
          >
             <div className="flex flex-col gap-2">
                <div className="flex flex-col pr-3 gap-2">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 const Soap = (props) => {
-   const { soapKey, expandedKey, handleClick, form } = props;
+   const { soapKey, expandedKey, handleClick } = props;
    const [expand, setExpand] = useState(false);
    useEffect(() => {
       if (expandedKey === soapKey) {

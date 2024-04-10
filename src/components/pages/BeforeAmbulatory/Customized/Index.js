@@ -39,7 +39,6 @@ function Index(props) {
    const printRef = useRef();
    const appIds = useSelector(selectCurrentAppId);
    const { usageType, patientId, appointmentId, inpatientRequestId } = useSelector(selectCurrentEmrData);
-   const [currentIsEdit, setCurrentIsEdit] = useState(isEdit);
    const [filterForm] = Form.useForm();
    const [form] = Form.useForm();
    const [data, setData] = useState([]);
@@ -144,11 +143,11 @@ function Index(props) {
                if (response.data.response.success) {
                   handleIsReload(true);
                   openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+                  onOk(false, response.data.response);
                }
             })
             .finally(() => {
                setIsLoading(false);
-               onOk(false);
             });
       } else {
          var sendData = {};
@@ -179,8 +178,10 @@ function Index(props) {
                   if (saveType === 'Draft') {
                      handleIsReload(true);
                   }
-                  openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
+               } else {
+                  onOk(false, response);
                }
+               openNofi('success', 'Амжилттай', 'Маягт амжилттай хадгалагдлаа');
             })
             .catch((error) => {
                if (error.response?.status === 409) {
@@ -384,30 +385,24 @@ function Index(props) {
                            checkProgress={(keyWords) => {
                               form.setFieldValue('documentPercent', checkProgress(keyWords));
                            }}
-                           isDisabledButton={setIsDisabledButton}
+                           isDisabledButton={(state) => {
+                              console.log('sdasd', state);
+                           }}
                         />
                      </div>
                   </Form>
                   <div className="flex flex-row gap-2 justify-between">
-                     <div>
-                        {isBackButton ? (
-                           <Button
-                              danger
-                              onClick={() => {
-                                 handleBackButton(true);
-                              }}
-                           >
-                              Буцах
-                           </Button>
-                        ) : null}
-                     </div>
-                     <div
-                        style={{
-                           display: 'flex',
-                           flexDirection: 'row',
-                           gap: 8
-                        }}
-                     >
+                     {isBackButton ? (
+                        <Button
+                           danger
+                           onClick={() => {
+                              handleBackButton(true);
+                           }}
+                        >
+                           Буцах
+                        </Button>
+                     ) : null}
+                     <div className="flex flex-row gap-2">
                         {isBackButton ? (
                            <Button
                               disabled={isDisabledButton}

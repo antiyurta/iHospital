@@ -12,7 +12,7 @@ import { selectCurrentEmrData } from '@Features/emrReducer';
 import OrganizationDocumentRoleApi from '@ApiServices/organization/documentRole';
 //img
 import Arrow from './arrow.svg';
-// compon
+// comp
 import Customized from '../../../BeforeAmbulatory/Customized/Index';
 
 const DocumentIndex = (props) => {
@@ -31,8 +31,7 @@ const DocumentIndex = (props) => {
       await OrganizationDocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
-            // structureIds: [incomeEmrData.departmentId],
-            structureIds: [incomeEmrData.cabinetId],
+            structureIds: [incomeEmrData.departmentId, incomeEmrData.cabinetId],
             usageType: usageType,
             documentType: 0
          }

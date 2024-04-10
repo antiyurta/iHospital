@@ -157,7 +157,7 @@ const DocumentDraft = (props) => {
             footer={false}
          >
             <Customized
-               propsUsageType={usageType}
+               propsUsageType={incomeEmrData.usageType}
                isEdit={true}
                editId={selectedDocument._id}
                document={selectedDocument}

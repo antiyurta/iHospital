@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker, Tooltip } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { CloseOutlined } from '@ant-design/icons';
@@ -154,18 +154,18 @@ const NewFormRender = ({
             return (
                <div key={item.index} className="document-forms">
                   <AForm>
-                     <div className="flex flex-row gap-1 justify-between items-end">
+                     <div className="flex flex-row gap-1 justify-between items-center">
                         <p className="font-bold">{item.question}</p>
-                        <Button
-                           danger
-                           disabled={state}
-                           icon={<CloseOutlined />}
-                           onClick={() => {
-                              handleChangeRadio(null, item?.options, configNames(item.keyWord));
-                           }}
-                        >
-                           Хариу арилгах
-                        </Button>
+                        <Tooltip title="Хариу арилгах">
+                           <Button
+                              danger
+                              disabled={state}
+                              icon={<CloseOutlined />}
+                              onClick={() => {
+                                 handleChangeRadio(null, item?.options, configNames(item.keyWord));
+                              }}
+                           />
+                        </Tooltip>
                      </div>
                      <Form.Item
                         tooltip={state ? message : null}
@@ -247,10 +247,10 @@ const NewFormRender = ({
                   checkProgress(keyWords);
                }
             };
-            const InputN = () => {
-               if (item.type === 'input') return <Input {...rest} />;
-               else if (item.type === 'inputNumber') return <InputNumber {...rest} />;
-               else if (item.type === 'textarea') return <TextArea {...rest} rows={7} />;
+            const InputN = (props) => {
+               if (item.type === 'input') return <Input {...rest} {...props} />;
+               else if (item.type === 'inputNumber') return <InputNumber {...rest} {...props} />;
+               else if (item.type === 'textarea') return <TextArea {...rest} {...props} rows={7} />;
             };
             return (
                <AForm key={item.index}>
@@ -317,13 +317,13 @@ const NewFormRender = ({
                placeholder: item.question || 'Бичих',
                locale: mnMN
             };
-            const Picker = () => {
+            const Picker = (props) => {
                if (item.type === 'timepicker') {
-                  return <TimePicker {...rest} />;
+                  return <TimePicker {...rest} {...props} />;
                } else if (item.type === 'datepicker') {
-                  return <DatePicker {...rest} format={'YYYY/MM/DD'} />;
+                  return <DatePicker {...rest} {...props} format={'YYYY/MM/DD'} />;
                } else if (item.type === 'dateTime') {
-                  return <DatePicker {...rest} showTime format={'YYYY/MM/DD HH:mm'} />;
+                  return <DatePicker {...rest} {...props} showTime format={'YYYY/MM/DD HH:mm'} />;
                }
             };
             return (
@@ -427,7 +427,6 @@ const NewFormRender = ({
       if (isCheck) {
          const unionSet = new Set([...(parentKeys || []), ...(formOptionIds || [])]);
          const unionArray = Array.from(unionSet);
-         console.log(unionArray);
          if (unionArray.length > 0) isDisabledButton(false);
          else isDisabledButton(true);
       } else {

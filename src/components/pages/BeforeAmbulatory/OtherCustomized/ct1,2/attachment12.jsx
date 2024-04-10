@@ -179,7 +179,7 @@ const Attachment2 = ({ document }) => {
 
          <Modal title="Маягт бөглөх" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null}>
             <Customized
-               propsUsageType={'IN'}
+               propsUsageType={incomeEmrData.usageType}
                isEdit={false}
                editId={null}
                document={document}

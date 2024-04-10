@@ -183,7 +183,7 @@ function MainInpatientHistory() {
             <div className="flex flex-col gap-1">
                <p className="text-center font-semibold">{selectedDocument?.docName}</p>
                <Customized
-                  propsUsageType="IN"
+                  propsUsageType={incomeEmrData.usageType}
                   isEdit={false}
                   editId={null}
                   document={selectedDocument}
