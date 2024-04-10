@@ -8,10 +8,9 @@ const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
-module.exports = (env) => {
-   const isDevelopment = env.mode !== 'production';
-   console.log('TT', isDevelopment);
+module.exports = ({ isDevelopment }) => {
    return {
       context: __dirname,
       entry: './src/index.js',
@@ -100,6 +99,21 @@ module.exports = (env) => {
             filename: 'index.html',
             inject: 'head',
             favicon: './public/favicon.ico'
+         }),
+         new FileManagerPlugin({
+            events: {
+               onStart: {
+                  delete: [
+                     {
+                        source: path.join(__dirname, '../build/').replaceAll('\\', '/'),
+                        options: {
+                           force: true,
+                           recursive: true
+                        }
+                     }
+                  ]
+               }
+            }
          }),
          new webpack.IgnorePlugin({
             resourceRegExp: /^\.\/locale$/,
