@@ -19,6 +19,17 @@ module.exports = {
       publicPath: '/',
       clean: true
    },
+   resolve: {
+      alias: {
+         '@ApiServices': path.resolve(__dirname, 'src/services'),
+         '@Comman': path.resolve(__dirname, 'src/components'),
+         '@Pages': path.resolve(__dirname, 'src/components/pages'),
+         '@Features': path.resolve(__dirname, 'src/features'),
+         '@Assets': path.resolve(__dirname, 'src/assets'),
+         '@Utils': path.resolve(__dirname, 'src/utils')
+      },
+      extensions: ['.js', '.jsx']
+   },
    module: {
       rules: [
          {
