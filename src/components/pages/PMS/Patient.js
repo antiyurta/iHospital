@@ -16,6 +16,7 @@ import PatientApi from '@ApiServices/pms/patient.api';
 const { Search } = Input;
 
 function Patient() {
+   const [mongoliaId, setMongoliaId] = useState(1);
    const [isGlobalDb, setIsGlobalDb] = useState(false);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [isViewModalVisible, setIsViewModalVisible] = useState(false);
@@ -141,6 +142,7 @@ function Patient() {
             type: 1
          }
       }).then(({ data: { response } }) => {
+         findMongolId(response.data);
          setCitizens(response.data);
       });
    };
@@ -294,6 +296,11 @@ function Patient() {
       }
    ];
    //
+   const findMongolId = (incomeCitizens) => {
+      const mongolia = incomeCitizens.find((citizen) => citizen.name === 'Монгол');
+      setMongoliaId(mongolia?.id);
+   };
+   //
    useEffect(() => {
       getData(1, 20);
       getCitizens();
@@ -394,6 +401,7 @@ function Patient() {
                   filterTowns(result);
                }}
                onFinish={onFinish}
+               mongoliaId={mongoliaId}
             />
          </Modal>
          <Modal

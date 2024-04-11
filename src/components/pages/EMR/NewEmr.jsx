@@ -333,17 +333,29 @@ class NewEmr extends React.Component {
                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
                      industry's standard dummy text ever since the
                   </p>
-                  <Button
-                     type="primary"
-                     onClick={() => {
-                        this.setState({
-                           type: this.state.temporarilyType,
-                           isOpenWarningModal: false
-                        });
-                     }}
-                  >
-                     Шилжих
-                  </Button>
+                  <div className="flex flex-row gap-2">
+                     <Button
+                        type="primary"
+                        onClick={() => {
+                           this.setState({
+                              type: this.state.temporarilyType,
+                              isOpenWarningModal: false
+                           });
+                        }}
+                     >
+                        Шилжих
+                     </Button>
+                     <Button
+                        danger
+                        onClick={() => {
+                           this.setState({
+                              isOpenWarningModal: false
+                           });
+                        }}
+                     >
+                        Үгүй
+                     </Button>
+                  </div>
                </div>
             </Modal>
          </EmrContextProvider>

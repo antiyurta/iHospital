@@ -1,61 +1,55 @@
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Select, Statistic } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get, openNofi } from '../../../common';
-import { selectHospitalIsXyp } from '../../../../features/hospitalReducer';
+//comp
 import Finger from '../../../../features/finger';
-import xypApi from '../../../../services/xyp/xyp.api';
-import localFileApi from '../../../../services/file/local-file/local-file.api';
-import { UploadImage } from '../../../Input/UploadImage';
+//redux
+import { selectHospitalIsXyp } from '@Features/hospitalReducer';
+//common
+import { openNofi } from '@Comman/common';
+import { UploadImage } from '@Comman/Input/UploadImage';
+//api
+import xypApi from '@ApiServices/xyp/xyp.api';
+import PatientApi from '@ApiServices/pms/patient.api';
+import CountryApi from '@ApiServices/reference/country';
+//extends
+const { Option } = Select;
 
 function GeneralInfo({ form, gbase }) {
-   const token = useSelector(selectCurrentToken);
-   const [loading, setLoading] = useState(false);
    const [citizens, setCitizens] = useState([]);
-   const [towns, setTowns] = useState([]);
+   const [countryId, setCountryId] = useState();
    const isXyp = useSelector(selectHospitalIsXyp);
 
-   const { Option } = Select;
+   const findMongolId = (incomeCitizens) => {
+      const mongolia = incomeCitizens.find((citizen) => citizen.name === 'Монгол');
+      setCountryId(34);
+   };
 
    const getCitizens = async () => {
-      const conf = {
-         headers: {},
+      await CountryApi.getByPageFilter({
          params: {
             type: 1
          }
-      };
-      const response = await Get('reference/country', token, conf);
-      setCitizens(response.data);
+      }).then(({ data: { response } }) => {
+         findMongolId(response.data);
+         setCitizens(response.data);
+      });
    };
    const dada = async (v) => {
       if (v.length === 10) {
-         const conf = {
-            headers: {},
+         await PatientApi.getCheckRegNo({
             params: {
                registerNumber: v
             }
-         };
-         const response = await Get('pms/patient/check/regno', token, conf);
-         if (response) {
-            response['birthDay'] = moment(response['birthDay']);
-            filterTowns(response.aimagId);
-            form.setFieldsValue(response);
-            gbase(true);
-         }
+         }).then(({ data: { response } }) => {
+            if (response) {
+               response['birthDay'] = moment(response['birthDay']);
+               form.setFieldsValue(response);
+               gbase(true);
+            }
+         });
       }
-   };
-   const filterTowns = async (value) => {
-      const conf = {
-         headers: {},
-         params: {
-            type: 3,
-            parentId: value
-         }
-      };
-      const response = await Get('reference/country', token, conf);
-      setTowns(response.data);
    };
    const end = async (value) => {
       const res = await xypApi.post(
@@ -135,18 +129,7 @@ function GeneralInfo({ form, gbase }) {
             </div>
          </div>
          <div className="p-1">
-            <Form.Item
-               name="familyName"
-               label="Ургийн овог:"
-               rules={[
-                  {
-                     required: true,
-                     message: 'Ургийн овог оруулна уу'
-                  }
-               ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
+            <Form.Item name="familyName" label="Ургийн овог:" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                <Input />
             </Form.Item>
          </div>
@@ -192,6 +175,7 @@ function GeneralInfo({ form, gbase }) {
                      message: 'Заавал'
                   }
                ]}
+               initialValue={countryId}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >

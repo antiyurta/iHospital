@@ -275,6 +275,7 @@ const GroupDocument = (props) => {
                   console.log(result);
                }}
                onFinish={updatePatientData}
+               mongoliaId={43}
             />
          </Modal>
       </>

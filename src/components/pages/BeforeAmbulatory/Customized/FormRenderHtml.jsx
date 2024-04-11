@@ -151,6 +151,6 @@ const FormRenderHtml = (props) => {
    useEffect(() => {
       formId && getDocumentForm();
    }, [formId]);
-   return <div className="font-times flex flex-wrap">{testData?.map(renderHTML)}</div>;
+   return <div className="font-times flex flex-wrap text-xs text-black">{testData?.map(renderHTML)}</div>;
 };
 export default FormRenderHtml;

@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import patientApi from '../../../services/pms/patient.api';
 
 const PatientSupport = (props) => {
-   const { editMode, patientId, setGlobalDb, filterTowns, onFinish } = props;
+   const { editMode, patientId, setGlobalDb, filterTowns, onFinish, mongoliaId } = props;
    const [form] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
    const getPatient = async () => {
@@ -72,7 +72,7 @@ const PatientSupport = (props) => {
          form={form}
          layout="horizontal"
          initialValues={{
-            countryId: 1,
+            countryId: mongoliaId,
             contacts: [{}]
          }}
       >
