@@ -40,10 +40,10 @@ function Surgery(props) {
             }}
          >
             <img src={surgeryIcon} />
-            Мэс ажилбар
+            Мэс засал
          </button>
          <Modal
-            title="Мэс ажилбар сонгох"
+            title="Мэс засал сонгох"
             width={'80%'}
             open={isOpenModal}
             bodyStyle={{

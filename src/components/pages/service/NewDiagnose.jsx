@@ -394,7 +394,7 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
                            </p>
                            <Form form={selectedDiagnoseForm}>
                               <Form.List name="diagnosis">
-                                 {(diagnosis, { _add, remove }) => (
+                                 {(diagnosis, {  remove }) => (
                                     <Table
                                        rowKey="fieldKey"
                                        columns={[

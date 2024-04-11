@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { CheckOutlined, CloseOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Input, Modal, Result, Select, Table, message } from 'antd';
+import { CheckOutlined, CloseOutlined, PlusCircleOutlined, } from '@ant-design/icons';
+import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -105,8 +105,6 @@ function Index({ type, isDoctor }) {
             .finally(() => {
                setSpinner(false);
             });
-      } else if (type === 3) {
-         // response = await Get(`tasks`, token, conf);
       }
    };
    const getEMRorENR = async (row) => {

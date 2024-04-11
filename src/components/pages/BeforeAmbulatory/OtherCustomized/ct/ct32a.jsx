@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Table } from 'antd';
+import { Button, Modal, Card, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 //comp
@@ -26,7 +26,8 @@ const ct32a = ({ document }) => {
          }
       })
          .then(({ data: { response } }) => {
-            setData(response);
+            setData(response[0]);
+            console.log(response[0]);
             setIsLoading(false);
          })
          .catch((error) => {});
@@ -50,57 +51,25 @@ const ct32a = ({ document }) => {
    return (
       <div>
          <div className="flex flex-col gap-3">
-            <div className="flow-root">
-               <div className="float-left">
-                  <Button
-                     disabled={data?.length > 0 ? true : false}
-                     type="primary"
-                     onClick={() => {
-                        setIsOpenModal(true);
-                     }}
-                  >
-                     Бөглөх
-                  </Button>
-               </div>
-            </div>
             <div>
-               <Table
-                  rowKey={'_id'}
-                  bordered
-                  loading={isLoading}
-                  columns={[
-                     {
-                        title: 'Огноо',
-                        dataIndex: 'createdAt',
-                        render: (text) => {
-                           return dayjs(text).format('YYYY-MM-DD HH:mm:ss');
-                        }
-                     },
-                     {
-                        title: 'Дуудлагын төрөл',
-                        dataIndex: 'hicsServiceId',
-                        render: (text) => {
-                           // return callServices?.find((e) => e.id === text)?.name;
-                        }
-                     },
-                     {
-                        title: 'Оношийн хамааралтай бүлэг',
-                        dataIndex: 'drgCode'
-                     },
-                     {
-                        title: 'ICD Код',
-                        dataIndex: 'icdCode'
-                     },
-                     {
-                        title: 'sada',
-                        dataIndex: '_id',
-                        render: (id) => <Button onClick={() => deleteD(id)}>sd</Button>
-                     }
-                  ]}
-                  dataSource={data}
-                  pagination={false}
-               />
+               <Button
+                  disabled={data?.length > 0 ? true : false}
+                  type="primary"
+                  onClick={() => {
+                     setIsOpenModal(true);
+                  }}
+               >
+                  Бөглөх
+               </Button>
             </div>
+            <Spin spinning={isLoading}>
+               <div className="">
+                  <div className="flex flex-row gap-1">
+                     <label>Яаралтай тусламжийн тасагт ирсэн</label>
+                     <p>{dayjs(data.q1).format('YYYY/MM/DD')}</p>
+                  </div>
+               </div>
+            </Spin>
          </div>
          <Modal title="CT32A" open={isOpenModal} onCancel={() => setIsOpenModal(false)} footer={null} destroyOnClose>
             <Customized
