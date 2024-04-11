@@ -194,7 +194,7 @@ function MainPatientHistory({ handleClick }) {
                   children: <XrayDocumentShow data={response.data.response[0]} />
                }
             ]);
-            setActiveKey(response.data.response[0]?.id);
+            setActiveKey(`item-${response.data.response[0]?.id}`);
          })
          .finally(() => {
             setLoading(false);
