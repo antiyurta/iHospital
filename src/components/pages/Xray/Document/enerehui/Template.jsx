@@ -21,7 +21,7 @@ const Template = (props) => {
                <tr>
                   <td>
                      <div className="exo-page">
-                        <p className="text-center text-[12px] font-bold ">{capitalizeFirstLetter(serviceName)}</p>
+                        <p className="text-center text-[16px] font-bold ">{capitalizeFirstLetter(serviceName)}</p>
                         {children}
                      </div>
                   </td>

@@ -15,15 +15,15 @@ const Header = ({ patient, createdAt }) => {
             }}
          >
             <div className="flex gap-1 justify-between">
-               <div className="flex gap-2">
+               <div className="flex items-center gap-2">
                   <img src={locationMark} style={{ width: 30, height: 30, borderRadius: 5 }} />
-                  <p className="text-xs text-black">
+                  <p className="text-[15px] text-black">
                      Хаяг: БЗД, 26-р хороо, Олимп хотхон, 424-р байр, үйлчилгээний хэсэгт.
                   </p>
                </div>
-               <div className="flex gap-2">
+               <div className="flex items-center gap-2">
                   <img src={fb} style={{ width: 30, height: 30, borderRadius: 5 }} />
-                  <p className="text-xs text-black">Энэрэхүй эмнэлэг(Уламжлалт, Сэргээн засах, Эхо оношилгоо)</p>
+                  <p className="text-[15px] text-black">Энэрэхүй эмнэлэг(Уламжлалт, Сэргээн засах, Эхо оношилгоо)</p>
                </div>
             </div>
          </div>
@@ -35,25 +35,26 @@ const Header = ({ patient, createdAt }) => {
          >
             <div className="grid grid-cols-4 gap-1 items-center">
                <div>
-                  <span className="font-bold text-xs text-black">Эцэг/эхийн нэр:</span>
+                  <span className="font-bold text-[15px] text-black">Эцэг/эхийн нэр:</span>
                </div>
-               <p className="text-xs text-black">{patient?.lastName}</p>
+               <p className="text-[15px] text-black">{patient?.lastName}</p>
                <div>
-                  <span className="font-bold text-xs text-black">Нас:</span> {patient?.age}
-               </div>
-               <div>
-                  <span className="font-bold text-xs text-black">ID:</span> {patient?.id}
+                  <span className="font-bold text-[15px] text-black">Нас:</span> {patient?.age}
                </div>
                <div>
-                  <span className="font-bold text-xs text-black">Нэр:</span>
+                  <span className="font-bold text-[15px] text-black">ID:</span> {patient?.id}
                </div>
-               <p className="text-xs text-black">{patient?.firstName}</p>
                <div>
-                  <span className="font-bold text-xs text-black">Хүйс:</span>
+                  <span className="font-bold text-[15px] text-black">Нэр:</span>
+               </div>
+               <p className="text-[15px] text-black">{patient?.firstName}</p>
+               <div>
+                  <span className="font-bold text-[15px] text-black">Хүйс:</span>
                   {patient?.genderType === 'WOMAN' ? 'Эмэгтэй' : 'Эрэгтэй'}
                </div>
                <div>
-                  <span className="font-bold text-xs text-black">Огноо:</span> {dayjs(createdAt).format('YYYY-MM-DD')}
+                  <span className="font-bold text-[15px] text-black">Огноо:</span>{' '}
+                  {dayjs(createdAt).format('YYYY-MM-DD')}
                </div>
             </div>
          </div>
