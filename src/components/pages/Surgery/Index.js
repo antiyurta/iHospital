@@ -33,7 +33,16 @@ import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { setEmrData } from '../../../features/emrReducer';
 import { useNavigate } from 'react-router-dom';
+
+//json
+import types from './types.js';
+//api
+import SurgeryApi from '@ApiServices/service/surgery.api';
+import dayjs from 'dayjs';
+import { ListPatientInfo, TypeInfo } from '@Comman/ListInjection';
+import { render } from 'less';
 //
+
 export const labelStyle = {
    fontSize: 16,
    color: 'black'
@@ -91,7 +100,7 @@ function Index(props) {
    const showConfirm = (id) => {
       confirm({
          okText: 'Балтах',
-         title: 'Do you Want to delete these items?',
+         title: 'Та батлахдаа итгэлтэй байна уу?',
          icon: <ExclamationCircleOutlined />,
          content: 'Some descriptions',
          okButtonProps: {
@@ -99,16 +108,14 @@ function Index(props) {
          },
          async onOk() {
             setIsLoadingConfirm(true);
-            await jwtInterceopter
-               .post('tasks/confirm', {
-                  columnId: 8,
-                  description: 'TEST CONFIRM',
-                  taskId: id
-               })
-               .finally(() => {
-                  getSurgeries(1, 10, start, end);
-                  setIsLoadingConfirm(false);
-               });
+            await SurgeryApi.postRequestConfirm({
+               columnId: 4,
+               description: 'TEST CONFIRM',
+               taskId: id
+            }).finally(() => {
+               getSurgeries(1, 10, start, end);
+               setIsLoadingConfirm(false);
+            });
          },
          onCancel() {
             console.log('Cancel');
@@ -118,12 +125,11 @@ function Index(props) {
    //
    const handleClickDrawer = async (id, state) => {
       addForm.resetFields();
-      await jwtInterceopter
-         .get('tasks/' + id)
-         .then((response) => {
-            setSelectedSurgery(response.data.response);
+      await SurgeryApi.getRequestById(id)
+         .then(({ data: { response } }) => {
+            setSelectedSurgery(response);
             if (state) {
-               let data = Object.assign({}, response.data.response);
+               let data = Object.assign({}, response);
                if (data.taskDoctorRels?.length === 0) {
                   data.taskDoctorRels = [{}];
                }
@@ -145,15 +151,11 @@ function Index(props) {
             } else {
                setIsOpenDrawer(true);
             }
-            if (response.data.response?.usageType === 'OUT') {
-               return {
-                  appointmentId: response.data.response.appointmentId
-               };
-            } else {
-               return {
-                  inpatientRequestId: response.data.response.inpatientRequestId
-               };
-            }
+            return {
+               appointmentId: response.appointmentId,
+               inpatientRequestId: response.inpatientRequestId,
+               patientId: response.patientId
+            };
          })
          .then(async (conf) => {
             await jwtInterceopter
@@ -174,40 +176,26 @@ function Index(props) {
                });
          });
    };
-   //
-   const types = [
-      {
-         value: null,
-         label: 'Бүх төлөв'
-      },
-      {
-         value: 3,
-         label: 'Захиалсан'
-      },
-      {
-         value: 4,
-         label: 'Төлөвлөсөн'
-      },
-      {
-         value: 5,
-         label: 'Батлагдсан'
-      },
-      {
-         value: 6,
-         label: 'Мэс заслын өрөөнд орсон'
-      },
-      {
-         value: 7,
-         label: 'Үргэлжилж байгаа'
-      },
-      {
-         value: 8,
-         label: 'Дууссан'
+
+   const getTypeInfo = (id) => {
+      if (id === 2) {
+         return <TypeInfo bgColor="#007bff" textColor="#fff" text={'Захиалсан'} />;
+      } else if (id === 3) {
+         return <TypeInfo bgColor="#ffc107" textColor="#000" text={'Төлөвлөсөн'} />;
+      } else if (id === 4) {
+         return <TypeInfo bgColor="#28a745" textColor="#fff" text={'Батлагдсан'} />;
+      } else if (id === 5) {
+         return <TypeInfo bgColor="#6c757d" textColor="#fff" text={'Мэс заслын өрөөнд орсон'} />;
+      } else if (id === 6) {
+         return <TypeInfo bgColor="#6610f2" textColor="#fff" text={'Үргэлжилж байгаа'} />;
+      } else if (id === 7) {
+         return <TypeInfo bgColor="#dc3545" textColor="#fff" text={'Дууссан'} />;
       }
-   ];
+   };
    const columns = [
       {
          title: '№',
+         width: 40,
          render: (_, _record, index) => {
             return metaSurgeries.page * metaSurgeries.limit - (metaSurgeries.limit - index - 1);
          }
@@ -216,72 +204,54 @@ function Index(props) {
          title: 'Захиалсан Огноо',
          dataIndex: 'createdAt',
          width: 120,
+         render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm')
+      },
+      {
+         title: 'Төрөл',
+         dataIndex: 'taskType',
+         width: 110,
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
+            if (text === 1) {
+               return <TypeInfo bgColor="#13baed" textColor="black" text={'Төлөвлөгөөт'} />;
+            } else {
+               return <TypeInfo bgColor="#e33d3d" textColor="white" text={'Яаралтай'} />;
+            }
          }
       },
       {
          title: 'Хаанаас',
          dataIndex: 'usageType',
+         width: 110,
          render: (text) => {
-            return text === 'IN' ? 'Хэвтэн' : 'Амбултори';
-         }
-      },
-      {
-         title: 'Төрөл',
-         dataIndex: 'taskType',
-         render: (text) => {
-            if (text === 1) {
-               return (
-                  <div
-                     style={{
-                        background: '#13baed',
-                        padding: 2,
-                        fontWeight: 400,
-                        color: 'white'
-                     }}
-                  >
-                     Төлөвлөгөөт
-                  </div>
-               );
-            } else {
-               return (
-                  <div
-                     style={{
-                        background: '#e33d3d',
-                        padding: 2,
-                        fontWeight: 400,
-                        color: 'white'
-                     }}
-                  >
-                     Яаралтай
-                  </div>
-               );
-            }
-         }
-      },
-      {
-         title: 'Овог',
-         dataIndex: 'lastName'
-      },
-      {
-         title: 'Нэр',
-         dataIndex: 'firstName'
-      },
-      {
-         title: 'Нас / Хүйс',
-         dataIndex: 'registerNumber',
-         render: (text) => {
-            return (
-               <div>
-                  {getAge(text)} / {getGender(text)}
-               </div>
+            return text === 'IN' ? (
+               <TypeInfo bgColor="#5cb85c" textColor="black" text={'Хэвтэн'} />
+            ) : (
+               <TypeInfo bgColor="#5cb85c" textColor="white" text={'Амбулатори'} />
             );
          }
       },
       {
+         title: 'Захиалсан тасаг',
+         dataIndex: ['authorDep', 'name']
+      },
+      {
+         title: 'Эмч',
+         dataIndex: 'doctor',
+         render: (doctor) => <ListPatientInfo patientData={doctor} />
+      },
+      {
+         title: 'Өвчтөн',
+         dataIndex: 'patient',
+         width: 170,
+         render: (patient) => <ListPatientInfo patientData={patient} />
+      },
+      {
          title: 'Мэс засал',
          dataIndex: ['taskWorkers', 'surgery', 'name']
+      },
+      {
+         title: 'Онош',
+         dataIndex: 'icdCode'
       },
       {
          title: 'Хугацаа',
@@ -297,7 +267,9 @@ function Index(props) {
       },
       {
          title: 'Төлөв',
-         dataIndex: ['currentColumn', 'column', 'name']
+         width: 100,
+         dataIndex: ['currentColumn', 'column', 'id'],
+         render: (id) => getTypeInfo(id)
       },
       {
          title: '',
@@ -332,7 +304,7 @@ function Index(props) {
                         Үзлэг хийх
                      </Button>
                   ) : null}
-                  {type === 2 && (row.currentColumn?.columnId === 3 || row.currentColumn?.columnId === 4) ? (
+                  {type === 2 && (row.currentColumn?.columnId === 2 || row.currentColumn?.columnId === 3) ? (
                      <Button
                         icon={
                            <PlusCircleOutlined
@@ -369,16 +341,13 @@ function Index(props) {
       setIsLoading(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
       end = moment(end).set({ hour: 23, minute: 59, second: 59 });
-      await jwtInterceopter
-         .get('tasks', {
-            params: {
-               page: page,
-               limit: pageSize,
-               columnId: filterType,
-               startDate: moment(start).format('YYYY-MM-DD HH:mm'),
-               endDate: moment(end).format('YYYY-MM-DD HH:mm')
-            }
-         })
+      await SurgeryApi.getRequest({
+         page: page,
+         limit: pageSize,
+         columnId: filterType,
+         startDate: moment(start).format('YYYY-MM-DD HH:mm'),
+         endDate: moment(end).format('YYYY-MM-DD HH:mm')
+      })
          .then((response) => {
             setSurgeries(response.data.response.data);
             setMetaSurgeries(response.data.response.meta);
@@ -417,9 +386,9 @@ function Index(props) {
                   secondHelperId: values.taskWorkers.secondHelperId
                }
             };
-            await jwtInterceopter.patch('tasks/' + selectedSurgery.id, taskData);
+            await SurgeryApi.patchRequest(selectedSurgery.id, taskData);
             const planData = {
-               columnId: 4,
+               columnId: 3,
                roomId: values.roomId,
                doctorId: values.taskWorkers.operationId,
                description: 'TEST SHU',
@@ -430,7 +399,9 @@ function Index(props) {
                   return doctor.userId.toString();
                })
             };
-            await jwtInterceopter.put('tasks/plan/' + selectedSurgery.id, planData);
+            await SurgeryApi.putRequestPlan(selectedSurgery.id, planData);
+            setIsOpenAddModal(false);
+            getSurgeries(1, 10, today, today, filterType);
          } catch (error) {
             console.log(error);
          }
@@ -466,15 +437,11 @@ function Index(props) {
                            defaultValue={filterType}
                            onChange={(e) => setFIlterType(e)}
                            placeholder="Төрөл сонгох"
-                        >
-                           {types?.map((type, index) => {
-                              return (
-                                 <Option key={index} value={type.value}>
-                                    {type.label}
-                                 </Option>
-                              );
-                           })}
-                        </Select>
+                           options={types?.map((type) => ({
+                              label: type.label,
+                              value: type.value
+                           }))}
+                        />
                      </div>
                   </div>
                   <div>
@@ -487,7 +454,6 @@ function Index(props) {
                   <ConfigProvider locale={localMn()}>
                      <Table
                         rowKey={'id'}
-                        bordered
                         locale={{
                            emptyText: <Empty description={'Хоосон'} />
                         }}
@@ -495,7 +461,7 @@ function Index(props) {
                         columns={columns}
                         dataSource={surgeries}
                         pagination={{
-                           position: ['topCenter', 'bottomCenter'],
+                           position: ['bottomCenter'],
                            size: 'small',
                            current: metaSurgeries.page,
                            total: metaSurgeries.itemCount,
@@ -517,7 +483,6 @@ function Index(props) {
             onCancel={() => setIsOpenAddModal(false)}
             onOk={() => addForm.validateFields().then((values) => onFinish(values))}
             width={'60%'}
-            forceRender={true}
          >
             <Form
                form={addForm}
@@ -650,14 +615,14 @@ function Index(props) {
                      </Divider>
                      <div className="grid grid-cols-2 justify-items-start gap-2">
                         <p style={labelStyle}>Овог:</p>
-                        <p style={contentStyle}>{selectedSurgery?.lastName}</p>
+                        <p style={contentStyle}>{selectedSurgery?.patient?.lastName}</p>
                         <p style={labelStyle}>Нэр:</p>
-                        <p style={contentStyle}>{selectedSurgery?.firstName}</p>
+                        <p style={contentStyle}>{selectedSurgery?.patient?.firstName}</p>
                         <p style={labelStyle}>Регистрийн дугаар:</p>
-                        <p style={contentStyle}>{selectedSurgery?.registerNumber}</p>
+                        <p style={contentStyle}>{selectedSurgery?.patient?.registerNumber}</p>
                         <p style={labelStyle}>Онош:</p>
                         <p>
-                           {selectedSurgery.diagnose?.map((diagnose, index) => {
+                           {patientDiagnosis?.map((diagnose, index) => {
                               return (
                                  <span key={index} className="flex flex-col">
                                     <span className="font-semibold">{diagnoseTypeInfo(diagnose.diagnoseType)}: </span>
@@ -682,41 +647,27 @@ function Index(props) {
                      <Divider orientation="left" className="self-center">
                         Эмч нар
                      </Divider>
-                     <div className="flex flex-row gap-3 justify-center">
-                        {selectedSurgery?.taskWorkers?.operation ? (
-                           <div className="flex flex-row gap-1">
-                              <img src={profile} className="w-12" />
-                              <div className="">
-                                 <p style={labelStyle}>{selectedSurgery?.taskWorkers?.operation?.lastName}</p>
-                                 <p>{selectedSurgery?.taskWorkers?.operation?.firstName}</p>
-                              </div>
-                           </div>
-                        ) : null}
-                        {selectedSurgery?.taskWorkers?.firstHelper ? (
-                           <div className="flex flex-row gap-1">
-                              <img src={profile} className="w-12" />
-                              <div className="">
-                                 <p style={labelStyle}>{selectedSurgery?.taskWorkers?.firstHelper?.lastName}</p>
-                                 <p>{selectedSurgery?.taskWorkers?.firstHelper?.firstName}</p>
-                              </div>
-                           </div>
-                        ) : null}
-                        {selectedSurgery?.taskWorkers?.secondHelper ? (
-                           <div className="flex flex-row gap-1">
-                              <img src={profile} className="w-12" />
-                              <div className="">
-                                 <p style={labelStyle}>{selectedSurgery?.taskWorkers?.secondHelper?.lastName}</p>
-                                 <p>{selectedSurgery?.taskWorkers?.secondHelper?.firstName}</p>
-                              </div>
-                           </div>
-                        ) : null}
+                     <div className="grid grid-cols-3 gap-3 justify-center">
+                        <ListPatientInfo patientData={selectedSurgery?.taskWorkers?.operation} />
+                        <ListPatientInfo patientData={selectedSurgery?.taskWorkers?.firstHelper} />
+                        <ListPatientInfo patientData={selectedSurgery?.taskWorkers?.secondHelper} />
                      </div>
                      <Divider orientation="left" className="self-center">
                         Мэдээгүйжүүлэгч
                      </Divider>
+                     <div className="grid grid-cols-3 gap-3 justify-center">
+                        {selectedSurgery?.taskDoctorRels?.map((surgury) => (
+                           <ListPatientInfo patientData={surgury?.taskDoctor} />
+                        ))}
+                     </div>
                      <Divider orientation="left" className="self-center">
                         Сувилагч нар
                      </Divider>
+                     <div className="grid grid-cols-3 gap-3 justify-center">
+                        {selectedSurgery?.taskNurseRels?.map((surgury) => (
+                           <ListPatientInfo patientData={surgury?.taskNurse} />
+                        ))}
+                     </div>
                   </div>
                </div>
             </div>

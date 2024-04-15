@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import ProgressNotes from './ProgressNotes';
-import NurseNote from '../NurseNote';
 import ProgressCheck from './ProgressCheck';
 import Xray from '../Xray';
 import ErequestList from './Erequest/ErequestList';
-
 import Assesments from './Nurse/Assesments';
-
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 

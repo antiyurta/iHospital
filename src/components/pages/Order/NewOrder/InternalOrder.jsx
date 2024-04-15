@@ -201,9 +201,10 @@ const InternalOrder = (props) => {
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
             {showSurgery && (
                <Surgery
-                  usageType={usageType}
-                  selectedPatient={selectedPatient}
+                  patientId={IncomeEMRData?.patientId}
                   appointmentId={IncomeEMRData?.appointmentId}
+                  usageType={usageType}
+                  selectedSurgery={IncomeEMRData?.surgery}
                   handleclick={handleclick}
                />
             )}

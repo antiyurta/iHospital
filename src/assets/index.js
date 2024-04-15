@@ -23,3 +23,8 @@ export const biometerIcon = require('./images/biemeter.svg');
 export const humanHeadImg = require('./images/humanHead.png');
 export const humanBodyImg = require('./images/humanBody.jpg');
 export const human32AImg = require('./images/32a.png');
+
+export const backArrow = require('./images/backArrow.svg');
+
+//chat
+export const expandIconChat = require('./chat/expandIcon.svg');

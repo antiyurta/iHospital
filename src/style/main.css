@@ -1590,6 +1590,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li.ant-menu-it
 }
 
 .ant-table-tbody > tr > td p {
+   text-align: start;
+   white-space: break-spaces;
    font-size: 14px;
    color: #8c8c8c;
    margin: 0px;

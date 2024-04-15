@@ -39,7 +39,7 @@ const Rooms = (props) => {
             style={{
                position: 'absolute',
                bottom: 0,
-               right: 383,
+               right: 301,
                height: 400,
                display: 'flex',
                flexDirection: 'row',

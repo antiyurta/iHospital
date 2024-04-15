@@ -40,11 +40,12 @@ jwtInterceopter.interceptors.response.use(
                error.config.headers['Authorization'] = `bearer ${response.data.response.accessToken}`;
                error.config.headers['x-api-key'] = API_KEY;
                return axios(error.config);
-            } catch (_error) {
+            } catch (error) {
+               console.log(error);
                openNofi('info', 'Анхааруулга', 'Системд нэвтрэх хугацаа дууссан байна.');
                localStorage.removeItem('tokens');
                window.location.href = '/login';
-               return Promise.reject(_error);
+               return Promise.reject(error);
             }
          }
       }

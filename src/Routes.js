@@ -4,17 +4,11 @@ import Privacy from './privacy/Index';
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
 //
 const DocumentUpload = React.lazy(() => import('./components/pages/Document/index'));
-// const DocumentUpload = React.lazy(() => import('./components/pages/611/Document/DocumentUpload'));
 //
 const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
 const InsuranceDoctorList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
 const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
 const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
-// mes zasal
-const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryList'));
-const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
-const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
-
 // tsagiin huwiar
 const Schedule = React.lazy(() => import('./components/pages/Appointment/Schedule/Schedule'));
 // tohooromj tsagin huwiar
@@ -69,6 +63,14 @@ const Diagnoses = React.lazy(() => import('./components/pages/service/Diagnoses'
 const Treatment = React.lazy(() => import('./components/pages/service/Treatment'));
 // halgaa list
 const Surgury = React.lazy(() => import('./components/pages/service/Surgury'));
+// mes zasal
+const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryList'));
+const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
+const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
+
+// const SurguryNurse =
+// const SurguryPlan =
+// const SurguryBoss =
 // mes ajilbar list
 const Operation = React.lazy(() => import('./components/pages/service/Operation'));
 const OperationRequests = React.lazy(() => import('@Pages/Operation/OperationRequest'));

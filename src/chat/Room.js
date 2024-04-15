@@ -7,7 +7,7 @@ import { Avatar, Badge, Button } from 'antd';
 import { CloseOutlined, MinusOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 
-const SOCKET_URL = process.env.REACT_APP_SOCKET_URL;
+const SOCKET_URL = 'https://ihospital.mn/';
 
 import Taudio from './xaxa.mp3';
 
@@ -18,8 +18,8 @@ const Room = (props) => {
    const [messages, setMessages] = useState([]);
    const [inputValue, setInputValue] = useState('');
    const playSound = () => {
-      const audio = new Audio(Taudio);
-      audio.play();
+      // const audio = new Audio(Taudio);
+      // audio.play();
    };
    const getCurrentRoomMessage = async (roomId) => {
       await ChatService.getRoomMessages(roomId, 1, 10).then((response) => {
@@ -139,6 +139,7 @@ const Room = (props) => {
          transports: ['websocket', 'polling']
       });
       socket.on('receive', async (roomId) => {
+         console.log(roomId);
          if (roomId === room._id) {
             getCurrentRoomMessage(roomId);
             playSound();
@@ -232,8 +233,11 @@ const Room = (props) => {
          >
             <TextArea
                value={inputValue}
-               rows={4}
-               autoSize={{ minRows: 2, maxRows: 6 }}
+               // rows={4}
+               style={{
+                  backgroundColor: '#F2F3F5'
+               }}
+               autoSize={{ minRows: 1, maxRows: 6 }}
                onChange={(e) => setInputValue(e.target.value)}
             />
             <Button
@@ -242,7 +246,14 @@ const Room = (props) => {
                   minHeight: '100%'
                }}
                type="primary"
-               icon={<SendOutlined />}
+               icon={
+                  <SendOutlined
+                     style={{
+                        color: 'white',
+                        fill: 'red'
+                     }}
+                  />
+               }
                onClick={() => {
                   sendMessage(inputValue, room._id);
                }}

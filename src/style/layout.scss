@@ -689,6 +689,51 @@ section.ant-layout {
    }
 }
 
+.chat-layout {
+   box-shadow: 4px 0px 8px 0px rgba(0, 0, 0, 0.05);
+   position: relative;
+   width: 65px;
+   height: 100%;
+   .test {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      transition: width 0.3s;
+      height: 100%;
+      position: relative;
+      .header {
+         align-items: center;
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         gap: 12px;
+      }
+   }
+}
+.chat-layout.expanded {
+   .test {
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      height: 100%;
+      transition: width 0.3s;
+      box-shadow: 4px 0px 8px 0px rgba(0, 0, 0, 1);
+      padding: 12px;
+      background-color: white;
+      position: absolute;
+      width: 300px;
+      right: 0;
+      top: 0;
+      .header {
+         width: 100%;
+      }
+   }
+}
+
 @media (min-width: 320px) and (max-width: 768px) {
    .ambo-list-filter {
       display: flex;

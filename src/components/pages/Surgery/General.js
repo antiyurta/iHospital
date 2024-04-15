@@ -18,9 +18,15 @@ function General(props) {
       return 'Яаралтай';
    };
    const getRooms = async () => {
-      await jwtInterceopter.get('organization/room').then((response) => {
-         setRooms(response.data.response.data);
-      });
+      await jwtInterceopter
+         .get('organization/room', {
+            params: {
+               isSurgury: true
+            }
+         })
+         .then((response) => {
+            setRooms(response.data.response.data);
+         });
    };
    const getHicsCost = async (value) => {
       const insuranceServiceId = selectedSurgery?.taskWorkers?.surgery.insuranceServiceId;

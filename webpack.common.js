@@ -28,7 +28,8 @@ module.exports = ({ isDevelopment }) => {
             '@Pages': path.resolve(__dirname, 'src/components/pages'),
             '@Features': path.resolve(__dirname, 'src/features'),
             '@Assets': path.resolve(__dirname, 'src/assets'),
-            '@Utils': path.resolve(__dirname, 'src/utils')
+            '@Utils': path.resolve(__dirname, 'src/utils'),
+            '@Chat': path.resolve(__dirname, 'src/chat')
          },
          extensions: ['.js', '.jsx']
       },
@@ -56,6 +57,18 @@ module.exports = ({ isDevelopment }) => {
             {
                test: /\.(ico|png|jpg|jpeg|gif|svg|json)$/,
                type: 'asset/resource'
+            },
+            {
+               test: /\.mp3$/,
+               use: [
+                  {
+                     loader: 'file-loader',
+                     options: {
+                        name: '[name].[ext]',
+                        outputPath: 'assets/audio/'
+                     }
+                  }
+               ]
             }
          ]
       },

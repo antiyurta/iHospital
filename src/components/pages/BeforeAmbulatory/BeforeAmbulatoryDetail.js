@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import PatientInformation from '../PatientInformation';
-import BeforeAmbulatoryTabs from './BeforeAmbulatoryTabs';
-import BeforeInPatientTabs from './BeforeInPatientTabs';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../features/emrReducer';
-
-import PmsPatientServices from '../../../services/pms/patient.api';
+//comp
 import DoctorNotes from '../EMR/DoctorNotes';
-import { EmrContextProvider } from '../../../features/EmrContext';
+import PatientInformation from '../PatientInformation';
+import BeforeInPatientTabs from './BeforeInPatientTabs';
+import BeforeAmbulatoryTabs from './BeforeAmbulatoryTabs';
+//context
+import { EmrContextProvider } from '@Features/EmrContext';
+//redux
+import { selectCurrentEmrData } from '@Features/emrReducer';
+//api
+import PatientApi from '@ApiServices/pms/patient.api';
 
 function BeforeAmbulatoryDetail() {
    const incomeENRData = useSelector(selectCurrentEmrData);
    const [selectedPatient, setSelectedPatient] = useState({});
    const getByIdPatient = async () => {
-      await PmsPatientServices.getById(incomeENRData.patientId).then((response) => {
+      await PatientApi.getById(incomeENRData.patientId).then((response) => {
          setSelectedPatient(response.data?.response);
       });
    };

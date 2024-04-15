@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
 
 const Pagination = (props) => {
    const { meta, page, setPage, displayTotal, limit, setLimit } = props;
@@ -22,14 +22,7 @@ const Pagination = (props) => {
                   setPage(page - 1);
                }}
             />
-            <span
-               style={{
-                  fontWeight: 400,
-                  fontSize: 16
-               }}
-            >
-               {page}
-            </span>
+            <span className="font-normal text-base">{page}</span>
             <Button
                disabled={!meta?.hasNextPage}
                icon={<RightOutlined />}

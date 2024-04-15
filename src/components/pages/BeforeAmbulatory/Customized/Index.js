@@ -410,6 +410,7 @@ function Index(props) {
                               onClick={() => {
                                  Modal.confirm({
                                     content: 'Та маягтаа ноороглох гэж байна',
+                                    okText: 'Хадгалах',
                                     onOk: () => form.validateFields().then((values) => onFinish(values, 'Draft'))
                                  });
                               }}

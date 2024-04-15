@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 //comp
 import OtherCustomized from './OtherCustomized/Index';
 //api
-import OrganizationDocumentRoleApi from '@ApiServices/organization/documentRole';
+import DocumentRoleApi from '@ApiServices/organization/documentRole';
 //common
 import { openNofi } from '@Comman/common';
 //redix
@@ -19,7 +19,7 @@ export default function BeforeAmbulatoryTabs({ appointmentType, reasonComming })
    const [selectedDocument, setSelectedDocument] = useState(Number);
 
    const getDocuments = async () => {
-      await OrganizationDocumentRoleApi.getByPageFilterShow({
+      await DocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
             structureIds: [incomeENRData.departmentId, incomeENRData.cabinetId],

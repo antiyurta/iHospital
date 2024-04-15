@@ -2,20 +2,21 @@
    "compilerOptions": {
       "module": "ESNext",
       "moduleResolution": "Node",
-      "target": "ES2022",
+      "target": "ES2020",
       "jsx": "react",
-      "strict": true,
       "strictNullChecks": true,
       "strictFunctionTypes": true,
       "baseUrl": "./",
       "paths": {
+         "@/*": ["*"],
          "@ApiServices/*": ["src/services/*"],
          "@Comman/*": ["src/components/*"],
          "@Pages/*": ["src/components/pages/*"],
          "@Features/*": ["src/features/*"],
          "@Assets/*": ["src/assets/*"],
-         "@Utils/*": ["src/utils/*"]
+         "@Utils/*": ["src/utils/*"],
+         "@Chat/*": ["src/chat/*"]
       }
    },
-   "exclude": ["**/node_modules/*"]
+   "exclude": ["node_modules", "**/node_modules/*"]
 }

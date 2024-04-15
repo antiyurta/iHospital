@@ -8,7 +8,7 @@ export const EmrContextProvider = ({ children }) => {
    const [expandedKeys, setExpandedKeys] = useState(null); // onosh songogdson ued
    const [countOfDocument, setCountOfDocument] = useState(0); // hewten maygtin too
    const [countOfDraft, setCountOfDraft] = useState(0); // hewten draft iin too
-   const [draftedDocuments, setDraftedDocuments] = useState(0);
+   const [draftedDocuments, setDraftedDocuments] = useState(null);
    const [isReloadDocumentHistory, setIsReloadDocumentHistory] = useState(false); // oorcloltin dara maygt tatah
    // OTS start
    const [countOfPublicSetOrder, setCountOfPublicSetOrder] = useState(0);
@@ -26,7 +26,6 @@ export const EmrContextProvider = ({ children }) => {
    //
    const setId = (id) => {
       if (id === selectedAppoitmentId) {
-         console.log(id, selectedAppoitmentId);
          setSelectedAppointmentId(null);
       } else {
          setSelectedAppointmentId(id);

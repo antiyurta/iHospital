@@ -1,12 +1,9 @@
 //Амбулаторийн үзлэгийн өмнөх жагсаалт
 import React, { useState } from 'react';
 import { Tabs } from 'antd';
-import Ambulatory from './Lists/Ambulatory';
-import PatientList from './Lists/PatientList';
-import PreOrder from './Lists/PreOrder';
-import Surgery from './Lists/Surgery';
 import DocumentShow from '../611/DocumentShow';
 import { useLocation } from 'react-router-dom';
+import Index from '../BeforeAmbulatory/Lists/Index/Index';
 
 export default function BeforeAmbulatoryList() {
    const {
@@ -30,22 +27,17 @@ export default function BeforeAmbulatoryList() {
       {
          label: 'Амбулатори',
          key: '1',
-         children: <Ambulatory />
+         children: <Index type={0} isDoctor={true} />
       },
       {
          label: 'Урьдчилсан сэргийлэх',
          key: '2',
-         children: <PreOrder />
+         children: <Index type={1} isDoctor={true} />
       },
       {
          label: 'Хэвтэн',
          key: '3',
-         children: <PatientList />
-      },
-      {
-         label: 'Мэс засал',
-         key: 4,
-         children: <Surgery />
+         children: <Index type={2} isDoctor={true} />
       }
    ];
    const [currentActiveKey, setActiveKey] = useState(activeKey);

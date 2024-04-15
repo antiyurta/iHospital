@@ -35,7 +35,7 @@ export const ListPatientInfo = ({ patientData }) => {
 export const TypeInfo = ({ bgColor, textColor, text }) => {
    return (
       <p
-         className="px-2 py-1 rounded-2xl"
+         className="px-2 py-1 rounded-2xl text-center"
          style={{
             backgroundColor: bgColor,
             color: textColor

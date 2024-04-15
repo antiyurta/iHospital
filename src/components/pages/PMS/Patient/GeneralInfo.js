@@ -119,8 +119,8 @@ function GeneralInfo({ form, gbase }) {
                            form?.getFieldValue('genderType') === 'MAN'
                               ? 'Эр'
                               : form?.getFieldValue('genderType') === 'WOMAN'
-                              ? 'Эм'
-                              : ''
+                                ? 'Эм'
+                                : ''
                         }
                         className="antiStatis"
                      />

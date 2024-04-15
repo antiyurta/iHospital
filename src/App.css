@@ -383,7 +383,7 @@ legend.scheduler-border {
 }
 
 .ant-picker {
-   height: 28px !important;
+   height: 28px;
    border-radius: 6px !important;
    width: 100%;
 }

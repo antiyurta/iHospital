@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DocumentIndex from './NewEmrSupport/document/Index';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
-import backArrow from './icon/backArrow.svg';
+import { backArrow } from '@Assets/index';
 import SentService from './Insurance/sent-service';
 import { useSelector } from 'react-redux';
 import { selectCurrentEmrData } from '../../../features/emrReducer';
@@ -14,15 +14,27 @@ const NewEmrSupport = () => {
    return (
       <div className="navbar">
          <div className="back">
-            <Link
-               to={'/main/ambulatoryList'}
-               state={{
-                  isRead: true
-               }}
-            >
-               <img src={backArrow} alt="icon" />
-               <p>Буцах</p>
-            </Link>
+            {incomeEmrData.appointmentType === 3 ? (
+               <Link
+                  to={'/main/SurgeryList'}
+                  state={{
+                     isRead: true
+                  }}
+               >
+                  <img src={backArrow} alt="icon" />
+                  <p>Буцах</p>
+               </Link>
+            ) : (
+               <Link
+                  to={'/main/ambulatoryList'}
+                  state={{
+                     isRead: true
+                  }}
+               >
+                  <img src={backArrow} alt="icon" />
+                  <p>Буцах</p>
+               </Link>
+            )}
          </div>
          <div className="emr-navbar">
             <button>Гарын авлага</button>

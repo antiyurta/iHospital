@@ -306,8 +306,8 @@ const BedInformation = () => {
                                     room.genderType === 'WOMAN'
                                        ? femaleImg
                                        : room.genderType === 'MAN'
-                                       ? manImg
-                                       : otherImg
+                                         ? manImg
+                                         : otherImg
                                  }
                                  style={styles.iconStyle}
                                  alt="iconStyle"
@@ -425,12 +425,12 @@ const BedInformation = () => {
                                        bed.status === 0
                                           ? require('../../../../assets/bed/hunte.png')
                                           : bed.status === 1
-                                          ? require('../../../../assets/bed/tsewerleh.png')
-                                          : bed.status === 2
-                                          ? require('../../../../assets/bed/zaswartai.png')
-                                          : bed.status === 3
-                                          ? require('../../../../assets/bed/sul.png')
-                                          : require('../../../../assets/bed/sul.png')
+                                            ? require('../../../../assets/bed/tsewerleh.png')
+                                            : bed.status === 2
+                                              ? require('../../../../assets/bed/zaswartai.png')
+                                              : bed.status === 3
+                                                ? require('../../../../assets/bed/sul.png')
+                                                : require('../../../../assets/bed/sul.png')
                                     }
                                     style={{ zIndex: 1, display: 'inline' }}
                                     draggable="false"

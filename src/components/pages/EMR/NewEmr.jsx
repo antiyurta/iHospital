@@ -26,6 +26,7 @@ import MainPatientHistory from '@Pages/EMR/EPatientHistory/MainPatientHistory';
 import PaymentApi from '@ApiServices/payment/payment';
 import PmsPatientApi from '@ApiServices/pms/patient.api';
 import ServiceRequestApi from '@ApiServices/serviceRequest';
+import MainInpatientHistory from './EPatientHistory/MainInpatientHistory';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
@@ -249,7 +250,11 @@ class NewEmr extends React.Component {
                                        }
                                     />
                                  </div>
-                                 <MainPatientHistory handleClick={this.handleTypeChange} />
+                                 {this.state.usageType === 'OUT' ? (
+                                    <MainPatientHistory handleClick={this.handleTypeChange} />
+                                 ) : (
+                                    <MainInpatientHistory newUsageType={'IN'} />
+                                 )}
                               </div>
                            </div>
                         ) : null}

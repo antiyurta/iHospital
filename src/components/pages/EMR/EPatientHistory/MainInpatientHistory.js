@@ -19,7 +19,7 @@ const MonitorType = {
    Document: 'document'
 };
 
-function MainInpatientHistory() {
+function MainInpatientHistory({ newUsageType }) {
    const AppIds = useSelector(selectCurrentAppId);
    const DepIds = useSelector(selectCurrentDepId);
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -36,7 +36,7 @@ function MainInpatientHistory() {
          params: {
             employeePositionIds: AppIds,
             structureIds: DepIds,
-            usageType: 'IN',
+            usageType: newUsageType,
             documentType: 0
          }
       }).then(({ data: { response } }) => {
@@ -61,10 +61,11 @@ function MainInpatientHistory() {
       if (isDrafted) {
          Modal.info({
             content: (
-               <>
-                  <p>${document.docName} маягт Ноорог дотор байнa</p>
-                  <p>Ноороглуу шилжих эсэх</p>
-               </>
+               <p>
+                  <span className="font-bold">{document.docName}</span>
+                  <br />
+                  маягт Ноорог дотор байнa ноороглуу шилжих эсэх
+               </p>
             ),
             cancelText: 'Үгүй',
             okText: 'Шилжих',
@@ -76,7 +77,7 @@ function MainInpatientHistory() {
          setIsLoading(true);
          await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
             type: 'FORM',
-            usageType: 'IN',
+            usageType: newUsageType,
             saveType: 'Save'
          }).then((response) => {
             if (response.status === 200) {
@@ -97,11 +98,20 @@ function MainInpatientHistory() {
                }
                if (state) {
                   Modal.info({
-                     content: `Та ${document.docName} маягт бөглөсөн байна`
+                     content: (
+                        <p>
+                           Та <span className="font-bold">{document.docName}</span> маягт бөглөсөн байна
+                        </p>
+                     )
                   });
                } else {
                   Modal.confirm({
-                     content: `Та ${document.docName} маягт бөглөх гэж байна итгэлттэй байна уу`,
+                     content: (
+                        <p>
+                           Та <span className="font-bold">{document.docName}</span> маягт бөглөх гэж байна итгэлттэй
+                           байна уу
+                        </p>
+                     ),
                      cancelText: 'Үгүй',
                      okText: 'Тийм',
                      onOk: () => {
@@ -135,35 +145,46 @@ function MainInpatientHistory() {
                         </div>
                      ),
                      children: (
-                        <Table
-                           rowKey="value"
-                           loading={isLoading}
-                           columns={[
-                              {
-                                 title: '№',
-                                 render: (_, _record, index) => index + 1,
-                                 width: 40
-                              },
-                              {
-                                 title: 'Нэр',
-                                 dataIndex: 'docName'
-                              },
-                              {
-                                 title: 'Дугаар',
-                                 dataIndex: 'label'
-                              },
-                              {
-                                 title: ' ',
-                                 render: (_, row) => (
-                                    <div className="hover: cursor-pointer" onClick={() => middleware(row)}>
-                                       <img src={ArrowIcon} alt="ArrowIcon" />
-                                    </div>
-                                 )
-                              }
-                           ]}
-                           dataSource={documents}
-                           pagination={false}
-                        />
+                        <div
+                           style={{
+                              height: 'calc(100vh - 390px)',
+                              overflow: 'auto',
+                              paddingRight: 12
+                           }}
+                        >
+                           <Table
+                              rowKey="value"
+                              loading={isLoading}
+                              columns={[
+                                 {
+                                    title: '№',
+                                    render: (_, _record, index) => index + 1,
+                                    width: 40
+                                 },
+                                 {
+                                    title: 'Нэр',
+                                    align: 'left',
+                                    dataIndex: 'docName'
+                                 },
+                                 {
+                                    title: 'Дугаар',
+                                    width: 130,
+                                    align: 'left',
+                                    dataIndex: 'label'
+                                 },
+                                 {
+                                    title: ' ',
+                                    render: (_, row) => (
+                                       <div className="hover: cursor-pointer" onClick={() => middleware(row)}>
+                                          <img src={ArrowIcon} alt="ArrowIcon" />
+                                       </div>
+                                    )
+                                 }
+                              ]}
+                              dataSource={documents}
+                              pagination={false}
+                           />
+                        </div>
                      )
                   },
                   {
@@ -175,7 +196,7 @@ function MainInpatientHistory() {
                            <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
                         </div>
                      ),
-                     children: <DocumentDraft usageType="IN" />
+                     children: <DocumentDraft usageType={newUsageType} />
                   }
                ]}
             />
@@ -183,7 +204,7 @@ function MainInpatientHistory() {
             <div className="flex flex-col gap-1">
                <p className="text-center font-semibold">{selectedDocument?.docName}</p>
                <Customized
-                  propsUsageType={incomeEmrData.usageType}
+                  propsUsageType={newUsageType}
                   isEdit={false}
                   editId={null}
                   document={selectedDocument}

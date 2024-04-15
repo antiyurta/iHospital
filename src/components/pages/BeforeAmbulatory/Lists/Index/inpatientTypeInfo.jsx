@@ -1,7 +1,6 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Badge } from 'antd';
 import React from 'react';
-
+import { Badge } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import orderType from './orderType.js';
 
 const InpatientTypeInfo = () => {
@@ -11,14 +10,7 @@ const InpatientTypeInfo = () => {
          <p>Тайлбар:</p>
          <Badge color="#22c55e" count="Төлөвлөгөөт" />
          {orderType?.map((item, index) => (
-            <div
-               key={index}
-               style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: 3
-               }}
-            >
+            <div key={index} className="flex flex-row gap-1">
                <img
                   src={require(`../../../../../assets/bed/${item.img}`)}
                   width="20"

@@ -8,6 +8,7 @@ import { LogoutOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import FullScreenLoader from '@Comman/FullScreenLoader';
 //comp
 import Sidebar from './NewSidebar';
+import ChatLayout from './Chat';
 //img
 import { manIcon, companyLogo, logoCollapsed } from '@Assets/index';
 //context
@@ -72,6 +73,7 @@ const MainLayout = () => {
                </Fragment>
             </div>
          </Layout>
+         <ChatLayout />
       </Layout>
    );
 };

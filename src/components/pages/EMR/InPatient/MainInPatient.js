@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ComingSoon from './ComingSoon';
-import NursingStats from './NursingStats';
 
 function MainInPatient() {
    const [activeKey, setActiveKey] = useState(1);

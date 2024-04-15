@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Modal, Table, Tooltip } from 'antd';
+import { Modal, Space, Table, Tooltip } from 'antd';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import dayjs from 'dayjs';
 //context
@@ -35,11 +35,8 @@ const DocumentDraft = (props) => {
                }
             }) => {
                setDraftedDocuments(response);
-               if (usageType === 'IN') {
-                  setDocumentDraft(response);
-               } else {
-                  handleCount?.(response?.length);
-               }
+               setDocumentDraft(response);
+               handleCount?.(response?.length);
             }
          )
          .finally(() => {
@@ -94,13 +91,16 @@ const DocumentDraft = (props) => {
                },
                {
                   title: 'Хувь',
+                  width: 60,
                   dataIndex: ['data', 'documentPercent'],
                   render: (percent) => `${percent?.toFixed(1)}%`
                },
                {
                   title: 'Нэр',
                   dataIndex: 'documentId',
-                  render: (documentId) => <div className="whitespace-break-spaces">{ReturnByIdToName(documentId)}</div>
+                  render: (documentId) => (
+                     <div className="whitespace-break-spaces text-start px-2">{ReturnByIdToName(documentId)}</div>
+                  )
                },
                {
                   title: 'Огноо',
@@ -109,15 +109,9 @@ const DocumentDraft = (props) => {
                },
                {
                   title: 'Үйлдэл',
+                  width: 100,
                   render: (_, row) => (
-                     <p
-                        style={{
-                           display: 'flex',
-                           flexDirection: 'row',
-                           gap: 8,
-                           justifyContent: 'center'
-                        }}
-                     >
+                     <Space>
                         <Tooltip title="Засах">
                            <EditOutlined
                               onClick={() => {
@@ -139,7 +133,7 @@ const DocumentDraft = (props) => {
                               className="hover: cursor-pointer text-green-600"
                            />
                         </Tooltip>
-                     </p>
+                     </Space>
                   )
                }
             ]}

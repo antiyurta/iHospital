@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import OrganizationDocumentFormService from '../../../../services/organization/documentForm';
+import DocumentFormApi from '@ApiServices/organization/documentForm';
 import dayjs from 'dayjs';
 
 const FormRenderHtml = (props) => {
    const { formId, documentData } = props;
    const [documentForm, setDocumentForm] = useState([]);
    const getDocumentForm = async () => {
-      await OrganizationDocumentFormService.getById(formId)
+      await DocumentFormApi.getById(formId)
          .then((response) => {
             setDocumentForm(response.data.response.documentForm);
          })

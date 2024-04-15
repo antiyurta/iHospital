@@ -3,7 +3,6 @@ import { Button, Form, Spin } from 'antd';
 import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
 import HistoryTab from './HistoryTab';
-import MainInpatientHistory from './MainInpatientHistory';
 import DynamicContent from './DynamicContent';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
@@ -25,13 +24,12 @@ import DocumentMiddlewareApi from '@ApiServices/organization/document';
 import { UsageTypeEnum, InspectionEnum, InspectionTypeEnum } from '@Utils/enum';
 // forms
 import { defualtForm, ConAndAdForm } from './DefualtForms';
+import MainInpatientHistory from './MainInpatientHistory';
 function MainPatientHistory({ handleClick }) {
    const {
       type,
       appointmentId,
-      inpatientRequestId,
       hicsServiceId,
-      departmentId,
       xrayRequestId,
       operationRequestId,
       cabinetId,
@@ -287,61 +285,55 @@ function MainPatientHistory({ handleClick }) {
       ]);
    };
    useEffect(() => {
-      if (type === 1) {
-         getUrgentTab();
-      } else {
-         if (usageType === UsageTypeEnum.OUT) {
-            if (inspection == InspectionTypeEnum.first) {
-               getInspectionTabs();
-            } else if (inspection === InspectionTypeEnum.second) {
-               getDefualtTab();
-            } else if (inspection === InspectionEnum.Xray) {
-               getXrayDefualtTab();
-            } else if (inspection === InspectionEnum.Exo) {
-               getExoInspectionTabs();
-               inspectionNoteId && getExoInspectionNote();
-            } else if (inspection === InspectionEnum.Operation) {
-               getOperationDefualtTab();
+      // 3 bol mes zasal ygl hewtenshig haragdah
+      if (appointmentType != 3) {
+         if (type === 1) {
+            getUrgentTab();
+         } else {
+            if (usageType === UsageTypeEnum.OUT) {
+               if (inspection == InspectionTypeEnum.first) {
+                  getInspectionTabs();
+               } else if (inspection === InspectionTypeEnum.second) {
+                  getDefualtTab();
+               } else if (inspection === InspectionEnum.Xray) {
+                  getXrayDefualtTab();
+               } else if (inspection === InspectionEnum.Exo) {
+                  getExoInspectionTabs();
+                  inspectionNoteId && getExoInspectionNote();
+               } else if (inspection === InspectionEnum.Operation) {
+                  getOperationDefualtTab();
+               }
             }
          }
       }
-   }, [usageType]);
+   }, []);
+   if (appointmentType === 3) {
+      return <MainInpatientHistory newUsageType={'OUT'} />;
+   }
    return (
       <>
-         {usageType === 'OUT' ? (
-            <>
-               <div className="progress-note-header">
-                  <Splide
-                     options={{
-                        pagination: false,
-                        autoWidth: true,
-                        autoHeight: true,
-                        gap: 10,
-                        padding: 28
-                     }}
-                  >
-                     {items?.map((item) => (
-                        <SplideSlide key={item.key}>
-                           <div className={activeKey === item.key ? 'section active' : 'section'}>
-                              <p onClick={() => setActiveKey(item.key)}>{item.label}</p>
-                           </div>
-                        </SplideSlide>
-                     ))}
-                  </Splide>
-               </div>
-               <Spin wrapperClassName="h-full" spinning={loading}>
-                  {items?.find((item) => item.key === activeKey)?.children}
-               </Spin>
-            </>
-         ) : null}
-         {usageType === 'IN' ? (
-            <MainInpatientHistory
-               patientId={patientId}
-               inpatientRequestId={inpatientRequestId}
-               deparmentId={departmentId}
-               hicsServiceId={hicsServiceId}
-            />
-         ) : null}
+         <div className="progress-note-header">
+            <Splide
+               options={{
+                  pagination: false,
+                  autoWidth: true,
+                  autoHeight: true,
+                  gap: 10,
+                  padding: 28
+               }}
+            >
+               {items?.map((item) => (
+                  <SplideSlide key={item.key}>
+                     <div className={activeKey === item.key ? 'section active' : 'section'}>
+                        <p onClick={() => setActiveKey(item.key)}>{item.label}</p>
+                     </div>
+                  </SplideSlide>
+               ))}
+            </Splide>
+         </div>
+         <Spin wrapperClassName="h-full" spinning={loading}>
+            {items?.find((item) => item.key === activeKey)?.children}
+         </Spin>
       </>
    );
 }

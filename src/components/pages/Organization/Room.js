@@ -87,6 +87,14 @@ function Room() {
          isDepend: true
       },
       {
+         index: 'isSurgury',
+         label: 'Мэс заслын эсэх',
+         isView: true,
+         input: 'switch',
+         col: 12,
+         isDepend: true
+      },
+      {
          index: 'genderType',
          label: 'Хүйс',
          isView: true,

@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ConfigProvider, DatePicker, Input } from 'antd';
 import locale from 'antd/es/locale/mn_MN';
 import 'moment/locale/mn';
 import Pagination from './pagination';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import dayjs from 'dayjs';
 
 const { RangePicker } = DatePicker;

@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import BST from './BeforeInPatientTabs/BST';
-import Cardex from './BeforeInPatientTabs/Cardex';
-import MedicineRequests from './BeforeInPatientTabs/MedicineRequests';
-import Acting from './BeforeInPatientTabs/Acting';
-import NursingLog from './BeforeInPatientTabs/NursingLog';
-import { openNofi } from '../../common';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId } from '../../../features/authReducer';
-
+//comp
+import Acting from './BeforeInPatientTabs/Acting';
+import Cardex from './BeforeInPatientTabs/Cardex';
 import OtherCustomized from './OtherCustomized/Index';
+import MedicineRequests from './BeforeInPatientTabs/MedicineRequests';
+//common
+import { openNofi } from '@Comman/common';
+//context
+import EmrContext from '@Features/EmrContext';
+//redux
+import { selectCurrentAppId } from '@Features/authReducer';
+//api
+import DocumentRoleApi from '@ApiServices/organization/documentRole';
 
-///
-import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
-import EmrContext from '../../../features/EmrContext';
-///
 function BeforeInPatientTabs({ departmentId }) {
    const { setDocumentView } = useContext(EmrContext);
    const AppIds = useSelector(selectCurrentAppId);
@@ -21,7 +21,7 @@ function BeforeInPatientTabs({ departmentId }) {
    const [documents, setDocuments] = useState([]);
    const [selectedDocument, setSelectedDocument] = useState(Number);
    const getDocuments = async () => {
-      await OrganizationDocumentRoleServices.getByPageFilterShow({
+      await DocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
             structureIds: [departmentId],
@@ -80,8 +80,6 @@ function BeforeInPatientTabs({ departmentId }) {
                <button
                   onClick={() => {
                      setActiveKey(index + 3);
-
-                     console.log(item);
                      setDocumentView(false, {}, 'one');
                      setSelectedDocument(item);
                   }}
