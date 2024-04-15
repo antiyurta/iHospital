@@ -182,7 +182,15 @@ function Surgery(props) {
                </>
             ),
             dataIndex: 'time',
-            render: (time) => <Checkbox />
+            render: (time) => (
+               <Checkbox
+                  onChange={(e) => {
+                     console.log(e.target.checked);
+                     console.log('alitsag', time);
+                     console.log('ali odor', index);
+                  }}
+               />
+            )
          });
       }
       return data;
@@ -342,10 +350,6 @@ function Surgery(props) {
             >
                <div className="flex flex-row gap-2">
                   <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-[200px]">
-                     <div className="rounded bg-[#F7F8FA] border-[#2D8CFF] border p-4 flex flex-row gap-2 hover:cursor-pointer">
-                        <SnippetsOutlined className="text-[#2D8CFF]" />
-                        <p className="text-[#2D8CFF]">Төлөвлөгөө гаргах</p>
-                     </div>
                      <p style={labelstyle}>Мэс засал:</p>
                      <p style={contentStyle}>{selectedSurgery?.name}</p>
                      <p style={labelstyle}>Мэс заслын төрөл:</p>
