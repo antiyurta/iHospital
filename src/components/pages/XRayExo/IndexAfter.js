@@ -13,7 +13,7 @@ import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
 import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
 import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
 //comman
-import { getAge, getGender, openNofi } from '@Comman/common';
+import { getAge, getGenderInType, openNofi } from '@Comman/common';
 //redux
 import { setEmrData } from '@Features/emrReducer';
 //api
@@ -168,7 +168,7 @@ function IndexAfter({ type, params }) {
       {
          title: 'Хүйс',
          dataIndex: ['patient', 'genderType'],
-         render: (genderType) => getGender(genderType)
+         render: (genderType) => getGenderInType(genderType)
       },
       {
          title: type === 3 ? 'Ажилбарын нэр' : 'Оношилгооны нэр',

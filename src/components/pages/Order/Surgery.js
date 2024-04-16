@@ -13,7 +13,7 @@ import {
    Table,
    TimePicker
 } from 'antd';
-import { CloseCircleOutlined, FormOutlined, PlusOutlined, SnippetsOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
@@ -168,16 +168,17 @@ function Surgery(props) {
       const data = [
          {
             title: 'Цаг',
-            dataIndex: 'time'
+            dataIndex: 'time',
+            className: 'text-[#A9AEB8] text-xs font-normal'
          }
       ];
-      for (let index = 0; index < 6; index++) {
+      for (let index = 0; index < 7; index++) {
          data.push({
             title: (
                <>
                   <p className="text-[#A9AEB8] text-xs font-normal">{days[index]}</p>
                   <p className="text-[#A9AEB8] text-xs font-normal">
-                     {selectedWeek.getMonth() + index + 1}/{selectedWeek.getDate()}
+                     {selectedWeek.getMonth() + index + 1}/{selectedWeek.getDate() + index}
                   </p>
                </>
             ),
@@ -387,8 +388,8 @@ function Surgery(props) {
                         </span>
                      </Checkbox>
                   </div>
-                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-[300px]">
-                     <Divider>Мэс заслын ажиллагааны баг</Divider>
+                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 min-w-[320px]">
+                     <Divider className="my-0">Мэс заслын ажиллагааны баг</Divider>
                      <EmployeeList
                         label="Мэс заслын эмч:"
                         name={['taskWorkers', 'operationId']}
@@ -410,8 +411,8 @@ function Surgery(props) {
                      <FormListEmployee formName="taskDoctorRels" label="Мэдээгүйжүүлэгч" employees={employees} />
                      <FormListEmployee formName="taskNurseRels" label="Сувилагч" employees={employees} />
                   </div>
-                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 min-w-[500px]">
-                     <Divider>Өрөөний жагсаалт</Divider>
+                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-[500px] min-w-[500px]">
+                     <Divider className="my-0">Өрөөний жагсаалт</Divider>
                      <div className="flex flex-row gap-3 items-end">
                         <Form.Item className="mb-0 w-full" label="Өрөө:" name="roomId" rules={rules}>
                            <Select
@@ -435,7 +436,6 @@ function Surgery(props) {
                            />
                         </ConfigProvider>
                      </div>
-
                      <Table
                         rowKey="time"
                         bordered
@@ -448,7 +448,7 @@ function Surgery(props) {
                      />
                   </div>
                   <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-full">
-                     <Divider>Мэс заслын үед хэрэглэгдэх эм /хэрэгслийн жагсаалт/</Divider>
+                     <Divider className="my-0">Мэс заслын үед хэрэглэгдэх эм,хэрэгсэл</Divider>
                      <Table />
                   </div>
                </div>

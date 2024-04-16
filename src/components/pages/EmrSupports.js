@@ -1,5 +1,5 @@
-import { CloseCircleOutlined, PrinterFilled } from '@ant-design/icons';
-import { Button, Card, DatePicker, Empty, Form, Input, Modal, Select, Table } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import { Button, Card, DatePicker, Empty, Form, Modal, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { selectCurrentAppId, selectCurrentInsurance, selectCurrentToken } from '../../features/authReducer';
 import { selectCurrentHicsService } from '../../features/emrReducer';
-import { DefaultPost, DefualtGet, Get, localMn, localMnC, openNofi, Post } from '../common';
+import { DefaultPost, DefualtGet, Get, localMnC, openNofi, Post } from '../common';
 //
 import PaintStory from '../pages/EMR/InPatient/document/painStory/Index';
 import Diagnose from './service/Diagnose';

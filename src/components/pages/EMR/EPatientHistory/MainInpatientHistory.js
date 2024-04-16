@@ -147,7 +147,7 @@ function MainInpatientHistory({ newUsageType }) {
                      children: (
                         <div
                            style={{
-                              height: 'calc(100vh - 390px)',
+                              height: 'calc(100vh - 420px)',
                               overflow: 'auto',
                               paddingRight: 12
                            }}

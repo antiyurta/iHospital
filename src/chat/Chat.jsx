@@ -1,18 +1,20 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Button, Spin, Input, List } from 'antd';
+import { useSelector } from 'react-redux';
+import { selectAuthReducer } from '@Features/authReducer';
+//comp
+import Rooms from '@Chat/Rooms';
+import ListUserInfo from '@Chat/ListUserInfo';
 //imgs
 import { expandIconChat } from '@Assets/index';
 import { DashOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 //context
 import { useSocketContext } from '@Features/socketContext';
-import { Button, Spin, Input, List } from 'antd';
-import ListUserInfo from '@Chat/ListUserInfo';
-import Rooms from '@Chat/Rooms';
-import { useSelector } from 'react-redux';
-import { selectAuthReducer } from '@Features/authReducer';
-import ChatService from '@ApiServices/chat/chat';
 import AuthContext from '@Features/AuthContext';
-import InfiniteScroll from 'react-infinite-scroll-component';
-//extends
+//api
+import ChatService from '@ApiServices/chat/chat';
+//defaults
 const socketUrl = 'https://ihospital.mn/';
 
 const ChatLayout = () => {
@@ -141,7 +143,8 @@ const ChatLayout = () => {
                         />
                      </InfiniteScroll>
                      <Rooms
-                        render={isConnected}
+                        isExpand={isExpand}
+                        isRender={isConnected}
                         isReloadRoom={isReloadRoom}
                         backSetIsReloadRoom={(props) => setIsReloadRoom(props.state)}
                         findUserInfo={findUserInfo}
