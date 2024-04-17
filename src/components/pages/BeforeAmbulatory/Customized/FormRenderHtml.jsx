@@ -40,7 +40,7 @@ const FormRenderHtml = (props) => {
          if (answer) return <span>{answer}</span>;
          return;
       } else if (item.type === 'input' || item.type === 'inputNumber') {
-         if (answer) {
+         if (answer || answer >= 0) {
             let pattern = /\.{1,}/g;
             const text = item.question.replace(pattern, `<span style="font-weight: 300;"> ${answer} </span>`);
             return (
