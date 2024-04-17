@@ -85,7 +85,7 @@ export function ReturnById(props) {
    //    // return <Doc4 data={document.data} patient={patient} />;
    // }
    return (
-      <Template patient={patient} createdAt={document.createdAt} serviceName={serviceName}>
+      <Template patient={patient} createdAt={document?.createdAt} serviceName={serviceName}>
          {body}
       </Template>
    );

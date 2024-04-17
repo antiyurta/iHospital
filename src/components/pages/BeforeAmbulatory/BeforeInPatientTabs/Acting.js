@@ -16,8 +16,8 @@ function Acting() {
                },
                {
                   label: 'Захиалга',
-                  key: 2
-                  // children: <Orders />
+                  key: 2,
+                  children: <Orders />
                },
                {
                   label: 'Дотоод захилга',

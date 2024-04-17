@@ -186,13 +186,13 @@ export const outDoctorColumns = [
    },
    {
       title: 'Даатгал',
-      width: 100,
+      width: 110,
       dataIndex: 'isInsurance',
       render: (isInsurance) => getPaymentInfo(isInsurance)
    },
    {
       title: 'Төлбөр',
-      width: 100,
+      width: 110,
       dataIndex: 'isPayment',
       render: (isPayment) => getPaymentInfo(isPayment)
    }

@@ -6,7 +6,6 @@ import mnMnn from 'antd/es/calendar/locale/mn_MN';
 import DiagnoseTypes from './pages/service/DiagnoseTypes.js';
 import moment from 'moment';
 import { NumericFormat } from 'react-number-format';
-import dayjs from 'dayjs';
 
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;

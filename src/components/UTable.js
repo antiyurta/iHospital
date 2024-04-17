@@ -190,20 +190,6 @@ function UTable(props) {
       ScrollRef(scrollRef);
    }, [props.isRefresh]);
 
-   const handleFormValuesChange = (changedValues) => {
-      // Хамааралтай hide/show тохируулах
-      const fieldName = Object.keys(changedValues)[0];
-      const fieldVal = Object.values(changedValues)[0];
-      if (fieldName === props.dependCol && fieldVal === props.dependVal) {
-         console.log('changed', changedValues);
-         console.log('fieldName', fieldName);
-         console.log('fieldVal', fieldVal);
-         setDependShow(true);
-      } else {
-         setDependShow(false);
-      }
-   };
-
    const getInputs = (element, inputType) => {
       switch (inputType) {
          case 'select':

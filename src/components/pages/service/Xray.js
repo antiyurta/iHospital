@@ -1,39 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../common';
+//comp
 import UTable from '../../UTable';
-import apiInsuranceService from '../../../services/healt-insurance/insurance';
-
+//api
+import deviceApi from '@ApiServices/device.api';
+import careTypeApi from '@ApiServices/reference/care-type.api';
+import insuranceApi from '@ApiServices/healt-insurance/insurance';
 function Xray() {
-   const token = useSelector(selectCurrentToken);
    const [xrayTypeData, setXrayTypeData] = useState([]);
    const [devices, setDevices] = useState([]);
    const [hicsExams, setHicsExams] = useState([]);
-
-   const config = {
-      headers: {},
-      params: {
-         type: 1
-      }
-   };
-
    const getXrayTypeData = async () => {
-      const response = await Get('reference-care-type', token, config);
-      setXrayTypeData(response.data);
+      await careTypeApi
+         .get({
+            type: 1
+         })
+         .then(({ data: { response } }) => {
+            setXrayTypeData(response.data);
+         });
    };
-
    const getDevices = async () => {
-      const response = await Get('device', token, {
-         headers: {}
-         // params: {
-         //    deviceType: 0
-         // }
+      await deviceApi.get({}).then(({ data: { response } }) => {
+         setDevices(response.data);
       });
-      setDevices(response.data);
    };
    const getHicsExams = async () => {
-      await apiInsuranceService.getAllHicsExams().then(({ data }) => {
+      await insuranceApi.getAllHicsExams().then(({ data }) => {
          if (data.success) {
             setHicsExams(data.response);
          }

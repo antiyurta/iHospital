@@ -33,6 +33,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       //    values['patientFinger'] = 'test2';
       //    values['appointmentId'] = appointmentId;
       // }
+      console.log('ins', isInsurance, hicsServiceId);
       if (isInsurance && hicsServiceId) {
          // await insuranceApi
          //    .appointmentSeal(values)

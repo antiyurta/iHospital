@@ -14,7 +14,8 @@ export const auth = createSlice({
       phoneNo: null,
       hospitalName: null,
       hospitalId: null,
-      hospitalIsAfterPay: false
+      hospitalIsAfterPay: false,
+      imageId: null
    },
    reducers: {
       set: (state, action) => {
@@ -29,6 +30,7 @@ export const auth = createSlice({
          state.hospitalName = action.payload.hospitalName;
          state.hospitalId = action.payload.hospitalId;
          state.hospitalIsAfterPay = action.payload.isAfterPay;
+         state.imageId = action.payload.imageId;
       },
       Delete: (state) => {
          state.firstName = null;
@@ -42,6 +44,7 @@ export const auth = createSlice({
          state.phoneNo = null;
          state.hospitalName = null;
          state.hospitalId = null;
+         state.imageId = null;
       },
       login: (state, action) => {
          state.token = action.payload;
@@ -67,4 +70,5 @@ export const selectCurrentPhoneNo = (state) => state.authReducer.phoneNo;
 export const selectCurrentHospitalName = (state) => state.authReducer.hospitalName;
 export const selectCurrentHospitalId = (state) => state.authReducer.hospitalId;
 export const selectCurrentIsAfterPay = (state) => state.authReducer.hospitalIsAfterPay;
+export const selectCurrentImageId = (state) => state.authReducer.imageId;
 export const selectAuthReducer = (state) => state.authReducer;

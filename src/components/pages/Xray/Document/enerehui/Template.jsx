@@ -3,9 +3,6 @@ import Header from './Header';
 import Footer from './Footer';
 const Template = (props) => {
    const { patient, createdAt, children, serviceName } = props;
-   const capitalizeFirstLetter = (str) => {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-   };
    return (
       <div className="font-times exo flex flex-col gap-1">
          <Header patient={patient} createdAt={createdAt} />
@@ -21,7 +18,7 @@ const Template = (props) => {
                <tr>
                   <td>
                      <div className="exo-page">
-                        <p className="text-center text-[16px] font-bold ">{capitalizeFirstLetter(serviceName)}</p>
+                        <p className="text-center text-[16px] font-bold ">{serviceName?.toUpperCase()}</p>
                         {children}
                      </div>
                   </td>

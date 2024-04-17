@@ -6,5 +6,8 @@ class AuthenticationApi {
    async changePassword(body) {
       return await jwtInterceopter.post('authentication/change-password', body);
    }
+   async changeProfile(body) {
+      return await jwtInterceopter.post('authentication/change-profile', body);
+   }
 }
 export default new AuthenticationApi();

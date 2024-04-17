@@ -90,9 +90,8 @@ const InternalOrder = (props) => {
       } else {
          var services = [];
          var subTotal = 0;
-         value.map((item, index) => {
+         value.map((item) => {
             var service = {};
-            service.unikey = index;
             service.id = item.id;
             service.name = item.name;
             service.type = item.type;
@@ -116,7 +115,7 @@ const InternalOrder = (props) => {
                service.price = 0;
                service.oPrice = item.price;
                service.type = item.type;
-               service.medicineType = null;
+               service.medicineType = item.medicineType;
                service.repeatTime = 1;
                service.dayCount = 1;
                service.total = 0;

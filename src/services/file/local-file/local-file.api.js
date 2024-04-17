@@ -39,5 +39,8 @@ class LocalFileApi {
    async remove(id) {
       return await jwtInterceopter.delete(`local-files/${id}`);
    }
+   async removeGlobal(id) {
+      return await jwtInterceopter.delete(`global-files/${id}`);
+   }
 }
 export default new LocalFileApi();

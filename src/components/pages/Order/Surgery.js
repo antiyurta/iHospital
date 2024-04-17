@@ -22,7 +22,7 @@ import mnMN from 'antd/es/calendar/locale/mn_MN';
 import locale from 'antd/es/locale/mn_MN';
 import 'moment/locale/mn';
 import moment from 'moment';
-moment.locale('mn', {
+moment.updateLocale('mn', {
    week: {
       dow: 1
    }
