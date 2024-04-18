@@ -56,6 +56,7 @@ const FormRenderHtml = (props) => {
       } else if (item.type === 'radio' || item.type === 'checkbox') {
          var other;
          if (item.isOther) {
+            console.log('radio', item);
             other = (
                <RenderOptions
                   item={{
@@ -76,7 +77,7 @@ const FormRenderHtml = (props) => {
             } else {
                text = `${item.question} ${checkBoxAnswers}`;
             }
-            if (checkBoxAnswers) {
+            if (checkBoxAnswers || other) {
                return (
                   <span className="flex gap-1">
                      <span>{text}</span>
@@ -86,7 +87,7 @@ const FormRenderHtml = (props) => {
             }
             return;
          }
-         if (selectedAnswer) {
+         if (selectedAnswer || other) {
             return (
                <span className="flex gap-1">
                   <span>{item.question}</span>
