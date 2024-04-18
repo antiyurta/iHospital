@@ -32,6 +32,9 @@ export const auth = createSlice({
          state.hospitalIsAfterPay = action.payload.isAfterPay;
          state.imageId = action.payload.imageId;
       },
+      setImageId: (state, action) => {
+         state.imageId = action.payload.imageId;
+      },
       Delete: (state) => {
          state.firstName = null;
          state.firstName = null;
@@ -55,7 +58,7 @@ export const auth = createSlice({
    }
 });
 
-export const { set, Delete, login, logout } = auth.actions;
+export const { set, setImageId, Delete, login, logout } = auth.actions;
 export default auth.reducer;
 
 export const selectCurrentToken = (state) => state.authReducer.token;

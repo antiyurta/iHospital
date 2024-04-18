@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useContext, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, Suspense, useContext, useEffect, useState } from 'react';
 import { Button, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -51,6 +51,7 @@ const MainLayout = () => {
    };
    useEffect(() => {
       imageId && getImage();
+      !imageId && setImageSrc(null);
    }, [imageId]);
    return (
       <Layout>

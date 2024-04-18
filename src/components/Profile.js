@@ -18,7 +18,14 @@ import AuthContext from '@Features/AuthContext';
 //redux
 import { removePatient } from '@Features/patientReducer';
 import { set as setHospital, remove as removeHospital } from '@Features/hospitalReducer';
-import { selectCurrentToken, selectCurrentInsurance, set as setAuth, Delete, logout } from '@Features/authReducer';
+import {
+   selectCurrentToken,
+   selectCurrentInsurance,
+   set as setAuth,
+   setImageId,
+   Delete,
+   logout
+} from '@Features/authReducer';
 
 function Profile() {
    const { logoutt } = useContext(AuthContext);
@@ -125,8 +132,14 @@ function Profile() {
       isValid ? setPasswordValid(true) : setPasswordValid(false);
    };
    const changeProfileImg = async (id) => {
+      console.log(id);
       await authenticationApi.changeProfile({ imageId: id }).then(() => {
          form.setFieldsValue({ imageId: id });
+         dispatch(
+            setImageId({
+               imageId: id
+            })
+         );
       });
    };
    return (

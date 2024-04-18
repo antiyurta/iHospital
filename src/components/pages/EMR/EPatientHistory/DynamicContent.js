@@ -66,7 +66,12 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
          }
       }).then(({ data: { response } }) => {
          const data = response.data?.flatMap((res) => res.services);
-         setServiceRequest(data);
+         setServiceRequest(
+            data?.map((item, index) => ({
+               ...item,
+               unikey: index
+            }))
+         );
       });
    };
 
@@ -151,7 +156,6 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
    };
 
    useEffect(() => {
-      console.log('asdasd', incomeData);
       incomeData.inspectionNoteId && getInspectionNote();
       incomeData.appointmentId && getServiceRequest();
    }, []);
@@ -400,7 +404,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            isDisabledButton={(_state) => null}
                         />
                         <Table
-                           rowKey="id"
+                           rowKey="unikey"
                            columns={[
                               {
                                  title: '№',
