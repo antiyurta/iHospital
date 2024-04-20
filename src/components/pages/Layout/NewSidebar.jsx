@@ -103,7 +103,7 @@ const Sidebar = ({ collapsed }) => {
    };
 
    useEffect(() => {
-      getMenus();
+      UserId && RoleId && getMenus();
    }, [UserId, RoleId]);
    return (
       <div className={`sidebar-body ${isLoading ? 'loading' : ''}`}>

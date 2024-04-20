@@ -1,11 +1,11 @@
 import React from 'react';
-import { Tooltip } from 'antd';
+import { Space, Tooltip } from 'antd';
 import { ListPatientInfo, TypeInfo } from '@Comman/ListInjection';
-import { getAge, getGenderInType } from '@Comman/common';
+import { formatNameForDoc, getAge, getGenderInType } from '@Comman/common';
 import MonitorCriteria from '@Comman/pages/Insurance/MonitorCriteria';
 import dayjs from 'dayjs';
 import orderType from './orderType.js';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, EyeOutlined } from '@ant-design/icons';
 
 const getInPatientType = (type) => {
    if (type === 'EMERGENCY') {
@@ -415,9 +415,10 @@ export const surguryColumns = [
       render: (text) => {
          if (text === 1) {
             return <TypeInfo bgColor="#13baed" textColor="black" text={'Төлөвлөгөөт'} />;
-         } else {
+         } else if (text === 2) {
             return <TypeInfo bgColor="#e33d3d" textColor="white" text={'Яаралтай'} />;
          }
+         return;
       }
    },
    {
@@ -438,7 +439,7 @@ export const surguryColumns = [
       render: (name) => <p className="text-black mx-3">{name}</p>
    },
    {
-      title: 'Эмч',
+      title: 'Захиалсан эмч',
       dataIndex: 'doctor',
       render: (doctor) => <ListPatientInfo patientData={doctor} />
    },
@@ -450,7 +451,45 @@ export const surguryColumns = [
    },
    {
       title: 'Мэс засал',
-      dataIndex: ['taskWorkers', 'surgery', 'name']
+      dataIndex: ['taskWorkers', 'surgeries'],
+      render: (surgeries) => surgeries?.map((surgery) => surgery.name).join(',')
+   },
+   {
+      title: 'Мэс заслын баг',
+      render: (_, row) => (
+         <Tooltip
+            title={
+               <Space direction="vertical">
+                  <Space className="w-full">
+                     <p>Эмч:</p>
+                     <p>
+                        {formatNameForDoc(row.taskWorkers?.operation?.lastName, row.taskWorkers?.operation?.firstName)}
+                     </p>
+                  </Space>
+                  <Space className="w-full">
+                     <p>1-p:</p>
+                     <p>
+                        {formatNameForDoc(
+                           row.taskWorkers?.firstHelper?.lastName,
+                           row.taskWorkers?.firstHelper?.firstName
+                        )}
+                     </p>
+                  </Space>
+                  <Space className="w-full">
+                     <p>2-p</p>
+                     <p>
+                        {formatNameForDoc(
+                           row.taskWorkers?.secondHelper?.lastName,
+                           row.taskWorkers?.secondHelper?.firstName
+                        )}
+                     </p>
+                  </Space>
+               </Space>
+            }
+         >
+            <EyeOutlined />
+         </Tooltip>
+      )
    },
    {
       title: 'Онош',
@@ -471,7 +510,6 @@ export const surguryColumns = [
    {
       title: 'Төлөв',
       width: 100,
-      dataIndex: ['currentColumn', 'column', 'id'],
-      render: (id) => getTypeInfoSurgury(id)
+      dataIndex: ['currentColumn', 'column', 'name']
    }
 ];

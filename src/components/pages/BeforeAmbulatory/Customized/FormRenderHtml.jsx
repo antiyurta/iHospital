@@ -56,7 +56,6 @@ const FormRenderHtml = (props) => {
       } else if (item.type === 'radio' || item.type === 'checkbox') {
          var other;
          if (item.isOther) {
-            console.log('radio', item);
             other = (
                <RenderOptions
                   item={{

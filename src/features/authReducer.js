@@ -37,7 +37,6 @@ export const auth = createSlice({
       },
       Delete: (state) => {
          state.firstName = null;
-         state.firstName = null;
          state.lastName = null;
          state.depId = null;
          state.appIds = null;
@@ -47,6 +46,7 @@ export const auth = createSlice({
          state.phoneNo = null;
          state.hospitalName = null;
          state.hospitalId = null;
+         state.hospitalIsAfterPay = null;
          state.imageId = null;
       },
       login: (state, action) => {

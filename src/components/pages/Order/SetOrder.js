@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { formatNameForDoc, openNofi } from '../../common';
 import {
    Badge,
@@ -130,11 +130,6 @@ function SetOrder({ handleclick }) {
          }
       });
    };
-
-   useEffect(() => {
-      getSetOrders();
-      getStructures();
-   }, []);
 
    const FullTable = () => {
       return (
@@ -421,6 +416,8 @@ function SetOrder({ handleclick }) {
          <button
             className="green-order"
             onClick={() => {
+               getSetOrders();
+               getStructures();
                setIsOpenModal(true);
             }}
          >

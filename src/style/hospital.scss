@@ -22,6 +22,15 @@
       height: auto !important;
    }
 }
+.ant-upload-picture-card-wrapper {
+   width: auto !important;
+}
+.ant-upload.ant-upload-select-picture-card,
+.ant-upload-list-picture-card-container {
+   height: 90px;
+   width: 90px;
+   margin: 0px !important;
+}
 
 .regular-divider {
    font-size: 14px;

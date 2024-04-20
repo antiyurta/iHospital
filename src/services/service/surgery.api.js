@@ -12,6 +12,9 @@ class SurgeryApi {
    async getRequestById(id) {
       return await jwtInterceopter.get('service/surgeryRequest/' + id);
    }
+   async postRequest(body) {
+      return await jwtInterceopter.post('service/surgeryRequest', body);
+   }
    async postRequestConfirm(body) {
       return await jwtInterceopter.post('service/surgeryRequest/confirm', body);
    }

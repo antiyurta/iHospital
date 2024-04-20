@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, Col, Descriptions, Form, Input, InputNumber, Modal, Row } from 'antd';
+import { Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
 import { KeyOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+//comp
 import ImageUpload from './Input/ImageUpload';
 // comman
 import { openNofi } from '@Comman/common';
@@ -29,7 +30,6 @@ import {
 
 function Profile() {
    const { logoutt } = useContext(AuthContext);
-   const [form] = Form.useForm();
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    const dispatch = useDispatch();
@@ -57,9 +57,6 @@ function Profile() {
          .get()
          .then((response) => {
             profileForm.setFieldsValue(response.data.response);
-            form.setFieldsValue({
-               imageId: response.data.response?.imageId
-            });
             dispatch(
                setAuth({
                   firstName: response.data.response.employee?.firstName,
@@ -132,9 +129,7 @@ function Profile() {
       isValid ? setPasswordValid(true) : setPasswordValid(false);
    };
    const changeProfileImg = async (id) => {
-      console.log(id);
       await authenticationApi.changeProfile({ imageId: id }).then(() => {
-         form.setFieldsValue({ imageId: id });
          dispatch(
             setImageId({
                imageId: id
@@ -152,11 +147,7 @@ function Profile() {
                <Row justify="space-between" align="middle" gutter={[24, 0]}>
                   <Col span={24} md={12} className="col-info">
                      <div className="flex flex-row gap-2 items-center">
-                        <Form form={form}>
-                           <ImageUpload className="mb-0" form={form} setImageId={changeProfileImg} name="imageId">
-                              <Input />
-                           </ImageUpload>
-                        </Form>
+                        <ImageUpload setImageId={changeProfileImg} />
                         <div className="avatar-info">
                            <h4 className="font-semibold m-0">
                               {user.employee?.lastName + ' ' + user.employee?.firstName}

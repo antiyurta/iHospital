@@ -14,7 +14,7 @@ export const defualtForm = {
    question: [
       {
          type: 'textarea',
-         index: 1,
+         index: 2,
          isHead: true,
          isOther: false,
          keyWord: 'Асуумж',
@@ -26,7 +26,7 @@ export const defualtForm = {
    inspection: [
       {
          type: 'textarea',
-         index: 1,
+         index: 3,
          isHead: true,
          isOther: false,
          keyWord: 'Бодит үзлэг',
@@ -38,7 +38,7 @@ export const defualtForm = {
    plan: [
       {
          type: 'textarea',
-         index: 1,
+         index: 4,
          isHead: true,
          isOther: false,
          keyWord: 'Төлөвлөгөө',

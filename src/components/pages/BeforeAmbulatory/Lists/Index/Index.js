@@ -112,7 +112,7 @@ function Index({ type, isDoctor }) {
          await SurgeryApi.getRequest({
             page: page,
             limit: limit,
-            columnId: 2,
+            // columnId: 2,
             startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
             endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
          })
@@ -225,8 +225,7 @@ function Index({ type, isDoctor }) {
          data['appointmentId'] = row.appointmentId;
          data['surgery'] = {
             surguryRequestId: row.id,
-            isCito: row.taskType === 1 ? false : true,
-            name: row.taskWorkers?.surgery.name
+            taskWorkersId: row.taskWorkers.id
          };
       }
       // uzleg ehleh tsag
