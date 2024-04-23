@@ -253,12 +253,7 @@ function IndexAfter({ type, params }) {
          <div className="flex flex-col gap-2">
             <ScheduleTypeInfo />
             <InspectionTypeInfo />
-            <ListFilter
-               meta={meta}
-               appointmentsLength={requestLists?.length || 0}
-               selectedTags={null}
-               getList={getRequest}
-            />
+            <ListFilter meta={meta} appointmentsLength={requestLists?.length || 0} getList={getRequest} />
             <div className="w-full">
                <Card
                   bordered={false}

@@ -14,9 +14,10 @@ import Menu from './components/pages/reference/Menu';
 import ProtectedRoute from './features/ProtectedRoute';
 import LandingLayout from './Layouts/Landing/LandingLayout';
 import MainLayout from './components/pages/Layout/MainLayout';
-import IHos from './components/pages/Layout/IHos';
 import PrivateRoute from './features/PrivateRoute';
 import CreateStory from './components/pages/Bed/MainBed/CreateStory';
+//
+import UserConfirm from '@Pages/UserConfirm';
 //
 import { PublicRoutes, ProtectedRoutes } from './Routes';
 //
@@ -47,31 +48,30 @@ function App() {
             <Route path="/" element={<LandingLayout />}>
                <Route index element={<Home />} />
                <Route path="/login" element={<Login />} />
-               {PublicRoutes.map((route, index) => {
-                  return <Route key={index} path={route.url} element={<route.element />} />;
-               })}
+               {PublicRoutes.map((route, index) => (
+                  <Route key={index} path={route.url} element={<route.element />} />
+               ))}
             </Route>
+            <Route path="/user-confirm" element={<UserConfirm />} />
             <Route element={<MainLayout />}>
                <Route path="/profile" element={<Profile />} />
                <Route element={<ProtectedRoute />}>
-                  <Route path="/main/" element={<IHos />}>
+                  <Route path="/main/">
                      <Route path="/main/hospital" element={<Hospital />} />
                      <Route path="/main/role" element={<Role />} />
                      <Route path="/main/emr" element={<EMR />} />
                      <Route path="/main/ambulatoryDetail" element={<BeforeAmbulatoryDetail />} />
-                     {ProtectedRoutes.map((route, index) => {
-                        return (
-                           <Route
-                              key={index}
-                              path={`/main${route.url}`}
-                              element={
-                                 <PrivateRoute>
-                                    <route.element />
-                                 </PrivateRoute>
-                              }
-                           />
-                        );
-                     })}
+                     {ProtectedRoutes.map((route, index) => (
+                        <Route
+                           key={index}
+                           path={`/main${route.url}`}
+                           element={
+                              <PrivateRoute>
+                                 <route.element />
+                              </PrivateRoute>
+                           }
+                        />
+                     ))}
                      <Route
                         path="/main/bed_management/create"
                         element={

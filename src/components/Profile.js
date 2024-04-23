@@ -55,26 +55,34 @@ function Profile() {
    const getProfile = async () => {
       await authenticationApi
          .get()
-         .then((response) => {
-            profileForm.setFieldsValue(response.data.response);
+         .then(({ data: { response } }) => {
+            profileForm.setFieldsValue(response);
+            // if (!response.isEmailConfirmed) {
+            //    navigate('/user-confirm', {
+            //       state: {
+            //          email: response.email
+            //       }
+            //    });
+            // } else {
             dispatch(
                setAuth({
-                  firstName: response.data.response.employee?.firstName,
-                  lastName: response.data.response.employee?.lastName,
-                  depId: response.data.response.employee?.depIds,
-                  appIds: response.data.response.employee?.appIds,
-                  userId: response.data.response.employee?.id,
-                  isInsurance: response.data.response.hospital?.isInsurance,
-                  roleId: response.data.response?.roleId,
-                  phoneNo: response.data.response?.employee?.phoneNo,
-                  hospitalName: response.data.response.hospital?.name,
-                  hospitalId: response.data.response.hospital?.id,
-                  isAfterPay: response.data.response.hospital?.isAfterPay,
-                  imageId: response.data.response?.imageId
+                  firstName: response.employee?.firstName,
+                  lastName: response.employee?.lastName,
+                  depId: response.employee?.depIds,
+                  appIds: response.employee?.appIds,
+                  userId: response.employee?.id,
+                  isInsurance: response.hospital?.isInsurance,
+                  roleId: response?.roleId,
+                  phoneNo: response?.employee?.phoneNo,
+                  hospitalName: response.hospital?.name,
+                  hospitalId: response.hospital?.id,
+                  isAfterPay: response.hospital?.isAfterPay,
+                  imageId: response?.imageId
                })
             );
-            dispatch(setHospital(response.data.response.hospital));
-            setUser(response.data.response);
+            dispatch(setHospital(response.hospital));
+            setUser(response);
+            // }
          })
          .catch((error) => {
             console.log(error);

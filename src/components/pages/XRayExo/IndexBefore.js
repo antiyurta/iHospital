@@ -331,12 +331,7 @@ function IndexBefore({ type }) {
          <div className="flex flex-col gap-2">
             <ScheduleTypeInfo />
             <InspectionTypeInfo />
-            <ListFilter
-               meta={meta}
-               appointmentsLength={xrayLists?.length || 0}
-               selectedTags={0}
-               getList={getXrayRequest}
-            />
+            <ListFilter meta={meta} appointmentsLength={xrayLists?.length || 0} getList={getXrayRequest} />
             <Card
                title={type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'}
                bordered={false}

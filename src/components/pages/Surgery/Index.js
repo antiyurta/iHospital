@@ -318,7 +318,7 @@ function Index(props) {
                         }}
                      />
                   ) : null}
-                  {type === 3 && row.currentColumn?.columnId === 4 ? (
+                  {type === 3 && row.currentColumn?.columnId === 3 ? (
                      <Button
                         icon={<CheckOutlined />}
                         style={{
