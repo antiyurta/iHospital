@@ -12,7 +12,12 @@ const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists
 // tsagiin huwiar
 const Schedule = React.lazy(() => import('./components/pages/Appointment/Schedule/Schedule'));
 // tohooromj tsagin huwiar
-const DeviceSchedule = React.lazy(() => import('./components/pages/Appointment/Device/DeviceSchedule'));
+// const DeviceSchedule = React.lazy(() => import('./components/pages/Appointment/Device/DeviceSchedule'));
+const DeviceSchedule = React.lazy(() =>
+   import('./components/pages/Appointment/Schedule/Index').then((module) => ({
+      default: (props) => <module.default {...props} type={3} />
+   }))
+);
 // tohooromj-> shinjilgee onshilgoo
 const EquipmentList = React.lazy(() => import('./components/pages/Laboratory/EquipmentList'));
 // hongololt

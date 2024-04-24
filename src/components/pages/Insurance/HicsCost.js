@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get, Patch, Post, numberToCurrency } from '../../common';
+import { numberToCurrency } from '../../common';
 import UTable from '../../UTable';
 import { Button, Card, Form, Input, InputNumber, Modal, Select, Table } from 'antd';
 import Support from './Support';
@@ -44,48 +44,48 @@ function HicsCost() {
    };
    //
    const getRange = async () => {
-      const conf = {
-         header: {},
-         params: {
-            startCode: 'A00',
-            endCode: 'A99'
-         }
-      };
-      const response = await Get('reference/diagnose/between/code', token, conf);
-      console.log(response);
+      // const conf = {
+      //    header: {},
+      //    params: {
+      //       startCode: 'A00',
+      //       endCode: 'A99'
+      //    }
+      // };
+      // const response = await Get('reference/diagnose/between/code', token, conf);
+      // console.log(response);
    };
    //
    const getDrgType = async () => {
-      const response = await DefualtGet('insurance/drg-type', token, conf);
-      setDrgType(response.data);
+      // const response = await DefualtGet('insurance/drg-type', token, conf);
+      // setDrgType(response.data);
    };
    const getDrgCode = async () => {
-      const response = await DefualtGet('insurance/drg-code', token, conf);
-      setDrgCode(response.data);
+      // const response = await DefualtGet('insurance/drg-code', token, conf);
+      // setDrgCode(response.data);
    };
    const getInsuranceHicsServiceGroup = async () => {
-      const response = await DefualtGet('insurance/hics-service-group', token, conf);
-      setIhsg(response.data);
+      // const response = await DefualtGet('insurance/hics-service-group', token, conf);
+      // setIhsg(response.data);
    };
    const getICD9 = async () => {
-      const conff = {
-         headers: {},
-         params: {
-            type: 1
-         }
-      };
-      const response = await Get('reference/diagnose', token, conff);
-      setIcd9(response.data);
+      // const conff = {
+      //    headers: {},
+      //    params: {
+      //       type: 1
+      //    }
+      // };
+      // const response = await Get('reference/diagnose', token, conff);
+      // setIcd9(response.data);
    };
    const getICD10 = async () => {
-      const conff = {
-         headers: {},
-         params: {
-            type: 0
-         }
-      };
-      const response = await Get('reference/diagnose', token, conff);
-      setIcd10(response.data);
+      // const conff = {
+      //    headers: {},
+      //    params: {
+      //       type: 0
+      //    }
+      // };
+      // const response = await Get('reference/diagnose', token, conff);
+      // setIcd10(response.data);
    };
    const columns = [
       {
@@ -165,19 +165,19 @@ function HicsCost() {
       }
    ];
    const getHicsCost = async (page, pageSize) => {
-      setHicsLoading(true);
-      const conf = {
-         headers: {},
-         params: {
-            page: page,
-            limit: pageSize,
-            ...query
-         }
-      };
-      const response = await Get('hics-cost', token, conf);
-      setHicsCosts(response.data);
-      setMeta(response.meta);
-      setHicsLoading(false);
+      // setHicsLoading(true);
+      // const conf = {
+      //    headers: {},
+      //    params: {
+      //       page: page,
+      //       limit: pageSize,
+      //       ...query
+      //    }
+      // };
+      // const response = await Get('hics-cost', token, conf);
+      // setHicsCosts(response.data);
+      // setMeta(response.meta);
+      // setHicsLoading(false);
    };
    //
    const findResult = (codes) => {
@@ -196,43 +196,43 @@ function HicsCost() {
       form.setFieldValue('icd10Codes', newData);
    };
    const onFinish = async (values) => {
-      setIsLoading(true);
-      if (editMode) {
-         console.log(editMode);
-         const conf = {
-            headers: {},
-            params: {}
-         };
-         const response = await Patch('hics-cost/' + selectedRowId, token, conf, values);
-         console.log(response);
-      } else {
-         const conf = {
-            headers: {},
-            params: {}
-         };
-         const response = await Post('hics-cost', token, conf, values);
-         if (response === 201) {
-            setIsOpenModal(false);
-            form.resetFields();
-         }
-      }
-      setIsLoading(false);
+      // setIsLoading(true);
+      // if (editMode) {
+      //    console.log(editMode);
+      //    const conf = {
+      //       headers: {},
+      //       params: {}
+      //    };
+      //    const response = await Patch('hics-cost/' + selectedRowId, token, conf, values);
+      //    console.log(response);
+      // } else {
+      //    const conf = {
+      //       headers: {},
+      //       params: {}
+      //    };
+      //    const response = await Post('hics-cost', token, conf, values);
+      //    if (response === 201) {
+      //       setIsOpenModal(false);
+      //       form.resetFields();
+      //    }
+      // }
+      // setIsLoading(false);
    };
    const filterGroupHicsCosts = async (groupId) => {
-      setHicsLoading(true);
-      const conf = {
-         headers: {},
-         params: {
-            page: 1,
-            limit: 10,
-            groupId: groupId
-         }
-      };
-      setQuery({ groupId: groupId });
-      const response = await Get('hics-cost', token, conf);
-      setHicsCosts(response.data);
-      setMeta(response.meta);
-      setHicsLoading(false);
+      // setHicsLoading(true);
+      // const conf = {
+      //    headers: {},
+      //    params: {
+      //       page: 1,
+      //       limit: 10,
+      //       groupId: groupId
+      //    }
+      // };
+      // setQuery({ groupId: groupId });
+      // const response = await Get('hics-cost', token, conf);
+      // setHicsCosts(response.data);
+      // setMeta(response.meta);
+      // setHicsLoading(false);
    };
    //
    useEffect(() => {

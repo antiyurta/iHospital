@@ -98,6 +98,7 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
    };
 
    const add = (row) => {
+      console.log('row', row);
       const isIncludePatientDiagnose = patientDiagnosis?.some((diagnose) => diagnose.diagnose.id === row.id) || false;
       const isIncludeSelectedDiagnose =
          selectedDiagnoseForm.getFieldValue('diagnosis')?.some((diagnose) => diagnose.id === row.id) || false;

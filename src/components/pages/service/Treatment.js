@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
-import { DefualtGet, Get } from '../../common';
 import UTable from '../../UTable';
 
 function Treatment() {
@@ -17,18 +16,18 @@ function Treatment() {
    };
 
    const getTreatmentTypeData = async () => {
-      const response = await Get('reference-care-type', token, config);
+      // const response = await Get('reference-care-type', token, config);
       setTreatmentTypeData(response.data);
    };
    const getInsuranceService = async () => {
-      const conf = {
-         headers: {},
-         params: {
-            groupIds: '203,206,207,208'
-         }
-      };
-      const response = await DefualtGet('insurance/hics-service', token, conf);
-      setHicsServices(response.data);
+      // const conf = {
+      //    headers: {},
+      //    params: {
+      //       groupIds: '203,206,207,208'
+      //    }
+      // };
+      // const response = await DefualtGet('insurance/hics-service', token, conf);
+      // setHicsServices(response.data);
    };
    useEffect(() => {
       getTreatmentTypeData();

@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SnippetsOutlined } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
-import { useState } from 'react';
-import { openNofi } from '../../common';
-
+import { Button, Modal, Input, Table } from 'antd';
+//comp
 import Customized from '../BeforeAmbulatory/Customized/Index';
-import { NewColumn, NewTable } from '../../Table/Table';
-import OrganizationDocumentRoleServices from '../../../services/organization/documentRole';
-import { NewInput } from '../../Input/Input';
+//common
+import { openNofi } from '@Comman/common';
+//api
+import DocumentRoleApi from '@ApiServices/organization/documentRole';
 
 function DocumentShow({ props }) {
    const [documents, setDocuments] = useState([]);
@@ -17,7 +16,7 @@ function DocumentShow({ props }) {
    const [documentSearchValue, setDocumentSearchValue] = useState('');
    const getDocuments = async () => {
       setIsLoadingGetDocuments(true);
-      await OrganizationDocumentRoleServices.getByPageFilterShow({
+      await DocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: props.appIds,
             structureId: props.departmentId,
@@ -72,7 +71,7 @@ function DocumentShow({ props }) {
                <div className="flex flex-col gap-3 px-3 border-r-[2px] w-[300px]">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
-                        <NewInput
+                        <Input
                            style={{
                               backgroundColor: 'white'
                            }}
@@ -85,29 +84,31 @@ function DocumentShow({ props }) {
                               marginTop: 12
                            }}
                         >
-                           <NewTable
-                              prop={{
-                                 rowKey: 'value',
-                                 bordered: true,
-                                 dataSource: filteredDocument,
-                                 onRow: (record, _rowIndex) => {
-                                    return {
-                                       onClick: () => {
-                                          setDocumentId(record.value);
-                                       }
-                                    };
+                           <Table
+                              rowKey="value"
+                              bordered
+                              columns={[
+                                 {
+                                    title: 'ДТ',
+                                    width: 40,
+                                    dataIndex: 'value'
+                                 },
+                                 {
+                                    title: 'Нэр',
+                                    width: 40,
+                                    dataIndex: 'label'
                                  }
+                              ]}
+                              dataSource={filteredDocument}
+                              onRow={(record) => {
+                                 return {
+                                    onClick: () => {
+                                       setDocumentId(record.value);
+                                    }
+                                 };
                               }}
-                              meta={{
-                                 page: 1,
-                                 limit: filteredDocument.length
-                              }}
-                              isLoading={false}
-                              isPagination={false}
-                           >
-                              <NewColumn width={'40'} dataIndex={'value'} title="ДТ" />
-                              <NewColumn width={'40'} dataIndex={'label'} title="Нэр" />
-                           </NewTable>
+                              pagination={false}
+                           />
                         </div>
                      </div>
                   </div>
