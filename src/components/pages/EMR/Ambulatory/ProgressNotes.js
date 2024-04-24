@@ -15,6 +15,7 @@ import EmrContext from '@Features/EmrContext';
 //redux
 import { selectCurrentEmrData } from '@Features/emrReducer';
 //api
+import DocumentApi from '@ApiServices/organization/document';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //document
 import * as InspectionDocumentIndex from './Document/Index';
@@ -52,11 +53,34 @@ export default function ProgressNotes() {
             setSpinner(false);
          });
    };
+   const getDocumentData = async (id) => {
+      await DocumentApi.getById(id).then(
+         ({
+            data: {
+               response: { response }
+            }
+         }) => {
+            setInspectionNote({
+               hospitalId: response.hospitalId,
+               pain: JSON.stringify({
+                  'Үндсэн зовиур': response.data?.q998
+               }),
+               inspection: JSON.stringify({
+                  'Одоогийн өвчний түүх': response.data?.q999
+               })
+            });
+         }
+      );
+   };
    const getAppointmentById = async (id) => {
       setSpinnerInfo(true);
       await AppointmentApi.getById(id)
          .then(({ data: { response } }) => {
-            setInspectionNote(response.inspectionNote);
+            if (response.urgentInspectionNoteId) {
+               getDocumentData(response.urgentInspectionNoteId);
+            } else {
+               setInspectionNote(response.inspectionNote);
+            }
             setDiagnosis(response.patientDiagnosis);
             setServices([].concat(...response.serviceRequests?.map((request) => request.services)));
             setInfo({

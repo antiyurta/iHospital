@@ -4,7 +4,6 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
-import { DefualtGet, Get, Post } from '../../../../common';
 import FullScreenLoader from '../../../../FullScreenLoader';
 import MiddleTable from './MiddleTable';
 const { Option } = Select;
@@ -24,23 +23,23 @@ function Orders() {
    const [fDepartments, setFDepartments] = useState([]);
    const [filterOrderStatus, setFilterOrderStatus] = useState(Number);
    const getFDepartments = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('finance/department', token, conf);
-      setFDepartments(response.data);
+      // const conf = {
+      //    headers: {},
+      //    params: {}
+      // };
+      // const response = await Get('finance/department', token, conf);
+      // setFDepartments(response.data);
    };
    const filterOrder = async (id) => {
-      setCalcedPlanLoading(true);
-      setFilterOrderStatus(id);
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('service/medicine-request/calc/' + id, token, conf);
-      setCalcedPlan(response);
-      setCalcedPlanLoading(false);
+      // setCalcedPlanLoading(true);
+      // setFilterOrderStatus(id);
+      // const conf = {
+      //    headers: {},
+      //    params: {}
+      // };
+      // const response = await Get('service/medicine-request/calc/' + id, token, conf);
+      // setCalcedPlan(response);
+      // setCalcedPlanLoading(false);
    };
    const rowSelection = {
       selectedRowKeys: selectedRowKeys,
@@ -73,36 +72,36 @@ function Orders() {
       }
    };
    const saveUsedMaterials = async (values) => {
-      setLoading(true);
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      values['mt_type'] = 70;
-      values['medicineRequestIds'] = selectedRowKeys;
-      console.log(values);
-      const response = await Post(`finance/create-expenses`, token, conf, values);
-      if (response === 201) {
-         setIsModalOpen(false);
-      }
-      filterOrder(filterOrderStatus);
-      setLoading(false);
+      // setLoading(true);
+      // const conf = {
+      //    headers: {},
+      //    params: {}
+      // };
+      // values['mt_type'] = 70;
+      // values['medicineRequestIds'] = selectedRowKeys;
+      // console.log(values);
+      // const response = await Post(`finance/create-expenses`, token, conf, values);
+      // if (response === 201) {
+      //    setIsModalOpen(false);
+      // }
+      // filterOrder(filterOrderStatus);
+      // setLoading(false);
    };
    const test = (e) => {
       getMaterials(e);
    };
-   const getMaterials = async (id) => {
-      setSpinner(true);
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await DefualtGet(`finance/department-material/${id}`, token, conf);
-      setMaterialList(response);
-      setSpinner(false);
-   };
+   // const getMaterials = async (id) => {
+   //    setSpinner(true);
+   //    const conf = {
+   //       headers: {},
+   //       params: {}
+   //    };
+   //    const response = await DefualtGet(`finance/department-material/${id}`, token, conf);
+   //    setMaterialList(response);
+   //    setSpinner(false);
+   // };
    useEffect(() => {
-      getFDepartments();
+      // getFDepartments();
    }, []);
    return (
       <>

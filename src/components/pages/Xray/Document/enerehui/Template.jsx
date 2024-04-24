@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { capitalizeFirstLetter } from '@Comman/common';
 const Template = (props) => {
    const { patient, createdAt, children, serviceName } = props;
    return (
@@ -19,7 +18,7 @@ const Template = (props) => {
                <tr>
                   <td>
                      <div className="exo-page">
-                        <p className="text-center text-[20px] font-bold ">{capitalizeFirstLetter(serviceName)}</p>
+                        <p className="text-center text-base font-bold ">{serviceName.toUpperCase()}</p>
                         {children}
                      </div>
                   </td>

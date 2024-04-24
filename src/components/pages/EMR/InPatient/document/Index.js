@@ -17,7 +17,7 @@ import Rebuild from './Rebuild/Index';
 import { Button, Checkbox, Collapse, Form, Input } from 'antd';
 import Painstory from './painStory/Index';
 import React, { useEffect } from 'react';
-import { DefaultPatch, Get } from '../../../../common';
+import { Get } from '../../../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../../../features/authReducer';
 import { useState } from 'react';
@@ -48,8 +48,8 @@ function Index({ handleClick, structureId, story, id, doctorInspection }) {
          params: {}
       };
       console.log(data);
-      const response = await DefaultPatch('inpatient/story/' + id, token, conf, data);
-      console.log(response);
+      // const response = await DefaultPatch('inpatient/story/' + id, token, conf, data);
+      // console.log(response);
    };
    const onFinishFailed = (error) => {
       console.log(error);

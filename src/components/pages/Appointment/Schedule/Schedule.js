@@ -1,14 +1,12 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import TreatmentSchedule from '../Nurse/TreatmentSchedule';
-import DoctorSchedule from '../Doctor/DoctorSchedule';
-import DeviceSchedule from '../Device/DeviceSchedule';
+import Index from './Index';
 
 function Schedule() {
    const tabs = [
-      { label: 'Эмчийн хуваарь', key: 1, children: <DoctorSchedule /> },
-      { label: 'Эмчилгээний хуваарь', key: 2, children: <TreatmentSchedule /> },
-      { label: 'Оношилгооны хуваарь', key: 3, children: <DeviceSchedule /> }
+      { label: 'Эмчийн хуваарь', key: 1, children: <Index type={1} /> },
+      { label: 'Эмчилгээний хуваарь', key: 2, children: <Index type={2} /> },
+      { label: 'Оношилгооны хуваарь', key: 3, children: <Index type={3} /> }
    ];
    return (
       <div className="p-3 w-full bg-[#f5f6f7] overflow-auto">
