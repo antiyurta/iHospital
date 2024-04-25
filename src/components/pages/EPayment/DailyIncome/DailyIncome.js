@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { EyeOutlined, RollbackOutlined, DownloadOutlined } from '@ant-design/icons';
-import { Button, Card, DatePicker, Modal } from 'antd';
-import { numberToCurrency, openNofi } from '../../../common';
-
-import mnMN from 'antd/es/calendar/locale/mn_MN';
-
-import EbarimtPrint from '../EbarimtPrint';
-import { NewColumn, NewSummaryCell, NewSummaryRow, NewTable } from '../../../Table/Table';
-import PrintIndex from './PrintIndex';
-
-import PaymentServices from '../../../../services/payment/payment';
+import { Button, Card, Modal, Space, Table } from 'antd';
 import dayjs from 'dayjs';
+//comp
+import PrintIndex from './PrintIndex';
+import EbarimtPrint from '../EbarimtPrint';
+import ListFilter from '@Pages/BeforeAmbulatory/Lists/Index/listFilter';
+//common
+import { ListPatientInfo } from '@Comman/ListInjection';
+import { numberToCurrency, openNofi } from '@Comman/common';
+//api
+import PaymentApi from '@ApiServices/payment/payment';
 
-const { RangePicker } = DatePicker;
 function DailyIncome() {
-   const today = new Date();
    const [incomes, setIncomes] = useState([]);
-   const [meta, setMeta] = useState({});
    const [spinner, setSpinner] = useState(false);
    const [ebarimtModal, setEbarimtModal] = useState(false);
    const [printOneDay, setPrintOneDay] = useState(false);
@@ -28,26 +25,20 @@ function DailyIncome() {
    const [paymentShape, setPaymentShape] = useState([]);
    const getDailyIncome = async (page, pageSize, start, end) => {
       setSpinner(true);
-      start = dayjs(start).set('hour', 0).set('minute', 0).set('second', 0);
-      end = dayjs(end).set('hour', 23).set('minute', 59).set('second', 59);
-      setStart(start);
-      setEnd(end);
-      await PaymentServices.getPayment({
+      await PaymentApi.getPayment({
          params: {
             page: page,
             limit: pageSize,
             startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
             endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
          }
-      }).then((response) => {
-         const data = response.data.response.data;
-         setIncomes(data);
-         setMeta(response.data.response.meta);
+      }).then(({ data: { response } }) => {
+         setIncomes(response.data);
          setSpinner(false);
       });
    };
    const getDiscount = async () => {
-      await PaymentServices.getDiscount().then((response) => {
+      await PaymentApi.getDiscount().then((response) => {
          setDiscount(response.data.response.data);
       });
    };
@@ -59,13 +50,13 @@ function DailyIncome() {
    };
    const viewModal = async (id, isBack) => {
       setIsBackPayment(isBack);
-      await PaymentServices.getPaymentById(id).then((response) => {
+      await PaymentApi.getPaymentById(id).then((response) => {
          setEbarimtData(response.data.response);
          setEbarimtModal(true);
       });
    };
    const reload = async (id) => {
-      await PaymentServices.patchPayment(id, { id: id }).then((response) => {
+      await PaymentApi.patchPayment(id, { id: id }).then((response) => {
          if (response.status === 200) {
             openNofi('success', 'Амжиллтай', 'Дахин татах үйлдэл амжилттай');
             getDailyIncome(1, 10, start, end);
@@ -73,245 +64,206 @@ function DailyIncome() {
       });
    };
    const getPaymentType = async () => {
-      await PaymentServices.getPaymentType().then((response) => {
+      await PaymentApi.getPaymentType().then((response) => {
          setPaymentShape(response.data.response);
       });
    };
    useEffect(() => {
-      getDailyIncome(1, 10, today, today);
       getPaymentType();
       getDiscount();
    }, []);
    return (
       <div className="w-full h-screen bg-[#f5f6f7] p-3">
-         <Card
-            bordered={false}
-            className="header-solid rounded-md"
-            title="Өдрийн орлогын тайлан"
-            extra={
-               <Button type="primary" onClick={() => setPrintOneDay(true)}>
-                  Өдрийн орлого
-               </Button>
-            }
-         >
-            <div className="flex flex-col gap-3">
-               <div className="w-1/3 md:w-1/2">
-                  <RangePicker
-                     onChange={(e) => {
-                        if (e != null) {
-                           getDailyIncome(1, 10, e[0], e[1]);
-                        }
-                     }}
-                     locale={mnMN}
-                  />
-               </div>
-               <div className="w-full">
-                  <div className="flex float-left">
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Хувь хүн</span>
-                     </div>
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Бизнес эрхлэгч</span>
-                     </div>
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Буцаалт хийгдсэн</span>
-                     </div>
+         <div className="flex flex-col gap-3">
+            <div className="w-full">
+               <div className="flex float-left">
+                  <div
+                     className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                     role="alert"
+                  >
+                     <span className="font-medium mx-1">Хувь хүн</span>
+                  </div>
+                  <div
+                     className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                     role="alert"
+                  >
+                     <span className="font-medium mx-1">Бизнес эрхлэгч</span>
+                  </div>
+                  <div
+                     className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
+                     role="alert"
+                  >
+                     <span className="font-medium mx-1">Буцаалт хийгдсэн</span>
                   </div>
                </div>
-               <NewTable
-                  prop={{
-                     rowKey: 'id',
-                     bordered: true,
-                     dataSource: incomes,
-                     rowClassName: (record) => {
-                        if (record.isReturn) {
-                           return 'bg-red-200 hover:cursor-pointer';
-                        } else {
-                           return 'hover: cursor-pointer';
-                        }
-                     },
-                     summary: (pageData) => {
-                        return (
-                           <NewSummaryRow>
-                              <NewSummaryCell index={0} colSpan={4}>
-                                 <p
-                                    style={{
-                                       fontWeight: 'bold',
-                                       textAlign: 'end'
-                                    }}
-                                 >
-                                    Нийт
-                                 </p>
-                              </NewSummaryCell>
-                              <NewSummaryCell index={1}>
-                                 <p
-                                    style={{
-                                       fontWeight: 'bold',
-                                       textAlign: 'center'
-                                    }}
-                                 >
-                                    {numberToCurrency(
-                                       pageData.reduce((total, current) => {
-                                          if (current.status != 'pre') {
-                                             return total + current.plusAmount;
-                                          }
-                                          return total + 0;
-                                       }, 0)
-                                    )}
-                                 </p>
-                              </NewSummaryCell>
-                              <NewSummaryCell index={2} />
-                              <NewSummaryCell index={3} />
-                              <NewSummaryCell index={4}>
-                                 <p
-                                    style={{
-                                       fontWeight: 'bold',
-                                       textAlign: 'center'
-                                    }}
-                                 >
-                                    {numberToCurrency(
-                                       pageData.reduce((total, current) => {
-                                          return total + current.paidAmount;
-                                       }, 0)
-                                    )}
-                                 </p>
-                              </NewSummaryCell>
-                              <NewSummaryCell index={5} colSpan={5} />
-                           </NewSummaryRow>
-                        );
+            </div>
+            <ListFilter meta={false} appointmentsLength={incomes?.length || 0} getList={getDailyIncome} />
+            <Card
+               bordered={false}
+               className="header-solid rounded-md"
+               bodyStyle={{
+                  padding: 8
+               }}
+            >
+               <Table
+                  rowKey="id"
+                  bordered
+                  loading={spinner}
+                  rowClassName={(record) => {
+                     if (record.isReturn) {
+                        return 'bg-red-200 hover:cursor-pointer';
+                     } else {
+                        return 'hover: cursor-pointer';
                      }
                   }}
-                  meta={meta}
-                  onChange={(page, pageSize) => getDailyIncome(page, pageSize, start, end)}
-                  isLoading={spinner}
-                  isPagination={true}
-               >
-                  <NewColumn
-                     dataIndex={'createdAt'}
-                     title="ТТ Огноо"
-                     width={120}
-                     render={(text, row) => {
-                        if (row?.customerNo) {
-                           return (
-                              <div className="bg-[#5cb85c] text-white">{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
-                           );
-                        } else {
-                           return (
-                              <div className="bg-[#f0ad4e] text-white">{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
-                           );
+                  columns={[
+                     {
+                        title: '№',
+                        width: 50,
+                        render: (_, _row, index) => index + 1
+                     },
+                     {
+                        title: 'ТТ Огноо',
+                        dataIndex: 'createdAt',
+                        width: 120,
+                        render: (text, row) => {
+                           if (row?.customerNo) {
+                              return (
+                                 <div className="bg-[#5cb85c] text-white">{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
+                              );
+                           } else {
+                              return (
+                                 <div className="bg-[#f0ad4e] text-white">{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
+                              );
+                           }
                         }
-                     }}
-                  />
-                  <NewColumn dataIndex={['patient', 'lastName']} title="Овог" />
-                  <NewColumn dataIndex={['patient', 'firstName']} title="Нэр" />
-                  <NewColumn
-                     dataIndex={'plusAmount'}
-                     title="Нийт төлбөр"
-                     render={(text, row) => {
-                        if (row.status != 'pre') {
-                           return numberToCurrency(text);
+                     },
+                     {
+                        title: 'Үйлчлүүлэгч',
+                        dataIndex: 'patient',
+                        render: (patient) => <ListPatientInfo patientData={patient} />
+                     },
+                     {
+                        title: 'Нийт төлбөр',
+                        dataIndex: 'plusAmount',
+                        render: (text, row) => {
+                           if (row.status != 'pre') {
+                              return numberToCurrency(text);
+                           }
                         }
-                     }}
-                  />
-                  <NewColumn
-                     width={40}
-                     dataIndex={'discountPercentId'}
-                     title="Хөнгөлөлтийн утга"
-                     render={(text) => {
-                        return checkDiscount(text);
-                     }}
-                  />
-                  <NewColumn
-                     width={40}
-                     title="Төлсөн урьдчилгаа"
-                     dataIndex={'preAmount'}
-                     render={(text) => {
-                        return numberToCurrency(text);
-                     }}
-                  />
-                  <NewColumn
-                     dataIndex={'paidAmount'}
-                     title="Төлсөн дүн"
-                     render={(text) => {
-                        return numberToCurrency(text);
-                     }}
-                  />
-                  <NewColumn
-                     width={40}
-                     title="Төлбөрийн хэлбэр"
-                     dataIndex={'paymentTypeId'}
-                     render={(text) => {
-                        return checkPaymentShape(text);
-                     }}
-                  />
-                  <NewColumn dataIndex={'createdEmployeeName'} title="Ажилтны нэр" />
-                  <NewColumn
-                     dataIndex={'id'}
-                     title="Харах"
-                     width={50}
-                     render={(text) => {
-                        return (
-                           <Button
-                              type="link"
-                              onClick={() => viewModal(text, false)}
-                              title="Харах"
-                              style={{ paddingRight: 5 }}
-                           >
-                              <EyeOutlined />
-                           </Button>
-                        );
-                     }}
-                  />
-                  <NewColumn
-                     dataIndex={'id'}
-                     title="Дахин татах"
-                     width={50}
-                     render={(text) => {
-                        return (
-                           <Button type="link" onClick={() => reload(text)} title="ТАТАХ" style={{ paddingRight: 5 }}>
-                              <DownloadOutlined />
-                           </Button>
-                        );
-                     }}
-                  />
-                  <NewColumn
-                     dataIndex={'id'}
-                     title="Буцаалт"
-                     width={50}
-                     render={(text, row) => {
-                        return (
-                           <Button
-                              type="link"
-                              onClick={() => {
-                                 if (row.isEbarimtSend) {
-                                    Modal.error({
-                                       okText: 'За',
-                                       content: 'Илгээгдсэн баримт буцаах боломжгүй'
-                                    });
-                                 } else {
-                                    viewModal(text, true);
-                                 }
-                              }}
-                              title="Харах"
-                              style={{ paddingRight: 5, color: 'red' }}
-                           >
-                              <RollbackOutlined />
-                           </Button>
-                        );
-                     }}
-                  />
-               </NewTable>
-            </div>
-         </Card>
+                     },
+                     {
+                        width: 150,
+                        title: 'Хөнгөлөлтийн утга',
+                        dataIndex: 'discountPercentId',
+                        render: (text) => <p className="m-2 text-black">{checkDiscount(text)}</p>
+                     },
+                     {
+                        title: 'Төлсөн урьдчилгаа',
+                        width: 150,
+                        dataIndex: 'preAmount',
+                        render: (text) => numberToCurrency(text)
+                     },
+                     {
+                        title: 'Төлсөн дүн',
+                        dataIndex: 'paidAmount',
+                        render: (text) => numberToCurrency(text)
+                     },
+                     {
+                        title: 'Төлбөрийн хэлбэр',
+                        dataIndex: 'paymentTypeId',
+                        render: (text) => checkPaymentShape(text)
+                     },
+                     {
+                        title: 'Ажилтны нэр',
+                        dataIndex: 'createdEmployeeName'
+                     },
+                     {
+                        title: 'Үйлдэл',
+                        dataIndex: 'id',
+                        render: (text, row) => (
+                           <Space>
+                              <Button
+                                 type="primary"
+                                 onClick={() => viewModal(text, false)}
+                                 title="Харах"
+                                 icon={<EyeOutlined />}
+                              />
+                              <Button
+                                 type="dashed"
+                                 onClick={() => reload(text)}
+                                 title="E-barimt ТАТАХ"
+                                 icon={<DownloadOutlined />}
+                              />
+                              <Button
+                                 danger
+                                 disabled={row.isEbarimtSend}
+                                 onClick={() => {
+                                    if (row.isEbarimtSend) {
+                                       Modal.error({
+                                          okText: 'За',
+                                          content: 'Илгээгдсэн баримт буцаах боломжгүй'
+                                       });
+                                    } else {
+                                       viewModal(text, true);
+                                    }
+                                 }}
+                                 title={row.isEbarimtSend ? 'Илгээгдсэн баримт буцаах боломжгүй' : 'Буцаалт'}
+                                 icon={<RollbackOutlined />}
+                              />
+                           </Space>
+                        )
+                     }
+                  ]}
+                  scroll={{
+                     y: 650
+                  }}
+                  dataSource={incomes}
+                  pagination={false}
+                  summary={(pageData) => (
+                     <Table.Summary fixed>
+                        <Table.Summary.Row>
+                           <Table.Summary.Cell index={0} colSpan={2}>
+                              <p className="font-bold text-center">{pageData?.length}</p>
+                           </Table.Summary.Cell>
+                           <Table.Summary.Cell index={1}>
+                              <p className="font-bold text-end">Нийт</p>
+                           </Table.Summary.Cell>
+                           <Table.Summary.Cell index={2}>
+                              <p className="font-bold text-center">
+                                 {numberToCurrency(
+                                    pageData.reduce((total, current) => {
+                                       if (current.status != 'pre') {
+                                          return total + current.plusAmount;
+                                       }
+                                       return total + 0;
+                                    }, 0)
+                                 )}
+                              </p>
+                           </Table.Summary.Cell>
+                           <Table.Summary.Cell index={3} />
+                           <Table.Summary.Cell index={4} />
+                           <Table.Summary.Cell index={5}>
+                              <p
+                                 style={{
+                                    fontWeight: 'bold',
+                                    textAlign: 'center'
+                                 }}
+                              >
+                                 {numberToCurrency(
+                                    pageData.reduce((total, current) => {
+                                       return total + current.paidAmount;
+                                    }, 0)
+                                 )}
+                              </p>
+                           </Table.Summary.Cell>
+                           <Table.Summary.Cell index={6} colSpan={5} />
+                        </Table.Summary.Row>
+                     </Table.Summary>
+                  )}
+               />
+            </Card>
+         </div>
          <Modal open={ebarimtModal} onCancel={() => setEbarimtModal(false)} footer={null} width="360px">
             <EbarimtPrint props={ebarimtData} isBackPayment={isBackPayment} />
          </Modal>

@@ -1,31 +1,28 @@
-import { Button, Form, Input, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, Modal, Table } from 'antd';
 import { CloseOutlined, PlusCircleFilled, RedoOutlined } from '@ant-design/icons';
 import OrderForm from './OrderTable/OrderForm';
-import { NewColumn, NewTable } from '../../Table/Table';
-// servicesuud
-import RecentRecipeService from '../../../services/service/prescription';
-import DiagnoseService from '../../../services/reference/diagnose';
+//api
+import DiagnoseApi from '@ApiServices/reference/diagnose';
+import RecentRecipeApi from '@ApiServices/service/prescription';
 
 const { TextArea, Search } = Input;
 
 function RecentRecipe() {
    const [form] = Form.useForm();
    const [isOpenModal, setIsOpenModal] = useState(false);
-   const [recentRecipe, setRecentRecipe] = useState([]);
-   const [meta, setMeta] = useState({});
    const [diagnoses, setDiagnoses] = useState([]);
    const [diagnoseMeta, setDiagnoseMeta] = useState({});
    const [searchValue, setSearchValue] = useState('');
    // functions
    const getRecentRepice = async () => {
-      await RecentRecipeService.get().then((response) => {
+      await RecentRecipeApi.get().then((response) => {
          console.log(response);
       });
    };
    const getDiagnoses = async (page, pageSize, value) => {
       setSearchValue(value);
-      await DiagnoseService.get({
+      await DiagnoseApi.get({
          params: {
             filter: value,
             page: page,
@@ -59,23 +56,13 @@ function RecentRecipe() {
                      }
                   />
                </div>
-               <NewTable
-                  prop={{
-                     rowKey: 'id',
-                     bordered: true,
-                     dataSource: services
-                  }}
-                  meta={{
-                     page: 1,
-                     limit: services.length
-                  }}
-                  isLoading={false}
-                  isPagination={false}
-               >
-                  <NewColumn
-                     title="Нэр"
-                     render={(value, row, index) => {
-                        return (
+               <Table
+                  rowKey="id"
+                  bordered
+                  columns={[
+                     {
+                        title: 'Нэр',
+                        render: (_, _row, index) => (
                            <OrderForm
                               rules={[
                                  {
@@ -89,14 +76,12 @@ function RecentRecipe() {
                            >
                               <Input />
                            </OrderForm>
-                        );
-                     }}
-                  />
-                  <NewColumn
-                     title="Үйлдэл"
-                     width={40}
-                     render={(value, row, index) => {
-                        return (
+                        )
+                     },
+                     {
+                        title: 'Үйлдэл',
+                        width: 40,
+                        render: (_, _row, index) => (
                            <Button
                               onClick={() => remove(index)}
                               icon={
@@ -107,10 +92,12 @@ function RecentRecipe() {
                                  />
                               }
                            />
-                        );
-                     }}
-                  />
-               </NewTable>
+                        )
+                     }
+                  ]}
+                  dataSource={services}
+                  pagination={false}
+               />
             </div>
          </>
       );
@@ -119,7 +106,6 @@ function RecentRecipe() {
    useEffect(() => {
       if (isOpenModal) {
          getRecentRepice();
-         // getDiagnoses();
       }
    }, [isOpenModal]);
    return (
@@ -155,20 +141,22 @@ function RecentRecipe() {
                               onSearch={(e) => getDiagnoses(1, 10, e)}
                            />
                         </div>
-                        <NewTable
-                           prop={{
-                              rowKey: 'di',
-                              bordered: true,
-                              dataSource: diagnoses
-                           }}
-                           meta={diagnoseMeta}
-                           isLoading={false}
-                           isPagination={true}
+                        <Table
+                           rowKey="id"
+                           bordered
+                           columns={[
+                              {
+                                 title: 'Код',
+                                 dataIndex: 'code'
+                              },
+                              {
+                                 title: 'Монгол нэр',
+                                 dataIndex: 'nameMn'
+                              }
+                           ]}
+                           dataSource={diagnoses}
                            onChange={(page, pageSize) => getDiagnoses(page, pageSize, searchValue)}
-                        >
-                           <NewColumn dataIndex={'code'} title="Код" />
-                           <NewColumn dataIndex={'nameMn'} title="Монгол нэр" />
-                        </NewTable>
+                        />
                      </div>
                   </div>
                   <Form.Item
