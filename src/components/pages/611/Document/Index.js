@@ -102,6 +102,7 @@ import CT1BaseOfClinicalDiagnose from './CT_1_BaseOfClinicalDiagnose';
 import CT1Inspection from './CT_1_Inspection';
 import CT1End from './CT_1_End';
 import CT32A from './CT32A';
+import CT1Sergeeh from './CT_1_Sergeeh';
 // EIM start
 import EIM4_2 from './../EIM/EIM4_2';
 import EIM5_2 from './../EIM/EIM5_2';
@@ -303,6 +304,8 @@ export function ReturnById({ type, id, appointmentId, data }) {
       return <NotFound />; // yaraltai duudlaga
    } else if (id === 111) {
       return <CT32A type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 113) {
+      return <CT1Sergeeh type={type} data={data} appointmentId={appointmentId} />;
    }
 }
 
