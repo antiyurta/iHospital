@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { Alert, Button, Card, Descriptions, Form, Modal, Radio, Select, Switch, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, Card, Descriptions, Form, Modal, Radio, Select, Switch } from 'antd';
 import { ClockCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-//comp
-import List from './List';
-import Finger from '../../../features/finger';
-//common
-import { formatNameForDoc, openNofi } from '@Comman/common';
-//redux
-import { selectCurrentEmrData } from '@Features/emrReducer';
-import { selectCurrentInsurance } from '@Features/authReducer';
-//Api
-import ScheduleApi from '@ApiServices/schedule';
-import ServiceApi from '@ApiServices/serviceRequest';
-import EmployeeApi from '@ApiServices/organization/employee';
-import StructureApi from '@ApiServices/organization/structure';
-import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
-import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
+import { selectCurrentInsurance } from '../../../features/authReducer';
 
-function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
-   const today = new Date();
+// components
+import List from './List';
+import { formatNameForDoc, openNofi } from '../../common';
+import { NewColumn, NewTable } from '../../Table/Table';
+import Finger from '../../../features/finger';
+
+//service
+import OrganizationEmployeeService from '../../../services/organization/employee';
+import OrganizationStructureService from '../../../services/organization/structure';
+import ScheduleService from '../../../services/schedule';
+import HealtInsuranceService from '../../../services/healt-insurance/healtInsurance';
+import AppointmentService from '../../../services/appointment/api-appointment-service';
+import serviceRequest from '../../../services/serviceRequest';
+import { selectCurrentEmrData } from '../../../features/emrReducer';
+
+function Index(props) {
+   const { selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud } = props;
+   const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const isInsurance = useSelector(selectCurrentInsurance);
-   const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
+   const today = new Date();
    const [selectedDate, setSelectedDate] = useState('');
    const [filterForm] = Form.useForm();
    const [structures, setStructures] = useState([]);
@@ -55,7 +57,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    // tasagt hamaaraltai emch awchirah
    const getDoctor = async (value) => {
       setSelectedDep(structures.find((e) => e['id'] === value));
-      await EmployeeApi.getEmployee({
+      await OrganizationEmployeeService.getEmployee({
          params: {
             depId: value
          }
@@ -65,7 +67,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    };
    // buh tasag awcirah
    const getStructures = async () => {
-      await StructureApi.get({
+      await OrganizationStructureService.get({
          params: {
             type: 2
          }
@@ -80,7 +82,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    // filter engiin ued schedule awcirah
    const onFinish = async (values) => {
       const date = new Date();
-      await ScheduleApi.get({
+      await ScheduleService.get({
          params: {
             findManyDate: dayjs(date.setDate(new Date().getDate() - 1)).format('YYYY-MM-DD'),
             structureId: values.structureId,
@@ -94,7 +96,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    // irgen deer daatgal shalgah
    const checkPatientInsurance = async (values) => {
       setIsLoadingCheckPatientInsurance(true);
-      await InsuranceApi.postCitizenInfo({
+      await HealtInsuranceService.postCitizenInfo({
          regNo: selectedPatient.registerNumber,
          isChild: selectedPatient.isChild,
          // fingerPrint: values.fingerPrint
@@ -118,7 +120,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    const urgentRequest = async () => {
       if (reasonComming != null) {
          setIsConfirmLoading(true);
-         await AppointmentApi.postAppointment({
+         await AppointmentService.postAppointment({
             ...selectedInfo,
             doctorId: selectedDoctor.id,
             patientId: selectedPatient.id,
@@ -144,7 +146,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    // engin tsag zahialga
    const createAppointment = async ({ inspectionType }) => {
       setIsOpenModalInspectionType(false);
-      await AppointmentApi.postAppointment({
+      await AppointmentService.postAppointment({
          ...selectedInfo,
          inspectionType: inspectionType, // uzlegiin torol anhan dawtan
          isPayment: incomeEmrData.usageType === 'IN' ? true : null,
@@ -172,18 +174,20 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       setIsConfirmLoading(true);
       setGetIsSlot({ state: false, slotType: 0 });
       if (type === 2 || type === 3) {
-         await ServiceApi.patch(invoiceData.invoiceId, {
-            ...selectedInfo,
-            doctorId: selectedDoctor.id,
-            patientId: selectedPatient.id,
-            type: invoiceData.type
-         }).then((response) => {
-            if (response.status === 200) {
-               setAppointmentModal(false);
-               handleClick(true, invoiceData.invoiceId);
-               setGetIsSlot({ state: true, slotType: 0 });
-            }
-         });
+         await serviceRequest
+            .patch(invoiceData.invoiceId, {
+               ...selectedInfo,
+               doctorId: selectedDoctor.id,
+               patientId: selectedPatient.id,
+               type: invoiceData.type
+            })
+            .then((response) => {
+               if (response.status === 200) {
+                  setAppointmentModal(false);
+                  handleClick(true, invoiceData.invoiceId);
+                  setGetIsSlot({ state: true, slotType: 0 });
+               }
+            });
       } else {
          if (incomeEmrData.usageType === 'IN') {
             setIsOpenModalInspectionType(true);
@@ -447,37 +451,35 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
                {stateInsurance && (
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
-                        <Table
-                           rowKey="id"
-                           size="small"
-                           bordered
-                           scroll={{
-                              y: 300
+                        <NewTable
+                           prop={{
+                              size: 'small',
+                              rowKey: 'id',
+                              bordered: true,
+                              dataSource: notInsuranceInfo
                            }}
-                           loading={isLoadingCheckPatientInsurance}
-                           columns={[
-                              {
-                                 title: 'Он',
-                                 dataIndex: 'pyear'
-                              },
-                              {
-                                 title: 'Сар',
-                                 dataIndex: 'pmonth'
-                              },
-                              {
-                                 title: 'Төлсөн эсэх',
-                                 render: () => (
+                           meta={{
+                              page: 1,
+                              limit: notInsuranceInfo?.length
+                           }}
+                           isLoading={isLoadingCheckPatientInsurance}
+                           isPagination={false}
+                        >
+                           <NewColumn title="Он" dataIndex="pyear" />
+                           <NewColumn title="Сар" dataIndex="pmonth" />
+                           <NewColumn
+                              title="Төлсөн эсэх"
+                              render={() => {
+                                 return (
                                     <CloseCircleOutlined
                                        style={{
                                           color: 'red'
                                        }}
                                     />
-                                 )
-                              }
-                           ]}
-                           dataSource={notInsuranceInfo}
-                           pagination={false}
-                        />
+                                 );
+                              }}
+                           />
+                        </NewTable>
                         <div className="flow-root">
                            <div className="pt-3 float-right">
                               <Finger

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined, EyeOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Table } from 'antd';
-//common
-import { openNofi } from '@Comman/common';
+import { Button, Modal } from 'antd';
+import { openNofi } from '../../../common';
+import { NewInput } from '../../../Input/Input';
+import { NewColumn, NewTable } from '../../../Table/Table';
 // AM start
 import AM1B from './AM1B';
 import AM_1V from './AM_1V';
@@ -394,7 +395,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   }}
                >
                   <div>
-                     <Input
+                     <NewInput
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                         placeholder="Хайх"
@@ -433,44 +434,58 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
    } else if (type === 1) {
       return (
          <div className="grid grid-cols-2 gap-6">
-            <div className="flex flex-col gap-2">
-               <Input onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
-               <Table
-                  rowKey="value"
-                  bordered
-                  scroll={{
-                     y: 500
+            <div className="grid gap-6">
+               <NewInput onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
+               <NewTable
+                  prop={{
+                     rowKey: 'value',
+                     bordered: true,
+                     scroll: {
+                        y: 500
+                     },
+                     dataSource: filteredOptionsSelectDf
                   }}
-                  columns={[
-                     {
-                        title: '№',
-                        width: 50,
-                        render: (_, _row, index) => index + 1
-                     },
-                     {
-                        title: 'Баримт бичгийн нэр',
-                        dataIndex: 'docName',
-                        render: (text) => <p className="whitespace-normal text-start p-1 text-black">{text}</p>
-                     },
-                     {
-                        title: 'Тушаал шийдвэрийн дугаар',
-                        dataIndex: 'label',
-                        render: (text) => <p className="whitespace-normal text-start p-1 text-black">{text}</p>
-                     },
-                     {
-                        title: 'FORM ID',
-                        width: 80,
-                        dataIndex: 'formId'
-                     },
-                     {
-                        title: 'FORM TYPE',
-                        width: 80,
-                        dataIndex: 'formType'
-                     },
-                     {
-                        title: 'Үйлдэл',
-                        width: 50,
-                        render: (_, row) => (
+                  meta={{
+                     page: 1,
+                     limit: filteredOptionsSelectDf.length
+                  }}
+                  isLoading={false}
+                  isPagination={false}
+               >
+                  <NewColumn
+                     title="Баримт бичгийн нэр"
+                     dataIndex="docName"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="Тушаал шийдвэрийн дугаар"
+                     dataIndex="label"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="FORM ID"
+                     dataIndex="formId"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="FORM TYPE"
+                     dataIndex="formType"
+                     render={(text) => {
+                        console.log(text);
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title=""
+                     width={40}
+                     render={(_text, row) => {
+                        return (
                            <Button
                               onClick={() => add(row)}
                               icon={
@@ -481,55 +496,65 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                                  />
                               }
                            />
-                        )
-                     }
-                  ]}
-                  dataSource={filteredOptionsSelectDf}
-                  pagination={false}
-               />
+                        );
+                     }}
+                  />
+               </NewTable>
             </div>
-            <div className="flex flex-col gap-2">
-               <Table
-                  rowKey="value"
-                  bordered
-                  scroll={{
-                     y: 500
+            <div className="grid gap-6">
+               <NewTable
+                  prop={{
+                     rowKey: 'value',
+                     bordered: true,
+                     scroll: {
+                        y: 500
+                     },
+                     dataSource: selectedOptions
                   }}
-                  columns={[
-                     {
-                        title: 'Баримт бичгийн нэр',
-                        dataIndex: 'docName',
-                        render: (text) => <p className="whitespace-normal text-start p-1 text-black">{text}</p>
-                     },
-                     {
-                        title: 'Тушаал шийдвэрийн дугаар',
-                        dataIndex: 'label',
-                        render: (text) => <p className="whitespace-normal text-start p-1 text-black">{text}</p>
-                     },
-                     {
-                        title: 'FORM TYPE',
-                        width: 80,
-                        dataIndex: 'formType'
-                     },
-                     {
-                        title: 'qq',
-                        width: 40,
-                        dataIndex: 'formId',
-                        render: (_text, _row, index) => {
-                           return (
-                              <CloseOutlined
-                                 style={{
-                                    color: 'red'
-                                 }}
-                                 onClick={() => remove(index)}
-                              />
-                           );
-                        }
-                     }
-                  ]}
-                  dataSource={selectedOptions}
-                  pagination={false}
-               />
+                  meta={{
+                     page: 1,
+                     limit: selectedOptions.length
+                  }}
+                  isLoading={false}
+                  isPagination={false}
+               >
+                  <NewColumn
+                     title="Баримт бичгийн нэр"
+                     dataIndex="docName"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title="Тушаал шийдвэрийн дугаар"
+                     dataIndex="label"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title=" asd"
+                     dataIndex="formType"
+                     render={(text) => {
+                        return <p className="whitespace-normal text-start text-black">{text}</p>;
+                     }}
+                  />
+                  <NewColumn
+                     title=""
+                     width={40}
+                     dataIndex="formId"
+                     render={(_text, _row, index) => {
+                        return (
+                           <CloseOutlined
+                              style={{
+                                 color: 'red'
+                              }}
+                              onClick={() => remove(index)}
+                           />
+                        );
+                     }}
+                  />
+               </NewTable>
                <Button type="primary" onClick={() => handleClick(selectedOptions)}>
                   Хадгалах
                </Button>
