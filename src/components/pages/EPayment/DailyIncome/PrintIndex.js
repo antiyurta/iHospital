@@ -1,18 +1,17 @@
+import React, { useRef, useState, useEffect } from 'react';
 import { Button, DatePicker, Form, Select } from 'antd';
 import moment from 'moment';
-import React, { useRef } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-import { useState } from 'react';
-import { formatNameForDoc, numberToCurrency } from '../../../common';
 import { useSelector } from 'react-redux';
-import { selectCurrentHospitalName } from '../../../../features/authReducer';
-import { useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
+//common
+import { formatNameForDoc, numberToCurrency } from '@Comman/common';
+//redux
+import { selectCurrentHospitalName } from '@Features/authReducer';
+//api
+import PaymentApi from '@ApiServices/payment/payment';
+import EmployeeApi from '@ApiServices/organization/employee';
 
-import PaymentService from '../../../../services/payment/payment';
-import OrganizationEmployeeService from '../../../../services/organization/employee';
-
-const { Option } = Select;
 function PrintIndex() {
    const printRef = useRef();
    const [form] = Form.useForm();
@@ -35,7 +34,7 @@ function PrintIndex() {
       setToday(start);
       const filteredEmployee = employees.filter((e) => e.userId == employeeId);
       setEmployee(filteredEmployee[0]);
-      await PaymentService.getPayment({
+      await PaymentApi.getPayment({
          params: {
             isReturn: false,
             createdBy: employeeId,
@@ -47,7 +46,7 @@ function PrintIndex() {
       });
    };
    const getEmployees = async () => {
-      await OrganizationEmployeeService.getEmployee({
+      await EmployeeApi.getEmployee({
          params: {
             isRegistration: true,
             isWorking: true
@@ -57,7 +56,7 @@ function PrintIndex() {
       });
    };
    const getDiscounts = async () => {
-      await PaymentService.getDiscount().then((response) => {
+      await PaymentApi.getDiscount().then((response) => {
          setDiscounts(response.data.response.data);
       });
    };
@@ -68,7 +67,7 @@ function PrintIndex() {
       return discounts.find((e) => e.id === id)?.name;
    };
    const getPaymentType = async () => {
-      await PaymentService.getPaymentType().then((response) => {
+      await PaymentApi.getPaymentType().then((response) => {
          setPaymentShape(response.data.response);
       });
    };
