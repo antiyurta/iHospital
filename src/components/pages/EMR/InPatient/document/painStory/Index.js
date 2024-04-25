@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import { selectCurrentToken } from '../../../../../../features/authReducer';
-import { DefaultPatch, Get } from '../../../../../common';
+import { Get } from '../../../../../common';
 import { PrinterFilled } from '@ant-design/icons';
 import Page1 from './Page1';
 import Page2 from './Page2';
@@ -57,7 +57,7 @@ function Index({ data }) {
       };
       values['doctorInspection'] = JSON.stringify(values['doctorInspection']);
       values['templateId'] = 1;
-      const response = await DefaultPatch('inpatient/story/' + storyId, token, conf, values);
+      // const response = await DefaultPatch('inpatient/story/' + storyId, token, conf, values);
       console.log(response);
       // form.setFieldsValue(response);
    };

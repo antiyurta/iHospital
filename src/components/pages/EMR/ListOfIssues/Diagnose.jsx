@@ -20,7 +20,7 @@ const Diagnose = (props) => {
    const { setId } = useContext(EmrContext);
    const [expanded, setExpanded] = useState(false);
    const setAppointmentIdForContext = () => {
-      setId(appointmentId);
+      setId(appointmentId, 'item-1');
    };
    return (
       <div className="diagnose">

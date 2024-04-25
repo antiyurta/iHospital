@@ -3,8 +3,7 @@ import AuthContext from '../features/AuthContext';
 import ChatService from '../services/chat/chat';
 import Room from './Room';
 
-const Rooms = (props) => {
-   const { isRender, isReloadRoom, backSetIsReloadRoom, findUserInfo } = props;
+const Rooms = ({ isExpand, isRender, isReloadRoom, backSetIsReloadRoom, findUserInfo }) => {
    const { user } = useContext(AuthContext);
    const [activeMyRooms, setActiveMyRooms] = useState([]);
    const [hidedMyRooms, setHidedMyRooms] = useState([]);
@@ -26,7 +25,7 @@ const Rooms = (props) => {
       getRooms();
    }, [isRender]);
    useEffect(() => {
-      if (isReloadRoom === true) {
+      if (isReloadRoom) {
          getRooms();
          backSetIsReloadRoom({
             state: false
@@ -39,7 +38,7 @@ const Rooms = (props) => {
             style={{
                position: 'absolute',
                bottom: 0,
-               right: 301,
+               right: isExpand ? 300 : 65,
                height: 400,
                display: 'flex',
                flexDirection: 'row',

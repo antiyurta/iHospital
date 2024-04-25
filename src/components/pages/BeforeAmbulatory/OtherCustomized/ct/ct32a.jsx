@@ -66,7 +66,7 @@ const ct32a = ({ document }) => {
                <div className="">
                   <div className="flex flex-row gap-1">
                      <label>Яаралтай тусламжийн тасагт ирсэн</label>
-                     <p>{dayjs(data.q1).format('YYYY/MM/DD')}</p>
+                     <p>{dayjs(data?.q1).format('YYYY/MM/DD')}</p>
                   </div>
                </div>
             </Spin>

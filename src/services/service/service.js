@@ -9,6 +9,9 @@ class Service {
    async getXrayRequest(conf) {
       return await jwtInterceopter.get('service/xrayRequest', conf);
    }
+   async getXrayRequestById(id) {
+      return await jwtInterceopter.get('service/xrayRequest/' + id);
+   }
    async patchXrayRequest(id, data) {
       return await jwtInterceopter.patch('service/xrayRequest/' + id, data);
    }

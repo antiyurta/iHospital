@@ -10,7 +10,7 @@ import {
 import { Button, Card, Form, Modal, Upload, Select, InputNumber, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, getAge, getGenderInType, openNofi, Post, ScrollRef } from '../../common';
+import { Get, getAge, getGenderInType, openNofi, Post } from '../../common';
 import jwtInterceopter from '../../jwtInterceopter';
 import { ListPatientInfo, TypeInfo } from '../../ListInjection';
 import dayjs from 'dayjs';
@@ -31,7 +31,6 @@ function IndexBefore({ type }) {
       params: {}
    };
    const { Option } = Select;
-   const scrollRef = useRef();
    const [xrayLists, setXrayLists] = useState([]);
    const [meta, setMeta] = useState({});
    const [xrayModal, setXrayModal] = useState(false);
@@ -94,7 +93,6 @@ function IndexBefore({ type }) {
       }
    };
    const handleRemove = async (info) => {
-      console.log(info.response.response);
       const id = info.response.response.id;
       await jwtInterceopter.delete('local-files/' + id).then((response) => {
          if (response.status === 200) {
@@ -149,7 +147,6 @@ function IndexBefore({ type }) {
    useEffect(() => {
       getXrayRequest(1, 10, today, today);
       // getXrayMaterials();
-      ScrollRef(scrollRef);
    }, []);
 
    const showModal = () => {
@@ -334,12 +331,7 @@ function IndexBefore({ type }) {
          <div className="flex flex-col gap-2">
             <ScheduleTypeInfo />
             <InspectionTypeInfo />
-            <ListFilter
-               meta={meta}
-               appointmentsLength={xrayLists?.length || 0}
-               selectedTags={0}
-               getList={getXrayRequest}
-            />
+            <ListFilter meta={meta} appointmentsLength={xrayLists?.length || 0} getList={getXrayRequest} />
             <Card
                title={type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'}
                bordered={false}

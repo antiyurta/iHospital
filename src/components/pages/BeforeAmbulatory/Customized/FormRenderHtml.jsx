@@ -40,7 +40,7 @@ const FormRenderHtml = (props) => {
          if (answer) return <span>{answer}</span>;
          return;
       } else if (item.type === 'input' || item.type === 'inputNumber') {
-         if (answer) {
+         if (answer || answer >= 0) {
             let pattern = /\.{1,}/g;
             const text = item.question.replace(pattern, `<span style="font-weight: 300;"> ${answer} </span>`);
             return (
@@ -76,7 +76,7 @@ const FormRenderHtml = (props) => {
             } else {
                text = `${item.question} ${checkBoxAnswers}`;
             }
-            if (checkBoxAnswers) {
+            if (checkBoxAnswers || other) {
                return (
                   <span className="flex gap-1">
                      <span>{text}</span>
@@ -86,7 +86,7 @@ const FormRenderHtml = (props) => {
             }
             return;
          }
-         if (selectedAnswer) {
+         if (selectedAnswer || other) {
             return (
                <span className="flex gap-1">
                   <span>{item.question}</span>

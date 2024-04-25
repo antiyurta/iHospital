@@ -113,7 +113,7 @@ class NewEmr extends React.Component {
       await this.getByIdPatient();
    }
    async componentWillUnmount() {
-      this.props.delEmrData();
+      // this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {

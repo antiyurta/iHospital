@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getAge, localMn, openNofi } from '../../common';
 import { CloseCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Table } from 'antd';
@@ -118,15 +118,13 @@ function Package({ registerNumber, handleclick }) {
          }
       }
    ];
-   useEffect(() => {
-      getPackages(1, 10);
-   }, []);
 
    return (
       <>
          <button
             className="yellow-order"
             onClick={() => {
+               getPackages(1, 10);
                setIsOpenModal(true);
             }}
          >

@@ -8,7 +8,8 @@ import axios from 'axios';
 export const UploadImage = ({ form, itemName }) => {
    const [fileList, setFileList] = useState([]);
    const [imageIds, setImageIds] = useState();
-   const imageId = Form.useWatch([itemName], form);
+   const imageId = Form.useWatch(`${itemName}`, form);
+   console.log('asdasdassad', imageId);
    const base64String = Form.useWatch('base64String', form);
    let tokens = JSON.parse(localStorage.getItem('tokens'));
    const headers = {
@@ -33,13 +34,16 @@ export const UploadImage = ({ form, itemName }) => {
    };
    const onPreview = (info) => {
       var my = window.open('about:blank', '_blank');
-      my?.document.write(`<image src="${info.url}" alt="any" />`);
+      my?.document.write(`<image src="${info.thumbUrl || info.url}" alt="any" />`);
    };
    const onChange = (info) => {
       setFileList(info.fileList);
       if (info.file.status === 'done' || info.file.status === 'removed') {
          info.fileList?.map((file) => {
             setImageIds(file.response.response.id);
+            if (file.response.success) {
+               openNofi('success', 'Амжилттай', 'Зураг хадгалагдлаа.');
+            }
          });
       }
    };
@@ -99,9 +103,7 @@ export const UploadImage = ({ form, itemName }) => {
       return new Blob([ab], { type: 'image/png' });
    };
    useEffect(() => {
-      if (imageIds) {
-         form.setFieldsValue({ [itemName]: imageIds });
-      }
+      imageIds && form.setFieldsValue({ [itemName]: imageIds });
    }, [imageIds]);
    useEffect(() => {
       if (imageId) {

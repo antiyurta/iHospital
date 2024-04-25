@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Finger from '../../../../../features/finger';
 import ScheduleTypeInfo from './scheduleTypeInfo';
 import ListFilter from './listFilter';
+import InpatientFilter from './inpatientFilter';
 import InpatientTypeInfo from './inpatientTypeInfo';
 //common
 import { openNofi } from '@Comman/common';
@@ -24,6 +25,7 @@ import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //columns
 import { outDoctorColumns, outNurseColumns, inColumns, surguryColumns } from './columns';
+import types from './types';
 
 function Index({ type, isDoctor }) {
    //type 0 bol ambultor
@@ -35,19 +37,19 @@ function Index({ type, isDoctor }) {
    const depIds = useSelector(selectCurrentDepId);
    const navigate = useNavigate();
    const dispatch = useDispatch();
+   const [otherParams, setOtherParams] = useState({});
    const [appointments, setAppointments] = useState([]);
    const [meta, setMeta] = useState({
       page: 1,
       limit: 10
    });
    const [spinner, setSpinner] = useState(false);
-   const [selectedTags, setSelectedTags] = useState(0);
    // suul newew 8.1
    const [selectedRow, setSelectedRow] = useState();
    const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
    const [hicsSupports, setHicsSupports] = useState([]);
    //
-   const getAppointment = async (page, limit, start, end, process) => {
+   const getAppointment = async (page, limit, start, end) => {
       setSpinner(true);
       if (type === 0) {
          await AppointmentApi.getByPageFilter({
@@ -96,9 +98,9 @@ function Index({ type, isDoctor }) {
                page: page,
                limit: limit,
                depIds: depIds?.toString(),
-               // process: process ? process.toString() : 0,
                startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
-               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+               endDate: dayjs(end).format('YYYY-MM-DD HH:mm'),
+               ...otherParams
             }
          })
             .then(({ data: { response } }) => {
@@ -112,9 +114,9 @@ function Index({ type, isDoctor }) {
          await SurgeryApi.getRequest({
             page: page,
             limit: limit,
-            columnId: 2,
             startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
-            endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+            endDate: dayjs(end).format('YYYY-MM-DD HH:mm'),
+            ...otherParams
          })
             .then(({ data: { response } }) => {
                setAppointments(response.data);
@@ -225,8 +227,7 @@ function Index({ type, isDoctor }) {
          data['appointmentId'] = row.appointmentId;
          data['surgery'] = {
             surguryRequestId: row.id,
-            isCito: row.taskType === 1 ? false : true,
-            name: row.taskWorkers?.surgery.name
+            taskWorkersId: row.taskWorkers.id
          };
       }
       // uzleg ehleh tsag
@@ -344,13 +345,39 @@ function Index({ type, isDoctor }) {
       <div className="w-full">
          <div className="flex flex-col gap-3">
             <ScheduleTypeInfo />
-            {type === 2 ? <InpatientTypeInfo /> : null}
+            {/* {type === 2 ? <InpatientTypeInfo /> : null} */}
             <ListFilter
                meta={meta}
                appointmentsLength={appointments?.length || 0}
-               selectedTags={selectedTags}
                getList={getAppointment}
-            />
+               otherParams={otherParams}
+            >
+               {type === 3 ? (
+                  <Select
+                     className="surgery-selector"
+                     defaultValue={otherParams['columnId']}
+                     onChange={(e) => {
+                        setOtherParams((prevValues) => ({ ...prevValues, columnId: e }));
+                     }}
+                     allowClear
+                     onClear={() => {
+                        setOtherParams((prevValues) => ({ ...prevValues, columnId: null }));
+                     }}
+                     placeholder="Төрөл сонгох"
+                     options={types?.map((type) => ({
+                        label: type.label,
+                        value: type.value
+                     }))}
+                  />
+               ) : null}
+            </ListFilter>
+            {type === 2 ? (
+               <InpatientFilter
+                  onChange={(value) => {
+                     setOtherParams((prevValues) => ({ ...prevValues, process: value }));
+                  }}
+               />
+            ) : null}
             <Card
                bordered={false}
                className="header-solid rounded-md"

@@ -10,16 +10,18 @@ import TextArea from 'antd/lib/input/TextArea';
 const SOCKET_URL = 'https://ihospital.mn/';
 
 import Taudio from './xaxa.mp3';
+import { useSocketContext } from '@Features/socketContext';
 
 const Room = (props) => {
    const { room, findUserInfo, getRooms } = props;
+   const { receivedDatas } = useSocketContext();
    const { user } = useContext(AuthContext);
    const ref = useRef();
    const [messages, setMessages] = useState([]);
    const [inputValue, setInputValue] = useState('');
    const playSound = () => {
-      // const audio = new Audio(Taudio);
-      // audio.play();
+      const audio = new Audio(Taudio);
+      audio.play();
    };
    const getCurrentRoomMessage = async (roomId) => {
       await ChatService.getRoomMessages(roomId, 1, 10).then((response) => {
@@ -64,25 +66,19 @@ const Room = (props) => {
          </p>
       );
    };
-   const Content = (props) => {
-      const { message } = props;
+   const Content = ({ message }) => {
       return (
          <div
+            className="flex self-center gap-1 px-2 w-full"
             style={{
-               display: 'flex',
-               flexDirection: message.from === user.userId ? 'row-reverse' : 'row',
-               alignSelf: 'center',
-               gap: 3,
-               padding: '6px 0px',
-               width: '100%'
+               flexDirection: message.from === user.userId ? 'row-reverse' : 'row'
             }}
          >
             <Avatar />
             <div
+               className="rounded p-1"
                style={{
-                  backgroundColor: message.from === user.userId ? '#40a9ff' : '#f0f0f0',
-                  padding: 5,
-                  borderRadius: 5
+                  backgroundColor: message.from === user.userId ? '#40a9ff' : '#f0f0f0'
                }}
             >
                <p
@@ -131,24 +127,13 @@ const Room = (props) => {
       setInputValue('');
    };
    useEffect(() => {
-      let tokens = JSON.parse(localStorage.getItem('tokens'));
-      const socket = io.connect(SOCKET_URL, {
-         auth: {
-            token: `${tokens.accessToken}`
-         },
-         transports: ['websocket', 'polling']
-      });
-      socket.on('receive', async (roomId) => {
-         console.log(roomId);
-         if (roomId === room._id) {
-            getCurrentRoomMessage(roomId);
+      if (receivedDatas['chatSocket']) {
+         if (receivedDatas['chatSocket'] === room._id) {
+            getCurrentRoomMessage(receivedDatas['chatSocket']);
             playSound();
          }
-      });
-      return () => {
-         socket.disconnect();
-      };
-   }, []);
+      }
+   }, [receivedDatas]);
    useEffect(() => {
       getCurrentRoomMessage(room._id);
    }, []);

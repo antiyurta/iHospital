@@ -1,14 +1,16 @@
-import React, { Fragment, Suspense, useContext, useState } from 'react';
+import React, { Fragment, Suspense, useContext, useEffect, useState } from 'react';
 import { Button, Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { LogoutOutlined, MenuFoldOutlined } from '@ant-design/icons';
+//api
+import FileApi from '@ApiServices/file/local-file/local-file.api';
 //common
 import FullScreenLoader from '@Comman/FullScreenLoader';
 //comp
 import Sidebar from './NewSidebar';
-import ChatLayout from './Chat';
+import ChatLayout from '@Chat/Chat';
 //img
 import { manIcon, companyLogo, logoCollapsed } from '@Assets/index';
 //context
@@ -16,17 +18,25 @@ import AuthContext from '@Features/AuthContext';
 //redux
 import { removePatient } from '@Features/patientReducer';
 import { remove as removeHospital } from '@Features/hospitalReducer';
-import { Delete, logout, selectCurrentFirstName, selectCurrentLastName } from '@Features/authReducer';
+import {
+   Delete,
+   logout,
+   selectCurrentFirstName,
+   selectCurrentImageId,
+   selectCurrentLastName
+} from '@Features/authReducer';
 //extends
 const { Sider } = Layout;
 
 const MainLayout = () => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
+   const [imageSrc, setImageSrc] = useState('');
    const [collapsed, setCollapsed] = useState(false);
    const { logoutt } = useContext(AuthContext);
    const firstName = useSelector(selectCurrentFirstName);
    const lastName = useSelector(selectCurrentLastName);
+   const imageId = useSelector(selectCurrentImageId);
    const handelLogOut = async () => {
       dispatch(removePatient());
       dispatch(Delete());
@@ -35,6 +45,14 @@ const MainLayout = () => {
       await logoutt();
       navigate('/');
    };
+   const getImage = async () => {
+      const blob = await FileApi.getFileGlobal(imageId);
+      setImageSrc(blob);
+   };
+   useEffect(() => {
+      imageId && getImage();
+      !imageId && setImageSrc(null);
+   }, [imageId]);
    return (
       <Layout>
          <div
@@ -51,7 +69,15 @@ const MainLayout = () => {
                   <Sidebar collapsed={collapsed} />
                   <div className="sidebar-footer">
                      <div className="image-cropper" onClick={() => navigate('/profile')}>
-                        <img src={manIcon} className="profile-pic" alt="profile" />
+                        <div
+                           className="w-full h-full"
+                           style={{
+                              backgroundImage: `url(${imageSrc || manIcon})`,
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center'
+                           }}
+                        />
                      </div>
                      <div className="profile-info" onClick={() => navigate('/profile')}>
                         <p className="profile-lastname">{lastName}</p>

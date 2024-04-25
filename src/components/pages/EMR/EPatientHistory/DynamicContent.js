@@ -10,6 +10,7 @@ import NewDiagnose from '../../service/NewDiagnose';
 import { inspectionTOJSON, openNofi } from '@Comman/common';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 //api
+import ServiceApi from '@ApiServices/service/service';
 import ServiceRequestApi from '@ApiServices/serviceRequest';
 import EmrInspectionNoteApi from '@ApiServices/emr/inspectionNote';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
@@ -65,7 +66,12 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
          }
       }).then(({ data: { response } }) => {
          const data = response.data?.flatMap((res) => res.services);
-         setServiceRequest(data);
+         setServiceRequest(
+            data?.map((item, index) => ({
+               ...item,
+               unikey: index
+            }))
+         );
       });
    };
 
@@ -107,37 +113,35 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
             advice: JSON.stringify(values['advice'])
          };
          await EmrInspectionNoteApi.post(data)
-            .then(async ({ data: { response, success } }) => {
-               if (success) {
-                  setSelectedInspectionNoteId(response.id);
-                  var newResponse;
-                  if (incomeData.appointmentType === ListIndexEnum.Ambulatory) {
-                     newResponse = await AppointmentApi.patchAppointment(incomeData.appointmentId, {
-                        inspectionNoteId: response.id
-                     }).then(({ data: { success } }) => success);
-                  } else if (incomeData.appointmentType === ListIndexEnum.PreOrder) {
-                     newResponse = await AppointmentApi.patchPreOrder(incomeData.appointmentId, {
-                        inspectionNoteId: response.id
-                     }).then(({ data: { success } }) => success);
-                  } else if (incomeData.inspection === InspectionEnum.Xray) {
-                     newResponse = await ServiceRequestApi.patchXrayRequest(incomeData.xrayRequestId, {
-                        inspectionNoteId: response.id.toString(),
-                        xrayProcess: 2
-                     });
-                  } else if (incomeData.inspection === InspectionEnum.Operation) {
-                     newResponse = await ServiceRequestApi.patchOperation(incomeData.operationRequestId, {
-                        inspectionNoteId: response.id,
-                        doctorId: employeeId
-                     });
-                  }
-                  if (newResponse) {
-                     setEditMode(true);
-                     handleClick({ target: { value: 'OTS' } });
-                  }
+            .then(async ({ data: { response } }) => {
+               setSelectedInspectionNoteId(response.id);
+               var newResponse;
+               if (incomeData.appointmentType === ListIndexEnum.Ambulatory) {
+                  newResponse = await AppointmentApi.patchAppointment(incomeData.appointmentId, {
+                     inspectionNoteId: response.id
+                  }).then(({ data: { success } }) => success);
+               } else if (incomeData.appointmentType === ListIndexEnum.PreOrder) {
+                  newResponse = await AppointmentApi.patchPreOrder(incomeData.appointmentId, {
+                     inspectionNoteId: response.id
+                  }).then(({ data: { success } }) => success);
+               } else if (incomeData.inspection === InspectionEnum.Xray) {
+                  newResponse = await ServiceApi.patchXrayRequest(incomeData.xrayRequestId, {
+                     inspectionNoteId: response.id.toString(),
+                     xrayProcess: 2
+                  }).then(({ data: { success } }) => success);
+               } else if (incomeData.inspection === InspectionEnum.Operation) {
+                  newResponse = await ServiceApi.patchOperation(incomeData.operationRequestId, {
+                     inspectionNoteId: response.id,
+                     doctorId: employeeId
+                  }).then(({ data: { success } }) => success);
+               }
+               if (newResponse) {
+                  setEditMode(true);
+                  handleClick({ target: { value: 'OTS' } });
                }
             })
             .catch((error) => {
-               if (error.response.status === 409) {
+               if (error.response?.status === 409) {
                   openNofi('error', 'Алдаа', 'Үзлэгийн тэмдэглэл хадгалагдсан байна');
                }
             })
@@ -163,7 +167,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
       }
    };
    return (
-      <Spin spinning={loading}>
+      <Spin spinning={loading} wrapperClassName="h-full">
          <Form
             form={form}
             layout={'vertical'}
@@ -176,7 +180,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
             }}
          >
             <div className="flex flex-col gap-2">
-               <div className="flex flex-col pr-3 gap-2">
+               <div className="flex flex-col h-[500px] overflow-auto pr-3 gap-2">
                   {props.data?.hasOwnProperty('conclusion') ? (
                      <Soap
                         title="Дүгнэлт"
@@ -400,7 +404,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            isDisabledButton={(_state) => null}
                         />
                         <Table
-                           rowKey="id"
+                           rowKey="unikey"
                            columns={[
                               {
                                  title: '№',

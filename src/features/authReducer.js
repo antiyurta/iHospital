@@ -14,7 +14,9 @@ export const auth = createSlice({
       phoneNo: null,
       hospitalName: null,
       hospitalId: null,
-      hospitalIsAfterPay: false
+      hospitalIsAfterPay: false,
+      imageId: null,
+      otpData: null
    },
    reducers: {
       set: (state, action) => {
@@ -29,9 +31,12 @@ export const auth = createSlice({
          state.hospitalName = action.payload.hospitalName;
          state.hospitalId = action.payload.hospitalId;
          state.hospitalIsAfterPay = action.payload.isAfterPay;
+         state.imageId = action.payload.imageId;
+      },
+      setImageId: (state, action) => {
+         state.imageId = action.payload.imageId;
       },
       Delete: (state) => {
-         state.firstName = null;
          state.firstName = null;
          state.lastName = null;
          state.depId = null;
@@ -42,17 +47,22 @@ export const auth = createSlice({
          state.phoneNo = null;
          state.hospitalName = null;
          state.hospitalId = null;
+         state.hospitalIsAfterPay = null;
+         state.imageId = null;
       },
       login: (state, action) => {
          state.token = action.payload;
       },
       logout: (state) => {
          state.token = null;
+      },
+      setOTPData: (state, action) => {
+         state.otpData = action.payload;
       }
    }
 });
 
-export const { set, Delete, login, logout } = auth.actions;
+export const { set, setImageId, Delete, login, logout, setOTPData } = auth.actions;
 export default auth.reducer;
 
 export const selectCurrentToken = (state) => state.authReducer.token;
@@ -67,4 +77,6 @@ export const selectCurrentPhoneNo = (state) => state.authReducer.phoneNo;
 export const selectCurrentHospitalName = (state) => state.authReducer.hospitalName;
 export const selectCurrentHospitalId = (state) => state.authReducer.hospitalId;
 export const selectCurrentIsAfterPay = (state) => state.authReducer.hospitalIsAfterPay;
+export const selectCurrentImageId = (state) => state.authReducer.imageId;
 export const selectAuthReducer = (state) => state.authReducer;
+export const selectOTPData = (state) => state.authReducer.otpData;

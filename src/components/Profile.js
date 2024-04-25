@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
+import { Button, Card, Col, Descriptions, Form, Input, Modal, Row } from 'antd';
 import { KeyOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import PasswordChecklist from 'react-password-checklist';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+//comp
+import ImageUpload from './Input/ImageUpload';
 // comman
 import { openNofi } from '@Comman/common';
 //img
-import { profileBg, manIcon } from '@Assets/index';
+import { profileBg } from '@Assets/index';
 // api
 import OrganizationEmployeeApi from '@ApiServices/organization/employee';
 import authenticationApi from '@ApiServices/authentication/authentication.api';
@@ -17,7 +19,14 @@ import AuthContext from '@Features/AuthContext';
 //redux
 import { removePatient } from '@Features/patientReducer';
 import { set as setHospital, remove as removeHospital } from '@Features/hospitalReducer';
-import { selectCurrentToken, selectCurrentInsurance, set as setAuth, Delete, logout } from '@Features/authReducer';
+import {
+   selectCurrentToken,
+   selectCurrentInsurance,
+   set as setAuth,
+   setImageId,
+   Delete,
+   logout
+} from '@Features/authReducer';
 
 function Profile() {
    const { logoutt } = useContext(AuthContext);
@@ -46,25 +55,34 @@ function Profile() {
    const getProfile = async () => {
       await authenticationApi
          .get()
-         .then((response) => {
-            profileForm.setFieldsValue(response.data.response);
+         .then(({ data: { response } }) => {
+            profileForm.setFieldsValue(response);
+            // if (!response.isEmailConfirmed) {
+            //    navigate('/user-confirm', {
+            //       state: {
+            //          email: response.email
+            //       }
+            //    });
+            // } else {
             dispatch(
                setAuth({
-                  firstName: response.data.response.employee?.firstName,
-                  lastName: response.data.response.employee?.lastName,
-                  depId: response.data.response.employee?.depIds,
-                  appIds: response.data.response.employee?.appIds,
-                  userId: response.data.response.employee?.id,
-                  isInsurance: response.data.response.hospital?.isInsurance,
-                  roleId: response.data.response?.roleId,
-                  phoneNo: response.data.response?.employee?.phoneNo,
-                  hospitalName: response.data.response.hospital?.name,
-                  hospitalId: response.data.response.hospital?.id,
-                  isAfterPay: response.data.response.hospital?.isAfterPay
+                  firstName: response.employee?.firstName,
+                  lastName: response.employee?.lastName,
+                  depId: response.employee?.depIds,
+                  appIds: response.employee?.appIds,
+                  userId: response.employee?.id,
+                  isInsurance: response.hospital?.isInsurance,
+                  roleId: response?.roleId,
+                  phoneNo: response?.employee?.phoneNo,
+                  hospitalName: response.hospital?.name,
+                  hospitalId: response.hospital?.id,
+                  isAfterPay: response.hospital?.isAfterPay,
+                  imageId: response?.imageId
                })
             );
-            dispatch(setHospital(response.data.response.hospital));
-            setUser(response.data.response);
+            dispatch(setHospital(response.hospital));
+            setUser(response);
+            // }
          })
          .catch((error) => {
             console.log(error);
@@ -118,6 +136,15 @@ function Profile() {
    const validPasswordHandle = (isValid) => {
       isValid ? setPasswordValid(true) : setPasswordValid(false);
    };
+   const changeProfileImg = async (id) => {
+      await authenticationApi.changeProfile({ imageId: id }).then(() => {
+         dispatch(
+            setImageId({
+               imageId: id
+            })
+         );
+      });
+   };
    return (
       <div className="flex flex-col gap-2">
          <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + profileBg + ')' }}></div>
@@ -127,8 +154,8 @@ function Profile() {
             title={
                <Row justify="space-between" align="middle" gutter={[24, 0]}>
                   <Col span={24} md={12} className="col-info">
-                     <Avatar.Group>
-                        <Avatar size={74} shape="square" src={manIcon} />
+                     <div className="flex flex-row gap-2 items-center">
+                        <ImageUpload setImageId={changeProfileImg} />
                         <div className="avatar-info">
                            <h4 className="font-semibold m-0">
                               {user.employee?.lastName + ' ' + user.employee?.firstName}
@@ -137,7 +164,7 @@ function Profile() {
                               {user.role?.name} / {user.role?.description}
                            </p>
                         </div>
-                     </Avatar.Group>
+                     </div>
                   </Col>
                   <Col
                      span={24}

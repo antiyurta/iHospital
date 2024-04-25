@@ -22,6 +22,15 @@
       height: auto !important;
    }
 }
+.ant-upload-picture-card-wrapper {
+   width: auto !important;
+}
+.ant-upload.ant-upload-select-picture-card,
+.ant-upload-list-picture-card-container {
+   height: 90px;
+   width: 90px;
+   margin: 0px !important;
+}
 
 .regular-divider {
    font-size: 14px;
@@ -80,6 +89,7 @@
             display: flex;
             flex-direction: row;
             gap: 12px;
+            align-items: center;
             p {
                color: #4e5969;
                font-family: Ubuntu;
@@ -1064,5 +1074,23 @@ table.table-611 {
       tfoot {
          display: table-footer-group;
       }
+   }
+}
+
+.surgery-selector {
+   .ant-select-selector {
+      width: 150px !important;
+      height: 100% !important;
+   }
+}
+
+.ant-tree-treenode {
+   width: 100% !important;
+   .ant-tree-node-content-wrapper{
+      width: 100% !important;
+   }
+   span.ant-tree-title {
+      display: flex !important;
+      width: 100% !important;
    }
 }

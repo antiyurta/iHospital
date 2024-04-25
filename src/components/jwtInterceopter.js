@@ -13,8 +13,8 @@ jwtInterceopter.interceptors.request.use((config) => {
    let tokens = JSON.parse(localStorage.getItem('tokens'));
    if (tokens) {
       config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
-      config.headers['x-api-key'] = API_KEY;
    }
+   config.headers['x-api-key'] = API_KEY;
    return config;
 });
 

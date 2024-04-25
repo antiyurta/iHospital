@@ -250,7 +250,7 @@ const NewFormRender = ({
             const InputN = (props) => {
                if (item.type === 'input') return <Input {...rest} {...props} />;
                else if (item.type === 'inputNumber') return <InputNumber {...rest} {...props} />;
-               else if (item.type === 'textarea') return <TextArea {...rest} {...props} rows={7} />;
+               else if (item.type === 'textarea') return <TextArea {...rest} {...props} rows={6} />;
             };
             return (
                <AForm key={item.index}>

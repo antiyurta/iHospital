@@ -1,28 +1,27 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
    Button,
    Checkbox,
-   ConfigProvider,
    DatePicker,
    Divider,
    Empty,
    Form,
+   Input,
    Modal,
+   Radio,
    Select,
-   Space,
    Table,
    TimePicker
 } from 'antd';
-import { CloseCircleOutlined, FormOutlined, PlusOutlined, SnippetsOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-import locale from 'antd/es/locale/mn_MN';
 import 'moment/locale/mn';
 import moment from 'moment';
-moment.locale('mn', {
+moment.updateLocale('mn', {
    week: {
       dow: 1
    }
@@ -45,47 +44,23 @@ const rules = [
       message: 'Заавал'
    }
 ];
+
+const { TextArea } = Input;
+
 //imgs
 import surgeryIcon from './NewOrder/surgeryIcon.svg';
 //common
-import { TypeInfo } from '@Comman/ListInjection';
 import { diagnoseTypeInfo, numberToCurrency, openNofi } from '@Comman/common';
 //comp
 import { EmployeeList, FormListEmployee } from './SurgeryEmployee';
 //api
+import SurgeryApi from '@ApiServices/service/surgery.api';
 import RoomApi from '@ApiServices/organization/room';
 import EmployeeApi from '@ApiServices/organization/employee';
 import PatientDiagnoseApi from '@ApiServices/emr/patientDiagnose';
 //redux
 import { selectCurrentDepId } from '@Features/authReducer';
-//defaults
-
-const timeTable = () => {
-   const data = [];
-   for (let index = 8; index < 24; index++) {
-      if (index.toString().length === 1) {
-         data.push({
-            time: `0${index}:00`
-         });
-      } else {
-         data.push({
-            time: `${index}:00`
-         });
-      }
-   }
-   for (let index = 0; index < 7; index++) {
-      if (index.toString().length === 1) {
-         data.push({
-            time: `0${index}:00`
-         });
-      } else {
-         data.push({
-            time: `${index}:00`
-         });
-      }
-   }
-   return data;
-};
+import dayjs from 'dayjs';
 
 function Surgery(props) {
    const { patientId, appointmentId, usageType, selectedSurgery, handleclick } = props;
@@ -96,10 +71,9 @@ function Surgery(props) {
    const [rooms, setRooms] = useState([]);
    const [isAnes, setAnes] = useState(false);
    const [employees, setEmployess] = useState([]);
-   const [selectedWeek, setWeek] = useState(moment().startOf('week').toDate());
+   const [isLoadingPlan, setLoadingPlan] = useState(false);
    //tolowlogo
    const [isOpenModalPlan, setOpenModalPlan] = useState(false);
-   const [isOpenModalWarning, setOpenModalWarning] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [selectedSurgeries, setSelectedSurgeries] = useState([]);
    const [selectedTypeId, setSelectedTypeId] = useState(null);
@@ -154,47 +128,100 @@ function Surgery(props) {
       });
    };
 
-   const middleware = () => {
+   const middleware = async () => {
       if (selectedSurgery?.hasOwnProperty('surguryRequestId')) {
-         setOpenModalWarning(true);
+         await SurgeryApi.getRequestById(selectedSurgery.surguryRequestId)
+            .then(({ data: { response, success } }) => {
+               if (success) {
+                  if (response.taskDoctorRels?.length > 0) {
+                     setAnes(true);
+                  }
+                  const [hours, minute] = response.durationTime.split(':');
+                  form.setFieldsValue({
+                     ...response,
+                     surgeries: response.taskWorkers.surgeries,
+                     description: response.currentColumn.description,
+                     durationTime: response.durationTime
+                        ? moment().set({
+                             hour: hours,
+                             minute: minute
+                          })
+                        : undefined
+                  });
+                  setOpenModalPlan(true);
+                  getPatientDiagnosis();
+                  getEmployees();
+                  getRooms();
+               }
+            })
+            .catch((error) => {
+               console.log(error);
+            });
       } else {
-         setIsOpenModal(true);
-         setSelectedSurgeries([]);
+         if (!patientId) {
+            openNofi('error', 'Алдаа', 'Өвчтөн сонгогдоогүй байна');
+         } else {
+            Modal.confirm({
+               title: 'Мэс заслын хүсэлт',
+               content: (
+                  <div>
+                     <p>Та мэс заслын хүсэлт илгээх гэж байна</p>
+                  </div>
+               ),
+               cancelText: 'Болих',
+               okText: 'Захиалах',
+               async onOk() {
+                  handleclick({
+                     patientId: patientId
+                  });
+               }
+            });
+         }
       }
    };
 
-   const timeColumns = useMemo(() => {
-      var days = ['Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба', 'Ням'];
-      const data = [
-         {
-            title: 'Цаг',
-            dataIndex: 'time'
+   const onUpdateTask = async (values) => {
+      setLoadingPlan(true);
+      await SurgeryApi.patchRequest(selectedSurgery.surguryRequestId, {
+         startDate: values.startDate,
+         icdCode: values.icdCode,
+         durationTime: dayjs(values.durationTime).format('HH:mm'),
+         taskType: values.taskType,
+         drgCode: null,
+         taskWorkers: {
+            id: selectedSurgery.taskWorkersId,
+            surgeryIds: values.surgeries?.map((surgery) => surgery.id),
+            operationId: values.taskWorkers.operationId,
+            firstHelperId: values.taskWorkers.firstHelperId,
+            secondHelperId: values.taskWorkers.secondHelperId
          }
-      ];
-      for (let index = 0; index < 6; index++) {
-         data.push({
-            title: (
-               <>
-                  <p className="text-[#A9AEB8] text-xs font-normal">{days[index]}</p>
-                  <p className="text-[#A9AEB8] text-xs font-normal">
-                     {selectedWeek.getMonth() + index + 1}/{selectedWeek.getDate()}
-                  </p>
-               </>
-            ),
-            dataIndex: 'time',
-            render: (time) => (
-               <Checkbox
-                  onChange={(e) => {
-                     console.log(e.target.checked);
-                     console.log('alitsag', time);
-                     console.log('ali odor', index);
-                  }}
-               />
-            )
+      })
+         .then(async () => {
+            await SurgeryApi.putRequestPlan(selectedSurgery.surguryRequestId, {
+               columnId: 3,
+               roomId: values.roomId,
+               description: values.description,
+               nurses: values.taskNurseRels?.map((nurse) => nurse.userId.toString()),
+               doctors: values.taskDoctorRels?.map((doctor) => doctor.userId.toString())
+            })
+               .then(() => {
+                  openNofi('success', 'Ажилттай', 'Мэс засал төлөвлөлт амжилттай');
+                  setOpenModalPlan(false);
+               })
+               .catch((error) => {
+                  console.log('PutRequestPlan error', error);
+               })
+               .finally(() => {
+                  setLoadingPlan(false);
+               });
+         })
+         .catch((error) => {
+            console.log('PatchRequest error', error);
+         })
+         .finally(() => {
+            setLoadingPlan(false);
          });
-      }
-      return data;
-   }, [selectedWeek]);
+   };
 
    return (
       <>
@@ -219,7 +246,7 @@ function Surgery(props) {
             }}
             onCancel={() => setIsOpenModal(false)}
             onOk={() => {
-               handleclick(selectedSurgeries);
+               form.setFieldValue('surgeries', selectedSurgeries);
                setIsOpenModal(false);
             }}
             okText={'Хадгалах'}
@@ -290,74 +317,99 @@ function Surgery(props) {
             </div>
          </Modal>
          <Modal
-            title="Сонгох"
-            open={isOpenModalWarning}
-            onCancel={() => {
-               setOpenModalWarning(false);
-            }}
-            width={320}
-            footer={null}
-         >
-            <Space align="center">
-               <Button
-                  type="primary"
-                  icon={<FormOutlined />}
-                  onClick={() => {
-                     setOpenModalWarning(true);
-                     setOpenModalPlan(true);
-                     getPatientDiagnosis();
-                     getEmployees();
-                     getRooms();
-                  }}
-               >
-                  Төлөвлөх
-               </Button>
-               <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={() => {
-                     setOpenModalWarning(false);
-                     setIsOpenModal(true);
-                  }}
-               >
-                  Шинэ захиалга
-               </Button>
-            </Space>
-         </Modal>
-         <Modal
             title="Мэс засал төлөвлөх цонх"
             open={isOpenModalPlan}
             onCancel={() => {
                setOpenModalPlan(false);
             }}
+            onOk={() => {
+               form
+                  .validateFields()
+                  .then(onUpdateTask)
+                  .catch((error) => {
+                     error.errorFields?.map((errField) => {
+                        openNofi('error', 'Алдаа', errField.errors[0]);
+                     });
+                     console.log(error);
+                  });
+            }}
+            confirmLoading={isLoadingPlan}
             width={'80%'}
+            cancelText="Болих"
+            okText="Төлөвлөх"
          >
             <Form
                form={form}
                layout="vertical"
                initialValues={{
-                  taskDoctorRels: [
-                     {
-                        id: 1
-                     }
-                  ],
-                  taskNurseRels: [
-                     {
-                        id: 1
-                     }
-                  ]
+                  surgeries: [{}],
+                  taskDoctorRels: [{}],
+                  taskNurseRels: [{}]
                }}
             >
                <div className="flex flex-row gap-2">
-                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-[200px]">
+                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 min-w-[200px]">
+                     <Divider className="my-0">Ерөнхий мэдээлэл</Divider>
                      <p style={labelstyle}>Мэс засал:</p>
-                     <p style={contentStyle}>{selectedSurgery?.name}</p>
+                     <Form.List
+                        name="surgeries"
+                        rules={[
+                           {
+                              validator: (_, value) => {
+                                 if (!value || value.length < 1) {
+                                    return Promise.reject(new Error('Багада 1 хагалгаа'));
+                                 }
+                                 return Promise.resolve();
+                              }
+                           }
+                        ]}
+                     >
+                        {(fields, { add, remove }) => (
+                           <>
+                              {fields.map(({ key, name, ...restField }) => (
+                                 <div key={key} className="flex flex-row gap-2 justify-between">
+                                    <Form.Item className="mb-0" {...restField} name={[name, 'name']} rules={rules}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                    <div className="bg-red-500 p-1 rounded-md flex items-center">
+                                       <MinusCircleOutlined
+                                          className="p-[2px] text-white text-base"
+                                          onClick={() => remove(name)}
+                                       />
+                                    </div>
+                                 </div>
+                              ))}
+                              <Form.Item>
+                                 <Button
+                                    className="bg-green-500 text-white"
+                                    type="dashed"
+                                    onClick={() => {
+                                       setIsOpenModal(true);
+                                    }}
+                                    block
+                                    icon={<PlusOutlined />}
+                                 >
+                                    Нэмэх
+                                 </Button>
+                              </Form.Item>
+                           </>
+                        )}
+                     </Form.List>
                      <p style={labelstyle}>Мэс заслын төрөл:</p>
-                     {selectedSurgery?.isCito ? (
-                        <TypeInfo bgColor="#e33d3d" textColor="white" text={'Яаралтай'} />
-                     ) : (
-                        <TypeInfo bgColor="#13baed" textColor="black" text={'Төлөвлөгөөт'} />
-                     )}
+                     <Form.Item noStyle name="taskType" rules={rules}>
+                        <Radio.Group>
+                           <Radio value={2}>Яаралтай</Radio>
+                           <Radio value={1}>Төлөвлөгөөт</Radio>
+                        </Radio.Group>
+                     </Form.Item>
+                     <Form.Item className="mb-0" label="Өрөө:" name="roomId" rules={rules}>
+                        <Select
+                           options={rooms?.map((room) => ({
+                              label: room.roomNumber,
+                              value: room.id
+                           }))}
+                        />
+                     </Form.Item>
                      <Form.Item className="mb-0" label="Онош" name="icdCode" rules={rules}>
                         <Select
                            options={diagnosis?.map((diagnose) => ({
@@ -366,14 +418,42 @@ function Surgery(props) {
                            }))}
                         />
                      </Form.Item>
-                     <Form.Item className="mb-0" label="Огноо:" name="startDate" rules={rules}>
+                     <Form.Item
+                        className="mb-0"
+                        label="Огноо:"
+                        name="startDate"
+                        rules={rules}
+                        getValueProps={(i) => {
+                           if (i) {
+                              return { value: moment(i) };
+                           } else {
+                              return;
+                           }
+                        }}
+                     >
                         <DatePicker locale={mnMN} />
                      </Form.Item>
-                     <Form.Item className="mb-0" label="Үргэлжлэх хугацаа:" name="durationTime" rules={rules}>
+                     <Form.Item
+                        className="mb-0"
+                        label="Үргэлжлэх хугацаа:"
+                        name="durationTime"
+                        getValueProps={(i) => {
+                           if (i) {
+                              return { value: moment(i) };
+                           } else {
+                              return;
+                           }
+                        }}
+                        rules={rules}
+                     >
                         <TimePicker format={'HH:mm'} locale={mnMN} />
                      </Form.Item>
                      <Checkbox
+                        defaultChecked={isAnes}
                         onChange={(e) => {
+                           if (!e.target.checked) {
+                              form.resetFields([['taskDoctorRels']]);
+                           }
                            setAnes(e.target.checked);
                         }}
                      >
@@ -387,8 +467,8 @@ function Surgery(props) {
                         </span>
                      </Checkbox>
                   </div>
-                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-[300px]">
-                     <Divider>Мэс заслын ажиллагааны баг</Divider>
+                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 min-w-[320px]">
+                     <Divider className="my-0">Мэс заслын ажиллагааны баг</Divider>
                      <EmployeeList
                         label="Мэс заслын эмч:"
                         name={['taskWorkers', 'operationId']}
@@ -405,51 +485,37 @@ function Surgery(props) {
                         employees={employees}
                      />
                      {isAnes ? (
-                        <EmployeeList label="Мэдээгүйжүүлэгч эмч:" name={['taskWorkers', 'dd']} employees={employees} />
+                        <>
+                           <p style={labelstyle}>Мэдээгүйжүүлэгч:</p>
+                           <FormListEmployee
+                              formName="taskDoctorRels"
+                              label="Мэдээгүйжүүлэгч"
+                              employees={employees}
+                              rules={null}
+                           />
+                        </>
                      ) : null}
-                     <FormListEmployee formName="taskDoctorRels" label="Мэдээгүйжүүлэгч" employees={employees} />
-                     <FormListEmployee formName="taskNurseRels" label="Сувилагч" employees={employees} />
-                  </div>
-                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 min-w-[500px]">
-                     <Divider>Өрөөний жагсаалт</Divider>
-                     <div className="flex flex-row gap-3 items-end">
-                        <Form.Item className="mb-0 w-full" label="Өрөө:" name="roomId" rules={rules}>
-                           <Select
-                              options={rooms?.map((room) => ({
-                                 label: room.roomNumber,
-                                 value: room.id
-                              }))}
-                           />
-                        </Form.Item>
-                        <ConfigProvider locale={locale}>
-                           <DatePicker
-                              picker="week"
-                              className="w-60"
-                              style={{
-                                 height: 32
-                              }}
-                              placeholder="7 хоног сонгох"
-                              onChange={(event) => {
-                                 setWeek(new Date(event));
-                              }}
-                           />
-                        </ConfigProvider>
-                     </div>
-
-                     <Table
-                        rowKey="time"
-                        bordered
-                        columns={timeColumns}
-                        scroll={{
-                           y: 400
-                        }}
-                        dataSource={timeTable()}
-                        pagination={false}
+                     <p style={labelstyle}>Сувилагч:</p>
+                     <FormListEmployee
+                        formName="taskNurseRels"
+                        label="Сувилагч"
+                        employees={employees}
+                        rules={[
+                           {
+                              validator: (_, value) => {
+                                 if (!value || value.length < 1) {
+                                    return Promise.reject(new Error('Багада 1 Сувилагч'));
+                                 }
+                                 return Promise.resolve();
+                              }
+                           }
+                        ]}
                      />
                   </div>
-                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 w-full">
-                     <Divider>Мэс заслын үед хэрэглэгдэх эм /хэрэгслийн жагсаалт/</Divider>
-                     <Table />
+                  <div className="flex flex-col gap-2 bg-[#F7F8FA] rounded-lg p-2 min-w-[320px]">
+                     <Form.Item name="description" label="Нэмэлт мэдээлэл" rules={rules}>
+                        <TextArea />
+                     </Form.Item>
                   </div>
                </div>
             </Form>

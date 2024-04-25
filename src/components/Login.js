@@ -21,9 +21,7 @@ function Login() {
       console.log('Failed:', errorInfo);
    };
    useEffect(() => {
-      if (user) {
-         navigate('/profile');
-      }
+      user && navigate('/profile');
    }, []);
 
    return (

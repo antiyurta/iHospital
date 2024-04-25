@@ -14,11 +14,15 @@ import Reinspection from '../Reinspection';
 import RecentRecipe from '../RecentRecipe';
 import PackageTable from '../PackageTable/PackageTable';
 import OrderTable from '../OrderTable/OrderTable';
-import { numberToCurrency, openNofi } from '../../../common';
-import ServiceService from '../../../../services/service/service';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
+//common
+import { numberToCurrency, openNofi } from '@Comman/common';
+//redux
+import { selectCurrentEmrData } from '@Features/emrReducer';
+//api
+import ServiceApi from '@ApiServices/service/service';
+import SurgeryApi from '@ApiServices/service/surgery.api';
 
 const InternalOrder = (props) => {
    const { isPackage, usageType, selectedPatient, categories, save } = props;
@@ -90,9 +94,8 @@ const InternalOrder = (props) => {
       } else {
          var services = [];
          var subTotal = 0;
-         value.map((item, index) => {
+         value.map((item) => {
             var service = {};
-            service.unikey = index;
             service.id = item.id;
             service.name = item.name;
             service.type = item.type;
@@ -116,7 +119,7 @@ const InternalOrder = (props) => {
                service.price = 0;
                service.oPrice = item.price;
                service.type = item.type;
-               service.medicineType = null;
+               service.medicineType = item.medicineType;
                service.repeatTime = 1;
                service.dayCount = 1;
                service.total = 0;
@@ -161,8 +164,26 @@ const InternalOrder = (props) => {
       }
       setIsLoadingOrderTable(false);
    };
+
+   const surgeryRequestClick = async (values) => {
+      await SurgeryApi.postRequest({
+         ...values,
+         appointmentId: IncomeEMRData.appointmentId,
+         inpatientRequestId: IncomeEMRData.inpatientRequestId,
+         usageType: usageType
+      })
+         .then((response) => {
+            if (response.status === 201) {
+               openNofi('success', 'Амжиллтай', 'Хэвтүүлэх хүсэлт амжилттай илгээгдлээ');
+            }
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   };
+
    const inpatientRequestClick = async (values) => {
-      await ServiceService.postInpatientRequest(values)
+      await ServiceApi.postInpatientRequest(values)
          .then((response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжиллтай', 'Хэвтүүлэх хүсэлт амжилттай илгээгдлээ');
@@ -205,7 +226,7 @@ const InternalOrder = (props) => {
                   appointmentId={IncomeEMRData?.appointmentId}
                   usageType={usageType}
                   selectedSurgery={IncomeEMRData?.surgery}
-                  handleclick={handleclick}
+                  handleclick={surgeryRequestClick}
                />
             )}
             {showOperation && <Operation usageType={usageType} handleclick={handleclick} />}

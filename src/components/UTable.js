@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import {
    Card,
@@ -15,7 +16,6 @@ import {
    Pagination,
    Popconfirm
 } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import {
    EditOutlined,
@@ -25,20 +25,16 @@ import {
    CheckOutlined,
    CloseOutlined
 } from '@ant-design/icons';
-import { Get, Post, Patch, Delete, ScrollRef } from './common';
+import { ScrollRef } from './common';
 import TextArea from 'antd/lib/input/TextArea';
 import mn from 'antd/es/calendar/locale/mn_MN';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../features/authReducer';
 import moment from 'moment';
+import jwtInterceopter from './jwtInterceopter';
 
 const { Search } = Input;
 const { Option } = Select;
 
 function UTable(props) {
-   const navigate = useNavigate();
-   const token = useSelector(selectCurrentToken);
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState([]);
    const [view, setView] = useState([]);
@@ -78,26 +74,19 @@ function UTable(props) {
    const viewModal = (row) => {
       setView(row);
       setIsViewModalVisible(true);
-      // const response = await Get(props.url + "/" + id, token, config);
-      // if (response.length != 0) {
-      //   setView(response);
-      //   console.log("=======>", response);
-      //   setIsViewModalVisible(true);
-      // }
    };
    const editModal = async (id) => {
       setEditMode(true);
       setId(id);
-      const response = await Get(props.url + '/' + id, token, config);
-      props.column.map((element) => {
-         if (element.input === 'date') {
-            response[`${element.index}`] = moment(response[`${element.index}`]);
-         }
-      });
-      if (response.length != 0) {
+      await jwtInterceopter.get(`${props.url}/${id}`).then(({ data: { response } }) => {
+         props.column.map((element) => {
+            if (element.input === 'date') {
+               response[`${element.index}`] = moment(response[`${element.index}`]);
+            }
+         });
          form.setFieldsValue(response);
          setIsModalVisible(true);
-      }
+      });
    };
    const deleteModal = (id) => {
       Modal.error({
@@ -106,8 +95,11 @@ function UTable(props) {
          closable: true,
          content: <div>Устгасан тохиолдолд дахин сэргээгдэхгүй болно</div>,
          async onOk() {
-            await Delete(props.url + '/' + id, token, config);
-            onStart(meta.page, 10);
+            await jwtInterceopter.delete(`${props.url}/${id}`).then(({ data: { success } }) => {
+               if (success) {
+                  onStart(meta.page, 10);
+               }
+            });
          }
       });
    };
@@ -118,39 +110,35 @@ function UTable(props) {
       if (props.params) {
          config.params = { ...config.params, ...props.params.params };
       }
-      const response = await Get(props.url, token, config);
-      if (response.status === 401) {
-         navigate('/login');
-      } else {
-         if (response.data.length != 0) {
+      await jwtInterceopter
+         .get(props.url, config)
+         .then(({ data: { response } }) => {
             setData(response.data);
             setMeta(response.meta);
-         } else {
-            setData([]);
-            setMeta({});
-         }
-      }
-      setSpinner(true);
+         })
+         .finally(() => {
+            setSpinner(true);
+         });
    };
    const onFinish = async (data) => {
       setIsConfirmLoading(true);
-      var response = null;
       if (editMode) {
-         response = await Patch(props.url + '/' + parseInt(id), token, config, data);
-         if (response === 200) {
-            setIsModalVisible(false);
-            onStart(meta.page, 10);
-            setSpinner(true);
-         }
+         await jwtInterceopter.patch(`${props.url}/${parseInt(id)}`, data).then(({ data: { success } }) => {
+            if (success) {
+               setIsModalVisible(false);
+               onStart(meta.page, 10);
+               setSpinner(true);
+            }
+         });
       } else {
-         response = await Post(props.url, token, config, data);
-         console.log(response);
-         if (response === 201) {
-            setIsConfirmLoading(false);
-            setIsModalVisible(false);
-            onStart(meta.page, 10);
-            setSpinner(true);
-         }
+         await jwtInterceopter.post(props.url, data).then(({ data: { success } }) => {
+            if (success) {
+               setIsConfirmLoading(false);
+               setIsModalVisible(false);
+               onStart(meta.page, 10);
+               setSpinner(true);
+            }
+         });
       }
       setIsConfirmLoading(false);
    };
@@ -187,28 +175,20 @@ function UTable(props) {
    };
    const getTypesDatas = async (type) => {
       setType(type);
-      config.params.type = type;
-      const response = await Get('reference-care-type', token, config);
-      setTypesData(response.data);
+      await jwtInterceopter
+         .get('reference-care-type', {
+            params: {
+               type: type
+            }
+         })
+         .then(({ data: { response } }) => {
+            setTypesData(response.data);
+         });
    };
    useEffect(() => {
       onStart(1, 10);
       ScrollRef(scrollRef);
    }, [props.isRefresh]);
-
-   const handleFormValuesChange = (changedValues) => {
-      // Хамааралтай hide/show тохируулах
-      const fieldName = Object.keys(changedValues)[0];
-      const fieldVal = Object.values(changedValues)[0];
-      if (fieldName === props.dependCol && fieldVal === props.dependVal) {
-         console.log('changed', changedValues);
-         console.log('fieldName', fieldName);
-         console.log('fieldVal', fieldVal);
-         setDependShow(true);
-      } else {
-         setDependShow(false);
-      }
-   };
 
    const getInputs = (element, inputType) => {
       switch (inputType) {
@@ -637,11 +617,12 @@ function UTable(props) {
                         }
                      });
                      values.type = type;
-                     const response = await Post('reference-care-type', token, config, values);
-                     if (response.length != 0) {
-                        props.refresh();
-                        setIsSubModalVisible(false);
-                     }
+                     await jwtInterceopter.post('reference-care-type', values).then(({ data: { success } }) => {
+                        if (success) {
+                           props.refresh();
+                           setIsSubModalVisible(false);
+                        }
+                     });
                   })
                   .catch((error) => {
                      console.log(error);
@@ -684,10 +665,13 @@ function UTable(props) {
                                  <Popconfirm
                                     title="Устгасан дохиолдолд сэргээх боломжгүй"
                                     onConfirm={async () => {
-                                       const response = await Delete('reference-care-type/' + data.id, token, config);
-                                       if (response === 200) {
-                                          getTypesDatas(data.type);
-                                       }
+                                       await jwtInterceopter
+                                          .delete(`reference-care-type/${data.id}`)
+                                          .then(({ data: { success } }) => {
+                                             if (success) {
+                                                getTypesDatas(data.type);
+                                             }
+                                          });
                                     }}
                                     okText="Тийм"
                                     cancelText="Үгүй"

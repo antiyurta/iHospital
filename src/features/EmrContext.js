@@ -4,7 +4,11 @@ const EmrContext = createContext();
 
 export const EmrContextProvider = ({ children }) => {
    const [selectedPatient, setSelectedPatient] = useState({}); // songogdson owtoni medelel
-   const [selectedAppoitmentId, setSelectedAppointmentId] = useState(null); // onosh delgerngu
+   const [selectedAppoitmentId, setSelectedAppointmentId] = useState({
+      key: null,
+      id: null
+   }); // onosh delgerngu
+   const [activeKey, setActiveKey] = useState(null);
    const [expandedKeys, setExpandedKeys] = useState(null); // onosh songogdson ued
    const [countOfDocument, setCountOfDocument] = useState(0); // hewten maygtin too
    const [countOfDraft, setCountOfDraft] = useState(0); // hewten draft iin too
@@ -24,12 +28,15 @@ export const EmrContextProvider = ({ children }) => {
       setSelectedPatient(patient);
    };
    //
-   const setId = (id) => {
-      if (id === selectedAppoitmentId) {
-         setSelectedAppointmentId(null);
-      } else {
-         setSelectedAppointmentId(id);
-      }
+   const setId = (id, type) => {
+      // setSelectedAppointmentId({
+      //    key: 'item-1',
+      //    id: null
+      // });
+      setSelectedAppointmentId({
+         key: type,
+         id: id
+      });
    };
    const setKeys = (keys) => {
       setExpandedKeys(keys);
@@ -55,6 +62,9 @@ export const EmrContextProvider = ({ children }) => {
       setSelectedDocument(document);
       setIsViewDocument(state);
    };
+   const setActiveKeyId = (id) => {
+      setActiveKey(id);
+   };
    // DocumentViewer functuin end
    return (
       <EmrContext.Provider
@@ -65,6 +75,8 @@ export const EmrContextProvider = ({ children }) => {
             setId,
             expandedKeys,
             setKeys,
+            activeKey,
+            setActiveKeyId,
             countOfDocument,
             setDocumentCount,
             countOfDraft,

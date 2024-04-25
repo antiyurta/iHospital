@@ -18,13 +18,7 @@ const { Option } = Select;
 
 function GeneralInfo({ form, gbase }) {
    const [citizens, setCitizens] = useState([]);
-   const [countryId, setCountryId] = useState();
    const isXyp = useSelector(selectHospitalIsXyp);
-
-   const findMongolId = (incomeCitizens) => {
-      const mongolia = incomeCitizens.find((citizen) => citizen.name === 'Монгол');
-      setCountryId(34);
-   };
 
    const getCitizens = async () => {
       await CountryApi.getByPageFilter({
@@ -32,7 +26,6 @@ function GeneralInfo({ form, gbase }) {
             type: 1
          }
       }).then(({ data: { response } }) => {
-         findMongolId(response.data);
          setCitizens(response.data);
       });
    };
@@ -175,7 +168,6 @@ function GeneralInfo({ form, gbase }) {
                      message: 'Заавал'
                   }
                ]}
-               initialValue={countryId}
                labelCol={{ span: 8 }}
                wrapperCol={{ span: 16 }}
             >

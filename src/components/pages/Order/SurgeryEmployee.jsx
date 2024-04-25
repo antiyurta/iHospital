@@ -32,9 +32,9 @@ const EmployeeList = ({ label, name, employees }) => {
    );
 };
 
-const FormListEmployee = ({ formName, label, employees }) => {
+const FormListEmployee = ({ formName, label, employees, rules }) => {
    return (
-      <Form.List name={formName}>
+      <Form.List name={formName} rules={rules}>
          {(fields, { add, remove }) => (
             <>
                {fields.map(({ key, name, ...restField }) => (

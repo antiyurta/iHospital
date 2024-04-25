@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ProgressNotes from './ProgressNotes';
 import ProgressCheck from './ProgressCheck';
-import Xray from '../Xray';
+import NewXray from '../Xray/NewXray';
 import ErequestList from './Erequest/ErequestList';
 import Assesments from './Nurse/Assesments';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
+//context
+import EmrContext from '@Features/EmrContext';
 
 export default function MainAmbulatory({ patientId }) {
    const [activeKey, setActiveKey] = useState('item-1');
+   const { selectedAppoitmentId, setActiveKeyId } = useContext(EmrContext);
+   useEffect(() => {
+      setActiveKey(selectedAppoitmentId?.key || 'item-1');
+      setActiveKeyId(selectedAppoitmentId?.id || null);
+   }, [selectedAppoitmentId]);
    const items = [
       {
          label: 'Явцын тэмдэглэл',
@@ -38,7 +45,7 @@ export default function MainAmbulatory({ patientId }) {
       {
          label: 'Оношилгоо',
          key: 'item-5',
-         children: <Xray PatientId={patientId} />
+         children: <NewXray />
       }
       // {
       //   label: "Эмийн эмчилгээ",
@@ -67,7 +74,14 @@ export default function MainAmbulatory({ patientId }) {
                {items?.map((item) => (
                   <SplideSlide key={item.key}>
                      <div className={activeKey === item.key ? 'section active' : 'section'}>
-                        <p onClick={() => setActiveKey(item.key)}>{item.label}</p>
+                        <p
+                           onClick={() => {
+                              setActiveKey(item.key);
+                              setActiveKeyId(null);
+                           }}
+                        >
+                           {item.label}
+                        </p>
                      </div>
                   </SplideSlide>
                ))}

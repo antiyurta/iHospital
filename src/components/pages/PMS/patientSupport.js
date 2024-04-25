@@ -28,8 +28,8 @@ const PatientSupport = (props) => {
          });
    };
 
-   const onFinishFailed = () => {
-      console.log('dsdsa');
+   const onFinishFailed = (error) => {
+      console.log('dsdsa', error);
    };
 
    useEffect(() => {
