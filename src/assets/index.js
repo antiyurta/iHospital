@@ -28,3 +28,12 @@ export const backArrow = require('./images/backArrow.svg');
 
 //chat
 export const expandIconChat = require('./chat/expandIcon.svg');
+export const humanMuscleImg = require('./images/humanMuscle.png');
+export const humanBody2Img = require('./images/humanBody2.png');
+export const noseImg = require('./images/nose.png');
+export const noseInsideImg = require('./images/noseInside.png');
+export const earImg = require('./images/ear.png');
+export const earinsideImg = require('./images/earInside.png');
+export const tambourineImg = require('./images/tambourine.png');
+export const mouthimg = require('./images/mouth.png');
+export const tuvunhimg = require('./images/aaa.png');
