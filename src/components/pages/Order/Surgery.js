@@ -133,18 +133,24 @@ function Surgery(props) {
          await SurgeryApi.getRequestById(selectedSurgery.surguryRequestId)
             .then(({ data: { response, success } }) => {
                if (success) {
+                  var hourss;
+                  var minutee;
                   if (response.taskDoctorRels?.length > 0) {
                      setAnes(true);
                   }
-                  const [hours, minute] = response.durationTime.split(':');
+                  if (response.durationTime) {
+                     const [hours, minute] = response.durationTime.split(':');
+                     hourss = hours;
+                     minutee = minute;
+                  }
                   form.setFieldsValue({
                      ...response,
                      surgeries: response.taskWorkers.surgeries,
                      description: response.currentColumn.description,
                      durationTime: response.durationTime
                         ? moment().set({
-                             hour: hours,
-                             minute: minute
+                             hour: hourss,
+                             minute: hourss
                           })
                         : undefined
                   });

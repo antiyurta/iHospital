@@ -1,10 +1,11 @@
 import React from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { Button, Form, Table } from 'antd';
-import { NewColumn } from '../../../Table/Table';
 import { NewDatePicker, NewInput, NewInputNumber, NewRangePicker, NewTextArea } from '../../../Input/Input';
 import { MinusOutlined } from '@ant-design/icons';
 import moment from 'moment';
+
+const { Column } = Table;
 
 const NewFormTable = (props) => {
    const { data, options, add, remove, state } = props;
@@ -22,7 +23,7 @@ const NewFormTable = (props) => {
       >
          {options?.map((column, index) => {
             return (
-               <NewColumn
+               <Column
                   key={index}
                   title={column.question}
                   dataIndex={column.keyWord}
@@ -83,7 +84,7 @@ const NewFormTable = (props) => {
                />
             );
          })}
-         <NewColumn
+         <Column
             title=" "
             width={50}
             render={(value, row, index) => {

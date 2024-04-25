@@ -20,7 +20,11 @@ const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }
       setEnd(incomeEndDate);
       setCurrentPage(page);
       setCurrentLimit(limit);
-      getList(page, limit, incomeStartDate.format(), incomeEndDate.format());
+      if (meta) {
+         getList(page, limit, incomeStartDate.format(), incomeEndDate.format());
+      } else {
+         getList(null, null, incomeStartDate.format(), incomeEndDate.format());
+      }
    };
 
    useEffect(() => {
@@ -78,18 +82,20 @@ const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }
          </div>
          <div className="right">
             <Input placeholder="Хайх" />
-            <Pagination
-               meta={meta}
-               page={meta.page}
-               setPage={(page) => {
-                  get(page, currentLimit, start, end);
-               }}
-               displayTotal={appointmentsLength}
-               limit={meta?.limit}
-               setLimit={(limit) => {
-                  get(1, limit, start, end);
-               }}
-            />
+            {meta ? (
+               <Pagination
+                  meta={meta}
+                  page={meta.page}
+                  setPage={(page) => {
+                     get(page, currentLimit, start, end);
+                  }}
+                  displayTotal={appointmentsLength}
+                  limit={meta?.limit}
+                  setLimit={(limit) => {
+                     get(1, limit, start, end);
+                  }}
+               />
+            ) : null}
          </div>
       </div>
    );
