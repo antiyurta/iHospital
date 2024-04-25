@@ -14,9 +14,7 @@ const CT1Dotor = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr>
-                        <th colSpan={4} className="text-center font-bold">
-                           ДОТРЫН ЭМЧИЙН ҮЗЛЭГ
-                        </th>
+                        <th colSpan={4} className="text-center font-bold ">ДОТРЫН ЭМЧИЙН ҮЗЛЭГ</th>
                      </tr>
                      <tr>
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
