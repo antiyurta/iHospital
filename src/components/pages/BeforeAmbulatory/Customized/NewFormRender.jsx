@@ -284,17 +284,33 @@ const NewFormRender = ({
                      <Form.Item {...restItem}>
                         <Input disabled placeholder={item.question} />
                      </Form.Item>
-                     <DiagnoseWindow
-                        handleClick={(diagnose) => {
-                           useForm.setFieldsValue({
-                              [`${item.keyWord}Id`]: diagnose.id,
-                              [`${configNames(item.keyWord)}`]: value(diagnose),
-                              [`${item.keyWord}CreatedAt`]: new Date()
-                           });
-                           checkProgress(keyWords);
-                        }}
-                        disabled={state}
-                     />
+                     <div className="flex flex-row gap-1">
+                        <Tooltip title="Хариу арилгах">
+                           <Button
+                              danger
+                              disabled={state}
+                              icon={<CloseOutlined />}
+                              onClick={() => {
+                                 useForm.resetFields([
+                                    [`${item.keyWord}Id`],
+                                    [`${configNames(item.keyWord)}`],
+                                    [`${item.keyWord}CreatedAt`]
+                                 ]);
+                              }}
+                           />
+                        </Tooltip>
+                        <DiagnoseWindow
+                           handleClick={(diagnose) => {
+                              useForm.setFieldsValue({
+                                 [`${item.keyWord}Id`]: diagnose.id,
+                                 [`${configNames(item.keyWord)}`]: value(diagnose),
+                                 [`${item.keyWord}CreatedAt`]: new Date()
+                              });
+                              checkProgress(keyWords);
+                           }}
+                           disabled={state}
+                        />
+                     </div>
                      <Form.Item className="hidden" name={`${item.keyWord}CreatedAt`}>
                         <Input />
                      </Form.Item>
