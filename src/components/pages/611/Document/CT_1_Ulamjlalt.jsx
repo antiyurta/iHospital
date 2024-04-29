@@ -2,7 +2,11 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 import { Checkbox, Input } from 'antd';
 
-const CT_1_Ulamjlalt = () => {
+const CT_1_Ulamjlalt = (props) => {
+   const {
+      data: { formData }
+   } = props;
+   console.log('Form', formData);
    return (
       <div className="print-remove-p">
          <div className="page">
@@ -19,26 +23,36 @@ const CT_1_Ulamjlalt = () => {
                   <thead>
                      <tr>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Дунд</Checkbox>
-                              <Checkbox>Хүндэвтэр</Checkbox>
-                              <Checkbox>Хүнд</Checkbox>
-                              <Checkbox>Маш хүнд</Checkbox>
+                           <Checkbox.Group value={formData?.q1}>
+                              <Checkbox className="ml-2" value={'q1-1'}>
+                                 Дунд
+                              </Checkbox>
+                              <Checkbox value={'q1-2'}>Хүндэвтэр</Checkbox>
+                              <Checkbox value={'q1-3'}>Хүнд</Checkbox>
+                              <Checkbox value={'q1-4'}>Маш хүнд</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Саруул</Checkbox>
-                              <Checkbox>Бүдгэрсэн</Checkbox>
-                              <Checkbox>Ухаангүй</Checkbox>
+                           <Checkbox.Group value={formData?.q2}>
+                              <Checkbox className="ml-2" value={'q2-1'}>
+                                 Саруул
+                              </Checkbox>
+                              <Checkbox value={'q2-2'}>Бүдгэрсэн</Checkbox>
+                              <Checkbox value={'q2-3'}>Ухаангүй</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th colSpan={4}>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэвийн</Checkbox>
-                              <Checkbox>
+                           <Checkbox.Group value={formData?.q3}>
+                              <Checkbox className="ml-2" value={'q3-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input className="amaraInput w-10 mb-2" style={{ textAlign: 'center' }} />
+                                 <Input
+                                    className="amaraInput w-10 mb-2"
+                                    value={formData?.['q3-2-1']}
+                                    style={{ textAlign: 'center' }}
+                                 />
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -53,14 +67,43 @@ const CT_1_Ulamjlalt = () => {
                         </th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]"> Амьсгал 1 минутанд _____ удаа</th>
+                        <th className="w-[220px]">
+                           {' '}
+                           Амьсгал 1 минутанд
+                           <Input className=" w-10 mb-2" value={formData?.['q4']} style={{ textAlign: 'center' }} />
+                           удаа
+                        </th>
                         <th colSpan={3}>
                            Чагналтаар:
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэржигнүүртэй</Checkbox>
-                              <Checkbox>Уушги цулцангийн</Checkbox>
-                              <Checkbox>Амьсгал сулавтар (баруун, зүүн, 2 талдаа)</Checkbox>
-                              <Checkbox>Гуурсан хоолойн</Checkbox>
+                           <Checkbox.Group value={formData?.q5}>
+                              <Checkbox className="ml-2" value={'q5-3'}>
+                                 Хэржигнүүртэй
+                              </Checkbox>
+                              <Checkbox value={'q5-1'}>Уушги цулцангийн</Checkbox>
+                              <Checkbox value={'q5-4'}>
+                                 Амьсгал сулавтар
+                                 <p>
+                                    <span className="text-[11px]">
+                                       (
+                                       <Checkbox.Group value={formData?.['q5-4-1']} className="inline">
+                                          <Checkbox className="test" value={'q5-4-1-1'}>
+                                             <span className="text-[11px]">Баруун,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                          <Checkbox className="ml-0 test" value={'q5-4-1-2'}>
+                                             <span className="text-[11px]">зүүн,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                          <Checkbox className="ml-0 test" value={'q5-4-1-3'}>
+                                             <span className="text-[11px]">2 талдаа,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                       </Checkbox.Group>
+                                       )
+                                    </span>
+                                 </p>
+                              </Checkbox>
+                              <Checkbox value={'q5-2'}>Гуурсан хоолойн</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -76,41 +119,81 @@ const CT_1_Ulamjlalt = () => {
                      <tr className="border-t-0">
                         <th>
                            Судасны цохилт 1 минутанд
-                           <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
                            удаа
                            <th>
                               Хүчдэл дүүрэлт
-                              <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
+                              <Input className="amaraInput w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                         <th>
                            <th>Тогшилтоор:</th>
                            Зүрхний хил
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэвийн</Checkbox>
-                              <Checkbox>Томорсон (зүүн, баруун)</Checkbox>
+                           <Checkbox.Group value={formData?.q8}>
+                              <Checkbox className="ml-2" value={'q8-1'}>
+                                 Хэвийн
+                              </Checkbox>
+                              <Checkbox value={'q8-2'}>
+                                 Томорсон
+                                 <p>
+                                    <span className="text-[11px]">
+                                       (
+                                       <Checkbox.Group value={formData?.['q8-2-1']} className="inline">
+                                          <Checkbox className="test" value={'q8-2-1-1'}>
+                                             <span className="text-[11px]">Баруун,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                          <Checkbox className="ml-0 test" value={'q8-2-1-2'}>
+                                             <span className="text-[11px]">зүүн,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                       </Checkbox.Group>
+                                       )
+                                    </span>
+                                 </p>
+                              </Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
                            <th>Чагналтаар::</th>
                            Зүрхний авиа
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Тод</Checkbox>
-                              <Checkbox>Бүдэг</Checkbox>
-                              <Checkbox>Бүдгэвтэр</Checkbox>
-                              <Checkbox>Хэм жигд</Checkbox>
-                              <Checkbox>Жигд бус </Checkbox>
-                              <Checkbox>Хэм алдалттай</Checkbox>
+                           <Checkbox.Group value={formData?.q9}>
+                              <Checkbox className="ml-2" value={'q9-1'}>
+                                 Тод
+                              </Checkbox>
+                              <Checkbox value={'q9-2'}>Бүдэг</Checkbox>
+                              <Checkbox value={'q9-3'}>Бүдгэвтэр</Checkbox>
+                              <Checkbox value={'q9-4'}>Хэм жигд</Checkbox>
+                              <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
+                              <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
                            <th>
                               АД баруун талд
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />/
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.['q9-6-1']}
+                                 style={{ textAlign: 'center' }}
+                              />
+                              /
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.['q9-6-2']}
+                                 style={{ textAlign: 'center' }}
+                              />
                            </th>
                            <th>
                               Зүүн талд
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />/
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.['q9-6-3']}
+                                 style={{ textAlign: 'center' }}
+                              />
+                              /
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.['q9-6-4']}
+                                 style={{ textAlign: 'center' }}
+                              />
                            </th>
                         </th>
                      </tr>
@@ -126,27 +209,34 @@ const CT_1_Ulamjlalt = () => {
                      <tr>
                         <th className="w-[150px]">
                            Хэл
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Ердийн</Checkbox>
-                              <Checkbox>Хуурай</Checkbox>
-                              <Checkbox>Өнгөргүй</Checkbox>
-                              <Checkbox>Өнгөртэй</Checkbox>
+                           <Checkbox.Group value={formData?.q10}>
+                              <Checkbox className="ml-2" value={'q10-1'}>
+                                 Ердийн
+                              </Checkbox>
+                              <Checkbox value={'q10-2'}>Хуурай</Checkbox>
+                              <Checkbox value={'q10-3'}>Өнгөргүй</Checkbox>
+                              <Checkbox value={'q10-4'}>Өнгөртэй</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th colSpan={3}>
                            <p> Хэвлийн үзлэг:</p>
-                           <Checkbox.Group>
-                              <Checkbox>Өнгөц тэмтрэлтээр</Checkbox>
-                              <Checkbox>Гүн тэмтрэлтээр</Checkbox>
-                              <Checkbox className="">
+                           <Checkbox.Group value={formData?.q11}>
+                              <Checkbox value={'q11-1'}>Өнгөц тэмтрэлтээр</Checkbox>
+                              <Checkbox value={'q11-2'}>Гүн тэмтрэлтээр</Checkbox>
+                              <Checkbox className="" value={'q11-3'}>
                                  Эмзэглэлтэй (байрлал
-                                 <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />)
+                                 <Input
+                                    className="amaraInput w-8"
+                                    value={formData?.['q11-3-1']}
+                                    style={{ textAlign: 'center' }}
+                                 />
+                                 )
                               </Checkbox>
                            </Checkbox.Group>
                            <Checkbox.Group>
-                              <Checkbox>Ердийн</Checkbox>
-                              <Checkbox>Зөөлөн гялтан цочрол үгүй</Checkbox>
-                              <Checkbox> Гялтан цочролын шинж илэрсэн</Checkbox>
+                              <Checkbox value={'q11-4'}>Ердийн</Checkbox>
+                              <Checkbox value={'q11-5'}>Зөөлөн гялтан цочрол үгүй</Checkbox>
+                              <Checkbox value={'q11-6'}> Гялтан цочролын шинж илэрсэн</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -157,14 +247,60 @@ const CT_1_Ulamjlalt = () => {
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
+                     <tr>
+                        <th>
+                           Сонсох чадвахи:
+                           <Checkbox.Group value={formData?.q12}>
+                              <Checkbox value={'q12-1'}>Хэвийн</Checkbox>
+                              <Checkbox value={'q12-2'}>
+                                 Буурсан
+                                 <p>
+                                    <span className="text-[11px]">
+                                       (
+                                       <Checkbox.Group value={formData?.['q12-2-1']} className="inline">
+                                          <Checkbox className="test" value={'q12-2-1-1'}>
+                                             <span className="text-[11px]">Баруун,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                          <Checkbox className="ml-0 test" value={'q12-2-1-2'}>
+                                             <span className="text-[11px]">зүүн,</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                       </Checkbox.Group>
+                                       )
+                                    </span>
+                                 </p>
+                              </Checkbox>
+                           </Checkbox.Group>
+                        </th>
+                        <th>
+                           Рефлексүүд:
+                           <Checkbox.Group value={formData?.q13}>
+                              <Checkbox value={'q13-1'}>Хадгалагдана</Checkbox>
+                              <Checkbox value={'q13-2'}>Хадгалагдана</Checkbox>
+                           </Checkbox.Group>
+                        </th>
+                     </tr>
+                  </thead>
+               </Table>
+               <Table bordered className="story mb-0">
+                  <thead>
                      <tr className="border-t-0">
                         <th colSpan={4}>
                            <th className="w-full">
                               Бусад
-                              <Input className="amaraInput w-[670px] mb-3" style={{ textAlign: 'center' }} />
+                              <Input
+                                 className="amaraInput w-[670px] mb-3"
+                                 value={formData?.q14}
+                                 style={{ textAlign: 'center' }}
+                              />
                            </th>
                            Сэтгэцийн байдал:
-                           <Input className="amaraInput w-[600px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input
+                              className="amaraInput w-[600px] mb-1"
+                              value={formData?.q15}
+                              style={{ textAlign: 'center' }}
+                           />
                         </th>
                      </tr>
                      <tr>
