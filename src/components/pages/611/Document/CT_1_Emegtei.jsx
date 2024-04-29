@@ -389,7 +389,7 @@ const CT_1_Emegtei = (props) => {
                                  <Input type="number" value={formData?.q27} className="w-4  cursor-pointer" />
                               </div>
                            </div>
-                           <div className="max-w-[18cm]">
+                           <div className="max-w-[18cm] ">
                               <p className="ml-2 underline">{`Эх барих, эмэгтэйчүүдийн тусгайлсан үзлэг: ${formData?.q28}`}</p>
                            </div>
                         </th>
@@ -404,18 +404,8 @@ const CT_1_Emegtei = (props) => {
                   <thead>
                      <tr>
                         <th>
-                           <div>
-                              <p className="ml-2">
-                                 Тольны үзлэг: PV
-                                 <span>{formData?.q29}</span>
-                              </p>
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
+                           <div className="max-w-[18cm]">
+                              <p className="ml-2 underline">{`Тольны үзлэг:PV: ${formData?.q29}`}</p>
                            </div>
                         </th>
                      </tr>
