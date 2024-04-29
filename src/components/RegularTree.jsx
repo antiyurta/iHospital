@@ -65,6 +65,9 @@ const RegularTree = ({ data, searchValue, getData }) => {
                onClick={() => {
                   configure(!expanded, props.title);
                   setExpanded(!expanded);
+                  getData({
+                     isLeaf: false
+                  });
                }}
             >
                {expanded ? <ExpandIcon /> : <CollapseIcon />}
@@ -119,7 +122,7 @@ const RegularTree = ({ data, searchValue, getData }) => {
                         <PageIcon />
                      </div>
                      <Highlighter
-                        className="p-1 hover:cursor-pointer hover:bg-gray-50 hover:rounded"
+                        className="p-1"
                         highlightClassName="YourHighlightClass"
                         searchWords={[searchValue]}
                         autoEscape={true}
