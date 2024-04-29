@@ -59,8 +59,13 @@ const CallAmbulance = ({ extraData }) => {
       const serviceId = emergencyForm.getFieldValue('hicsServiceId');
       await healtInsuranceApi
          .getHicsCostByField(serviceId, value)
-         .then((response) => {
-            setHicsCostByField(response.data.result);
+         .then(({ data }) => {
+            console.log(data);
+            if (data.result === null) {
+               openNofi('error', 'Алдаа', data.description);
+            } else {
+               setHicsCostByField(data.result);
+            }
          })
          .catch((error) => {
             if (error.response.status === 400) {
