@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from 'antd';
+import { Button, Form, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined, PlusCircleFilled, RedoOutlined } from '@ant-design/icons';
 import OrderForm from './OrderTable/OrderForm';
