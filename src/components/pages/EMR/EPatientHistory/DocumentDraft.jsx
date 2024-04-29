@@ -162,6 +162,7 @@ const DocumentDraft = (props) => {
                   getDocumentsInDraft();
                }}
                isBackButton={false}
+               handleIsReload={setIsReloadDocumentHistory}
                handleBackButton={() => null}
             />
          </Modal>

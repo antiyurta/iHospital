@@ -389,26 +389,8 @@ const CT_1_Emegtei = (props) => {
                                  <Input type="number" value={formData?.q27} className="w-4  cursor-pointer" />
                               </div>
                            </div>
-                           <div>
-                              <p className="ml-2">
-                                 {' '}
-                                 Эх барих, эмэгтэйчүүдийн тусгайлсан үзлэг:
-                                 <span>{formData?.q28}</span>
-                                 {/* <Input */}
-                                 {/* className="amaraInput w-[450px]" */}
-                                 {/* value={formData?.q28} */}
-                                 {/* style={{ textAlign: 'center' }} */}
-                                 {/* /> */}
-                              </p>
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
-                              <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
+                           <div className="max-w-[18cm]">
+                              <p className="ml-2 underline">{`Эх барих, эмэгтэйчүүдийн тусгайлсан үзлэг: ${formData?.q28}`}</p>
                            </div>
                         </th>
                      </tr>
@@ -425,11 +407,7 @@ const CT_1_Emegtei = (props) => {
                            <div>
                               <p className="ml-2">
                                  Тольны үзлэг: PV
-                                 <Input
-                                    className="amaraInput w-[600px] mt-4"
-                                    value={formData?.q29}
-                                    style={{ textAlign: 'center' }}
-                                 />
+                                 <span>{formData?.q29}</span>
                               </p>
                               <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
                               <Input className="amaraInput w-full  mb-2" style={{ textAlign: 'center' }} />
