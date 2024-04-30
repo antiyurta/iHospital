@@ -71,6 +71,7 @@ const NewXray = () => {
    const printRefPicture = useRef();
    const hospitalId = useSelector(selectCurrentHospitalId);
    const incomeEMRData = useSelector(selectCurrentEmrData);
+   const [isSelected, setIsSelected] = useState(false);
    const [doctor, setDoctor] = useState({});
    const [patient, setPatient] = useState({});
    const [deviceType, setDeviceType] = useState(null);
@@ -232,117 +233,117 @@ const NewXray = () => {
 
    return (
       <>
-         <div className="flex flex-row gap-2">
-            <Spin wrapperClassName="h-[500px] min-w-[200px]" spinning={isLoading}>
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                  <div className="p-1">
-                     <div className="flex flex-col gap-2 p-2">
-                        <Input
-                           prefix={<SearchOutlined />}
-                           placeholder="Хайх"
-                           value={searchValue}
-                           onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                        <RegularTree
-                           data={treeData}
-                           searchValue={searchValue}
-                           getData={(item) => {
-                              setActiveKeyId(item.key);
-                              setDeviceType(item.deviceType);
-                              //   getXray(item.key);
-                              setServiceName(item.title);
-                           }}
-                        />
-                     </div>
+         <div className="flex flex-row gap-2 h-full">
+            <Spin wrapperClassName="min-w-[200px] emr-tabs" spinning={isLoading}>
+               <div className="flex flex-col gap-1 h-full">
+                  <div className="sticky-header">
+                     <Input
+                        prefix={<SearchOutlined />}
+                        placeholder="Хайх"
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                     />
                   </div>
+                  <RegularTree
+                     data={treeData}
+                     searchValue={searchValue}
+                     getData={(item) => {
+                        if (item.isLeaf) {
+                           setIsSelected(true);
+                        } else {
+                           setIsSelected(false);
+                        }
+                        setActiveKeyId(item.key);
+                        setDeviceType(item.deviceType);
+                        setServiceName(item.title);
+                     }}
+                  />
                </div>
             </Spin>
-            <div className="w-full">
-               <Spin wrapperClassName="h-[500px]" spinning={isLoadingInfo}>
-                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                     <div className="m-1 bg-white h-full flex flex-col gap-2">
-                        <div className="flex flex-row justify-between py-3 px-1 bg-[#F3F4F6]">
-                           <ListPatientInfo patientData={doctor} />
-                           <div className="flex flex-row gap-2">
+            <Spin wrapperClassName="emr-tabs w-full" spinning={isLoadingInfo}>
+               {isSelected ? (
+                  <div className="flex flex-col gap-1">
+                     <div className="flex flex-row justify-between p-3 bg-white rounded-md sticky-header">
+                        <ListPatientInfo patientData={doctor} />
+                        <div className="flex flex-row gap-2">
+                           <Button
+                              type="primary"
+                              onClick={() => {
+                                 if (deviceType === 0) {
+                                    setImageUrls(appInspection.photos?.map((photo) => photo.url));
+                                 }
+                                 setIsOpenModal(true);
+                              }}
+                           >
+                              Зураг хэвлэх
+                           </Button>
+                           {deviceType === 1 ? (
+                              <ReactToPrint
+                                 trigger={() => {
+                                    return <Button type="primary" icon={<PrinterOutlined />} />;
+                                 }}
+                                 content={() => printRef.current}
+                              />
+                           ) : null}
+                           {deviceType === 0 ? (
                               <Button
                                  type="primary"
                                  onClick={() => {
-                                    if (deviceType === 0) {
-                                       setImageUrls(appInspection.photos?.map((photo) => photo.url));
-                                    }
-                                    setIsOpenModal(true);
+                                    setIsOpenModalForm(true);
                                  }}
-                              >
-                                 Зураг хэвлэх
-                              </Button>
-                              {deviceType === 1 ? (
-                                 <ReactToPrint
-                                    trigger={() => {
-                                       return <Button type="primary" icon={<PrinterOutlined />} />;
-                                    }}
-                                    content={() => printRef.current}
-                                 />
-                              ) : null}
-                              {deviceType === 0 ? (
-                                 <Button
-                                    type="primary"
-                                    onClick={() => {
-                                       setIsOpenModalForm(true);
-                                    }}
-                                    icon={<PrinterOutlined />}
-                                 />
-                              ) : null}
-                           </div>
+                                 icon={<PrinterOutlined />}
+                              />
+                           ) : null}
                         </div>
-                        {deviceType === 1 ? (
-                           <>
-                              <div ref={printRef}>
-                                 <XrayDocumentReturnById
-                                    serviceName={serviceName}
-                                    hospitalId={hospitalId}
-                                    document={document}
-                                    patient={patient}
-                                    body={<FormRenderHtml formId={document?.formId} documentData={document?.data} />}
-                                 />
-                              </div>
-                              {isViewPacs ? (
-                                 <div className="flex flex-col gap-2">
-                                    <Divider>Зураг</Divider>
-                                    <Button
-                                       onClick={() => {
-                                          window.open(osimisViewerUrl, '_blank');
-                                       }}
-                                    >
-                                       Дэлгэрэнгүй харах (VIEWER)
-                                    </Button>
-                                    <Image.PreviewGroup>
-                                       <div className="grid grid-cols-4 gap-2">
-                                          {imageUrls?.map((url, index) => (
-                                             <Image key={index} src={url} alt={index} crossOrigin="anonymous" />
-                                          ))}
-                                       </div>
-                                    </Image.PreviewGroup>
-                                 </div>
-                              ) : null}
-                           </>
-                        ) : null}
-                        {deviceType === 0 ? (
-                           <ul className="list-disc list-inside">
-                              <li>Зураг</li>
-                              <div className="grid grid-cols-2 gap-1">
-                                 {appInspection.photos?.map((photo, index) => {
-                                    return <Image key={index} src={photo.url} />;
-                                 })}
-                              </div>
-                              <li>ЭМЧИЙН ҮЗЛЭГ</li>
-                              <RenderNotesDetail data={appInspection?.inspectionNote?.conclusion} />
-                              <RenderNotesDetail data={appInspection?.inspectionNote?.advice} />
-                           </ul>
-                        ) : null}
                      </div>
+                     {deviceType === 1 ? (
+                        <>
+                           <div ref={printRef}>
+                              <XrayDocumentReturnById
+                                 serviceName={serviceName}
+                                 hospitalId={hospitalId}
+                                 document={document}
+                                 patient={patient}
+                                 body={<FormRenderHtml formId={document?.formId} documentData={document?.data} />}
+                              />
+                           </div>
+                           {isViewPacs ? (
+                              <div className="flex flex-col gap-2">
+                                 <Divider>Зураг</Divider>
+                                 <Button
+                                    onClick={() => {
+                                       window.open(osimisViewerUrl, '_blank');
+                                    }}
+                                 >
+                                    Дэлгэрэнгүй харах (VIEWER)
+                                 </Button>
+                                 <Image.PreviewGroup>
+                                    <div className="grid grid-cols-4 gap-2">
+                                       {imageUrls?.map((url, index) => (
+                                          <Image key={index} src={url} alt={index} crossOrigin="anonymous" />
+                                       ))}
+                                    </div>
+                                 </Image.PreviewGroup>
+                              </div>
+                           ) : null}
+                        </>
+                     ) : null}
+                     {deviceType === 0 ? (
+                        <ul className="list-disc list-inside">
+                           <li>Зураг</li>
+                           <div className="grid grid-cols-2 gap-1">
+                              {appInspection.photos?.map((photo, index) => {
+                                 return <Image key={index} src={photo.url} />;
+                              })}
+                           </div>
+                           <li>ЭМЧИЙН ҮЗЛЭГ</li>
+                           <RenderNotesDetail data={appInspection?.inspectionNote?.conclusion} />
+                           <RenderNotesDetail data={appInspection?.inspectionNote?.advice} />
+                        </ul>
+                     ) : null}
                   </div>
-               </Spin>
-            </div>
+               ) : null}
+            </Spin>
          </div>
          <Modal
             open={isOpenModalForm}

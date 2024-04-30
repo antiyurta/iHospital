@@ -1,14 +1,13 @@
 //Явцын тэмдэглэл
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Input, Result, Spin } from 'antd';
+import { Button, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { SearchOutlined } from '@ant-design/icons';
 import ReactToPrint from 'react-to-print';
-//img
-import { manIcon } from '@Assets/index';
 //common
 import RegularTree from '@Comman/RegularTree';
+import { ListPatientInfo } from '@Comman/ListInjection';
 import { diagnoseTypeInfo, formatNameForDoc, capitalizeFirstLetter } from '@Comman/common';
 //context
 import EmrContext from '@Features/EmrContext';
@@ -22,7 +21,7 @@ import * as InspectionDocumentIndex from './Document/Index';
 const InspectionDocumentReturnById = InspectionDocumentIndex.ReturnById;
 
 export default function ProgressNotes() {
-   const { expandedKeys, activeKey, setActiveKeyId, setKeys } = useContext(EmrContext);
+   const { activeKey, setActiveKeyId, setKeys } = useContext(EmrContext);
    const printRef = useRef();
    const [searchValue, setSearchValue] = useState('');
    const incomeEMRData = useSelector(selectCurrentEmrData);
@@ -97,7 +96,6 @@ export default function ProgressNotes() {
             console.log('error', error);
          })
          .finally(() => {
-            setIsSelected(true);
             setSpinnerInfo(false);
          });
    };
@@ -157,122 +155,103 @@ export default function ProgressNotes() {
    }, [searchValue, responseData]);
 
    useEffect(() => {
-      expandedKeys && setIsSelected(true);
-   }, [expandedKeys]);
-
-   useEffect(() => {
       getPatientInspectionNotes();
    }, []);
    return (
-      <div className="flex flex-row gap-2">
-         <Spin wrapperClassName="h-[500px] min-w-[200px]" spinning={spinner}>
-            <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-               <div className="p-1">
-                  <div className="flex flex-col gap-2 p-2">
-                     <Input
-                        prefix={<SearchOutlined />}
-                        placeholder="Хайх"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                     />
-                     <RegularTree
-                        data={treeData}
-                        searchValue={searchValue}
-                        getData={(item) => {
-                           setActiveKeyId(item.key);
-                           // getAppointmentById(item.key);
-                        }}
-                     />
-                  </div>
+      <div className="flex flex-row gap-2 h-full">
+         <Spin wrapperClassName="min-w-[200px] emr-tabs" spinning={spinner}>
+            <div className="flex flex-col gap-1 h-full">
+               <div className="sticky-header">
+                  <Input
+                     prefix={<SearchOutlined />}
+                     placeholder="Хайх"
+                     value={searchValue}
+                     onChange={(e) => setSearchValue(e.target.value)}
+                  />
                </div>
+               <RegularTree
+                  data={treeData}
+                  searchValue={searchValue}
+                  getData={(item) => {
+                     if (item.isLeaf) {
+                        setIsSelected(true);
+                     } else {
+                        setIsSelected(false);
+                     }
+                     setActiveKeyId(item.key);
+                  }}
+               />
             </div>
          </Spin>
-         <div className="w-full">
-            <Spin wrapperClassName="h-[500px]" spinning={spinerInfo}>
-               <div className="rounded-md bg-[#F3F4F6] w-full inline-block overflow-auto h-full">
-                  <div className="m-1 bg-white h-full flex flex-col gap-2">
-                     {isSelected ? (
-                        <div className="flex flex-col gap-1 p-1">
-                           <div className="flex flex-row gap-2">
-                              <img src={manIcon} width={70} alt="d" />
-                              <div className="flex flex-col gap-1">
-                                 <div className="flex flex-row gap-2 text-xs">
-                                    <span className="w-[30px]">Овог:</span>
-                                    <span className="text-black">{info.lastName}</span>
-                                 </div>
-                                 <div className="flex flex-row gap-2 text-xs">
-                                    <span className="w-[30px]">Нэр:</span>
-                                    <span className="text-black">{info.firstName}</span>
-                                 </div>
-                                 <div className="flex flex-row gap-2 text-xs">
-                                    <span>Кабинет:</span>
-                                    <span className="text-black">{info.cabinetName}</span>
-                                 </div>
-                              </div>
+         <Spin wrapperClassName="emr-tabs w-full" spinning={spinerInfo}>
+            {isSelected ? (
+               <div className="flex flex-col gap-1">
+                  <div className="flex flex-row justify-between p-3 bg-white rounded-md sticky-header">
+                     <ListPatientInfo
+                        patientData={{
+                           lastName: info.lastName,
+                           firstName: info.firstName
+                        }}
+                     />
+                     <ReactToPrint
+                        trigger={() => {
+                           return <Button type="primary">Хэвлэх</Button>;
+                        }}
+                        content={() => printRef.current}
+                     />
+                  </div>
+                  <div ref={printRef}>
+                     <InspectionDocumentReturnById
+                        hospitalId={inspectionNote?.hospitalId || 0}
+                        body={
+                           <div className="flex flex-col gap-1">
+                              <table className="table table-bordered">
+                                 <tbody>
+                                    <tr>
+                                       <td className="text-center">{`${capitalizeFirstLetter(
+                                          info.cabinetName
+                                       )} үзлэг`}</td>
+                                    </tr>
+                                    <tr>
+                                       <td>
+                                          <RenderHTML data={inspectionNote?.pain} />
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td>
+                                          <RenderHTML data={inspectionNote?.question} />
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td>
+                                          <RenderHTML data={inspectionNote?.inspection} />
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td>
+                                          <span>Онош:</span>
+                                          <RenderHTMLDiagnose diagnosis={diagnosis} />
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <td>
+                                          <RenderHTML data={inspectionNote?.plan} />
+                                          <RenderHTMLServices services={services} />
+                                       </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                              <p className="text-center">
+                                 Эмч: ........................
+                                 {formatNameForDoc(info?.lastName, info?.firstName)}
+                              </p>
                            </div>
-                           <ReactToPrint
-                              trigger={() => {
-                                 return <Button type="primary">Хэвлэх</Button>;
-                              }}
-                              content={() => printRef.current}
-                           />
-                           <div ref={printRef}>
-                              <InspectionDocumentReturnById
-                                 hospitalId={inspectionNote?.hospitalId || 0}
-                                 body={
-                                    <div className="flex flex-col gap-1">
-                                       <table className="table table-bordered">
-                                          <tbody>
-                                             <tr>
-                                                <td className="text-center">{`${capitalizeFirstLetter(
-                                                   info.cabinetName
-                                                )} үзлэг`}</td>
-                                             </tr>
-                                             <tr>
-                                                <td>
-                                                   <RenderHTML data={inspectionNote?.pain} />
-                                                </td>
-                                             </tr>
-                                             <tr>
-                                                <td>
-                                                   <RenderHTML data={inspectionNote?.question} />
-                                                </td>
-                                             </tr>
-                                             <tr>
-                                                <td>
-                                                   <RenderHTML data={inspectionNote?.inspection} />
-                                                </td>
-                                             </tr>
-                                             <tr>
-                                                <td>
-                                                   <span>Онош:</span>
-                                                   <RenderHTMLDiagnose diagnosis={diagnosis} />
-                                                </td>
-                                             </tr>
-                                             <tr>
-                                                <td>
-                                                   <RenderHTML data={inspectionNote?.plan} />
-                                                   <RenderHTMLServices services={services} />
-                                                </td>
-                                             </tr>
-                                          </tbody>
-                                       </table>
-                                       <p className="text-center">
-                                          Эмч: ........................
-                                          {formatNameForDoc(info?.lastName, info?.firstName)}
-                                       </p>
-                                    </div>
-                                 }
-                              />
-                           </div>
-                        </div>
-                     ) : (
-                        <Result title={'Хугацаа сонгох'} />
-                     )}
+                        }
+                     />
                   </div>
                </div>
-            </Spin>
-         </div>
+            ) : null}
+         </Spin>
       </div>
    );
 }
