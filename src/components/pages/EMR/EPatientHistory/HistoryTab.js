@@ -76,7 +76,7 @@ export default function HistoryTab() {
          layout="vertical"
          className="h-full"
       >
-         <div className="flex flex-col gap-3 h-full justify-between">
+         <div className="emr-ins flex flex-col gap-1 justify-between">
             <Collapse accordion>
                <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
                   <Step1 />

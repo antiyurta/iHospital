@@ -125,20 +125,8 @@ function MainPatientHistory({ handleClick }) {
    };
    const XrayDocumentShow = (props) => (
       <Form form={xrayForm} layout="vertical" onFinish={(values) => onFinishXray(values, props)}>
-         <div
-            style={{
-               width: '100%',
-               display: 'flex',
-               flexDirection: 'column',
-               gap: 8
-            }}
-         >
-            <div
-               style={{
-                  overflow: 'auto',
-                  height: 520
-               }}
-            >
+         <div className="emr-ins w-full flex flex-col gap-1 justify-between">
+            <div className="inputs">
                <NewFormRender
                   useForm={xrayForm}
                   form={props.data}
@@ -331,9 +319,7 @@ function MainPatientHistory({ handleClick }) {
                ))}
             </Splide>
          </div>
-         <Spin wrapperClassName="h-full" spinning={loading}>
-            {items?.find((item) => item.key === activeKey)?.children}
-         </Spin>
+         <Spin spinning={loading}>{items?.find((item) => item.key === activeKey)?.children}</Spin>
       </>
    );
 }

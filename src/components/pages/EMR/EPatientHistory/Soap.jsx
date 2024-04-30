@@ -18,9 +18,7 @@ const Soap = (props) => {
          <div
             className="flex-col gap-1"
             style={{
-               display: expand ? 'flex' : 'none',
-               height: 205,
-               overflow: 'auto'
+               display: expand ? 'flex' : 'none'
             }}
          >
             {props.children}

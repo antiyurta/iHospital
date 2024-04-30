@@ -5,13 +5,7 @@ import { checkNumber } from '../../../common';
 
 export default function Step3() {
    return (
-      <div
-         className="flex flex-col gap-2"
-         style={{
-            height: 200,
-            overflow: 'auto'
-         }}
-      >
+      <div className="input-panel flex flex-col gap-2">
          <Divider orientation="left" className="text-sm my-2">
             Архи
          </Divider>
