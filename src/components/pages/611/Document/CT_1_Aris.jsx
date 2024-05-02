@@ -350,26 +350,26 @@ const CT_1_Aris = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <th>Уян чанар:</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2 w-full">Хэвийн</Checkbox>
-                              <Checkbox className="ml-2 w-full">Ихэссэн</Checkbox>
-                              <Checkbox>Алдагдсан</Checkbox>
+                           <Checkbox.Group value={formData?.q20}>
+                              <Checkbox className="ml-2 w-full" value={'q20-1'}>Хэвийн</Checkbox>
+                              <Checkbox className="ml-2 w-full" value={'q20-2'}>Ихэссэн</Checkbox>
+                              <Checkbox value={'q20-3'}>Алдагдсан</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
                            <th>Арьсны халуун:</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэвийн бус</Checkbox>
-                              <Checkbox className="ml-2 w-full">Халуун</Checkbox>
-                              <Checkbox>Хүйтэн</Checkbox>
+                           <Checkbox.Group value={formData?.q21}>
+                              <Checkbox value={'q21-1'} className="ml-2">Хэвийн бус</Checkbox>
+                              <Checkbox value={'q21-2'} className="ml-2 w-full">Халуун</Checkbox>
+                              <Checkbox value={'q21-3'}>Хүйтэн</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
                            <th>Чийглэг байдал:</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2 w-full">Хэвийн</Checkbox>
-                              <Checkbox className="ml-2 w-full">Ихэссэн</Checkbox>
-                              <Checkbox>Багассан</Checkbox>
+                           <Checkbox.Group value={formData?.q22}>
+                              <Checkbox value={'q22-1'}  className="ml-2 w-full">Хэвийн</Checkbox>
+                              <Checkbox value={'q22-2'}  className="ml-2 w-full">Ихэссэн</Checkbox>
+                              <Checkbox value={'q22-3'} >Багассан</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -388,43 +388,43 @@ const CT_1_Aris = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <th>Өнгө</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Ягаан</Checkbox>
-                              <Checkbox>Улаан</Checkbox>
-                              <Checkbox>Цагаан</Checkbox>
-                              <Checkbox>Цайвар бор</Checkbox>
+                           <Checkbox.Group value={formData?.q23}>
+                              <Checkbox className="ml-2" value={'q23-1'} >Ягаан</Checkbox>
+                              <Checkbox value={'q23-2'}>Улаан</Checkbox>
+                              <Checkbox value={'q23-3'}>Цагаан</Checkbox>
+                              <Checkbox value={'q23-4'}>Цайвар бор</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Бор</Checkbox>
-                              <Checkbox className="ml-2 w-full">Хар</Checkbox>
-                              <Checkbox>Хөх</Checkbox>
-                              <Checkbox>Саарал</Checkbox>
-                              <Checkbox>Шар</Checkbox>
+                           <Checkbox.Group value={formData?.q23}>
+                              <Checkbox value={'q23-5'} className="ml-2">Бор</Checkbox>
+                              <Checkbox value={'q23-6'} className="ml-2 w-full">Хар</Checkbox>
+                              <Checkbox value={'q23-7'}>Хөх</Checkbox>
+                              <Checkbox value={'q23-8'}>Саарал</Checkbox>
+                              <Checkbox value={'q23-9'}>Шар</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
                            <th>Хүрээ:</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2 w-full">Хил хязгаар нь тод</Checkbox>
-                              <Checkbox className="ml-2 w-full">Тод бус (well defined) (Illdefined)</Checkbox>
+                           <Checkbox.Group value={formData?.q24}>
+                              <Checkbox value={'q24-1'} className="ml-2 w-full">Хил хязгаар нь тод</Checkbox>
+                              <Checkbox value={'q24-2'} className="ml-2 w-full">Тод бус (well defined) (Illdefined)</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
                            <th>Хэлбэр:</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Дугараг</Checkbox>
-                              <Checkbox>Зууван</Checkbox>
-                              <Checkbox>Олон талт</Checkbox>
-                              <Checkbox>Олон цагирагт</Checkbox>
+                           <Checkbox.Group value={formData?.q25}>
+                              <Checkbox className="ml-2" value={'q25-1'}>Дугараг</Checkbox>
+                              <Checkbox value={'q25-2'}>Зууван</Checkbox>
+                              <Checkbox value={'q25-3'}>Олон талт</Checkbox>
+                              <Checkbox value={'q25-4'}>Олон цагирагт</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2"> Зоос хэлбэрийн</Checkbox>
-                              <Checkbox>Могой хэлбэрийн</Checkbox>
-                              <Checkbox>Шугаман</Checkbox>
+                           <Checkbox.Group value={formData?.q25}>
+                              <Checkbox className="ml-2" value={'q25-5'}> Зоос хэлбэрийн</Checkbox>
+                              <Checkbox value={'q25-6'}>Могой хэлбэрийн</Checkbox>
+                              <Checkbox value={'q25-7'}>Шугаман</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -435,35 +435,35 @@ const CT_1_Aris = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <th>Тэмтрэхэд:</th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Тогтоц нь</Checkbox>
-                              <Checkbox>Зөөлөн</Checkbox>
+                           <Checkbox.Group value={formData?.q26}>
+                              <p>Тогтоц нь</p>
+                              <Checkbox value={'q26-1'}>Зөөлөн</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хатуувтар</Checkbox>
-                              <Checkbox className="ml-2 w-full">Нягт хатуу</Checkbox>
-                              <Checkbox>Бамбалзсан</Checkbox>
+                           <Checkbox.Group value={formData?.q26}>
+                              <Checkbox value={'q26-2'} className="ml-2">Хатуувтар</Checkbox>
+                              <Checkbox value={'q26-3'} className="ml-2 w-full">Нягт хатуу</Checkbox>
+                              <Checkbox value={'q26-4'}>Бамбалзсан</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Даргар</Checkbox>
-                              <Checkbox>Халуун</Checkbox>
-                              <Checkbox>Хүйтэн</Checkbox>
+                           <Checkbox.Group value={formData?.q26}>
+                              <Checkbox value={'q26-5'} className="ml-2">Даргар</Checkbox>
+                              <Checkbox value={'q26-6'}>Халуун</Checkbox>
+                              <Checkbox value={'q26-7'}>Хүйтэн</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2 w-full">Хөдөлгөөнтэй</Checkbox>
-                              <Checkbox className="ml-2 w-full">Хөдөлгөөнгүй</Checkbox>
+                           <Checkbox.Group value={formData?.q26} >
+                              <Checkbox  value={'q26-8'} className="ml-2 w-full">Хөдөлгөөнтэй</Checkbox>
+                              <Checkbox  value={'q26-9'} className="ml-2 w-full">Хөдөлгөөнгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2"> Эмзэглэлтэй</Checkbox>
-                              <Checkbox>Эмзэглэлгүй</Checkbox>
+                           <Checkbox.Group value={formData?.q26}>
+                              <Checkbox className="ml-2" value={'q26-10'}> Эмзэглэлтэй</Checkbox>
+                              <Checkbox value={'q26-11'}>Эмзэглэлгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -471,24 +471,24 @@ const CT_1_Aris = (props) => {
                         <th className="w-[50%]" colSpan={2}>
                            <p> Эмх цэгц, хэв маяг болон тархалт</p>
                            Тоо хэмжээ:
-                           <Checkbox.Group>
-                              <Checkbox>Нэг</Checkbox>
-                              <Checkbox>Олон тууралт</Checkbox>
+                           <Checkbox.Group value={formData?.q27}>
+                              <Checkbox value={'q27-1'}>Нэг</Checkbox>
+                              <Checkbox value={'q27-2'}>Олон тууралт</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th colSpan={4}>
                            <div>
                               <p>Эмх цэгц:</p>
-                              <Checkbox.Group>
-                                 <Checkbox>Бүлэглэсэн</Checkbox>
-                                 <Checkbox>Тархсан</Checkbox>
+                              <Checkbox.Group value={formData?.q28}>
+                                 <Checkbox value={'q28-1'}>Бүлэглэсэн</Checkbox>
+                                 <Checkbox value={'q28-2'}>Тархсан</Checkbox>
                               </Checkbox.Group>
                            </div>
                            <div className="flex items-center gap-2">
                               <p>Нягтрал:</p>
-                              <Checkbox.Group>
-                                 <Checkbox>Байгаа</Checkbox>
-                                 <Checkbox>Байхгүй</Checkbox>
+                              <Checkbox.Group value={formData?.q29}>
+                                 <Checkbox value={'q29-1'}>Байгаа</Checkbox>
+                                 <Checkbox value={'q29-2'}>Байхгүй</Checkbox>
                               </Checkbox.Group>
                            </div>
                         </th>
@@ -501,7 +501,7 @@ const CT_1_Aris = (props) => {
                         <th className="w-[33%]">Тархац: Тэлэлт:</th>
                         <th className="w-[33%]">Байрлалт</th>
                         <th className="w-[33%]">
-                           <Checkbox>Хурууны завсар</Checkbox>
+                           <Checkbox value={formData?.['q31-5']}>Хурууны завсар</Checkbox>
                         </th>
                      </tr>
                   </thead>
@@ -514,25 +514,25 @@ const CT_1_Aris = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th className="w-[35%]">
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Дангараа</Checkbox>
-                              <Checkbox className="w-full">Нэг хэсэг (хэсэгчилсэн)</Checkbox>
-                              <Checkbox className="w-full">Хэсэг газрыг хамарсан</Checkbox>
-                              <Checkbox>Бүх биеэр тархсан </Checkbox>
+                           <Checkbox.Group value={formData?.q30}>
+                              <Checkbox value={'q30-1'} className="ml-2">Дангараа</Checkbox>
+                              <Checkbox value={'q30-2'} className="w-full">Нэг хэсэг (хэсэгчилсэн)</Checkbox>
+                              <Checkbox value={'q30-3'} className="w-full">Хэсэг газрыг хамарсан</Checkbox>
+                              <Checkbox value={'q30-4'}>Бүх биеэр тархсан </Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th className="w-[25%]">
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">2 талд тэгш</Checkbox>
-                              <Checkbox className="ml-2 w-full">Тэгш бус</Checkbox>
-                              <Checkbox>Өртсөн хэсэгт </Checkbox>
-                              <Checkbox> Даралттай хэсэгт</Checkbox>
+                           <Checkbox.Group value={formData?.q31}>
+                              <Checkbox value={'q31-1'} className="ml-2">2 талд тэгш</Checkbox>
+                              <Checkbox value={'q31-2'} className="ml-2 w-full">Тэгш бус</Checkbox>
+                              <Checkbox value={'q31-3'}>Өртсөн хэсэгт </Checkbox>
+                              <Checkbox value={'q31-4'}> Даралттай хэсэгт</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2 w-full">Энд тэнд</Checkbox>
-                              <Checkbox className="ml-2 w-full">Blaschko-н шугам дагуу</Checkbox>
+                           <Checkbox.Group value={formData?.q31}>
+                              <Checkbox className="ml-2 w-full" value={'q31-6'}>Энд тэнд</Checkbox>
+                              <Checkbox className="ml-2 w-full" value={'q31-7'}>Blaschko-н шугам дагуу</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -544,22 +544,23 @@ const CT_1_Aris = (props) => {
                      <tr>
                         <th colSpan={3}>
                            1. Чихэрийн шижинтэй эсэх
-                           <Input className="amaraInput w-[550px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[550px] mb-1" value={formData?.q32} style={{ textAlign: 'center' }} />
                            2. Даралт ихтэй эсэх
-                           <Input className="amaraInput w-[590px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[590px] mb-1" value={formData?.q33} style={{ textAlign: 'center' }} />
                            3. Харшил (ялангуяа эмийн)
-                           <Input className="amaraInput w-[550px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[550px] mb-1" value={formData?.q34} style={{ textAlign: 'center' }} />
                            4. Эм хэрэглэлт, байнга уудаг болон одоо ууж байгаа
-                           <Input className="amaraInput w-[410px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[410px] mb-1" value={formData?.q35} style={{ textAlign: 'center' }} />
                            5. Хорт зуршил (архи, тамхи)
-                           <Input className="amaraInput w-[545px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[545px] mb-1" value={formData?.q36} style={{ textAlign: 'center' }} />
                            6. Атофийн түүх (астма, чонон хөрвөс, экзем)
-                           <Input className="amaraInput w-[450px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[455px] mb-1" value={formData?.q37} style={{ textAlign: 'center' }} />
                            7. Гэр бүлийн өвчлөлийн түүх
-                           <Input className="amaraInput w-[540px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[540px] mb-1" value={formData?.q38} style={{ textAlign: 'center' }} />
                            8. Нийгмийн идэвх сонирхол
-                           <Input className="amaraInput w-[545px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="amaraInput w-[545px] mb-1" value={formData?.q39} style={{ textAlign: 'center' }} />
                            9. Бэлгийн хавьтлын түүх
+                           <Input className="amaraInput w-[545px] mb-1" value={formData?.q40} style={{ textAlign: 'center' }} />
                         </th>
                      </tr>
                      <tr>
