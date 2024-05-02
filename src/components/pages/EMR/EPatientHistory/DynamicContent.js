@@ -305,6 +305,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                               appointmentId={incomeData.appointmentId}
                               hicsServiceId={hicsServiceId}
                               usageType={incomeData.usageType}
+                              selectType={1}
                            />
                            {/* <Diagnose
                               form={form}

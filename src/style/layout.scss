@@ -694,10 +694,11 @@ section.ant-layout {
 }
 
 .chat-layout {
-   box-shadow: 4px 0px 8px 0px rgba(0, 0, 0, 0.05);
+   text-align: center;
+   box-shadow: 4px 0px 8px 0px rgba(0, 0, 0, 1);
    position: relative;
    width: 65px;
-   height: 100%;
+   height: 100vh;
    .test {
       padding: 12px;
       display: flex;

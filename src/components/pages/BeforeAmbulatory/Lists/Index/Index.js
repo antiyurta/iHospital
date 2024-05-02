@@ -10,7 +10,9 @@ import ScheduleTypeInfo from './scheduleTypeInfo';
 import ListFilter from './listFilter';
 import InpatientFilter from './inpatientFilter';
 import InpatientTypeInfo from './inpatientTypeInfo';
+import SurgeryBoss from '../SurgeryBoss';
 //common
+import types from './types';
 import { openNofi } from '@Comman/common';
 //redux
 import { setEmrData } from '@Features/emrReducer';
@@ -25,9 +27,8 @@ import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //columns
 import { outDoctorColumns, outNurseColumns, inColumns, surguryColumns } from './columns';
-import types from './types';
 
-function Index({ type, isDoctor }) {
+function Index({ type, isDoctor, isSurgeyBoss }) {
    //type 0 bol ambultor
    //1 bol urdcilsan sergiileh
    //2 bol hewten
@@ -43,6 +44,7 @@ function Index({ type, isDoctor }) {
       page: 1,
       limit: 10
    });
+   const [isOpenModalConfirm, setOpenModalConfirm] = useState(false);
    const [spinner, setSpinner] = useState(false);
    // suul newew 8.1
    const [selectedRow, setSelectedRow] = useState();
@@ -116,6 +118,7 @@ function Index({ type, isDoctor }) {
             limit: limit,
             startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
             endDate: dayjs(end).format('YYYY-MM-DD HH:mm'),
+            columnId: isSurgeyBoss ? 3 : null,
             ...otherParams
          })
             .then(({ data: { response } }) => {
@@ -298,6 +301,20 @@ function Index({ type, isDoctor }) {
          width: 40
       }
    ];
+   const LastButtonForSurgeryBoss = [
+      {
+         title: 'Үйлдэл',
+         dataIndex: 'endDate',
+         render: (endDate, row) => (
+            <SurgeryBoss
+               row={row}
+               handleRefresh={() => {
+                  setOtherParams((prevValues) => ({ ...prevValues, process: 4 }));
+               }}
+            />
+         )
+      }
+   ];
    const LastButton = [
       {
          title: 'Үйлдэл',
@@ -326,7 +343,7 @@ function Index({ type, isDoctor }) {
          )
       }
    ];
-   const CurrentColumn = () => {
+   const currentColumn = () => {
       if (type === 0 || type === 1) {
          if (isDoctor) {
             return Numberer.concat(outDoctorColumns, LastButton);
@@ -336,10 +353,38 @@ function Index({ type, isDoctor }) {
       } else if (type === 2) {
          return Numberer.concat(inColumns, LastButton);
       } else if (type === 3) {
-         return Numberer.concat(surguryColumns, LastButton);
+         if (isSurgeyBoss) {
+            return Numberer.concat(surguryColumns, LastButtonForSurgeryBoss);
+         } else {
+            return Numberer.concat(surguryColumns, LastButton);
+         }
       }
    };
    // column configure
+   // filter
+   const SurgeryFilter = () => {
+      if (type === 3 && !isSurgeyBoss) {
+         return (
+            <Select
+               className="surgery-selector"
+               defaultValue={otherParams['columnId']}
+               onChange={(e) => {
+                  setOtherParams((prevValues) => ({ ...prevValues, columnId: e }));
+               }}
+               allowClear
+               onClear={() => {
+                  setOtherParams((prevValues) => ({ ...prevValues, columnId: null }));
+               }}
+               placeholder="Төрөл сонгох"
+               options={types?.map((type) => ({
+                  label: type.label,
+                  value: type.value
+               }))}
+            />
+         );
+      }
+      return;
+   };
 
    return (
       <div className="w-full">
@@ -352,24 +397,7 @@ function Index({ type, isDoctor }) {
                getList={getAppointment}
                otherParams={otherParams}
             >
-               {type === 3 ? (
-                  <Select
-                     className="surgery-selector"
-                     defaultValue={otherParams['columnId']}
-                     onChange={(e) => {
-                        setOtherParams((prevValues) => ({ ...prevValues, columnId: e }));
-                     }}
-                     allowClear
-                     onClear={() => {
-                        setOtherParams((prevValues) => ({ ...prevValues, columnId: null }));
-                     }}
-                     placeholder="Төрөл сонгох"
-                     options={types?.map((type) => ({
-                        label: type.label,
-                        value: type.value
-                     }))}
-                  />
-               ) : null}
+               <SurgeryFilter />
             </ListFilter>
             {type === 2 ? (
                <InpatientFilter
@@ -396,7 +424,7 @@ function Index({ type, isDoctor }) {
                      spinning: spinner,
                      tip: 'Уншиж байна....'
                   }}
-                  columns={CurrentColumn()}
+                  columns={currentColumn()}
                   dataSource={appointments}
                   scroll={{
                      y: 665
