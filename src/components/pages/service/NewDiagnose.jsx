@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, ConfigProvider, Form, Input, Modal, Select, Table } from 'antd';
+import { Button, ConfigProvider, Form, Input, Modal, Select, Space, Table } from 'antd';
 import { ArrowRightOutlined, DeleteOutlined, EditOutlined, MinusOutlined } from '@ant-design/icons';
 import locale from 'antd/es/locale/mn_MN';
 //service
@@ -35,8 +35,11 @@ const DiagnoseTypeOptions = [
 ];
 
 const { Search } = Input;
+const { Column } = Table;
 
-const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => {
+const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType, selectType }) => {
+   //selectType = 0 , onlyDiagnose
+   //selectType = 1 , diagnoseAndType
    const [editMode, setEditMode] = useState(false);
    const [selectedDiagnoseForm] = Form.useForm();
    const [newDiagnoseTypeForm] = Form.useForm();
@@ -98,7 +101,6 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
    };
 
    const add = (row) => {
-      console.log('row', row);
       const isIncludePatientDiagnose = patientDiagnosis?.some((diagnose) => diagnose.diagnose.id === row.id) || false;
       const isIncludeSelectedDiagnose =
          selectedDiagnoseForm.getFieldValue('diagnosis')?.some((diagnose) => diagnose.id === row.id) || false;
@@ -183,38 +185,25 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
             >
                Онош сонгох
             </Button>
-            <Table
-               rowKey="id"
-               loading={isLoading}
-               columns={[
-                  {
-                     title: '№',
-                     width: 50,
-                     render: (_, _row, index) => index + 1
-                  },
-                  {
-                     title: 'Код',
-                     dataIndex: ['diagnose', 'code']
-                  },
-                  {
-                     title: 'Монгол нэр',
-                     dataIndex: ['diagnose', 'nameMn']
-                  },
-                  {
-                     title: 'Англи нэр',
-                     dataIndex: ['diagnose', 'nameEn']
-                  },
-                  {
-                     title: 'Оношийн төрөл',
-                     dataIndex: 'diagnoseType',
-                     render: (diagnoseType) => DiagnoseTypeEnum[diagnoseType]
-                  },
-                  {
-                     title: 'Үйлдэл',
-                     width: 80,
-                     dataIndex: 'id',
-                     render: (id, row) => (
-                        <div className="grid grid-cols-2 gap-1 justify-items-center">
+            <Table rowKey="id" bordered loading={isLoading} dataSource={patientDiagnosis} pagination={false}>
+               <Column title="№" width={50} render={(_, _row, index) => index + 1} />
+               <Column title="Код" dataIndex={['diagnose', 'code']} />
+               <Column title="Монгол нэр" dataIndex={['diagnose', 'nameMn']} />
+               <Column title="Англи нэр" dataIndex={['diagnose', 'nameEn']} />
+               {selectType === 1 ? (
+                  <Column
+                     title="Оношийн төрөл"
+                     dataIndex="diagnoseType"
+                     render={(diagnoseType) => DiagnoseTypeEnum[diagnoseType]}
+                  />
+               ) : null}
+               <Column
+                  title="Үйлдэл"
+                  width={80}
+                  dataIndex="id"
+                  render={(id, row) => (
+                     <Space>
+                        {selectType == 1 ? (
                            <Button
                               title="Засах"
                               icon={<EditOutlined />}
@@ -246,24 +235,22 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
                                  });
                               }}
                            />
-                           <Button
-                              danger
-                              title="Устгах"
-                              icon={<DeleteOutlined />}
-                              onClick={() => {
-                                 Modal.error({
-                                    content: 'Онош устгахдаа итгэлтэй байна уу',
-                                    onOk: () => deleteDiagnose(id)
-                                 });
-                              }}
-                           />
-                        </div>
-                     )
-                  }
-               ]}
-               dataSource={patientDiagnosis}
-               pagination={false}
-            />
+                        ) : null}
+                        <Button
+                           danger
+                           title="Устгах"
+                           icon={<DeleteOutlined />}
+                           onClick={() => {
+                              Modal.error({
+                                 content: 'Онош устгахдаа итгэлтэй байна уу',
+                                 onOk: () => deleteDiagnose(id)
+                              });
+                           }}
+                        />
+                     </Space>
+                  )}
+               />
+            </Table>
          </div>
          <Modal
             title="Онош"
@@ -396,30 +383,29 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
                            <Form form={selectedDiagnoseForm}>
                               <Form.List name="diagnosis">
                                  {(diagnosis, { remove }) => (
-                                    <Table
-                                       rowKey="fieldKey"
-                                       columns={[
-                                          {
-                                             title: 'Код',
-                                             width: 100,
-                                             render: (_, _row, index) => (
-                                                <EditableFormItem name={[index, 'code']}>
-                                                   <Input />
-                                                </EditableFormItem>
-                                             )
-                                          },
-                                          {
-                                             title: 'Монгол нэр',
-                                             render: (_, _row, index) => (
-                                                <EditableFormItem name={[index, 'nameMn']}>
-                                                   <Input />
-                                                </EditableFormItem>
-                                             )
-                                          },
-                                          {
-                                             title: 'Оношийн төрөл',
-                                             width: 150,
-                                             render: (_, _row, index) => (
+                                    <Table rowKey="fieldKey" dataSource={diagnosis} pagination={false}>
+                                       <Column
+                                          title="Код"
+                                          width={100}
+                                          render={(_, _row, index) => (
+                                             <EditableFormItem name={[index, 'code']}>
+                                                <Input />
+                                             </EditableFormItem>
+                                          )}
+                                       />
+                                       <Column
+                                          title="Монгол нэр"
+                                          render={(_, _row, index) => (
+                                             <EditableFormItem name={[index, 'nameMn']}>
+                                                <Input />
+                                             </EditableFormItem>
+                                          )}
+                                       />
+                                       {selectType === 1 ? (
+                                          <Column
+                                             title="Оношийн төрөл"
+                                             width={150}
+                                             render={(_, _row, index) => (
                                                 <Form.Item
                                                    className="mb-0"
                                                    name={[index, 'diagnoseType']}
@@ -435,18 +421,16 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType }) => 
                                                       options={DiagnoseTypeOptions}
                                                    />
                                                 </Form.Item>
-                                             )
-                                          },
-                                          {
-                                             title: 'Үйлдэл',
-                                             render: (_, _row, index) => (
-                                                <Button danger icon={<MinusOutlined />} onClick={() => remove(index)} />
-                                             )
-                                          }
-                                       ]}
-                                       dataSource={diagnosis}
-                                       pagination={false}
-                                    />
+                                             )}
+                                          />
+                                       ) : null}
+                                       <Column
+                                          title="Үйлдэл"
+                                          render={(_, _row, index) => (
+                                             <Button danger icon={<MinusOutlined />} onClick={() => remove(index)} />
+                                          )}
+                                       />
+                                    </Table>
                                  )}
                               </Form.List>
                            </Form>

@@ -6,13 +6,7 @@ import mnMN from 'antd/es/calendar/locale/mn_MN';
 export default function Step1() {
    const { TextArea } = Input;
    return (
-      <div
-         className="flex flex-col gap-2"
-         style={{
-            height: 200,
-            overflow: 'auto'
-         }}
-      >
+      <div className="input-panel flex flex-col gap-2">
          <Divider orientation="left" className="text-sm my-2">
             Төрөлт
          </Divider>

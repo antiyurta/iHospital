@@ -179,8 +179,8 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                console.log(e);
             }}
          >
-            <div className="flex flex-col gap-2">
-               <div className="flex flex-col h-[500px] overflow-auto pr-3 gap-2">
+            <div className="emr-ins flex flex-col gap-2 justify-between">
+               <div className="inputs flex flex-col pr-3 gap-2">
                   {props.data?.hasOwnProperty('conclusion') ? (
                      <Soap
                         title="Дүгнэлт"
@@ -305,6 +305,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                               appointmentId={incomeData.appointmentId}
                               hicsServiceId={hicsServiceId}
                               usageType={incomeData.usageType}
+                              selectType={1}
                            />
                            {/* <Diagnose
                               form={form}

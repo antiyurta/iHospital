@@ -18,6 +18,9 @@ class SurgeryApi {
    async postRequestConfirm(body) {
       return await jwtInterceopter.post('service/surgeryRequest/confirm', body);
    }
+   async getDashboardData() {
+      return await jwtInterceopter.get('service/surgeryRequest/stat/dashboard');
+   }
    async patchRequest(id, body) {
       return await jwtInterceopter.patch('service/surgeryRequest/' + id, body);
    }

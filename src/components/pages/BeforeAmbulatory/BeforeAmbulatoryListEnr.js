@@ -11,12 +11,12 @@ function BeforeAmbulatoryListEnr() {
                {
                   label: 'Амбулатори',
                   key: '1',
-                  children: <Index type={0} isDoctor={false} />
+                  children: <Index type={0} isDoctor={false} isSurgeyBoss={false} />
                },
                {
                   label: 'Хэвтэн',
                   key: '2',
-                  children: <Index type={2} isDoctor={false} />
+                  children: <Index type={2} isDoctor={false} isSurgeyBoss={false} />
                }
             ]}
          />

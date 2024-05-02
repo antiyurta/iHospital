@@ -27,17 +27,17 @@ export default function BeforeAmbulatoryList() {
       {
          label: 'Амбулатори',
          key: '1',
-         children: <Index type={0} isDoctor={true} />
+         children: <Index type={0} isDoctor={true} isSurgeyBoss={false} />
       },
       {
          label: 'Урьдчилсан сэргийлэх',
          key: '2',
-         children: <Index type={1} isDoctor={true} />
+         children: <Index type={1} isDoctor={true} isSurgeyBoss={false} />
       },
       {
          label: 'Хэвтэн',
          key: '3',
-         children: <Index type={2} isDoctor={true} />
+         children: <Index type={2} isDoctor={true} isSurgeyBoss={false} />
       }
    ];
    const [currentActiveKey, setActiveKey] = useState(activeKey);
