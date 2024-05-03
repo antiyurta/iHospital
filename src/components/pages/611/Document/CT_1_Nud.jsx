@@ -11,186 +11,6 @@ const CT_1_Nud = (props) => {
          <div className="page">
             <div className="subpage">
                <th className="flex justify-center">НҮДНИЙ ЭМЧИЙН ҮЗЛЭГ</th>
-               {/* <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="text-center">
-                        <th>Биеийн ерөнхий байдал</th>
-                        <th>Ухаан санаа</th>
-                        <th colSpan={4}>Арьс салст</th>
-                     </tr>
-                  </thead>
-                  <thead>
-                     <tr>
-                        <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Дунд</Checkbox>
-                              <Checkbox>Хүндэвтэр</Checkbox>
-                              <Checkbox>Хүнд</Checkbox>
-                              <Checkbox>Маш хүнд</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Саруул</Checkbox>
-                              <Checkbox>Бүдгэрсэн</Checkbox>
-                              <Checkbox>Ухаангүй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th colSpan={4}>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэвийн</Checkbox>
-                              <Checkbox>
-                                 Хэвийн бус
-                                 <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
-                     </tr>
-                     <tr>
-                        <th className="w-[220px]"> Амьсгал 1 минутанд _____ удаа</th>
-                        <th colSpan={3}>
-                           Чагналтаар:
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэржигнүүртэй</Checkbox>
-                              <Checkbox>Уушги цулцангийн</Checkbox>
-                              <Checkbox>Амьсгал сулавтар (баруун, зүүн, 2 талдаа)</Checkbox>
-                              <Checkbox>Гуурсан хоолойн</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                     <tr>
-                        <th colSpan={4}>Цусны эргэлтийн тогтолцоо</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>
-                           Судасны цохилт 1 минутанд
-                           <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
-                              Хүчдэл дүүрэлт
-                              <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
-                           </th>
-                        </th>
-                        <th>
-                           <th>Тогшилтоор:</th>
-                           Зүрхний хил
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэвийн</Checkbox>
-                              <Checkbox>Томорсон (зүүн, баруун)</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <th>Чагналтаар::</th>
-                           Зүрхний авиа
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Тод</Checkbox>
-                              <Checkbox>Бүдэг</Checkbox>
-                              <Checkbox>Бүдгэвтэр</Checkbox>
-                              <Checkbox>Хэм жигд</Checkbox>
-                              <Checkbox>Жигд бус </Checkbox>
-                              <Checkbox>Хэм алдалттай</Checkbox>
-                           </Checkbox.Group>
-                           <th>
-                              АД баруун талд
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />/
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />
-                           </th>
-                           <th>
-                              Зүүн талд
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />/
-                              <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />
-                           </th>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th colSpan={4}>Хоол шингээх эрхтэн тогтолцоо</th>
-                     </tr>
-                     <tr>
-                        <th className="w-[150px]">
-                           Хэл
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Ердийн</Checkbox>
-                              <Checkbox>Хуурай</Checkbox>
-                              <Checkbox>Өнгөргүй</Checkbox>
-                              <Checkbox>Өнгөртэй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th colSpan={3}>
-                           <p> Хэвлийн үзлэг:</p>
-                           <Checkbox.Group>
-                              <Checkbox>Өнгөц тэмтрэлтээр</Checkbox>
-                              <Checkbox>Гүн тэмтрэлтээр</Checkbox>
-                              <Checkbox className="">
-                                 Эмзэглэлтэй (байрлал
-                                 <Input className="amaraInput w-8" style={{ textAlign: 'center' }} />)
-                              </Checkbox>
-                           </Checkbox.Group>
-                           <Checkbox.Group>
-                              <Checkbox>Ердийн</Checkbox>
-                              <Checkbox>Зөөлөн гялтан цочрол үгүй</Checkbox>
-                              <Checkbox> Гялтан цочролын шинж илэрсэн</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                     <tr>
-                        <th colSpan={4}>Мэдрэлийн тогтолцоо</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>
-                           <p> Сонсох чадвахи:</p>
-                           <Checkbox.Group>
-                              <Checkbox>Хэвийн</Checkbox>
-                              <Checkbox>Буурсан (баруун, зүүн)</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <p>Рефлексүүд</p>
-                           <Checkbox.Group>
-                              <Checkbox>Хадгалагдана</Checkbox>
-                              <Checkbox>Хадгалагдахгүй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>
-                           <th className="w-full">
-                              Бусад
-                              <Input className="amaraInput w-[670px]" style={{ textAlign: 'center' }} />
-                           </th>
-                           Сэтгэцийн байдал:
-                           <Input className="amaraInput w-[600px] mb-1" style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th>
-                           <p className="flex justify-center">НҮДНИЙ ҮЗЛЭГ</p>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table> */}
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="text-center">
@@ -508,7 +328,10 @@ const CT_1_Nud = (props) => {
                   <Table key={index} bordered className="story mb-0">
                      <thead>
                         <tr className="border-t-0 h-10">
-                           <th className="">{item.data}</th>
+                           <th className="">
+                              {item.data}
+                              {formData?.[item.value]}
+                           </th>
                         </tr>
                      </thead>
                   </Table>
@@ -517,25 +340,21 @@ const CT_1_Nud = (props) => {
          </div>
          <div className="page">
             <div className="subpage">
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className=" h-10">
-                        <th className="">Болор</th>
-                     </tr>
-                  </thead>
-               </Table>
                {tableData1.map((item, index) => (
-                  <Table key={index} bordered className="story mb-0">
+                  <Table key={index} bordered className="story mb-0 ">
                      <thead>
-                        <tr className="border-t-0 h-10">
-                           <th className="">{item.data}</th>
+                        <tr className="border-b-0 h-10">
+                           <th className="">
+                              {item.data}
+                              {formData?.[item.value]}
+                           </th>
                         </tr>
                      </thead>
                   </Table>
                ))}
                <Table bordered className="story mb-0">
                   <thead>
-                     <tr className=" border-t-0 ">
+                     <tr>
                         <th>
                            <p className="flex justify-center">НҮДНИЙ ШИНЖИЛГЭЭ</p>
                         </th>
@@ -546,7 +365,11 @@ const CT_1_Nud = (props) => {
                   <Table key={index} bordered className="story mb-0">
                      <thead>
                         <tr className="border-t-0 h-10">
-                           <th className="">{item.data}</th>
+                           <th className="">
+                              {item.data}
+
+                              {formData?.[item.value]}
+                           </th>
                         </tr>
                      </thead>
                   </Table>
@@ -565,6 +388,7 @@ const CT_1_Nud = (props) => {
                               {item.data.split(';').map((text, i) => (
                                  <div key={i} style={{ marginBottom: '5px' }}>
                                     {text}
+                                    {formData?.[item.value]}
                                  </div>
                               ))}
                            </th>
@@ -596,7 +420,10 @@ const CT_1_Nud = (props) => {
                         <tr className="border-t-0 ">
                            <th style={{ height: 'auto' }}>
                               {item.data.split(';').map((text, i) => (
-                                 <div key={i}>{text}</div>
+                                 <div key={i}>
+                                    {text}
+                                    {formData?.[item.value]}
+                                 </div>
                               ))}
                            </th>
                         </tr>
@@ -658,15 +485,16 @@ const CT_1_Nud = (props) => {
 };
 export default CT_1_Nud;
 const tableData = [
-   { data: 'Өнгө танилт: '   , },
-   { data: 'Нүдний хөдөлгөөн:' },
-   { data: 'Нулимсны зам:' },
-   { data: 'Зовхи: ' },
-   { data: 'Салст: ' },
-   { data: 'Склер: ' },
-   { data: 'Эвэрлэг: ' },
-   { data: 'Өмнөд таславч:: ' },
-   { data: 'Солонгон бүрхүүл:' }
+   { data: 'Өнгө танилт: ', value: 'q19' },
+   { data: 'Нүдний хөдөлгөөн:', value: 'q20' },
+   { data: 'Нулимсны зам:', value: 'q21' },
+   { data: 'Зовхи: ', value: 'q22' },
+   { data: 'Салст: ', value: 'q23' },
+   { data: 'Склер: ', value: 'q24' },
+   { data: 'Эвэрлэг: ', value: 'q25' },
+   { data: 'Өмнөд таславч:: ', value: 'q26' },
+   { data: 'Солонгон бүрхүүл:', value: 'q27' },
+   { data: 'Хүүхэн хараа:', value: 'q28' }
 ];
 const tableData4 = [
    { data: 'Өвчин эхэлсэн хугацаа:он_______сар___өдөр___', style: { height: '65px' } },
@@ -681,15 +509,28 @@ const tableData5 = [
 ];
 
 const tableData3 = [
-   { data: 'Schirmer test:', style: { height: '50px' } },
-   { data: 'A scan: ; B scan:', style: { height: '90px', gap: '20px' } },
-   { data: 'CCT: ', style: { height: '50px' } },
-   { data: 'Gonioscopy: ', style: { height: '78px' } },
-   { data: 'OCT (ONH: ; OCT (Macula):', style: { height: '78px' } },
-   { data: 'Humphrey: ', style: { height: '48px' } },
-   { data: 'FFA: ', style: { height: '78px' } },
-   { data: 'X-ray:;CT:;MRI:', style: { height: '120px' } },
-   { data: 'Бусад: ', style: { height: '80px' } }
+   { data: 'Schirmer test:', style: { height: '50px' }, value: 'q36' },
+   { data: 'A scan:', style: { height: '50px' }, value: 'q37' },
+   { data: 'B scan:', style: { height: '50px' }, value: 'q38' },
+   { data: 'CCT: ', style: { height: '50px' }, value: 'q39' },
+   { data: 'Gonioscopy: ', style: { height: '78px' }, value: 'q40' },
+   { data: 'OCT (ONH: ', style: { height: '48px' }, value: 'q41' },
+   { data: 'OCT (Macula):', style: { height: '48px' }, value: 'q42' },
+   { data: 'Humphrey: ', style: { height: '48px' }, value: 'q43' },
+   { data: 'FFA: ', style: { height: '48px' }, value: 'q44' },
+   { data: 'X-ray:', style: { height: '48px' }, value: 'q45' },
+   { data: 'CT: ', style: { height: '48px' }, value: 'q46' },
+   { data: 'MRI: ', style: { height: '48px' }, value: 'q47' },
+   { data: 'Бусад: ', style: { height: '80px' }, value: 'q48' }
 ];
-const tableData1 = [{ data: 'Шилэнцэр:' }, { data: 'Нүдний уг:' }, { data: 'Бусад:' }];
-const tableData2 = [{ data: 'Autorefractometer:' }, { data: 'Tonometer' }, { data: 'Exophthalmometer:' }];
+const tableData1 = [
+   { data: 'Болор:', value: 'q29' },
+   { data: 'Шилэнцэр:', value: 'q30' },
+   { data: 'Нүдний уг:', value: 'q31' },
+   { data: 'Бусад:', value: 'q32' }
+];
+const tableData2 = [
+   { data: 'Autorefractometer:', value: 'q33' },
+   { data: 'Tonometer', value: 'q34' },
+   { data: 'Exophthalmometer:', value: 'q35' }
+];
