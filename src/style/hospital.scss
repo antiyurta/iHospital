@@ -382,11 +382,12 @@
    }
 
    > .content {
-      height: calc(100% - 40px);
+      height: 100%;
+      background: #f2f3f5;
+      border-radius: 8px;
+      max-height: calc(100vh - 300px);
       .list-of-issues,
       .list-of-orders {
-         border-radius: 8px;
-         background: #f2f3f5;
          overflow: auto;
          height: 100%;
          .diagnose {
@@ -394,6 +395,7 @@
             flex-direction: column;
             padding: 6px;
             gap: 8px;
+            border-bottom: 1px solid #c9cdd4;
             > .header {
                display: flex;
                flex-direction: row;
@@ -1117,5 +1119,18 @@ table.table-611 {
       position: -webkit-sticky;
       top: 0;
       z-index: 2;
+   }
+}
+
+.emr-ins {
+   padding: 4px;
+   height: calc(100vh - 345px);
+   .input-panel {
+      height: calc(100vh - 680px);
+      overflow: auto;
+   }
+   .inputs {
+      height: calc(100% - 40px);
+      overflow: auto;
    }
 }

@@ -147,7 +147,7 @@ function MainInpatientHistory({ newUsageType }) {
                      children: (
                         <div
                            style={{
-                              height: 'calc(100vh - 420px)',
+                              height: 'calc(100vh - 365px)',
                               overflow: 'auto',
                               paddingRight: 12
                            }}
@@ -175,7 +175,12 @@ function MainInpatientHistory({ newUsageType }) {
                                  {
                                     title: ' ',
                                     render: (_, row) => (
-                                       <div className="hover: cursor-pointer" onClick={() => middleware(row)}>
+                                       <div
+                                          className="hover: cursor-pointer"
+                                          onClick={() => {
+                                             middleware(row);
+                                          }}
+                                       >
                                           <img src={ArrowIcon} alt="ArrowIcon" />
                                        </div>
                                     )
