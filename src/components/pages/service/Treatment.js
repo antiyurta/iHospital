@@ -3,6 +3,10 @@ import { useSelector } from 'react-redux';
 import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
 import UTable from '../../UTable';
 
+//api
+import careTypeApi from '@ApiServices/reference/care-type.api';
+import { Get } from '@Comman/common';
+
 function Treatment() {
    const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
@@ -16,7 +20,7 @@ function Treatment() {
    };
 
    const getTreatmentTypeData = async () => {
-      // const response = await Get('reference-care-type', token, config);
+      const response = await Get('reference-care-type', token, config);
       setTreatmentTypeData(response.data);
    };
    const getInsuranceService = async () => {
