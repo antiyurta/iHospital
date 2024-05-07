@@ -154,6 +154,7 @@ function MainInpatientHistory({ newUsageType }) {
                         >
                            <Table
                               rowKey="value"
+                              bordered
                               loading={isLoading}
                               columns={[
                                  {
@@ -163,26 +164,26 @@ function MainInpatientHistory({ newUsageType }) {
                                  },
                                  {
                                     title: 'Нэр',
-                                    align: 'left',
-                                    dataIndex: 'docName'
+                                    dataIndex: 'docName',
+                                    render: (label, record, index) => <p className="text-black">{label}</p>
                                  },
                                  {
                                     title: 'Дугаар',
-                                    width: 130,
-                                    align: 'left',
-                                    dataIndex: 'label'
+                                    dataIndex: 'label',
+                                    render: (label) => <p className="text-black">{label}</p>
                                  },
                                  {
                                     title: ' ',
+                                    width: 50,
                                     render: (_, row) => (
-                                       <div
+                                       <img
                                           className="hover: cursor-pointer"
                                           onClick={() => {
                                              middleware(row);
                                           }}
-                                       >
-                                          <img src={ArrowIcon} alt="ArrowIcon" />
-                                       </div>
+                                          src={ArrowIcon}
+                                          alt="ArrowIcon"
+                                       />
                                     )
                                  }
                               ]}
