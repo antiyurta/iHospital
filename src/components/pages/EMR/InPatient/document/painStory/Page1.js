@@ -152,7 +152,7 @@ function Page1({ form }) {
                         </Form.Item>
                      </th>
                      <th className="w-52">
-                        <p>Боловсролын байда dddл:</p>
+                        <p>Боловсролын байдал:</p>
                         <Form.Item className="mb-0" name={['patient', 'educationType']}>
                            <Radio.Group>
                               <Radio value="apple"> Apple </Radio>

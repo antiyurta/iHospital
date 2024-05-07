@@ -93,7 +93,7 @@ const CT_1_Nud = (props) => {
                                                 <span className="text-[11px]">зүүн,</span>
                                              </Checkbox>
                                              &nbsp;
-                                             <Checkbox className="ml-0 test" value={'q5-4-1-2'}>
+                                             <Checkbox className="ml-0 test" value={'q5-4-1-3'}>
                                                 <span className="text-[11px]">2 талдаа</span>
                                              </Checkbox>
                                              &nbsp;

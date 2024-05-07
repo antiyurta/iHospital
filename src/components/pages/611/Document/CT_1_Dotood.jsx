@@ -6,7 +6,10 @@ import TalimoMetrImg from '../../../../assets/images/talimometr.png';
 import ThyroidImg from '../../../../assets/images/thyroid.png';
 import PhysicalImg from '../../../../assets/images/physical.png';
 import FootImg from '../../../../assets/images/foot.png';
-const CT_1_Dotood = () => {
+const CT_1_Dotood = (props) => {
+   const {
+      data: { formData }
+   } = props;
    return (
       <div className="print-remove-p">
          <div className="page">
@@ -23,26 +26,26 @@ const CT_1_Dotood = () => {
                   <thead>
                      <tr>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Дунд</Checkbox>
-                              <Checkbox>Хүндэвтэр</Checkbox>
-                              <Checkbox>Хүнд</Checkbox>
-                              <Checkbox>Маш хүнд</Checkbox>
+                           <Checkbox.Group value={formData?.q1}>
+                              <Checkbox value={'q1-1'} className="ml-2">Дунд</Checkbox>
+                              <Checkbox value={'q1-2'}>Хүндэвтэр</Checkbox>
+                              <Checkbox value={'q1-3'}>Хүнд</Checkbox>
+                              <Checkbox value={'q1-4'}>Маш хүнд</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Саруул</Checkbox>
-                              <Checkbox>Бүдгэрсэн</Checkbox>
-                              <Checkbox>Ухаангүй</Checkbox>
+                           <Checkbox.Group value={formData?.q2}>
+                              <Checkbox value={'q2-1'}  className="ml-2">Саруул</Checkbox>
+                              <Checkbox value={'q2-2'} >Бүдгэрсэн</Checkbox>
+                              <Checkbox value={'q2-3'}>Ухаангүй</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th colSpan={4}>
-                           <Checkbox.Group>
-                              <Checkbox className="ml-2">Хэвийн</Checkbox>
-                              <Checkbox>
+                           <Checkbox.Group value={formData?.q3}>
+                              <Checkbox value={'q3-1'} className="ml-2">Хэвийн</Checkbox>
+                              <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input className="amaraInput w-10" style={{ textAlign: 'center' }} />
+                                 <Input className="amaraInput w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
