@@ -721,7 +721,7 @@ const CT_1_Gemtel = () => {
                </div>
                <Table bordered className="story mb-0">
                   <thead>
-                     <tr >
+                     <tr>
                         <th colSpan={3}>
                            <p className="text-center mb-2"> КЛИНИКИЙН УРЬДЧИЛСАН ОНОШ</p>
                         </th>
