@@ -157,7 +157,7 @@ const BedInformation = () => {
    };
 
    //Оронд хуваарилж хэвтүүлэх
-   const setPatientBed = async (inpatient_request_id, patient) => {
+   const setPatientBed = async (inpatient_request) => {
       if (selectedBed === '' || selectedBed.status !== 3) {
          notification['warning']({
             message: `Өвчтөн хэвтүүлэх ор сонгоно уу.`,
@@ -168,14 +168,16 @@ const BedInformation = () => {
          navigate('/main/bed_management/create', {
             state: {
                isRead: true,
-               patient: patient,
+               patient: inpatient_request.patient,
+               inpatientRequestId: inpatient_request.id,
                roomInfo: {
                   depId: selectedRoom.structureId,
                   floorId: selectedRoom.floorId,
                   roomId: selectedBed.roomId,
                   bedId: selectedBed.id
                },
-               inpatientRequestId: inpatient_request_id
+               isInsurance: inpatient_request.isInsurance,
+               hicsSeal: inpatient_request.appointment?.hicsSeal
             }
          });
       }
@@ -643,7 +645,9 @@ const BedInformation = () => {
                                          <Button
                                             type="primary"
                                             className="custom-primary-btn"
-                                            onClick={() => setPatientBed(el.id, el.patient)}
+                                            onClick={() => {
+                                               setPatientBed(el);
+                                            }}
                                          >
                                             Хэвтүүлэх
                                          </Button>

@@ -1,5 +1,5 @@
-import { Modal } from 'antd';
 import React from 'react';
+import { Modal } from 'antd';
 import inpatientIcon from './NewOrder/inpatientIcon.svg';
 import { openNofi } from '../../common';
 
@@ -23,19 +23,21 @@ function InpatientRequest({ selectedPatient, handleClick }) {
    };
 
    return (
-      <button
-         className="yellow-order"
-         onClick={() => {
-            if (!selectedPatient.hasOwnProperty('id')) {
-               openNofi('error', 'Алдаа', 'Өвчтөн сонгогдоогүй байна');
-            } else {
-               getConfirm();
-            }
-         }}
-      >
-         <img src={inpatientIcon} />
-         Хэвтүүлэх
-      </button>
+      <>
+         <button
+            className="yellow-order"
+            onClick={() => {
+               if (!selectedPatient.hasOwnProperty('id')) {
+                  openNofi('error', 'Алдаа', 'Өвчтөн сонгогдоогүй байна');
+               } else {
+                  getConfirm();
+               }
+            }}
+         >
+            <img src={inpatientIcon} />
+            Хэвтүүлэх
+         </button>
+      </>
    );
 }
 export default InpatientRequest;

@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import DocumentIndex from './NewEmrSupport/document/Index';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
-import { backArrow } from '@Assets/index';
-import SentService from './Insurance/sent-service';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../features/emrReducer';
+//img
+import { backArrow } from '@Assets/index';
+//comp
+import SentService from './Insurance/sent-service';
+import DocumentIndex from './NewEmrSupport/document/Index';
+//redux
+import { selectPatient } from '@Features/patientReducer';
+import { selectCurrentEmrData } from '@Features/emrReducer';
 
 const NewEmrSupport = () => {
+   const currentPatient = useSelector(selectPatient);
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   console.log('incomeData=========>', incomeEmrData);
    const [isOpenModalRequests, setIsOpenModalRequests] = useState(false);
    const [isOpenModalHics, setIsOpenModalHics] = useState(false);
    return (
@@ -44,7 +50,12 @@ const NewEmrSupport = () => {
             <DocumentIndex />
          </div>
          <Modal title="Даатгал" open={isOpenModalHics} onCancel={() => setIsOpenModalHics(false)}>
-            <SentService PatientId={incomeEmrData.patientId} />
+            <SentService
+               patient={currentPatient}
+               hicsSeal={incomeEmrData.hicsSeal}
+               parentHicsSeal={incomeEmrData.parentHicsSeal}
+               inspectionNoteId={incomeEmrData.inspectionNoteId}
+            />
          </Modal>
          <Modal
             title="Үйлчлүүлэгчийн хүсэлт"

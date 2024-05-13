@@ -175,6 +175,11 @@ function DailyIncome() {
                         render: (text) => numberToCurrency(text)
                      },
                      {
+                        title: 'Даатгал дүн',
+                        dataIndex: 'insuranceAmount',
+                        render: (text) => numberToCurrency(text)
+                     },
+                     {
                         title: 'Төлбөрийн хэлбэр',
                         dataIndex: 'paymentTypeId',
                         render: (text) => checkPaymentShape(text)
@@ -196,8 +201,20 @@ function DailyIncome() {
                               />
                               <Button
                                  type="dashed"
-                                 onClick={() => reload(text)}
-                                 title="E-barimt ТАТАХ"
+                                 disabled={row.isEbarimtSend}
+                                 onClick={() => {
+                                    if (row.isEbarimtSend) {
+                                       Modal.error({
+                                          okText: 'За',
+                                          content: 'Илгээгдсэн баримт дахин татах боломжгүй'
+                                       });
+                                    } else {
+                                       reload(text);
+                                    }
+                                 }}
+                                 title={
+                                    row.isEbarimtSend ? 'Илгээгдсэн баримт дахин татах боломжгүй' : 'E-barimt ТАТАХ'
+                                 }
                                  icon={<DownloadOutlined />}
                               />
                               <Button
@@ -262,7 +279,21 @@ function DailyIncome() {
                                  )}
                               </p>
                            </Table.Summary.Cell>
-                           <Table.Summary.Cell index={6} colSpan={5} />
+                           <Table.Summary.Cell index={6}>
+                              <p
+                                 style={{
+                                    fontWeight: 'bold',
+                                    textAlign: 'center'
+                                 }}
+                              >
+                                 {numberToCurrency(
+                                    pageData.reduce((total, current) => {
+                                       return total + current.totalAmount;
+                                    }, 0)
+                                 )}
+                              </p>
+                           </Table.Summary.Cell>
+                           <Table.Summary.Cell index={7} colSpan={4} />
                         </Table.Summary.Row>
                      </Table.Summary>
                   )}

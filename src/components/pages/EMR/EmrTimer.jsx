@@ -21,7 +21,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const location = useLocation();
    const [form] = Form.useForm();
    const emrHicsService = useSelector(selectCurrentHicsService);
-   const { hicsServiceId, appointmentId, appointmentType } = useSelector(selectCurrentEmrData);
+   const { hicsServiceId, appointmentId, appointmentType, type } = useSelector(selectCurrentEmrData);
    const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -33,6 +33,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       //    values['patientFinger'] = 'test2';
       //    values['appointmentId'] = appointmentId;
       // }
+      console.log('values', values, type);
       console.log('ins', isInsurance, hicsServiceId);
       if (isInsurance && hicsServiceId) {
          // await insuranceApi
@@ -57,29 +58,29 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
          //       }
          //    });
       } else {
-         var newResponse;
-         if (appointmentType === 0) {
-            newResponse = await AppointmentApi.patchAppointment(appointmentId, {
-               slotId: location?.state?.slotId,
-               endDate: new Date(),
-               status: values?.conclusion?.includes('confirmed') ? 5 : 4
-            }).then(({ data: { success } }) => success);
-         } else if (appointmentType === 1) {
-            newResponse = await AppointmentApi.patchPreOrder(appointmentId, {
-               endDate: new Date(),
-               doctorId: userId,
-               status: values?.conclusion?.includes('confirmed') ? 5 : 4
-            }).then(({ data: { success } }) => success);
-         }
-         if (newResponse) {
-            setIsOpenModal(false);
-            openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-            navigate('/main/ambulatoryList', {
-               state: {
-                  isRead: true
-               }
-            });
-         }
+         // var newResponse;
+         // if (appointmentType === 0) {
+         //    newResponse = await AppointmentApi.patchAppointment(appointmentId, {
+         //       slotId: location?.state?.slotId,
+         //       endDate: new Date(),
+         //       status: values?.conclusion?.includes('confirmed') ? 5 : 4
+         //    }).then(({ data: { success } }) => success);
+         // } else if (appointmentType === 1) {
+         //    newResponse = await AppointmentApi.patchPreOrder(appointmentId, {
+         //       endDate: new Date(),
+         //       doctorId: userId,
+         //       status: values?.conclusion?.includes('confirmed') ? 5 : 4
+         //    }).then(({ data: { success } }) => success);
+         // }
+         // if (newResponse) {
+         //    setIsOpenModal(false);
+         //    openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+         //    navigate('/main/ambulatoryList', {
+         //       state: {
+         //          isRead: true
+         //       }
+         //    });
+         // }
       }
    };
 
@@ -119,6 +120,9 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
             <Form
                form={form}
                onFinish={endInspection}
+               onFinishFailed={(e) => {
+                  console.log(e);
+               }}
                initialValues={{
                   inspection: inspection,
                   finger: ''
@@ -158,12 +162,8 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                               Төрөл
                            </p>
                            <div className="h-[1px] w-full bg-[#C9CDD4]" />
-                           <Form.Item
-                              name="inspection"
-                              noStyle
-                              rules={[{ required: true, message: 'Үзлэгийн төрөл сонгох' }]}
-                           >
-                              <Radio.Group disabled={inspection ? true : false} className="flex flex-col">
+                           <Form.Item name="inspection" rules={[{ required: true, message: 'Үзлэгийн төрөл сонгох' }]}>
+                              <Radio.Group disabled={inspection ? true : false} className="flex flex-col bg-[#F2F3F5]">
                                  <Radio value={1}>Анхан</Radio>
                                  <Radio value={2}>Давтан</Radio>
                                  <Radio value={3}>Урьдчилсан үзлэг</Radio>

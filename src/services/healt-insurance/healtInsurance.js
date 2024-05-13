@@ -74,7 +74,13 @@ class HealthInsurance {
    }
    /** 4.37 Өртгийн жингийн жагсаалтыг үйлчилгээний дугаар, оношоор татах сервис*/
    async getHicsCostByField(serviceId, icdCode) {
-      return await jwtInterceopter.get('health-insurance/hics-cost-by-field', { params: { serviceId, icdCode } });
+      const newIcdCode = icdCode.replace(/\s/g, '');
+      return await jwtInterceopter.get('health-insurance/hics-cost-by-field', {
+         params: {
+            serviceId,
+            icdCode: newIcdCode
+         }
+      });
    }
    /** 4.38 Төр хариуцах иргэний төрөл татах сервис */
    async getFreeType() {

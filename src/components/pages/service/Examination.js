@@ -4,6 +4,7 @@ import { selectCurrentToken } from '../../../features/authReducer';
 import { Get } from '../../common';
 import UTable from '../../UTable';
 import apiInsuranceService from '../../../services/healt-insurance/insurance';
+import api from '@ApiServices/healt-insurance/healtInsurance';
 
 function Examination() {
    const token = useSelector(selectCurrentToken);
@@ -27,9 +28,9 @@ function Examination() {
       setTypes(response.data);
    };
    const getHicsExams = async () => {
-      await apiInsuranceService.getAllHicsExams().then(({ data }) => {
-         if (data.success) {
-            setHicsExams(data.response);
+      await api.getHicsExam().then(({ data }) => {
+         if (data.result.length > 0) {
+            setHicsExams(data.result);
          }
       });
    };
@@ -100,13 +101,14 @@ function Examination() {
          col: 12
       },
       {
-         index: 'hicsExamId',
+         index: 'examCode',
          label: 'ЭМД үйлчилгээ',
          isView: true,
          isSearch: false,
          input: 'select',
          inputData: hicsExams,
-         relIndex: 'name',
+         relIndex: 'examName',
+         relValueIndex: 'examCode',
          col: 12
       }
    ];

@@ -6,29 +6,28 @@ import UTable from '../../UTable';
 import ReferenceMenuServices from '../../../services/reference/menu';
 //api
 import ReferenceRoleApi from '@ApiServices/reference/role';
-import PermissionApi from '@ApiServices/organization/permission';
-import { Button, Card, Checkbox, Space, Table, Tree } from 'antd';
+import { Button, Card, Checkbox, Form, Input, Modal, Result, Select, Space, Switch, Table, Tree } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import QRCode from 'react-qr-code';
 
 const { DirectoryTree } = Tree;
+//
+import { ProtectedRoutes } from '../../../Routes';
+//
+//api
+import PermissionApi from '@ApiServices/organization/permission';
+import MenuApi from '@ApiServices/reference/menu';
+const { TextArea } = Input;
 
 function Permission() {
    const hospitalId = useSelector(selectCurrentHospitalId);
+
    const getPermissions = async () => {
       await PermissionApi.get().then(({ data: { response } }) => {
          // console.log(response);
       });
    };
-   const getPermission = async (roleId) => {
-      await PermissionApi.get({
-         params: {
-            roleId: roleId
-         }
-      }).then((response) => {
-         // console.log('res', response);
-      });
-   };
+
    const [roles, setRoles] = useState([]);
    const [menus, setMenus] = useState([]);
    const getRoles = async () => {
@@ -38,7 +37,7 @@ function Permission() {
    };
    const getMenus = async () => {
       await ReferenceMenuServices.get({}).then(({ data: { response } }) => {
-         setMenus(response.data);
+         // setMenus(response.data);
       });
    };
    const convertTree = (data) => {
@@ -69,10 +68,15 @@ function Permission() {
       return d;
    }, [menus]);
 
+   //endes ehli
+   const [menuForm] = Form.useForm();
+   const [selectedRole, setRole] = useState();
+   const [isLoading, setLoading] = useState(false);
+   const [isOpenModalMenu, setOpenModalMenu] = useState(false);
    //
-   const [indeterminate, setIndeterminate] = useState(true);
+   const [indeterminate, setIndeterminate] = useState([]);
    const [checkedList, setCheckedList] = useState([]);
-   const [checkAll, setCheckAll] = useState(false);
+   const [checkAll, setCheckAll] = useState([]);
    const plainOptions = [
       { label: 'Нэмэх', value: 'isCreate' },
       { label: 'Харах', value: 'isRead' },
@@ -84,25 +88,73 @@ function Permission() {
          ...prevValue,
          [key]: list
       }));
-      setIndeterminate(!!list.length && list.length < plainOptions.length);
-      setCheckAll(list.length === plainOptions.length);
+      setIndeterminate((prevValue) => ({
+         ...prevValue,
+         [key]: !!list.length && list.length < plainOptions.length
+      }));
+      setCheckAll((prevValue) => ({
+         ...prevValue,
+         [key]: list.length === plainOptions.length
+      }));
    };
-   const onCheckAllChange = (e) => {
-      setCheckedList(e.target.checked ? plainOptions?.map((pO) => pO.value) : []);
-      setIndeterminate(false);
-      setCheckAll(e.target.checked);
+   const onCheckAllChange = (e, key) => {
+      setCheckedList((prevValue) => ({
+         ...prevValue,
+         [key]: e.target.checked ? plainOptions?.map((pO) => pO.value) : []
+      }));
+      setIndeterminate((prevValue) => ({
+         ...prevValue,
+         [key]: false
+      }));
+      setCheckAll((prevValue) => ({
+         ...prevValue,
+         [key]: e.target.checked
+      }));
+   };
+   const getPermission = async (roleId) => {
+      setLoading(true);
+      await PermissionApi.get({
+         params: {
+            roleId: roleId
+         }
+      })
+         .then(({ data: { response } }) => {
+            setMenus(response.data);
+         })
+         .finally(() => {
+            setLoading(false);
+         });
+   };
+   const onFinishMenu = async (values) => {
+      await MenuApi.post({
+         isSubMenu: values.isPrime,
+         hospitalId: hospitalId,
+         name: 'TEST',
+         title: 'TEST1',
+         icon: values.icon,
+         url: '/test'
+      });
    };
    useEffect(() => {
-      getPermissions();
+      // getPermissions();
       getRoles();
-      getMenus();
+      // getMenus();
    }, []);
    return (
       <>
          <div className="p-3 w-full h-full bg-[#f5f6f7]">
             <div className="grid grid-cols-3 gap-2">
-               <Card title="Эрх">
+               <Card title="Эрх" extra={<Button type="primary">Нэмэх</Button>}>
                   <Table
+                     rowKey="id"
+                     onRow={(row) => {
+                        if (selectedRole?.id === row.id) {
+                           return {
+                              className: 'bg-blue-100'
+                           };
+                        }
+                        return;
+                     }}
                      columns={[
                         {
                            title: 'Нэр',
@@ -120,11 +172,12 @@ function Permission() {
                         {
                            title: 'Үйлдэл',
                            dataIndex: 'id',
-                           render: (id) => (
+                           render: (id, row) => (
                               <Space>
                                  <Button
                                     icon={<EditOutlined />}
                                     onClick={() => {
+                                       setRole(row);
                                        getPermission(id);
                                     }}
                                  />
@@ -142,46 +195,118 @@ function Permission() {
                </Card>
                <div className="col-span-2">
                   <Card
+                     loading={isLoading}
                      title="Зөвшөөрөл"
                      bodyStyle={{
                         height: 'calc(100vh - 200px)',
                         overflow: 'auto'
                      }}
+                     extra={
+                        <Button
+                           type="primary"
+                           onClick={() => {
+                              console.log('selected', checkedList);
+                           }}
+                        >
+                           Хадгалах
+                        </Button>
+                     }
                   >
-                     <Tree
-                        showIcon
-                        showLine
-                        titleRender={(node) => {
-                           return (
-                              <div className="flex flex-row gap-2 w-full justify-between">
-                                 <p>{node.title}</p>
-                                 {node.isLeaf ? (
-                                    <div>
-                                       <Checkbox
-                                          indeterminate={indeterminate}
-                                          onChange={onCheckAllChange}
-                                          checked={checkAll}
-                                       >
-                                          Бүгд
-                                       </Checkbox>
-                                       <Checkbox.Group
-                                          value={checkedList[node.key]}
-                                          options={plainOptions}
-                                          onChange={(values) => {
-                                             onChange(values, node.key);
-                                          }}
-                                       />
-                                    </div>
-                                 ) : null}
-                              </div>
-                           );
-                        }}
-                        treeData={tree}
-                     />
+                     {selectedRole?.id ? (
+                        <>
+                           {menus?.length > 0 ? (
+                              <Tree
+                                 showIcon
+                                 showLine
+                                 titleRender={(node) => {
+                                    return (
+                                       <div className="flex flex-row gap-2 w-full justify-between items-center">
+                                          <p>{node.title}</p>
+                                          {node.isLeaf ? (
+                                             <div>
+                                                <Checkbox
+                                                   indeterminate={indeterminate[node.key]}
+                                                   onChange={(e) => {
+                                                      onCheckAllChange(e, node.key);
+                                                   }}
+                                                   checked={checkAll[node.key]}
+                                                >
+                                                   Бүгд
+                                                </Checkbox>
+                                                <Checkbox.Group
+                                                   value={checkedList[node.key]}
+                                                   options={plainOptions}
+                                                   onChange={(values) => {
+                                                      onChange(values, node.key);
+                                                   }}
+                                                />
+                                                <Button danger icon={<DeleteOutlined />} />
+                                             </div>
+                                          ) : null}
+                                       </div>
+                                    );
+                                 }}
+                                 treeData={tree}
+                              />
+                           ) : (
+                              <Button
+                                 onClick={() => {
+                                    setOpenModalMenu(true);
+                                 }}
+                              >
+                                 asd
+                              </Button>
+                           )}
+                        </>
+                     ) : (
+                        <Result status={404} />
+                     )}
                   </Card>
                </div>
             </div>
          </div>
+         <Modal
+            title="ТУИГ"
+            open={isOpenModalMenu}
+            onCancel={() => {
+               setOpenModalMenu(false);
+            }}
+            onOk={() => {
+               menuForm.validateFields().then(onFinishMenu);
+            }}
+         >
+            <Form
+               form={menuForm}
+               layout="vertical"
+               initialValues={{
+                  isPrime: true
+               }}
+            >
+               <Form.Item label="Дэд цэс эсэх" name="isPrime" valuePropName="checked">
+                  <Switch checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+               </Form.Item>
+               <Form.Item label="Зураг" name="icon">
+                  <TextArea />
+               </Form.Item>
+               <Form.Item
+                  label="Menu"
+                  name="url"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Заавал'
+                     }
+                  ]}
+               >
+                  <Select
+                     options={ProtectedRoutes.map((route) => ({
+                        value: route.url,
+                        label: route.mnName
+                     }))}
+                  />
+               </Form.Item>
+            </Form>
+         </Modal>
          {/* <div className="flex flex-wrap">
             <div className="w-full">
                <UTable

@@ -29,6 +29,9 @@ class ApiInsurance {
       return await jwtInterceopter.patch(`hics-seal/${id}`, data);
    }
    /** Эмнэлэг доторх битүүмжүүд дуудах */
+   async getByIdHicsSeals(id) {
+      return await jwtInterceopter.get(`hics-seal/${id}`);
+   }
    async getAllHicsSeals(params) {
       return await jwtInterceopter.get('hics-seal', { params });
    }

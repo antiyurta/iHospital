@@ -1,28 +1,37 @@
-import { Button, ConfigProvider, DatePicker, Form, Input, InputNumber, Radio, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import PatientInformation from '../../PatientInformation';
-import DoctorNotes from '../../EMR/DoctorNotes';
-//
-import { formatNameForDoc, numberToCurrency, openNofi } from '../../../common';
+import { Button, ConfigProvider, DatePicker, Form, Input, InputNumber, Radio, Select, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { RollbackOutlined } from '@ant-design/icons';
 import locale from 'antd/es/locale/mn_MN';
 import 'moment/locale/mn';
-//
-import OrganizationDocumentRoleServices from '../../../../services/organization/documentRole';
-import InpatientApi from '../../../../services/service/inpatient';
-import OrganizationStructureApi from '../../../../services/organization/structure';
-import OrganizationFloorApi from '../../../../services/organization/floor';
-import OrganizationEmployeeApi from '../../../../services/organization/employee';
-import DiagnoseWindow from '../../service/DiagnoseWindow';
 import { useLocation } from 'react-router-dom';
-//
+//common
+import { formatNameForDoc, numberToCurrency, openNofi } from '@Comman/common';
+//comp
+import DoctorNotes from '@Pages/EMR/DoctorNotes';
+import NewDiagnose from '@Pages/service/NewDiagnose';
+import PatientInformation from '@Pages/PatientInformation';
+//api
+import FloorApi from '@ApiServices/organization/floor';
+import InpatientApi from '@ApiServices/service/inpatient';
+import EmployeeApi from '@ApiServices/organization/employee';
+import StructureApi from '@ApiServices/organization/structure';
+import InsuranceApi from '@ApiServices/healt-insurance/insurance';
+import DocumentRoleApi from '@ApiServices/organization/documentRole';
+import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+//defaults
 const { Option } = Select;
+const { TextArea } = Input;
 const { RangePicker } = DatePicker;
+import { InpatientGroupIds } from '@Utils/config/insurance';
+//
 const CreateStory = () => {
    const {
-      state: { patient, inpatientRequestId, roomInfo }
+      state: { patient, inpatientRequestId, roomInfo, isInsurance, hicsSeal }
    } = useLocation();
+   //emd
+   const [hicsSupports, setHicsSupports] = useState([]);
+   //
    const [form] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
    const [departments, setDepartments] = useState([]);
@@ -36,7 +45,7 @@ const CreateStory = () => {
    const [documentInfo, setDocumentInfo] = useState({});
    const getDepartments = async () => {
       setIsLoading(true);
-      await OrganizationStructureApi.get({
+      await StructureApi.get({
          params: {
             type: 2
          }
@@ -49,7 +58,7 @@ const CreateStory = () => {
          });
    };
    const getFloors = async () => {
-      await OrganizationFloorApi.get({
+      await FloorApi.get({
          params: {
             ids: floorIds.toString()
          }
@@ -62,7 +71,7 @@ const CreateStory = () => {
          });
    };
    const getDoctors = async (id) => {
-      await OrganizationEmployeeApi.getEmployee({
+      await EmployeeApi.getEmployee({
          params: {
             depId: id
          }
@@ -91,7 +100,6 @@ const CreateStory = () => {
    };
    const onSelectFloor = (id) => {
       const filteredRooms = rooms?.filter((room) => room.floorId === id && room.isInpatient);
-      console.log('filteredRooms', filteredRooms);
       setFilteredRooms(filteredRooms);
       form.resetFields([['roomInfo', 'roomId']]);
    };
@@ -105,7 +113,7 @@ const CreateStory = () => {
    };
    const onSelectDoctor = async (id) => {
       const doctor = doctors?.find((doctor) => doctor.id === id);
-      await OrganizationDocumentRoleServices.getByPageFilterShow({
+      await DocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: doctor.appIds,
             structureIds: doctor.depIds,
@@ -135,17 +143,26 @@ const CreateStory = () => {
          }
       });
    };
-   const setInpatient = () => {
-      form.validateFields().then(async (values) => {
-         values['isOut'] = false;
-         values['process'] = 0;
-         values['patientId'] = patient.id;
-         values['documentInfo'] = documentInfo;
-         await InpatientApi.patch(inpatientRequestId, { ...values, ...documentInfo }).then(({ data }) => {
-            openNofi('success', 'Амжилттай', 'Амжиллтай');
-            window.history.back();
+   const setInpatient = async () => {
+      await form
+         .validateFields()
+         .then(async (values) => {
+            if (isInsurance) {
+               return setApproval(values);
+            } else {
+               return values;
+            }
+         })
+         .then(async (data) => {
+            data['isOut'] = false;
+            data['process'] = 0;
+            data['patientId'] = patient.id;
+            data['documentInfo'] = documentInfo;
+            await InpatientApi.patch(inpatientRequestId, { ...data, ...documentInfo }).then(({ data }) => {
+               openNofi('success', 'Амжилттай', 'Амжиллтай');
+               window.history.back();
+            });
          });
-      });
    };
 
    const setIncomeRoomInfo = () => {
@@ -155,6 +172,52 @@ const CreateStory = () => {
       onSelectRoom(roomInfo.roomId, rooms);
       form.setFieldValue('roomInfo', roomInfo);
       getDoctors(roomInfo?.depId);
+   };
+
+   const getHicsService = async () => {
+      await HealtInsuranceApi.getHicsService().then(({ data }) => {
+         if (data.code === 200) {
+            openNofi('success', 'Амжиллтай', `${data.description}`);
+            setHicsSupports(data.result.filter((hicsService) => InpatientGroupIds.includes(hicsService.groupId)));
+         } else if (data.code === 400) {
+            openNofi('error', 'Амжилттгүй', `${data.description}`);
+         }
+      });
+   };
+   const setApproval = async (values) => {
+      return await HealtInsuranceApi.postApproval({
+         patientRegno: patient.registerNumber,
+         patientFirstname: patient.firstName,
+         patientLastname: patient.lastName,
+         approvalDesc: values?.inpatientInfo.approvalDesc,
+         toServiceId: values?.inpatientInfo.toServiceId,
+         fromServiceId: hicsSeal.hicsServiceId,
+         toHospitalId: 1892298
+      }).then(({ data }) => {
+         if (data.code === 200 && data.result?.length > 0) {
+            return CreateHicsSeal(values, data.result[0]);
+         }
+         return values;
+      });
+   };
+
+   const CreateHicsSeal = async (values, result) => {
+      return await InsuranceApi.createHicsSeal({
+         inpatientRequestId: inpatientRequestId,
+         patientId: patient.id,
+         departmentId: values.roomInfo?.depId,
+         startAt: new Date(),
+         doctorServiceNumber: result.fromServiceId,
+         hicsAmbulatoryStartId: null,
+         hicsServiceId: values?.inpatientInfo.toServiceId,
+         hicsApprovalCode: result.approvalCode,
+         groupId: hicsSupports.find((hicsSupport) => hicsSupport.id === values.inpatientInfo.toServiceId)?.groupId
+      }).then((response) => {
+         if (response.status != 201) {
+            openNofi('error', 'Амжилтгүй', response);
+         }
+         return values;
+      });
    };
 
    useEffect(() => {
@@ -168,6 +231,11 @@ const CreateStory = () => {
    useEffect(() => {
       getDepartments();
    }, []);
+
+   useEffect(() => {
+      isInsurance && getHicsService();
+   }, [isInsurance]);
+
    return (
       <div className="w-full">
          <Spin tip={'Уншиж байна'} spinning={isLoading}>
@@ -184,7 +252,6 @@ const CreateStory = () => {
                         <DoctorNotes patientId={patient.id} />
                      </div>
                      <div className="flex flex-col gap-2">
-                        <Button>ЭМД</Button>
                         <Button type="primary" onClick={() => setInpatient()}>
                            Өвчтөнг хэвтүүлэх
                         </Button>
@@ -200,7 +267,7 @@ const CreateStory = () => {
                      height: 'calc(100vh - 190px)'
                   }}
                >
-                  <Form form={form} layout="vertical">
+                  <Form form={form} layout="vertical" className="h-full">
                      <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col gap-2">
                            <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
@@ -389,29 +456,49 @@ const CreateStory = () => {
                                     }))}
                                  />
                               </Form.Item>
+                              {isInsurance ? (
+                                 <>
+                                    <Form.Item
+                                       label="Т.Ү-ний дугаар"
+                                       name={['inpatientInfo', 'toServiceId']}
+                                       rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
+                                       style={{
+                                          width: '100%'
+                                       }}
+                                       className="mb-0"
+                                    >
+                                       <Select
+                                          placeholder="Үйлчилгээний төрөл сонгох"
+                                          options={hicsSupports.map((hicsSupport) => ({
+                                             label: hicsSupport.name,
+                                             value: hicsSupport.id
+                                          }))}
+                                       />
+                                    </Form.Item>
+                                    <Form.Item
+                                       label="Заалтын тайлбар"
+                                       name={['inpatientInfo', 'approvalDesc']}
+                                       rules={[
+                                          {
+                                             required: true,
+                                             message: 'Заалтын тайлбар'
+                                          }
+                                       ]}
+                                    >
+                                       <TextArea maxLength={255} />
+                                    </Form.Item>
+                                 </>
+                              ) : null}
                               <div className="flex flex-row gap-2 items-end">
-                                 <Form.Item
-                                    className="mb-0"
-                                    label="Оношийн код:"
-                                    name={['inpatientInfo', 'icdCode']}
-                                    rules={[
-                                       {
-                                          required: true,
-                                          message: 'Заавал'
-                                       }
-                                    ]}
-                                 >
-                                    <Input disabled />
-                                 </Form.Item>
-                                 <DiagnoseWindow
-                                    handleClick={(diagnose) => {
-                                       form.setFieldValue(['inpatientInfo', 'icdCode'], diagnose.code);
-                                    }}
+                                 <NewDiagnose
+                                    patientId={patient.id}
+                                    appointmentId={null}
+                                    inpatientRequestId={inpatientRequestId}
+                                    hicsServiceId={null}
+                                    usageType={'IN'}
+                                    selectType={1}
                                  />
                               </div>
-                              <Form.Item className="mb-1" label="Оношийн бүлэг:" name={['inpatientInfo', 'icdGroup']}>
-                                 <Select />
-                              </Form.Item>
                            </div>
                            <div className="bg-white p-2 rounded-lg flex flex-col gap-1">
                               <p

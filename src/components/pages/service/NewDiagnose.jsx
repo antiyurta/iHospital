@@ -37,7 +37,7 @@ const DiagnoseTypeOptions = [
 const { Search } = Input;
 const { Column } = Table;
 
-const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType, selectType }) => {
+const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, hicsServiceId, usageType, selectType }) => {
    //selectType = 0 , onlyDiagnose
    //selectType = 1 , diagnoseAndType
    const [editMode, setEditMode] = useState(false);
@@ -54,7 +54,8 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType, selec
    const getPatientDiagnosis = async () => {
       setIsLoading(true);
       await EmrPatientDiagnoseServices.getByPageFilter({
-         appointmentId: appointmentId
+         appointmentId: appointmentId,
+         inpatientRequestId: inpatientRequestId
       })
          .then(({ data: { response } }) => {
             setPatientDiagnosis(response.data);
@@ -152,7 +153,7 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType, selec
                type: diagnose.type,
                diagnoseId: diagnose.id,
                appointmentId: appointmentId,
-               inpatientRequestId: null,
+               inpatientRequestId: inpatientRequestId,
                diagnose: diagnose
             });
          })
@@ -172,7 +173,7 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType, selec
    }, [appointmentId]);
 
    return (
-      <div>
+      <div className="w-full">
          <div className="flex flex-col gap-2">
             <Button
                className="w-36"
@@ -231,7 +232,7 @@ const NewDiagnose = ({ patientId, appointmentId, hicsServiceId, usageType, selec
                                     ),
                                     onOk: () => patchDiagnose(id, newDiagnoseTypeForm.getFieldValue('diagnoseType')),
                                     okText: 'Хадгалах',
-                                    onCancel: 'Болих'
+                                    cancelText: 'Болих'
                                  });
                               }}
                            />

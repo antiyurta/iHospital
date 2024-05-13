@@ -27,6 +27,8 @@ import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //columns
 import { outDoctorColumns, outNurseColumns, inColumns, surguryColumns } from './columns';
+//defaults
+import { AmbulatoryGroupId } from '@Utils/config/insurance';
 
 function Index({ type, isDoctor, isSurgeyBoss }) {
    //type 0 bol ambultor
@@ -131,6 +133,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       }
    };
    const getEMRorENR = async (row) => {
+      dispatch(setPatient(row.patient));
       // status heregteii anhan dawtan
       // tolbor shalgah
       setSelectedRow(row);
@@ -139,7 +142,9 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       } else if (row.process === 2) {
          const data = {
             patientId: row.patientId,
-            slotId: row.slotId
+            slotId: row.slotId,
+            parentHicsSeal: row.appointment.hicsSeal,
+            hicsSeal: row.hicsSeal
          };
          if (type === 2) {
             data['usageType'] = 'IN';
@@ -149,6 +154,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          } else if (type === 3) {
             data['usageType'] = 'OUT';
          }
+         console.log('end orj irne');
          dispatch(setEmrData(data));
          if (isDoctor) {
             navigate(`/main/emr`, {
@@ -170,7 +176,9 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      await healthInsuranceApi
                         .getHicsService()
                         .then(({ data }) =>
-                           setHicsSupports(data.result.filter((hicsService) => hicsService.groupId == 201))
+                           setHicsSupports(
+                              data.result.filter((hicsService) => hicsService.groupId == AmbulatoryGroupId)
+                           )
                         )
                         .catch(() => {
                            openNofi(
@@ -193,12 +201,13 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       }
    };
    // 8.1
-   const hrefEMR = (row) => {
+   const hrefEMR = (row, sealResponse) => {
       const data = {
          patientId: row.patientId,
          inspection: type === 2 ? 1 : row.inspectionType,
          type: row.type,
-         hicsSeal: row.hicsSeal,
+         hicsSeal: row.hicsSeal || sealResponse.data?.response,
+         parentHicsSeal: null,
          startDate: row.startDate || new Date(),
          endDate: row.endDate,
          appointmentType: type,
@@ -207,7 +216,8 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          slotId: row.slotId,
          hicsServiceId: row.hicsSeal?.hicsServiceId,
          reasonComming: row.reasonComming,
-         status: row.status
+         status: row.status,
+         isInsurance: row.isInsurance
       };
       if (type === 0) {
          data['usageType'] = 'OUT';
@@ -264,7 +274,6 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             state: data
          });
       }
-      dispatch(setPatient(row.patient));
    };
    const CreateHicsSeal = async (row, data, groupId) => {
       await InsuranceApi.createHicsSeal({
@@ -279,8 +288,8 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          if (response.status != 201) {
             openNofi('error', 'Амжилтгүй', response);
          }
+         hrefEMR(row, response);
       });
-      hrefEMR(row);
    };
    const startAmbulatory = async (values) => {
       await InsuranceApi.hicsAmbulatoryStart(values.fingerprint, selectedRow.patientId, values.hicsServiceId).then(
@@ -288,7 +297,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);
             } else if (data.code === 200) {
-               CreateHicsSeal(selectedRow, data, 201);
+               CreateHicsSeal(selectedRow, data, AmbulatoryGroupId);
             }
          }
       );
@@ -491,7 +500,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      <Select
                         placeholder="Үйлчилгээний төрөл сонгох"
                         options={hicsSupports.map((hicsSupport) => ({
-                           label: hicsSupport.name,
+                           label: `${hicsSupport.name}->${hicsSupport.id}`,
                            value: hicsSupport.id
                         }))}
                      />

@@ -302,6 +302,8 @@ export function ReturnById({ type, id, appointmentId, data }) {
       return <NotFound />; // yaraltai duudlaga
    } else if (id === 111) {
       return <CT32A type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 112) {
+      return <div>1</div>;
    } else if (id === 113) {
       return <CT1Sergeeh type={type} data={data} appointmentId={appointmentId} />;
    }

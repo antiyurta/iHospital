@@ -16,10 +16,16 @@ export const emr = createSlice({
       },
       setHicsService: (state, action) => {
          state.hicsService = action.payload;
+      },
+      setInspectionNoteId: (state, action) => {
+         state.emrData = { ...state.emrData, inspectionNoteId: action.payload };
+      },
+      setHicsSeal: (state, action) => {
+         state.emrData = { ...state.emrData, hicsSeal: action.payload };
       }
    }
 });
-export const { setEmrData, setHicsService, setPatient, delEmrData } = emr.actions;
+export const { setEmrData, setHicsService, setInspectionNoteId, setHicsSeal, delEmrData } = emr.actions;
 export default emr.reducer;
 export const selectCurrentEmrData = (state) => state.emrReducer.emrData;
 export const selectCurrentHicsService = (state) => state.emrReducer.hicsService;
