@@ -10,7 +10,7 @@ const CT_1_Nud = (props) => {
       <div className="print-remove-p">
          <div className="page">
             <div className="subpage">
-               <th className="flex justify-center">НҮДНИЙ ЭМЧИЙН ҮЗЛЭГ</th>
+               <th className="flex justify-center mb-2">НҮДНИЙ ЭМЧИЙН ҮЗЛЭГ</th>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="text-center">
@@ -125,7 +125,7 @@ const CT_1_Nud = (props) => {
                         </th>
                         <th>
                            <th>Тогшилтоор:</th>
-                           Зүрхний хил
+                           <p>Зүрхний хил</p>
                            <Checkbox.Group value={formData?.q8}>
                               <Checkbox value={'q8-1'} className="ml-2">
                                  Хэвийн
@@ -164,7 +164,7 @@ const CT_1_Nud = (props) => {
                               <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id='text'>
                               АД баруун талд
                               <Input className="amaraInput w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
                               /

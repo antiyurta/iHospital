@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CloseOutlined, EyeOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Table } from 'antd';
 import { openNofi } from '../../../common';
+import './style.css';
 // AM start
 import AM1B from './AM1B';
 import AM_1V from './AM_1V';
