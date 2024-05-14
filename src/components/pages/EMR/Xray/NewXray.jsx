@@ -217,6 +217,20 @@ const NewXray = () => {
       return newTreeData;
    }, [searchValue, data]);
 
+   const handleChange = (type, value, index) => {
+      const clone = [...pages];
+      clone[index] = {
+         ...clone[index],
+         [`${type}`]: value
+      };
+      setPages(clone);
+   };
+   const removePage = (index) => {
+      const clone = [...pages];
+      clone.splice(index, 1);
+      setPages(clone);
+   };
+
    const handlePrint = useReactToPrint({
       content: () => printRefPicture.current
    });
