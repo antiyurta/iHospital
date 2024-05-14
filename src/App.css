@@ -494,6 +494,7 @@ input[type='number'] {
 }
 
 .ant-table-tbody > tr > td {
+   text-align: center;
    padding: 2px !important;
    vertical-align: middle;
 }

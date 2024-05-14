@@ -14,12 +14,12 @@ function InsuranceHistory(props) {
    const getData = async () => {
       setIsloading(true);
       await HealthInsuranceApi.getPatientData(registerNumber)
-         .then((response) => {
-            if (response.data.code === 200 && response.data.result != null) {
-               openNofi('success', 'Амжилттай', response.data.description);
-               setData(response.data.result);
+         .then(({ data }) => {
+            if (data.code === 200 && data.result != null) {
+               openNofi('success', 'Амжилттай', data.description);
+               setData(data.result?.details?.sort((a, b) => a.outDateStr - b.outDateStr));
             } else {
-               openNofi('info', 'Мэдээлэл', response.data.description);
+               openNofi('info', 'Мэдээлэл', data.description);
             }
          })
          .catch((error) => {
@@ -76,7 +76,7 @@ function InsuranceHistory(props) {
                   }
                }
             ]}
-            dataSource={data.details}
+            dataSource={data}
             pagination={false}
          />
       </Spin>

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Card, ConfigProvider, Empty, Input, Modal, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 //commmon
-import { getAge, getGenderInType, localMn } from '@Comman/common.js';
 import { ListPatientInfo } from '@Comman/ListInjection';
+import { getAge, getGenderInType, localMn } from '@Comman/common.js';
 //Api
 import InpatientApi from '@ApiServices/service/inpatient.js';
 //extends
 import orderType from '../orderType.js';
 const { CheckableTag } = Tag;
 const { Search } = Input;
+
 function InpatientRequests() {
    const [isLoading, setIsLoading] = useState(false);
    const [inpatientRequests, setInpatientRequests] = useState([]);
@@ -67,8 +69,19 @@ function InpatientRequests() {
       {
          title: 'Хүсэлт илгээсэн огноо',
          dataIndex: 'createdAt',
+         width: 100,
          render: (text) => {
             return dayjs(text).format('YYYY-MM-DD HH:mm');
+         }
+      },
+      {
+         title: 'ЭМД',
+         dataIndex: 'isInsurance',
+         render: (text) => {
+            if (text) {
+               return <CheckCircleOutlined className="text-green-500" />;
+            }
+            return <CloseCircleOutlined className="text-red-500" />;
          }
       },
       {
@@ -165,7 +178,9 @@ function InpatientRequests() {
                      state={{
                         isRead: true,
                         patient: patient,
-                        inpatientRequestId: row.id
+                        inpatientRequestId: row.id,
+                        isInsurance: row.isInsurance,
+                        hicsSeal: row.appointment?.hicsSeal
                      }}
                   >
                      Хэвтүүлэх
@@ -218,6 +233,7 @@ function InpatientRequests() {
                </div>
                <ConfigProvider locale={localMn()}>
                   <Table
+                     bordered
                      rowKey={'id'}
                      scroll={{
                         x: 1000

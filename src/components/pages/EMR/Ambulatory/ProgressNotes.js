@@ -35,6 +35,7 @@ export default function ProgressNotes() {
    const [info, setInfo] = useState({});
    useEffect(() => {
       setSearchValue('');
+      setIsSelected(true);
       activeKey && getAppointmentById(activeKey);
    }, [activeKey]);
 

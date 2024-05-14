@@ -142,6 +142,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
+      !patient.imageId && setImageUrl(null);
    }, [patient]);
    return (
       <>

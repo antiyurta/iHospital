@@ -39,8 +39,8 @@ const SendHics = (props) => {
       await apiInsurance
          .getAllHicsSeals({
             patientId: patient.id,
-            departmentId: currentEmrData.cabinetId,
-            createdBy: user.id,
+            // departmentId: currentEmrData.cabinetId,
+            // createdBy: user.id,
             process: HICS_PROCESS.SEAL_CONFIRM
          })
          .then((response) => {

@@ -183,7 +183,11 @@ const InternalOrder = (props) => {
    };
 
    const inpatientRequestClick = async (values) => {
-      await ServiceApi.postInpatientRequest(values)
+      await ServiceApi.postInpatientRequest({
+         ...values,
+         isInsurance: IncomeEMRData.isInsurance,
+         appointmentId: IncomeEMRData.appointmentId
+      })
          .then((response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжиллтай', 'Хэвтүүлэх хүсэлт амжилттай илгээгдлээ');

@@ -6,7 +6,9 @@ import '../src/style/layout.scss';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContextProvider } from './features/AuthContext';
 
+import Auth from './components/Auth';
 import Login from './components/Login';
+import ResetPassword from './components/ResetPassword';
 import Hospital from './components/pages/Organization/Hospital';
 import Home from './components/Home';
 import Profile from './components/Profile';
@@ -37,7 +39,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<LandingLayout />}>
                <Route index element={<Home />} />
-               <Route path="/login" element={<Login />} />
+               <Route path="auth" element={<Auth />}>
+                  <Route path="login" element={<Login />} />
+                  <Route path="reset-password" element={<ResetPassword />} />
+               </Route>
                {PublicRoutes.map((route, index) => (
                   <Route key={index} path={route.url} element={<route.element />} />
                ))}
