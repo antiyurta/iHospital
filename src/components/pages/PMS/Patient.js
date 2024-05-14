@@ -129,12 +129,6 @@ function Patient() {
          setIsConfirmLoading(false);
          setIsModalVisible(false);
       }
-      // }
-   };
-   const onFinishFailed = (errorInfo) => {
-      errorInfo?.errorFields?.map((error) => {
-         return openNofi('warning', 'Заавал', error.errors[0]);
-      });
    };
    const getCitizens = async () => {
       await CountryApi.getByPageFilter({
@@ -180,15 +174,19 @@ function Patient() {
       }
       return 'Байхгүй';
    };
-   const ddprovices = (id) => {
+   const ddprovices = (id, aimagCityName) => {
       if (id != null) {
          return provices.find((provice) => provice.id === id)?.name || 'Байхгүй';
+      } else if (aimagCityName) {
+         return aimagCityName;
       }
       return 'Байхгүй';
    };
-   const ddtowns = (id) => {
+   const ddtowns = (id, soumDistrictName) => {
       if (id != null) {
          return towns.find((town) => town.id === id)?.name || 'Байхгүй';
+      } else if (soumDistrictName) {
+         return soumDistrictName;
       }
       return 'Байхгүй';
    };
@@ -247,24 +245,24 @@ function Patient() {
             {
                title: 'Аймаг/Хот',
                dataIndex: 'aimagId',
-               render: (aimagId) => ddprovices(aimagId)
+               render: (aimagId, row) => ddprovices(aimagId, row.aimagCityName)
             },
             {
                title: 'Сум/Дүүрэг',
                dataIndex: 'soumId',
-               render: (soumId) => ddtowns(soumId)
+               render: (soumId, row) => ddtowns(soumId, row.soumDistrictName)
             },
             {
                title: 'Баг/Хороо',
-               dataIndex: 'committee'
+               dataIndex: 'bagKhorooName'
             },
             {
                title: 'Гудамж/Байшин',
-               dataIndex: 'building'
+               dataIndex: 'addressStreetName'
             },
             {
                title: 'Тоот',
-               dataIndex: 'address'
+               dataIndex: 'addressDetail'
             }
          ]
       },

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
+import { Button, Card, Empty, Form, Input, InputNumber, Modal, Select, Table, message } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 //comp
-import Finger from '../../../../../features/finger';
 import ScheduleTypeInfo from './scheduleTypeInfo';
 import ListFilter from './listFilter';
 import InpatientFilter from './inpatientFilter';
@@ -14,11 +13,13 @@ import SurgeryBoss from '../SurgeryBoss';
 //common
 import types from './types';
 import { openNofi } from '@Comman/common';
+import Finger from '@Comman/Finger/Finger';
 //redux
 import { setEmrData } from '@Features/emrReducer';
 import { setPatient } from '@Features/patientReducer';
 import { selectCurrentDepId, selectCurrentUserId } from '@Features/authReducer';
 //api
+import StructureApi from '@ApiServices/organization/structure';
 import ScheduleApi from '@ApiServices/schedule';
 import ServiceApi from '@ApiServices/service/service';
 import SurgeryApi from '@ApiServices/service/surgery.api';
@@ -46,6 +47,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       page: 1,
       limit: 10
    });
+   const [hicsServiceIds, setHicsServiceIds] = useState([]);
    const [isOpenModalConfirm, setOpenModalConfirm] = useState(false);
    const [spinner, setSpinner] = useState(false);
    // suul newew 8.1
@@ -132,6 +134,12 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             });
       }
    };
+   const getStructureById = async (id) => {
+      return await StructureApi.getById(id).then(({ data: { response } }) => {
+         return response.hicsServiceIds || [];
+      });
+   };
+   //
    const getEMRorENR = async (row) => {
       dispatch(setPatient(row.patient));
       // status heregteii anhan dawtan
@@ -173,23 +181,24 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             if (row.startDate === null && isDoctor) {
                if (row.isInsurance) {
                   if (row.type != 1) {
-                     await healthInsuranceApi
-                        .getHicsService()
-                        .then(({ data }) =>
-                           setHicsSupports(
-                              data.result.filter((hicsService) => hicsService.groupId == AmbulatoryGroupId)
+                     await getStructureById(row.cabinet.parentId).then(async (response) => {
+                        await healthInsuranceApi
+                           .getHicsService()
+                           .then(({ data }) =>
+                              setHicsSupports(data.result.filter((hicsService) => response.includes(hicsService.id)))
                            )
-                        )
-                        .catch(() => {
-                           openNofi(
-                              'error',
-                              'Алдаа',
-                              'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу'
-                           );
-                        });
+                           .catch(() => {
+                              openNofi(
+                                 'error',
+                                 'Алдаа',
+                                 'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу'
+                              );
+                           });
+                     });
+                     startFormHics.resetFields();
                      setIsOpenModalStartService(true);
                   } else {
-                     CreateHicsSeal(row, {}, 209);
+                     // CreateHicsSeal(row, {}, 209);
                   }
                } else {
                   hrefEMR(row);
@@ -275,7 +284,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          });
       }
    };
-   const CreateHicsSeal = async (row, data, groupId) => {
+   const CreateHicsSeal = async (row, data) => {
       await InsuranceApi.createHicsSeal({
          appointmentId: row.id,
          patientId: row.patientId,
@@ -283,7 +292,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          startAt: data.result?.createdDate || new Date(),
          hicsAmbulatoryStartId: data.result?.id,
          hicsServiceId: data.result?.hicsServiceId,
-         groupId: groupId
+         groupId: hicsSupports?.find((hicsSupport) => hicsSupport.id === data.result?.hicsServiceId)?.groupId
       }).then((response) => {
          if (response.status != 201) {
             openNofi('error', 'Амжилтгүй', response);
@@ -297,7 +306,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);
             } else if (data.code === 200) {
-               CreateHicsSeal(selectedRow, data, AmbulatoryGroupId);
+               CreateHicsSeal(selectedRow, data);
             }
          }
       );
@@ -456,37 +465,25 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      errorFields?.map((error) => message.error(error.errors[0]));
                   })
             }
+            width={300}
          >
             <Form form={startFormHics} layout="vertical">
                <div className="w-full flex flex-col gap-3">
-                  <Finger
-                     text="Иргэний хурууний хээ"
-                     isFinger={true}
-                     steps={[
-                        {
-                           title: 'Өвтний',
-                           path: 'fingerprint'
-                        }
-                     ]}
-                     isPatientSheet={false}
-                     handleClick={(values) => {
-                        startFormHics.setFieldsValue({
-                           fingerprint: values.fingerprint
-                        });
-                     }}
-                  />
-                  <div className="hidden">
-                     <Form.Item
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+                     <Finger
+                        form={startFormHics}
+                        insurance={true}
+                        noStyle
+                        name="fingerprint"
                         rules={[
                            {
                               required: true,
                               message: 'Иргэний хурууны хээ заавал'
                            }
                         ]}
-                        name="fingerprint"
                      >
                         <Input />
-                     </Form.Item>
+                     </Finger>
                   </div>
                   <Form.Item
                      label="Т.Ү-ний дугаар"

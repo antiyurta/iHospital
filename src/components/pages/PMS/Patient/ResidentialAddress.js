@@ -1,127 +1,58 @@
-import { Form, Input, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
-//api
-import CountryApi from '@ApiServices/reference/country';
-//extends
-const { Option } = Select;
+import React from 'react';
+import { Form, Input } from 'antd';
 
 function ResidentialAddress() {
-   const [towns, setTowns] = useState([]);
-   const [provices, setProvices] = useState([]);
-   const filterTowns = async (value) => {
-      await CountryApi.getByPageFilter({
-         params: {
-            type: 3,
-            parentId: value
-         }
-      }).then(({ data: { response } }) => {
-         setTowns(response.data);
-      });
-   };
-   const getProvices = async () => {
-      await CountryApi.getByPageFilter({
-         params: {
-            type: 2
-         }
-      }).then(({ data: { response } }) => {
-         setProvices(response.data);
-      });
-   };
-   const getTowns = async () => {
-      await CountryApi.getByPageFilter({
-         params: {
-            type: 3
-         }
-      }).then(({ data: { response } }) => {
-         setTowns(response.data);
-      });
-   };
-   useEffect(() => {
-      getProvices();
-      getTowns();
-   }, []);
    return (
-      <div>
-         <div className="p-1">
+      <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+         <div className="flex flex-row gap-2 items-end">
             <Form.Item
                label="Аймаг/Хот:"
-               name={'aimagId'}
+               className="w-full"
+               name={'aimagCityName'}
                rules={[{ required: true, message: 'Аймаг/Хот оруулна уу' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
             >
-               <Select
-                  onChange={filterTowns}
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) => (option?.children ?? '').toLowerCase().includes(input.toLowerCase())}
-               >
-                  {provices.map((provice, index) => {
-                     return (
-                        <Option key={index} value={provice.id}>
-                           {provice.name}
-                        </Option>
-                     );
-                  })}
-               </Select>
+               <Input />
+            </Form.Item>
+            <Form.Item label="" name={'aimagCityCode'}>
+               <Input disabled className="w-10" />
             </Form.Item>
          </div>
-         <div className="p-1">
+         <div className="flex flex-row gap-2 items-end">
             <Form.Item
                label="Сум/Дүүрэг:"
-               name="soumId"
+               className="w-full"
+               name="soumDistrictName"
                rules={[{ required: true, message: 'Сум/Дүүрэг оруулна уу' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
             >
-               <Select
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) => (option?.children ?? '').toLowerCase().includes(input.toLowerCase())}
-               >
-                  {towns?.map((town, index) => {
-                     return (
-                        <Option key={index} value={town.id}>
-                           {town.name}
-                        </Option>
-                     );
-                  })}
-               </Select>
+               <Input />
+            </Form.Item>
+            <Form.Item label="" name="soumDistrictCode">
+               <Input disabled className="w-10" />
             </Form.Item>
          </div>
-         <div className="p-1">
+         <div className="flex flex-row gap-2 items-end">
             <Form.Item
                label="Баг/Хороо:"
-               name="committee"
+               className="w-full"
+               name="bagKhorooName"
                rules={[{ required: true, message: 'Баг/Хороо оруулна уу' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
             >
                <Input />
             </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Гудамж/Байшин:"
-               name="building"
-               rules={[{ required: true, message: 'Гудамж/Байшин оруулна уу' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Input />
+            <Form.Item label="" name="bagKhorooCode">
+               <Input disabled className="w-10" />
             </Form.Item>
          </div>
-         <div className="p-1">
-            <Form.Item
-               label="Тоот:"
-               name="address"
-               rules={[{ required: true, message: 'Тоот оруулна уу' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Input />
-            </Form.Item>
-         </div>
+         <Form.Item
+            label="Гудамж/Байшин:"
+            name="addressStreetName"
+            rules={[{ required: true, message: 'Гудамж/Байшин оруулна уу' }]}
+         >
+            <Input />
+         </Form.Item>
+         <Form.Item label="Тоот:" name="addressDetail" rules={[{ required: true, message: 'Тоот оруулна уу' }]}>
+            <Input />
+         </Form.Item>
       </div>
    );
 }

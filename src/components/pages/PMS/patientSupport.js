@@ -70,7 +70,7 @@ const PatientSupport = (props) => {
    return (
       <Form
          form={form}
-         layout="horizontal"
+         layout="vertical"
          initialValues={{
             countryId: mongoliaId,
             contacts: [{}]

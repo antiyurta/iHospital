@@ -23,31 +23,23 @@ function Insurance() {
       return <Result title="Эмнэлэг даатгалгүй байна" />;
    }
    return (
-      <div>
-         <div className="p-1">
-            <Form.Item
-               label="Төр хариуцах төрөл:"
-               name="insuranceType"
-               // rules={[{ required: isInsurance, message: 'Төр хариуцах төрөл заавал сонго' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Select
-                  options={socialStatus.map((status) => ({
-                     label: status.name,
-                     value: status.id
-                  }))}
-               />
-            </Form.Item>
-            <Form.Item label="Харьяа хороо эсэх:" name="isLiver" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-               <Select
-                  options={[
-                     { value: true, label: 'Тийм' },
-                     { value: false, label: 'Үгүй' }
-                  ]}
-               />
-            </Form.Item>
-         </div>
+      <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+         <Form.Item label="Төр хариуцах төрөл:" name="insuranceType">
+            <Select
+               options={socialStatus.map((status) => ({
+                  label: status.name,
+                  value: status.id
+               }))}
+            />
+         </Form.Item>
+         <Form.Item label="Харьяа хороо эсэх:" name="isLiver">
+            <Select
+               options={[
+                  { value: true, label: 'Тийм' },
+                  { value: false, label: 'Үгүй' }
+               ]}
+            />
+         </Form.Item>
       </div>
    );
 }
