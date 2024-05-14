@@ -431,7 +431,7 @@ function DocForRoleList() {
                   name="structureIds"
                   rules={[
                      {
-                        required: true,
+                        required: false,
                         message: 'Заавал'
                      }
                   ]}
@@ -510,7 +510,7 @@ function DocForRoleList() {
                   name="employeePositionIds"
                   rules={[
                      {
-                        required: true,
+                        required: false,
                         message: 'Заавал'
                      }
                   ]}
@@ -522,7 +522,7 @@ function DocForRoleList() {
                   name="supervisePositionIds"
                   rules={[
                      {
-                        required: true,
+                        required: false,
                         message: 'Заавал'
                      }
                   ]}

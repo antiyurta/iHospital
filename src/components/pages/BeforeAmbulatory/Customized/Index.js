@@ -204,6 +204,8 @@ function Index(props) {
          startDate: moment(start).format('YYYY-MM-DD HH:mm'),
          endDate: moment(end).format('YYYY-MM-DD HH:mm')
       };
+      console.log(documentForm);
+      console.log(document);
       await RegularApi.get(documentForm.url, {
          params: params
       })
@@ -297,7 +299,7 @@ function Index(props) {
                      >
                         <RangePicker />
                      </Form.Item>
-                     {documentValue === 1 ? (
+                     {documentValue === 1 || documentValue === 114 ? (
                         <Form.Item
                            label="Тасаг"
                            name="cabinetId"

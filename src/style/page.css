@@ -17,6 +17,34 @@
    font-size: 10px;
    /* white-space: normal; */
 }
+table.ct-13-a thead tr th p,
+table.ct-13-a tbody tr td p {
+   font-size: 8pt;
+   font-weight: normal;
+}
+
+table.ct-13-a thead tr th,
+table.ct-13-a tbody tr td {
+   text-align: center;
+   align-content: center;
+   border: 1px solid black;
+   font-size: 8pt;
+   font-weight: normal;
+}
+
+table.ct-13-a tbody tr:nth-child(even) td {
+   font-size: 8pt;
+   padding: 2px;
+}
+
+table.ct-13-a thead tr:first-child th:first-child,
+table.ct-13-a thead tr:first-child th:nth-child(2) {
+   rotate: 180deg;
+   writing-mode: vertical-rl; /* Vertical text, top to bottom */
+   text-align: start; /* Center align the text horizontally */
+   white-space: nowrap; /* Prevent text from wrapping */
+   border: 1px solid black; /* Optional: Add a border for better visibility */
+}
 
 table.dailyTable thead > tr > th,
 table.dailyTable tbody > tr > td,

@@ -11,7 +11,7 @@ import DocumentRoleApi from '@ApiServices/organization/documentRole';
 function DocumentShow({ props }) {
    const [documents, setDocuments] = useState([]);
    const [isOpenAM, setIsOpenAM] = useState(false);
-   const [documentId, setDocumentId] = useState(Number);
+   const [selectedDocument, setSelectedDocument] = useState({});
    const [isLoadingGetDocuments, setIsLoadingGetDocuments] = useState(false);
    const [documentSearchValue, setDocumentSearchValue] = useState('');
    const getDocuments = async () => {
@@ -36,7 +36,7 @@ function DocumentShow({ props }) {
                );
                setDocuments(data);
                setIsOpenAM(true);
-               setDocumentId(0);
+               setDocument(null);
             }
          })
          .catch((error) => {
@@ -103,7 +103,8 @@ function DocumentShow({ props }) {
                               onRow={(record) => {
                                  return {
                                     onClick: () => {
-                                       setDocumentId(record.value);
+                                       console.log(record);
+                                       setSelectedDocument(record);
                                     }
                                  };
                               }}
@@ -116,14 +117,19 @@ function DocumentShow({ props }) {
                <div className="w-full overflow-auto">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
-                        <Customized
-                           documentValue={documentId}
-                           documentType={props.documentType}
-                           structureId={props.departmentId}
-                           appointmentId={props.appointmentId}
-                           patientId={props.patientId}
-                           onOk={(state) => setIsOpenAM(state)}
-                        />
+                        {selectedDocument.formId ? (
+                           <Customized
+                              propsUsageType={'OUT'}
+                              isEdit={false}
+                              editId={null}
+                              document={selectedDocument}
+                              documentValue={114}
+                              documentType={1}
+                              onOk={() => null}
+                              isBackButton={false}
+                              handleBackButton={() => null}
+                           />
+                        ) : null}
                      </div>
                   </div>
                </div>
