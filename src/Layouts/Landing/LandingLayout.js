@@ -16,7 +16,7 @@ const LandingLayout = () => {
    }, [pathname]);
    useEffect(() => {
       if (pathname != '/privacy') {
-         navigate('/login');
+         navigate('/auth/login');
       }
    }, [user]);
    return (

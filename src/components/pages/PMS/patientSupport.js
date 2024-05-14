@@ -53,15 +53,15 @@ const PatientSupport = (props) => {
          key: 3,
          children: <ResidentialAddress />
       },
+      // {
+      //    forceRender: true,
+      //    label: 'Даатгал',
+      //    key: 4,
+      //    children: <Insurance form={form} />
+      // },
       {
          forceRender: true,
-         label: 'Даатгал',
-         key: 4,
-         children: <Insurance form={form} />
-      },
-      {
-         forceRender: true,
-         label: 'Холбоо барих хүний мэдээлэл',
+         label: 'Асран хамгаалагч',
          key: 5,
          children: <Contact />
       }

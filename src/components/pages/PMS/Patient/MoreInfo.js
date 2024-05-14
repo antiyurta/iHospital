@@ -9,6 +9,20 @@ import emplessDescriptions from '../emplessDescriptions.js'; // hodolmor erhlegu
 function MoreInfo({ form }) {
    return (
       <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+         <Form.Item label="Боловсрол:" name="educationId">
+            <Select
+               showSearch
+               onSelect={(_, option) => form.setFieldValue('educationName', option.label)}
+               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+               options={educations?.map((education) => ({
+                  label: education.name,
+                  value: education.id
+               }))}
+            />
+         </Form.Item>
+         <Form.Item label="" name="educationName" hidden>
+            <Input disabled className="w-10" />
+         </Form.Item>
          <Form.Item label="Ажлын газар:" name="workplace">
             <Select
                showSearch
@@ -19,7 +33,7 @@ function MoreInfo({ form }) {
                }))}
             />
          </Form.Item>
-         <Form.Item label="Албан байр:" name="positionId">
+         <Form.Item label="Нийгмийн байдал:" name="positionId">
             <Select
                showSearch
                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
@@ -47,20 +61,7 @@ function MoreInfo({ form }) {
          <Form.Item label="" name="occuptionName" hidden>
             <Input disabled className="w-10" />
          </Form.Item>
-         <Form.Item label="Боловсрол:" name="educationId">
-            <Select
-               showSearch
-               onSelect={(_, option) => form.setFieldValue('educationName', option.label)}
-               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-               options={educations?.map((education) => ({
-                  label: education.name,
-                  value: education.id
-               }))}
-            />
-         </Form.Item>
-         <Form.Item label="" name="educationName" hidden>
-            <Input disabled className="w-10" />
-         </Form.Item>
+
          <Form.Item label="Хөдөлмөр эрхлэлт:" name="employmentId">
             <Select
                showSearch

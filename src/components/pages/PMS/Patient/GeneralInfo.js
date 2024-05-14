@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Segmented, Select, Statistic } from 'antd';
+import { Form, Input, Select } from 'antd';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 //comp
@@ -7,14 +7,10 @@ import XypFormPatient from './Xyp';
 //redux
 import { selectHospitalIsXyp } from '@Features/hospitalReducer';
 //common
-import { openNofi } from '@Comman/common';
-import Finger from '@Comman/Finger/Finger';
 import { UploadImage } from '@Comman/Input/UploadImage';
 //api
-import xypApi from '@ApiServices/xyp/xyp.api';
 import PatientApi from '@ApiServices/pms/patient.api';
 import CountryApi from '@ApiServices/reference/country';
-import { SendOutlined } from '@ant-design/icons';
 //extends
 const { Option } = Select;
 

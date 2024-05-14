@@ -219,17 +219,21 @@ const NewXray = () => {
    }, [searchValue, data]);
 
    const handleChange = (type, value, index) => {
-      const clone = [...pages];
-      clone[index] = {
-         ...clone[index],
-         [`${type}`]: value
-      };
-      setPages(clone);
+      setPages((prevPages) => {
+         const clone = [...prevPages];
+         clone[index] = {
+            ...clone[index],
+            [type]: value
+         };
+         return clone;
+      });
    };
    const removePage = (index) => {
-      const clone = [...pages];
-      clone.splice(index, 1);
-      setPages(clone);
+      setPages((prevPages) => {
+         const clone = [...prevPages];
+         clone.splice(index, 1);
+         return clone;
+      });
    };
 
    const handlePrint = useReactToPrint({

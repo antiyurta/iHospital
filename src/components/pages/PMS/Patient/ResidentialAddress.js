@@ -13,7 +13,7 @@ function ResidentialAddress() {
             >
                <Input />
             </Form.Item>
-            <Form.Item label="" name={'aimagCityCode'}>
+            <Form.Item label="" name={'aimagCityCode'} hidden>
                <Input disabled className="w-10" />
             </Form.Item>
          </div>
@@ -26,7 +26,7 @@ function ResidentialAddress() {
             >
                <Input />
             </Form.Item>
-            <Form.Item label="" name="soumDistrictCode">
+            <Form.Item label="" name="soumDistrictCode" hidden>
                <Input disabled className="w-10" />
             </Form.Item>
          </div>
@@ -39,7 +39,7 @@ function ResidentialAddress() {
             >
                <Input />
             </Form.Item>
-            <Form.Item label="" name="bagKhorooCode">
+            <Form.Item label="" name="bagKhorooCode" hidden>
                <Input disabled className="w-10" />
             </Form.Item>
          </div>

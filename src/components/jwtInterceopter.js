@@ -24,7 +24,7 @@ jwtInterceopter.interceptors.response.use(
    },
    async (error) => {
       const originalConfig = error.config;
-      if (originalConfig?.url !== '/login' && error.response) {
+      if (originalConfig?.url !== '/auth/login' && error.response) {
          if (error.response.status === 401 && !originalConfig._retry) {
             originalConfig._retry = true;
             try {
@@ -44,7 +44,7 @@ jwtInterceopter.interceptors.response.use(
                console.log(error);
                openNofi('info', 'Анхааруулга', 'Системд нэвтрэх хугацаа дууссан байна.');
                localStorage.removeItem('tokens');
-               window.location.href = '/login';
+               window.location.href = '/auth/login';
                return Promise.reject(error);
             }
          }

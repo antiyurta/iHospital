@@ -7,8 +7,6 @@ import PatientSupport from './patientSupport';
 import dayjs from 'dayjs';
 //common
 import { openNofi } from '@Comman/common';
-//redux
-import { selectHospitalIsXyp } from '@Features/hospitalReducer';
 //api
 import CountryApi from '@ApiServices/reference/country';
 import PatientApi from '@ApiServices/pms/patient.api';
@@ -385,7 +383,7 @@ function Patient() {
             title={editMode ? 'Өвчтөн засах' : 'Өвчтөн бүртгэх'}
             open={isModalVisible}
             onCancel={() => setIsModalVisible(false)}
-            width="18cm"
+            width="16cm"
             footer={null}
             confirmLoading={isConfirmLoading}
          >
