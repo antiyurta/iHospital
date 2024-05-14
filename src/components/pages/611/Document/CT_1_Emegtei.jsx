@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { Checkbox, Input } from 'antd';
+
 const CT_1_Emegtei = (props) => {
    const {
       data: { formData }
@@ -234,14 +235,14 @@ const CT_1_Emegtei = (props) => {
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
-                     <tr>
+                     <tr className="border-t-0">
                         <th>
                            Сонсох чадвахи:
                            <Checkbox.Group value={formData?.q14}>
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>
-                                 Буурсан
                                  <p>
+                                    Буурсан
                                     <span className="text-[11px]">
                                        (
                                        <Checkbox.Group value={formData?.['q14-2-1']} className="inline">

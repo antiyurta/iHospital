@@ -424,7 +424,7 @@ function Index(props) {
                            onClick={() => form.validateFields().then((values) => onFinish(values, 'Save'))}
                            type="primary"
                         >
-                           {isEdit ? 'Засах' : 'Хадгалах'}
+                           {isEdit ? 'Хадгалах' : 'Засах'}
                         </Button>
                      </div>
                   </div>

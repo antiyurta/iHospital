@@ -108,8 +108,8 @@ function MainInpatientHistory({ newUsageType }) {
                   Modal.confirm({
                      content: (
                         <p>
-                           Та <span className="font-bold">{document.docName}</span> маягт бөглөх гэж байна итгэлттэй
-                           байна уу
+                           Та <span className="font-bold">{document.docName}</span> маягт бөглөх гэж байна! Итгэлтэй
+                           байна уу?
                         </p>
                      ),
                      cancelText: 'Үгүй',

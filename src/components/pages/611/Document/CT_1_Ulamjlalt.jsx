@@ -177,7 +177,7 @@ const CT_1_Ulamjlalt = (props) => {
                               /
                               <Input
                                  className="amaraInput w-8"
-                                 value={formData?.['q9-6-2']}
+                                 value={formData?.['q9-6-2']}     
                                  style={{ textAlign: 'center' }}
                               />
                            </th>
