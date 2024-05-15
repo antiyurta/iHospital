@@ -15,7 +15,7 @@ const LandingLayout = () => {
       window.scrollTo(0, 0);
    }, [pathname]);
    useEffect(() => {
-      if (pathname != '/privacy') {
+      if (pathname != '/privacy' && pathname != '/hubstar-privacy') {
          navigate('/auth/login');
       }
    }, [user]);
