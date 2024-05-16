@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Select, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import { SUPPORT_ORGAN_TRANSPLANT } from './enum-utils';
+import { SUPPORT_ORGAN_TRANSPLANT } from '../enum-utils';
 //common
 import { openNofi } from '@Comman/common';
 import { ListPatientInfo } from '@Comman/ListInjection';
@@ -21,8 +21,7 @@ const labelstyle = {
    fontWeight: 700
 };
 
-const SaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable }) => {
-   console.log(hicsSeal, parentHicsSeal);
+export const SaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable }) => {
    const patient = useSelector(selectPatient);
    const [isLoading, setLoading] = useState(false);
    const [defaultHics, setDefaultHics] = useState([]);
@@ -343,4 +342,4 @@ const SaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable 
       </Spin>
    );
 };
-export default SaveHics;
+

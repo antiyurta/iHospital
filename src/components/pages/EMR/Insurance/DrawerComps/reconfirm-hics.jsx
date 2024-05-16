@@ -1,12 +1,12 @@
 import { Col, Form, Input, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectPatient } from '../../../../features/patientReducer';
-import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
+import { selectPatient } from '../../../../../features/patientReducer';
+import healthInsurance from '../../../../../services/healt-insurance/healtInsurance';
 
 const { TextArea } = Input;
 
-const CancelHics = (props) => {
+export const ReConfirmHics = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hics, setHics] = useState([]);
@@ -14,8 +14,7 @@ const CancelHics = (props) => {
       await healthInsurance.getPatientData(patient.registerNumber).then(({ data }) => {
          if (data.code == 200) {
             const details = data.result.details;
-            // setHics(details.filter((detail) => detail.statusCode != 6));
-            setHics(details.filter((detail) => detail.statusCode != null));
+            setHics(details.filter((detail) => detail.statusCode == 6));
          }
       });
    };
@@ -44,12 +43,12 @@ const CancelHics = (props) => {
          </Form.Item>
 
          <Form.Item
-            label="Цуцлах шалтгаан"
+            label="Шалтгаан"
             name="reason"
             rules={[
                {
                   required: true,
-                  message: 'Цуцлах шалтгаан оруулна уу'
+                  message: 'шалтгаан оруулна уу'
                }
             ]}
          >
@@ -58,4 +57,4 @@ const CancelHics = (props) => {
       </>
    );
 };
-export default CancelHics;
+
