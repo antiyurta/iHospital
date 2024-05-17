@@ -1,12 +1,12 @@
 import { Col, Form, Input, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectPatient } from '../../../../features/patientReducer';
-import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
+import { selectPatient } from '../../../../../features/patientReducer';
+import healthInsurance from '../../../../../services/healt-insurance/healtInsurance';
 
 const { TextArea } = Input;
 
-const ConfirmHics = (props) => {
+export const SendReConfirmHics = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hics, setHics] = useState([]);
@@ -14,7 +14,7 @@ const ConfirmHics = (props) => {
       await healthInsurance.getPatientData(patient.registerNumber).then(({ data }) => {
          if (data.code == 200) {
             const details = data.result.details;
-            setHics(details.filter((detail) => detail.statusCode == 5 && detail.serviceId == 20120));
+            setHics(details.filter((detail) => detail.statusCode == 6));
          }
       });
    };
@@ -57,4 +57,4 @@ const ConfirmHics = (props) => {
       </>
    );
 };
-export default ConfirmHics;
+

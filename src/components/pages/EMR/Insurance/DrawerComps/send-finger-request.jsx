@@ -1,13 +1,13 @@
 import { Col, Form, Input, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectPatient } from '../../../../features/patientReducer';
-import insurance from '../../../../services/healt-insurance/insurance';
-import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
+import { selectPatient } from '../../../../../features/patientReducer';
+import insurance from '../../../../../services/healt-insurance/insurance';
+import healthInsurance from '../../../../../services/healt-insurance/healtInsurance';
 
 const { TextArea } = Input;
 
-const FingerRequest = (props) => {
+export const SendFingerRequest = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);
@@ -166,4 +166,4 @@ const FingerRequest = (props) => {
       </>
    );
 };
-export default FingerRequest;
+

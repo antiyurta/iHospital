@@ -1,12 +1,12 @@
 import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectPatient } from '../../../../features/patientReducer';
-import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
+import { selectPatient } from '../../../../../features/patientReducer';
+import healtInsurance from '../../../../../services/healt-insurance/healtInsurance';
 
 const { TextArea } = Input;
 
-const SetApproval = (props) => {
+export const SendApproval = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);
@@ -167,4 +167,4 @@ const SetApproval = (props) => {
       </>
    );
 };
-export default SetApproval;
+

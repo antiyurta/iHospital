@@ -33,6 +33,8 @@ const XypFormPatient = ({ setData }) => {
                   lastName: newResponse.lastname,
                   firstName: newResponse.firstname,
                   registerNumber: newResponse.regnum,
+                  nationality: newResponse.nationality,
+                  ethnicity: newResponse.ethnicity,
                   aimagCityName: newResponse.aimagCityName,
                   aimagCityCode: newResponse.aimagCityCode,
                   soumDistrictName: newResponse.soumDistrictName,

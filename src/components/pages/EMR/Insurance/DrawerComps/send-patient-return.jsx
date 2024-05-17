@@ -1,13 +1,14 @@
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { selectPatient } from '../../../../features/patientReducer';
+import { selectPatient } from '../../../../../features/patientReducer';
 import { useSelector } from 'react-redux';
-import patientDiagnose from '../../../../services/emr/patientDiagnose';
-import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
-import { getAge } from '../../../common';
+import patientDiagnose from '../../../../../services/emr/patientDiagnose';
+import healtInsurance from '../../../../../services/healt-insurance/healtInsurance';
+import { getAge } from '../../../../common';
 const { Option } = Select;
 const { TextArea } = Input;
-const SetPatientReturn = (props) => {
+
+export const SendPatientReturn = (props) => {
    const { form } = props;
    const [diagnosis, setDiagnosis] = useState([]);
    const [hospitals, setHospitals] = useState([]);
@@ -29,7 +30,6 @@ const SetPatientReturn = (props) => {
    };
    const getPatientDiagnosis = async () => {
       await patientDiagnose.getByPageFilter({ patientId: patient.id }).then(({ data }) => {
-         console.log(data);
          if (data.success) {
             setDiagnosis(data.response.data.map((patientDiagnose) => patientDiagnose.diagnose));
          }
@@ -293,4 +293,4 @@ const SetPatientReturn = (props) => {
       </>
    );
 };
-export default SetPatientReturn;
+

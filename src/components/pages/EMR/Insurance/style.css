@@ -1,0 +1,16 @@
+.ant-row .ant-form-item-row {
+   align-items: flex-start !important;
+   justify-content: space-between !important;
+}
+
+label {
+   font-weight: 600 !important;
+}
+
+::placeholder {
+   font-weight: 400 !important;
+}
+
+.ant-list-item-meta-description {
+   color: rgba(0, 0, 0, 0.623);
+}

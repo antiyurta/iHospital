@@ -114,6 +114,9 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                setImageUrl(null);
             }
          })
+         .catch(() => {
+            setImageUrl(null);
+         })
          .finally(() => {
             setIsLoadingImage(false);
          });
@@ -142,14 +145,23 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
-      !patient.imageId && setImageUrl(null);
    }, [patient]);
    return (
       <>
          <div className="patient-info xl:min-w-[500px]">
             <div className="picture">
                <Spin spinning={isLoadingImage}>
-                  <img src={imageUrl || ImageIcon} alt="pation" />
+                  <div
+                     style={{
+                        height: 150,
+                        width: '100%',
+                        backgroundImage: `url(${imageUrl})`,
+                        backgroundSize: 'contain',
+                        backgroundPosition: 'center center',
+                        backgroundRepeat: 'no-repeat',
+                        borderRadius: 16
+                     }}
+                  />
                </Spin>
             </div>
             <div className="info">

@@ -284,15 +284,16 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          });
       }
    };
-   const CreateHicsSeal = async (row, data) => {
+   const CreateHicsSeal = async (row, result) => {
       await InsuranceApi.createHicsSeal({
          appointmentId: row.id,
          patientId: row.patientId,
          departmentId: row.cabinetId,
-         startAt: data.result?.createdDate || new Date(),
-         hicsAmbulatoryStartId: data.result?.id,
-         hicsServiceId: data.result?.hicsServiceId,
-         groupId: hicsSupports?.find((hicsSupport) => hicsSupport.id === data.result?.hicsServiceId)?.groupId
+         startAt: result?.createdDate || new Date(),
+         hicsAmbulatoryStartId: null,
+         hicsStartCode: result.code,
+         hicsServiceId: result?.hicsServiceId,
+         groupId: hicsSupports?.find((hicsSupport) => hicsSupport.id === result?.hicsServiceId)?.groupId
       }).then((response) => {
          if (response.status != 201) {
             openNofi('error', 'Амжилтгүй', response);
@@ -301,15 +302,19 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       });
    };
    const startAmbulatory = async (values) => {
-      await InsuranceApi.hicsAmbulatoryStart(values.fingerprint, selectedRow.patientId, values.hicsServiceId).then(
-         async ({ data }) => {
+      await healthInsuranceApi
+         .postStartHics({
+            patientRegno: selectedRow.patient?.registerNumber,
+            patientFingerprint: values.fingerprint,
+            hicsServiceId: values.hicsServiceId
+         })
+         .then(({ data }) => {
             if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);
             } else if (data.code === 200) {
-               CreateHicsSeal(selectedRow, data);
+               CreateHicsSeal(selectedRow, data.result);
             }
-         }
-      );
+         });
    };
    // column configure
    const Numberer = [
@@ -327,7 +332,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             <SurgeryBoss
                row={row}
                handleRefresh={() => {
-                  setOtherParams((prevValues) => ({ ...prevValues, process: 4 }));
+                  // setOtherParams((prevValues) => ({ ...prevValues, process: 4 }));
                }}
             />
          )

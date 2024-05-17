@@ -1,5 +1,6 @@
 import React from 'react';
 import Privacy from './privacy/Index';
+import PrivacyHubStar from './privacy/hubstar';
 
 const DocumentList = React.lazy(() => import('./components/pages/611/Lists'));
 //
@@ -107,6 +108,12 @@ export const PublicRoutes = [
       mnName: 'Үйлчилгээний нөхцөл',
       url: '/privacy',
       element: Privacy
+   },
+   {
+      name: 'Privacy',
+      mnName: 'Үйлчилгээний нөхцөл',
+      url: '/hubstar-privacy',
+      element: PrivacyHubStar
    }
 ];
 export const ProtectedRoutes = [

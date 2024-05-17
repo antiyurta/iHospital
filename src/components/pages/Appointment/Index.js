@@ -96,9 +96,8 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       setIsLoadingCheckPatientInsurance(true);
       await InsuranceApi.postCitizenInfo({
          regNo: selectedPatient.registerNumber,
-         isChild: selectedPatient.isChild,
-         // fingerPrint: values.fingerPrint
-         fingerPrint: 'test'
+         isChild: selectedPatient.age > 18 ? true : false,
+         fingerPrint: values.fingerPrint
       })
          .then((response) => {
             if (response.data?.isChance) {

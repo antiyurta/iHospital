@@ -49,7 +49,12 @@ const NewEmrSupport = () => {
             <button onClick={() => setIsOpenModalHics(true)}>ЭМД</button>
             <DocumentIndex />
          </div>
-         <Modal title="Даатгал" open={isOpenModalHics} onCancel={() => setIsOpenModalHics(false)}>
+         <Modal
+            title="Даатгал"
+            open={isOpenModalHics}
+            onCancel={() => setIsOpenModalHics(false)}
+            style={{ maxHeight: '80vh', overflow: 'hidden', borderRadius: '14px' }}
+         >
             <SentService
                patient={currentPatient}
                hicsSeal={incomeEmrData.hicsSeal}
@@ -98,3 +103,4 @@ const NewEmrSupport = () => {
    );
 };
 export default NewEmrSupport;
+

@@ -2,17 +2,17 @@ import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React from 'react';
 import { useEffect } from 'react';
-import insurance from '../../../../services/healt-insurance/insurance';
+import insurance from '../../../../../services/healt-insurance/insurance';
 import { useState } from 'react';
-import { getAge, localMn } from '../../../common';
-import patientDiagnose from '../../../../services/emr/patientDiagnose';
-import healtInsurance from '../../../../services/healt-insurance/healtInsurance';
+import { getAge, localMn } from '../../../../common';
+import patientDiagnose from '../../../../../services/emr/patientDiagnose';
+import healtInsurance from '../../../../../services/healt-insurance/healtInsurance';
 import { useSelector } from 'react-redux';
-import { selectPatient } from '../../../../features/patientReducer';
+import { selectPatient } from '../../../../../features/patientReducer';
 import moment from 'moment';
-import { selectCurrentFirstName } from '../../../../features/authReducer';
+import { selectCurrentFirstName } from '../../../../../features/authReducer';
 
-const SetPatientSheet = (props) => {
+export const SendPatientSheet = (props) => {
    const { form } = props;
    const doctor = useSelector(selectCurrentFirstName);
    const [hicsServices, setHicsServices] = useState([]);
@@ -446,4 +446,4 @@ const SetPatientSheet = (props) => {
       </>
    );
 };
-export default SetPatientSheet;
+
