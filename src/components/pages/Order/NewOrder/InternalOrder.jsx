@@ -15,17 +15,19 @@ import RecentRecipe from '../RecentRecipe';
 import PackageTable from '../PackageTable/PackageTable';
 import OrderTable from '../OrderTable/OrderTable';
 import dayjs from 'dayjs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 //common
 import { numberToCurrency, openNofi } from '@Comman/common';
 //redux
-import { selectCurrentEmrData } from '@Features/emrReducer';
+import { selectCurrentEmrData, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
 //api
 import ServiceApi from '@ApiServices/service/service';
 import SurgeryApi from '@ApiServices/service/surgery.api';
 
 const InternalOrder = (props) => {
    const { isPackage, usageType, selectedPatient, categories, save } = props;
+   const dispatch = useDispatch();
+   const IncomeOTSData = useSelector(selectCurrentOtsData);
    const IncomeEMRData = useSelector(selectCurrentEmrData);
    const [total, setTotal] = useState(0);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
@@ -94,6 +96,7 @@ const InternalOrder = (props) => {
       } else {
          var services = [];
          var subTotal = 0;
+         console.log('asdasdada', value);
          value.map((item) => {
             var service = {};
             service.id = item.id;
@@ -128,6 +131,7 @@ const InternalOrder = (props) => {
                service.qty = item.qty ? item.qty : 1;
                service.repeatTime = 1;
                service.dayCount = 1;
+               service.typeId = item.treatmentTypeId;
                if (service.qty != 1) {
                   service.price = item.calCprice;
                   service.oPrice = item.price;
@@ -159,12 +163,21 @@ const InternalOrder = (props) => {
          } else {
             data = datas.services.concat(services);
          }
+         replaceOtsData(data, total + subTotal);
          orderForm.setFieldsValue({ services: data });
          setTotal(total + subTotal);
       }
       setIsLoadingOrderTable(false);
    };
 
+   const replaceOtsData = (services, total) => {
+      dispatch(
+         setOtsData({
+            services: services,
+            total: total
+         })
+      );
+   };
    const surgeryRequestClick = async (values) => {
       await SurgeryApi.postRequest({
          ...values,
@@ -208,8 +221,14 @@ const InternalOrder = (props) => {
    };
 
    useEffect(() => {
-      orderForm.resetFields();
-      setTotal(0);
+      // replaceOtsData([], 0);
+      if (IncomeOTSData?.services?.length > 0) {
+         orderForm.setFieldValue('services', IncomeOTSData.services);
+         setTotal(IncomeOTSData.total || 0);
+      } else {
+         orderForm.resetFields();
+         setTotal(0);
+      }
    }, [selectedPatient]);
    useEffect(() => {
       RenderCategories();
@@ -245,7 +264,12 @@ const InternalOrder = (props) => {
          </div>
          <div className="flex flex-wrap">
             <div className="w-full">
-               <Form form={orderForm}>
+               <Form
+                  form={orderForm}
+                  onValuesChange={(_changedValue, allValues) => {
+                     replaceOtsData(allValues, total);
+                  }}
+               >
                   <Form.List name="services">
                      {(services, { remove }) => {
                         if (isPackage) {
@@ -253,6 +277,8 @@ const InternalOrder = (props) => {
                         } else {
                            return (
                               <OrderTable
+                                 selectedPatient={selectedPatient}
+                                 setLoading={setIsLoadingOrderTable}
                                  isLoading={isLoadingOrderTable}
                                  usageType={usageType}
                                  form={orderForm}
@@ -276,7 +302,7 @@ const InternalOrder = (props) => {
                type="primary"
                onClick={() =>
                   orderForm.validateFields().then((values) => {
-                     save(values.services);
+                     save(values.services, true);
                      orderForm.resetFields();
                   })
                }

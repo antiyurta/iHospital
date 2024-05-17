@@ -20,6 +20,7 @@ import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
+   console.log('asdasdasdsad', invoiceData);
    const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const isInsurance = useSelector(selectCurrentInsurance);
@@ -171,6 +172,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       setIsConfirmLoading(true);
       setGetIsSlot({ state: false, slotType: 0 });
       if (type === 2 || type === 3) {
+         /** type 3 bol xray 2 bol treatment */
          await ServiceApi.patch(invoiceData.invoiceId, {
             ...selectedInfo,
             doctorId: selectedDoctor.id,
@@ -179,7 +181,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
          }).then((response) => {
             if (response.status === 200) {
                setAppointmentModal(false);
-               handleClick(true, invoiceData.invoiceId);
+               handleClick(true, invoiceData.invoiceId, selectedInfo);
                setGetIsSlot({ state: true, slotType: 0 });
             }
          });
@@ -260,6 +262,9 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
                      >
                         <Select
                            allowClear
+                           onClear={() => {
+                              filterForm.resetFields(['doctorId']);
+                           }}
                            onChange={getDoctor}
                            className="w-full"
                            placeholder="Тасаг сонгох"

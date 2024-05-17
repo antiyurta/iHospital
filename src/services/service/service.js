@@ -15,6 +15,15 @@ class Service {
    async patchXrayRequest(id, data) {
       return await jwtInterceopter.patch('service/xrayRequest/' + id, data);
    }
+   async getTreatmentRequest(conf) {
+      return await jwtInterceopter.get('service/treatmentRequest', conf);
+   }
+   async getTreatmentRequestById(id) {
+      return await jwtInterceopter.get('service/treatmentRequest/' + id);
+   }
+   async patchTreatmentRequest(id, data) {
+      return await jwtInterceopter.patch('service/treatmentRequest/' + id, data);
+   }
    async getInpatientRequestById(id) {
       return await jwtInterceopter.get('service/inpatient-request/show/' + id);
    }

@@ -1,10 +1,17 @@
-import React from 'react';
-import { Button, Checkbox, DatePicker, Input, InputNumber, Table } from 'antd';
+import React, { useState } from 'react';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Space, Table, message } from 'antd';
 import OrderForm from './OrderForm';
 import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { NewInputNumber } from '../../../Input/Input';
+import { useDispatch, useSelector } from 'react-redux';
+import Appointment from '@Pages/Appointment/Index';
+//api
+import regularApi from '@ApiServices/regular.api';
+//redux
+import { selectCurrentEmrData, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
+
 const checkNumber = (event) => {
    var charCode = event.charCode;
    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
@@ -14,8 +21,36 @@ const checkNumber = (event) => {
    }
 };
 
+const urlMapPost = {
+   1: 'service/xrayRequest',
+   2: 'service/treatmentRequest'
+};
+
+const appointmentMap = {
+   1: 3,
+   2: 2
+};
+
+const requestTypeMap = (id, typeId) => ({
+   1: {
+      xrayId: id,
+      xrayTypeId: typeId
+   },
+   2: {
+      treatmentId: id,
+      treatmentTypeId: typeId
+   }
+});
+
 function OrderTable(props) {
-   const { isLoading, usageType, services, form, remove, setTotal } = props;
+   const { selectedPatient, setLoading, isLoading, usageType, services, form, remove, setTotal } = props;
+   const dispatch = useDispatch();
+   const incomeOtsData = useSelector(selectCurrentOtsData);
+   const incomeEmrData = useSelector(selectCurrentEmrData);
+   const [lastResponse, setLastResponse] = useState({});
+   const [isOpenAppointment, setOpenAppointment] = useState(false);
+   const [appointmentTypeId, setAppointmentTypeId] = useState();
+   const [invoiceData, setInvoiceData] = useState({});
    const minRule = (index) => {
       const type = form.getFieldValue(['services', index, 'type']);
       const state = type === 8 || type === 2 ? true : false;
@@ -59,6 +94,73 @@ function OrderTable(props) {
          }
       }
    };
+   const createOtsRequest = async (service, formIndex) => {
+      console.log(service);
+      setLoading(true);
+      return await regularApi
+         .post('payment/invoice', {
+            patientId: selectedPatient.id,
+            amount: service.oPrice,
+            type: service.type,
+            typeId: service.typeId
+         })
+         .then(async ({ data: { response } }) => {
+            try {
+               form.setFieldValue(['services', formIndex, 'invoiceId'], response.id);
+               setInvoiceData({
+                  invoiceId: response.id,
+                  type: service.type
+               });
+               setAppointmentTypeId(appointmentMap[service.type]);
+               return await regularApi
+                  .post(urlMapPost[service.type], {
+                     ...requestTypeMap(service.id, service.typeId)[service.type],
+                     patientId: selectedPatient.id,
+                     name: response.name,
+                     invoiceId: response.id,
+                     isActive: false,
+                     price: response.amount,
+                     inpatientPrice: response.amount,
+                     requestDate: new Date(),
+                     usageType: usageType,
+                     xrayProcess: 0,
+                     scheduleId: null,
+                     isPayment: false,
+                     deviceType: service.deviceType,
+                     startAt: null,
+                     isInsurance: incomeEmrData.isInsurance
+                  })
+                  .then(({ data: { response } }) => response)
+                  .catch(() => false);
+            } catch (error) {
+               message.error(error.message || 'An error occurred');
+            }
+         })
+         .then((lastResponse) => {
+            if (lastResponse) {
+               form.setFieldValue(['services', formIndex, 'xrayRequestId'], lastResponse.id);
+               setLastResponse({
+                  responseId: lastResponse.id,
+                  formIndex: formIndex
+               });
+               setOpenAppointment(true);
+            }
+         })
+         .catch((error) => {
+            console.log('error', error);
+         })
+         .finally(() => {
+            setLoading(false);
+         });
+   };
+   const replaceOtsData = () => {
+      dispatch(
+         setOtsData({
+            services: form.getFieldValue('services'),
+            total: incomeOtsData.total
+         })
+      );
+   };
    return (
       <>
          <Table
@@ -84,8 +186,50 @@ function OrderTable(props) {
                   title: 'Нэр',
                   dataIndex: 'name',
                   render: (_value, _row, index) => (
-                     <OrderForm noStyle name={[index, 'name']} editing={false}>
-                        <Input />
+                     <Form.Item
+                        noStyle
+                        shouldUpdate={(prevValues, currentValues) =>
+                           prevValues?.services?.[index]?.isCito !== currentValues.services?.[index]?.isCito
+                        }
+                     >
+                        {({ getFieldValue }) =>
+                           getFieldValue(['services', index, 'isCito']) ? (
+                              <OrderForm noStyle name={[index, 'name']} editing={false}>
+                                 <Input />
+                              </OrderForm>
+                           ) : (
+                              <Space>
+                                 <Button
+                                    icon={<ClockCircleOutlined />}
+                                    disabled={getFieldValue(['services', index, 'responseId']) ? true : false}
+                                    onClick={() => {
+                                       createOtsRequest(getFieldValue(['services', index]), index);
+                                    }}
+                                 />
+                                 <Form.Item name={[index, 'invoiceId']}>
+                                    <InputNumber />
+                                 </Form.Item>
+                                 <Form.Item name={[index, 'xrayRequestId']}>
+                                    <InputNumber />
+                                 </Form.Item>
+                                 <Form.Item name={[index, 'slotId']}>
+                                    <InputNumber />
+                                 </Form.Item>
+                                 <OrderForm noStyle name={[index, 'name']} editing={false}>
+                                    <Input />
+                                 </OrderForm>
+                              </Space>
+                           )
+                        }
+                     </Form.Item>
+                  )
+               },
+               {
+                  title: 'Цаг',
+                  dataIndex: 'orderTime',
+                  render: (_value, _row, index) => (
+                     <OrderForm name={[index, 'orderTime']} editing={false}>
+                        <TextArea />
                      </OrderForm>
                   )
                },
@@ -223,6 +367,40 @@ function OrderTable(props) {
             dataSource={services}
             pagination={false}
          />
+         <Modal
+            width={'85%'}
+            open={isOpenAppointment}
+            onCancel={() => {
+               setOpenAppointment(false);
+            }}
+         >
+            <div className="pt-10">
+               <Appointment
+                  selectedPatient={selectedPatient}
+                  type={appointmentTypeId}
+                  invoiceData={invoiceData}
+                  handleClick={(state, _id, info) => {
+                     if (state) {
+                        form.setFieldsValue({
+                           services: {
+                              [`${lastResponse.formIndex}`]: {
+                                 slotId: info.slotId,
+                                 orderTime: `${info?.time?.start?.substr(0, 5)}->${info?.time?.end?.substr(0, 5)}`
+                              }
+                           }
+                        });
+                        replaceOtsData();
+                        setOpenAppointment(false);
+                     }
+                  }}
+                  isExtraGrud={{
+                     isCreate: true,
+                     isChange: true,
+                     isDelete: true
+                  }}
+               />
+            </div>
+         </Modal>
       </>
    );
 }
