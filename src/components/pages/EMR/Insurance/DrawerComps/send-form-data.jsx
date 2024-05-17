@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import { bloodType, pregnancyActivity, relationship } from '@Utils/config/xypField';
 import { useSelector } from 'react-redux';
@@ -14,6 +14,12 @@ const labelstyle = {
 };
 export const SendFormData = ({ form }) => {
    const patient = useSelector(selectPatient);
+   const [formData, setFormData] = useState([]);
+   useEffect(() => {
+      InsuranceApi.getFormData(1).then((res) => {
+         setFormData(res.data.result);
+      });
+   }, []);
 
    return (
       <>

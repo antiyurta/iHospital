@@ -35,10 +35,6 @@ import {
    SentAddHicsService,
    SendDirectService,
    SendFormData,
-   SendFixDoctorExams,
-   GetDataByFormSummary,
-   GetDataFormData,
-   GetCt4
 } from './DrawerComps';
 
 //defaults
@@ -193,10 +189,6 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             [HST.sendAddHicsService]: healthInsuranceApi.postAddHicsService,
             [HST.sendDirectService]: healthInsuranceApi.postDirectSendService,
             [HST.sendFormData]: healthInsuranceApi.postSendFormData,
-            [HST.sendFixDoctorExams]: healthInsuranceApi.postFixDoctorExams,
-            [HST.getDataByFormSummary]: healthInsuranceApi.getDataByFormSummary,
-            [HST.getDataFormData]: healthInsuranceApi.getDataFormData,
-            [HST.getCt4]: healthInsuranceApi.getCt4
          };
          const selectedApi = apiMap[chooseService];
          if (!selectedApi) throw new Error('Unknown service type');
@@ -250,10 +242,6 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          [HST.sendAddHicsService]: <SentAddHicsService form={insuranceForm} />,
          [HST.sendDirectService]: <SendDirectService form={insuranceForm} />,
          [HST.sendFormData]: <SendFormData form={insuranceForm} />,
-         [HST.sendFixDoctorExams]: <SendFixDoctorExams form={insuranceForm} />,
-         [HST.getDataByFormSummary]: <GetDataByFormSummary form={insuranceForm} />,
-         [HST.getDataFormData]: <GetDataFormData form={insuranceForm} />,
-         [HST.getCt4]: <GetCt4 form={insuranceForm} />
       };
 
       return formMap[chooseService] || null;
@@ -337,4 +325,3 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
 };
 
 export default SentService;
-

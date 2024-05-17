@@ -26,7 +26,3 @@ export * from './get-vaccine-by-regno';
 export * from './send-add-hics-service';
 export * from './send-direct-service';
 export * from './send-form-data';
-export * from './send-fix-doctor-exams';
-export * from './get-data-by-form-summary';
-export * from './get-data-form-data';
-export * from './get-ct4';
