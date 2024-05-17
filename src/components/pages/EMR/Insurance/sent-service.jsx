@@ -87,14 +87,87 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                message.error(error);
             });
       } else if (chooseService == HEALTH_SERVICES_TITLE.saveHics) {
-         await insuranceApi
-            .requestHicsSeal(hicsSeal.id, values)
+         console.log('values', values, hicsSeal, patient);
+         const {
+            civilId: patientCivilId,
+            familyName: patientSurname,
+            aimagCityCode: patientAimagCode,
+            aimagCityName: patientAimagName,
+            soumDistrictCode: patientSoumCode,
+            soumDistrictName: patientSoumName,
+            contacts: patientContacts,
+            ...otherInfoPatient
+         } = patient;
+         const data = {
+            patientRegno: patient.registerNumber,
+            patientFingerprint: values.patientFingerprint,
+            patientFirstname: patient.firstName,
+            patientLastname: patient.lastName,
+            startDate: hicsSeal.startAt,
+            endDate: new Date(),
+            hicsServiceId: hicsSeal.hicsServiceId,
+            parentServiceNumber: parentHicsSeal?.hicsServiceId,
+            doctorServiceNumber: values.doctorServiceNumber,
+            sent13RequestNo: values.sent13RequestNo,
+            departNo: values.departNo,
+            departName: values.departName,
+            isForeign: 0,
+            freeTypeId: 0,
+            historyCode: values.historyCode,
+            phoneNo: patient.phoneNo,
+            bloodType: values.bloodType,
+            diagnosis: values.diagnosis,
+            isLiver: patient.isLiver ? 1 : 2,
+            startCode: hicsSeal.hicsStartCode,
+            xypResponse: {
+               requestId: patient.requestId,
+               resultMsg: patient.resultMsg
+            },
+            personalInfo: {
+               patientCivilId: patientCivilId,
+               isRaped: 2,
+               surname: patientSurname,
+               aimagCode: patientAimagCode,
+               aimgName: patientAimagName,
+               soumCode: patientSoumCode,
+               soumName: patientSoumName,
+               parentPhoneNo: parseInt(patientContacts?.[0]?.contactPhoneNo) || null,
+               ...otherInfoPatient,
+               age: 27
+               // isDonor: 2
+               // donorTypeId
+               // donorTypeName
+            },
+            employment: {
+               ...values.employment,
+               employmentId: patient.employmentId || '1',
+               employmentName: patient.employmentName || '- Цалин хөлстэй ажиллагч',
+               isEmployment: patient.isEmployment,
+               emplessDescriptionId: patient.emplessDescriptionId,
+               emplessDescription: patient.emplessDescription
+            },
+            healthInfo: values.healthInfo
+         };
+         await healthInsuranceApi
+            .saveHics(data)
             .then(async ({ data }) => {
                if (data.code === 200) {
                   openNofi('success', 'Амжилттай', data.description);
-                  await insuranceApi.getByIdHicsSeals(hicsSeal.id).then(({ data: { response } }) => {
-                     dispatch(setHicsSeal(response));
-                  });
+                  console.log('ene heregtei data ========>', data);
+                  await insuranceApi
+                     .requestHicsSeal(hicsSeal.id, {
+                        diagnosis: values.diagnosis,
+                        // doctorServiceNumber
+                        // donorRegno
+                        endAt: new Date(),
+                        hicsSealCode: data.result.serviceNumber,
+                        patientHistoryCode: values.historyCode,
+                        process: 1
+                        // sent13RequestNo
+                     })
+                     .then(({ data: { response } }) => {
+                        dispatch(setHicsSeal(response));
+                     });
                   message.success(data.description);
                   setOpen(false);
                   setDisabled(false);
@@ -103,20 +176,9 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                }
             })
             .catch((error) => {
+               console.log('end aldaa');
                message.error(error);
             });
-         // healthInsuranceApi
-         //    .saveHics(values)
-         //    .then(({ data }) => {
-         //       if (data.code == 200) {
-         //          message.success(data.description);
-         //       } else {
-         //          message.warn(data.description);
-         //       }
-         //    })
-         //    .catch((error) => {
-         //       message.error(error);
-         //    });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
          healthInsuranceApi.postPatientReturn(values).then((response) => {
             console.log(response);

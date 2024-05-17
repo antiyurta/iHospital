@@ -113,19 +113,20 @@ function Patient() {
       setIsConfirmLoading(true);
       data['isGlobalDb'] = isGlobalDb;
       data['isEmergency'] = false;
-      // if (data?.contacts === undefined || data?.contacts === null || data?.contacts.length === 0) {
-      // openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
-      // } else {
       var response;
-      if (editMode) {
-         response = await PatientApi.patch(id, data).then(({ data: { success } }) => success);
-      } else {
-         response = await PatientApi.post(data).then(({ data: { success } }) => success);
-      }
-      if (response) {
-         getData(1, 20);
-         setIsConfirmLoading(false);
-         setIsModalVisible(false);
+      try {
+         if (editMode) {
+            response = await PatientApi.patch(id, data).then(({ data: { success } }) => success);
+         } else {
+            response = await PatientApi.post(data).then(({ data: { success } }) => success);
+         }
+         if (response) {
+            getData(1, 20);
+            setIsConfirmLoading(false);
+            setIsModalVisible(false);
+         }
+      } catch (error) {
+         openNofi('error', 'Алдаа', error.response.data.message);
       }
    };
    const getCitizens = async () => {

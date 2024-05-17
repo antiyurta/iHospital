@@ -90,6 +90,7 @@ class NewEmr extends React.Component {
          data['requestDate'] = new Date();
          data['usageType'] = this.props.IncomeEMRData.usageType;
          data['services'] = value;
+         data['isInsurance'] = this.props.IncomeEMRData.isInsurance;
          await ServiceRequestApi.post(data).then(async (response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');

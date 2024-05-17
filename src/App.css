@@ -402,9 +402,17 @@ legend.scheduler-border {
    justify-content: space-between !important;
 }
 
+.form-transparent .ant-form-item-control-input {
+   background-color: transparent;
+}
+
+.white-radio .ant-form-item-control-input {
+   background-color: transparent;
+}
+
 .ant-form-item-control-input {
    min-height: 28px !important;
-   background: white;
+   background-color: white;
    border-radius: 5px;
 }
 

@@ -1,22 +1,40 @@
-import { Form, Input, Select } from 'antd';
 import React from 'react';
-import educations from '../educations.js'; //bolowsrol
-import occupations from '../occupations.js'; //mergejil
-import workplaces from '../workplaces.js'; //ajlin gazar
-import positions from '../positions.js'; // alban tushaal
-import employements from '../employements.js'; // hodolmor erehlelt
-import emplessDescriptions from '../emplessDescriptions.js'; // hodolmor erhlegu shaltgaan
+import { Form, Input, Radio, Select } from 'antd';
+//utils
+import {
+   education,
+   workplace,
+   position,
+   occupation,
+   isEmployment,
+   employment,
+   emplessDescription
+} from '@Utils/config/xypField.js';
 function MoreInfo({ form }) {
    return (
       <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+         <Form.Item className="mb-0 white-radio" label="Оршин суугч эсэх:" name="isLiver">
+            <Radio.Group
+               options={[
+                  {
+                     label: 'Тийм',
+                     value: true
+                  },
+                  {
+                     label: 'Үгүй',
+                     value: false
+                  }
+               ]}
+            />
+         </Form.Item>
          <Form.Item label="Боловсрол:" name="educationId">
             <Select
                showSearch
                onSelect={(_, option) => form.setFieldValue('educationName', option.label)}
                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-               options={educations?.map((education) => ({
-                  label: education.name,
-                  value: education.id
+               options={education?.map((edu) => ({
+                  label: edu.valueName,
+                  value: edu.valueId.toString()
                }))}
             />
          </Form.Item>
@@ -27,9 +45,9 @@ function MoreInfo({ form }) {
             <Select
                showSearch
                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-               options={workplaces?.map((workplace) => ({
-                  label: workplace.name,
-                  value: workplace.id
+               options={workplace?.map((place) => ({
+                  label: place.valueName,
+                  value: place.valueName
                }))}
             />
          </Form.Item>
@@ -38,57 +56,86 @@ function MoreInfo({ form }) {
                showSearch
                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
                onSelect={(_, option) => form.setFieldValue('positionName', option.label)}
-               options={positions?.map((position) => ({
-                  label: position.name,
-                  value: position.id
+               options={position?.map((pos) => ({
+                  label: pos.valueName,
+                  value: pos.valueId.toString()
                }))}
             />
          </Form.Item>
          <Form.Item label="" name="positionName" hidden>
             <Input disabled className="w-10" />
          </Form.Item>
-         <Form.Item label="Мэргэжил:" name="occuptionId">
+         <Form.Item label="Мэргэжил:" name="occupationId">
             <Select
                showSearch
                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-               onSelect={(_, option) => form.setFieldValue('occuptionName', option.label)}
-               options={occupations?.map((occupation) => ({
-                  label: occupation.name,
-                  value: occupation.id
+               onSelect={(_, option) => form.setFieldValue('occupationName', option.label)}
+               options={occupation?.map((occu) => ({
+                  label: occu.valueName,
+                  value: occu.valueId.toString()
                }))}
             />
          </Form.Item>
-         <Form.Item label="" name="occuptionName" hidden>
+         <Form.Item label="" name="occupationName" hidden>
             <Input disabled className="w-10" />
          </Form.Item>
-
-         <Form.Item label="Хөдөлмөр эрхлэлт:" name="employmentId">
-            <Select
-               showSearch
-               onSelect={(_, option) => form.setFieldValue('employmentName', option.label)}
-               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-               options={employements?.map((employement) => ({
-                  label: employement.name,
-                  value: employement.id
+         <Form.Item className="mb-0 white-radio" label="Хөдөлмөр эрхлэлт:" name="isEmployment">
+            <Radio.Group
+               onChange={(e) => {
+                  if (e.target.value === 1) {
+                     form.resetFields([['emplessDescriptionId', 'emplessDescription']]);
+                  } else if (e.target.value === 2) {
+                     form.resetFields([['employmentId', 'employmentName']]);
+                  }
+               }}
+               options={isEmployment?.map((empo) => ({
+                  label: empo.valueName,
+                  value: empo.valueId
                }))}
             />
          </Form.Item>
-         <Form.Item label="" name="employmentName" hidden>
-            <Input disabled className="w-10" />
-         </Form.Item>
-         <Form.Item label="Хөдөлмөр эрхлээгүй шалтгаан:" name="emplessDescriptionId">
-            <Select
-               showSearch
-               onSelect={(_, option) => form.setFieldValue('emplessDescription', option.label)}
-               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-               options={emplessDescriptions?.map((emplessDescription) => ({
-                  label: emplessDescription.name,
-                  value: emplessDescription.id
-               }))}
-            />
-         </Form.Item>
-         <Form.Item name="emplessDescription" hidden>
-            <Input disabled />
+         <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}>
+            {({ getFieldValue }) =>
+               getFieldValue('isEmployment') === 1 ? (
+                  <>
+                     <Form.Item label="Хөдөлмөр эрхлэлт:" name="employmentId">
+                        <Select
+                           showSearch
+                           onSelect={(_, option) => form.setFieldValue('employmentName', option.label)}
+                           filterOption={(input, option) =>
+                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                           }
+                           options={employment?.map((emp) => ({
+                              label: emp.valueName,
+                              value: emp.valueId.toString()
+                           }))}
+                        />
+                     </Form.Item>
+                     <Form.Item label="" name="employmentName" hidden>
+                        <Input disabled className="w-10" />
+                     </Form.Item>
+                  </>
+               ) : (
+                  <>
+                     <Form.Item label="Хөдөлмөр эрхлээгүй шалтгаан:" name="emplessDescriptionId">
+                        <Select
+                           showSearch
+                           onSelect={(_, option) => form.setFieldValue('emplessDescription', option.label)}
+                           filterOption={(input, option) =>
+                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                           }
+                           options={emplessDescription?.map((empl) => ({
+                              label: empl.valueName,
+                              value: empl.valueId.toString()
+                           }))}
+                        />
+                     </Form.Item>
+                     <Form.Item name="emplessDescription" hidden>
+                        <Input disabled />
+                     </Form.Item>
+                  </>
+               )
+            }
          </Form.Item>
       </div>
    );

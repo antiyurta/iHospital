@@ -33,6 +33,7 @@ const PatientSupport = (props) => {
    };
 
    useEffect(() => {
+      form.resetFields();
       if (editMode) {
          patientId && getPatient();
       } else {
@@ -53,12 +54,6 @@ const PatientSupport = (props) => {
          key: 3,
          children: <ResidentialAddress />
       },
-      // {
-      //    forceRender: true,
-      //    label: 'Даатгал',
-      //    key: 4,
-      //    children: <Insurance form={form} />
-      // },
       {
          forceRender: true,
          label: 'Асран хамгаалагч',
