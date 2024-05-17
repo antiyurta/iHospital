@@ -239,20 +239,5 @@ class HealthInsurance {
          }
       });
    }
-   async postSkipHics() {
-      return await jwtInterceopter.post('health-insurance/skip-hics-service', data);
-   }
-   async getEsbRefValues(data) {
-      return await jwtInterceopter.get('health-insurance/get-esb-ref-values');
-   }
-   async esbMedicalExamHistory(data) {
-      return await jwtInterceopter.post('health-insurance/send-esb-medical-exam-history', data);
-   }
-   async getQuestionCategories() {
-      return await jwtInterceopter.get('health-insurance/get-question-categories');
-   }
-   async getQuestionsByCategory() {
-      return await jwtInterceopter.get('health-insurance/get-questions-by-category');
-   }
 }
 export default new HealthInsurance();
