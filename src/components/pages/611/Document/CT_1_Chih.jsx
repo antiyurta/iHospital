@@ -29,7 +29,7 @@ const CT_1_Chih = (props) => {
                   </thead>
                   <thead>
                      <tr>
-                        <th>
+                        <th id="child">
                            <Checkbox.Group value={formData?.q1}>
                               <Checkbox className="ml-2" value={'q1-1'}>
                                  Дунд
@@ -39,7 +39,7 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q1-4'}>Маш хүнд</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <Checkbox.Group value={formData?.q2}>
                               <Checkbox value={'q2-1'} className="ml-2">
                                  Саруул
@@ -48,7 +48,7 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q2-3'}>Ухаангүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th colSpan={4}>
+                        <th id="child" colSpan={4}>
                            <Checkbox.Group value={formData?.q3}>
                               <Checkbox className="ml-2" value={'q3-1'}>
                                  Хэвийн
@@ -72,13 +72,13 @@ const CT_1_Chih = (props) => {
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]">
+                        <th className="w-[220px]" id="child">
                            {' '}
                            Амьсгал 1 минутанд
-                           <Input value={formData?.q4} />
+                           <Input className="w-10" value={formData?.q4} />
                            удаа
                         </th>
-                        <th colSpan={3}>
+                        <th colSpan={3} id="child">
                            Чагналтаар:
                            <Checkbox.Group value={formData?.q5}>
                               <Checkbox value={'q5-1'} className="ml-2">
@@ -123,18 +123,30 @@ const CT_1_Chih = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           Судасны цохилт 1 минутанд
-                           <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
+                           <p id="child">
+                              Судасны цохилт 1 минутанд
+                              <Input
+                                 className="amaraInput w-10"
+                                 id="child"
+                                 value={formData?.q6}
+                                 style={{ textAlign: 'center' }}
+                              />
+                              удаа
+                           </p>
+                           <p id="child">
                               Хүчдэл дүүрэлт
-                              <Input className="amaraInput w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
-                           </th>
+                              <Input
+                                 className="amaraInput w-10"
+                                 id="child"
+                                 value={formData?.q7}
+                                 style={{ textAlign: 'center' }}
+                              />
+                           </p>
                         </th>
                         <th>
                            <th>Тогшилтоор:</th>
-                           Зүрхний хил
-                           <Checkbox.Group value={formData?.q8}>
+                           <p id="child"> Зүрхний хил</p>
+                           <Checkbox.Group value={formData?.q8} id="child">
                               <Checkbox value={'q8-1'} className="ml-2">
                                  Хэвийн
                               </Checkbox>
@@ -161,8 +173,8 @@ const CT_1_Chih = (props) => {
                         </th>
                         <th>
                            <th>Чагналтаар::</th>
-                           Зүрхний авиа
-                           <Checkbox.Group value={formData?.q9}>
+                           <p id="child"> Зүрхний авиа</p>
+                           <Checkbox.Group value={formData?.q9} id="child">
                               <Checkbox value={'q9-1'} className="ml-2">
                                  Тод
                               </Checkbox>
@@ -172,14 +184,23 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="child">
                               АД баруун талд
-                              <Input className="amaraInput w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
-                              /
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.q10}
+                                 id="child"
+                                 style={{ textAlign: 'center' }}
+                              />
                            </th>
-                           <th>
+                           <th id="child">
                               Зүүн талд
-                              <Input className="amaraInput w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.q11}
+                                 id="child"
+                                 style={{ textAlign: 'center' }}
+                              />
                            </th>
                         </th>
                      </tr>
@@ -193,7 +214,7 @@ const CT_1_Chih = (props) => {
                      <tr>
                         <th className="w-[150px]">
                            Хэл
-                           <Checkbox.Group value={formData?.q12}>
+                           <Checkbox.Group value={formData?.q12} id="child">
                               <Checkbox value={'q12-1'} className="ml-2">
                                  Ердийн
                               </Checkbox>
@@ -204,7 +225,7 @@ const CT_1_Chih = (props) => {
                         </th>
                         <th colSpan={3}>
                            <p> Хэвлийн үзлэг:</p>
-                           <Checkbox.Group value={formData?.q13}>
+                           <Checkbox.Group value={formData?.q13} id="child">
                               <Checkbox value={'q13-1'}>Өнгөц тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-3'} className="">
@@ -213,11 +234,12 @@ const CT_1_Chih = (props) => {
                                     className="amaraInput w-8"
                                     value={formData?.['q13-3-1']}
                                     style={{ textAlign: 'center' }}
+                                    id="child"
                                  />
                                  )
                               </Checkbox>
                            </Checkbox.Group>
-                           <Checkbox.Group value={formData?.q13}>
+                           <Checkbox.Group value={formData?.q13} id="child">
                               <Checkbox value={'q13-4'}>Ердийн</Checkbox>
                               <Checkbox value={'q13-5'}>Зөөлөн гялтан цочрол үгүй</Checkbox>
                               <Checkbox value={'q13-6'}> Гялтан цочролын шинж илэрсэн</Checkbox>
@@ -234,11 +256,11 @@ const CT_1_Chih = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <p> Сонсох чадвахи:</p>
-                           <Checkbox.Group value={formData?.q14}>
+                           <Checkbox.Group value={formData?.q14} id="child">
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>
-                                 Буурсан
-                                 <p>
+                                 <p className="flex items-center gap-2">
+                                    <p>Буурсан</p>
                                     <span className="text-[11px]">
                                        (
                                        <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
@@ -259,7 +281,7 @@ const CT_1_Chih = (props) => {
                         </th>
                         <th>
                            <p>Рефлексүүд</p>
-                           <Checkbox.Group value={formData?.q15}>
+                           <Checkbox.Group value={formData?.q15} id="child">
                               <Checkbox value={'q15-1'}>Хадгалагдана</Checkbox>
                               <Checkbox value={'q15-2'}>Хадгалагдахгүй</Checkbox>
                            </Checkbox.Group>
@@ -271,20 +293,26 @@ const CT_1_Chih = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           <th className="w-full">
-                              Бусад
-                              <Input
-                                 className="amaraInput w-[670px]"
-                                 value={formData?.q16}
-                                 style={{ textAlign: 'center' }}
-                              />
-                           </th>
-                           Сэтгэцийн байдал:
-                           <Input
-                              className="amaraInput w-[600px] mb-1"
-                              value={formData?.q17}
-                              style={{ textAlign: 'center' }}
-                           />
+                           <div>
+                              <p id="child">
+                                 Бусад
+                                 <Input
+                                    className="amaraInput w-[670px]"
+                                    value={formData?.q16}
+                                    style={{ textAlign: 'center' }}
+                                    id="child"
+                                 />
+                              </p>
+                              <p id="child">
+                                 Сэтгэцийн байдал:
+                                 <Input
+                                    className="amaraInput w-[600px] mb-1"
+                                    value={formData?.q17}
+                                    style={{ textAlign: 'center' }}
+                                    id="child"
+                                 />
+                              </p>
+                           </div>
                         </th>
                      </tr>
                   </thead>
@@ -301,15 +329,15 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Хамрын амьсгал:</th>
+                        <th id="child">
+                           <th id="child">Хамрын амьсгал:</th>
                            <Checkbox.Group value={formData?.q18}>
                               <Checkbox value={'q18-1'} className="w-full ml-2">
-                                 Чөлөөтэй
+                                 <p> Чөлөөтэй</p>
                               </Checkbox>
                               <Checkbox value={'q18-2'}>
-                                 Саадтай
-                                 <p>
+                                 <p className="flex items-center gap-1">
+                                    <p>Саадтай</p>
                                     <span className="text-[11px]">
                                        (
                                        <Checkbox.Group value={formData?.['q18-2-1']} className="inline">
@@ -331,8 +359,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Гадна хамрын хэлбэр:</th>
+                        <th id="child">
+                           <th id="child">Гадна хамрын хэлбэр:</th>
                            <Checkbox.Group value={formData?.q19}>
                               <Checkbox value={'q19-1'} className="w-full ml-2">
                                  Зөв
@@ -340,8 +368,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q19-2'}>Зөв бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Тэмтрэхэд:</th>
+                        <th id="child">
+                           <th id="child">Тэмтрэхэд:</th>
                            <Checkbox.Group value={formData?.q20}>
                               <Checkbox value={'q20-1'} className="w-full ml-2">
                                  Эмзэглэлгүй
@@ -355,8 +383,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Хамрын үүдэвч</th>
+                        <th id="child">
+                           <th id="child">Хамрын үүдэвч</th>
                            <Checkbox.Group value={formData?.q21}>
                               <Checkbox value={'q21-1'} className="w-full ml-2">
                                  Хэвийн
@@ -364,8 +392,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q21-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Ерөнхий хөндий:</th>
+                        <th id="child">
+                           <th id="child">Ерөнхий хөндий:</th>
                            <Checkbox.Group value={formData?.q22}>
                               <Checkbox value={'q22-1'} className="w-full ml-2">
                                  Чөлөөтэй
@@ -373,8 +401,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q22-2'}>Саадтай</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Хамрын таславч:</th>
+                        <th id="child">
+                           <th id="child">Хамрын таславч:</th>
                            <Checkbox.Group value={formData?.q23}>
                               <Checkbox value={'q23-1'} className="w-full ml-2">
                                  Муруйлтгүй
@@ -392,8 +420,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Хамрын салст бүрхүүл:</th>
+                        <th id="child">
+                           <th id="child">Хамрын салст бүрхүүл:</th>
                            <Checkbox.Group value={formData?.q24}>
                               <Checkbox value={'q24-1'} className="w-full ml-2">
                                  Ягаан
@@ -410,8 +438,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q24-5'}>Бусад </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Самалдгууд:</th>
+                        <th id="child">
+                           <th id="child">Самалдгууд:</th>
                            <Checkbox.Group value={formData?.q25}>
                               <Checkbox value={'q25-1'} className="w-full ml-2">
                                  Хэвийн
@@ -419,7 +447,7 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q25-2'}>Хөөнгө</Checkbox>
                               <Checkbox value={'q25-3'}>Бусад өөрчлөлттэй</Checkbox>
                            </Checkbox.Group>
-                           <th>Хамрын жим:</th>
+                           <th id="child">Хамрын жим:</th>
                            <Checkbox.Group value={formData?.q26}>
                               <Checkbox value={'q26-1'} className="w-full ml-2">
                                  Ялгадасгүй
@@ -427,14 +455,14 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q26-2'}>Ялгадастай</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Ялгадас:</th>
+                        <th id="child">
+                           <th id="child">Ялгадас:</th>
                            <Checkbox.Group value={formData?.q27}>
                               <Checkbox className="w-full ml-2" value={'q27-1'}>
                                  Хэвийн
                               </Checkbox>
                            </Checkbox.Group>
-                           <th>Эмгэг шинжтэй:</th>
+                           <th id="child">Эмгэг шинжтэй:</th>
                            <Checkbox.Group value={formData?.q28}>
                               <Checkbox value={'q28-1'} className="w-full ml-2">
                                  Идээрхэг
@@ -460,7 +488,7 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
+                        <th id="child">
                            <p className="ml-2 underline">{`Бүсийн лимфийн булчирхайн байдал: ${formData?.q29}`}</p>
                         </th>
                      </tr>
@@ -476,8 +504,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Гадна чихний хэлбэр:</th>
+                        <th id="child">
+                           <th id="child">Гадна чихний хэлбэр:</th>
                            <Checkbox.Group value={formData?.q30}>
                               <Checkbox value={'q30-1'} className="w-full ml-2">
                                  Хэвийн
@@ -485,8 +513,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q30-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Тэмтрэхэд:</th>
+                        <th id="child">
+                           <th id="child">Тэмтрэхэд:</th>
                            <Checkbox.Group value={formData?.q31}>
                               <Checkbox value={'q31-1'} className="w-full ml-2">
                                  Эмзэглэлгүй
@@ -494,8 +522,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q31-2'}>Эмзэглэлтэй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Хөхлөг сэртэн:</th>
+                        <th id="child">
+                           <th id="child">Хөхлөг сэртэн:</th>
                            <Checkbox.Group value={formData?.q32}>
                               <Checkbox value={'q32-1'} className="w-full ml-2">
                                  Хэвийн
@@ -503,8 +531,8 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q32-2'}>Хавантай</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Тэмтрэхэд:</th>
+                        <th id="child">
+                           <th id="child">Тэмтрэхэд:</th>
                            <Checkbox.Group value={formData?.q33}>
                               <Checkbox value={'q33-1'} className="w-full ml-2">
                                  Эмзэглэлгүй
@@ -531,8 +559,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Чихний гадна суваг:</th>
+                        <th id="child">
+                           <th id="child">Чихний гадна суваг:</th>
                            <Checkbox.Group value={formData?.q34}>
                               <Checkbox value={'q34-1'} className="w-full ml-2">
                                  Хэвийн
@@ -540,7 +568,7 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q34-2'}>Нарийссан (төрөлхийн, олдмол)</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <Checkbox.Group value={formData?.q34}>
                               <Checkbox value={'q34-3'} className="w-full ml-2">
                                  Чөлөөтэй
@@ -570,8 +598,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Сувгийн хана: </th>
+                        <th id="child">
+                           <th id="child">Сувгийн хана: </th>
                            <Checkbox.Group value={formData?.q35}>
                               <Checkbox value={'q35-1'} className="w-full ml-2">
                                  Хэвийн
@@ -588,8 +616,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Хэнгэргэн хальс:</th>
+                        <th id="child">
+                           <th id="child">Хэнгэргэн хальс:</th>
                            <Checkbox.Group value={formData?.q36}>
                               <Checkbox value={'q36-1'} className="w-full ml-2">
                                  Хэвийн
@@ -606,7 +634,7 @@ const CT_1_Chih = (props) => {
                               <Checkbox value={'q36-5'}>Улаан</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <Checkbox.Group value={formData?.q36}>
                               <Checkbox value={'q36-6'} className="w-full ml-2">
                                  Цооролтын байрлал
@@ -632,12 +660,13 @@ const CT_1_Chih = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           <th>
+                           <th id="child">
                               Бүсийн лимфийн булчирхайн байдал:
                               <Input
                                  className="amaraInput w-[450px] mb-1"
                                  value={formData?.q38}
                                  style={{ textAlign: 'center' }}
+                                 id="child"
                               />
                            </th>
                         </th>
@@ -647,8 +676,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Хөглүүрийн сорил:</th>
+                        <th id="child">
+                           <th id="child">Хөглүүрийн сорил:</th>
                            <Checkbox.Group value={formData?.q39}>
                               <Checkbox value={'q39-1'} className="w-full ml-2">
                                  Ринне
@@ -664,7 +693,7 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            Сонсголын бичлэг:
                            <Input
                               className="amaraInput w-full mb-1"
@@ -678,8 +707,8 @@ const CT_1_Chih = (props) => {
                               style={{ textAlign: 'center' }}
                            />
                         </th>
-                        <th>
-                           <th>Ам ангайлт:</th>
+                        <th id="child">
+                           <th id="child">Ам ангайлт:</th>
                            <Checkbox.Group value={formData?.q42}>
                               <Checkbox value={'q42-1'} className="w-full ml-2">
                                  Чөлөөтэй
@@ -698,8 +727,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Зөөлөн тагнай:</th>
+                        <th id="child">
+                           <th id="child">Зөөлөн тагнай:</th>
                            <Checkbox.Group value={formData?.q44}>
                               <Checkbox value={'q44-1'} className="w-full ml-2">
                                  Хэвийн
@@ -709,7 +738,7 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                            <Checkbox.Group value={formData?.q45}>
-                              <p>Тагнайн гүйлс:</p>
+                              <p id="child">Тагнайн гүйлс:</p>
                               <Checkbox className="ml-2" value={'q45-1'}>
                                  Хэвийн{' '}
                               </Checkbox>
@@ -729,8 +758,8 @@ const CT_1_Chih = (props) => {
                         <th>
                            <Image src={MouthImg} alt="" width={160} height={100} className="mt-2" />
                         </th>
-                        <th className="w-[200px]">
-                           <th>Архаг үрэвслийн шинж:</th>
+                        <th id="child" className="w-[200px]">
+                           <th id="child">Архаг үрэвслийн шинж:</th>
                            <Checkbox.Group value={formData?.q46}>
                               <Checkbox value={'q46-1'} className="w-full ml-2">
                                  Зак
@@ -746,8 +775,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Лакуны байдал:</th>
+                        <th id="child">
+                           <th id="child">Лакуны байдал:</th>
                            <Checkbox.Group value={formData?.q47}>
                               <Checkbox value={'q47-1'} className="w-full ml-2">
                                  Хэвийн
@@ -766,8 +795,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Залгиурын хажуу хана:</th>
+                        <th id="child">
+                           <th id="child"> Залгиурын хажуу хана:</th>
                            <Checkbox.Group value={formData?.q49}>
                               <Checkbox value={'q49-1'} className="ml-2 ">
                                  Хэвийн{' '}
@@ -792,8 +821,8 @@ const CT_1_Chih = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th>Төвөнхийн гадна үзлэг:</th>
+                        <th id="child">
+                           <th id="child">Төвөнхийн гадна үзлэг:</th>
                            <Checkbox.Group value={formData?.q51}>
                               <Checkbox value={'q51-1'} className="w-full ml-2">
                                  Хэвийн
@@ -803,7 +832,7 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                            <Checkbox.Group value={formData?.q52}>
-                              <p>Тэмтрэхэд:</p>
+                              <p id="child">Тэмтрэхэд:</p>
                               <Checkbox value={'q52-1'} className="ml-2 ">
                                  Хэвийн{' '}
                               </Checkbox>
@@ -812,8 +841,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th className="w-[200px]">
-                           <th>Нуржигнах:</th>
+                        <th id="child" className="w-[200px]">
+                           <th id="child">Нуржигнах:</th>
                            <Checkbox.Group value={formData?.q53}>
                               <Checkbox value={'q53-1'} className="w-full ml-2">
                                  Чимээтэй
@@ -832,8 +861,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <th>Халхавч мөгөөрс:</th>
+                        <th id="child">
+                           <th id="child">Халхавч мөгөөрс:</th>
                            <Checkbox.Group value={formData?.q55}>
                               <Checkbox value={'q55-1'} className="w-full ml-2">
                                  Хэвийн
@@ -855,8 +884,8 @@ const CT_1_Chih = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th className="w-[200px]">
-                           <th>Утгуур мөгөөрс:</th>
+                        <th id="child" className="w-[200px]">
+                           <th id="child">Утгуур мөгөөрс:</th>
                            <Checkbox.Group value={formData?.q57}>
                               <Checkbox value={'q57-1'} className="ml-2 ">
                                  Хэвийн{' '}
@@ -891,8 +920,8 @@ const CT_1_Chih = (props) => {
                         <th className="w-[170px]">
                            <Image src={TuvunhImg} alt="" width={160} height={100} />
                         </th>
-                        <th className="w-[270px]">
-                           <th>
+                        <th id="child" className="w-[270px]">
+                           <th id="child">
                               Дууны өнгө:
                               <Checkbox.Group value={formData?.q60}>
                                  <Checkbox value={'q60-1'} className="ml-2">
@@ -904,13 +933,14 @@ const CT_1_Chih = (props) => {
                            <p>Фонаци хийх үед: (Дууны хөвчүүд бүрэн гадаргуугаар шүргэлцэнэ)</p>
                            <p>Дууны хөвчүүдийн үйл ажиллаггааны хямрал:</p>
                         </th>
-                        <th>
-                           <th>
+                        <th id="child">
+                           <th id="child">
                               Дууны хөвчийн доод зайн байдал:
                               <Input
                                  className="amaraInput w-10 "
                                  value={formData?.q62}
                                  style={{ textAlign: 'center' }}
+                                 id="child"
                               />
                            </th>
 

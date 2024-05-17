@@ -21,7 +21,7 @@ const CT_1_Nud = (props) => {
                   </thead>
                   <thead>
                      <tr>
-                        <th>
+                        <th id="child">
                            <Checkbox.Group value={formData?.q1}>
                               <Checkbox className="ml-2" value={'q1-1'}>
                                  Дунд
@@ -31,7 +31,7 @@ const CT_1_Nud = (props) => {
                               <Checkbox value={'q1-4'}>Маш хүнд</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <Checkbox.Group value={formData?.q2}>
                               <Checkbox value={'q2-1'} className="ml-2">
                                  Саруул
@@ -40,7 +40,7 @@ const CT_1_Nud = (props) => {
                               <Checkbox value={'q2-3'}>Ухаангүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th colSpan={4}>
+                        <th colSpan={4} id="child">
                            <Checkbox.Group value={formData?.q3}>
                               <Checkbox className="ml-2" value={'q3-1'}>
                                  Хэвийн
@@ -64,7 +64,7 @@ const CT_1_Nud = (props) => {
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]">
+                        <th className="w-[220px]" id="child">
                            {' '}
                            Амьсгал 1 минутанд
                            <Input className="w-10" value={formData?.q4} style={{ textAlign: 'center' }} />
@@ -72,7 +72,7 @@ const CT_1_Nud = (props) => {
                         </th>
                         <th colSpan={3}>
                            Чагналтаар:
-                           <Checkbox.Group value={formData?.q5}>
+                           <Checkbox.Group value={formData?.q5} id="child">
                               <Checkbox value={'q5-1'} className="ml-2">
                                  Хэржигнүүртэй
                               </Checkbox>
@@ -114,19 +114,19 @@ const CT_1_Nud = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
+                        <th id="child">
                            Судасны цохилт 1 минутанд
                            <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
                            удаа
-                           <th>
+                           <th id="child">
                               Хүчдэл дүүрэлт
                               <Input className="amaraInput w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                         <th>
                            <th>Тогшилтоор:</th>
-                           <p>Зүрхний хил</p>
-                           <Checkbox.Group value={formData?.q8}>
+                           <p id="child">Зүрхний хил</p>
+                           <Checkbox.Group value={formData?.q8} id="child">
                               <Checkbox value={'q8-1'} className="ml-2">
                                  Хэвийн
                               </Checkbox>
@@ -153,8 +153,8 @@ const CT_1_Nud = (props) => {
                         </th>
                         <th>
                            <th>Чагналтаар::</th>
-                           Зүрхний авиа
-                           <Checkbox.Group value={formData?.q9}>
+                           <p id="child"> Зүрхний авиа</p>
+                           <Checkbox.Group value={formData?.q9} id="child">
                               <Checkbox value={'q9-1'} className="ml-2">
                                  Тод
                               </Checkbox>
@@ -164,14 +164,23 @@ const CT_1_Nud = (props) => {
                               <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th id='text'>
+                           <th id="child">
                               АД баруун талд
-                              <Input className="amaraInput w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
-                              /
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.q10}
+                                 style={{ textAlign: 'center' }}
+                                 id="child"
+                              />
                            </th>
-                           <th>
+                           <th id="child">
                               Зүүн талд
-                              <Input className="amaraInput w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
+                              <Input
+                                 className="amaraInput w-8"
+                                 value={formData?.q11}
+                                 style={{ textAlign: 'center' }}
+                                 id="child"
+                              />
                            </th>
                         </th>
                      </tr>
@@ -185,7 +194,7 @@ const CT_1_Nud = (props) => {
                      <tr>
                         <th className="w-[150px]">
                            Хэл
-                           <Checkbox.Group value={formData?.q12}>
+                           <Checkbox.Group value={formData?.q12} id="child">
                               <Checkbox value={'q12-1'} className="ml-2">
                                  Ердийн
                               </Checkbox>
@@ -196,7 +205,7 @@ const CT_1_Nud = (props) => {
                         </th>
                         <th colSpan={3}>
                            <p> Хэвлийн үзлэг:</p>
-                           <Checkbox.Group value={formData?.q13}>
+                           <Checkbox.Group value={formData?.q13} id="child">
                               <Checkbox value={'q13-1'}>Өнгөц тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-3'} className="">
@@ -209,7 +218,7 @@ const CT_1_Nud = (props) => {
                                  )
                               </Checkbox>
                            </Checkbox.Group>
-                           <Checkbox.Group value={formData?.q13}>
+                           <Checkbox.Group value={formData?.q13} id="child">
                               <Checkbox value={'q13-4'}>Ердийн</Checkbox>
                               <Checkbox value={'q13-5'}>Зөөлөн гялтан цочрол үгүй</Checkbox>
                               <Checkbox value={'q13-6'}> Гялтан цочролын шинж илэрсэн</Checkbox>
@@ -226,7 +235,7 @@ const CT_1_Nud = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <p> Сонсох чадвахи:</p>
-                           <Checkbox.Group value={formData?.q14}>
+                           <Checkbox.Group value={formData?.q14} id="child">
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>
                                  <div className="flex items-center">
@@ -253,7 +262,7 @@ const CT_1_Nud = (props) => {
                         </th>
                         <th>
                            <p>Рефлексүүд</p>
-                           <Checkbox.Group value={formData?.q15}>
+                           <Checkbox.Group value={formData?.q15} id="child">
                               <Checkbox value={'q15-1'}>Хадгалагдана</Checkbox>
                               <Checkbox value={'q15-2'}>Хадгалагдахгүй</Checkbox>
                            </Checkbox.Group>
@@ -265,20 +274,26 @@ const CT_1_Nud = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           <th className="w-full">
-                              Бусад
-                              <Input
-                                 className="amaraInput w-[670px]"
-                                 value={formData?.q16}
-                                 style={{ textAlign: 'center' }}
-                              />
-                           </th>
-                           Сэтгэцийн байдал:
-                           <Input
-                              className="amaraInput w-[600px] mb-1"
-                              value={formData?.q17}
-                              style={{ textAlign: 'center' }}
-                           />
+                           <div>
+                              <p className="w-full" id="child">
+                                 Бусад
+                                 <Input
+                                    className="amaraInput w-[670px]"
+                                    value={formData?.q16}
+                                    style={{ textAlign: 'center' }}
+                                    id="child"
+                                 />
+                              </p>
+                              <p id="child">
+                                 Сэтгэцийн байдал:
+                                 <Input
+                                    className="amaraInput w-[600px] mb-1"
+                                    value={formData?.q17}
+                                    style={{ textAlign: 'center' }}
+                                    id="child"
+                                 />
+                              </p>
+                           </div>
                         </th>
                      </tr>
                   </thead>
@@ -418,7 +433,7 @@ const CT_1_Nud = (props) => {
                   >
                      <thead>
                         <tr className="border-t-0 ">
-                           <th style={{ height: 'auto' }}>
+                           <th style={{ height: 'auto' }} id="child">
                               {item.data.split(';').map((text, i) => (
                                  <div key={i}>
                                     {text}

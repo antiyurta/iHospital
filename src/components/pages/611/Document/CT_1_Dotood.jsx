@@ -51,7 +51,11 @@ const CT_1_Dotood = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input className=" w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
+                                 <Input
+                                    className=" w-10"
+                                    value={formData?.['q3-2-1']}
+                                    style={{ textAlign: 'center' }}
+                                 />
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
