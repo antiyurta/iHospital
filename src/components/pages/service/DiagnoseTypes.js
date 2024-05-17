@@ -14,5 +14,9 @@ module.exports = [
    {
       value: 3,
       label: 'Дагалдах'
+   },
+   {
+      value: 4,
+      label: 'Ялгах онош'
    }
 ];

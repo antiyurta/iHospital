@@ -9,7 +9,6 @@ export const UploadImage = ({ form, itemName }) => {
    const [fileList, setFileList] = useState([]);
    const [imageIds, setImageIds] = useState();
    const imageId = Form.useWatch(`${itemName}`, form);
-   console.log('asdasdassad', imageId);
    const base64String = Form.useWatch('base64String', form);
    let tokens = JSON.parse(localStorage.getItem('tokens'));
    const headers = {

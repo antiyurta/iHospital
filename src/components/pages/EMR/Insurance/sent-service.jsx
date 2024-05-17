@@ -1,43 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { SendOutlined } from '@ant-design/icons';
-import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE } from './enum-utils';
-import { Button, Drawer, Form, List, Divider, message, Space } from 'antd';
-import healthInsuranceService from '../../../../services/healt-insurance/healtInsurance';
-import apiInsuranceService from '../../../../services/healt-insurance/insurance';
-import SetPatientSheet from './set-patient-sheet';
-import Search from 'antd/lib/input/Search';
-import SaveHics from './save-hics';
-import SetApproval from './set-approval';
-import SetPatientReturn from './set-patient-return';
-import SendHics from './send-hics-service';
-import Prescription from './prescription';
-import CancelHics from './cancel-hics';
-import ConfirmHics from './confirm-hics';
-import ReConfirmHics from './reconfirm-hics';
-import FingerRequest from './finger-request';
-import RepairHics from './repair-hics';
+import { Button, Drawer, Form, List, Divider, message, Space, Input } from 'antd';
 
-const SentService = () => {
+//common
+import { openNofi } from '@Comman/common';
+
+//comp
+import {
+   CancelHics,
+   ConfirmHics,
+   FingerRequest,
+   Prescription,
+   RepairHics,
+   SaveHics,
+   SendHics,
+   SetApproval,
+   SetPatientReturn,
+   SetPatientSheet,
+   ReConfirmHics,
+   SkipHics,
+   StartHics,
+   GetEsbRef,
+   MedicalExam,
+   QuestionCategories,
+   QuestionsByCategory
+} from './DrawerComps';
+
+//defaults
+const { Search } = Input;
+
+//api
+import insuranceApi from '@ApiServices/healt-insurance/insurance';
+import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+
+import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE as HST } from './enum-utils';
+import { setHicsSeal } from '@Features/emrReducer';
+import { useDispatch } from 'react-redux';
+
+// style css
+import './style.css';
+
+const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) => {
+   const dispatch = useDispatch();
    const [insuranceForm] = Form.useForm();
-   const [chooseService, setChooseService] = useState(HEALTH_SERVICES_TITLE.saveHics);
+
    const [open, setOpen] = useState(false);
+   const [isDisabled, setDisabled] = useState(false);
    const [insuranceServiceItems, setInsuranceServiceItems] = useState([]);
-   const onClose = () => {
-      setOpen(false);
-   };
-   const defaultServiceItems = () => {
-      return Object.values(HEALTH_SERVICES_TITLE).map((value) => ({
+   const [chooseService, setChooseService] = useState(HST.saveHics);
+
+   const onClose = () => setOpen(false);
+
+   const defaultServiceItems = () =>
+      Object.values(HST).map((value) => ({
          value,
          title: HEALTH_SERVCES_DESCRIPTION(value)
       }));
-   };
+
    const onSearch = (value) => {
-      const filter = defaultServiceItems().filter((item) => item.title.toLowerCase().includes(value.toLowerCase()));
+      const lowerCaseValue = value.toLowerCase();
+      const filter = defaultServiceItems().filter((item) => item.title.toLowerCase().includes(lowerCaseValue));
       setInsuranceServiceItems(filter);
    };
+
    const sentService = async (values) => {
       if (chooseService == HEALTH_SERVICES_TITLE.savePrescription) {
-         healthInsuranceService.savePrescription(values).then(({ data }) => {
+         healthInsuranceApi.savePrescription(values).then(({ data }) => {
             if (data.respMsgCode == 200) {
                message.success(data.respMsg);
             } else {
@@ -45,14 +73,14 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.sendHics) {
-         apiInsuranceService.createHicsPayment(values).then(({ data }) => {
+         insuranceApi.createHicsPayment(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
                message.warn(data.description);
             }
          });
-         // healthInsuranceService.sendHicsService(values).then(({ data }) => {
+         // healthInsuranceApi.sendHicsService(values).then(({ data }) => {
          //    if (data.code == 200) {
          //       message.success(data.description);
          //    } else {
@@ -60,7 +88,7 @@ const SentService = () => {
          //    }
          // });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setApproval) {
-         healthInsuranceService.postApproval(values).then(({ data }) => {
+         healthInsuranceApi.postApproval(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
@@ -68,7 +96,7 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.setPatientSheet) {
-         healthInsuranceService
+         healthInsuranceApi
             .setPatientSheet(values)
             .then((response) => {
                message.success(response.data.description);
@@ -77,36 +105,102 @@ const SentService = () => {
                message.error(error);
             });
       } else if (chooseService == HEALTH_SERVICES_TITLE.saveHics) {
-         apiInsuranceService
-            .requestHicsSeal(values.id, values)
-            .then(({ data }) => {
-               if (data.code == 200) {
+         console.log('values', values, hicsSeal, patient);
+         const {
+            civilId: patientCivilId,
+            familyName: patientSurname,
+            aimagCityCode: patientAimagCode,
+            aimagCityName: patientAimagName,
+            soumDistrictCode: patientSoumCode,
+            soumDistrictName: patientSoumName,
+            contacts: patientContacts,
+            ...otherInfoPatient
+         } = patient;
+         const data = {
+            patientRegno: patient.registerNumber,
+            patientFingerprint: values.patientFingerprint,
+            patientFirstname: patient.firstName,
+            patientLastname: patient.lastName,
+            startDate: hicsSeal.startAt,
+            endDate: new Date(),
+            hicsServiceId: hicsSeal.hicsServiceId,
+            parentServiceNumber: parentHicsSeal?.hicsServiceId,
+            doctorServiceNumber: values.doctorServiceNumber,
+            sent13RequestNo: values.sent13RequestNo,
+            departNo: values.departNo,
+            departName: values.departName,
+            isForeign: 0,
+            freeTypeId: 0,
+            historyCode: values.historyCode,
+            phoneNo: patient.phoneNo,
+            bloodType: values.bloodType,
+            diagnosis: values.diagnosis,
+            isLiver: patient.isLiver ? 1 : 2,
+            startCode: hicsSeal.hicsStartCode,
+            xypResponse: {
+               requestId: patient.requestId,
+               resultMsg: patient.resultMsg
+            },
+            personalInfo: {
+               patientCivilId: patientCivilId,
+               isRaped: 2,
+               surname: patientSurname,
+               aimagCode: patientAimagCode,
+               aimgName: patientAimagName,
+               soumCode: patientSoumCode,
+               soumName: patientSoumName,
+               parentPhoneNo: parseInt(patientContacts?.[0]?.contactPhoneNo) || null,
+               ...otherInfoPatient,
+               age: 27
+               // isDonor: 2
+               // donorTypeId
+               // donorTypeName
+            },
+            employment: {
+               ...values.employment,
+               employmentId: patient.employmentId || '1',
+               employmentName: patient.employmentName || '- Цалин хөлстэй ажиллагч',
+               isEmployment: patient.isEmployment,
+               emplessDescriptionId: patient.emplessDescriptionId,
+               emplessDescription: patient.emplessDescription
+            },
+            healthInfo: values.healthInfo
+         };
+         await healthInsuranceApi
+            .saveHics(data)
+            .then(async ({ data }) => {
+               if (data.code === 200) {
+                  openNofi('success', 'Амжилттай', data.description);
+                  console.log('ene heregtei data ========>', data);
+                  await insuranceApi
+                     .requestHicsSeal(hicsSeal.id, {
+                        diagnosis: values.diagnosis,
+                        // doctorServiceNumber
+                        // donorRegno
+                        endAt: new Date(),
+                        hicsSealCode: data.result.serviceNumber,
+                        patientHistoryCode: values.historyCode,
+                        process: 1
+                        // sent13RequestNo
+                     })
+                     .then(({ data: { response } }) => {
+                        dispatch(setHicsSeal(response));
+                     });
                   message.success(data.description);
-               } else {
-                  message.warn(data.description);
+                  setOpen(false);
+                  setDisabled(false);
                }
             })
             .catch((error) => {
+               console.log('end aldaa');
                message.error(error);
             });
-         // healthInsuranceService
-         //    .saveHics(values)
-         //    .then(({ data }) => {
-         //       if (data.code == 200) {
-         //          message.success(data.description);
-         //       } else {
-         //          message.warn(data.description);
-         //       }
-         //    })
-         //    .catch((error) => {
-         //       message.error(error);
-         //    });
       } else if (chooseService === HEALTH_SERVICES_TITLE.setPatientReturn) {
-         healthInsuranceService.postPatientReturn(values).then((response) => {
+         healthInsuranceApi.postPatientReturn(values).then((response) => {
             console.log(response);
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.cancelService) {
-         healthInsuranceService.cancelService(values).then(({ data }) => {
+         healthInsuranceApi.cancelService(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
@@ -114,7 +208,7 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.confirmHics) {
-         healthInsuranceService.confirmHicsService(values).then(({ data }) => {
+         healthInsuranceApi.confirmHicsService(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
@@ -122,7 +216,7 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.reConfirmHics) {
-         healthInsuranceService.reConfirmService(values).then(({ data }) => {
+         healthInsuranceApi.reConfirmService(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
@@ -130,7 +224,7 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.fingerRequest) {
-         healthInsuranceService.fingerRequest(values).then(({ data }) => {
+         healthInsuranceApi.fingerRequest(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
@@ -138,7 +232,7 @@ const SentService = () => {
             }
          });
       } else if (chooseService == HEALTH_SERVICES_TITLE.repairHics) {
-         healthInsuranceService.postRepair(values).then(({ data }) => {
+         healthInsuranceApi.postRepair(values).then(({ data }) => {
             if (data.code == 200) {
                message.success(data.description);
             } else {
@@ -147,37 +241,43 @@ const SentService = () => {
          });
       }
    };
+
    const getForms = () => {
-      switch (chooseService) {
-         case HEALTH_SERVICES_TITLE.savePrescription:
-            return <Prescription form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.sendHics:
-            return <SendHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.setApproval:
-            return <SetApproval form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.setPatientSheet:
-            return <SetPatientSheet form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.saveHics:
-            return <SaveHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.setPatientReturn:
-            return <SetPatientReturn form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.cancelService:
-            return <CancelHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.confirmHics:
-            return <ConfirmHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.reConfirmHics:
-            return <ReConfirmHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.fingerRequest:
-            return <FingerRequest form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.repairHics:
-            return <RepairHics form={insuranceForm} />;
-         default:
-            break;
-      }
+      const formMap = {
+         [HST.savePrescription]: <Prescription form={insuranceForm} />,
+         [HST.sendHics]: <SendHics form={insuranceForm} />,
+         [HST.setApproval]: <SetApproval form={insuranceForm} />,
+         [HST.setPatientSheet]: <SetPatientSheet form={insuranceForm} />,
+         [HST.saveHics]: (
+            <SaveHics
+               hicsSeal={hicsSeal}
+               form={insuranceForm}
+               parentHicsSeal={parentHicsSeal}
+               inspectionNoteId={inspectionNoteId}
+               isDisable={setDisabled}
+            />
+         ),
+         [HST.setPatientReturn]: <SetPatientReturn form={insuranceForm} />,
+         [HST.cancelService]: <CancelHics form={insuranceForm} />,
+         [HST.confirmHics]: <ConfirmHics form={insuranceForm} />,
+         [HST.reConfirmHics]: <ReConfirmHics form={insuranceForm} />,
+         [HST.fingerRequest]: <FingerRequest form={insuranceForm} />,
+         [HST.repairHics]: <RepairHics form={insuranceForm} />,
+         [HST.startHics]: <StartHics form={insuranceForm} />,
+         [HST.skipHics]: <SkipHics form={insuranceForm} />,
+         [HST.getEsbRef]: <GetEsbRef form={insuranceForm} />,
+         [HST.esbMedicalExam]: <MedicalExam form={insuranceForm} />,
+         [HST.getQuestionCategories]: <QuestionCategories form={insuranceForm} />,
+         [HST.getQuestionsByCategory]: <QuestionsByCategory form={insuranceForm} />
+      };
+
+      return formMap[chooseService] || null;
    };
+
    useEffect(() => {
       setInsuranceServiceItems(defaultServiceItems());
    }, []);
+
    return (
       <>
          <Search placeholder="Хайх..." allowClear enterButton="Хайх" size="large" onSearch={onSearch} />
@@ -195,9 +295,10 @@ const SentService = () => {
                         onClick={() => {
                            setChooseService(item.value);
                            setOpen(true);
+                           setDisabled(false);
                         }}
                         icon={<SendOutlined />}
-                     ></Button>
+                     />
                   ]}
                >
                   <List.Item.Meta description={item.title} />
@@ -206,20 +307,32 @@ const SentService = () => {
          />
          <Drawer
             width={640}
-            placement="right"
-            title={HEALTH_SERVCES_DESCRIPTION(chooseService)}
-            closable={false}
-            onClose={onClose}
             open={open}
-            forceRender
+            destroyOnClose
+            closable={false}
+            placement="right"
+            onClose={onClose}
+            title={HEALTH_SERVCES_DESCRIPTION(chooseService)}
+            // forceRender
             extra={
                <Space>
-                  <Button onClick={() => insuranceForm.resetFields()}>Цэвэрлэх</Button>
+                  <Button disabled={isDisabled} onClick={() => insuranceForm.resetFields()}>
+                     Цэвэрлэх
+                  </Button>
                   <Button
+                     disabled={isDisabled}
                      onClick={() => {
-                        insuranceForm.validateFields().then((values) => {
-                           sentService(values);
-                        });
+                        insuranceForm
+                           .validateFields()
+                           .then((values) => {
+                              console.log(values);
+                              sentService(values);
+                           })
+                           .catch((error) => {
+                              error.errorFields?.map((errorField) => {
+                                 openNofi('error', 'Амжилттгүй', errorField.errors?.[0]);
+                              });
+                           });
                      }}
                      type="primary"
                   >
@@ -237,3 +350,4 @@ const SentService = () => {
 };
 
 export default SentService;
+

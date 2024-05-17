@@ -10,10 +10,13 @@ import { UrgentFormFirst, UrgnetFormLast } from '../DefualtForms';
 //redux
 import { selectCurrentEmrData } from '@Features/emrReducer';
 //api
+import DiagnoseApi from '@ApiServices/reference/diagnose';
+import patientDiagnoseApi from '@ApiServices/emr/patientDiagnose';
 import DocumentMiddlewareApi from '@ApiServices/organization/document';
 
 const UrgentIndex = ({ type, handleClick }) => {
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   const [patientDiagnosis, setPatientDiagnosis] = useState([]);
    const [form] = Form.useForm();
    const [oldData, setOldData] = useState();
    const [isLoading, setLoading] = useState(false);
@@ -28,7 +31,69 @@ const UrgentIndex = ({ type, handleClick }) => {
             setLoading(false);
          });
    };
+   const getPatientDiagnosis = async () => {
+      await patientDiagnoseApi
+         .getByPageFilter({
+            patientId: incomeEmrData.patientId,
+            appointmentId: incomeEmrData.appointmentId
+         })
+         .then(({ data: { response } }) => {
+            setPatientDiagnosis(response.data);
+         });
+   };
+   const removePatientDiagnoseById = async (id) => {
+      await patientDiagnoseApi.delete(id);
+   };
    const onFinish = async (values) => {
+      if (type === 'last') {
+         if (patientDiagnosis?.length > 0) {
+            patientDiagnosis?.map((pd) => {
+               removePatientDiagnoseById(pd.id);
+            });
+         }
+         const newDiagnosis = [
+            {
+               value: 1,
+               id: values.q814Id
+            },
+            {
+               value: 4,
+               id: values.q815Id
+            }
+         ].filter((id) => id.id);
+         try {
+            const incomeDiagnosis = await Promise.all(
+               newDiagnosis?.map(async (newDiagnose) => {
+                  return await DiagnoseApi.getById(newDiagnose.id).then(({ data: { response } }) => ({
+                     ...response,
+                     newDiagnoseType: newDiagnose.value
+                  }));
+               })
+            );
+            Promise.all(
+               incomeDiagnosis?.map(async (diagnose) => {
+                  return await patientDiagnoseApi.post({
+                     patientId: incomeEmrData.patientId,
+                     usageType: incomeEmrData.usageType,
+                     diagnoseType: diagnose.newDiagnoseType,
+                     type: diagnose.type,
+                     diagnoseId: diagnose.id,
+                     appointmentId: incomeEmrData.appointmentId,
+                     inpatientRequestId: null,
+                     diagnose: diagnose
+                  });
+               })
+            )
+               .then(() => {
+                  getPatientDiagnosis();
+               })
+               .catch((error) => {
+                  console.log(error);
+               });
+         } catch (error) {
+            console.log('diagnoseGetError', error);
+         }
+      }
       await DocumentMiddlewareApi.patch(incomeEmrData.urgentInspectionNoteId, { data: { ...oldData, ...values } })
          .then(() => {
             openNofi('success', 'Амжилттай', 'Дүгнэлт амжилттай хадгалагдсан');
@@ -41,9 +106,14 @@ const UrgentIndex = ({ type, handleClick }) => {
    const onFinishFailed = (error) => {
       console.log(error);
    };
+
    useEffect(() => {
       incomeEmrData.urgentInspectionNoteId && getInspectionNote();
    }, [incomeEmrData.urgentInspectionNoteId]);
+
+   useEffect(() => {
+      type === 'last' && getPatientDiagnosis();
+   }, []);
    return (
       <Spin spinning={isLoading}>
          <Form form={form} layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}>

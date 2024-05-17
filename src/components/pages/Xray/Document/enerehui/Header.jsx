@@ -3,6 +3,7 @@ import enerehui_logo from './assets/enerehui_logo.png';
 import locationMark from './assets/locationMark.jpg';
 import fb from './assets/fbIcon.jpg';
 import dayjs from 'dayjs';
+import { getAgeYear } from '@Comman/common';
 const Header = ({ patient, createdAt }) => {
    return (
       <div className="exo-header">
@@ -39,7 +40,7 @@ const Header = ({ patient, createdAt }) => {
                </div>
                <p className="text-[15px] text-black">{patient?.lastName}</p>
                <div>
-                  <span className="font-bold text-[15px] text-black">Нас:</span> {patient?.age}
+                  <span className="font-bold text-[15px] text-black">Нас:</span> {getAgeYear(patient?.registerNumber)}
                </div>
                <div>
                   <span className="font-bold text-[15px] text-black">ID:</span> {patient?.id}

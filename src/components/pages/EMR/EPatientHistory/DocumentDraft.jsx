@@ -45,7 +45,7 @@ const DocumentDraft = (props) => {
    };
    const changeSaveStatus = (_id) => {
       Modal.confirm({
-         content: 'Та маягтаа бүрэнгүйцэт бөглөөрөй',
+         content: 'Та маягтаа бүрэн гүйцэт бөглөөрэй!',
          cancelText: 'Болих',
          okText: 'Тийм',
          onOk: async () => {
@@ -162,6 +162,7 @@ const DocumentDraft = (props) => {
                   getDocumentsInDraft();
                }}
                isBackButton={false}
+               handleIsReload={setIsReloadDocumentHistory}
                handleBackButton={() => null}
             />
          </Modal>

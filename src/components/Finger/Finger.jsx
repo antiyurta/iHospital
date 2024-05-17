@@ -22,22 +22,23 @@ const Finger = (props) => {
    } = useSocketContext();
 
    const isLoading = useMemo(() => {
-      return isLoadingSockets?.['fingerSocket'] || false;
+      return isLoadingSockets?.[`${rest.name}`] || false;
    }, [isLoadingSockets]);
 
    const isConnected = useMemo(() => {
-      return isConnectedSockets?.['fingerSocket'] || false;
+      return isConnectedSockets?.[`${rest.name}`] || false;
    }, [isConnectedSockets]);
 
    useEffect(() => {
-      if (receivedDatas['fingerSocket']) {
-         form.setFieldValue(`${rest.name}`, receivedDatas['fingerSocket'].result.image);
+      if (receivedDatas[`${rest.name}`]) {
+         console.log('end data=====>', rest);
+         form.setFieldValue(`${rest.name}`, receivedDatas[`${rest.name}`].result.image);
       }
    }, [receivedDatas]);
 
    const handleSendData = () => {
       form.resetFields([[rest.name]]);
-      sendDataWebSocketByName('fingerSocket', {
+      sendDataWebSocketByName(`${rest.name}`, {
          deviceId: 123456789,
          command: 'ReadFinger',
          Parameters: null
@@ -58,8 +59,8 @@ const Finger = (props) => {
                   type="primary"
                   loading={isLoading}
                   onClick={() => {
-                     if (isConnected) removeWebSocketByName('fingerSocket');
-                     else createWebSocket(socketUrl, 'fingerSocket');
+                     if (isConnected) removeWebSocketByName(`${rest.name}`);
+                     else createWebSocket(socketUrl, `${rest.name}`);
                   }}
                >
                   {isConnected ? 'Салгах' : 'Холбох'}

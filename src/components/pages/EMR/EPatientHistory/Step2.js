@@ -4,13 +4,7 @@ import { Input, Form, Checkbox } from 'antd';
 const { TextArea } = Input;
 export default function Step2() {
    return (
-      <div
-         className="flex flex-col gap-2"
-         style={{
-            height: 200,
-            overflow: 'auto'
-         }}
-      >
+      <div className="input-panel flex flex-col gap-2">
          <Form.Item className="mb-0" label="Халдварт өвчин" name={['healthRecord', 'contagious']}>
             <Checkbox.Group className="flex flex-col gap-1">
                <Checkbox className="ml-2" value={'MEASLES'}>

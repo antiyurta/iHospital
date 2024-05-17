@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Spin, Table } from 'antd';
 //redux
+import { setInspectionNoteId } from '@Features/emrReducer';
 import { selectCurrentUserId } from '@Features/authReducer';
 //comp
 import Soap from './Soap';
@@ -18,6 +19,8 @@ import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 import { InspectionEnum, ListIndexEnum } from '@Utils/enum';
 
 function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsServiceId }) {
+   const dispatch = useDispatch();
+   console.log('end', incomeData);
    const employeeId = useSelector(selectCurrentUserId);
    const [form] = Form.useForm();
    const [editMode, setEditMode] = useState(false);
@@ -79,6 +82,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
       setLoading(true);
       if (editMode) {
          const id = incomeData.inspectionNoteId || selectedInspectionNoteId;
+         dispatch(setInspectionNoteId(id));
          await EmrInspectionNoteApi.patch(id, {
             pain: JSON.stringify(values['pain']),
             question: JSON.stringify(values['question']),
@@ -115,6 +119,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
          await EmrInspectionNoteApi.post(data)
             .then(async ({ data: { response } }) => {
                setSelectedInspectionNoteId(response.id);
+               dispatch(setInspectionNoteId(response.id));
                var newResponse;
                if (incomeData.appointmentType === ListIndexEnum.Ambulatory) {
                   newResponse = await AppointmentApi.patchAppointment(incomeData.appointmentId, {
@@ -179,8 +184,8 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                console.log(e);
             }}
          >
-            <div className="flex flex-col gap-2">
-               <div className="flex flex-col h-[500px] overflow-auto pr-3 gap-2">
+            <div className="emr-ins flex flex-col gap-2 justify-between">
+               <div className="inputs flex flex-col pr-3 gap-2">
                   {props.data?.hasOwnProperty('conclusion') ? (
                      <Soap
                         title="Дүгнэлт"
@@ -305,6 +310,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                               appointmentId={incomeData.appointmentId}
                               hicsServiceId={hicsServiceId}
                               usageType={incomeData.usageType}
+                              selectType={1}
                            />
                            {/* <Diagnose
                               form={form}

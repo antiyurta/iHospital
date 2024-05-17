@@ -1,175 +1,142 @@
-import { Form, Input, Select } from 'antd';
-import React, { useState } from 'react';
-import SocialStatus from '../socialStatus.js';
-import ChildStatus from '../childStatus.js';
-import serviceScopeStatus from '../serviceScopeStatus.js';
-import marriageStatus from '../marriageStatus.js';
+import React from 'react';
+import { Form, Input, Radio, Select } from 'antd';
+//utils
+import {
+   education,
+   workplace,
+   position,
+   occupation,
+   isEmployment,
+   employment,
+   emplessDescription
+} from '@Utils/config/xypField.js';
 function MoreInfo({ form }) {
-   const { Option } = Select;
-   const [isChild, setIsChild] = useState(true);
-   const checkIsChild = (value) => {
-      if (value === 6) {
-         setIsChild(false);
-      } else {
-         setIsChild(true);
-         form.setFieldValue('type');
-      }
-   };
    return (
-      <div>
-         <div className="p-1">
-            <Form.Item
-               label="Нийгмийн байдал:"
-               name="socialStatusType"
-               rules={[{ required: false, message: 'Нийгмийн байдал оруулна уу' }]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Select onChange={checkIsChild}>
-                  {SocialStatus.map((status, index) => {
-                     return (
-                        <Option key={index} value={status.value}>
-                           {status.label}
-                        </Option>
-                     );
-                  })}
-               </Select>
-            </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Хэрэв хүүхэд бол:"
-               name="type"
-               rules={[
+      <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+         <Form.Item className="mb-0 white-radio" label="Оршин суугч эсэх:" name="isLiver">
+            <Radio.Group
+               options={[
                   {
-                     required: !isChild,
-                     message: 'Хэрэв хүүхэд бол оруулна уу'
+                     label: 'Тийм',
+                     value: true
+                  },
+                  {
+                     label: 'Үгүй',
+                     value: false
                   }
                ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Select disabled={isChild}>
-                  {ChildStatus.map((child, index) => {
-                     return (
-                        <Option key={index} value={child.value}>
-                           {child.label}
-                        </Option>
-                     );
-                  })}
-               </Select>
-            </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Гэрлэлтийн байдал:"
-               name="marriageStatus"
-               rules={[
-                  {
-                     // required: isChild,
-                     required: false,
-                     message: 'Гэрлэлтийн байдал оруулна уу'
+            />
+         </Form.Item>
+         <Form.Item label="Боловсрол:" name="educationId">
+            <Select
+               showSearch
+               onSelect={(_, option) => form.setFieldValue('educationName', option.label)}
+               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+               options={education?.map((edu) => ({
+                  label: edu.valueName,
+                  value: edu.valueId.toString()
+               }))}
+            />
+         </Form.Item>
+         <Form.Item label="" name="educationName" hidden>
+            <Input disabled className="w-10" />
+         </Form.Item>
+         <Form.Item label="Ажлын газар:" name="workplace">
+            <Select
+               showSearch
+               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+               options={workplace?.map((place) => ({
+                  label: place.valueName,
+                  value: place.valueName
+               }))}
+            />
+         </Form.Item>
+         <Form.Item label="Нийгмийн байдал:" name="positionId">
+            <Select
+               showSearch
+               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+               onSelect={(_, option) => form.setFieldValue('positionName', option.label)}
+               options={position?.map((pos) => ({
+                  label: pos.valueName,
+                  value: pos.valueId.toString()
+               }))}
+            />
+         </Form.Item>
+         <Form.Item label="" name="positionName" hidden>
+            <Input disabled className="w-10" />
+         </Form.Item>
+         <Form.Item label="Мэргэжил:" name="occupationId">
+            <Select
+               showSearch
+               filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+               onSelect={(_, option) => form.setFieldValue('occupationName', option.label)}
+               options={occupation?.map((occu) => ({
+                  label: occu.valueName,
+                  value: occu.valueId.toString()
+               }))}
+            />
+         </Form.Item>
+         <Form.Item label="" name="occupationName" hidden>
+            <Input disabled className="w-10" />
+         </Form.Item>
+         <Form.Item className="mb-0 white-radio" label="Хөдөлмөр эрхлэлт:" name="isEmployment">
+            <Radio.Group
+               onChange={(e) => {
+                  if (e.target.value === 1) {
+                     form.resetFields([['emplessDescriptionId', 'emplessDescription']]);
+                  } else if (e.target.value === 2) {
+                     form.resetFields([['employmentId', 'employmentName']]);
                   }
-               ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Select disabled={!isChild}>
-                  {marriageStatus.map((status, index) => {
-                     return (
-                        <Option key={index} value={status.value}>
-                           {status.label}
-                        </Option>
-                     );
-                  })}
-               </Select>
-            </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Боловсрол:"
-               name="educationType"
-               rules={[
-                  {
-                     // required: isChild,
-                     required: false,
-                     message: 'Боловсрол оруулна уу'
-                  }
-               ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Select>
-                  <Option value={0}>Боловсролгүй</Option>
-                  <Option value={1}>Бага</Option>
-                  <Option value={2}>Бүрэн дунд</Option>
-                  <Option value={3}>Мэргэжлийн болон техникийн</Option>
-                  <Option value={4}>Дипломын</Option>
-                  <Option value={5}>Бакалавр</Option>
-                  <Option value={6}>Магистр</Option>
-                  <Option value={7}>Доктор</Option>
-               </Select>
-            </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Үйлчлэх хүрээ:"
-               name="serviceScopeStatusType"
-               rules={[
-                  {
-                     // required: isChild,
-                     required: false,
-                     message: 'Үйлчлэх хүрээ оруулна уу'
-                  }
-               ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Select disabled={!isChild}>
-                  {serviceScopeStatus.map((scope, index) => {
-                     return (
-                        <Option key={index} value={scope.value}>
-                           {scope.label}
-                        </Option>
-                     );
-                  })}
-               </Select>
-            </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Ажлын газар:"
-               name="organization"
-               rules={[
-                  {
-                     // required: isChild,
-                     required: false,
-                     message: 'Ажлын газар оруулна уу'
-                  }
-               ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Input disabled={!isChild} />
-            </Form.Item>
-         </div>
-         <div className="p-1">
-            <Form.Item
-               label="Албан тушаал:"
-               name="jobPosition"
-               rules={[
-                  {
-                     // required: isChild,
-                     required: false,
-                     message: 'Албан тушаал оруулна уу'
-                  }
-               ]}
-               labelCol={{ span: 8 }}
-               wrapperCol={{ span: 16 }}
-            >
-               <Input disabled={!isChild} />
-            </Form.Item>
-         </div>
+               }}
+               options={isEmployment?.map((empo) => ({
+                  label: empo.valueName,
+                  value: empo.valueId
+               }))}
+            />
+         </Form.Item>
+         <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}>
+            {({ getFieldValue }) =>
+               getFieldValue('isEmployment') === 1 ? (
+                  <>
+                     <Form.Item label="Хөдөлмөр эрхлэлт:" name="employmentId">
+                        <Select
+                           showSearch
+                           onSelect={(_, option) => form.setFieldValue('employmentName', option.label)}
+                           filterOption={(input, option) =>
+                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                           }
+                           options={employment?.map((emp) => ({
+                              label: emp.valueName,
+                              value: emp.valueId.toString()
+                           }))}
+                        />
+                     </Form.Item>
+                     <Form.Item label="" name="employmentName" hidden>
+                        <Input disabled className="w-10" />
+                     </Form.Item>
+                  </>
+               ) : (
+                  <>
+                     <Form.Item label="Хөдөлмөр эрхлээгүй шалтгаан:" name="emplessDescriptionId">
+                        <Select
+                           showSearch
+                           onSelect={(_, option) => form.setFieldValue('emplessDescription', option.label)}
+                           filterOption={(input, option) =>
+                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                           }
+                           options={emplessDescription?.map((empl) => ({
+                              label: empl.valueName,
+                              value: empl.valueId.toString()
+                           }))}
+                        />
+                     </Form.Item>
+                     <Form.Item name="emplessDescription" hidden>
+                        <Input disabled />
+                     </Form.Item>
+                  </>
+               )
+            }
+         </Form.Item>
       </div>
    );
 }

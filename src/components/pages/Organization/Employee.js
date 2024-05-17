@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
-import { Form, Button, Card, Descriptions, Input, Modal, Switch, Select, DatePicker, Pagination } from 'antd';
+import { Form, Button, Card, Descriptions, Input, Modal, Switch, Select, DatePicker, Pagination, Divider } from 'antd';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
@@ -46,6 +46,7 @@ function Employee() {
       setIsOpenCreateModal(true);
    };
    const editModal = async (id) => {
+      form.resetFields();
       setEditMode(true);
       setId(id);
       const response = await Get('organization/employee/' + id, token, config);
@@ -358,11 +359,26 @@ function Employee() {
             title={editMode ? 'Ажилтан засах' : 'Ажилтан нэмэх'}
             onCancel={() => setIsOpenCreateModal(false)}
             onOk={onFinish}
-            width={'80%'}
+            okText="Хадгалах"
+            cancelText="Болих"
+            width={500}
          >
-            <Form form={form}>
-               <div className="flex flex-wrap">
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
+            <Form form={form} layout="vertical">
+               <Divider>Ерөнхий мэдээлэл</Divider>
+               <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+                  <div className="grid grid-cols-2 gap-2">
+                     <Form.Item
+                        label="Системд нэвтрэх нэр:"
+                        name="username"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Zaawal'
+                           }
+                        ]}
+                     >
+                        <Input placeholder="Системд нэвтрэх нэр" />
+                     </Form.Item>
                      <Form.Item
                         label="Овог"
                         name="lastName"
@@ -375,8 +391,6 @@ function Employee() {
                      >
                         <Input placeholder="Овог" />
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Нэр"
                         name="firstName"
@@ -389,8 +403,6 @@ function Employee() {
                      >
                         <Input placeholder="Нэр" />
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Регистр №"
                         name="registerNumber"
@@ -403,8 +415,6 @@ function Employee() {
                      >
                         <Input placeholder="Регистр №" />
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="И-мэйл"
                         name="email"
@@ -417,8 +427,6 @@ function Employee() {
                      >
                         <Input placeholder="И-мэйл" />
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Утасны дугаар"
                         name="phoneNo"
@@ -431,27 +439,26 @@ function Employee() {
                      >
                         <Input placeholder="Утасны дугаар" />
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item label="Aжиллаж байгаа эсэх" name="isWorking" valuePropName="checked">
                         <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
                      </Form.Item>
                   </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
-                     <Form.Item
-                        label="Гэрийн хаяг"
-                        name="homeAddress"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Zaawal'
-                           }
-                        ]}
-                     >
-                        <Input placeholder="Гэрийн хаяг" />
-                     </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
+                  <Form.Item
+                     label="Гэрийн хаяг"
+                     name="homeAddress"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Zaawal'
+                        }
+                     ]}
+                  >
+                     <Input placeholder="Гэрийн хаяг" />
+                  </Form.Item>
+               </div>
+               <Divider>Алба</Divider>
+               <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                      <Form.Item
                         label="Тасаг"
                         name="type"
@@ -467,8 +474,6 @@ function Employee() {
                            <Option value={0}>Харьяалал</Option>
                         </Select>
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Тасаг(Mobile)"
                         name="subOrganizationId"
@@ -490,8 +495,6 @@ function Employee() {
                            })}
                         </Select>
                      </Form.Item>
-                  </div>
-                  <div className="w-full p-1">
                      <Form.Item
                         label="Aлбан нэгж"
                         name="depIds"
@@ -512,8 +515,6 @@ function Employee() {
                            })}
                         </Select>
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Албан Тушаал"
                         name="appIds"
@@ -541,8 +542,6 @@ function Employee() {
                            })}
                         </Select>
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Зэрэг"
                         name="degreeId"
@@ -563,8 +562,6 @@ function Employee() {
                            })}
                         </Select>
                      </Form.Item>
-                  </div>
-                  <div className="md:w-1/4 sm:w-1/3 p-1">
                      <Form.Item
                         label="Эрх үүрэг"
                         name="roleId"
@@ -585,8 +582,6 @@ function Employee() {
                            })}
                         </Select>
                      </Form.Item>
-                  </div>
-                  <div className="w-1/2 p-1">
                      <Form.Item
                         label="Ажилд орсон огноо"
                         name="dateInEmployment"
@@ -599,8 +594,6 @@ function Employee() {
                      >
                         <DatePicker locale={mnMN} />
                      </Form.Item>
-                  </div>
-                  <div className="w-1/2 p-1">
                      <Form.Item label="Ажлаас гарсан огноо" name="dateOutEmployment">
                         <DatePicker locale={mnMN} />
                      </Form.Item>

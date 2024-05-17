@@ -4,13 +4,7 @@ import { Col, Radio, Row, Divider, Input, Form } from 'antd';
 
 export default function Step4() {
    return (
-      <div
-         className="flex flex-col gap-2"
-         style={{
-            height: 200,
-            overflow: 'auto'
-         }}
-      >
+      <div className="input-panel flex flex-col gap-2">
          <Divider orientation="left" className="text-sm my-2">
             Ахуйн нөхцөл / Ажлын нөхцөл
          </Divider>

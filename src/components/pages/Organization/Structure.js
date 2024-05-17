@@ -3,10 +3,13 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import { Get } from '../../common';
 import UTable from '../../UTable';
+//api
+import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 function Structure() {
    const token = useSelector(selectCurrentToken);
    const [testParam, setTestParam] = useState(true);
+   const [hicsServices, setHicsServices] = useState([]);
    const [financeDepartments, setFinanceDepartments] = useState([]);
    const config = {
       headers: {},
@@ -66,12 +69,12 @@ function Structure() {
          col: 24
       },
       {
-         label: 'Санхүүгийн тасаг',
-         index: 'financeDepId',
+         label: 'Даатгал',
+         index: 'hicsServiceIds',
          isView: true,
-         input: 'select',
-         inputData: financeDepartments,
-         relIndex: 'dep_name',
+         input: 'multipleSelect',
+         inputData: hicsServices,
+         relIndex: 'id',
          col: 24
       }
    ];
@@ -148,21 +151,16 @@ function Structure() {
       const response = await Get('organization/structure', token, config);
       setDepartments(response.data);
    };
-   const getFinanceDepartments = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('finance/department', token, conf);
-      response?.data?.map((item, index) => {
-         item.id = item.dep_id;
+   const getHicsServices = async () => {
+      await healthInsuranceApi.getHicsService().then(({ data }) => {
+         if (data.code === 200) {
+            setHicsServices(data.result);
+         }
       });
-      console.log(response.data);
-      setFinanceDepartments(response.data);
    };
    useEffect(() => {
       getDepartments();
-      // getFinanceDepartments();
+      getHicsServices();
    }, []);
    return (
       <div className="w-full overflow-auto h-screen bg-[#f5f6f7] p-3">

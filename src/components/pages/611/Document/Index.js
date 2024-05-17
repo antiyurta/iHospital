@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { CloseOutlined, EyeOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
+import { Button, Input, Modal, Table } from 'antd';
 import { openNofi } from '../../../common';
-import { NewInput } from '../../../Input/Input';
-import { NewColumn, NewTable } from '../../../Table/Table';
+import './style.css';
 // AM start
 import AM1B from './AM1B';
 import AM_1V from './AM_1V';
@@ -101,6 +100,7 @@ import CT1ClinalDiagnose from './CT_1_ClinicalDiagnose';
 import CT1BaseOfClinicalDiagnose from './CT_1_BaseOfClinicalDiagnose';
 import CT1Inspection from './CT_1_Inspection';
 import CT1End from './CT_1_End';
+import CT13A from './CT13A';
 import CT32A from './CT32A';
 import CT1Sergeeh from './CT_1_Sergeeh';
 // EIM start
@@ -304,8 +304,12 @@ export function ReturnById({ type, id, appointmentId, data }) {
       return <NotFound />; // yaraltai duudlaga
    } else if (id === 111) {
       return <CT32A type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 112) {
+      return <div>1</div>;
    } else if (id === 113) {
       return <CT1Sergeeh type={type} data={data} appointmentId={appointmentId} />;
+   } else if (id === 114) {
+      return <CT13A type={type} data={data} appointmentId={appointmentId} />;
    }
 }
 
@@ -330,11 +334,8 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
    const filteredOptions = options?.filter((e) => {
       return e.label.toLowerCase().includes(searchValue.toLowerCase());
    });
-   const filteredOptionsSelectDf = documentForms?.filter((e) => {
-      return e.label.toLowerCase().includes(searchValue.toLowerCase());
-   });
-   const filteredOptionsSelect = options?.filter((e) => {
-      return e.docName.toLowerCase().includes(searchValueSelect.toLowerCase());
+   const filteredOptionsSelect = documentForms?.filter((e) => {
+      return e.label.toLowerCase().includes(searchValueSelect.toLowerCase());
    });
    const add = (row) => {
       const result = selectedOptions?.find((option) => {
@@ -398,7 +399,7 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                   }}
                >
                   <div>
-                     <NewInput
+                     <Input
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                         placeholder="Хайх"
@@ -437,58 +438,39 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
    } else if (type === 1) {
       return (
          <div className="grid grid-cols-2 gap-6">
-            <div className="grid gap-6">
-               <NewInput onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
-               <NewTable
-                  prop={{
-                     rowKey: 'value',
-                     bordered: true,
-                     scroll: {
-                        y: 500
+            <div className="flex flex-col gap-2">
+               <Input onChange={(e) => setSearchValueSelect(e.target.value)} placeholder="Хайх" />
+               <Table
+                  rowKey="value"
+                  bordered
+                  scroll={{
+                     y: 500
+                  }}
+                  columns={[
+                     {
+                        title: 'Баримт бичгийн нэр',
+                        dataIndex: 'docName',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
                      },
-                     dataSource: filteredOptionsSelectDf
-                  }}
-                  meta={{
-                     page: 1,
-                     limit: filteredOptionsSelectDf.length
-                  }}
-                  isLoading={false}
-                  isPagination={false}
-               >
-                  <NewColumn
-                     title="Баримт бичгийн нэр"
-                     dataIndex="docName"
-                     render={(text) => {
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title="Тушаал шийдвэрийн дугаар"
-                     dataIndex="label"
-                     render={(text) => {
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title="FORM ID"
-                     dataIndex="formId"
-                     render={(text) => {
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title="FORM TYPE"
-                     dataIndex="formType"
-                     render={(text) => {
-                        console.log(text);
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title=""
-                     width={40}
-                     render={(_text, row) => {
-                        return (
+                     {
+                        title: 'Тушаал шийдвэрийн дугаар',
+                        dataIndex: 'label',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
+                     },
+                     {
+                        title: 'FORM ID',
+                        dataIndex: 'formId',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
+                     },
+                     {
+                        title: 'FORM TYPE',
+                        dataIndex: 'formType',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
+                     },
+                     {
+                        title: '',
+                        width: 40,
+                        render: (_text, row) => (
                            <Button
                               onClick={() => add(row)}
                               icon={
@@ -499,65 +481,53 @@ export function ReturnDetails({ type, oldDocuments, handleClick }) {
                                  />
                               }
                            />
-                        );
-                     }}
-                  />
-               </NewTable>
+                        )
+                     }
+                  ]}
+                  dataSource={filteredOptionsSelect}
+                  pagination={false}
+               />
             </div>
-            <div className="grid gap-6">
-               <NewTable
-                  prop={{
-                     rowKey: 'value',
-                     bordered: true,
-                     scroll: {
-                        y: 500
+            <div className="flex flex-col gap-2">
+               <Table
+                  rowKey="value"
+                  bordered
+                  scroll={{
+                     y: 500
+                  }}
+                  columns={[
+                     {
+                        title: 'Баримт бичгийн нэр',
+                        dataIndex: 'docName',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
                      },
-                     dataSource: selectedOptions
-                  }}
-                  meta={{
-                     page: 1,
-                     limit: selectedOptions.length
-                  }}
-                  isLoading={false}
-                  isPagination={false}
-               >
-                  <NewColumn
-                     title="Баримт бичгийн нэр"
-                     dataIndex="docName"
-                     render={(text) => {
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title="Тушаал шийдвэрийн дугаар"
-                     dataIndex="label"
-                     render={(text) => {
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title=" asd"
-                     dataIndex="formType"
-                     render={(text) => {
-                        return <p className="whitespace-normal text-start text-black">{text}</p>;
-                     }}
-                  />
-                  <NewColumn
-                     title=""
-                     width={40}
-                     dataIndex="formId"
-                     render={(_text, _row, index) => {
-                        return (
+                     {
+                        title: 'Тушаал шийдвэрийн дугаар',
+                        dataIndex: 'label',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
+                     },
+                     {
+                        title: 'asd',
+                        dataIndex: 'formType',
+                        render: (text) => <p className="whitespace-normal text-start text-black">{text}</p>
+                     },
+                     {
+                        title: '',
+                        width: 40,
+                        dataIndex: 'formId',
+                        render: (_text, _row, index) => (
                            <CloseOutlined
                               style={{
                                  color: 'red'
                               }}
                               onClick={() => remove(index)}
                            />
-                        );
-                     }}
-                  />
-               </NewTable>
+                        )
+                     }
+                  ]}
+                  dataSource={selectedOptions}
+                  pagination={false}
+               />
                <Button type="primary" onClick={() => handleClick(selectedOptions)}>
                   Хадгалах
                </Button>

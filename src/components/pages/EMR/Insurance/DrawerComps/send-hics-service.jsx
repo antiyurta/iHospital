@@ -1,19 +1,20 @@
 import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
-import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
-import apiInsurance from '../../../../services/healt-insurance/insurance';
-import { selectPatient } from '../../../../features/patientReducer';
+import healthInsurance from '../../../../../services/healt-insurance/healtInsurance';
+import apiInsurance from '../../../../../services/healt-insurance/insurance';
+import { selectPatient } from '../../../../../features/patientReducer';
 import { useSelector } from 'react-redux';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import patientDiagnose from '../../../../services/emr/patientDiagnose';
+import patientDiagnose from '../../../../../services/emr/patientDiagnose';
 import TextArea from 'antd/lib/input/TextArea';
-import Finger from '../../../../features/finger';
+import Finger from '../../../../../features/finger';
 import { useContext } from 'react';
-import AuthContext from '../../../../features/AuthContext';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
-import { HICS_PROCESS } from './enum-utils';
-const SendHics = (props) => {
+import AuthContext from '../../../../../features/AuthContext';
+import { selectCurrentEmrData } from '../../../../../features/emrReducer';
+import { HICS_PROCESS } from '../enum-utils';
+
+export const SendHics = (props) => {
    const { form } = props;
    const { user } = useContext(AuthContext);
    const currentEmrData = useSelector(selectCurrentEmrData);
@@ -39,8 +40,8 @@ const SendHics = (props) => {
       await apiInsurance
          .getAllHicsSeals({
             patientId: patient.id,
-            departmentId: currentEmrData.cabinetId,
-            createdBy: user.id,
+            // departmentId: currentEmrData.cabinetId,
+            // createdBy: user.id,
             process: HICS_PROCESS.SEAL_CONFIRM
          })
          .then((response) => {
@@ -323,4 +324,4 @@ const SendHics = (props) => {
       </>
    );
 };
-export default SendHics;
+

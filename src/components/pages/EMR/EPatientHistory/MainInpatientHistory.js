@@ -108,8 +108,8 @@ function MainInpatientHistory({ newUsageType }) {
                   Modal.confirm({
                      content: (
                         <p>
-                           Та <span className="font-bold">{document.docName}</span> маягт бөглөх гэж байна итгэлттэй
-                           байна уу
+                           Та <span className="font-bold">{document.docName}</span> маягт бөглөх гэж байна! Итгэлтэй
+                           байна уу?
                         </p>
                      ),
                      cancelText: 'Үгүй',
@@ -147,13 +147,14 @@ function MainInpatientHistory({ newUsageType }) {
                      children: (
                         <div
                            style={{
-                              height: 'calc(100vh - 420px)',
+                              height: 'calc(100vh - 365px)',
                               overflow: 'auto',
                               paddingRight: 12
                            }}
                         >
                            <Table
                               rowKey="value"
+                              bordered
                               loading={isLoading}
                               columns={[
                                  {
@@ -163,21 +164,26 @@ function MainInpatientHistory({ newUsageType }) {
                                  },
                                  {
                                     title: 'Нэр',
-                                    align: 'left',
-                                    dataIndex: 'docName'
+                                    dataIndex: 'docName',
+                                    render: (label, record, index) => <p className="text-black">{label}</p>
                                  },
                                  {
                                     title: 'Дугаар',
-                                    width: 130,
-                                    align: 'left',
-                                    dataIndex: 'label'
+                                    dataIndex: 'label',
+                                    render: (label) => <p className="text-black">{label}</p>
                                  },
                                  {
                                     title: ' ',
+                                    width: 50,
                                     render: (_, row) => (
-                                       <div className="hover: cursor-pointer" onClick={() => middleware(row)}>
-                                          <img src={ArrowIcon} alt="ArrowIcon" />
-                                       </div>
+                                       <img
+                                          className="hover: cursor-pointer"
+                                          onClick={() => {
+                                             middleware(row);
+                                          }}
+                                          src={ArrowIcon}
+                                          alt="ArrowIcon"
+                                       />
                                     )
                                  }
                               ]}

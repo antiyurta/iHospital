@@ -134,6 +134,11 @@ function IndexAfter({ type, params }) {
    };
    const requestColumns = [
       {
+         title: '№',
+         width: 50,
+         render: (_, _row, rowIndex) => meta.page * meta.limit - (meta.limit - rowIndex - 1)
+      },
+      {
          title: 'Он сар',
          width: 150,
          dataIndex: 'updatedAt',

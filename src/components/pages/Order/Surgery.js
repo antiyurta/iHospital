@@ -50,24 +50,23 @@ const { TextArea } = Input;
 //imgs
 import surgeryIcon from './NewOrder/surgeryIcon.svg';
 //common
-import { diagnoseTypeInfo, numberToCurrency, openNofi } from '@Comman/common';
+import { numberToCurrency, openNofi } from '@Comman/common';
 //comp
 import { EmployeeList, FormListEmployee } from './SurgeryEmployee';
 //api
 import SurgeryApi from '@ApiServices/service/surgery.api';
 import RoomApi from '@ApiServices/organization/room';
 import EmployeeApi from '@ApiServices/organization/employee';
-import PatientDiagnoseApi from '@ApiServices/emr/patientDiagnose';
 //redux
 import { selectCurrentDepId } from '@Features/authReducer';
 import dayjs from 'dayjs';
+import NewDiagnose from '../service/NewDiagnose';
 
 function Surgery(props) {
    const { patientId, appointmentId, usageType, selectedSurgery, handleclick } = props;
    const depIds = useSelector(selectCurrentDepId);
    //tolowlogo
    const [form] = Form.useForm();
-   const [diagnosis, setDiagnosis] = useState([]);
    const [rooms, setRooms] = useState([]);
    const [isAnes, setAnes] = useState(false);
    const [employees, setEmployess] = useState([]);
@@ -102,22 +101,7 @@ function Surgery(props) {
          setRooms(response.data);
       });
    };
-   const getPatientDiagnosis = async () => {
-      await PatientDiagnoseApi.getByPageFilter({
-         patientId: patientId,
-         appointmentId: appointmentId
-      }).then(({ data: { response } }) => {
-         setDiagnosis(
-            response.data?.map((item) => ({
-               code: item.diagnose.code,
-               nameEn: item.diagnose.nameEn,
-               nameMn: item.diagnose.nameMn,
-               nameRu: item.diagnose.nameRu,
-               diagnoseType: diagnoseTypeInfo(item.diagnoseType)
-            }))
-         );
-      });
-   };
+
    const getEmployees = async () => {
       await EmployeeApi.getEmployee({
          params: {
@@ -133,23 +117,28 @@ function Surgery(props) {
          await SurgeryApi.getRequestById(selectedSurgery.surguryRequestId)
             .then(({ data: { response, success } }) => {
                if (success) {
+                  var hourss;
+                  var minutee;
                   if (response.taskDoctorRels?.length > 0) {
                      setAnes(true);
                   }
-                  const [hours, minute] = response.durationTime.split(':');
+                  if (response.durationTime) {
+                     const [hours, minute] = response.durationTime.split(':');
+                     hourss = hours;
+                     minutee = minute;
+                  }
                   form.setFieldsValue({
                      ...response,
                      surgeries: response.taskWorkers.surgeries,
                      description: response.currentColumn.description,
                      durationTime: response.durationTime
                         ? moment().set({
-                             hour: hours,
-                             minute: minute
+                             hour: hourss,
+                             minute: hourss
                           })
                         : undefined
                   });
                   setOpenModalPlan(true);
-                  getPatientDiagnosis();
                   getEmployees();
                   getRooms();
                }
@@ -364,7 +353,7 @@ function Surgery(props) {
                            }
                         ]}
                      >
-                        {(fields, { add, remove }) => (
+                        {(fields, { remove }) => (
                            <>
                               {fields.map(({ key, name, ...restField }) => (
                                  <div key={key} className="flex flex-row gap-2 justify-between">
@@ -410,14 +399,13 @@ function Surgery(props) {
                            }))}
                         />
                      </Form.Item>
-                     <Form.Item className="mb-0" label="Онош" name="icdCode" rules={rules}>
-                        <Select
-                           options={diagnosis?.map((diagnose) => ({
-                              label: `${diagnose.code} - ${diagnose.diagnoseType}`,
-                              value: diagnose.code
-                           }))}
-                        />
-                     </Form.Item>
+                     <NewDiagnose
+                        patientId={patientId}
+                        appointmentId={appointmentId}
+                        hicsServiceId={null}
+                        usageType={'OUT'}
+                        selectType={0}
+                     />
                      <Form.Item
                         className="mb-0"
                         label="Огноо:"

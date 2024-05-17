@@ -7,8 +7,6 @@ import PatientSupport from './patientSupport';
 import dayjs from 'dayjs';
 //common
 import { openNofi } from '@Comman/common';
-//redux
-import { selectHospitalIsXyp } from '@Features/hospitalReducer';
 //api
 import CountryApi from '@ApiServices/reference/country';
 import PatientApi from '@ApiServices/pms/patient.api';
@@ -115,26 +113,21 @@ function Patient() {
       setIsConfirmLoading(true);
       data['isGlobalDb'] = isGlobalDb;
       data['isEmergency'] = false;
-      // if (data?.contacts === undefined || data?.contacts === null || data?.contacts.length === 0) {
-      // openNofi('warning', 'Заавал', 'Холбоо барих хүний мэдээлэл заавал');
-      // } else {
       var response;
-      if (editMode) {
-         response = await PatientApi.patch(id, data).then(({ data: { success } }) => success);
-      } else {
-         response = await PatientApi.post(data).then(({ data: { success } }) => success);
+      try {
+         if (editMode) {
+            response = await PatientApi.patch(id, data).then(({ data: { success } }) => success);
+         } else {
+            response = await PatientApi.post(data).then(({ data: { success } }) => success);
+         }
+         if (response) {
+            getData(1, 20);
+            setIsConfirmLoading(false);
+            setIsModalVisible(false);
+         }
+      } catch (error) {
+         openNofi('error', 'Алдаа', error.response.data.message);
       }
-      if (response) {
-         getData(1, 20);
-         setIsConfirmLoading(false);
-         setIsModalVisible(false);
-      }
-      // }
-   };
-   const onFinishFailed = (errorInfo) => {
-      errorInfo?.errorFields?.map((error) => {
-         return openNofi('warning', 'Заавал', error.errors[0]);
-      });
    };
    const getCitizens = async () => {
       await CountryApi.getByPageFilter({
@@ -180,15 +173,19 @@ function Patient() {
       }
       return 'Байхгүй';
    };
-   const ddprovices = (id) => {
+   const ddprovices = (id, aimagCityName) => {
       if (id != null) {
          return provices.find((provice) => provice.id === id)?.name || 'Байхгүй';
+      } else if (aimagCityName) {
+         return aimagCityName;
       }
       return 'Байхгүй';
    };
-   const ddtowns = (id) => {
+   const ddtowns = (id, soumDistrictName) => {
       if (id != null) {
          return towns.find((town) => town.id === id)?.name || 'Байхгүй';
+      } else if (soumDistrictName) {
+         return soumDistrictName;
       }
       return 'Байхгүй';
    };
@@ -247,24 +244,24 @@ function Patient() {
             {
                title: 'Аймаг/Хот',
                dataIndex: 'aimagId',
-               render: (aimagId) => ddprovices(aimagId)
+               render: (aimagId, row) => ddprovices(aimagId, row.aimagCityName)
             },
             {
                title: 'Сум/Дүүрэг',
                dataIndex: 'soumId',
-               render: (soumId) => ddtowns(soumId)
+               render: (soumId, row) => ddtowns(soumId, row.soumDistrictName)
             },
             {
                title: 'Баг/Хороо',
-               dataIndex: 'committee'
+               dataIndex: 'bagKhorooName'
             },
             {
                title: 'Гудамж/Байшин',
-               dataIndex: 'building'
+               dataIndex: 'addressStreetName'
             },
             {
                title: 'Тоот',
-               dataIndex: 'address'
+               dataIndex: 'addressDetail'
             }
          ]
       },
@@ -387,7 +384,7 @@ function Patient() {
             title={editMode ? 'Өвчтөн засах' : 'Өвчтөн бүртгэх'}
             open={isModalVisible}
             onCancel={() => setIsModalVisible(false)}
-            width="18cm"
+            width="16cm"
             footer={null}
             confirmLoading={isConfirmLoading}
          >
