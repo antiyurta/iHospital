@@ -1,50 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { SendOutlined } from '@ant-design/icons';
 import { Button, Drawer, Form, List, Divider, message, Space, Input } from 'antd';
+
 //common
 import { openNofi } from '@Comman/common';
+
 //comp
-import SaveHics from './save-hics';
-import CancelHics from './cancel-hics';
-import RepairHics from './repair-hics';
-import ConfirmHics from './confirm-hics';
-import SetApproval from './set-approval';
-import Prescription from './prescription';
-import SendHics from './send-hics-service';
-import ReConfirmHics from './reconfirm-hics';
-import FingerRequest from './finger-request';
-import SetPatientSheet from './set-patient-sheet';
-import SetPatientReturn from './set-patient-return';
+import {
+   CancelHics,
+   ConfirmHics,
+   FingerRequest,
+   Prescription,
+   RepairHics,
+   SaveHics,
+   SendHics,
+   SetApproval,
+   SetPatientReturn,
+   SetPatientSheet,
+   ReConfirmHics,
+   SkipHics,
+   StartHics,
+   GetEsbRef,
+   MedicalExam,
+   QuestionCategories,
+   QuestionsByCategory
+} from './DrawerComps';
+
+//defaults
+const { Search } = Input;
+
 //api
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
-//defaults
-const { Search } = Input;
-import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE } from './enum-utils';
+
+import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE as HST } from './enum-utils';
 import { setHicsSeal } from '@Features/emrReducer';
 import { useDispatch } from 'react-redux';
 
+// style css
+import './style.css';
+
 const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) => {
-   console.log('hicsSeal', hicsSeal);
    const dispatch = useDispatch();
-   const [isDisabled, setDisabled] = useState(false);
    const [insuranceForm] = Form.useForm();
-   const [chooseService, setChooseService] = useState(HEALTH_SERVICES_TITLE.saveHics);
+
    const [open, setOpen] = useState(false);
+   const [isDisabled, setDisabled] = useState(false);
    const [insuranceServiceItems, setInsuranceServiceItems] = useState([]);
-   const onClose = () => {
-      setOpen(false);
-   };
-   const defaultServiceItems = () => {
-      return Object.values(HEALTH_SERVICES_TITLE).map((value) => ({
+   const [chooseService, setChooseService] = useState(HST.saveHics);
+
+   const onClose = () => setOpen(false);
+
+   const defaultServiceItems = () =>
+      Object.values(HST).map((value) => ({
          value,
          title: HEALTH_SERVCES_DESCRIPTION(value)
       }));
-   };
+
    const onSearch = (value) => {
-      const filter = defaultServiceItems().filter((item) => item.title.toLowerCase().includes(value.toLowerCase()));
+      const lowerCaseValue = value.toLowerCase();
+      const filter = defaultServiceItems().filter((item) => item.title.toLowerCase().includes(lowerCaseValue));
       setInsuranceServiceItems(filter);
    };
+
    const sentService = async (values) => {
       if (chooseService == HEALTH_SERVICES_TITLE.savePrescription) {
          healthInsuranceApi.savePrescription(values).then(({ data }) => {
@@ -171,8 +189,6 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                   message.success(data.description);
                   setOpen(false);
                   setDisabled(false);
-               } else {
-                  message.warn(data.description);
                }
             })
             .catch((error) => {
@@ -225,47 +241,43 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          });
       }
    };
+
    const getForms = () => {
-      switch (chooseService) {
-         case HEALTH_SERVICES_TITLE.savePrescription:
-            return <Prescription form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.sendHics:
-            return <SendHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.setApproval:
-            return <SetApproval form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.setPatientSheet:
-            return <SetPatientSheet form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.saveHics:
-            return (
-               <SaveHics
-                  form={insuranceForm}
-                  hicsSeal={hicsSeal}
-                  parentHicsSeal={parentHicsSeal}
-                  inspectionNoteId={inspectionNoteId}
-                  isDisable={(state) => {
-                     setDisabled(state);
-                  }}
-               />
-            );
-         case HEALTH_SERVICES_TITLE.setPatientReturn:
-            return <SetPatientReturn form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.cancelService:
-            return <CancelHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.confirmHics:
-            return <ConfirmHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.reConfirmHics:
-            return <ReConfirmHics form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.fingerRequest:
-            return <FingerRequest form={insuranceForm} />;
-         case HEALTH_SERVICES_TITLE.repairHics:
-            return <RepairHics form={insuranceForm} />;
-         default:
-            break;
-      }
+      const formMap = {
+         [HST.savePrescription]: <Prescription form={insuranceForm} />,
+         [HST.sendHics]: <SendHics form={insuranceForm} />,
+         [HST.setApproval]: <SetApproval form={insuranceForm} />,
+         [HST.setPatientSheet]: <SetPatientSheet form={insuranceForm} />,
+         [HST.saveHics]: (
+            <SaveHics
+               hicsSeal={hicsSeal}
+               form={insuranceForm}
+               parentHicsSeal={parentHicsSeal}
+               inspectionNoteId={inspectionNoteId}
+               isDisable={setDisabled}
+            />
+         ),
+         [HST.setPatientReturn]: <SetPatientReturn form={insuranceForm} />,
+         [HST.cancelService]: <CancelHics form={insuranceForm} />,
+         [HST.confirmHics]: <ConfirmHics form={insuranceForm} />,
+         [HST.reConfirmHics]: <ReConfirmHics form={insuranceForm} />,
+         [HST.fingerRequest]: <FingerRequest form={insuranceForm} />,
+         [HST.repairHics]: <RepairHics form={insuranceForm} />,
+         [HST.startHics]: <StartHics form={insuranceForm} />,
+         [HST.skipHics]: <SkipHics form={insuranceForm} />,
+         [HST.getEsbRef]: <GetEsbRef form={insuranceForm} />,
+         [HST.esbMedicalExam]: <MedicalExam form={insuranceForm} />,
+         [HST.getQuestionCategories]: <QuestionCategories form={insuranceForm} />,
+         [HST.getQuestionsByCategory]: <QuestionsByCategory form={insuranceForm} />
+      };
+
+      return formMap[chooseService] || null;
    };
+
    useEffect(() => {
       setInsuranceServiceItems(defaultServiceItems());
    }, []);
+
    return (
       <>
          <Search placeholder="Хайх..." allowClear enterButton="Хайх" size="large" onSearch={onSearch} />
@@ -295,12 +307,12 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          />
          <Drawer
             width={640}
-            placement="right"
-            title={HEALTH_SERVCES_DESCRIPTION(chooseService)}
-            closable={false}
-            onClose={onClose}
             open={open}
             destroyOnClose
+            closable={false}
+            placement="right"
+            onClose={onClose}
+            title={HEALTH_SERVCES_DESCRIPTION(chooseService)}
             // forceRender
             extra={
                <Space>
@@ -338,3 +350,4 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
 };
 
 export default SentService;
+

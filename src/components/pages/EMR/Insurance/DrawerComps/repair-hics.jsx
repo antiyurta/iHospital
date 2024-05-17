@@ -1,14 +1,14 @@
 import { Col, Form, Input, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectPatient } from '../../../../features/patientReducer';
-import insurance from '../../../../services/healt-insurance/insurance';
-import healthInsurance from '../../../../services/healt-insurance/healtInsurance';
-import patientDiagnose from '../../../../services/emr/patientDiagnose';
+import { selectPatient } from '../../../../../features/patientReducer';
+import insurance from '../../../../../services/healt-insurance/insurance';
+import healthInsurance from '../../../../../services/healt-insurance/healtInsurance';
+import patientDiagnose from '../../../../../services/emr/patientDiagnose';
 
 const { TextArea } = Input;
 
-const RepairHics = (props) => {
+export const RepairHics = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);
@@ -185,4 +185,4 @@ const RepairHics = (props) => {
       </>
    );
 };
-export default RepairHics;
+

@@ -496,4 +496,4 @@ const SaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable 
       </Spin>
    );
 };
-export default SaveHics;
+
