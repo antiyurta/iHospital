@@ -301,8 +301,12 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             onClose={onClose}
             title={HEALTH_SERVCES_DESCRIPTION(chooseService)}
             // forceRender
-            extra={
-               <Space>
+         >
+            <Space direction="vertical" style={{ justifyContent: 'space-between', height: '100%' }}>
+               <Form layout="vertical" form={insuranceForm}>
+                  {getForms()}
+               </Form>
+               <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
                   <Button disabled={isDisabled} onClick={() => insuranceForm.resetFields()}>
                      Цэвэрлэх
                   </Button>
@@ -326,11 +330,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                      Илгээх
                   </Button>
                </Space>
-            }
-         >
-            <Form layout="vertical" form={insuranceForm}>
-               {getForms()}
-            </Form>
+            </Space>
          </Drawer>
       </>
    );
