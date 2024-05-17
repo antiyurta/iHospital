@@ -3,7 +3,7 @@ import { Input, Row } from 'antd';
 
 const { TextArea } = Input;
 
-export const QuestionsByCategory = ({ form }) => {
+export const SendDirectService = ({ form }) => {
    return <Row>empty</Row>;
 };
 

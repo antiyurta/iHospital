@@ -239,5 +239,59 @@ class HealthInsurance {
          }
       });
    }
+   async getTabletCategories() {
+      return await jwtInterceopter.get('health-insurance/tablet-categories');
+   }
+   async getTabletsByCategory() {
+      return await jwtInterceopter.get('health-insurance/tablets-by-category');
+   }
+   async postEsbNotification() {
+      return await jwtInterceopter.get('health-insurance/send-esb-notification');
+   }
+   async postHostpitalInfo() {
+      return await jwtInterceopter.get('health-insurance/send-hospital-info');
+   }
+   async postCheckLicenseInfo() {
+      return await jwtInterceopter.get('health-insurance/check-license-info');
+   }
+   async postEditMedicalLink() {
+      return await jwtInterceopter.get('health-insurance/edit-medical-link');
+   }
+   async getHostpitalOperation() {
+      return await jwtInterceopter.get('health-insurance/get-hospital-operation');
+   }
+   async getVaccineByRegno() {
+      return await jwtInterceopter.get('health-insurance/get-vaccine-by-regno');
+   }
+   async postAddHicsService() {
+      return await jwtInterceopter.get('health-insurance/add-hics-service');
+   }
+   async postDirectService() {
+      return await jwtInterceopter.get('health-insurance/direct-send-service');
+   }
+   async getFormData() {
+      return await jwtInterceopter.get('health-insurance/get-form-data');
+   }
+   async postFormData() {
+      return await jwtInterceopter.get('health-insurance/send-form-data');
+   }
+   async getAmbulatory() {
+      return await jwtInterceopter.get('health-insurance/get-ambulatory');
+   }
+   async postFixDoctorExams() {
+      return await jwtInterceopter.get('health-insurance/fix-doctor-exams');
+   }
+   async getHospital() {
+      return await jwtInterceopter.get('health-insurance/get-hospital');
+   }
+   async getDataByFormSummary() {
+      return await jwtInterceopter.get('health-insurance/get-data-by-form-summary');
+   }
+   async getDataFormData() {
+      return await jwtInterceopter.get('health-insurance/get-data-form-data');
+   }
+   async getCt4() {
+      return await jwtInterceopter.get('health-insurance/get-ct4');
+   }
 }
 export default new HealthInsurance();

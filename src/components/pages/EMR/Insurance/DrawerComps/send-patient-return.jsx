@@ -8,7 +8,7 @@ import { getAge } from '../../../../common';
 const { Option } = Select;
 const { TextArea } = Input;
 
-export const SetPatientReturn = (props) => {
+export const SendPatientReturn = (props) => {
    const { form } = props;
    const [diagnosis, setDiagnosis] = useState([]);
    const [hospitals, setHospitals] = useState([]);

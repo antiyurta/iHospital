@@ -1,4 +1,4 @@
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Form, Input, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectPatient } from '../../../../../features/patientReducer';
@@ -6,7 +6,7 @@ import healthInsurance from '../../../../../services/healt-insurance/healtInsura
 
 const { TextArea } = Input;
 
-export const ReConfirmHics = (props) => {
+export const SendCancelHics = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hics, setHics] = useState([]);
@@ -14,7 +14,8 @@ export const ReConfirmHics = (props) => {
       await healthInsurance.getPatientData(patient.registerNumber).then(({ data }) => {
          if (data.code == 200) {
             const details = data.result.details;
-            setHics(details.filter((detail) => detail.statusCode == 6));
+            // setHics(details.filter((detail) => detail.statusCode != 6));
+            setHics(details.filter((detail) => detail.statusCode != null));
          }
       });
    };
@@ -43,12 +44,12 @@ export const ReConfirmHics = (props) => {
          </Form.Item>
 
          <Form.Item
-            label="Шалтгаан"
+            label="Цуцлах шалтгаан"
             name="reason"
             rules={[
                {
                   required: true,
-                  message: 'шалтгаан оруулна уу'
+                  message: 'Цуцлах шалтгаан оруулна уу'
                }
             ]}
          >

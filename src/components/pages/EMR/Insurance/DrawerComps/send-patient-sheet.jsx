@@ -12,7 +12,7 @@ import { selectPatient } from '../../../../../features/patientReducer';
 import moment from 'moment';
 import { selectCurrentFirstName } from '../../../../../features/authReducer';
 
-export const SetPatientSheet = (props) => {
+export const SendPatientSheet = (props) => {
    const { form } = props;
    const doctor = useSelector(selectCurrentFirstName);
    const [hicsServices, setHicsServices] = useState([]);

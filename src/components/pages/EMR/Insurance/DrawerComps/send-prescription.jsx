@@ -14,7 +14,7 @@ const customeBorderStyle = {
    padding: '16px'
 };
 
-export const Prescription = (props) => {
+export const SendPrescription = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [diagnosis, setDiagnosis] = useState([]);

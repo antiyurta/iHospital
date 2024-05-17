@@ -8,7 +8,7 @@ import patientDiagnose from '../../../../../services/emr/patientDiagnose';
 
 const { TextArea } = Input;
 
-export const RepairHics = (props) => {
+export const SendRepairHics = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);

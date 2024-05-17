@@ -23,7 +23,7 @@ const labelstyle = {
    fontWeight: 700
 };
 
- const SaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable }) => {
+export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable }) => {
    console.log('parentHicsSeal', parentHicsSeal);
    const patient = useSelector(selectPatient);
    const [isLoading, setLoading] = useState(false);
@@ -496,3 +496,4 @@ const labelstyle = {
       </Spin>
    );
 };
+

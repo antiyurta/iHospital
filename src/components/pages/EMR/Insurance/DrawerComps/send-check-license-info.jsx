@@ -3,7 +3,7 @@ import { Input, Row } from 'antd';
 
 const { TextArea } = Input;
 
-export const GetEsbRef = ({ form }) => {
+export const SendCheckLicenseInfo = ({ form }) => {
    return <Row>empty</Row>;
 };
 

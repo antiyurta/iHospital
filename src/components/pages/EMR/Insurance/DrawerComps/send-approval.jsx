@@ -6,7 +6,7 @@ import healtInsurance from '../../../../../services/healt-insurance/healtInsuran
 
 const { TextArea } = Input;
 
-export const SetApproval = (props) => {
+export const SendApproval = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);

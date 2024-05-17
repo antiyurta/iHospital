@@ -7,7 +7,7 @@ import healthInsurance from '../../../../../services/healt-insurance/healtInsura
 
 const { TextArea } = Input;
 
-export const FingerRequest = (props) => {
+export const SendFingerRequest = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hicsServices, setHicsServices] = useState([]);

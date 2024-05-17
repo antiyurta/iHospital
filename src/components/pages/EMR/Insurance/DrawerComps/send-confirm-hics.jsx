@@ -6,7 +6,7 @@ import healthInsurance from '../../../../../services/healt-insurance/healtInsura
 
 const { TextArea } = Input;
 
-export const ConfirmHics = (props) => {
+export const SendConfirmHics = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
    const [hics, setHics] = useState([]);
