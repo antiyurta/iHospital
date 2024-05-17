@@ -26,9 +26,5 @@ const formItems = [
    { name: 'link', label: 'Холбоос', placeholder: 'https://example.com', span: 22 }
 ];
 
-export const SendMedicalExam = ({ form }) => (
-   <>
-      <DynamicComp items={formItems} />
-   </>
-);
+export const SendMedicalExam = ({ form }) => <DynamicComp items={formItems} />;
 
