@@ -28,7 +28,7 @@ const CT_1_Nud = (props) => {
                               </Checkbox>
                               <Checkbox value={'q1-2'}>Хүндэвтэр</Checkbox>
                               <Checkbox value={'q1-3'}>Хүнд</Checkbox>
-                              <Checkbox value={'q1-4'}>Маш хүнд</Checkbox>
+                              <Checkbox value={'q1-4'}>хүнд</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th id="child">
