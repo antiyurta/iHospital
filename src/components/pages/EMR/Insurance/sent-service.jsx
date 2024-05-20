@@ -34,7 +34,7 @@ import {
    GetVaccineByRegno,
    SentAddHicsService,
    SendDirectService,
-   SendFormData,
+   SendFormData
 } from './DrawerComps';
 
 //defaults
@@ -188,7 +188,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             [HST.getVaccineByRegno]: healthInsuranceApi.getVaccineByRegno,
             [HST.sendAddHicsService]: healthInsuranceApi.postAddHicsService,
             [HST.sendDirectService]: healthInsuranceApi.postDirectSendService,
-            [HST.sendFormData]: healthInsuranceApi.postSendFormData,
+            [HST.sendFormData]: healthInsuranceApi.postSendFormData({ personalInfo: dataa.personalInfo, ...values })
          };
          const selectedApi = apiMap[chooseService];
          if (!selectedApi) throw new Error('Unknown service type');
@@ -241,7 +241,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          [HST.getVaccineByRegno]: <GetVaccineByRegno form={insuranceForm} />,
          [HST.sendAddHicsService]: <SentAddHicsService form={insuranceForm} />,
          [HST.sendDirectService]: <SendDirectService form={insuranceForm} />,
-         [HST.sendFormData]: <SendFormData form={insuranceForm} />,
+         [HST.sendFormData]: <SendFormData form={insuranceForm} />
       };
 
       return formMap[chooseService] || null;

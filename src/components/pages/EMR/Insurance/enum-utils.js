@@ -27,12 +27,6 @@ export const HEALTH_SERVICES_TITLE = {
    sendAddHicsService: 'ADD_HICS_SERVICE',
    sendDirectService: 'DIRECT_SEND_SERVICE',
    sendFormData: 'SEND_FORM_DATA',
-   getAmbulatory: 'GET_AMBULATORY',
-   sendFixDoctorExams: 'FIX_DOCTOR_EXAMS',
-   getHostpital: 'GET_HOSPITAL',
-   getDataByFormSummary: 'GET_DATA_BY_FORM_SUMMARY',
-   getDataFormData: 'GET_DATA_FORM_DATA',
-   getCt4: 'GET_CT4'
 };
 
 export const HICS_PROCESS = {
@@ -77,12 +71,6 @@ export const HEALTH_SERVCES_DESCRIPTION = (title) =>
       [HST.sendDirectService]:
          '4.62 Тусламж үйлчилгээг дуусгавар болгох сервис – Зөвхөн Амбулаторийн цогц тусламж, үйлчилгээ',
       [HST.sendFormData]: '4.64 Жирэмсний хяналтын дэвтрийн мэдээллийг илгээх сервис',
-      [HST.getAmbulatory]: '4.65 Амбулаторийн цогц тусламжийн үзлэг болон шинжилгээний мэдээлэл лавлах сервис',
-      [HST.sendFixDoctorExams]: '4.66 Эмчийн үзлэгийн мэдээлэл засварлах сервис/Зөвхөн амбулаторийн цогц тусламж',
-      [HST.getHostpital]: '4.67 Эмнэлгийн мэдээлэл лавлах сервис',
-      [HST.getDataByFormSummary]: '4.68 Иргэний жирэмсний хяналтын тусламж, үйлчилгээний мэдээллийг лавлах сервис',
-      [HST.getDataFormData]: '4.69 Иргэний жирэмсний хяналтын дэвтрийн мэдээллийг лавлах сервис',
-      [HST.getCt4]: '4.70 Төрсөн хүүхдийн мэдээлэл лавлах сервис'
    })[title];
 
 /** Амбулторийн тусламж үйлчилгээний DRGCODE */
