@@ -172,7 +172,7 @@ const CT_1_Chih = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
+                           <th>Чагналтаар:</th>
                            <p id="child"> Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q9} id="child">
                               <Checkbox value={'q9-1'} className="ml-2">

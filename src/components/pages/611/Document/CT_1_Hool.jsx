@@ -46,7 +46,7 @@ const CT_1_Hool = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input className="amaraInput w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
+                                 <Input className=" w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -59,10 +59,9 @@ const CT_1_Hool = (props) => {
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]">
-                           {' '}
+                        <th className="w-[220px]" id="child">
                            Амьсгал 1 минутанд
-                           <Input value={formData?.q4} />
+                           <Input className="w-10" value={formData?.q4} style={{ textAlign: 'center' }} />
                            удаа
                         </th>
                         <th colSpan={3}>
@@ -108,17 +107,19 @@ const CT_1_Hool = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           Судасны цохилт 1 минутанд
-                           <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
+                           <div id="child">
+                              Судасны цохилт 1 минутанд
+                              <Input className="w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
+                              удаа
+                           </div>
+                           <div id="child">
                               Хүчдэл дүүрэлт
-                              <Input className="amaraInput w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
-                           </th>
+                              <Input className="w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
+                           </div>
                         </th>
                         <th>
-                           <th>Тогшилтоор:</th>
-                           Зүрхний хил
+                           <p>Тогшилтоор:</p>
+                           <p id="child">Зүрхний хил</p>
                            <Checkbox.Group value={formData?.q8}>
                               <Checkbox className="ml-2" value={'q8-1'}>
                                  Хэвийн
@@ -145,8 +146,8 @@ const CT_1_Hool = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
-                           Зүрхний авиа
+                           <p>Чагналтаар:</p>
+                           <p id="child">Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q9}>
                               <Checkbox className="ml-2" value={'q9-1'}>
                                  Тод
@@ -159,13 +160,11 @@ const CT_1_Hool = (props) => {
                            </Checkbox.Group>
                            <th>
                               АД баруун талд
-                              <Input className="amaraInput w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
-                              /
+                              <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
                            </th>
-                           <th>
+                           <th id="child">
                               Зүүн талд
-                              <Input className="amaraInput w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
-                              /
+                              <Input className=" w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                      </tr>
@@ -196,7 +195,7 @@ const CT_1_Hool = (props) => {
                               <Checkbox value={'q13-3'} className="">
                                  Эмзэглэлтэй (байрлал
                                  <Input
-                                    className="amaraInput w-8"
+                                    className=" w-8"
                                     value={formData?.['q13-3-1']}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -221,8 +220,8 @@ const CT_1_Hool = (props) => {
                            <Checkbox.Group value={formData?.q14}>
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>
-                                 Буурсан
-                                 <p>
+                                 <p className="flex items-center gap-2">
+                                    <p> Буурсан</p>
                                     <span className="text-[11px]">
                                        (
                                        <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
@@ -256,19 +255,11 @@ const CT_1_Hool = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <th className="w-full">
-                              Бусад
-                              <Input
-                                 className="amaraInput w-[670px]"
-                                 value={formData?.q16}
-                                 style={{ textAlign: 'center' }}
-                              />
+                              Бусад:
+                              <Input className=" w-[650px] ml-2" value={formData?.q16} />
                            </th>
                            Сэтгэцийн байдал:
-                           <Input
-                              className="amaraInput w-[600px] mb-1"
-                              value={formData?.q17}
-                              style={{ textAlign: 'center' }}
-                           />
+                           <Input className=" w-[580px] mb-1 ml-2" value={formData?.q17} />
                         </th>
                      </tr>
                      <tr>
@@ -278,14 +269,18 @@ const CT_1_Hool = (props) => {
                      </tr>
                      <tr>
                         <th colSpan={4} className="h-12">
-                           Зовиур:
-                           <p className="ml-2 underline">{` Зовиур: ${formData?.q18}`}</p>
+                           <div className="flex items-center">
+                              <p>Зовиур:</p>
+                              <p className="ml-2 underline" id="child">{` ${formData?.q18}`}</p>
+                           </div>
                         </th>
                      </tr>
                      <tr>
                         <th colSpan={4} className="h-12">
-                           Өвчний эхлэл явц:
-                           <p className="ml-2 underline">{`: ${formData?.q19}`}</p>
+                           <div className="flex items-center">
+                              <p>Өвчний эхлэл явц:</p>
+                              <p className="ml-2 underline" id="child">{` ${formData?.q19}`}</p>
+                           </div>
                         </th>
                      </tr>
                      <tr>
@@ -343,8 +338,10 @@ const CT_1_Hool = (props) => {
                      </tr>
                      <tr>
                         <th colSpan={4} className="h-6">
-                           Хийсэн эмчилгээ:
-                           <p className="ml-2 underline">{`: ${formData?.q21}`}</p>
+                           <div className="flex items-center">
+                              <p> Хийсэн эмчилгээ:</p>
+                              <p className="ml-2 underline" id="child">{`${formData?.q21}`}</p>
+                           </div>
                         </th>
                      </tr>
                   </thead>
@@ -354,30 +351,27 @@ const CT_1_Hool = (props) => {
                      <tr className="border-t-0">
                         <th>
                            <th>Харж ажиглах: Хэл өнгөртэй эсэх:</th>
+
                            <Checkbox.Group value={formData?.q22}>
                               <Checkbox className=" ml-2" value={'q22-1'}>
                                  Тийм
                               </Checkbox>
                               <Checkbox value={'q22-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
-                           <th>Арьс, салст–чийглэг</th>
+                           <th id="child">Арьс, салст–чийглэг</th>
                            <Checkbox.Group value={formData?.q23}>
                               <Checkbox className="ml-2" value={'q23-1'}>
                                  Тийм
                               </Checkbox>
                               <Checkbox value={'q23-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="child">
                               Өнгө
-                              <Input
-                                 className="amaraInput w-20 mb-2"
-                                 value={formData?.q24}
-                                 style={{ textAlign: 'center' }}
-                              />
+                              <Input className=" w-20 mb-2" value={formData?.q24} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                         <th>
-                           <th> Хэвлийн – хэм</th>
+                           <th id="child"> Хэвлийн – хэм</th>
                            <Checkbox.Group value={formData?.q25}>
                               <Checkbox className="w-full ml-2" value={'q25-1'}>
                                  Жигд
@@ -386,26 +380,22 @@ const CT_1_Hool = (props) => {
                                  Жигд бус
                               </Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="child">
                               Хэлбэр
-                              <Input
-                                 className="amaraInput w-14"
-                                 value={formData?.['q25-2-1']}
-                                 style={{ textAlign: 'center' }}
-                              />
+                              <Input className=" w-14" value={formData?.['q25-2-1']} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                         <th>
                            <th>
                               <th>Тэмтрэлт:</th>
-                              Өнгөц тэмтрэлт – хэвлий эмзэглэлтэй эсэх
+                              <p id="child">Өнгөц тэмтрэлт – хэвлий эмзэглэлтэй эсэх</p>
                               <Checkbox.Group value={formData?.q26}>
                                  <Checkbox className="ml-2 w-full" value={'q26-1'}>
                                     Эмзэглэлгүй
                                  </Checkbox>
                                  <Checkbox value={'q26-2'}>Эмзэглэлтэй</Checkbox>
                               </Checkbox.Group>
-                              <th>
+                              <th id="child">
                                  Булчингийн чангарал байгаа эсэх:
                                  <Checkbox.Group value={formData?.q27}>
                                     <Checkbox className="ml-2 " value={'q27-1'}>
@@ -423,16 +413,24 @@ const CT_1_Hool = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
+                        <th colSpan={4} className="h-4">
+                           <div className="flex items-center">
+                              <p> Гүнзгий тэмтэрлт:</p>
+                              <p className="ml-2 underline" id="child">{`${formData?.q100}`}</p>
+                           </div>
+                        </th>
+                     </tr>
+                     <tr className="border-t-0">
                         <th>
                            <th>
-                              <th>Тахир гэдэс – байрлал</th>
+                              <th id="child">Тахир гэдэс – байрлал</th>
                               <Checkbox.Group value={formData?.q28}>
                                  <Checkbox className="ml-2" value={'q28-1'}>
                                     Эмзэглэлгүй
                                  </Checkbox>
                                  <Checkbox value={'q28-1'}>Эмзэглэлтэй</Checkbox>
                               </Checkbox.Group>
-                              <th>
+                              <th id="child">
                                  <th> Тогтоц</th>
                                  <Checkbox.Group value={formData?.q29}>
                                     <Checkbox value={'q29-1'} className="ml-2 ">
@@ -445,7 +443,7 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th>
                            <th>
-                              <th> Тогтоц</th>
+                              <th id="child"> Тогтоц</th>
                               <Checkbox.Group value={formData?.q32}>
                                  <Checkbox value={'q32-1'} className="ml-2 ">
                                     Хатуу
@@ -453,7 +451,7 @@ const CT_1_Hool = (props) => {
                                  <Checkbox value={'q32-2'}>Зөөлөн</Checkbox>
                               </Checkbox.Group>
                               <th>
-                                 <th> Хөдөлгөөнтэй</th>
+                                 <th id="child"> Хөдөлгөөнтэй</th>
                                  <Checkbox.Group value={formData?.q33}>
                                     <Checkbox className="ml-2 " value={'q33-1'}>
                                        Тийм
@@ -465,7 +463,7 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th>
                            <th>
-                              <th> Хөдөлгөөнтэй</th>
+                              <th id="child"> Хөдөлгөөнтэй</th>
                               <Checkbox.Group value={formData?.q36}>
                                  <Checkbox className="ml-2 " value={'q36-1'}>
                                     Тийм
@@ -473,7 +471,7 @@ const CT_1_Hool = (props) => {
                                  <Checkbox value={'q36-2'}>Үгүй</Checkbox>
                               </Checkbox.Group>
                               <th>
-                                 <th> Цутгалан гэдэс - байрлал</th>
+                                 <th id="child"> Цутгалан гэдэс - байрлал</th>
                                  <Checkbox.Group value={formData?.q37}>
                                     <Checkbox className="ml-2 " value={'q37-1'}>
                                        Эмзэглэлгүй
@@ -495,7 +493,7 @@ const CT_1_Hool = (props) => {
                      <tr>
                         <th>
                            <th>
-                              <th> Хөдөлгөөнтэй</th>
+                              <th id="child"> Хөдөлгөөнтэй</th>
                               <Checkbox.Group value={formData?.q30}>
                                  <Checkbox className="ml-2 " value={'q30-1'}>
                                     Тийм
@@ -503,7 +501,7 @@ const CT_1_Hool = (props) => {
                                  <Checkbox value={'q30-2'}>Үгүй</Checkbox>
                               </Checkbox.Group>
                               <th>
-                                 <th> Өгсөх болон уруудах гэдэс - байрлал </th>
+                                 <th id="child"> Өгсөх болон уруудах гэдэс - байрлал </th>
                                  <Checkbox.Group value={formData?.q31}>
                                     <Checkbox className="ml-2 " value={'q31-1'}>
                                        Эмзэглэлгүй
@@ -515,7 +513,7 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th>
                            <th>
-                              <th>Хөндлөн гэдэс - байрлал</th>
+                              <th id="child">Хөндлөн гэдэс - байрлал</th>
                               <Checkbox.Group value={formData?.q34}>
                                  <Checkbox className="ml-2 " value={'q34-1'}>
                                     Эмзэглэлгүй
@@ -523,7 +521,7 @@ const CT_1_Hool = (props) => {
                                  <Checkbox value={'q34-2'}>Эмзэглэлтэй</Checkbox>
                               </Checkbox.Group>
                               <th>
-                                 <th> Тогтоц</th>
+                                 <th id="child"> Тогтоц</th>
                                  <Checkbox.Group value={formData?.q35}>
                                     <Checkbox className="ml-2 " value={'q35-1'}>
                                        Хатуу
@@ -535,7 +533,7 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th>
                            <th>
-                              <th> Тогтоц</th>
+                              <th id="child"> Тогтоц</th>
                               <Checkbox.Group value={formData?.q38}>
                                  <Checkbox className="ml-2" value={'q38-1'}>
                                     Хатуу
@@ -543,7 +541,7 @@ const CT_1_Hool = (props) => {
                                  <Checkbox value={'q38-2'}>Зөөлөн</Checkbox>
                               </Checkbox.Group>
                               <th>
-                                 <th> Хөдөлгөөнтэй</th>
+                                 <th id="child"> Хөдөлгөөнтэй</th>
                                  <Checkbox.Group value={formData?.q39}>
                                     <Checkbox className="ml-2 " value={'q39-1'}>
                                        Тийм
@@ -562,7 +560,7 @@ const CT_1_Hool = (props) => {
                         <th className="w-[30%]">
                            <th>
                               Тогшилт
-                              <th> Хэвлийн хэнгэрэгэн чимээ:</th>
+                              <th id="child"> Хэвлийн хэнгэрэгэн чимээ:</th>
                               <Checkbox.Group value={formData?.q40}>
                                  <Checkbox className="ml-2 " value={'q40-1'}>
                                     Хэвийн
@@ -573,7 +571,7 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th>
                            <th>
-                              <th>Ихэссэн хэсэгт тогшилтын дуу</th>
+                              <th id="child">Ихэссэн хэсэгт тогшилтын дуу</th>
                               <Checkbox.Group value={formData?.['q40-2-1']}>
                                  <Checkbox className="ml-2 w-full " value={'q40-2-1-1'}>
                                     Бүдгэрсэн
@@ -587,7 +585,7 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th className="w-[35%]">
                            Чагналт
-                           <th> Гэдэсний гүрвэлзэх хөдөлгөөн:</th>
+                           <th id="child"> Гэдэсний гүрвэлзэх хөдөлгөөн:</th>
                            <Checkbox.Group className="flex flex-col" value={formData?.q41}>
                               <th>
                                  <Checkbox className="ml-2 " value={'q41-1'}>
@@ -601,12 +599,18 @@ const CT_1_Hool = (props) => {
                      </tr>
                      <tr className="h-12">
                         <th colSpan={4}>
-                           <p className="ml-2 underline">{`Хэвлийн рентген шинжилгээ КТГ, хэт авиан шинжилгээ: ${formData?.q42}`}</p>
+                           <div className="flex items-center">
+                              <p>Хэвлийн рентген шинжилгээ КТГ, хэт авиан шинжилгээ: </p>
+                              <p className="ml-2 underline" id="child">{`${formData?.q42}`}</p>
+                           </div>
                         </th>
                      </tr>
                      <tr className="h-12">
                         <th colSpan={4}>
-                           <p className="ml-2 underline">{`Дурангийн шинжилгээ: ${formData?.q42}`}</p>
+                           <div className="flex items-center">
+                              <p>Дурангийн шинжилгээ:</p>
+                              <p className="ml-2 underline" id="child">{` ${formData?.q42}`}</p>
+                           </div>
                         </th>
                      </tr>
                   </thead>
@@ -619,25 +623,21 @@ const CT_1_Hool = (props) => {
                               <th>Улаан хоолой</th>
                               <Checkbox.Group>
                                  <Checkbox className="ml-2 ">
-                                    Салстын өнгө
+                                    Салстын өнгө:
                                     <Input
-                                       className="amaraInput w-[100px]"
+                                       className=" w-[80px]"
                                        value={formData?.q44}
                                        style={{ textAlign: 'center' }}
                                     />
                                  </Checkbox>
                                  <Checkbox>
                                     Хаван
-                                    <Input
-                                       className="amaraInput w-26"
-                                       value={formData?.q45}
-                                       style={{ textAlign: 'center' }}
-                                    />
+                                    <Input className=" w-26" value={formData?.q45} style={{ textAlign: 'center' }} />
                                  </Checkbox>
                                  <Checkbox>
                                     Z шугам
                                     <Input
-                                       className="amaraInput w-26 mb-1"
+                                       className=" w-26 mb-1"
                                        value={formData?.q46}
                                        style={{ textAlign: 'center' }}
                                     />
@@ -651,23 +651,19 @@ const CT_1_Hool = (props) => {
                                  <Checkbox className="ml-2 ">
                                     Хөдөлгөөн{' '}
                                     <Input
-                                       className="amaraInput w-[120px]"
+                                       className=" w-[120px]"
                                        value={formData?.q47}
                                        style={{ textAlign: 'center' }}
                                     />
                                  </Checkbox>
                                  <Checkbox>
                                     Шалбархай – хэмжээ
-                                    <Input
-                                       className="amaraInput w-16"
-                                       value={formData?.q48}
-                                       style={{ textAlign: 'center' }}
-                                    />
+                                    <Input className=" w-16" value={formData?.q48} style={{ textAlign: 'center' }} />
                                  </Checkbox>
                                  <Checkbox>
                                     Тоо{' '}
                                     <Input
-                                       className="amaraInput w-40 mb-1"
+                                       className=" w-40 mb-1"
                                        value={formData?.q49}
                                        style={{ textAlign: 'center' }}
                                     />
@@ -680,24 +676,16 @@ const CT_1_Hool = (props) => {
                               <Checkbox.Group>
                                  <Checkbox className="ml-2 ">
                                     Байрлал
-                                    <Input
-                                       className="amaraInput w-26"
-                                       value={formData?.q50}
-                                       style={{ textAlign: 'center' }}
-                                    />
+                                    <Input className=" w-26" value={formData?.q50} style={{ textAlign: 'center' }} />
                                  </Checkbox>
                                  <Checkbox>
                                     Хэлбэр
-                                    <Input
-                                       className="amaraInput w-26"
-                                       value={formData?.q51}
-                                       style={{ textAlign: 'center' }}
-                                    />
+                                    <Input className=" w-26" value={formData?.q51} style={{ textAlign: 'center' }} />
                                  </Checkbox>
                                  <Checkbox>
                                     Өнгөр
                                     <Input
-                                       className="amaraInput w-26 mb-1"
+                                       className=" w-26 mb-1"
                                        value={formData?.q52}
                                        style={{ textAlign: 'center' }}
                                     />
@@ -715,65 +703,65 @@ const CT_1_Hool = (props) => {
                            <th>
                               <th>Ходоод:</th>
                               <div className="flex">
-                                 <div> Амсар - салстын өнгө</div>
+                                 <p id="child"> Амсар - салстын өнгө</p>
                                  <Input
-                                    className="amaraInput w-[100px] mb-1"
+                                    className=" w-[100px] mb-1"
                                     value={formData?.q53}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хаван </div>
+                                 <div id="child">Хаван </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q54}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хөдөлгөөн </div>
+                                 <div id="child">Хөдөлгөөн </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q55}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div> Шалбархай – хэмжээ </div>
+                                 <div id="child"> Шалбархай – хэмжээ </div>
                                  <Input
-                                    className="amaraInput w-[110px] mb-1"
+                                    className=" w-[110px] mb-1"
                                     value={formData?.q56}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хэлбэр </div>
+                                 <div id="child">Хэлбэр </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q57}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Өнгөр </div>
+                                 <div id="child">Өнгөр </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q58}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Тоо </div>
+                                 <div id="child">Тоо </div>
                                  <Input
-                                    className="amaraInput w-[30px] mb-1"
+                                    className=" w-[30px] mb-1"
                                     value={formData?.q59}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Байрлал </div>
+                                 <div id="child">Байрлал </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q60}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -784,65 +772,65 @@ const CT_1_Hool = (props) => {
                         <th className="w-[30%]">
                            <th>
                               <div className="flex">
-                                 <div> Их бие - салстын өнгө</div>
+                                 <div id="child"> Их бие - салстын өнгө</div>
                                  <Input
-                                    className="amaraInput w-[100px]  mb-1"
+                                    className=" w-[100px]  mb-1"
                                     value={formData?.q61}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хаван </div>
+                                 <div id="child">Хаван </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q62}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хөдөлгөөн </div>
+                                 <div id="child">Хөдөлгөөн </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q63}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div> Шалбархай – хэмжээ </div>
+                                 <div id="child"> Шалбархай – хэмжээ </div>
                                  <Input
-                                    className="amaraInput w-[110px] mb-1"
+                                    className=" w-[110px] mb-1"
                                     value={formData?.q64}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хэлбэр </div>
+                                 <div id="child">Хэлбэр </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q65}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Өнгөр </div>
+                                 <div id="child">Өнгөр </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q66}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Тоо </div>
+                                 <div id="child">Тоо </div>
                                  <Input
-                                    className="amaraInput w-[30px] mb-1"
+                                    className=" w-[30px] mb-1"
                                     value={formData?.q67}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Байрлал </div>
+                                 <div id="child">Байрлал </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q68}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -852,65 +840,65 @@ const CT_1_Hool = (props) => {
                         <th className="w-[30%]">
                            <th>
                               <div className="flex">
-                                 <div> Антрум - салстын өнгө </div>
+                                 <div id="child"> Антрум - салстын өнгө </div>
                                  <Input
-                                    className="amaraInput w-[100px] mb-1"
+                                    className=" w-[100px] mb-1"
                                     value={formData?.q69}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хаван </div>
+                                 <div id="child">Хаван </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q70}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хөдөлгөөн </div>
+                                 <div id="child">Хөдөлгөөн </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q71}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div> Шалбархай – хэмжээ </div>
+                                 <div id="child"> Шалбархай – хэмжээ </div>
                                  <Input
-                                    className="amaraInput w-[110px] mb-1"
+                                    className=" w-[110px] mb-1"
                                     value={formData?.q72}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хэлбэр </div>
+                                 <div id="child">Хэлбэр </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q73}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Өнгөр </div>
+                                 <div id="child">Өнгөр </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q74}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Тоо </div>
+                                 <div id="child">Тоо </div>
                                  <Input
-                                    className="amaraInput w-[30px] mb-1"
+                                    className=" w-[30px] mb-1"
                                     value={formData?.q75}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Байрлал </div>
+                                 <div id="child">Байрлал </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q76}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -922,26 +910,26 @@ const CT_1_Hool = (props) => {
                         <th className="w-[30%] border-r-0">
                            <th>
                               <th>Дээд гэдэс:</th>
-                              <div>
-                                 <div>Салстын өнгө</div>
+                              <div className="flex">
+                                 <div id="child">Салстын өнгө</div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-[150px] mb-1"
                                     value={formData?.q77}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хаван </div>
+                                 <div id="child">Хаван </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q78}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Хөдөлгөөн </div>
+                                 <div id="child">Хөдөлгөөн </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q79}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -950,60 +938,48 @@ const CT_1_Hool = (props) => {
                         </th>
                         <th className="w-[30%] border-x-0">
                            <div className="flex">
-                              <div> Шалбархай – хэмжээ </div>
+                              <div id="child"> Шалбархай – хэмжээ </div>
                               <Input
-                                 className="amaraInput w-[110px] mb-1"
+                                 className=" w-[110px] mb-1"
                                  value={formData?.q80}
                                  style={{ textAlign: 'center' }}
                               />
                            </div>
                            <div className="flex">
-                              <div>Хэлбэр </div>
-                              <Input
-                                 className="amaraInput w-full mb-1"
-                                 value={formData?.q81}
-                                 style={{ textAlign: 'center' }}
-                              />
+                              <div id="child">Хэлбэр </div>
+                              <Input className=" w-full mb-1" value={formData?.q81} style={{ textAlign: 'center' }} />
                            </div>
                            <div className="flex">
-                              <div>Өнгөр </div>
-                              <Input
-                                 className="amaraInput w-full mb-1"
-                                 value={formData?.q82}
-                                 style={{ textAlign: 'center' }}
-                              />
+                              <div id="child"> Өнгөр </div>
+                              <Input className=" w-full mb-1" value={formData?.q82} style={{ textAlign: 'center' }} />
                            </div>
                            <div className="flex">
-                              <div>Тоо </div>
-                              <Input
-                                 className="amaraInput w-[30px] mb-1"
-                                 value={formData?.q83}
-                                 style={{ textAlign: 'center' }}
-                              />
+                              <div id="child">Тоо </div>
+                              <Input className=" w-[30px] mb-1" value={formData?.q83} style={{ textAlign: 'center' }} />
                            </div>
                         </th>
                         <th className="w-[30%] border-l-0">
                            <th>
                               <div className="flex">
-                                 <div>Байрлал </div>
+                                 <div id="child">Байрлал </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-full mb-1"
                                     value={formData?.q84}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Фатер хөхлөг </div>
+                                 <div id="child">Фатер хөхлөг </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-[150px] mb-1"
                                     value={formData?.q85}
                                     style={{ textAlign: 'center' }}
                                  />
                               </div>
                               <div className="flex">
-                                 <div>Цөс ялгаралт </div>
+                                 <div id="child">Цөс ялгаралт </div>
                                  <Input
-                                    className="amaraInput w-full mb-1"
+                                    className=" w-[130px] mb-1"
                                     value={formData?.q86}
                                     style={{ textAlign: 'center' }}
                                  />

@@ -18,6 +18,9 @@ table {
    padding: 0%;
    padding-left: 4px;
 }
+#cls{
+   font-weight: 300;
+}
 
 .ant-checkbox-wrapper {
    font-size: 11px !important;

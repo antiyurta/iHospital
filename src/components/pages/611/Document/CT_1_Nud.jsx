@@ -152,7 +152,7 @@ const CT_1_Nud = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
+                           <p>Чагналтаар:</p>
                            <p id="child"> Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q9} id="child">
                               <Checkbox value={'q9-1'} className="ml-2">
