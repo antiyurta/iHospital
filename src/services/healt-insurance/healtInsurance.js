@@ -124,7 +124,7 @@ class HealthInsurance {
    }
    /** 4.50 Иргэний шинжилгээ болон дүрс оношлогооны мэдээлэл илгээх сервис */
    async postSendEsbMedicalExamHistory(data) {
-      return await jwtInterceopter.get('health-insurance/send-esb-medical-exam-history', data);
+      return await jwtInterceopter.post('health-insurance/send-esb-medical-exam-history', data);
    }
    /** 4.51 Асуумжийн бүлгийн мэдээлэл лавлах сервис */
    async getQuestionCategories(regNo) {
@@ -161,11 +161,11 @@ class HealthInsurance {
    }
    /** 4.57 Эмчийн лицензийн мэдээлэл шалгах сервис */
    async postCheckLicenseInfo(regno) {
-      return await jwtInterceopter.post('asdasd', regno);
+      return await jwtInterceopter.get(`health-insurance/check-license/${regno.Register}`);
    }
    /** 4.58 medicalLinks засварлах сервис */
    async postEditMedicalLink(data) {
-      return await jwtInterceopter.post('asdasd', data);
+      return await jwtInterceopter.post('health-insurance/edit-medical-link', data);
    }
    /** 4.59 Эмнэлгийн үйл ажиллагааны чиглэлийн мэдээллийг лавлах сервис */
    async getHospitalOperation() {
@@ -241,26 +241,23 @@ class HealthInsurance {
    async getTabletsByCategory() {
       return await jwtInterceopter.get('health-insurance/tablets-by-category');
    }
-   async postEsbNotification() {
-      return await jwtInterceopter.get('health-insurance/send-esb-notification');
+   async postEsbNotification(data) {
+      return await jwtInterceopter.post('health-insurance/send-esb-notification', data);
    }
-   async postHostpitalInfo() {
-      return await jwtInterceopter.get('health-insurance/send-hospital-info');
-   }
-   async postCheckLicenseInfo() {
-      return await jwtInterceopter.get('health-insurance/check-license-info');
-   }
-   async postEditMedicalLink() {
-      return await jwtInterceopter.get('health-insurance/edit-medical-link');
+   async postHostpitalInfo(data) {
+      return await jwtInterceopter.post('health-insurance/hospital-info', data);
    }
    async getHostpitalOperation() {
-      return await jwtInterceopter.get('health-insurance/get-hospital-operation');
+      return await jwtInterceopter.get('health-insurance/hospital-operation');
    }
    async getVaccineByRegno() {
       return await jwtInterceopter.get('health-insurance/get-vaccine-by-regno');
    }
    async getCt4() {
       return await jwtInterceopter.get('health-insurance/get-ct4');
+   }
+   async getDrgType() {
+      return await jwtInterceopter.get('health-insurance/drg-type');
    }
 }
 export default new HealthInsurance();

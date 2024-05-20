@@ -1,8 +1,8 @@
-import React from 'react';
-import { Input, Select } from 'antd';
-import { DynamicComp } from '../utils';
+import React, { Fragment } from 'react';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { renderFormItem } from '../utils';
 
-const diagnosisOptions = [
+export const diagnosisOptions = [
    { value: 1, label: 'Дүрс оношлогоо дүгнэлт' },
    { value: 2, label: 'Шинжилгээ' },
    { value: 3, label: 'Үзлэгийн бүртгэл' },
@@ -11,20 +11,96 @@ const diagnosisOptions = [
 
 const defaultPlaceholder = '- - - - -';
 
-const formItems = [
-   { name: 'regNum', label: 'Иргэний регистр', placeholder: defaultPlaceholder, span: 11, row: true },
-   { name: 'serviceId', label: 'Тусламж, үйлчилгээний дугаар', placeholder: defaultPlaceholder, span: 11 },
-   { name: 'serviceName', label: 'Тусламж, үйлчилгээний нэр', placeholder: defaultPlaceholder, span: 11 },
-   { name: 'indate', label: 'Огноо', placeholder: defaultPlaceholder, span: 11 },
-   {
-      name: 'type',
-      label: 'Үйлчилгээний төрөл сонгох',
-      placeholder: 'Сонгох',
-      span: 11,
-      component: <Select placeholder="Сонгох" options={diagnosisOptions} />
-   },
-   { name: 'link', label: 'Холбоос', placeholder: 'https://example.com', span: 22 }
-];
-
-export const SendMedicalExam = ({ form }) => <DynamicComp items={formItems} />;
+export const SendMedicalExam = () => {
+   return (
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+         <Row gutter={6} style={{ width: '100%' }}>
+            {renderFormItem('Иргэний регистр', 'regNum', [], <Input placeholder="Иргэний регистр оруулах..." />, 22)}
+            <Col span={22} offset={1}>
+               <h1
+                  style={{
+                     fontWeight: 'bold',
+                     fontSize: '20px',
+                     margin: '2rem auto',
+                     textAlign: 'center'
+                  }}
+               >
+                  Тусламж, үйлчилгээ нэмэх
+               </h1>
+            </Col>
+            <Form.List name="links">
+               {(fields, { add, remove }) => (
+                  <>
+                     {fields.map(({ key, name }) => (
+                        <Fragment key={key}>
+                           {renderFormItem(
+                              'Тусламж, үйлчилгээний дугаар',
+                              [name, 'serviceId'],
+                              [],
+                              <Input placeholder={defaultPlaceholder} />
+                           )}
+                           {renderFormItem(
+                              'Тусламж, үйлчилгээний нэр',
+                              [name, 'serviceName'],
+                              [],
+                              <Input placeholder={defaultPlaceholder} />
+                           )}
+                           {renderFormItem('Огноо', [name, 'indate'], [], <Input placeholder={defaultPlaceholder} />)}
+                           {renderFormItem(
+                              'Үйлчилгээний төрөл сонгох',
+                              [name, 'type'],
+                              [],
+                              <Select
+                                 allowClear
+                                 showSearch
+                                 filterOption={(input, option) =>
+                                    option.label.toLowerCase().includes(input.toLowerCase())
+                                 }
+                                 options={diagnosisOptions}
+                                 placeholder="Сонгох"
+                              />
+                           )}
+                           {renderFormItem(
+                              'Холбоос',
+                              [name, 'link'],
+                              [],
+                              <Input placeholder={'https://example.com'} />
+                           )}
+                        </Fragment>
+                     ))}
+                     <div style={{ width: '100%', display: 'flex' }}>
+                        {fields.length > 0 && (
+                           <Col span={11} offset={1} style={{ display: 'flex', alignItems: 'flex-end' }}>
+                              <Form.Item style={{ width: 'fit-content' }}>
+                                 <Button
+                                    type="dashed"
+                                    onClick={() => fields.forEach((field) => remove(field.name))}
+                                    style={{ color: 'red', borderColor: 'red' }}
+                                 >
+                                    Устгах
+                                 </Button>
+                              </Form.Item>
+                           </Col>
+                        )}
+                        <Col
+                           span={fields.length > 0 ? 11 : 22}
+                           offset={1}
+                           style={{ display: 'flex', justifyContent: fields.length > 0 && 'flex-end' }}
+                        >
+                           <Form.Item
+                              style={{ width: 'fit-content', margin: fields.length > 0 ? '1rem 0' : '1rem auto' }}
+                           >
+                              <Button type="dashed" onClick={() => add()}>
+                                 Мэдээлэл нэмэх
+                              </Button>
+                           </Form.Item>
+                        </Col>
+                     </div>
+                  </>
+               )}
+            </Form.List>
+         </Row>
+      </div>
+   );
+};
 
