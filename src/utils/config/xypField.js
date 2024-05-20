@@ -5,6 +5,7 @@ export const position = xypFieldJson.filter((field) => field.fieldId === 1);
 export const isRaped = xypFieldJson.filter((field) => field.fieldId === 2);
 /** Хүйс gender 3 */
 export const gender = xypFieldJson.filter((field) => field.fieldId === 3);
+export const getGender = (value) => gender.find((gndr) => gndr.valueId === value)?.valueName;
 /** education 4 */
 export const education = xypFieldJson.filter((field) => field.fieldId === 4);
 /** employment 5 */

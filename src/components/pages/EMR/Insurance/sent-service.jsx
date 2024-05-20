@@ -34,14 +34,7 @@ import {
    GetVaccineByRegno,
    SentAddHicsService,
    SendDirectService,
-   GetFormData,
    SendFormData,
-   GetAmbulatory,
-   SendFixDoctorExams,
-   GetHospital,
-   GetDataByFormSummary,
-   GetDataFormData,
-   GetCt4
 } from './DrawerComps';
 
 //defaults
@@ -194,15 +187,8 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             [HST.getHospitalOperation]: healthInsuranceApi.getHostpitalOperation,
             [HST.getVaccineByRegno]: healthInsuranceApi.getVaccineByRegno,
             [HST.sendAddHicsService]: healthInsuranceApi.postAddHicsService,
-            [HST.sendDirectService]: healthInsuranceApi.postDirectService,
-            [HST.getFormData]: healthInsuranceApi.getFormData,
-            [HST.sendFormData]: healthInsuranceApi.postFormData,
-            [HST.getAmbulatory]: healthInsuranceApi.getAmbulatory,
-            [HST.sendFixDoctorExams]: healthInsuranceApi.postFixDoctorExams,
-            [HST.getHostpital]: healthInsuranceApi.getHospital,
-            [HST.getDataByFormSummary]: healthInsuranceApi.getDataByFormSummary,
-            [HST.getDataFormData]: healthInsuranceApi.getDataFormData,
-            [HST.getCt4]: healthInsuranceApi.getCt4
+            [HST.sendDirectService]: healthInsuranceApi.postDirectSendService,
+            [HST.sendFormData]: healthInsuranceApi.postSendFormData,
          };
          const selectedApi = apiMap[chooseService];
          if (!selectedApi) throw new Error('Unknown service type');
@@ -255,14 +241,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          [HST.getVaccineByRegno]: <GetVaccineByRegno form={insuranceForm} />,
          [HST.sendAddHicsService]: <SentAddHicsService form={insuranceForm} />,
          [HST.sendDirectService]: <SendDirectService form={insuranceForm} />,
-         [HST.getFormData]: <GetFormData form={insuranceForm} />,
          [HST.sendFormData]: <SendFormData form={insuranceForm} />,
-         [HST.getAmbulatory]: <GetAmbulatory form={insuranceForm} />,
-         [HST.sendFixDoctorExams]: <SendFixDoctorExams form={insuranceForm} />,
-         [HST.getHostpital]: <GetHospital form={insuranceForm} />,
-         [HST.getDataByFormSummary]: <GetDataByFormSummary form={insuranceForm} />,
-         [HST.getDataFormData]: <GetDataFormData form={insuranceForm} />,
-         [HST.getCt4]: <GetCt4 form={insuranceForm} />
       };
 
       return formMap[chooseService] || null;
@@ -310,8 +289,12 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             onClose={onClose}
             title={HEALTH_SERVCES_DESCRIPTION(chooseService)}
             // forceRender
-            extra={
-               <Space>
+         >
+            <Space direction="vertical" style={{ justifyContent: 'space-between', height: '100%' }}>
+               <Form layout="vertical" form={insuranceForm}>
+                  {getForms()}
+               </Form>
+               <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
                   <Button disabled={isDisabled} onClick={() => insuranceForm.resetFields()}>
                      Цэвэрлэх
                   </Button>
@@ -335,15 +318,10 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                      Илгээх
                   </Button>
                </Space>
-            }
-         >
-            <Form layout="vertical" form={insuranceForm}>
-               {getForms()}
-            </Form>
+            </Space>
          </Drawer>
       </>
    );
 };
 
 export default SentService;
-

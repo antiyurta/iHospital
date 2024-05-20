@@ -26,7 +26,6 @@ export const HEALTH_SERVICES_TITLE = {
    getVaccineByRegno: 'GET_VACCINE_BY_REGNO',
    sendAddHicsService: 'ADD_HICS_SERVICE',
    sendDirectService: 'DIRECT_SEND_SERVICE',
-   getFormData: 'GET_FORM_DATA',
    sendFormData: 'SEND_FORM_DATA',
    getAmbulatory: 'GET_AMBULATORY',
    sendFixDoctorExams: 'FIX_DOCTOR_EXAMS',
@@ -77,7 +76,6 @@ export const HEALTH_SERVCES_DESCRIPTION = (title) =>
          '4.61 Эмчийн үзлэгийн мэдээлэл илгээх сервис/Зөвхөн амбулаторийн цогц тусламж үйлчилгээ',
       [HST.sendDirectService]:
          '4.62 Тусламж үйлчилгээг дуусгавар болгох сервис – Зөвхөн Амбулаторийн цогц тусламж, үйлчилгээ',
-      [HST.getFormData]: '4.63 Жирэмсний хяналтын дэвтрийн мэдээллийг илгээх талбарын утгуудыг лавлах сервис',
       [HST.sendFormData]: '4.64 Жирэмсний хяналтын дэвтрийн мэдээллийг илгээх сервис',
       [HST.getAmbulatory]: '4.65 Амбулаторийн цогц тусламжийн үзлэг болон шинжилгээний мэдээлэл лавлах сервис',
       [HST.sendFixDoctorExams]: '4.66 Эмчийн үзлэгийн мэдээлэл засварлах сервис/Зөвхөн амбулаторийн цогц тусламж',
@@ -108,4 +106,3 @@ const SUPPORT_CARE = [
 const SUPPORT_CARE_DIAGNOSE = 'C';
 /** Эрхтэн шилжүүлэх тусламж, үйлчилгээ дээр заавал secondRegno дамжуулна. */
 export const SUPPORT_ORGAN_TRANSPLANT = 20540;
-

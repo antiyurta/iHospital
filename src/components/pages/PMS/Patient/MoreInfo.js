@@ -94,7 +94,10 @@ function MoreInfo({ form }) {
                }))}
             />
          </Form.Item>
-         <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}>
+         <Form.Item
+            noStyle
+            shouldUpdate={(prevValues, currentValues) => prevValues.isEmployment !== currentValues.isEmployment}
+         >
             {({ getFieldValue }) =>
                getFieldValue('isEmployment') === 1 ? (
                   <>

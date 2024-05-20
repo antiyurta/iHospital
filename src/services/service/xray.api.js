@@ -6,5 +6,8 @@ class XrayApi {
    async getById(id) {
       return await jwtInterceopter.get(`service/xray/${id}`);
    }
+   async post(body) {
+      return await jwtInterceopter.post('service/xray', body);
+   }
 }
 export default new XrayApi();
