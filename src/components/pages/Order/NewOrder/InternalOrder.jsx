@@ -305,8 +305,9 @@ const InternalOrder = (props) => {
                   orderForm
                      .validateFields()
                      .then((values) => {
-                        const errors = values?.services?.filter((service) => !service.orderTime && service.type != 0);
-                        console.log(values?.services);
+                        const errors = values?.services?.filter(
+                           (service) => !service.orderTime && service.type != 0 && !service.isCito
+                        );
                         if (errors?.length > 0) {
                            errors?.map((error) => {
                               openNofi('error', 'Алдаа', `${error.name} Цаг оруулах`);
