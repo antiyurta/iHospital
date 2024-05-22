@@ -18,6 +18,12 @@ import EmployeeApi from '@ApiServices/organization/employee';
 import StructureApi from '@ApiServices/organization/structure';
 import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
+//utils
+import { xrayTreatmentIds } from '@Utils/config/insurance';
+
+const hicsIdMap = {
+   2: xrayTreatmentIds
+};
 
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
    console.log('asdasdasdsad', invoiceData);
@@ -70,8 +76,15 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
          params: {
             type: 2
          }
-      }).then((response) => {
-         setStructures(response.data.response.data);
+      }).then(({ data: { response } }) => {
+         if (incomeEmrData.isInsurance) {
+            console.log(hicsIdMap[type]);
+            const d = response?.data?.map((res) => hicsIdMap[type]?.map((id) => res.hicsServiceIds?.includes(id)));
+            console.log('dddd', d);
+            setStructures(response.data);
+         } else {
+            setStructures(response.data);
+         }
       });
    };
    // emch songoh
@@ -86,7 +99,8 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
             findManyDate: dayjs(date.setDate(new Date().getDate() - 1)).format('YYYY-MM-DD'),
             structureId: values.structureId,
             doctorId: values.doctorId,
-            type: type
+            type: type,
+            deviceId: invoiceData?.deviceId || null
          }
       }).then((response) => {
          setSchedules(response.data.response.data);
@@ -175,6 +189,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
          /** type 3 bol xray 2 bol treatment */
          await ServiceApi.patch(invoiceData.invoiceId, {
             ...selectedInfo,
+            appointmentId: invoiceData.appointmentId || null,
             doctorId: selectedDoctor.id,
             patientId: selectedPatient.id,
             type: invoiceData.type

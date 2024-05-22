@@ -10,7 +10,7 @@ class RegularApi {
       return await jwtInterceopter.patch(url, body);
    }
    async delete(url, id) {
-      return await jwtInterceopter.post(url, body);
+      return await jwtInterceopter.delete(url + '/' + id);
    }
 }
 export default new RegularApi();

@@ -25,7 +25,6 @@ export const emr = createSlice({
          state.emrData = { ...state.emrData, hicsSeal: action.payload };
       },
       setOtsData: (state, action) => {
-         console.log('state', action);
          state.otsData = action.payload;
       },
       delOtsData: (state) => {

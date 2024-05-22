@@ -5,7 +5,38 @@ import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 //utls
 import { SUPPORT_ORGAN_TRANSPLANT } from '../enum-utils';
-import { bloodType, healthType, isPregnancy, isImpairment, pregnancyActivity } from '@Utils/config/xypField';
+import {
+   bloodType,
+   healthType,
+   isPregnancy,
+   isImpairment,
+   hasSurgery,
+   treatmentResult,
+   inpatientStatus,
+   surgeryType,
+   surgerySeverity,
+   disease,
+   isSendSubstate,
+   paymentType,
+   pregnancyActivity,
+   hasSurgeryFourWeeks,
+   hasQuestionnaire,
+   isQuestionnaireUsed,
+   deathType,
+   deathLocation,
+   fetalMortality,
+   isTwin,
+   isStillBirth,
+   isMotherMortality,
+   motherMortality,
+   motherMortalityResult,
+   relationship,
+   birthType,
+   birthPlace,
+   hasPregnantSeverity,
+   manageBirth,
+   isSurrogateMother
+} from '@Utils/config/xypField';
 //common
 import { openNofi } from '@Comman/common';
 import { ListPatientInfo } from '@Comman/ListInjection';
@@ -24,8 +55,9 @@ const labelstyle = {
 };
 
 export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId, isDisable }) => {
-   console.log('parentHicsSeal', parentHicsSeal);
+   console.log('hicsSeal', hicsSeal);
    const patient = useSelector(selectPatient);
+   console.log('patient', patient);
    const [isLoading, setLoading] = useState(false);
    const [defaultHics, setDefaultHics] = useState([]);
    const [hicsApprovals, setApprovals] = useState([]);
@@ -119,9 +151,9 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
             const icdAddCode = response.data
                ?.filter((res) => res.diagnoseType === 2)
                ?.map((patientDiagnose) => patientDiagnose.diagnose);
-            setDiagnosis(diagnosis);
-            setIcdCode1(icdCode1);
-            setIcdAddCode(icdAddCode);
+            setDiagnosis(response.data?.map((patientDiagnose) => patientDiagnose.diagnose));
+            setIcdCode1(response.data?.map((patientDiagnose) => patientDiagnose.diagnose));
+            setIcdAddCode(response.data?.map((patientDiagnose) => patientDiagnose.diagnose));
          });
    };
    const getDoctorServiceNumber = (value) => {
@@ -160,7 +192,7 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
    }, []);
 
    const getCurrentServiceName = useMemo(() => {
-      return defaultHics.find((hics) => hics.id === hicsSeal.hicsServiceId)?.name;
+      return defaultHics.find((hics) => hics.id === hicsSeal?.hicsServiceId)?.name;
    }, [defaultHics]);
 
    return (
@@ -329,16 +361,6 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                      label="Оношийн код-2/хос онош илгээх Т.Ү дээр/"
                      name={['diagnosis', 'icd1Code']}
                      className="mb-0"
-                     rules={
-                        icd1Code?.length > 0
-                           ? [
-                                {
-                                   required: true,
-                                   message: 'Оношийн код-2/хос онош илгээх Т.Ү дээр/'
-                                }
-                             ]
-                           : []
-                     }
                   >
                      <Select
                         allowClear
@@ -352,21 +374,7 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                      <Input />
                   </Form.Item>
                   {/*  */}
-                  <Form.Item
-                     label="Хавсарсан оношийн код"
-                     name={['diagnosis', 'icdAddCode']}
-                     className="mb-0"
-                     rules={
-                        icdAddCode?.length > 0
-                           ? [
-                                {
-                                   required: true,
-                                   message: 'Оношийн код-2/хос онош илгээх Т.Ү дээр/'
-                                }
-                             ]
-                           : []
-                     }
-                  >
+                  <Form.Item label="Хавсарсан оношийн код" name={['diagnosis', 'icdAddCode']} className="mb-0">
                      <Select
                         allowClear
                         showSearch
@@ -395,6 +403,14 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                      ]}
                   >
                      <Select
+                        onSelect={(value) => {
+                           const current = drgCodes.find((drgCode) => drgCode.drgCode === value);
+                           form.setFieldsValue({
+                              amountCit: current.amountCit || 0,
+                              amountHi: current.amountHi || 0,
+                              amountTotal: current.amountTotal || 0
+                           });
+                        }}
                         options={drgCodes.map((drgCode) => ({ value: drgCode.drgCode, label: drgCode.drgName }))}
                      />
                   </Form.Item>
@@ -425,6 +441,20 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                            }
                         ]}
                      />
+                  </Form.Item>
+               </div>
+            </div>
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+               <p style={labelstyle}>Төлбөрийн мэдээлэл</p>
+               <div className="grid grid-cols-2 gap-2">
+                  <Form.Item label="amountCit" name="amountCit">
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="amountHi" name="amountHi">
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="amountTotal" name="amountTotal">
+                     <Input />
                   </Form.Item>
                </div>
             </div>
@@ -474,6 +504,477 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                   </Form.Item>
                </div>
             </div>
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+               <p style={labelstyle}>ТУСЛАМЖ, ҮЙЛЧИЛГЭЭНИЙ МЭДЭЭЛЭЛ</p>
+               <div className="grid grid-cols-2 gap-2">
+                  <Form.Item label="Ерөнхий эмч" name={['medicalInfo', 'generalDoctor']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Эмнэлгээс гарагчийн төрөл" name={['medicalInfo', 'inpatientStatusName']}>
+                     <Select
+                        options={inpatientStatus?.map((status) => ({
+                           label: status.fieldName,
+                           value: status.fieldName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Өвчний төгсгөл" name={['medicalInfo', 'treatmentResultId']}>
+                     <Select
+                        options={treatmentResult?.map((result) => ({
+                           label: result.fieldName,
+                           value: result.fieldId.toString()
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Өвчний төгсгөл" name={['medicalInfo', 'treatmentResult']}>
+                     <TextArea />
+                  </Form.Item>
+               </div>
+            </div>
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+               <p style={labelstyle}>Мэс засл</p>
+               <Form.Item label="Mэс засал хийлгэсэн эсэх" name={['medicalInfo', 'hasSurgery']}>
+                  <Radio.Group
+                     options={hasSurgery?.map((state) => ({
+                        label: state.valueName,
+                        value: state.valueId
+                     }))}
+                  />
+               </Form.Item>
+               <div className="grid grid-cols-2 gap-2">
+                  <Form.Item label="Мэс заслын төрөл" name={['medicalInfo', 'surgeryType']}>
+                     <Select
+                        options={surgeryType?.map((type) => ({
+                           label: type.valueName,
+                           value: type.valueName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Мэс заслын хүндрэл" name={['medicalInfo', 'surgerySeverity']}>
+                     <Select
+                        options={surgerySeverity?.map((severity) => ({
+                           label: severity.valueName,
+                           value: severity.valueName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Эмийн зардал" name={['medicalInfo', 'drugExpenses']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Оношилгоо, шинжилгээний нэр" name={['medicalInfo', 'examName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Өвчлөл" name={['medicalInfo', 'diseaseName']}>
+                     <Select
+                        options={disease?.map((dss) => ({
+                           label: dss.valueName,
+                           value: dss.valueName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="ICD10 код" name={['medicalInfo', 'icd10code']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Дээд шатлалд илгээсэн эсэх" name={['medicalInfo', 'isSendSubstate']}>
+                     <Select
+                        options={isSendSubstate?.map((state) => ({
+                           label: state.valueName,
+                           value: state.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Эмнэлэгт хэвтсэн огноо" name={['medicalInfo', 'indateInpatient']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Эмнэлэгт гарсан огноо" name={['medicalInfo', 'outdateInpatient']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Хэвтэн эмчлүүлсэн ор хоног" name={['medicalInfo', 'inpatientDays']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Эмчийн код" name={['medicalInfo', 'doctorId']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Эмчийн нэр" name={['medicalInfo', 'doctorName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Эмчийн нэр" name={['medicalInfo', 'paymentType']}>
+                     <Select
+                        options={paymentType?.map((type) => ({
+                           label: type.valueName,
+                           value: type.valueId.toString()
+                        }))}
+                     />
+                  </Form.Item>
+               </div>
+            </div>
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+               <p style={labelstyle}>ЖИРЭМСЭН ҮЕИЙН МЭДЭЭЛЭЛ</p>
+               <div className="grid grid-cols-2 gap-2">
+                  <Form.Item label="Жирэмсний хяналтад орсон огноо" name={['pregnantInfo', 'pregnancyControlledDate']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Жирэмсний хугацаа /7 хоногоор/" name={['pregnantInfo', 'pregnancyWeek']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Жирэмсний төрөл" name={['pregnantInfo', 'pregnancyActivityId']}>
+                     <Select
+                        onSelect={(_, option) => {
+                           form.setFieldValue(['pregnantInfo', 'pregnancyActivityName'], option.label);
+                        }}
+                        options={pregnancyActivity?.map((activity) => ({
+                           label: activity.valueName,
+                           value: activity.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item hidden name={['pregnantInfo', 'pregnancyActivityName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="protectMethod" name={['pregnantInfo', 'protectMethod']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="abortion" name={['pregnantInfo', 'abortion']}>
+                     <Input />
+                  </Form.Item>
+               </div>
+            </div>
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+               <p style={labelstyle}>НАС БАРАЛТЫН МЭДЭЭЛЭЛ</p>
+               <div className="grid grid-cols-2 gap-2">
+                  <Form.Item label="Нас барсан огноо /он сар, өдөр, цаг,минут/" name={['medicalInfo', 'deathInfo']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item
+                     label="Үхэлд шууд хүргэсэн өвчин ба эмгэг:ICD10 оношийн код"
+                     name={['medicalInfo', 'deathResultCode']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Үхэлд шууд хүргэсэн өвчин ба эмгэг:ICD10 оношийн нэр"
+                     name={['medicalInfo', 'deathResult']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Үхэлд хүргэсэн ослын шалтгаан:ICD10 оношийн код /V01-Y98/"
+                     name={['medicalInfo', 'deathAccidentCode']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Үхэлд хүргэсэн ослын шалтгаан ICD10 оношийн нэр"
+                     name={['medicalInfo', 'deathAccident']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Сүүлийн 4 долоо хоногт мэс засал хийлгэсэн эсэх"
+                     name={['medicalInfo', 'hasSurgeryFourWeeks']}
+                  >
+                     <Select
+                        options={hasSurgeryFourWeeks?.map((weeks) => ({
+                           label: weeks.valueName,
+                           value: weeks.valueName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item
+                     label="Асуумжаар дүгнэлт шинжилгээ /VA WHO 2016 standart/ хийсэн эсэх"
+                     name={['medicalInfo', 'hasQuestionnaireId']}
+                  >
+                     <Select
+                        onSelect={(_, option) => {
+                           form.setFieldValue(['medicalInfo', 'hasQuestionnaire'], option.label);
+                        }}
+                        options={hasQuestionnaire?.map((question) => ({
+                           label: question.valueName,
+                           value: question.valueId.toString()
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item hidden name={['medicalInfo', 'hasQuestionnaire']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Хэрэв тийм бол баталгаажуулахад ашигласан эсэх"
+                     name={['medicalInfo', 'isQuestionnaireUsed']}
+                  >
+                     <Select
+                        options={isQuestionnaireUsed?.map((question) => ({
+                           label: question.valueName,
+                           value: question.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Нас барсан хэлбэр" name={['medicalInfo', 'deathType']}>
+                     <Select
+                        options={deathType?.map((type) => ({
+                           label: type.valueName,
+                           value: type.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Нас барсан газар" name={['medicalInfo', 'deathLocationId']}>
+                     <Select
+                        onSelect={(_, option) => {
+                           form.setFieldValue(['medicalInfo', 'deathLocationName'], option.label);
+                        }}
+                        options={deathLocation?.map((loc) => ({
+                           label: loc.valueName,
+                           value: loc.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item hidden name={['medicalInfo', 'deathLocationName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Хорт хавдар, ХДХВ оношлогдсон огноо" name={['medicalInfo', 'cancerHIVDate']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item
+                     label="Хоног болоогүй нас баралтын хугацаа /цаг минут секунд/"
+                     name={['medicalInfo', 'datetimeOfRemaindayOfDeath']}
+                  >
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Ураг болон нярайн эндэгдэл" name={['medicalInfo', 'fetalMortality']}>
+                     <Select
+                        options={fetalMortality?.map((fetal) => ({
+                           label: fetal.valueName,
+                           value: fetal.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Ихэр эсэх" name={['medicalInfo', 'isTwin']}>
+                     <Select
+                        options={isTwin?.map((twin) => ({
+                           label: twin.valueName,
+                           value: twin.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Амьгүй төрөлт" name={['medicalInfo', 'isStillBirth']}>
+                     <Select
+                        options={isStillBirth?.map((still) => ({
+                           label: still.valueName,
+                           value: still.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Төрөх үеийн жин /гр/" name={['medicalInfo', 'birthWeight']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Жирэмсний хугацаа /7 хоногоор/" name={['medicalInfo', 'pregnantWeek']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Эхийн нас" name={['medicalInfo', 'motherAge']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Эхийн регистр" name={['medicalInfo', 'motherRegister']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Жирэмсэн ба төрөх үеийн хүндрэлийн оношийн код ICD10"
+                     name={['medicalInfo', 'birthSeverityCode']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Жирэмсэн ба төрөх үеийн хүндрэлийн оношийн нэр ICD10"
+                     name={['medicalInfo', 'birthSeverity']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Эхийн эндэгдэлтэй эсэх" name={['medicalInfo', 'isMotherMortality']}>
+                     <Select
+                        options={isMotherMortality?.map((mortality) => ({
+                           label: mortality.valueName,
+                           value: mortality.valueName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Эхийн эндэгдэл" name={['medicalInfo', 'motherMortalityId']}>
+                     <Select
+                        onSelect={(_, option) => {
+                           form.setFieldValue(['medicalInfo', 'motherMortalityName'], option.label);
+                        }}
+                        options={motherMortality?.map((mortality) => ({
+                           label: mortality.valueName,
+                           value: mortality.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item hidden name={['medicalInfo', 'motherMortalityName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Жирэмслэлт нь нас баралтын шалтгаан болсон эсэх"
+                     name={['medicalInfo', 'motherMortalityResult']}
+                  >
+                     <Select
+                        options={motherMortalityResult?.map((result) => ({
+                           label: result.valueName,
+                           value: result.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Гэрчилгээ олгосон огноо /Он, сар, өдөр/" name={['medicalInfo', 'registerDate']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Гэрчилгээ олгосон эмч" name={['medicalInfo', 'registerDoctor']}>
+                     <Input />
+                  </Form.Item>
+               </div>
+            </div>
+            <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+               <p style={labelstyle}>ТӨРӨЛТИЙН ҮЕИЙН БОЛОН НЯРАЙН МЭДЭЭЛЭЛ</p>
+               <div className="grid grid-cols-2 gap-2">
+                  <Form.Item label="Гэр бүлийн байдал" name={['birthInfo', 'relationshipId']}>
+                     <Select
+                        onSelect={(_, option) => {
+                           form.setFieldValue(['birthInfo', 'relationshipName'], option.label);
+                        }}
+                        options={relationship?.map((rel) => ({
+                           label: rel.valueName,
+                           value: rel.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item hidden name={['birthInfo', 'relationshipName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Хэд дэх жирэмслэлт" name={['birthInfo', 'pregnantCount']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Хэд дэх төрөлт" name={['birthInfo', 'birthCount']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Жирэмсний хяналтанд үзүүлсэн тоо" name={['birthInfo', 'pregnantSurveyCount']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Төрлөгийн хэлбэр" name={['birthInfo', 'birthTypeId']}>
+                     <Select
+                        onSelect={(_, option) => {
+                           form.setFieldValue(['birthInfo', 'birthTypeName'], option.label);
+                        }}
+                        options={birthType?.map((type) => ({
+                           label: type.valueName,
+                           value: type.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item hidden name={['birthInfo', 'birthTypeName']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Төрөх үеийн тээлтийн хугацаа /долоо хоногоор/"
+                     name={['birthInfo', 'pregnantDuration']}
+                  >
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Хүүхдийн регистр" name={['birthInfo', 'childRegister']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Төрсөн огноо /он, сар, өдөр, цаг, минут/" name={['birthInfo', 'birthday']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Хүүхдийн өндөр /см/" name={['birthInfo', 'childHeight']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Толгойн бүслүүр" name={['birthInfo', 'childHeadCircumference']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Мөрний бүслүүр" name={['birthInfo', 'childShoulderCircumference']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Төрсөн газар" name={['birthInfo', 'birthPlace']}>
+                     <Select
+                        options={birthPlace?.map((place) => ({
+                           label: place.valueName,
+                           label: place.valueId.toString()
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Анх хяналтанд авсан долоо хоног" name={['birthInfo', 'takeControlDate']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Жирэмсний хүндрэлтэй эсэх" name={['birthInfo', 'hasPregnantSeverity']}>
+                     <Select
+                        options={hasPregnantSeverity?.map((severity) => ({
+                           label: severity.valueName,
+                           label: severity.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item
+                     label="Жирэмсний хүндрэлийн оношийн код ICD10"
+                     name={['birthInfo', 'pregnantSeverityCode']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item
+                     label="Жирэмсний хүндрэлийн оношийн нэр ICD10"
+                     name={['birthInfo', 'pregnantSeverityName']}
+                  >
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Төрөлт удирдсан" name={['birthInfo', 'manageBirth']}>
+                     <Select
+                        options={manageBirth?.map((birth) => ({
+                           label: birth.valueName,
+                           label: birth.valueName
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Төрөлтийн хүндрэл" name={['birthInfo', 'birthSeverityDescription']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Төрөлтийн дараах хүндрэл" name={['birthInfo', 'birthAfterSeverity']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Төрөлтийн дараах хүндрэл" name={['birthInfo', 'isSurrogateMother']}>
+                     <Select
+                        options={isSurrogateMother?.map((isSurr) => ({
+                           label: isSurr.valueName,
+                           label: isSurr.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Тээгч эхийн регистр, овог, нэр" name={['birthInfo', 'surrogateMotherRegister']}>
+                     <Input />
+                  </Form.Item>
+                  <Form.Item label="Ихэр эсэх" name={['birthInfo', 'isTwin']}>
+                     <Select
+                        options={isTwin?.map((twin) => ({
+                           label: twin.valueName,
+                           value: twin.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Амьгүй төрөлт" name={['birthInfo', 'isStillBirth']}>
+                     <Select
+                        options={isStillBirth?.map((still) => ({
+                           label: still.valueName,
+                           value: still.valueId
+                        }))}
+                     />
+                  </Form.Item>
+                  <Form.Item label="Жирэмсний хугацаа /7 хоногоор/" name={['birthInfo', 'pregnantWeek']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Төрөх үеийн жин /гр/" name={['birthInfo', 'birthWeight']}>
+                     <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Гэрчилгээ олгосон огноо /Он, сар, өдөр/" name={['birthInfo', 'registerDate']}>
+                     <DatePicker />
+                  </Form.Item>
+                  <Form.Item label="Гэрчилгээ олгосон эмч" name={['birthInfo', 'registerDoctor']}>
+                     <Input />
+                  </Form.Item>
+               </div>
+            </div>
          </div>
          <Form.Item hidden name="departNo">
             <Input />
@@ -496,4 +997,3 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
       </Spin>
    );
 };
-

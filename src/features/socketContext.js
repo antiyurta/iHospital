@@ -136,6 +136,9 @@ export const SocketProvider = ({ children }) => {
          socketIO.on('disconnect', () => {
             console.log('Disconnected from Socket.IO server');
          });
+         socketIO.on('error', () => {
+            console.log('Disconnected from Socket.IO server');
+         });
          socketIO.on('receive', (roomId) => {
             createData(name, roomId);
          });

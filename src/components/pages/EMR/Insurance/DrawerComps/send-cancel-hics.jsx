@@ -14,8 +14,8 @@ export const SendCancelHics = (props) => {
       await healthInsurance.getPatientData(patient.registerNumber).then(({ data }) => {
          if (data.code == 200) {
             const details = data.result.details;
-            // setHics(details.filter((detail) => detail.statusCode != 6));
-            setHics(details.filter((detail) => detail.statusCode != null));
+            setHics(details.filter((detail) => detail.statusCode != 6));
+            // setHics(details.filter((detail) => detail.statusCode != null));
          }
       });
    };

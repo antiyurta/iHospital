@@ -114,7 +114,8 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                soumName: patientSoumName,
                parentPhoneNo: parseInt(patientContacts?.[0]?.contactPhoneNo) || null,
                ...otherInfoPatient,
-               age: 27
+               age: 27,
+               workplace: '1'
                // isDonor: 2
                // donorTypeId
                // donorTypeName
@@ -131,33 +132,10 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          };
          const apiMap = {
             [HST.savePrescription]: healthInsuranceApi.savePrescription,
-            [HST.sendHics]: insuranceApi.createHicsPayment,
+            [HST.sendHics]: healthInsuranceApi.sendHicsService,
             [HST.setApproval]: healthInsuranceApi.postApproval,
             [HST.setPatientSheet]: healthInsuranceApi.setPatientSheet,
-            [HST.saveHics]: async (values) => {
-               await healthInsuranceApi.saveHics(dataa).then(async ({ data }) => {
-                  if (data.code === 200) {
-                     openNofi('success', 'Амжилттай', data.description);
-                     await insuranceApi
-                        .requestHicsSeal(hicsSeal.id, {
-                           diagnosis: values.diagnosis,
-                           // doctorServiceNumber
-                           // donorRegno
-                           endAt: new Date(),
-                           hicsSealCode: data.result.serviceNumber,
-                           patientHistoryCode: values.historyCode,
-                           process: 1
-                           // sent13RequestNo
-                        })
-                        .then(({ data: { response } }) => {
-                           dispatch(setHicsSeal(response));
-                        });
-                     message.success(data.description);
-                     setOpen(false);
-                     setDisabled(false);
-                  }
-               });
-            },
+            [HST.saveHics]: healthInsuranceApi.saveHics,
             [HST.setPatientReturn]: healthInsuranceApi.postPatientReturn,
             [HST.cancelService]: healthInsuranceApi.cancelService,
             [HST.confirmHics]: healthInsuranceApi.confirmHicsService,
@@ -182,21 +160,72 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                   }
                });
             },
-
             [HST.sendCheckLicenseInfo]: healthInsuranceApi.postCheckLicenseInfo,
             [HST.sendEditMedicalLink]: healthInsuranceApi.postEditMedicalLink,
             [HST.sendAddHicsService]: healthInsuranceApi.postAddHicsService,
             [HST.sendDirectService]: healthInsuranceApi.postDirectSendService,
-            [HST.sendFormData]: healthInsuranceApi.postSendFormData,
+            [HST.sendFormData]: healthInsuranceApi.postSendFormData
          };
          const selectedApi = apiMap[chooseService];
          if (!selectedApi) throw new Error('Unknown service type');
-         const response = await selectedApi(values);
-         const { data } = response;
-         if (data.code === 200 || data.respMsgCode === 200) {
-            message.success(data.description || data.respMsg);
+         if (chooseService === HST.saveHics) {
+            await selectedApi(dataa).then(async ({ data }) => {
+               if (data.code === 200) {
+                  openNofi('success', 'Амжилттай', data.description);
+                  await insuranceApi
+                     .requestHicsSeal(hicsSeal.id, {
+                        amountCit: values.amountCit,
+                        amountHi: values.amountHi,
+                        amountTotal: values.amountTotal,
+                        diagnosis: values.diagnosis,
+                        // doctorServiceNumber
+                        // donorRegno
+                        endAt: new Date(),
+                        hicsSealCode: data.result.serviceNumber,
+                        patientHistoryCode: values.historyCode,
+                        process: 1
+                        // sent13RequestNo
+                     })
+                     .then(({ data }) => {
+                        dispatch(setHicsSeal(data));
+                     });
+                  message.success(data.description);
+                  setOpen(false);
+                  setDisabled(false);
+               }
+            });
+         } else if (chooseService === HST.sendHics) {
+            console.log(';end orj irne', values);
+            const dataa = {
+               patientRegno: patient.registerNumber,
+               patientFingerprint: values.fingerprint,
+               patientFirstname: patient.firstName,
+               patientLastname: patient.lastName,
+               payments: values.payments
+            };
+            await selectedApi(dataa).then(async (data) => {
+               if (data.code === 200) {
+                  openNofi('success', 'Амжилттай', data.description);
+                  await insuranceApi
+                     .requestHicsSeal(hicsSeal.id, {
+                        process: 2
+                     })
+                     .then(({ data }) => {
+                        dispatch(setHicsSeal(data));
+                     });
+                  message.success(data.description);
+                  setOpen(false);
+                  setDisabled(false);
+               }
+            });
          } else {
-            message.warn(data.description || data.respMsg);
+            const response = await selectedApi(values);
+            const { data } = response;
+            if (data.code === 200 || data.respMsgCode === 200) {
+               message.success(data.description || data.respMsg);
+            } else {
+               message.warn(data.description || data.respMsg);
+            }
          }
       } catch (error) {
          message.error(error.message || 'An error occurred');
@@ -299,9 +328,10 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
                               sentService(values);
                            })
                            .catch((error) => {
-                              // error.errorFields?.map((errorField) => {
-                              openNofi('error', 'Амжилттгүй', errorField.errors?.[0]);
-                              // });
+                              console.log('---->', error);
+                              error.errorFields?.map((errorField) => {
+                                 openNofi('error', 'Амжилттгүй', errorField.errors?.[0]);
+                              });
                            });
                      }}
                      type="primary"
@@ -316,4 +346,3 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
 };
 
 export default SentService;
-
