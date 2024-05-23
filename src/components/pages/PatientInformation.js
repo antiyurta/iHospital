@@ -123,19 +123,13 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    };
 
    const ImageIcon = useMemo(() => {
-      if (patient.genderType === 'WOMAN') {
-         return womanIcon;
-      } else {
-         return manIcon;
-      }
+      if (patient.genderType === 'WOMAN') return womanIcon;
+      return manIcon;
    }, [patient]);
 
    const genderSymbolIcon = useMemo(() => {
-      if (patient.genderType === 'WOMAN') {
-         return manSymbol;
-      } else {
-         return womanSymbol;
-      }
+      if (patient.genderType === 'WOMAN') return manSymbol;
+      return womanSymbol;
    }, [patient]);
 
    useEffect(() => {
@@ -145,6 +139,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
+      !patient.imageId && setImageUrl(ImageIcon);
    }, [patient]);
    return (
       <>
