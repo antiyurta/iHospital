@@ -12,7 +12,8 @@ import {
    mapSymbol
 } from '@Assets/index';
 // common
-import { getAge, getGenderInType } from '@Comman/common';
+import { getAge } from '@Comman/common';
+import { getGender } from '@Utils/config/xypField';
 //apiF
 import localFileApi from '@ApiServices/file/local-file/local-file.api';
 import CountryApi from '@ApiServices/reference/country';
@@ -175,7 +176,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         src={genderSymbolIcon}
                         alt="symbol"
                      />
-                     <p>{`${getGenderInType(patient?.genderType || undefined)} | ${getAge(
+                     <p>{`${getGender(patient?.gender || undefined)} | ${getAge(
                         patient?.registerNumber || undefined
                      )}`}</p>
                   </div>
