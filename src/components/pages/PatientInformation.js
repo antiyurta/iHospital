@@ -198,8 +198,8 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                      <img src={mailSymbol} alt="symbolMail" />
                      <p>{patient?.email}</p>
                   </div>
-                  <div className="flex flex-row gap-3">
-                     <img src={phoneSymbol} alt="phone" />
+                  <div className="flex flex-row gap-3 mr-[18px]">
+                     <img src={phoneSymbol} alt="phone"  />
                      <p>{patient?.phoneNo}</p>
                   </div>
                </div>

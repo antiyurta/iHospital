@@ -64,43 +64,44 @@ const CT_1_Tsus = (props) => {
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]">
-                           {' '}
+                        <th className="w-[220px]" id="cls">
                            Амьсгал 1 минутанд
                            <Input className=" w-10" value={formData?.q4} style={{ textAlign: 'center' }} />
                            удаа
                         </th>
                         <th colSpan={3}>
                            Чагналтаар:
-                           <Checkbox.Group value={formData?.q5}>
-                              <Checkbox className="ml-2" value={'q5-1'}>
+                           <Checkbox.Group value={formData?.q5} id="child">
+                              <Checkbox value={'q5-1'} className="ml-2">
                                  Хэржигнүүртэй
                               </Checkbox>
                               <Checkbox value={'q5-2'}>Уушги цулцангийн</Checkbox>
-                              <Checkbox value={'q5-4'}>
-                                 Амьсгал сулавтар
-                                 <p>
-                                    <span className="text-[11px]">
-                                       (
-                                       <Checkbox.Group value={formData?.['q5-4-1']} className="inline">
-                                          <Checkbox className="test" value={'q5-4-1-1'}>
-                                             <span className="text-[11px]">Баруун,</span>
-                                          </Checkbox>
-                                          &nbsp;
-                                          <Checkbox className="ml-0 test" value={'q5-4-1-2'}>
-                                             <span className="text-[11px]">зүүн,</span>
-                                          </Checkbox>
-                                          &nbsp;
-                                          <Checkbox className="ml-0 test" value={'q5-4-1-3'}>
-                                             <span className="text-[11px]"> 2 талдаа,</span>
-                                          </Checkbox>
-                                          &nbsp;
-                                       </Checkbox.Group>
-                                       )
-                                    </span>
-                                 </p>
-                              </Checkbox>
                               <Checkbox value={'q5-3'}>Гуурсан хоолойн</Checkbox>
+                              <Checkbox value={'q5-4'}>
+                                 <div className="flex items-center">
+                                    <span> Амьсгал сулавтар</span>
+                                    <p>
+                                       <span className="text-[11px]">
+                                          (
+                                          <Checkbox.Group value={formData?.['q5-4-1']} className="inline">
+                                             <Checkbox className="test" value={'q5-4-1-1'}>
+                                                <span className="text-[11px]">Баруун,</span>
+                                             </Checkbox>
+                                             &nbsp;
+                                             <Checkbox className="ml-0 test" value={'q5-4-1-2'}>
+                                                <span className="text-[11px]">зүүн,</span>
+                                             </Checkbox>
+                                             &nbsp;
+                                             <Checkbox className="ml-0 test" value={'q5-4-1-3'}>
+                                                <span className="text-[11px]">2 талдаа</span>
+                                             </Checkbox>
+                                             &nbsp;
+                                          </Checkbox.Group>
+                                          )
+                                       </span>
+                                    </p>
+                                 </div>
+                              </Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -112,18 +113,20 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           Судасны цохилт 1 минутанд
-                           <Input className=" w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
+                        <th id="cls">
+                           <p>
+                              Судасны цохилт 1 минутанд
+                              <Input className=" w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
+                              удаа
+                           </p>
+                           <p>
                               Хүчдэл дүүрэлт
                               <Input className=" w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
-                           </th>
+                           </p>
                         </th>
                         <th>
-                           <th>Тогшилтоор:</th>
-                           Зүрхний хил
+                           <p>Тогшилтоор:</p>
+                           <p id="cls">Зүрхний хил</p>
                            <Checkbox.Group value={formData?.q8}>
                               <Checkbox className="ml-2" value={'q8-1'}>
                                  Хэвийн
@@ -150,8 +153,8 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
-                           Зүрхний авиа
+                           <p>Чагналтаар:</p>
+                           <p id="cls">Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q9}>
                               <Checkbox className="ml-2" value={'q9-1'}>
                                  Тод
@@ -162,11 +165,11 @@ const CT_1_Tsus = (props) => {
                               <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="cls">
                               АД баруун талд
-                              <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} />/
+                              <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
                            </th>
-                           <th>
+                           <th id="cls">
                               Зүүн талд
                               <Input className=" w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
                            </th>
@@ -180,7 +183,7 @@ const CT_1_Tsus = (props) => {
                         <th colSpan={4}>Хоол шингээх эрхтэн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-[150px]">
+                        <th className="w-[150px]" id="cls">
                            Хэл
                            <Checkbox.Group value={formData?.q12}>
                               <Checkbox className="ml-2" value={'q12-1'}>
@@ -192,9 +195,11 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th colSpan={3}>
-                           <p> Хэвлийн үзлэг:</p>
+                           <p id="cls"> Хэвлийн үзлэг:</p>
                            <Checkbox.Group value={formData?.q13}>
-                              <Checkbox value={'q13-1'}>Өнгөц тэмтрэлтээр</Checkbox>
+                              <Checkbox value={'q13-1'} className="ml-2">
+                                 Өнгөц тэмтрэлтээр
+                              </Checkbox>
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-5'} className="">
                                  Эмзэглэлтэй (байрлал
@@ -220,14 +225,14 @@ const CT_1_Tsus = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           <p> Сонсох чадвахи:</p>
+                           <p id="cls"> Сонсох чадвахи:</p>
                            <Checkbox.Group value={formData?.q14}>
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>Буурсан (баруун, зүүн)</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <p>Рефлексүүд</p>
+                           <p id="cls">Рефлексүүд</p>
                            <Checkbox.Group value={formData?.q15}>
                               <Checkbox value={'q15-1'}>Хадгалагдана</Checkbox>
                               <Checkbox value={'q15-2'}>Хадгалагдахгүй</Checkbox>
@@ -239,13 +244,19 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th className="w-full">
+                        <th id="cls">
+                           <p className="w-full">
                               Бусад
                               <Input className=" w-[670px]" value={formData?.q16} style={{ textAlign: 'center' }} />
-                           </th>
-                           Сэтгэцийн байдал:
-                           <Input className=" w-[600px] mb-1" value={formData?.q17} style={{ textAlign: 'center' }} />
+                           </p>
+                           <p>
+                              Сэтгэцийн байдал:
+                              <Input
+                                 className=" w-[600px] mb-1"
+                                 value={formData?.q17}
+                                 style={{ textAlign: 'center' }}
+                              />
+                           </p>
                         </th>
                      </tr>
                      <tr>
@@ -259,7 +270,7 @@ const CT_1_Tsus = (props) => {
                         <th rowSpan={2}>
                            <Image src={HematopImg} alt="" width={250} height={160} className="p-8" />
                         </th>
-                        <th>
+                        <th id="cls">
                            Зовиур:
                            <Input className=" w-[400px] mb-1" style={{ textAlign: 'center' }} />
                            <Input className=" w-full mb" style={{ textAlign: 'center' }} />
@@ -267,7 +278,7 @@ const CT_1_Tsus = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="cls">
                            <p>
                               Биеийн жин /Кг/ :
                               <Input value={formData?.q18} />
@@ -339,7 +350,7 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <p>(Тууралтын байрлалыг зурагт тэмдэглэх)</p>
+                           <p id="cls">(Тууралтын байрлалыг зурагт тэмдэглэх)</p>
                            <Image src={BodyImg} alt="" width={280} height={220} />
                         </th>
                      </tr>
@@ -348,7 +359,7 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0 ">
-                        <th>
+                        <th id="cls">
                            <p>Хумсны байдал:</p>
                            <Checkbox.Group value={formData?.q24}>
                               <Checkbox className="ml-2 w-full" value={'q24-1'}>
@@ -359,7 +370,7 @@ const CT_1_Tsus = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="cls">
                            <p>Амны хөндий: Хэл/ </p>
                            <p>Өнгө:</p>
                            <Checkbox.Group value={formData?.q25}>
@@ -368,10 +379,11 @@ const CT_1_Tsus = (props) => {
                               </Checkbox>
                               <Checkbox value={'q25-2'}>Цайвар</Checkbox>
                               <Checkbox value={'q25-3'}>Улаан</Checkbox>
+                              <Checkbox value={formData?.['q25-4']}>Ягаан</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <p>Хөхлөг</p>
+                        <th id="cls">
+                           <p>Хөхлөг:</p>
                            <Checkbox.Group value={formData?.q26}>
                               <Checkbox className="ml-2 w-full" value={'q26-1'}>
                                  Ердийн
@@ -384,8 +396,8 @@ const CT_1_Tsus = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
-                           <p>Тууралт</p>
+                        <th id="cls">
+                           <p>Тууралт:</p>
                            <Checkbox.Group value={formData?.q27}>
                               <Checkbox className="ml-2 w-full" value={'q27-1'}>
                                  Тууралттай
@@ -399,6 +411,7 @@ const CT_1_Tsus = (props) => {
                               <Checkbox className="w-full" value={'q27-4'}>
                                  Яр
                               </Checkbox>
+                              <Checkbox value={formData?.['q27-5']}>Газрын зураг</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -411,22 +424,8 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr>
-                        <th className="w-[25%]"></th>
-                        <th className="w-[25%]">
-                           <Checkbox value={formData?.['q25-4']}>Ягаан</Checkbox>
-                        </th>
-                        <th className="w-[25%]"></th>
-                        <th className="w-[25%]">
-                           <Checkbox value={formData?.['q27-5']}>Газрын зураг</Checkbox>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
                         <th className="w-[27%]">
-                           <p>Бөөрөлзгөнө хэл Өнгө:</p>
+                           <p id="cls">Бөөрөлзгөнө хэл Өнгө:</p>
                            <Checkbox.Group value={formData?.q28}>
                               <Checkbox className="ml-2 " value={'q28-1'}>
                                  Ердийн
@@ -437,7 +436,7 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th className="w-[23%]">
-                           <p>Шарх:</p>
+                           <p id="cls">Шарх:</p>
                            <Checkbox.Group value={formData?.q29}>
                               <Checkbox className="ml-2 " value={'q29-1'}>
                                  Шархтай
@@ -446,7 +445,7 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th className="w-[25%]">
-                           <p>Буйл: Эмзэглэл</p>
+                           <p id="cls">Буйл: Эмзэглэл</p>
                            <Checkbox.Group value={formData?.q30}>
                               <Checkbox className="ml-2" value={'q30-1'}>
                                  Эмзэглэлгүй
@@ -455,7 +454,7 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th className="w-[25%]">
-                           <p>Тууралт:</p>
+                           <p id="cls">Тууралт:</p>
                            <Checkbox.Group value={formData?.q31}>
                               <Checkbox className="ml-2" value={'q31-1'}>
                                  Тууралттай
@@ -477,7 +476,7 @@ const CT_1_Tsus = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th className=" border-r-0">
-                           <p>Нягт :</p>
+                           <p id="cls">Нягт :</p>
                            <Checkbox.Group value={formData?.q32}>
                               <Checkbox value={'q32-1'} className="ml-2 ">
                                  Хатуу
@@ -486,7 +485,7 @@ const CT_1_Tsus = (props) => {
                                  Зөөлөн
                               </Checkbox>
                            </Checkbox.Group>
-                           <p>Гадаргуу :</p>
+                           <p id="cls">Гадаргуу :</p>
                            <Checkbox.Group value={formData?.q33}>
                               <Checkbox value={'q33-1'} className="ml-2 ">
                                  Барзгар
@@ -500,14 +499,14 @@ const CT_1_Tsus = (props) => {
                            <Image src={Body2Img} alt="" width={100} height={100} className="mr-4" />
                         </th>
                         <th className="w-[23%]">
-                           <p>Хөдөлгөөн:</p>
+                           <p id="cls">Хөдөлгөөн:</p>
                            <Checkbox.Group value={formData?.q34}>
                               <Checkbox className="ml-2" value={'q34-1'}>
                                  Хөдөлгөөнтэй
                               </Checkbox>
                               <Checkbox value={'q34-2'}>Хөдөлгөөнгүй</Checkbox>
                            </Checkbox.Group>
-                           <p>Эмзэглэл:</p>
+                           <p id="cls">Эмзэглэл:</p>
                            <Checkbox.Group value={formData?.q35}>
                               <Checkbox className="ml-2" value={'q35-1'}>
                                  Эмзэглэлгүй
@@ -516,7 +515,7 @@ const CT_1_Tsus = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th className="w-[50%] border-r-0">
-                           <p>Дэлүүний хэмжээ</p>
+                           <p id="cls">Дэлүүний хэмжээ</p>
                            <Checkbox.Group value={formData?.q36}>
                               <Checkbox value={'q36-1'} className="ml-2">
                                  Хэвийн
@@ -552,8 +551,12 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]">Цусны дэлгэрэнгүй шинжилгээ:</th>
-                        <th className="w-[50%]">Лейкограмм</th>
+                        <th id="cls" className="w-[50%]">
+                           Цусны дэлгэрэнгүй шинжилгээ:
+                        </th>
+                        <th id="cls" className="w-[50%]">
+                           Лейкограмм
+                        </th>
                      </tr>
                   </thead>
                </Table>
@@ -561,111 +564,149 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">WBC</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Blasts</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           WBC
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Blasts
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">PLT</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Basophil</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           PLT
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Basophil
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">RBC</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Eosinophil</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           RBC
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Eosinophil
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">HGB</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Promyelocyte</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           HGB
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Promyelocyte
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">HCT</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Myelocyte</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           HCT
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Myelocyte
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">MCV</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Bands</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           MCV
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Bands
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">RET</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Neutrophil</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           RET
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Neutrophil
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">RET-He</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Lymphocyte</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           RET-He
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Lymphocyte
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]"></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[25%]">Monocyte</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[25%]">
+                           Monocyte
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]">
+                        <th id="cls" className="w-[50%]">
                            Дүгнэлт:
                            <Input className=" w-[660px]" style={{ textAlign: 'center' }} />
                         </th>
@@ -675,7 +716,9 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]">Миелограмм:</th>
+                        <th id="cls" className="w-[50%]">
+                           Миелограмм:
+                        </th>
                      </tr>
                   </thead>
                </Table>
@@ -683,10 +726,12 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[60%]" colSpan={4} rowSpan={7}>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={7}>
                            Дүгнэлт:
                            <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
@@ -697,93 +742,109 @@ const CT_1_Tsus = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">Бласт</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Бласт
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">Бүх нейтрофиль</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Бүх нейтрофиль
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">Бүх эритриод эс</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Бүх эритриод эс
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">Лимфоцит</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Лимфоцит
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">Плазмоцит</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Плазмоцит
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th className="w-[25%]">Мегакариоцит</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls" className="w-[25%]">
+                           Мегакариоцит
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]">Цито химийн урвал :</th>
+                        <th id="cls" className="w-[50%]">
+                           Цито химийн урвал :
+                        </th>
                      </tr>
                   </thead>
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[20%]"></th>
-                        <th>Эерэг</th>
-                        <th>Сөрөг</th>
-                        <th className="w-[20%]">Огноо</th>
-                        <th className="w-[20%]"></th>
-                        <th className="w-[20%]"></th>
+                        <th id="cls" className="w-[20%]"></th>
+                        <th id="cls">Эерэг</th>
+                        <th id="cls">Сөрөг</th>
+                        <th id="cls" className="w-[20%]">
+                           Огноо
+                        </th>
+                        <th id="cls" className="w-[20%]"></th>
+                        <th id="cls" className="w-[20%]"></th>
                      </tr>
                      <tr>
-                        <th>MPO</th>
-                        <th></th>
-                        <th></th>
-                        <th>APTT</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">MPO</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls">APTT</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>PAS</th>
-                        <th></th>
-                        <th></th>
-                        <th>PT</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">PAS</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls">PT</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>DAB</th>
-                        <th></th>
-                        <th></th>
-                        <th>INR</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">DAB</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls">INR</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>NS</th>
-                        <th></th>
-                        <th></th>
-                        <th>TT</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">NS</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls">TT</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Fibrinogen</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls">Fibrinogen</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
@@ -797,10 +858,12 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[60%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
                            Дүгнэлт:
                            <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
@@ -819,74 +882,74 @@ const CT_1_Tsus = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th>Нийт билирубин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Нийт билирубин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Шууд бус билирубин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Шууд бус билирубин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Алат</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Алат</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Асат</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Асат</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Шүлт Фосфатаза</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Шүлт Фосфатаза</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>ЛДГ</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">ЛДГ</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Кальци</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Кальци</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Кали</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Кали</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Креатинин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Креатинин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Төмөр</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Төмөр</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Ферритин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Ферритин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Төмөр хол/ чадвар</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Төмөр хол/ чадвар</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Витамин В12</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Витамин В12</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Фолийн хүчил</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Фолийн хүчил</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
@@ -897,12 +960,12 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr>
-                        <th className="w-[50%]">
+                        <th id="cls" className="w-[50%]">
                            Бактер, вирус, маркерийн шинжилгээ:
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                            <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
                         </th>
-                        <th className="w-[50%]">
+                        <th id="cls" className="w-[50%]">
                            Дүгнэлт:
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                            <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
@@ -913,7 +976,7 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
                            Шээсэнд:
                         </th>
                      </tr>
@@ -922,10 +985,12 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[60%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
                            Дүгнэлт:
                            <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
@@ -939,56 +1004,56 @@ const CT_1_Tsus = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th>Сахар</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Сахар</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>pH</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">pH</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Уураг</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Уураг</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Цагаан эс</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Цагаан эс</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Улаан эс</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Улаан эс</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Хувийн жин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Хувийн жин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>гемосидерин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">гемосидерин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Бенс-жонс уураг</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Бенс-жонс уураг</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Гемоглобин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Гемоглобин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
                            Цусанд: :
                         </th>
                      </tr>
@@ -997,36 +1062,38 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[60%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
                            Дүгнэлт:
                            <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                         </th>
                      </tr>
                      <tr>
-                        <th>Кумбсын шууд урвал</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Кумбсын шууд урвал</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Кумбсын шууд бус урвал</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Кумбсын шууд бус урвал</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
                            Бусад(PCR, молекул генетик цитогенетик, урсгал цитометр):
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                            <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
                         </th>
-                        <th className="w-[50%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
                            Дүгнэлт:
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                            <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
@@ -1037,7 +1104,7 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[50%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
                            Иммунологи
                         </th>
                         <th className="w-[50%]" colSpan={4} rowSpan={15}></th>
@@ -1047,36 +1114,38 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="w-[25%]">Огноо</th>
-                        <th></th>
-                        <th></th>
-                        <th className="w-[60%]" colSpan={4} rowSpan={15}>
+                        <th id="cls" className="w-[25%]">
+                           Огноо
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
                            Дүгнэлт:
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                            <Input className=" w-full " style={{ textAlign: 'center' }} />
                         </th>
                      </tr>
                      <tr>
-                        <th>IgG</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">IgG</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>IgM</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">IgM</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>IgA</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">IgA</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th className="h-6">Үйл онош:</th>
+                        <th id="cls" className="h-6">Үйл онош:</th>
                      </tr>
                   </thead>
                </Table>

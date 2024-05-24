@@ -203,17 +203,19 @@ const GroupDocument = (props) => {
                   <div className="flex flex-row gap-1 justify-between">
                      <Button
                         type="primary"
-                        icon={<UserOutlined />}
                         onClick={() => findHistory(props.document?.documents)}
+                        className="flex items-center gap-1 justify-center  w-full"
                      >
-                        Өвчтөн засах
+                        <p>Өвчтөн засах</p>
+                        <UserOutlined />
                      </Button>
                      <Button
-                        icon={<ArrowRightOutlined />}
                         type="primary"
                         onClick={() => setDocumentView(true, props.document.documents, 'many')}
+                        className="flex items-center gap-1 justify-center p-0 w-full"
                      >
-                        Дэлгэрэнгүй
+                        <p>Дэлгэрэнгүй</p>
+                        <ArrowRightOutlined />
                      </Button>
                   </div>
                   <Each

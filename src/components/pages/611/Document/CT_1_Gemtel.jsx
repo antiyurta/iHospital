@@ -320,29 +320,33 @@ const CT_1_Gemtel = (props) => {
                               <div id="child">Амьсгалж байгаа байдал</div>
                            </div>
                            <div id="child"> Эрүү нүүрний гэмтэл </div>
-                           <div id="child"> Эмчилгээ:</div>
-                           <div className="mt-6" id="child">
-                              Хүзүү, нурууны үнэлгээ:
+                           <div id="child" className="flex ml-0 items-center">
+                              <p>Эмчилгээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q29}`}</p>
+                           </div>
+                           <div className="mt-6 ml-1 flex items-center">
+                              <p id="cls"> Хүзүү, нурууны үнэлгээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q29}`}</p>
                            </div>
                            <div className="mt-6" id="child">
                               Хүзүү нурууны хөдөлгөөн хорих
                            </div>
                         </th>
-                        <th className="w-[45%] border-l-0">
+                        <th className="w-[45%] border-l-0 ">
                            <div>
                               <div></div>
                               <div></div>
                            </div>
                            <div>
-                              <div id="child">
+                              <div id="cls" className="mt-0">
                                  <p>
-                                    <span className="text-[11px]">
-                                       <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
-                                          <Checkbox className="test" value={'q14-2-1-1'}>
+                                    <span className="text-[11px] ">
+                                       <Checkbox.Group value={formData?.['q18']} className="inline">
+                                          <Checkbox className="test " value={'q18-1'}>
                                              <span className="text-[11px]">Тийм/</span>
                                           </Checkbox>
                                           &nbsp;
-                                          <Checkbox className="ml-0 test" value={'q14-2-1-2'}>
+                                          <Checkbox className="ml-0 test" value={'q18-2'}>
                                              <span className="text-[11px]">үгүй</span>
                                           </Checkbox>
                                           &nbsp;
@@ -350,44 +354,44 @@ const CT_1_Gemtel = (props) => {
                                     </span>
                                  </p>
                               </div>
-                              <div id="child">
+                              <div id="cls">
                                  {' '}
                                  <span className="text-[11px]">
-                                    <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
-                                       <Checkbox className="test" value={'q14-2-1-1'}>
+                                    <Checkbox.Group value={formData?.['q19']} className="inline">
+                                       <Checkbox className="test" value={'q19-1'}>
                                           <span className="text-[11px]">Тийм/</span>
                                        </Checkbox>
                                        &nbsp;
-                                       <Checkbox className="ml-0 test" value={'q14-2-1-2'}>
+                                       <Checkbox className="ml-0 test" value={'q19-2'}>
                                           <span className="text-[11px]">үгүй</span>
                                        </Checkbox>
                                        &nbsp;
                                     </Checkbox.Group>
                                  </span>
                               </div>
-                              <div id="child">
+                              <div id="cls">
                                  {' '}
                                  <span className="text-[11px]">
-                                    <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
-                                       <Checkbox className="test" value={'q14-2-1-1'}>
+                                    <Checkbox.Group value={formData?.['q20']} className="inline">
+                                       <Checkbox className="test" value={'q20-1'}>
                                           <span className="text-[11px]">Тийм/</span>
                                        </Checkbox>
                                        &nbsp;
-                                       <Checkbox className="ml-0 test" value={'q14-2-1-2'}>
+                                       <Checkbox className="ml-0 test" value={'q20-2'}>
                                           <span className="text-[11px]">үгүй</span>
                                        </Checkbox>
                                        &nbsp;
                                     </Checkbox.Group>
                                  </span>
                               </div>
-                              <div id="child" className="mt-20">
+                              <div id="cls" className="mt-20">
                                  <span className="text-[11px]">
-                                    <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
-                                       <Checkbox className="test" value={'q14-2-1-1'}>
+                                    <Checkbox.Group value={formData?.['q23']} className="inline">
+                                       <Checkbox className="test" value={'q23-1'}>
                                           <span className="text-[11px]">Тийм/</span>
                                        </Checkbox>
                                        &nbsp;
-                                       <Checkbox className="ml-0 test" value={'q14-2-1-2'}>
+                                       <Checkbox className="ml-0 test" value={'q23-2'}>
                                           <span className="text-[11px]">үгүй</span>
                                        </Checkbox>
                                        &nbsp;
@@ -414,31 +418,53 @@ const CT_1_Gemtel = (props) => {
                         <th id="child">Өөрөө</th>
                         <th id="child"></th>
                         <th id="child">Амьсгалын аппарат </th>
-                        <th id="child">Тийм/үгүй</th>
+                        <th id="child">
+                           <span className="text-[11px]">
+                              <Checkbox.Group value={formData?.q25} className="inline">
+                                 <Checkbox className="test" value={'q25-1'}>
+                                    <span className="text-[11px]">Тийм/</span>
+                                 </Checkbox>
+                                 &nbsp;
+                                 <Checkbox className="ml-0 test" value={'q25-2'}>
+                                    <span className="text-[11px]">үгүй</span>
+                                 </Checkbox>
+                                 &nbsp;
+                              </Checkbox.Group>
+                           </span>
+                        </th>
                      </tr>
                      <tr>
                         <th id="child">Цээж рүү нэвтэрсэн гэмтэл</th>
                         <th colSpan={2}>
-                           <Checkbox.Group>
-                              <Checkbox>Тийм</Checkbox>
-                              <Checkbox>Үгүй</Checkbox>
+                           <Checkbox.Group value={formData?.q24}>
+                              <Checkbox value={'q24-1'}>Тийм</Checkbox>
+                              <Checkbox value={'q24-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
                         <th id="child"></th>
                         <th id="child" colSpan={2}>
-                           Хэмжээ:
+                           <div className="flex items-center">
+                              <p>Хэмжээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q30}`}</p>
+                           </div>
                         </th>
                      </tr>
                      <tr className="h-16">
                         <th id="child" colSpan={3}>
-                           Үзлэг:
+                           <div className="flex items-center ">
+                              <p>Үзлэг:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q29}`}</p>
+                           </div>
                         </th>
                         <th id="child"></th>
                         <th id="child" colSpan={4}></th>
                      </tr>
                      <tr className="h-16">
                         <th id="child" colSpan={3}>
-                           Эмчилгээ:
+                           <div className="flex items-center">
+                              <p>Эмчилгээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q31}`}</p>
+                           </div>
                         </th>
                         <th id="child"></th>
                         <th id="child" colSpan={4}></th>
@@ -731,13 +757,19 @@ const CT_1_Gemtel = (props) => {
                            <div className="text-center font-[500] ">Толгой, нүүр болон хүзүү</div>
                         </div>
                         <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[80px] justify-end">
-                           <div className="text-center text-[13px] font-[300] ml-2">Нүд:</div>
-                           <div className="text-center text-[13px] font-[300] ml-2">Чихний хэнгэрэг:</div>
+                           <div className="text-center text-[13px] font-[300] ml-2 flex items-center">
+                              <p>Нүд:</p>
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q32}`}</p>
+                           </div>
+                           <div className="text-center text-[13px] font-[300] ml-2 flex items-center">
+                              <p>Чихний хэнгэрэг:</p>
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q33}`}</p>
+                           </div>
                         </div>
                      </div>
                      <div>
                         <div className="w-[300px] bg-neutral-300  border-1 border-slate-950">
-                           <div className="text-center font-[500] ">Цээж:</div>
+                           <div className="text-center font-[500] flex ">Цээж</div>
                         </div>
                         <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[80px] justify-end">
                            <Image src={ChestImg} alt="" width={120} />
@@ -745,11 +777,14 @@ const CT_1_Gemtel = (props) => {
                      </div>
                      <div>
                         <div className="w-[300px] bg-neutral-300  border-1 border-slate-950">
-                           <div className="text-center  font-[500]">Хэвлий:</div>
+                           <div className="text-center  font-[500]">Хэвлий</div>
                         </div>
-                        <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[110px] justify-end">
-                           <Image src={AbdomenImg} alt="" width={120} />
-                           <div className="text-center text-[13px] font-[300] ml-2 ">Шээсний зам:</div>
+                        <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[100px] justify-end">
+                           <Image src={AbdomenImg} alt="" width={100} />
+                           <div className="text-center text-[13px] font-[300] ml-2 flex items-center ">
+                              <p>Шээсний зам:</p>
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q34}`}</p>
+                           </div>
                         </div>
                      </div>
                      <div>
@@ -757,7 +792,9 @@ const CT_1_Gemtel = (props) => {
                            <div className="text-center font-[500]">Аарцаг</div>
                         </div>
                         <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[25px] ">
-                           <div className="text-center"></div>
+                           <div className="text-center">
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q35}`}</p>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -804,28 +841,28 @@ const CT_1_Gemtel = (props) => {
                               </th>
                            </tr>
                            <tr>
-                              <th id='cls'>Biceps </th>
-                              <th id='cls'></th>
+                              <th id="cls">Biceps </th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th id='cls'>Triceps</th>
-                              <th id='cls'></th>
+                              <th id="cls">Triceps</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th id='cls'>Supinator</th>
-                              <th id='cls'></th>
+                              <th id="cls">Supinator</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th id='cls'>Knee</th>
-                              <th id='cls'></th>
+                              <th id="cls">Knee</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th id='cls'>Ankle</th>
-                              <th id='cls'></th>
+                              <th id="cls">Ankle</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th id='cls'>Plantar</th>
-                              <th id='cls'></th>
+                              <th id="cls">Plantar</th>
+                              <th id="cls"></th>
                            </tr>
                         </thead>
                      </Table>
