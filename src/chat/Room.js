@@ -7,7 +7,8 @@ import { Avatar, Badge, Button } from 'antd';
 import { CloseOutlined, MinusOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 
-const SOCKET_URL = 'https://ihospital.mn/';
+// const SOCKET_URL = 'https://ihospital.mn/';
+const SOCKET_URL = undefined;
 
 import Taudio from './xaxa.mp3';
 import { useSocketContext } from '@Features/socketContext';

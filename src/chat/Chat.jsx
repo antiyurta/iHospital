@@ -15,7 +15,8 @@ import AuthContext from '@Features/AuthContext';
 //api
 import ChatService from '@ApiServices/chat/chat';
 //defaults
-const socketUrl = 'https://ihospital.mn/';
+// const socketUrl = 'https://www.ihospital.mn/';
+const socketUrl = undefined;
 
 const ChatLayout = () => {
    const { user } = useContext(AuthContext);

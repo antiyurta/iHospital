@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import { bloodType, pregnancyActivity, relationship } from '@Utils/config/xypField';
 import { useSelector } from 'react-redux';
 import { ListPatientInfo } from '@Comman/ListInjection';
 import { selectPatient } from '@Features/patientReducer';
 import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
-
-const { TextArea } = Input;
 const labelstyle = {
    fontSize: 14,
    color: 'black',
@@ -14,10 +12,9 @@ const labelstyle = {
 };
 export const SendFormData = ({ form }) => {
    const patient = useSelector(selectPatient);
-   const [formData, setFormData] = useState([]);
    useEffect(() => {
       InsuranceApi.getFormData(1).then((res) => {
-         setFormData(res.data.result);
+         form.setFieldValue('formdata', res.data.result);
       });
    }, []);
 
@@ -30,7 +27,7 @@ export const SendFormData = ({ form }) => {
             <Col span={7} offset={1}>
                <Form.Item
                   label="Тусламж, үйлчилгээний дугаар"
-                  name="serviceNo"
+                  name={['pregnantInfo', 'serviceNo']}
                   rules={[
                      {
                         required: true,
@@ -44,7 +41,7 @@ export const SendFormData = ({ form }) => {
             <Col span={7} offset={1}>
                <Form.Item
                   label="Жирэмсний хяналтад орсон огноо"
-                  name="pregnancyControlledDate"
+                  name={['pregnantInfo', 'pregnancyControlledDate']}
                   rules={[
                      {
                         required: true,
@@ -58,7 +55,7 @@ export const SendFormData = ({ form }) => {
             <Col span={7} offset={1}>
                <Form.Item
                   label="Жирэмсний хугацаа /7 хоногоор/"
-                  name="pregnancyWeek"
+                  name={['pregnantInfo', 'pregnancyWeek']}
                   rules={[
                      {
                         required: true,
@@ -72,7 +69,7 @@ export const SendFormData = ({ form }) => {
             <Col span={7} offset={1}>
                <Form.Item
                   label="Төлөв"
-                  name="pregnancyActivityId"
+                  name={['pregnantInfo', 'pregnancyActivityId']}
                   rules={[
                      {
                         required: true,
@@ -85,12 +82,15 @@ export const SendFormData = ({ form }) => {
                      onSelect={(_, option) => form.setFieldValue('pregnancyActivityName', option.label)}
                   />
                </Form.Item>
-               <Form.Item name="pregnancyActivityName" hidden>
+               <Form.Item name={['pregnantInfo', 'pregnancyActivityName']} hidden>
                   <Input />
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Жирэмслэхээс сэргийлэх арга хэмжээ авч байсан эсэх" name="protectMethod">
+               <Form.Item
+                  label="Жирэмслэхээс сэргийлэх арга хэмжээ авч байсан эсэх"
+                  name={['pregnantInfo', 'protectMethod']}
+               >
                   <Select
                      options={[
                         { value: 1, label: 'Тийм' },
@@ -100,7 +100,7 @@ export const SendFormData = ({ form }) => {
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Үр хөндүүлж байсан эсэх" name="abortion">
+               <Form.Item label="Үр хөндүүлж байсан эсэх" name={['pregnantInfo', 'abortion']}>
                   <Select
                      options={[
                         { value: 1, label: 'Тийм' },
@@ -110,17 +110,17 @@ export const SendFormData = ({ form }) => {
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Цусны бүлэг" name="bloodType">
+               <Form.Item label="Цусны бүлэг" name={['pregnantInfo', 'bloodType']}>
                   <Select options={bloodType.map((item) => ({ value: item.valueId, label: item.valueName }))} />
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Гэрлэлтийн байдал" name="martialStatus">
+               <Form.Item label="Гэрлэлтийн байдал" name={['pregnantInfo', 'martialStatus']}>
                   <Select options={relationship.map((item) => ({ value: item.valueId, label: item.valueName }))} />
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Хөгжлийн бэрхшээлтэй эсэх" name="isImpairment">
+               <Form.Item label="Хөгжлийн бэрхшээлтэй эсэх" name={['pregnantInfo', 'isImpairment']}>
                   <Select
                      options={[
                         { value: 1, label: 'Тийм' },
@@ -130,7 +130,7 @@ export const SendFormData = ({ form }) => {
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Архи хэрэглэдэг эсэх" name="isAlcohol">
+               <Form.Item label="Архи хэрэглэдэг эсэх" name={['pregnantInfo', 'isAlcohol']}>
                   <Select
                      options={[
                         { value: 1, label: 'Тийм' },
@@ -140,7 +140,7 @@ export const SendFormData = ({ form }) => {
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Тамхи хэрэглэдэг эсэх" name="isSmoking">
+               <Form.Item label="Тамхи хэрэглэдэг эсэх" name={['pregnantInfo', 'isSmoking']}>
                   <Select
                      options={[
                         { value: 1, label: 'Тийм' },
@@ -150,7 +150,10 @@ export const SendFormData = ({ form }) => {
                </Form.Item>
             </Col>
             <Col span={7} offset={1}>
-               <Form.Item label="Урт хугацааны эм биологийн идэвхит бүтээгдэхүүн тогтмол хэрэглэдэг эсэх" name="isDrug">
+               <Form.Item
+                  label="Урт хугацааны эм биологийн идэвхит бүтээгдэхүүн тогтмол хэрэглэдэг эсэх"
+                  name={['pregnantInfo', 'isDrug']}
+               >
                   <Select
                      options={[
                         { value: 1, label: 'Тийм' },
@@ -160,6 +163,74 @@ export const SendFormData = ({ form }) => {
                </Form.Item>
             </Col>
          </Row>
+         <Form.List name="formdata">
+            {(formdata) => (
+               <div className="rounded-md bg-[#F3F4F6] w-full inline-block m-1">
+                  {formdata.map((item, index) => (
+                     <Fragment key={index}>
+                        <Form.Item name={[item.name, 'docud']} hidden>
+                           <Input />
+                        </Form.Item>
+                        <Form.Item name={[item.name, 'categoryId']} hidden>
+                           <Input />
+                        </Form.Item>
+                        <Form.Item label="Бүлгийн нэр" name={[item.name, 'categoryName']}>
+                           <Input disabled />
+                        </Form.Item>
+                        <Form.Item name={[item.name, 'fieldId']} hidden>
+                           <Input />
+                        </Form.Item>
+                        <Form.Item label="Талбарын нэр" name={[item.name, 'fieldName']}>
+                           <Input disabled />
+                        </Form.Item>
+                        <Form.Item name={[item.name, 'type']} hidden>
+                           <Input />
+                        </Form.Item>
+                        <Form.Item label="Хариулт" name={[item.name, 'value']}>
+                           {form.getFieldValue(['formdata', item.name, 'type']) == 'selectAnswer' ? (
+                              <Select
+                                 options={form
+                                    .getFieldValue(['formdata', item.name, 'refs'])
+                                    ?.map((item) => ({ value: item.resultId, label: item.resultName }))}
+                              />
+                           ) : (
+                              <Input placeholder="Хариултаа бичнэ үү." />
+                           )}
+                        </Form.Item>
+                        <Form.List name={[item.name, 'refs']}>
+                           {(refs) => (
+                              <div className="rounded-md bg-[#e8eaee] w-full inline-block m-1">
+                                 {refs.map((item, index) => (
+                                    <Fragment key={index}>
+                                       <Form.Item name={[item.name, 'docud']} hidden>
+                                          <Input />
+                                       </Form.Item>
+                                       <Form.Item name={[item.name, 'resultId']} hidden>
+                                          <Input />
+                                       </Form.Item>
+                                       <Form.Item name={[item.name, 'resultName']} hidden>
+                                          <Input />
+                                       </Form.Item>
+                                    </Fragment>
+                                 ))}
+                              </div>
+                           )}
+                        </Form.List>
+                     </Fragment>
+                  ))}
+               </div>
+            )}
+            {/* {
+ "docud": 297,
+ "categoryId": 1,
+ "categoryName": "Өмнөх жирэмслэлт, төрөлтийн байдлын талаарх мэдээлэл",
+ "fieldId": 1,
+ "fieldName": "Хэд дэх жирэмслэлт",
+ "type": "inputText",
+ "value": "2",
+ "refs": null
+ }, */}
+         </Form.List>
       </>
    );
 };

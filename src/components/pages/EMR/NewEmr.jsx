@@ -8,7 +8,7 @@ import { WarningIcon } from '@Assets/index';
 //context
 import { EmrContextProvider } from '@Features/EmrContext';
 //redux
-import { delEmrData } from '@Features/emrReducer';
+import { delEmrData, delOtsData } from '@Features/emrReducer';
 //common
 import { openNofi } from '@Comman/common';
 //comp
@@ -36,7 +36,8 @@ const getReduxDatas = (state) => {
 };
 const dispatchReduxDatas = (dispatch) => {
    return {
-      delEmrData: () => dispatch(delEmrData())
+      delEmrData: () => dispatch(delEmrData()),
+      delOtsData: () => dispatch(delOtsData())
    };
 };
 class NewEmr extends React.Component {
@@ -94,6 +95,7 @@ class NewEmr extends React.Component {
          await ServiceRequestApi.post(data).then(async (response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');
+               this.props.delOtsData();
                await PaymentApi.get({
                   params: {
                      patientId: this.state.selectedPatient.id

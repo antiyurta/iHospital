@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BarcodeOutlined, CheckOutlined, MinusOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Modal, Table } from 'antd';
+import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -12,17 +12,26 @@ import { ListPatientInfo, TypeInfo } from '../../ListInjection';
 import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
 import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
 import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
+//utils
+import { getGender } from '@Utils/config/xypField';
 //comman
-import { getAge, getGenderInType, openNofi } from '@Comman/common';
+import Finger from '@Comman/Finger/Finger';
+import { getAge, openNofi } from '@Comman/common';
 //redux
 import { setEmrData } from '@Features/emrReducer';
+import { setPatient } from '@Features/patientReducer';
 //api
 import ServiceApi from '@ApiServices/service/service';
+import InsuranceApi from '@ApiServices/healt-insurance/insurance';
+import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 function IndexAfter({ type, params }) {
    // type 0 bol Xray 1 bol exo 2r bol ekg 3r operation
    const dispatch = useDispatch();
    const navigate = useNavigate();
+   const [startFormHics] = Form.useForm();
+   const [selectedRow, setSelectedRow] = useState({});
+   const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
    const [requestLists, setRequestLists] = useState([]);
    const [meta, setMeta] = useState({
       page: 1,
@@ -75,11 +84,14 @@ function IndexAfter({ type, params }) {
       }
    };
    const getEMR = (row) => {
+      dispatch(setPatient(row.patient));
       // status heregteii anhan dawtan
       // tolbor shalgah
+      setSelectedRow(row);
+      const payment = row.isPayment || row.isInsurance;
       if (row.xrayProcess === 0 && row.deviceType === 0) {
          openNofi('warning', 'Зураг', 'Зураг оруулагүй');
-      } else if (!row.isPayment && row.usageType === 'OUT') {
+      } else if (!payment && row.usageType === 'OUT') {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
       } else {
          if (row.confirmedDate === null && type != 3) {
@@ -102,12 +114,17 @@ function IndexAfter({ type, params }) {
             inspectionNoteId: row.inspectionNoteId,
             inspection: type === 3 ? 13 : row.deviceType === 0 ? 11 : 12,
             xrayId: row.xrayId,
-            startDate: row.startAt || new Date()
+            startDate: row.startAt || new Date(),
+            hicsSeal: row.hicsSeal
          };
          dispatch(setEmrData(data));
-         navigate(`/main/emr`, {
-            state: data
-         });
+         if (row.isInsurance && !row.hicsSeal && type === 3) {
+            setIsOpenModalStartService(true);
+         } else {
+            navigate(`/main/emr`, {
+               state: data
+            });
+         }
       }
    };
    const getTypeInfo = (begin, end) => {
@@ -172,8 +189,8 @@ function IndexAfter({ type, params }) {
       },
       {
          title: 'Хүйс',
-         dataIndex: ['patient', 'genderType'],
-         render: (genderType) => getGenderInType(genderType)
+         dataIndex: ['patient', 'gender'],
+         render: (gender) => getGender(gender)
       },
       {
          title: type === 3 ? 'Ажилбарын нэр' : 'Оношилгооны нэр',
@@ -182,9 +199,9 @@ function IndexAfter({ type, params }) {
       },
       {
          title: 'Үзлэгийн цаг',
-         dataIndex: 'deviceSlots',
+         dataIndex: 'deviceSlot',
          width: 90,
-         render: (deviceSlots) => getTypeInfo(deviceSlots?.startTime, deviceSlots?.endTime)
+         render: (deviceSlot) => getTypeInfo(deviceSlot?.startTime, deviceSlot?.endTime)
       },
       {
          title: 'Үзлэг',
@@ -253,41 +270,135 @@ function IndexAfter({ type, params }) {
          }
       }
    ];
+   //hisc
+   const CreateHicsSeal = async (row, result) => {
+      await InsuranceApi.createHicsSeal({
+         appointmentId: null,
+         inpatientRequestId: null,
+         operationRequestId: row.id,
+         patientId: row.patientId,
+         departmentId: 72,
+         startAt: result?.createdDate || new Date(),
+         hicsAmbulatoryStartId: null,
+         hicsStartCode: result.code,
+         hicsServiceId: result?.hicsServiceId,
+         groupId: 201
+      }).then((response) => {
+         if (response.status != 201) {
+            openNofi('error', 'Амжилтгүй', response);
+         }
+         navigate(`/main/emr`, {
+            // state: data
+         });
+      });
+   };
+   const startAmbulatory = async (values) => {
+      await healthInsuranceApi
+         .postStartHics({
+            patientRegno: selectedRow.patient?.registerNumber,
+            patientFingerprint: values.fingerprint,
+            hicsServiceId: values.hicsServiceId
+         })
+         .then(({ data }) => {
+            if (data.code === 400) {
+               openNofi('error', 'Амжилтгүй', data.description);
+            } else if (data.code === 200) {
+               CreateHicsSeal(selectedRow, data.result);
+            }
+         });
+   };
+   //
    return (
-      <div className="w-full h-screen bg-[#f5f6f7] p-3">
-         <div className="flex flex-col gap-2">
-            <ScheduleTypeInfo />
-            <InspectionTypeInfo />
-            <ListFilter meta={meta} appointmentsLength={requestLists?.length || 0} getList={getRequest} />
-            <div className="w-full">
-               <Card
-                  bordered={false}
-                  className="header-solid max-h-max rounded-md"
-                  bodyStyle={{
-                     padding: 8
-                  }}
-               >
-                  <Table
-                     rowKey={'id'}
-                     locale={{
-                        emptyText: <Empty description={'Хоосон'} />
+      <>
+         <div className="w-full h-screen bg-[#f5f6f7] p-3">
+            <div className="flex flex-col gap-2">
+               <ScheduleTypeInfo />
+               <InspectionTypeInfo />
+               <ListFilter meta={meta} appointmentsLength={requestLists?.length || 0} getList={getRequest} />
+               <div className="w-full">
+                  <Card
+                     bordered={false}
+                     className="header-solid max-h-max rounded-md"
+                     bodyStyle={{
+                        padding: 8
                      }}
-                     rowClassName="hover: cursor-pointer"
-                     columns={requestColumns}
-                     dataSource={requestLists}
-                     scroll={{
-                        x: 1000
-                     }}
-                     loading={{
-                        spinning: spinner,
-                        tip: 'Уншиж байна....'
-                     }}
-                     pagination={false}
-                  />
-               </Card>
+                  >
+                     <Table
+                        rowKey={'id'}
+                        locale={{
+                           emptyText: <Empty description={'Хоосон'} />
+                        }}
+                        rowClassName="hover: cursor-pointer"
+                        columns={requestColumns}
+                        dataSource={requestLists}
+                        scroll={{
+                           x: 1000
+                        }}
+                        loading={{
+                           spinning: spinner,
+                           tip: 'Уншиж байна....'
+                        }}
+                        pagination={false}
+                     />
+                  </Card>
+               </div>
             </div>
          </div>
-      </div>
+         <Modal
+            title="Тусламж үйлчилгээг эхлүүлэх"
+            open={isOpenModalStartService}
+            onCancel={() => setIsOpenModalStartService(false)}
+            onOk={() =>
+               startFormHics
+                  .validateFields()
+                  .then((values) => {
+                     startAmbulatory(values);
+                  })
+                  .catch(({ errorFields }) => {
+                     errorFields?.map((error) => message.error(error.errors[0]));
+                  })
+            }
+            width={300}
+         >
+            <Form
+               form={startFormHics}
+               layout="vertical"
+               initialValues={{
+                  hicsServiceId: 20130
+               }}
+            >
+               <div className="w-full flex flex-col gap-3">
+                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+                     <Finger
+                        form={startFormHics}
+                        insurance={true}
+                        noStyle
+                        name="fingerprint"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Иргэний хурууны хээ заавал'
+                           }
+                        ]}
+                     >
+                        <Input />
+                     </Finger>
+                  </div>
+                  <Form.Item
+                     label="Т.Ү-ний дугаар"
+                     name="hicsServiceId"
+                     rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
+                     style={{
+                        width: '100%'
+                     }}
+                     className="mb-0"
+                  >
+                     <Input />
+                  </Form.Item>
+               </div>
+            </Form>
+         </Modal>
+      </>
    );
 }
 export default IndexAfter;

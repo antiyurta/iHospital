@@ -184,9 +184,11 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      await getStructureById(row.cabinet.parentId).then(async (response) => {
                         await healthInsuranceApi
                            .getHicsService()
-                           .then(({ data }) =>
-                              setHicsSupports(data.result.filter((hicsService) => response.includes(hicsService.id)))
-                           )
+                           .then(({ data }) => {
+                              setHicsSupports(
+                                 data.result.filter((hicsService) => response.includes(hicsService.groupId))
+                              );
+                           })
                            .catch(() => {
                               openNofi(
                                  'error',
@@ -198,13 +200,19 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      startFormHics.resetFields();
                      setIsOpenModalStartService(true);
                   } else {
-                     // CreateHicsSeal(row, {}, 209);
+                     CreateHicsSeal(
+                        row,
+                        {
+                           hicsServiceId: 20900
+                        },
+                        209
+                     );
                   }
                } else {
-                  hrefEMR(row);
+                  hrefEMR(row, null);
                }
             } else {
-               hrefEMR(row);
+               hrefEMR(row, null);
             }
          }
       }
@@ -215,7 +223,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          patientId: row.patientId,
          inspection: type === 2 ? 1 : row.inspectionType,
          type: row.type,
-         hicsSeal: row.hicsSeal || sealResponse.data?.response,
+         hicsSeal: row.hicsSeal || sealResponse?.data?.response,
          parentHicsSeal: null,
          startDate: row.startDate || new Date(),
          endDate: row.endDate,
@@ -223,6 +231,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          inspectionNoteId: row.inspectionNoteId,
          urgentInspectionNoteId: row.urgentInspectionNoteId,
          slotId: row.slotId,
+         invoiceId: row.invoiceId,
          hicsServiceId: row.hicsSeal?.hicsServiceId,
          reasonComming: row.reasonComming,
          status: row.status,
@@ -284,7 +293,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          });
       }
    };
-   const CreateHicsSeal = async (row, result) => {
+   const CreateHicsSeal = async (row, result, groupId) => {
       await InsuranceApi.createHicsSeal({
          appointmentId: row.id,
          patientId: row.patientId,
@@ -293,7 +302,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          hicsAmbulatoryStartId: null,
          hicsStartCode: result.code,
          hicsServiceId: result?.hicsServiceId,
-         groupId: hicsSupports?.find((hicsSupport) => hicsSupport.id === result?.hicsServiceId)?.groupId
+         groupId: groupId
       }).then((response) => {
          if (response.status != 201) {
             openNofi('error', 'Амжилтгүй', response);
@@ -312,7 +321,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);
             } else if (data.code === 200) {
-               CreateHicsSeal(selectedRow, data.result);
+               CreateHicsSeal(selectedRow, data.result, 201);
             }
          });
    };

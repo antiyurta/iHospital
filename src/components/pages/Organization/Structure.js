@@ -73,7 +73,16 @@ function Structure() {
          index: 'hicsServiceIds',
          isView: true,
          input: 'multipleSelect',
-         inputData: hicsServices,
+         inputData: [
+            {
+               id: 201,
+               label: 201
+            },
+            {
+               id: 205,
+               label: 205
+            }
+         ],
          relIndex: 'id',
          col: 24
       }

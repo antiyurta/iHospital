@@ -29,7 +29,6 @@ const InternalOrder = (props) => {
    const dispatch = useDispatch();
    const IncomeOTSData = useSelector(selectCurrentOtsData);
    const IncomeEMRData = useSelector(selectCurrentEmrData);
-   const [total, setTotal] = useState(0);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();
    const [showMedicine, setShowMedicine] = useState(false);
@@ -75,8 +74,8 @@ const InternalOrder = (props) => {
    };
    const handleclick = async (value) => {
       setIsLoadingOrderTable(true);
+      var services = [];
       if (isPackage) {
-         var services = [];
          value.map((item, index) => {
             const service = {};
             service.unikey = index;
@@ -94,9 +93,6 @@ const InternalOrder = (props) => {
          }
          orderForm.setFieldsValue({ services: data });
       } else {
-         var services = [];
-         var subTotal = 0;
-         console.log('asdasdada', value);
          value.map((item) => {
             var service = {};
             service.id = item.id;
@@ -153,28 +149,36 @@ const InternalOrder = (props) => {
                service.requestDate = new Date();
             }
             service.requestDate = dayjs(new Date()).format('YYYY-MM-DD');
-            subTotal += service.price;
             services.push(service);
          });
-         var datas = await orderForm.getFieldsValue();
-         var data = [];
-         if (datas.services === undefined) {
-            data = services;
-         } else {
-            data = datas.services.concat(services);
-         }
-         replaceOtsData(data, total + subTotal);
-         orderForm.setFieldsValue({ services: data });
-         setTotal(total + subTotal);
+         replaceOtsData([...(IncomeOTSData?.services || []), ...services]);
       }
       setIsLoadingOrderTable(false);
    };
 
-   const replaceOtsData = (services, total) => {
+   const replaceOtsData = (services) => {
+      const newServices = services?.map((service) => {
+         if (service.type === 2 || service.type === 8) {
+            return {
+               ...service,
+               total: service.dayCount * service.repeatTime,
+               price: service.dayCount * service.repeatTime * service.oPrice
+            };
+         } else {
+            return service;
+         }
+      });
+      const totalAmount = newServices?.reduce((sum, service) => {
+         if (service.type === 2 || service.type === 8) {
+            return sum + (service.oPrice || 0) * service.total;
+         } else {
+            return sum + service.oPrice || 0;
+         }
+      }, 0);
       dispatch(
          setOtsData({
-            services: services,
-            total: total
+            services: newServices,
+            total: totalAmount
          })
       );
    };
@@ -224,12 +228,10 @@ const InternalOrder = (props) => {
       // replaceOtsData([], 0);
       if (IncomeOTSData?.services?.length > 0) {
          orderForm.setFieldValue('services', IncomeOTSData.services);
-         setTotal(IncomeOTSData.total || 0);
       } else {
          orderForm.resetFields();
-         setTotal(0);
       }
-   }, [selectedPatient]);
+   }, [IncomeOTSData]);
    useEffect(() => {
       RenderCategories();
    }, []);
@@ -267,7 +269,7 @@ const InternalOrder = (props) => {
                <Form
                   form={orderForm}
                   onValuesChange={(_changedValue, allValues) => {
-                     replaceOtsData(allValues, total);
+                     replaceOtsData(allValues?.services);
                   }}
                >
                   <Form.List name="services">
@@ -284,7 +286,6 @@ const InternalOrder = (props) => {
                                  form={orderForm}
                                  services={services}
                                  remove={remove}
-                                 setTotal={setTotal}
                               />
                            );
                         }
@@ -296,15 +297,35 @@ const InternalOrder = (props) => {
          <div className="w-full flex justify-between">
             <div className="flex flex-row gap-3">
                <p className="font-extrabold">Нийт дүн:</p>
-               <p className="font-extrabold">{numberToCurrency(total)}</p>
+               <p className="font-extrabold">{numberToCurrency(IncomeOTSData?.total || 0)}</p>
             </div>
             <Button
                type="primary"
                onClick={() =>
-                  orderForm.validateFields().then((values) => {
-                     save(values.services, true);
-                     orderForm.resetFields();
-                  })
+                  orderForm
+                     .validateFields()
+                     .then((values) => {
+                        const errors = values?.services?.filter(
+                           (service) => !service.orderTime && service.type != 0 && !service.isCito
+                        );
+                        if (errors?.length > 0) {
+                           errors?.map((error) => {
+                              openNofi('error', 'Алдаа', `${error.name} Цаг оруулах`);
+                           });
+                        } else {
+                           const newServices = values?.services?.filter(
+                              (service) => !service.requestId && !service.invoiceId
+                           );
+                           save(newServices, true);
+                           orderForm.resetFields();
+                        }
+                     })
+                     .catch((error) => {
+                        console.log('er', error);
+                        error.errorFields?.map((errorField) => {
+                           openNofi('error', 'Алдаа', errorField.errors[0]);
+                        });
+                     })
                }
             >
                {isPackage ? 'Хадгалах' : 'OTS Хадгалах'}

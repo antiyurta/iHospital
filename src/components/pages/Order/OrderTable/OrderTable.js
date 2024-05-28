@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Space, Table, message } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Space, Table, message } from 'antd';
 import OrderForm from './OrderForm';
 import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
@@ -43,7 +43,7 @@ const requestTypeMap = (id, typeId) => ({
 });
 
 function OrderTable(props) {
-   const { selectedPatient, setLoading, isLoading, usageType, services, form, remove, setTotal } = props;
+   const { selectedPatient, setLoading, isLoading, usageType, services, form, remove } = props;
    const dispatch = useDispatch();
    const incomeOtsData = useSelector(selectCurrentOtsData);
    const incomeEmrData = useSelector(selectCurrentEmrData);
@@ -68,22 +68,6 @@ function OrderTable(props) {
          }
       ];
    };
-   const totalCalculator = (key, value, name) => {
-      form.setFieldValue(['services', key, `${name}`], value);
-      let repeatTime = form.getFieldValue(['services', key, 'repeatTime']);
-      let dayCount = form.getFieldValue(['services', key, 'dayCount']);
-      const oPrice = form.getFieldValue(['services', key, 'oPrice']);
-      form.setFieldValue(['services', key, 'total'], repeatTime * dayCount);
-      form.setFieldValue(['services', key, 'price'], repeatTime * dayCount * oPrice);
-      const services = form.getFieldValue('services');
-      var total = 0;
-      services.map((service) => {
-         if (service.price) {
-            total += service.price;
-         }
-      });
-      setTotal(total);
-   };
    const isDisable = (index, name) => {
       if (name === 'repeatTime' || name === 'dayCount') {
          const type = form.getFieldValue(['services', index, 'type']);
@@ -94,64 +78,101 @@ function OrderTable(props) {
          }
       }
    };
-   const createOtsRequest = async (service, formIndex) => {
-      console.log(service);
-      setLoading(true);
-      return await regularApi
-         .post('payment/invoice', {
-            patientId: selectedPatient.id,
-            amount: service.oPrice,
-            type: service.type,
-            typeId: service.typeId
-         })
-         .then(async ({ data: { response } }) => {
-            try {
-               form.setFieldValue(['services', formIndex, 'invoiceId'], response.id);
-               setInvoiceData({
-                  invoiceId: response.id,
-                  type: service.type
-               });
-               setAppointmentTypeId(appointmentMap[service.type]);
-               return await regularApi
-                  .post(urlMapPost[service.type], {
-                     ...requestTypeMap(service.id, service.typeId)[service.type],
-                     patientId: selectedPatient.id,
-                     name: response.name,
-                     invoiceId: response.id,
-                     isActive: false,
-                     price: response.amount,
-                     inpatientPrice: response.amount,
-                     requestDate: new Date(),
-                     usageType: usageType,
-                     xrayProcess: 0,
-                     scheduleId: null,
-                     isPayment: false,
-                     deviceType: service.deviceType,
-                     startAt: null,
-                     isInsurance: incomeEmrData.isInsurance
+   const removeOtsRequest = async (index) => {
+      try {
+         setLoading(true);
+         const currentService = form.getFieldValue(['services', index]);
+         if (currentService.requestId && currentService.invoiceId) {
+            if (currentService.type === 1 || currentService.type === 2) {
+               const selectedUrl = urlMapPost[currentService.type];
+               if (!selectedUrl) throw new Error('Unknown service type');
+               await regularApi
+                  .patch(selectedUrl + '/' + currentService.requestId, {
+                     status: 3,
+                     slotId: null,
+                     description: 'TEST YM'
                   })
-                  .then(({ data: { response } }) => response)
-                  .catch(() => false);
-            } catch (error) {
-               message.error(error.message || 'An error occurred');
+                  .then(async () => {
+                     await regularApi.delete(selectedUrl, currentService.requestId);
+                     await regularApi.delete('payment/invoice', currentService.invoiceId);
+                     setLoading(false);
+                     return true;
+                  });
             }
-         })
-         .then((lastResponse) => {
-            if (lastResponse) {
-               form.setFieldValue(['services', formIndex, 'xrayRequestId'], lastResponse.id);
-               setLastResponse({
-                  responseId: lastResponse.id,
-                  formIndex: formIndex
-               });
-               setOpenAppointment(true);
-            }
-         })
-         .catch((error) => {
-            console.log('error', error);
-         })
-         .finally(() => {
-            setLoading(false);
-         });
+         }
+         setLoading(false);
+         return true;
+      } catch (error) {
+         message.error(error.message || 'An error occurred');
+      }
+      setLoading(false);
+      return false;
+   };
+   const createOtsRequest = async (service, formIndex) => {
+      console.log('service', service);
+      if (!service.invoiceId && !service.requestId) {
+         setLoading(true);
+         return await regularApi
+            .post('payment/invoice', {
+               patientId: selectedPatient.id,
+               amount: service.oPrice,
+               type: service.type,
+               typeId: service.typeId
+            })
+            .then(async ({ data: { response } }) => {
+               try {
+                  form.setFieldValue(['services', formIndex, 'invoiceId'], response.id);
+                  console.log(response);
+                  setInvoiceData({
+                     invoiceId: response.id,
+                     type: service.type,
+                     appointmentId: incomeEmrData.appointmentId,
+                     deviceId: service.deviceId
+                  });
+                  setAppointmentTypeId(appointmentMap[service.type]);
+                  return await regularApi
+                     .post(urlMapPost[service.type], {
+                        ...requestTypeMap(service.id, service.typeId)[service.type],
+                        patientId: selectedPatient.id,
+                        name: response.name,
+                        invoiceId: response.id,
+                        isActive: false,
+                        price: response.amount,
+                        inpatientPrice: response.amount,
+                        requestDate: new Date(),
+                        usageType: usageType,
+                        xrayProcess: 0,
+                        scheduleId: null,
+                        isPayment: false,
+                        deviceType: service.deviceType,
+                        startAt: null,
+                        isInsurance: incomeEmrData.isInsurance
+                     })
+                     .then(({ data: { response } }) => response)
+                     .catch(() => false);
+               } catch (error) {
+                  message.error(error.message || 'An error occurred');
+               }
+            })
+            .then((lastResponse) => {
+               if (lastResponse) {
+                  form.setFieldValue(['services', formIndex, 'requestId'], lastResponse.id);
+                  setLastResponse({
+                     responseId: lastResponse.id,
+                     formIndex: formIndex
+                  });
+                  setOpenAppointment(true);
+               }
+            })
+            .catch((error) => {
+               console.log('error', error);
+            })
+            .finally(() => {
+               setLoading(false);
+            });
+      } else {
+         setOpenAppointment(true);
+      }
    };
    const replaceOtsData = () => {
       dispatch(
@@ -186,51 +207,72 @@ function OrderTable(props) {
                   title: 'Нэр',
                   dataIndex: 'name',
                   render: (_value, _row, index) => (
+                     <OrderForm noStyle name={[index, 'name']} editing={false}>
+                        <Input />
+                     </OrderForm>
+                  )
+               },
+               {
+                  title: 'Цаг',
+                  dataIndex: 'orderTime',
+                  width: 50,
+                  render: (_value, _row, index) => (
                      <Form.Item
                         noStyle
                         shouldUpdate={(prevValues, currentValues) =>
                            prevValues?.services?.[index]?.isCito !== currentValues.services?.[index]?.isCito
                         }
                      >
-                        {({ getFieldValue }) =>
-                           getFieldValue(['services', index, 'isCito']) ? (
-                              <OrderForm noStyle name={[index, 'name']} editing={false}>
-                                 <Input />
-                              </OrderForm>
-                           ) : (
-                              <Space>
-                                 <Button
-                                    icon={<ClockCircleOutlined />}
-                                    disabled={getFieldValue(['services', index, 'responseId']) ? true : false}
-                                    onClick={() => {
-                                       createOtsRequest(getFieldValue(['services', index]), index);
-                                    }}
-                                 />
-                                 <Form.Item name={[index, 'invoiceId']}>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item name={[index, 'xrayRequestId']}>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item name={[index, 'slotId']}>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <OrderForm noStyle name={[index, 'name']} editing={false}>
-                                    <Input />
-                                 </OrderForm>
-                              </Space>
-                           )
-                        }
+                        {({ getFieldValue }) => {
+                           const type = getFieldValue(['services', index, 'type']);
+                           console.log('service type=========>', type);
+                           if (type === 1 || type === 12) {
+                              const isCito = getFieldValue(['services', index, 'isCito']);
+                              const orderTime = getFieldValue(['services', index, 'orderTime']);
+                              if (isCito || orderTime) {
+                                 return (
+                                    <OrderForm noStyle name={[index, 'orderTime']} editing={false}>
+                                       <Input />
+                                    </OrderForm>
+                                 );
+                              } else {
+                                 const name = getFieldValue(['services', index, 'name']);
+                                 const invoiceId = getFieldValue(['services', index, 'invoiceId']);
+                                 const responseId = getFieldValue(['services', index, 'responseId']);
+                                 const isDanger = invoiceId && responseId ? false : true;
+                                 return (
+                                    <Space>
+                                       <Button
+                                          title="Цаг оруулах"
+                                          danger={isDanger}
+                                          icon={<ClockCircleOutlined />}
+                                          onClick={() => {
+                                             createOtsRequest(getFieldValue(['services', index]), index);
+                                          }}
+                                       />
+                                       <Form.Item hidden name={[index, 'invoiceId']}>
+                                          <InputNumber />
+                                       </Form.Item>
+                                       <Form.Item
+                                          hidden
+                                          rules={[
+                                             {
+                                                required: true,
+                                                message: `${name} цаг оруулах заавал`
+                                             }
+                                          ]}
+                                          name={[index, 'requestId']}
+                                       >
+                                          <InputNumber />
+                                       </Form.Item>
+                                    </Space>
+                                 );
+                              }
+                           } else {
+                              return;
+                           }
+                        }}
                      </Form.Item>
-                  )
-               },
-               {
-                  title: 'Цаг',
-                  dataIndex: 'orderTime',
-                  render: (_value, _row, index) => (
-                     <OrderForm name={[index, 'orderTime']} editing={false}>
-                        <TextArea />
-                     </OrderForm>
                   )
                },
                {
@@ -285,13 +327,7 @@ function OrderTable(props) {
                         rules={minRule(index, 'repeatTime')}
                         editing={!isDisable(index, 'repeatTime')}
                      >
-                        <NewInputNumber
-                           onChange={(e) => totalCalculator(index, e, 'repeatTime')}
-                           defualtvalue={1}
-                           controls={false}
-                           min={1}
-                           onKeyPress={checkNumber}
-                        />
+                        <NewInputNumber defualtvalue={1} controls={false} min={1} onKeyPress={checkNumber} />
                      </OrderForm>
                   )
                },
@@ -305,13 +341,7 @@ function OrderTable(props) {
                         rules={minRule(index, 'dayCount')}
                         editing={!isDisable(index, 'dayCount')}
                      >
-                        <NewInputNumber
-                           onChange={(e) => totalCalculator(index, e, 'dayCount')}
-                           defualtvalue={1}
-                           controls={false}
-                           min={1}
-                           onKeyPress={checkNumber}
-                        />
+                        <NewInputNumber defualtvalue={1} controls={false} min={1} onKeyPress={checkNumber} />
                      </OrderForm>
                   )
                },
@@ -321,13 +351,14 @@ function OrderTable(props) {
                   dataIndex: 'total',
                   render: (_value, _row, index) => (
                      <OrderForm noStyle name={[index, 'total']} editing={false}>
-                        <InputNumber onKeyPress={checkNumber} />
+                        <Input />
                      </OrderForm>
                   )
                },
                {
                   title: 'Эхлэх өдөр',
                   dataIndex: 'startAt',
+                  width: 150,
                   render: (_value, _row, index) => {
                      const type = form.getFieldValue(['services', index, 'type']);
                      if (type === 2 || type === 8) {
@@ -360,7 +391,22 @@ function OrderTable(props) {
                   title: '',
                   width: 40,
                   render: (_value, _row, index) => (
-                     <Button onClick={() => remove(index)} icon={<MinusCircleOutlined style={{ color: 'red' }} />} />
+                     <Popconfirm
+                        title="Устгах"
+                        description="Та устгахдаа итгэлтэй байна уу?"
+                        onConfirm={async () => {
+                           await removeOtsRequest(index).then((res) => {
+                              console.log('reeesss', res);
+                              if (res) {
+                                 remove(index);
+                              }
+                           });
+                        }}
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                     >
+                        <Button danger icon={<MinusCircleOutlined />} />
+                     </Popconfirm>
                   )
                }
             ]}
@@ -384,7 +430,6 @@ function OrderTable(props) {
                         form.setFieldsValue({
                            services: {
                               [`${lastResponse.formIndex}`]: {
-                                 slotId: info.slotId,
                                  orderTime: `${info?.time?.start?.substr(0, 5)}->${info?.time?.end?.substr(0, 5)}`
                               }
                            }

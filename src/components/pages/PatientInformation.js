@@ -12,7 +12,8 @@ import {
    mapSymbol
 } from '@Assets/index';
 // common
-import { getAge, getGenderInType } from '@Comman/common';
+import { getAge } from '@Comman/common';
+import { getGender } from '@Utils/config/xypField';
 //apiF
 import localFileApi from '@ApiServices/file/local-file/local-file.api';
 import CountryApi from '@ApiServices/reference/country';
@@ -123,19 +124,13 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    };
 
    const ImageIcon = useMemo(() => {
-      if (patient.genderType === 'WOMAN') {
-         return womanIcon;
-      } else {
-         return manIcon;
-      }
+      if (patient.genderType === 'WOMAN') return womanIcon;
+      return manIcon;
    }, [patient]);
 
    const genderSymbolIcon = useMemo(() => {
-      if (patient.genderType === 'WOMAN') {
-         return manSymbol;
-      } else {
-         return womanSymbol;
-      }
+      if (patient.genderType === 'WOMAN') return manSymbol;
+      return womanSymbol;
    }, [patient]);
 
    useEffect(() => {
@@ -145,6 +140,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
    }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
+      !patient.imageId && setImageUrl(ImageIcon);
    }, [patient]);
    return (
       <>
@@ -180,7 +176,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         src={genderSymbolIcon}
                         alt="symbol"
                      />
-                     <p>{`${getGenderInType(patient?.genderType || undefined)} | ${getAge(
+                     <p>{`${getGender(patient?.gender || undefined)} | ${getAge(
                         patient?.registerNumber || undefined
                      )}`}</p>
                   </div>

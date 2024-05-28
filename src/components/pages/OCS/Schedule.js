@@ -53,12 +53,11 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       setTotalAmount(invoices?.reduce((totalAmount, invoice) => (totalAmount += invoice.amount), 0));
       var noTime = [];
       var time = [];
-      console.log('end invoicesiid', invoices);
       invoices?.map((invoice) => {
-         console.log('hospitalIsAfterPay', hospitalIsAfterPay);
          if (hospitalIsAfterPay) {
             noTime.push(invoice);
          } else {
+            console.log('end', invoice);
             if (invoice.type === 2 && invoice.treatmentRequest?.slotId === null && invoice.treatment?.isSlot) {
                time.push(invoice);
             } else if (
@@ -77,7 +76,6 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       setTimeRequirePayments(time);
    };
    const onClick = (element) => {
-      console.log('element', element);
       if (element.type === 2) {
          setAppointmentType(2);
          setIsOpenAppointment(true);
