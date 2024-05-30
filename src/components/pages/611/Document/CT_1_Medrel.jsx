@@ -336,19 +336,19 @@ const CT_1_Medrel = (props) => {
                               <p>
                                  GCS: E
                                  <Input
-                                    value={formData?.q19}
+                                    value={formData?.['q19-1']}
                                     className="amaraInput w-8"
                                     style={{ textAlign: 'center' }}
                                  />
                                  V
                                  <Input
-                                    value={formData?.q4}
+                                    value={formData?.['q19-2']}
                                     className="amaraInput w-8"
                                     style={{ textAlign: 'center' }}
                                  />{' '}
                                  М
                                  <Input
-                                    value={formData?.q4}
+                                    value={formData?.['q19-3']}
                                     className="amaraInput w-8"
                                     style={{ textAlign: 'center' }}
                                  />
