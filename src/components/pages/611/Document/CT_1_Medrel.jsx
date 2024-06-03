@@ -422,7 +422,7 @@ const CT_1_Medrel = (props) => {
                               <Checkbox value={'q21-4'}> Нэрлэхийн хэлгүйдэл</Checkbox>
                               <Checkbox value={'q21-5'}> Уншихгүйдэл</Checkbox>
                               <Checkbox value={'q21-6'}> Бичихгүйдэл</Checkbox>
-                              <Checkbox value={'q21-7'}> Давтан хэлэх чадвар</Checkbox>
+                              <Checkbox value={'q21-7'}> Давтан хэлэх чадвар</Checkbox>
                            </Checkbox.Group>
                         </th>
                      </tr>
@@ -437,20 +437,20 @@ const CT_1_Medrel = (props) => {
                      </tr>
                      <tr className="min-h-[200px]">
                         <th className="w-[45%] h-full relative">
-                           <Checkbox.Group value={formData?.q5} className="ml-0">
-                              <div className="items-center flex gap-1 " id="cls">
+                           <Checkbox.Group value={formData?.q22} className="ml-0">
+                              <div className="items-center flex gap-1 ml-1 " id="cls">
                                  <p>I:</p>
-                                 <Checkbox value={'q5-2'}>Хэвийн</Checkbox>
-                                 <Checkbox value={'q5-2'}>
+                                 <Checkbox value={'q22-1'}>Хэвийн</Checkbox>
+                                 <Checkbox value={'q22-2'}>
                                     Хэвийн бус: Б
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q22-2-1']}
                                        className="amaraInput w-10"
                                        style={{ textAlign: 'center' }}
                                     />
                                     З
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q22-2-2']}
                                        className="amaraInput w-10"
                                        style={{ textAlign: 'center' }}
                                     />
@@ -458,31 +458,40 @@ const CT_1_Medrel = (props) => {
                               </div>
                            </Checkbox.Group>
                            <div className="items-center flex gap-1  ">
-                              <p>II:</p>
+                              <p className="flex items-center" id="cls">
+                                 <p>II:</p>
+                                 <p className="ml-2 underline">{` ${formData?.q23}`}</p>
+                              </p>
                            </div>
                            <th className="flex" id="cls">
                               <div className="flex gap-3 ">
                                  <p>
                                     ХХХ: Б
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q24-1']}
                                        className="amaraInput w-6"
                                        style={{ textAlign: 'center' }}
                                     />
                                     З
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q24-2']}
                                        className="amaraInput w-6"
                                        style={{ textAlign: 'center' }}
                                     />
                                     (мм)
                                  </p>
-                                 <p>Харах чадал: </p>
+                                 <p className="flex items-center">
+                                    <p> Харах чадал:</p>
+                                    <p className="ml-2 underline">{` ${formData?.q26}`}</p>
+                                 </p>
                               </div>
                            </th>
                            <th id="cls">
                               <div className="flex gap-10">
-                                 <p>Гэрлийн гурвал:</p>
+                                 <p className="flex items-center ">
+                                    <p>Гэрлийн гурвал</p>
+                                    <p className="ml-2 underline">{` ${formData?.q28}`}</p>
+                                 </p>
 
                                  <p>
                                     Б
@@ -505,13 +514,13 @@ const CT_1_Medrel = (props) => {
                                  <p>
                                     Шууд: Б
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q25-1']}
                                        className="amaraInput w-6"
                                        style={{ textAlign: 'center' }}
                                     />
                                     З
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q25-2']}
                                        className="amaraInput w-6"
                                        style={{ textAlign: 'center' }}
                                     />
