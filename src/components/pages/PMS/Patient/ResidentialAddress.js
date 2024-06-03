@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input } from 'antd';
 
-function ResidentialAddress() {
+function ResidentialAddress({ form }) {
    return (
       <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
          <div className="flex flex-row gap-2 items-end">

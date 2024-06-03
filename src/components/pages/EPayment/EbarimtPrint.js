@@ -18,14 +18,8 @@ function EbarimtPrint(props) {
    const printRef = useRef();
    const hospitalName = useSelector(selectCurrentHospitalName);
    const handleBack = async (id) => {
-      await EbarimtService.ReturnBill(props?.props?.billId).then(async (response) => {
-         if (response.data.response.result.errorCode === 0) {
-            await PaymentService.patchPayment(id, { isReturn: true }).then((_response) => {
-               openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
-            });
-         } else {
-            openNofi('error', 'Алдаа И-Баримт буцаалт', response.data.response.result.message);
-         }
+      await PaymentService.patchPayment(id, { isReturn: true }).then((_response) => {
+         openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
       });
    };
    const handlePrint = useReactToPrint({

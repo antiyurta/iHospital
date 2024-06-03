@@ -143,8 +143,8 @@ function Invoice() {
    const sendDataButton = async () => {
       setIsLoadingEbarimt(true);
       await EBarimtApi.sendData()
-         .then(({ data: { response } }) => {
-            if (response === 'success') {
+         .then(({ data }) => {
+            if (data.success) {
                openNofi('success', 'Амжиллтай', 'Амжилттай И-Баримт илгээгдлээ');
                getInformation();
             } else {
@@ -157,7 +157,7 @@ function Invoice() {
    };
    const getInformation = async () => {
       await EBarimtApi.getInformation().then((response) => {
-         setEbarimtInfo(response.data.response.result?.extraInfo);
+         setEbarimtInfo(response.data.response);
       });
    };
    const [notPatientLoading, setNotPatientLoading] = useState(false);
@@ -277,11 +277,11 @@ function Invoice() {
             <div className="rounded-md bg-[#F3F4F6] flex flex-col gap-2 p-3 max-w-xs">
                <div className="flex flex-row gap-2 justify-between">
                   <p className="font-bold">И-Баримт:</p>
-                  <p className="font-bold">{`${ebarimtInfo?.countBill} / ${ebarimtInfo?.countLottery}`}</p>
+                  <p className="font-bold">{ebarimtInfo?.leftLotteries} </p>
                </div>
                <div className="flex flex-row gap-2 justify-between">
                   <p className="font-bold">Сүүлд татсан огноо:</p>
-                  <p className="font-bold">{`${dayjs(ebarimtInfo?.lastSentdate).format('YYYY/MM/DD')}`}</p>
+                  <p className="font-bold">{`${dayjs(ebarimtInfo?.lastSentDate).format('YYYY/MM/DD')}`}</p>
                </div>
                <Button loading={isLoadingEbarimt} onClick={() => sendDataButton()} type="primary">
                   И-баримт илгээх

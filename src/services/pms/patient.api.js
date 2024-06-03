@@ -18,8 +18,8 @@ class PatientApi {
    async delete(id) {
       return await jwtInterceopter.delete(`pms/patient/${id}`);
    }
-   async getCheckRegNo(conf) {
-      return await jwtInterceopter.get('pms/patient/check/regno', conf);
+   async getByRegno(regno) {
+      return await jwtInterceopter.get(`pms/patient/by-regno/${regno}`);
    }
    async getInsurancePayments(conf) {
       return await jwtInterceopter.get('pms/patient/insurance/payments', conf);

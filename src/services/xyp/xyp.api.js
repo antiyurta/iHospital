@@ -1,17 +1,8 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
-class Country {
-   async post(civilID, { citizenFingerprint, citizenRegnum }, { operatorFingerprint, operatorRegnum }) {
-      return await jwtInterceopter.post('xyp', {
-         civilID,
-         citizen: {
-            fingerprint: citizenFingerprint,
-            regnum: citizenRegnum
-         },
-         operator: {
-            fingerprint: operatorFingerprint,
-            regnum: operatorRegnum
-         }
-      });
+class XypApi {
+   /** Иргэний мэдээлэл лавлах сервис */
+   async post(data) {
+      return await jwtInterceopter.post('xyp/citizen-card', data);
    }
 }
-export default new Country();
+export default new XypApi();

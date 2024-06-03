@@ -3,7 +3,7 @@ import { Form, Input, Select } from 'antd';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 //comp
-import XypFormPatient from './Xyp';
+// import XypFormPatient from '.';
 //redux
 import { selectHospitalIsXyp } from '@Features/hospitalReducer';
 //common
@@ -27,24 +27,6 @@ function GeneralInfo({ form, gbase }) {
          setCitizens(response.data);
       });
    };
-   const dada = async (v) => {
-      if (v.length === 10) {
-         await PatientApi.getCheckRegNo({
-            params: {
-               registerNumber: v
-            }
-         }).then(({ data: { response } }) => {
-            if (response) {
-               response['birthDay'] = moment(response['birthDay']);
-               form.setFieldsValue(response);
-               gbase(true);
-            }
-         });
-      }
-   };
-   const setXypData = async (values) => {
-      form.setFieldsValue(values);
-   };
    useEffect(() => {
       getCitizens();
    }, []);
@@ -60,7 +42,7 @@ function GeneralInfo({ form, gbase }) {
                </Form.Item>
                <UploadImage form={form} itemName={'imageId'} />
             </div>
-            <div className="flex flex-col gap-2">{isXyp ? <XypFormPatient setData={setXypData} /> : null}</div>
+            <div className="flex flex-col gap-2">{isXyp ? null : null}</div>
          </div>
          <div className="rounded-md bg-[#F3F4F6] p-2">
             <Form.Item name="civilId" hidden>
@@ -126,9 +108,6 @@ function GeneralInfo({ form, gbase }) {
             <Form.Item
                label="Регистр дугаар:"
                name="registerNumber"
-               onChange={(v) => {
-                  dada(v.target.value);
-               }}
                rules={[
                   {
                      required: true,
