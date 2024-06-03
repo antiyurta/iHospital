@@ -2,7 +2,7 @@ import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Select } from 'antd';
 import contactPersons from '../ContactPerson.js';
-function Contact() {
+function Contact({ form }) {
    return (
       <div className="flex flex-wrap">
          <Form.List name="contacts">

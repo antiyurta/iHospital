@@ -10,6 +10,7 @@ import { openNofi } from '@Comman/common';
 //api
 import CountryApi from '@ApiServices/reference/country';
 import PatientApi from '@ApiServices/pms/patient.api';
+import RegisterPatient from './Patient/index';
 //extends
 const { Search } = Input;
 
@@ -113,7 +114,8 @@ function Patient() {
       setIsConfirmLoading(true);
       data['isGlobalDb'] = isGlobalDb;
       data['isEmergency'] = false;
-      var response;
+      let response;
+      console.log('is working on finish');
       try {
          if (editMode) {
             response = await PatientApi.patch(id, data).then(({ data: { success } }) => success);
@@ -388,18 +390,7 @@ function Patient() {
             footer={null}
             confirmLoading={isConfirmLoading}
          >
-            <PatientSupport
-               editMode={editMode}
-               patientId={id}
-               setGlobalDb={(state) => {
-                  setIsGlobalDb(state);
-               }}
-               filterTowns={(result) => {
-                  filterTowns(result);
-               }}
-               onFinish={onFinish}
-               mongoliaId={mongoliaId}
-            />
+            <RegisterPatient onFinish={onFinish} patientId={id} />
          </Modal>
          <Modal
             title="Яаралтай бүртгэл"
