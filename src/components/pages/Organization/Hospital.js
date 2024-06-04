@@ -7,234 +7,82 @@ import { Patch } from '../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
 import apiInsuranceService from '../../../services/healt-insurance/insurance';
-
-const column = [
-   {
-      index: 'name',
-      label: 'Нэр',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'databaseName',
-      label: 'Дата басс нэр',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'hospitalType',
-      label: 'Лавлагаа ЭМБ гм',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-
-   {
-      index: 'registerNumber',
-      label: 'Регистр дугаар',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'email',
-      label: 'И-мэйл',
-      rules: [
-         {
-            required: true,
-            message: 'Хоосон байж болохгүй'
-         },
-         {
-            type: 'email',
-            message: 'Хэлбэрийн алдаа'
-         },
-         {
-            validator: async (_, email) => {
-               if (email.length < 10) {
-                  return Promise.reject(new Error(''));
-               }
-            }
-         }
-      ],
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'phone',
-      label: 'Утас(1)',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'hsPersonPhone',
-      label: 'Утас(2)',
-      isView: false,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'hsLng',
-      label: 'Уртраг',
-      isView: false,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'hsLat',
-      label: 'Өргөрөг',
-      isView: false,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'hsCapacity',
-      label: 'Нийт орны тоо',
-      isView: true,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'hsSocial',
-      label: 'Сошиал хаяг',
-      isView: false,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'hsIntroduction',
-      label: 'Танилцуулга',
-      isView: false,
-      input: 'textarea',
-      col: 12
-   },
-   {
-      index: 'hsTimetable',
-      label: 'Цагийн хуваарь',
-      isView: false,
-      input: 'date',
-      col: 12
-   },
-   {
-      index: 'address',
-      label: 'Хаяг байршил',
-      isView: false,
-      input: 'textarea',
-      col: 12
-   },
-   {
-      index: 'hasInsurance',
-      label: 'ЭМД гэрээтэй эсэх',
-      isView: false,
-      input: 'switch',
-      col: 8
-   },
-   {
-      index: 'isActive',
-      label: 'Идэвхтэй эсэх',
-      isView: true,
-      input: 'switch',
-      col: 8
-   },
-   {
-      index: 'isXyp',
-      label: 'Xyp-тай эсэх',
-      isView: true,
-      input: 'switch',
-      col: 8
-   },
-   {
-      index: 'isInsurance',
-      label: 'Даатгалтай эсэх',
-      isView: false,
-      input: 'switch',
-      col: 8
-   },
-   {
-      index: 'isAfterPay',
-      label: 'Дараа төлбөрт эсэх',
-      isView: true,
-      input: 'switch',
-      col: 8
-   },
-   {
-      index: 'hasBranch',
-      label: 'Салбартай эсэх',
-      isView: true,
-      input: 'switch',
-      col: 8,
-      child: true
-   }
-];
+import jwtInterceopter from '../../jwtInterceopter';
 
 const columnBranch = [
    {
-      label: 'Салбарын мэдээлэл',
+      label: 'Салбарын мэдээлэл (Заавал биш)',
       isView: true,
-      input: 'branch_title',
+      input: 'title',
       col: 24
    },
    {
-      index: 'branch_hospitalName',
+      index: 'branchList_hospitalName',
+      extraIndex: 'branchList',
       label: 'Нэр',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_branchId',
+      index: 'branchList_branchId',
+      extraIndex: 'branchList',
       label: 'Дугаар (ID)',
       isView: true,
       input: 'numberInput',
       col: 12
    },
    {
-      index: 'branch_hsPhone',
+      index: 'branchList_hsPhone',
+      extraIndex: 'branchList',
       label: 'Утас(1)',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_hsPersonPhone',
+      index: 'branchList_hsPersonPhone',
+      extraIndex: 'branchList',
       label: 'Утас(2)',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_hsEmail',
+      index: 'branchList_hsEmail',
+      extraIndex: 'branchList',
       label: 'Имэйл хаяг',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_hsSocial',
+      index: 'branchList_hsSocial',
+      extraIndex: 'branchList',
       label: 'Салбарын сошиал хаяг',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_address',
+      index: 'branchList_address',
+      extraIndex: 'branchList',
       label: 'Хаяг, байршил',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_hsLng',
+      index: 'branchList_hsLng',
+      extraIndex: 'branchList',
       label: 'Уртраг',
       isView: true,
       input: 'numberInput',
       col: 12
    },
    {
-      index: 'branch_hsLat',
+      index: 'branchList_hsLat',
+      extraIndex: 'branchList',
       label: 'Өргөрөг',
       isView: true,
       input: 'numberInput',
@@ -242,35 +90,40 @@ const columnBranch = [
    },
 
    {
-      index: 'branch_hsTimetable',
+      index: 'branchList_hsTimetable',
+      extraIndex: 'branchList',
       label: 'Цагийн хуваарь',
       isView: true,
       input: 'input',
       col: 12
    },
    {
-      index: 'branch_hsCapacity',
+      index: 'branchList_hsCapacity',
+      extraIndex: 'branchList',
       label: 'Нийт орны тоо',
       isView: true,
       input: 'numberInput',
       col: 12
    },
    {
-      index: 'branch_status',
+      index: 'branchList_status',
+      extraIndex: 'branchList',
       label: 'Төлөв',
       isView: true,
       input: 'switch',
       col: 12
    },
    {
-      index: 'branch_numberOfBeds',
+      index: 'branchList_numberOfBeds',
+      extraIndex: 'branchList',
       label: 'Сул орны тоо',
       isView: true,
       input: 'numberInput',
       col: 12
    },
    {
-      index: 'branch_hsIntroduction',
+      index: 'branchList_hsIntroduction',
+      extraIndex: 'branchList',
       label: 'Товч танилцуулга',
       isView: false,
       input: 'textarea',
@@ -284,7 +137,214 @@ function Hospital() {
    const [isOpenInsurance, setIsOpenInsurance] = useState(false);
    const [selectedRow, setSelectedRow] = useState({});
    const [isRefresh, setIsRefresh] = useState(true);
-   const [havebranch, setHaveBranch] = useState(false);
+   const [operationList, setOperationList] = useState([]);
+
+   useEffect(() => {
+      const fetchOperationList = async () => {
+         try {
+            const res = await jwtInterceopter.get('health-insurance/hospital-operation');
+            const operations = res.data.result || [];
+            setOperationList(
+               operations.map((op) => ({
+                  id: op.id,
+                  label: op.name,
+                  value: op.id
+               }))
+            );
+         } catch (error) {
+            console.error('Error fetching operation list:', error);
+         }
+      };
+
+      fetchOperationList();
+   }, []);
+
+   const column = [
+      {
+         index: 'name',
+         label: 'Нэр',
+         isView: true,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'databaseName',
+         label: 'Дата басс нэр',
+         isView: true,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'hospitalType',
+         label: 'Лавлагаа ЭМБ гм',
+         isView: true,
+         input: 'input',
+         col: 12
+      },
+
+      {
+         index: 'registerNumber',
+         label: 'Регистр дугаар',
+         isView: true,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'email',
+         label: 'И-мэйл',
+         rules: [
+            {
+               required: true,
+               message: 'Хоосон байж болохгүй'
+            },
+            {
+               type: 'email',
+               message: 'Хэлбэрийн алдаа'
+            },
+            {
+               validator: async (_, email) => {
+                  if (email.length < 10) {
+                     return Promise.reject(new Error(''));
+                  }
+               }
+            }
+         ],
+         isView: true,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'phone',
+         label: 'Утас(1)',
+         isView: true,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'hsPersonPhone',
+         label: 'Утас(2)',
+         isView: false,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'hsLng',
+         label: 'Уртраг',
+         isView: false,
+         input: 'numberInput',
+         col: 12
+      },
+      {
+         index: 'hsLat',
+         label: 'Өргөрөг',
+         isView: false,
+         input: 'numberInput',
+         col: 12
+      },
+      {
+         index: 'hsCapacity',
+         label: 'Нийт орны тоо',
+         isView: true,
+         input: 'numberInput',
+         col: 12
+      },
+      {
+         index: 'hsSocial',
+         label: 'Сошиал хаяг',
+         isView: false,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'hsIntroduction',
+         label: 'Танилцуулга',
+         isView: false,
+         input: 'textarea',
+         col: 12
+      },
+      {
+         index: 'hsTimetable',
+         label: 'Цагийн хуваарь',
+         isView: false,
+         input: 'date',
+         col: 12
+      },
+      {
+         index: 'address',
+         label: 'Хаяг байршил',
+         isView: false,
+         input: 'textarea',
+         col: 12
+      },
+      {
+         index: 'hasInsurance',
+         label: 'ЭМД гэрээтэй эсэх',
+         isView: false,
+         input: 'switch',
+         col: 8
+      },
+      {
+         index: 'isActive',
+         label: 'Идэвхтэй эсэх',
+         isView: true,
+         input: 'switch',
+         col: 8
+      },
+      {
+         index: 'isXyp',
+         label: 'Xyp-тай эсэх',
+         isView: true,
+         input: 'switch',
+         col: 8
+      },
+      {
+         index: 'isInsurance',
+         label: 'Даатгалтай эсэх',
+         isView: false,
+         input: 'switch',
+         col: 8
+      },
+      {
+         index: 'isAfterPay',
+         label: 'Дараа төлбөрт эсэх',
+         isView: true,
+         input: 'switch',
+         col: 8
+      },
+      {
+         index: 'hasBranch',
+         label: 'Салбартай эсэх',
+         isView: true,
+         input: 'switch',
+         col: 8,
+         child: true
+      },
+      {
+         label: 'Үйл ажиллагааны чиглэлийн мэдээлэл',
+         isView: false,
+         input: 'title',
+         col: 24
+      },
+      {
+         index: 'operationList_id',
+         extraIndex: 'operationList',
+         label: 'Чиглэлийн дугаар',
+         inputData: operationList,
+         isView: false,
+         input: 'select',
+         col: 15,
+         relValueIndex: 'value',
+         relIndex: 'label'
+      },
+      {
+         index: 'operationList_status',
+         extraIndex: 'operationList',
+         label: 'Төлөв',
+         isView: false,
+         input: 'switch',
+         col: 9
+      }
+   ];
 
    const updateHospital = async (values) => {
       const conf = {
@@ -315,14 +375,12 @@ function Hospital() {
       });
    };
 
-   const isColumns = havebranch ? [...column, ...columnBranch] : [...column];
    return (
       <div className="w-full bg-[#f5f6f7] p-3">
          <UTable
             title={'Байгууллага'}
             url={'organization/hospital'}
-            column={isColumns}
-            extraColumn={columnBranch}
+            column={[...column, ...columnBranch]}
             isCreate={true}
             isRead={true}
             isUpdate={true}
@@ -333,24 +391,22 @@ function Hospital() {
             insuranceFunction={insuranceFunction}
             insuranceSyncFunction={insuranceSyncFunction}
             isRefresh={isRefresh}
-            setChild={setHaveBranch}
-            child={havebranch}
             // initialValues={{
             //    hospitalType: 'test',
             //    address: 'dasd',
-            //    branch_address: 'asd',
-            //    branch_branchId: 123,
-            //    branch_hospitalName: 'asd',
-            //    branch_hsCapacity: 123,
-            //    branch_hsEmail: 'asd12@gmail.com',
-            //    branch_hsLat: 1223,
-            //    branch_hsLng: 213,
-            //    branch_hsPersonPhone: 'asd',
-            //    branch_hsPhone: 'asd',
-            //    branch_hsSocial: 'as',
-            //    branch_hsTimetable: 'asdsa',
-            //    branch_numberOfBeds: 100,
-            //    branch_status: undefined,
+            //    branchList_address: 'asd',
+            //    branchList_branchId: 123,
+            //    branchList_hospitalName: 'asd',
+            //    branchList_hsCapacity: 123,
+            //    branchList_hsEmail: 'asd12@gmail.com',
+            //    branchList_hsLat: 1223,
+            //    branchList_hsLng: 213,
+            //    branchList_hsPersonPhone: 'asd',
+            //    branchList_hsPhone: 'asd',
+            //    branchList_hsSocial: 'as',
+            //    branchList_hsTimetable: 'asdsa',
+            //    branchList_numberOfBeds: 100,
+            //    branchList_status: undefined,
             //    databaseName: 'as',
             //    email: 'dasd@gmail.com',
             //    hasBranch: undefined,

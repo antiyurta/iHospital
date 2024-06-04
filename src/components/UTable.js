@@ -58,7 +58,6 @@ function UTable(props) {
 
    useEffect(() => {
       setIsSwitch(false);
-      props?.setChild?.(false);
       if (isModalVisible === false) {
          form.resetFields();
       }
@@ -91,6 +90,12 @@ function UTable(props) {
          props.column.map((element) => {
             if (element.input === 'date') {
                response[`${element.index}`] = moment(response[`${element.index}`]);
+            }
+
+            if (element.extraIndex) {
+               response[element.index] = (response[element.extraIndex] || []).map(
+                  (res) => res[element.index.split('_')[1]]
+               )[0];
             }
          });
          form.setFieldsValue(response);
@@ -201,10 +206,9 @@ function UTable(props) {
 
    const handleSwitch = (e) => {
       setIsSwitch(e);
-      props?.setChild?.(e || false);
    };
 
-   const getInputs = (element, inputType, child = false) => {
+   const getInputs = (element, inputType) => {
       switch (inputType) {
          case 'select':
             return (
@@ -578,12 +582,19 @@ function UTable(props) {
                   .then((values) => {
                      const branchVals = Object.entries(values).reduce(
                         (acc, [key, value]) => {
-                           if (key.includes('branch_')) {
-                              if (key === 'branch_status' && typeof value === 'boolean') {
+                           if (key.includes('branchList_')) {
+                              if (key === 'branchList_status' && typeof value === 'boolean') {
                                  let convertedVal = !!value ? 1 : 0;
                                  acc.branchList[key.split('_')[1]] = convertedVal;
                               } else {
                                  acc.branchList[key.split('_')[1]] = value;
+                              }
+                           } else if (key.includes('operationList_')) {
+                              if (key === 'operationList_status') {
+                                 let convertedVal = !!value ? 1 : 0;
+                                 acc.operationList[key.split('_')[1]] = convertedVal;
+                              } else {
+                                 acc.operationList[key.split('_')[1]] = value;
                               }
                            } else {
                               if (key == 'hasBranch' || key == 'hasInsurance') {
@@ -595,12 +606,13 @@ function UTable(props) {
                            }
                            return acc;
                         },
-                        { hasNoBranchVals: {}, branchList: {} }
+                        { hasNoBranchVals: {}, branchList: {}, operationList: {} }
                      );
 
                      const resultValues = {
                         ...branchVals.hasNoBranchVals,
-                        branchList: !!branchVals.branchList ? [branchVals.branchList] : null
+                        branchList: !!branchVals.branchList ? [branchVals.branchList] : [],
+                        operationList: !!branchVals.operationList ? [branchVals.operationList] : {}
                      };
 
                      onFinish(!!branchVals.branchList ? resultValues : values);
@@ -646,7 +658,11 @@ function UTable(props) {
                               </Button>
                            )}
                            <Suspense fallback={<>---</>}>
-                              {getInputs(element, element.input, props.child || false)}
+                              {element.input === 'title' ? (
+                                 <div className="text-center font-bold text-lg mb-2">{element.label}</div>
+                              ) : (
+                                 getInputs(element, element.input, props.child || false)
+                              )}
                            </Suspense>
                         </Col>
                      );
