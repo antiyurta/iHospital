@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ClockCircleOutlined } from '@ant-design/icons';
-import { Alert, Checkbox, Divider, Input, Modal, Select, Table } from 'antd';
+import { Alert, Checkbox, Divider, Input, Modal, Radio, Select, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentIsAfterPay } from '../../../features/authReducer';
 import { numberToCurrency, openNofi } from '../../common';
@@ -35,9 +35,10 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    ///
    const [isCustomerNo, setIsCustomerNo] = useState(false);
    const [customerNo, setCustomerNo] = useState('');
-   const [customerInfo, setCustomerInfo] = useState({});
+   const [customerTin, setCustomerTin] = useState('');
    ///
    const [paymentShape, setPaymentShape] = useState([]);
+   const [currentType, setCurrentType] = useState('B2C_RECEIPT');
    const [selectedPaymentShape, setSelectedPaymentShape] = useState(null);
    // hongololt
    const [prePayments, setPrePayments] = useState([]);
@@ -104,7 +105,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    };
    const PaymentRequest = async () => {
       setPaymentConfirmLoading(true);
-      if (isCustomerNo && Object.keys(customerInfo).length === 0) {
+      if (currentType == 'B2C_RECEIPT' && customerTin !== '') {
          openNofi('error', 'Алдаа', 'Байгууллага сонго');
       } else {
          if (selectedPaymentShape === null) {
@@ -112,6 +113,8 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
          } else {
             if (invoiceRequest.length > 0) {
                const data = {
+                  type: currentType,
+                  customerTin,
                   invoiceIds: invoiceRequest.map((invoice) => invoice.id),
                   patientId: selectedPatient.id,
                   discountPercentId: discountPercentRequest,
@@ -145,12 +148,12 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
    const onSearchCustomer = async (event) => {
       setCustomerNo(event);
       await EbarimtService.getOrganizationInfo(event).then((response) => {
-         if (response.data.response.result?.found && response.status === 200) {
-            openNofi('success', 'Амжиллтай', `Байгууллага: ${response?.data.response.result?.name}`);
-            setCustomerInfo(response.data.response.result);
+         if (response.status === 200) {
+            openNofi('success', 'Амжиллтай', `Худалдан авагчийн ТТД: ${response?.data?.response?.data}`);
+            setCustomerTin(response?.data?.response?.data);
          } else {
-            openNofi('error', 'Алдаа', 'Байгууллага олдсонгүй');
-            setCustomerInfo({});
+            openNofi('error', 'Алдаа', 'Худалдан авагчийн ТТД олдсонгүй');
+            setCustomerTin('');
          }
       });
    };
@@ -205,7 +208,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
          setPaymentModal(isOpen);
          setIsCustomerNo(false);
          setCustomerNo(null);
-         setCustomerInfo({});
+         setCustomerTin('');
       }
    }, [isOpen]);
    return (
@@ -267,7 +270,16 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <div className="flex flex-col gap-3">
-                           <Checkbox
+                           <Radio.Group
+                              optionType="button"
+                              value={currentType}
+                              onChange={(e) => setCurrentType(e.target.value)}
+                              options={[
+                                 { label: 'Хувь хүн', value: 'B2C_RECEIPT' },
+                                 { label: 'Байгууллага', value: 'B2B_RECEIPT' }
+                              ]}
+                           ></Radio.Group>
+                           {/* <Checkbox
                               checked={isCustomerNo}
                               onChange={(e) => {
                                  setIsCustomerNo(e.target.checked);
@@ -278,8 +290,8 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                               }}
                            >
                               Байгууллагаар бол:
-                           </Checkbox>
-                           {isCustomerNo && (
+                           </Checkbox> */}
+                           {currentType == 'B2B_RECEIPT' && (
                               <div className="w-full p-1">
                                  <p>Байгууллагын дугаар оруулах</p>
                                  <Search
@@ -290,8 +302,8 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                                        width: '100%'
                                     }}
                                  />
-                                 {Object.keys(customerInfo).length > 0 && (
-                                    <Alert message={customerInfo.name} type="success" />
+                                 {customerTin !== '' && (
+                                    <Alert message={`Худалдан авагчийн ТТД: ${customerTin}`} type="success" />
                                  )}
                               </div>
                            )}
