@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import {
    Card,
@@ -53,8 +53,16 @@ function UTable(props) {
    const [type, setType] = useState();
    const [typesData, setTypesData] = useState([]);
 
-   const [dependShow, setDependShow] = useState(false); //Хамааралтай hide/show байвал энэ хувсагч харуулах эсэхийг шийднэ
-   //
+   // const [dependShow, setDependShow] = useState(false); //Хамааралтай hide/show байвал энэ хувсагч харуулах эсэхийг шийднэ
+   const [isSwitch, setIsSwitch] = useState(false);
+
+   useEffect(() => {
+      setIsSwitch(false);
+      if (isModalVisible === false) {
+         form.resetFields();
+      }
+   }, [isModalVisible]);
+
    const config = {
       headers: {},
       params: {
@@ -82,6 +90,12 @@ function UTable(props) {
          props.column.map((element) => {
             if (element.input === 'date') {
                response[`${element.index}`] = moment(response[`${element.index}`]);
+            }
+
+            if (element.extraIndex) {
+               response[element.index] = (response[element.extraIndex] || []).map(
+                  (res) => res[element.index.split('_')[1]]
+               )[0];
             }
          });
          form.setFieldsValue(response);
@@ -190,6 +204,10 @@ function UTable(props) {
       ScrollRef(scrollRef);
    }, [props.isRefresh]);
 
+   const handleSwitch = (e) => {
+      setIsSwitch(e);
+   };
+
    const getInputs = (element, inputType) => {
       switch (inputType) {
          case 'select':
@@ -237,13 +255,21 @@ function UTable(props) {
          case 'input':
             return (
                <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                  <Input placeholder={element.label} />
+                  <Input placeholder={element.label} className="placeholder:text-xs" />
                </Form.Item>
             );
+         case 'title':
+            return <p className="w-full mx-auto text-center my-2 font-bold text-lg">{element.label}</p>;
          case 'switch':
             return (
                <Form.Item label={element.label} name={element.index} rules={element.rules} valuePropName="checked">
-                  <Switch className="bg-sky-700" checkedChildren="Тийм" unCheckedChildren="Үгүй" />
+                  <Switch
+                     key={element.index}
+                     className={isSwitch && element.index === 'hasBranch' ? 'bg-sky-700' : 'bg-gray-400'}
+                     checkedChildren="Тийм"
+                     unCheckedChildren="Үгүй"
+                     onChange={element.index === 'hasBranch' && handleSwitch}
+                  />
                </Form.Item>
             );
          case 'numberInput':
@@ -255,7 +281,7 @@ function UTable(props) {
          case 'textarea':
             return (
                <Form.Item label={element.label} name={element.index} rules={element.rules}>
-                  <TextArea />
+                  <TextArea placeholder={element.label} className="placeholder:text-xs" />
                </Form.Item>
             );
          case 'date':
@@ -539,7 +565,6 @@ function UTable(props) {
                {props.column.map((element, idx) => {
                   return (
                      <Descriptions.Item key={idx} label={element.label}>
-                        {inputChecker(idx, view[`${element.index}`])}
                         {element.relation
                            ? inputChecker(idx, view[`${element.index[0]}`]?.[`${element.index[1]}`])
                            : inputChecker(idx, view[`${element.index}`])}
@@ -555,7 +580,42 @@ function UTable(props) {
                form
                   .validateFields()
                   .then((values) => {
-                     onFinish(values);
+                     const branchVals = Object.entries(values).reduce(
+                        (acc, [key, value]) => {
+                           if (key.includes('branchList_')) {
+                              if (key === 'branchList_status' && typeof value === 'boolean') {
+                                 let convertedVal = !!value ? 1 : 0;
+                                 acc.branchList[key.split('_')[1]] = convertedVal;
+                              } else {
+                                 acc.branchList[key.split('_')[1]] = value;
+                              }
+                           } else if (key.includes('operationList_')) {
+                              if (key === 'operationList_status') {
+                                 let convertedVal = !!value ? 1 : 0;
+                                 acc.operationList[key.split('_')[1]] = convertedVal;
+                              } else {
+                                 acc.operationList[key.split('_')[1]] = value;
+                              }
+                           } else {
+                              if (key == 'hasBranch' || key == 'hasInsurance') {
+                                 let convertedVal = !!value ? 1 : 0;
+                                 acc.hasNoBranchVals[key] = convertedVal;
+                              } else {
+                                 acc.hasNoBranchVals[key] = value;
+                              }
+                           }
+                           return acc;
+                        },
+                        { hasNoBranchVals: {}, branchList: {}, operationList: {} }
+                     );
+
+                     const resultValues = {
+                        ...branchVals.hasNoBranchVals,
+                        branchList: !!branchVals.branchList ? [branchVals.branchList] : [],
+                        operationList: !!branchVals.operationList ? [branchVals.operationList] : {}
+                     };
+
+                     onFinish(!!branchVals.branchList ? resultValues : values);
                   })
                   .catch((error) => {
                      onFinishFailed(error);
@@ -597,7 +657,13 @@ function UTable(props) {
                                  />
                               </Button>
                            )}
-                           {getInputs(element, element.input)}
+                           <Suspense fallback={<>---</>}>
+                              {element.input === 'title' ? (
+                                 <div className="text-center font-bold text-lg mb-2">{element.label}</div>
+                              ) : (
+                                 getInputs(element, element.input, props.child || false)
+                              )}
+                           </Suspense>
                         </Col>
                      );
                   })}
