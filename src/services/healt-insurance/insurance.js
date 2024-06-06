@@ -30,7 +30,7 @@ class ApiInsurance {
    }
    /** Битүүмж илгээх -> Үзлэг дуусгах */
    async requestHicsSealSent(id, data) {
-      return await jwtInterceopter.post(`hics-seal/sent/${id}`, data);
+      return await jwtInterceopter.patch(`hics-seal/sent/${id}`, data);
    }
    /** Цогц дээр эмчин үзлэг нээх */
    async createAddHics(data) {

@@ -57,83 +57,82 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    // uzleg duusgah
    const endInspection = async (values) => {
       if (isInsurance) {
-         if (values.conclusion?.includes('confirmed')) {
-            const data = await getSendData(currentPatient, hicsSeal?.id, '', addHics?.id);
-            console.log('data', data);
-            // await insuranceApi.requestHicsSealSent(hicsSeal.id, values?.finger);
+         if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
+            await addHicsService(hicsSeal.hicsSealCode).then(async () => {
+               if (values.conclusion?.includes('confirmed')) {
+                  const data = await insuranceApi.requestHicsSealSent(hicsSeal.id, {
+                     patientFingerprint: values?.finger,
+                     addHicsId: addHics?.id
+                  });
+                  console.log('==============>', data);
+                  // const data = getSendData(currentPatient, hicsSeal?.id);
+                  // console.log('data', data);
+                  // // await insuranceApi.requestHicsSealSent(hicsSeal.id, values?.finger);
+               }
+               setIsOpenModal(false);
+               openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+               navigate(-1);
+            });
          } else {
-            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
-               // await addHicsService(hicsSeal.hicsSealCode).then(async () => {
-               //    if (values.conclusion?.includes('confirmed')) {
-               //       const data = getSendData(currentPatient, hicsSeal?.id);
-               //       console.log('data', data);
-               //       // await insuranceApi.requestHicsSealSent(hicsSeal.id, values?.finger);
-               //    }
-               //    setIsOpenModal(false);
-               //    openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-               //    navigate(-1);
-               // });
-            } else {
-               const data = {
-                  patientRegno: currentPatient.registerNumber,
-                  patientFingerprint: values.finger,
-                  patientFirstname: currentPatient.firstName,
-                  patientLastname: currentPatient.lastName,
-                  startDate: hicsSeal.startAt,
-                  endDate: new Date(),
-                  hicsServiceId: hicsSeal.hicsServiceId,
-                  parentServiceNumber: null,
-                  doctorServiceNumber: hicsSeal.doctorServiceNumber,
-                  sent13RequestNo: hicsSeal.sent13RequestNo,
-                  departNo: hicsSeal.department?.id,
-                  departName: hicsSeal.department?.name,
-                  isForeign: 0,
-                  freeTypeId: 0,
-                  historyCode: hicsSeal.patientHistoryCode,
-                  phoneNo: currentPatient.phoneNo,
-                  bloodType: hicsSeal.bloodType,
-                  diagnosis: {
-                     ...hicsSeal.diagnosis,
-                     description: hicsSeal.description || (await getInspectionNote())
-                  },
-                  isLiver: currentPatient.isLiver ? 1 : 2,
-                  startCode: hicsSeal.hicsStartCode,
-                  xypResponse: {
-                     requestId: currentPatient.requestId,
-                     resultMsg: currentPatient.resultMsg
-                  },
-                  personalInfo: getPersonalInfo(currentPatient),
-                  employment: {
-                     ...hicsSeal.employment,
-                     employmentId: currentPatient.employmentId || '1',
-                     employmentName: currentPatient.employmentName || '- Цалин хөлстэй ажиллагч',
-                     isEmployment: currentPatient.isEmployment,
-                     emplessDescriptionId: currentPatient.emplessDescriptionId,
-                     emplessDescription: currentPatient.emplessDescription
-                  },
-                  healthInfo: hicsSeal.healthInfo,
-                  paymentType: isInsurance ? 0 : 1
-               };
-               await healtInsurance.saveHics(data).then(async ({ data }) => {
-                  if (data.code === 200) {
-                     openNofi('success', 'Амжилттай', data.description);
-                     await insuranceApi
-                        .requestHicsSeal(hicsSeal.id, {
-                           ...hicsSeal,
-                           hicsSealCode: data.result.serviceNumber,
-                           process: 1
-                        })
-                        .then(async ({ data: { response: ourHicsResponse } }) => {
-                           dispatch(setHicsSeal(ourHicsResponse));
-                           if (ourHicsResponse.hicsServiceId === 20120) {
-                              await addHicsService(ourHicsResponse.hicsSealCode);
-                           }
-                        });
-                  } else if (data.code === 400) {
-                     openNofi('error', 'Амжилтгүй', data.description);
-                  }
-               });
-            }
+            const data = {
+               patientRegno: currentPatient.registerNumber,
+               patientFingerprint: values.finger,
+               patientFirstname: currentPatient.firstName,
+               patientLastname: currentPatient.lastName,
+               startDate: hicsSeal.startAt,
+               endDate: new Date(),
+               hicsServiceId: hicsSeal.hicsServiceId,
+               parentServiceNumber: null,
+               doctorServiceNumber: hicsSeal.doctorServiceNumber,
+               sent13RequestNo: hicsSeal.sent13RequestNo,
+               departNo: hicsSeal.department?.id,
+               departName: hicsSeal.department?.name,
+               isForeign: 0,
+               freeTypeId: 0,
+               historyCode: hicsSeal.patientHistoryCode,
+               phoneNo: currentPatient.phoneNo,
+               bloodType: hicsSeal.bloodType,
+               diagnosis: {
+                  ...(hicsSeal.diagnosis || addHics.diagnosis),
+                  description: hicsSeal.description || (await getInspectionNote())
+               },
+               isLiver: currentPatient.isLiver ? 1 : 2,
+               startCode: hicsSeal.hicsStartCode,
+               xypResponse: {
+                  requestId: currentPatient.requestId,
+                  resultMsg: currentPatient.resultMsg
+               },
+               personalInfo: getPersonalInfo(currentPatient),
+               employment: {
+                  ...hicsSeal.employment,
+                  employmentId: currentPatient.employmentId || '1',
+                  employmentName: currentPatient.employmentName || '- Цалин хөлстэй ажиллагч',
+                  isEmployment: currentPatient.isEmployment,
+                  emplessDescriptionId: currentPatient.emplessDescriptionId,
+                  emplessDescription: currentPatient.emplessDescription
+               },
+               healthInfo: hicsSeal.healthInfo,
+               paymentType: isInsurance ? 0 : 1
+            };
+            await healtInsurance.saveHics(data).then(async ({ data }) => {
+               if (data.code === 200) {
+                  openNofi('success', 'Амжилттай', data.description);
+                  await insuranceApi
+                     .requestHicsSeal(hicsSeal.id, {
+                        ...hicsSeal,
+                        hicsSealCode: data.result.serviceNumber,
+                        process: 1
+                     })
+                     .then(async ({ data: { response: ourHicsResponse } }) => {
+                        dispatch(setHicsSeal(ourHicsResponse));
+                        if (ourHicsResponse.hicsServiceId === 20120) {
+                           await addHicsService(ourHicsResponse.hicsSealCode);
+                        }
+                     });
+               } else if (data.code === 400) {
+                  openNofi('error', 'Амжилтгүй', data.description);
+               }
+            });
          }
       } else {
          try {

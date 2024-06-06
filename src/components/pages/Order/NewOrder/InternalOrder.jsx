@@ -141,7 +141,7 @@ const InternalOrder = (props) => {
                            service.sealData = {
                               serviceId: exam.serviceId,
                               drgCode: exam.drgCode,
-                              oldServiceId: currentSeal.hicsServiceId
+                              oldServiceId: hicsSeal.hicsServiceId
                            };
                         } else {
                            openNofi('error', 'Алдаа', description);
