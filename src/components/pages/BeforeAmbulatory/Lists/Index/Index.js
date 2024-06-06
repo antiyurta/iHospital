@@ -151,7 +151,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          const data = {
             patientId: row.patientId,
             slotId: row.slotId,
-            parentHicsSeal: row.appointment.hicsSeal,
+            parentHicsSeal: row.appointment?.hicsSeal,
             hicsSeal: row.hicsSeal
          };
          if (type === 2) {

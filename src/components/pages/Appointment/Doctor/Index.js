@@ -80,39 +80,42 @@ function Index({ PatientId, RegisterNumber }) {
       {
          key: 0,
          label: 'Даатгал',
-         children: (
+         children: ({ isModal = false }) => (
             <RendererComponent
                loading={loading.insurance}
                data={insuranceData}
                columns={insuranceColumns}
                rowKey={'serviceNumber'}
                emptyText="Иргэнд даатгалын түүх байхгүй"
+               isModal={isModal}
             />
          )
       },
       {
          key: 1,
          label: 'Үзлэгийн түүх',
-         children: (
+         children: ({ isModal = false }) => (
             <RendererComponent
                rowKey={'id'}
                loading={loading.inspection}
                data={inspectionData}
                columns={inspectionColumns}
                emptyText="Үзлэгийн түүх хоосон байна."
+               isModal={isModal}
             />
          )
       },
       {
          key: 2,
          label: 'Төлбөрийн мэдээлэл',
-         children: (
+         children: ({ isModal = false }) => (
             <RendererComponent
                rowKey={'id'}
                loading={loading.payment}
                data={paymentData}
                columns={paymentColumns}
                emptyText="Хоосон"
+               isModal={isModal}
             />
          )
       }
@@ -126,7 +129,14 @@ function Index({ PatientId, RegisterNumber }) {
             overflow: 'auto'
          }}
       >
-         <Tabs type="card" items={items} tabBarExtraContent={!isFull && <FullScreen />} />
+         <Tabs type="card" tabBarExtraContent={!isFull && <FullScreen />}>
+            {items.map((item) => (
+               <Tabs.TabPane key={item.key} tab={item.label}>
+                  {item.children({ isModal: true })}
+               </Tabs.TabPane>
+            ))}
+         </Tabs>
+         {/* <Tabs type="card" items={items} tabBarExtraContent={!isFull && <FullScreen />} /> */}
       </Card>
    );
 
@@ -177,7 +187,7 @@ function Index({ PatientId, RegisterNumber }) {
                   value={filter}
                   onChange={setFilter}
                />
-               {items[filter]?.children}
+               {items[filter]?.children({ isModal: false })}
                <FullScreen />
             </div>
          </Card>
