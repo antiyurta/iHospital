@@ -3,96 +3,214 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Radio } from 'antd';
 import dayjs from 'dayjs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 //redux
-import { selectCurrentEmrData, selectCurrentHicsService } from '@Features/emrReducer';
+import { selectPatient } from '@Features/patientReducer';
 import { selectCurrentInsurance, selectCurrentUserId } from '@Features/authReducer';
+import {
+   selectCurrentAddHics,
+   selectCurrentEmrData,
+   selectCurrentHicsSeal,
+   selectCurrentOtsData,
+   setHicsSeal
+} from '@Features/emrReducer';
 //common
 import { openNofi } from '@Comman/common';
 //api
+import appointmentApi from '@ApiServices/appointment/api-appointment-service';
+import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
-import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
+import InspectionNoteApi from '@ApiServices/emr/inspectionNote';
 //comp
-import Finger from '@Comman/Finger/Finger';
 import Clock from './Clock';
+import Finger from '@Comman/Finger/Finger';
+//
+import { getPersonalInfo, getSendData } from '@Utils/config/insurance';
 
 const EmrTimer = ({ startDate, endDate, inspection }) => {
    const navigate = useNavigate();
+   const dispatch = useDispatch();
    const location = useLocation();
    const [form] = Form.useForm();
-   const emrHicsService = useSelector(selectCurrentHicsService);
-   const { hicsServiceId, appointmentId, appointmentType, type } = useSelector(selectCurrentEmrData);
+   const [isDisable, setDisable] = useState(true);
+   const currentPatient = useSelector(selectPatient);
+   const hicsSeal = useSelector(selectCurrentHicsSeal);
+   const addHics = useSelector(selectCurrentAddHics);
+   console.log('hicsSeal=======>', hicsSeal);
+   console.log('addHics=======>', addHics);
+   const { inspectionNoteId, appointmentId, appointmentType } = useSelector(selectCurrentEmrData);
+   const currentOtsData = useSelector(selectCurrentOtsData);
+   // console.log('hicsSeal timer derr', hicsSeal, currentOtsData, hasExams);
    const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
-
+   // uzlegin temdeglel tatah
+   const getInspectionNote = async () => {
+      if (inspectionNoteId) {
+         return await InspectionNoteApi.getById(inspectionNoteId).then(({ data: { response } }) => {
+            if (response.inspection) return JSON.parse(response.inspection)?.['Бодит үзлэг'];
+            return undefined;
+         });
+      }
+      return 'TEST';
+   };
    // uzleg duusgah
    const endInspection = async (values) => {
-      // if (isInsurance && hicsServiceId) {
-      //    values['doctorFinger'] = 'test';
-      //    values['patientFinger'] = 'test2';
-      //    values['appointmentId'] = appointmentId;
-      // }
-      console.log('values', values, type);
-      console.log('ins', isInsurance, hicsServiceId);
-      if (isInsurance && hicsServiceId) {
-         // await insuranceApi
-         //    .appointmentSeal(values)
-         //    .post('insurance/appointment-seal', values)
-         //    .then((response) => {
-         //       if (response.data.code === 400) {
-         //          openNofi('error', 'Алдаа', response.data.description);
-         //       } else {
-         //          openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-         //          navigate('/ambulatoryList', {
-         //             state: {
-         //                isRead: true
-         //             }
-         //          });
-         //       }
-         //    })
-         //    .catch((error) => {
-         //       if (error.response.status === 400) {
-         //          const message = error.response.data.message.replaceAll('HttpException:', '');
-         //          openNofi('error', 'Алдаа', message);
-         //       }
-         //    });
+      if (isInsurance) {
+         if (values.conclusion?.includes('confirmed')) {
+            const data = await getSendData(currentPatient, hicsSeal?.id, '', addHics?.id);
+            console.log('data', data);
+            // await insuranceApi.requestHicsSealSent(hicsSeal.id, values?.finger);
+         } else {
+            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
+               // await addHicsService(hicsSeal.hicsSealCode).then(async () => {
+               //    if (values.conclusion?.includes('confirmed')) {
+               //       const data = getSendData(currentPatient, hicsSeal?.id);
+               //       console.log('data', data);
+               //       // await insuranceApi.requestHicsSealSent(hicsSeal.id, values?.finger);
+               //    }
+               //    setIsOpenModal(false);
+               //    openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+               //    navigate(-1);
+               // });
+            } else {
+               const data = {
+                  patientRegno: currentPatient.registerNumber,
+                  patientFingerprint: values.finger,
+                  patientFirstname: currentPatient.firstName,
+                  patientLastname: currentPatient.lastName,
+                  startDate: hicsSeal.startAt,
+                  endDate: new Date(),
+                  hicsServiceId: hicsSeal.hicsServiceId,
+                  parentServiceNumber: null,
+                  doctorServiceNumber: hicsSeal.doctorServiceNumber,
+                  sent13RequestNo: hicsSeal.sent13RequestNo,
+                  departNo: hicsSeal.department?.id,
+                  departName: hicsSeal.department?.name,
+                  isForeign: 0,
+                  freeTypeId: 0,
+                  historyCode: hicsSeal.patientHistoryCode,
+                  phoneNo: currentPatient.phoneNo,
+                  bloodType: hicsSeal.bloodType,
+                  diagnosis: {
+                     ...hicsSeal.diagnosis,
+                     description: hicsSeal.description || (await getInspectionNote())
+                  },
+                  isLiver: currentPatient.isLiver ? 1 : 2,
+                  startCode: hicsSeal.hicsStartCode,
+                  xypResponse: {
+                     requestId: currentPatient.requestId,
+                     resultMsg: currentPatient.resultMsg
+                  },
+                  personalInfo: getPersonalInfo(currentPatient),
+                  employment: {
+                     ...hicsSeal.employment,
+                     employmentId: currentPatient.employmentId || '1',
+                     employmentName: currentPatient.employmentName || '- Цалин хөлстэй ажиллагч',
+                     isEmployment: currentPatient.isEmployment,
+                     emplessDescriptionId: currentPatient.emplessDescriptionId,
+                     emplessDescription: currentPatient.emplessDescription
+                  },
+                  healthInfo: hicsSeal.healthInfo,
+                  paymentType: isInsurance ? 0 : 1
+               };
+               await healtInsurance.saveHics(data).then(async ({ data }) => {
+                  if (data.code === 200) {
+                     openNofi('success', 'Амжилттай', data.description);
+                     await insuranceApi
+                        .requestHicsSeal(hicsSeal.id, {
+                           ...hicsSeal,
+                           hicsSealCode: data.result.serviceNumber,
+                           process: 1
+                        })
+                        .then(async ({ data: { response: ourHicsResponse } }) => {
+                           dispatch(setHicsSeal(ourHicsResponse));
+                           if (ourHicsResponse.hicsServiceId === 20120) {
+                              await addHicsService(ourHicsResponse.hicsSealCode);
+                           }
+                        });
+                  } else if (data.code === 400) {
+                     openNofi('error', 'Амжилтгүй', data.description);
+                  }
+               });
+            }
+         }
       } else {
-         // var newResponse;
-         // if (appointmentType === 0) {
-         //    newResponse = await AppointmentApi.patchAppointment(appointmentId, {
-         //       slotId: location?.state?.slotId,
-         //       endDate: new Date(),
-         //       status: values?.conclusion?.includes('confirmed') ? 5 : 4
-         //    }).then(({ data: { success } }) => success);
-         // } else if (appointmentType === 1) {
-         //    newResponse = await AppointmentApi.patchPreOrder(appointmentId, {
-         //       endDate: new Date(),
-         //       doctorId: userId,
-         //       status: values?.conclusion?.includes('confirmed') ? 5 : 4
-         //    }).then(({ data: { success } }) => success);
-         // }
-         // if (newResponse) {
-         //    setIsOpenModal(false);
-         //    openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-         //    navigate('/main/ambulatoryList', {
-         //       state: {
-         //          isRead: true
-         //       }
-         //    });
-         // }
+         try {
+            const apiMap = {
+               0: appointmentApi.patchAppointment,
+               1: appointmentApi.patchPreOrder
+            };
+            const selectedApi = apiMap[appointmentType];
+            if (!selectedApi) throw new Error('Unknown service type');
+            await selectedApi(appointmentId, {
+               slotId: appointmentType === 0 ? location?.state?.slotId : null,
+               endDate: new Date(),
+               doctorId: appointmentType === 0 ? null : userId,
+               status: values?.conclusion?.includes('confirmed') ? 5 : 4
+            }).then(({ data: { success } }) => {
+               if (success) {
+                  setIsOpenModal(false);
+                  openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+                  navigate(-1);
+               }
+            });
+         } catch (error) {
+            console.log('error');
+         }
       }
+   };
+
+   const addHicsService = async (hicsSealCode) => {
+      await healtInsurance
+         .postAddHicsService({
+            regNo: currentPatient.registerNumber,
+            firstName: currentPatient.firstName,
+            lastName: currentPatient.lastName,
+            serviceList: [
+               {
+                  checkupId: addHics.checkupId,
+                  startDate: addHics.startDate,
+                  endDate: new Date(),
+                  parentServiceNumber: hicsSealCode,
+                  startCode: addHics.startCode,
+                  departNo: hicsSeal.departmentId.toString(),
+                  departName: hicsSeal.department?.name,
+                  hasExams: addHics.hasExam ? 1 : 0,
+                  diagnosis: {
+                     ...addHics.diagnosis,
+                     description: await getInspectionNote()
+                  }
+               }
+            ]
+         })
+         .then(async ({ data }) => {
+            if (data.code === 200) {
+               openNofi('success', 'Амжилттай', data.description);
+               await insuranceApi.requestAddHics(addHics.id, {
+                  hasExam: addHics.hasExam
+               });
+            } else if (data.code === 400) {
+               openNofi('error', 'Амжилтгүй', data.description);
+            }
+         });
    };
 
    return (
       <>
          <div className="emr-timer">
             <p>Үзлэгийн хугацаа</p>
-            <Clock startDate={startDate} endDate={endDate} />
+            <Clock
+               startDate={startDate}
+               endDate={endDate}
+               isDisable={(state) => {
+                  setDisable(state);
+               }}
+            />
             <p>{`${dayjs(startDate).format('YYYY/MM/DD hh:mm')} эхэлсэн`}</p>
             {endDate ? <p>{`${dayjs(endDate).format('YYYY/MM/DD hh:mm')} дууссан`}</p> : null}
             <Button
-               disabled={endDate ? true : false}
+               disabled={isDisable}
                danger
                onClick={() => {
                   setIsOpenModal(true);
@@ -120,8 +238,10 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
             <Form
                form={form}
                onFinish={endInspection}
-               onFinishFailed={(e) => {
-                  console.log(e);
+               onFinishFailed={(error) => {
+                  error.errorFields?.map((errorField) => {
+                     openNofi('error', 'Алдаа', errorField.errors[0]);
+                  });
                }}
                initialValues={{
                   inspection: inspection,
@@ -185,7 +305,18 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                            Үйлчлүүлэгчийн хурууны хээ
                         </p>
                         <div className="h-[1px] w-full bg-[#C9CDD4]" />
-                        <Finger form={form} insurance={isInsurance} noStyle name="finger">
+                        <Finger
+                           form={form}
+                           insurance={isInsurance}
+                           noStyle
+                           name="finger"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Хурууний хээ заавал'
+                              }
+                           ]}
+                        >
                            <Input />
                         </Finger>
                      </div>

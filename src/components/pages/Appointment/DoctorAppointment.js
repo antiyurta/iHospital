@@ -134,6 +134,9 @@ function DoctorAppointment() {
             <Appointment
                selectedPatient={selectedPatient}
                type={1}
+               invoiceData={{
+                  isCheckInsurance: true
+               }}
                prevAppointmentId={null}
                isExtraGrud={{
                   isCreate: true,

@@ -4,6 +4,7 @@ import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
 import HistoryTab from './HistoryTab';
 import DynamicContent from './DynamicContent';
+import HealtInfo from './HealtInfo';
 import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
@@ -29,11 +30,11 @@ function MainPatientHistory({ handleClick }) {
    const {
       type,
       appointmentId,
-      hicsServiceId,
       xrayRequestId,
       operationRequestId,
       cabinetId,
       inspection,
+      isInsurance,
       usageType,
       patientId,
       xrayId,
@@ -62,6 +63,9 @@ function MainPatientHistory({ handleClick }) {
    const Tab2Content = useCallback(() => {
       return <GeneralInspection />;
    }, []);
+   const Tab3Content = useCallback(() => {
+      return <HealtInfo />;
+   });
    const DynamicTabContent = useCallback((props) => {
       return (
          <DynamicContent
@@ -80,7 +84,6 @@ function MainPatientHistory({ handleClick }) {
             }}
             handleClick={handleClick}
             isViewDiagnose={isViewDiagnose(inspection, type)}
-            hicsServiceId={hicsServiceId}
          />
       );
    }, []);
@@ -189,14 +192,24 @@ function MainPatientHistory({ handleClick }) {
    const getInspectionTabs = async () => {
       setLoading(true);
       //Тухайн эмчид харагдах TAB ууд
-      setItems((items) => [
-         ...items,
-         {
-            label: 'Анхан үзлэгийн асуумж',
-            key: `item-first`,
-            children: <DynamicTabContent data={defualtForm} />
+      setItems((items) => {
+         const newItems = [
+            ...items,
+            {
+               label: 'Анхан үзлэгийн асуумж',
+               key: 'item-first',
+               children: <DynamicTabContent data={defualtForm} />
+            }
+         ];
+         if (isInsurance) {
+            newItems.push({
+               label: 'Эрүүл мэндийн мэдээлэл',
+               key: 'item-health-info',
+               children: <Tab3Content />
+            });
          }
-      ]);
+         return newItems;
+      });
       setLoading(false);
       // Түр commit hiwe
       // await EmrInspectionFormServices.get({
@@ -234,13 +247,23 @@ function MainPatientHistory({ handleClick }) {
    };
    const getDefualtTab = () => {
       setActiveKey('item-second');
-      setItems([
-         {
-            label: 'Давтан үзлэгийн асуумж',
-            key: `item-second`,
-            children: <DynamicTabContent data={defualtForm} />
+      setItems((_items) => {
+         const newItems = [
+            {
+               label: 'Давтан үзлэгийн асуумж',
+               key: `item-second`,
+               children: <DynamicTabContent data={defualtForm} />
+            }
+         ];
+         if (isInsurance) {
+            newItems.push({
+               label: 'Эрүүл мэндийн мэдээлэл',
+               key: 'item-health-info',
+               children: <Tab3Content />
+            });
          }
-      ]);
+         return newItems;
+      });
    };
    const getXrayDefualtTab = () => {
       setActiveKey('item-xray');

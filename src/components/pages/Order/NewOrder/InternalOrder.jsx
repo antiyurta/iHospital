@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form } from 'antd';
 import SetOrder from '../SetOrder';
 import { Examination } from '../Examination';
@@ -19,16 +19,29 @@ import { useDispatch, useSelector } from 'react-redux';
 //common
 import { numberToCurrency, openNofi } from '@Comman/common';
 //redux
-import { selectCurrentEmrData, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
+import {
+   delOtsData,
+   selectCurrentAddHics,
+   selectCurrentEmrData,
+   selectCurrentHicsSeal,
+   selectCurrentOtsData,
+   setAddHics,
+   setOtsData
+} from '@Features/emrReducer';
 //api
 import ServiceApi from '@ApiServices/service/service';
 import SurgeryApi from '@ApiServices/service/surgery.api';
+import InsuranceApi from '@ApiServices/healt-insurance/insurance';
+import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 const InternalOrder = (props) => {
    const { isPackage, usageType, selectedPatient, categories, save } = props;
    const dispatch = useDispatch();
+   const hicsSeal = useSelector(selectCurrentHicsSeal);
+   const addHics = useSelector(selectCurrentAddHics);
    const IncomeOTSData = useSelector(selectCurrentOtsData);
    const IncomeEMRData = useSelector(selectCurrentEmrData);
+   const [hicsExams, setHicsExams] = useState([]);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();
    const [showMedicine, setShowMedicine] = useState(false);
@@ -73,89 +86,134 @@ const InternalOrder = (props) => {
       });
    };
    const handleclick = async (value) => {
-      setIsLoadingOrderTable(true);
-      var services = [];
-      if (isPackage) {
-         value.map((item, index) => {
-            const service = {};
-            service.unikey = index;
-            service.serviceId = item.id;
-            service.serviceName = item.name;
-            service.serviceType = item.type;
-            services.push(service);
-         });
-         var datas = await orderForm.getFieldsValue();
-         var data = [];
-         if (datas.services === undefined) {
-            data = services;
+      try {
+         setIsLoadingOrderTable(true);
+         var services = [];
+         if (isPackage) {
+            value.map((item, index) => {
+               services.push({
+                  unikey: index,
+                  serviceId: item.id,
+                  serviceName: item.name,
+                  serviceType: item.type
+               });
+            });
+            var datas = await orderForm.getFieldsValue();
+            var data = [];
+            if (datas.services === undefined) {
+               data = services;
+            } else {
+               data = datas.services.concat(services);
+            }
+            orderForm.setFieldsValue({ services: data });
          } else {
-            data = datas.services.concat(services);
-         }
-         orderForm.setFieldsValue({ services: data });
-      } else {
-         value.map((item) => {
-            var service = {};
-            service.id = item.id;
-            service.name = item.name;
-            service.type = item.type;
-            service.specimen = item.specimen;
-            service.description = item.description;
-            if (usageType === 'IN') {
-               service.price = item.inpatientPrice;
-               service.oPrice = item.inpatientPrice;
-            } else {
-               service.price = item.price;
-               service.oPrice = item.price;
-            }
-            if (item.type === 3) {
-               service.diagnose = item.diagnose;
-               service.surgeryType = item.surgeryType;
-            }
-            if (item.type === 8) {
-               service.id = item.id;
-               service.name = item.iName;
-               service.dose = item.dose;
-               service.price = 0;
-               service.oPrice = item.price;
-               service.type = item.type;
-               service.medicineType = item.medicineType;
-               service.repeatTime = 1;
-               service.dayCount = 1;
-               service.total = 0;
-            } else if (service.type === 2 || item.type === 2) {
-               service.name = item.name;
-               service.qty = item.qty ? item.qty : 1;
-               service.repeatTime = 1;
-               service.dayCount = 1;
-               service.typeId = item.treatmentTypeId;
-               if (service.qty != 1) {
-                  service.price = item.calCprice;
-                  service.oPrice = item.price;
-               }
-            } else if (item.type === 7) {
-               service.type = item.type;
-               service.services = item.services;
-               service.price = item.price;
-            }
-            service.isCito = false;
-            if (item.type === 1) {
-               service.deviceType = item.device?.deviceType;
-               service.deviceId = item.deviceId;
-               service.typeId = item.xrayTypeId;
-            } else if (item.type === 0) {
-               service.typeId = item.examinationTypeId;
-               service.requestDate = new Date();
-            } else {
-               service.requestDate = new Date();
-            }
-            service.requestDate = dayjs(new Date()).format('YYYY-MM-DD');
-            services.push(service);
-         });
-         replaceOtsData([...(IncomeOTSData?.services || []), ...services]);
-      }
-      setIsLoadingOrderTable(false);
-   };
+            await Promise.all(
+               value.map(async (item) => {
+                  let service = {
+                     isCito: false,
+                     id: item.id,
+                     name: item.name,
+                     type: item.type,
+                     typeId: null,
+                     specimen: item.specimen,
+                     description: item.description,
+                     examCode: item.examCode,
+                     amountCit: null,
+                     amountHi: null,
+                     price: usageType === 'IN' ? item.inpatientPrice : item.price,
+                     oPrice: usageType === 'IN' ? item.inpatientPrice : item.price,
+                     requestDate: dayjs(new Date()).format('YYYY-MM-DD'),
+                     sealData: null
+                  };
+                  if (item.examCode) {
+                     const currentSeal = addHics || hicsSeal;
+                     const currentExam = hicsExams.find((exam) => exam.examCode === item.examCode);
+                     let newExam = currentExam;
+                     const freeTypeId = 0;
+                     const selectedIcdCode = currentSeal?.diagnosis?.icdCode || undefined;
+                     if (currentExam.drgCode && currentExam.serviceId === 20200) {
+                        const {
+                           data: { result, description, code }
+                        } = await HealtInsuranceApi.getHicsCostByField(20200, currentSeal.diagnosis.icdCode);
+                        if (code === 200) {
+                           const exam = result.find((item) => item.drgCode === currentExam.drgCode);
+                           newExam = exam;
+                           service.sealData = {
+                              serviceId: exam.serviceId,
+                              drgCode: exam.drgCode,
+                              oldServiceId: currentSeal.hicsServiceId
+                           };
+                        } else {
+                           openNofi('error', 'Алдаа', description);
+                        }
+                     }
+                     service.amountCit = newExam?.amountCit || 0;
+                     service.amountHi = newExam?.amountHi || 0;
+                     service.price = newExam?.amountTotal || 0;
+                     service.oPrice = newExam?.amountTotal || 0;
+                     if (
+                        (newExam.amountCit > 0 && freeTypeId > 0) ||
+                        (newExam.amountCit > 0 &&
+                           selectedIcdCode &&
+                           ['A', 'B', 'P', 'F', 'O'].some(
+                              (char) => char.toLowerCase() === selectedIcdCode[0].toLowerCase()
+                           ))
+                     ) {
+                        service.amountCit = 0;
+                        service.price -= newExam?.amountCit;
+                        service.oPrice -= newExam?.amountCit;
+                     }
+                  }
 
+                  switch (item.type) {
+                     case 0:
+                        service.typeId = item.examinationTypeId;
+                        break;
+                     case 1:
+                        service.deviceType = item.device?.deviceType;
+                        service.deviceId = item.deviceId;
+                        service.typeId = item.xrayTypeId;
+                        break;
+                     case 2:
+                        service.qty = item.qty || 1;
+                        service.repeatTime = 1;
+                        service.dayCount = 1;
+                        service.typeId = item.treatmentTypeId;
+                        if (service.qty !== 1) {
+                           service.price = item.calCprice;
+                           service.oPrice = item.price;
+                        }
+                        break;
+                     case 3:
+                        service.diagnose = item.diagnose;
+                        service.surgeryType = item.surgeryType;
+                        break;
+                     case 7:
+                        service.services = item.services;
+                        break;
+                     case 8:
+                        service.name = item.iName;
+                        service.dose = item.dose;
+                        service.price = 0;
+                        service.oPrice = item.price;
+                        service.medicineType = item.medicineType;
+                        service.repeatTime = 1;
+                        service.dayCount = 1;
+                        service.total = 0;
+                        break;
+                  }
+
+                  services.push(service);
+               })
+            );
+            // Replace OTS data
+            replaceOtsData([...(IncomeOTSData?.services || []), ...services]);
+         }
+         setIsLoadingOrderTable(false);
+      } catch (error) {
+         console.log('error', error);
+      }
+   };
    const replaceOtsData = (services) => {
       const newServices = services?.map((service) => {
          if (service.type === 2 || service.type === 8) {
@@ -198,6 +256,23 @@ const InternalOrder = (props) => {
             console.log(err);
          });
    };
+   const updateAddHics = async (services) => {
+      if (hicsSeal?.hicsServiceId === 20120) {
+         const exams = services.filter((service) => service.type === 0 || service.type === 1);
+         if (exams?.length > 0) {
+            await InsuranceApi.requestAddHics(addHics.id, {
+               amountCit: hicsSeal.amountCit,
+               amountHi: hicsSeal.amountHi,
+               amountTotal: hicsSeal.amountTotal,
+               hasExam: true,
+               diagnosis: hicsSeal.diagnosis
+            }).then(({ data: { response } }) => {
+               dispatch(setAddHics(response));
+            });
+         }
+      }
+      save(services);
+   };
 
    const inpatientRequestClick = async (values) => {
       await ServiceApi.postInpatientRequest({
@@ -224,9 +299,16 @@ const InternalOrder = (props) => {
       handleclick(newServices);
    };
 
+   const getExams = async () => {
+      await HealtInsuranceApi.getHicsExam().then(({ data }) => {
+         setHicsExams(data?.result);
+      });
+   };
+
    useEffect(() => {
       // replaceOtsData([], 0);
       if (IncomeOTSData?.services?.length > 0) {
+         console.log('asdasdasd', IncomeOTSData);
          orderForm.setFieldValue('services', IncomeOTSData.services);
       } else {
          orderForm.resetFields();
@@ -234,6 +316,7 @@ const InternalOrder = (props) => {
    }, [IncomeOTSData]);
    useEffect(() => {
       RenderCategories();
+      getExams();
    }, []);
    return (
       <div className="flex flex-col gap-3">
@@ -261,7 +344,11 @@ const InternalOrder = (props) => {
             )}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
             {showReinspection && (
-               <Reinspection selectedPatient={selectedPatient} appointmentId={IncomeEMRData?.appointmentId} />
+               <Reinspection
+                  selectedPatient={selectedPatient}
+                  appointmentId={IncomeEMRData?.appointmentId}
+                  hicsSealId={hicsSeal.id}
+               />
             )}
          </div>
          <div className="flex flex-wrap">
@@ -294,10 +381,10 @@ const InternalOrder = (props) => {
                </Form>
             </div>
          </div>
-         <div className="w-full flex justify-between">
+         <div className="w-full flex flex-row gap-2 justify-between">
             <div className="flex flex-row gap-3">
-               <p className="font-extrabold">Нийт дүн:</p>
-               <p className="font-extrabold">{numberToCurrency(IncomeOTSData?.total || 0)}</p>
+               <p className="font-extrabold">Нийт дүн: {numberToCurrency(IncomeOTSData?.total || 0)}</p>
+               <p className="font-extrabold">Даатгал дүн: {numberToCurrency(hicsSeal?.amountTotal || 0)}</p>
             </div>
             <Button
                type="primary"
@@ -305,19 +392,26 @@ const InternalOrder = (props) => {
                   orderForm
                      .validateFields()
                      .then((values) => {
-                        const errors = values?.services?.filter(
-                           (service) => !service.orderTime && service.type != 0 && !service.isCito
-                        );
-                        if (errors?.length > 0) {
-                           errors?.map((error) => {
-                              openNofi('error', 'Алдаа', `${error.name} Цаг оруулах`);
-                           });
-                        } else {
-                           const newServices = values?.services?.filter(
-                              (service) => !service.requestId && !service.invoiceId
-                           );
-                           save(newServices, true);
+                        if (isPackage) {
+                           save(values.services);
                            orderForm.resetFields();
+                        } else {
+                           const services = values.services || [];
+                           const errors = services.filter(
+                              (service) => !service.orderTime && service.type !== 0 && !service.isCito
+                           );
+                           if (errors?.length > 0) {
+                              errors?.map((error) => {
+                                 openNofi('error', 'Алдаа', `${error.name} Цаг оруулах`);
+                              });
+                           } else {
+                              const newServices = services.filter(
+                                 (service) => !service.requestId && !service.invoiceId
+                              );
+                              updateAddHics(newServices);
+                              orderForm.resetFields();
+                              dispatch(delOtsData());
+                           }
                         }
                      })
                      .catch((error) => {

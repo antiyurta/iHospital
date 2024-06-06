@@ -24,6 +24,9 @@ export const EmrContextProvider = ({ children }) => {
    const [selectedDocument, setSelectedDocument] = useState(false);
    const [documentTrigger, setDocumentTrigger] = useState([]);
    // Document End
+   // ots has exam
+   const [hasExams, setHasExams] = useState(0);
+   // ots
    const setPatient = (patient) => {
       setSelectedPatient(patient);
    };
@@ -93,7 +96,9 @@ export const EmrContextProvider = ({ children }) => {
             documentType,
             setDocumentView,
             documentTrigger,
-            setDocumentTrigger
+            setDocumentTrigger,
+            hasExams,
+            setHasExams
          }}
       >
          {children}

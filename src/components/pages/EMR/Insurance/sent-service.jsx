@@ -84,7 +84,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             patientFingerprint: values.patientFingerprint,
             patientFirstname: patient.firstName,
             patientLastname: patient.lastName,
-            startDate: hicsSeal.startAt,
+            startDate: hicsSeal?.startAt,
             endDate: new Date(),
             hicsServiceId: hicsSeal.hicsServiceId,
             parentServiceNumber: parentHicsSeal?.hicsServiceId,
@@ -228,6 +228,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
             }
          }
       } catch (error) {
+         console.log('err', error);
          message.error(error.message || 'An error occurred');
       }
    };

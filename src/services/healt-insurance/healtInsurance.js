@@ -32,6 +32,12 @@ class HealthInsurance {
    async getHicsExam() {
       return await jwtInterceopter.get('health-insurance/hics-exam');
    }
+   /** 4.26 Өртгийн жингийн мэдээлэл татах сервис */
+   async getHicsCostList(params) {
+      return await jwtInterceopter.get('health-insurance/hics-cost-list', {
+         params
+      });
+   }
    /** 4.27 Оношийн хамааралтай бүлгийн жагсаалт татах сервис */
    async drgCode() {
       return await jwtInterceopter.get('health-insurance/drg-codes');

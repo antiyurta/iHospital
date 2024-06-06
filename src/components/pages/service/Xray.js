@@ -4,7 +4,7 @@ import UTable from '../../UTable';
 //api
 import deviceApi from '@ApiServices/device.api';
 import careTypeApi from '@ApiServices/reference/care-type.api';
-import insuranceApi from '@ApiServices/healt-insurance/insurance';
+import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
 function Xray() {
    const [xrayTypeData, setXrayTypeData] = useState([]);
    const [devices, setDevices] = useState([]);
@@ -24,9 +24,9 @@ function Xray() {
       });
    };
    const getHicsExams = async () => {
-      await insuranceApi.getAllHicsExams().then(({ data }) => {
-         if (data.success) {
-            setHicsExams(data.response);
+      await healtInsurance.getHicsExam().then(({ data }) => {
+         if (data.code === 200) {
+            setHicsExams(data.result);
          }
       });
    };
@@ -120,8 +120,9 @@ function Xray() {
          isSearch: false,
          input: 'select',
          inputData: hicsExams,
-         relIndex: 'name',
-         col: 12
+         relIndex: 'examName',
+         relValueIndex: 'examCode',
+         col: 24
       }
    ];
    return (

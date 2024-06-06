@@ -23,7 +23,8 @@ const checkNumber = (event) => {
 
 const urlMapPost = {
    1: 'service/xrayRequest',
-   2: 'service/treatmentRequest'
+   2: 'service/treatmentRequest',
+   9: 'appointment'
 };
 
 const appointmentMap = {
@@ -83,7 +84,7 @@ function OrderTable(props) {
          setLoading(true);
          const currentService = form.getFieldValue(['services', index]);
          if (currentService.requestId && currentService.invoiceId) {
-            if (currentService.type === 1 || currentService.type === 2) {
+            if (currentService.type === 1 || currentService.type === 2 || currentService.type === 9) {
                const selectedUrl = urlMapPost[currentService.type];
                if (!selectedUrl) throw new Error('Unknown service type');
                await regularApi
@@ -127,7 +128,8 @@ function OrderTable(props) {
                      invoiceId: response.id,
                      type: service.type,
                      appointmentId: incomeEmrData.appointmentId,
-                     deviceId: service.deviceId
+                     deviceId: service.deviceId,
+                     isCheckInsurance: false
                   });
                   setAppointmentTypeId(appointmentMap[service.type]);
                   return await regularApi
@@ -187,10 +189,14 @@ function OrderTable(props) {
          <Table
             rowKey="fieldKey"
             loading={isLoading}
+            bordered
+            locale={{
+               emptyText: 'OTS захиалга байхгүй'
+            }}
             columns={[
                {
                   title: '№',
-                  width: 50,
+                  width: 30,
                   render: (_, _row, index) => index + 1
                },
                {
@@ -225,8 +231,7 @@ function OrderTable(props) {
                      >
                         {({ getFieldValue }) => {
                            const type = getFieldValue(['services', index, 'type']);
-                           console.log('service type=========>', type);
-                           if (type === 1 || type === 12) {
+                           if (type === 1 || type === 12 || type === 9) {
                               const isCito = getFieldValue(['services', index, 'isCito']);
                               const orderTime = getFieldValue(['services', index, 'orderTime']);
                               if (isCito || orderTime) {
@@ -312,9 +317,34 @@ function OrderTable(props) {
                   title: 'Тайлбар',
                   dataIndex: 'description',
                   render: (_value, _row, index) => (
-                     <OrderForm name={[index, 'description']} editing={true}>
-                        <TextArea />
-                     </OrderForm>
+                     <Form.Item
+                        noStyle
+                        shouldUpdate={(prevValues, currentValues) =>
+                           prevValues?.services?.[index]?.sealData !== currentValues.services?.[index]?.sealData
+                        }
+                     >
+                        {({ getFieldValue }) => {
+                           const drgCode = getFieldValue(['services', index, 'sealData', 'drgCode']);
+                           return (
+                              <OrderForm
+                                 rules={
+                                    drgCode
+                                       ? [
+                                            {
+                                               required: true,
+                                               message: 'Тайлбар заавал эмчин заалт авна'
+                                            }
+                                         ]
+                                       : []
+                                 }
+                                 name={[index, 'description']}
+                                 editing={true}
+                              >
+                                 <TextArea />
+                              </OrderForm>
+                           );
+                        }}
+                     </Form.Item>
                   )
                },
                {
@@ -379,13 +409,35 @@ function OrderTable(props) {
                },
                {
                   title: 'Үнэ',
-                  width: 200,
-                  dataIndex: 'price',
-                  render: (_value, _row, index) => (
-                     <OrderForm noStyle name={[index, 'price']} isNumber={true} editing={false}>
-                        <InputNumber onKeyPress={checkNumber} />
-                     </OrderForm>
-                  )
+                  children: [
+                     {
+                        title: 'Даатгал',
+                        width: 120,
+                        render: (_value, _row, index) => (
+                           <OrderForm noStyle name={[index, 'amountHi']} isNumber={true} editing={false}>
+                              <InputNumber onKeyPress={checkNumber} />
+                           </OrderForm>
+                        )
+                     },
+                     {
+                        title: 'Иргэн төлөх',
+                        width: 120,
+                        render: (_value, _row, index) => (
+                           <OrderForm noStyle name={[index, 'amountCit']} isNumber={true} editing={false}>
+                              <InputNumber onKeyPress={checkNumber} />
+                           </OrderForm>
+                        )
+                     },
+                     {
+                        title: 'Нийт',
+                        width: 120,
+                        render: (_value, _row, index) => (
+                           <OrderForm noStyle name={[index, 'price']} isNumber={true} editing={false}>
+                              <InputNumber onKeyPress={checkNumber} />
+                           </OrderForm>
+                        )
+                     }
+                  ]
                },
                {
                   title: '',
@@ -396,7 +448,6 @@ function OrderTable(props) {
                         description="Та устгахдаа итгэлтэй байна уу?"
                         onConfirm={async () => {
                            await removeOtsRequest(index).then((res) => {
-                              console.log('reeesss', res);
                               if (res) {
                                  remove(index);
                               }

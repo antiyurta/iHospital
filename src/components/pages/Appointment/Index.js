@@ -26,7 +26,6 @@ const hicsIdMap = {
 };
 
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
-   console.log('asdasdasdsad', invoiceData);
    const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const isInsurance = useSelector(selectCurrentInsurance);
@@ -77,14 +76,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
             type: 2
          }
       }).then(({ data: { response } }) => {
-         if (incomeEmrData.isInsurance) {
-            console.log(hicsIdMap[type]);
-            const d = response?.data?.map((res) => hicsIdMap[type]?.map((id) => res.hicsServiceIds?.includes(id)));
-            console.log('dddd', d);
-            setStructures(response.data);
-         } else {
-            setStructures(response.data);
-         }
+         setStructures(response.data);
       });
    };
    // emch songoh
@@ -167,10 +159,12 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
          patientId: selectedPatient.id,
          type: 3, // 1 bol yaralta 2 bol shuud 3 urdcilsan zahialga 4 bol urdcilsan segiileh
          status: 1, // 1 bol tsag zahilsn 2 bol odor solison 3 tsutsalsn 4 uzleh higed duussan
-         isInsurance: stateInsurance,
+         isInsurance: stateInsurance || !invoiceData?.isCheckInsurance,
+         hicsSealId: invoiceData?.hicsSealId || null,
          appointmentId: prevAppointmentId
       }).then(async (response) => {
          if (response.status === 201) {
+            handleClick?.(selectedInfo, selectedDoctor, response.data?.response);
             setAppointmentModal(false);
             await onFinish({
                date: selectedDate,
@@ -432,7 +426,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
                      </div>
                   </div>
                ) : null}
-               {isInsurance ? (
+               {isInsurance && invoiceData?.isCheckInsurance ? (
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-3">
                         <div className="flow-root">
