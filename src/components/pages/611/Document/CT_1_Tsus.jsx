@@ -733,12 +733,12 @@ const CT_1_Tsus = (props) => {
                         <th id="cls"></th>
                         <th id="cls" className="w-[60%]" colSpan={4} rowSpan={7}>
                            Дүгнэлт:
-                           <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
+                           <Input className="w-[370px] mb-1" style={{ textAlign: 'center' }} />
+                           <Input className="w-full " style={{ textAlign: 'center' }} />
+                           <Input className="w-full " style={{ textAlign: 'center' }} />
+                           <Input className="w-full " style={{ textAlign: 'center' }} />
+                           <Input className="w-full " style={{ textAlign: 'center' }} />
+                           <Input className="w-full " style={{ textAlign: 'center' }} />
                         </th>
                      </tr>
                      <tr>
@@ -1145,7 +1145,9 @@ const CT_1_Tsus = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th id="cls" className="h-6">Үйл онош:</th>
+                        <th id="cls" className="h-6">
+                           Үйл онош:
+                        </th>
                      </tr>
                   </thead>
                </Table>

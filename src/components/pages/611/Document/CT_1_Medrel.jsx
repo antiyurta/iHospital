@@ -482,17 +482,16 @@ const CT_1_Medrel = (props) => {
                                  </p>
                                  <p className="flex items-center">
                                     <p> Харах чадал:</p>
-                                    <p className="ml-2 underline">{` ${formData?.q26}`}</p>
+                                    <p className="ml-2 ">{` ${formData?.q26}`}</p>
                                  </p>
                               </div>
                            </th>
                            <th id="cls">
-                              <div className="flex gap-10">
-                                 <p className="flex items-center ">
-                                    <p>Гэрлийн гурвал</p>
-                                    <p className="ml-2 underline">{` ${formData?.q28}`}</p>
+                              <div className="flex gap-10 mr-2">
+                                 <p className="flex items-center  ">
+                                    <p>Гэрлийн гурвал:</p>
+                                    <p className="ml-2">{` ${formData?.q28}`}</p>
                                  </p>
-
                                  <p>
                                     Б
                                     <Input
@@ -528,49 +527,66 @@ const CT_1_Medrel = (props) => {
                                  <p>Харааны талбай:</p>
                               </div>
                            </th>
-                           <th id="cls">
-                              <div className="ml-1">
+                           <th id="cls" className="w-full">
+                              <p>
+                                 Шууд бус: Б
+                                 <Input
+                                    value={formData?.['q29-1']}
+                                    className="amaraInput w-6"
+                                    style={{ textAlign: 'center' }}
+                                 />
+                                 З
+                                 <Input
+                                    value={formData?.['q29-2']}
+                                    className="amaraInput w-6"
+                                    style={{ textAlign: 'center' }}
+                                 />
+                              </p>
+                              <p className="ml-1">
                                  Нүдний уг:
                                  <Input
-                                    value={formData?.q4}
+                                    value={formData?.q30}
                                     className="amaraInput w-40 "
                                     style={{ textAlign: 'center' }}
                                  />
-                              </div>
+                              </p>
                            </th>
                            <th className="flex" id="cls">
                               <div className="flex gap-8 ">
                                  <p>
                                     Птоз: Б
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q32-1']}
                                        className="amaraInput w-6"
                                        style={{ textAlign: 'center' }}
                                     />
                                     З
                                     <Input
-                                       value={formData?.q4}
+                                       value={formData?.['q32-2']}
                                        className="amaraInput w-6"
                                        style={{ textAlign: 'center' }}
                                     />
                                  </p>
-                                 <p>Нистагм:</p>
+                                 <p className="flex items-center">
+                                    <p>Нистагм:</p>
+                                    <p className="ml-2 ">{` ${formData?.q33}`}</p>
+                                 </p>
                               </div>
                            </th>
                            <th className="flex items-baseline" id="cls">
                               <p>Диплопи:</p>
-                              <Checkbox.Group value={formData?.q5} className="ml-1">
-                                 <Checkbox value={'q5-2'}>Эерэг</Checkbox>
-                                 <Checkbox value={'q5-2'}> Сөрөг</Checkbox>
-                                 <Checkbox value={'q5-2'}> Илрээгүй</Checkbox>
-                                 <Checkbox value={'q5-2'}> Илэрсэн</Checkbox>
+                              <Checkbox.Group value={formData?.q34} className="ml-1">
+                                 <Checkbox value={'q34-1'}>Эерэг</Checkbox>
+                                 <Checkbox value={'q34-2'}> Сөрөг</Checkbox>
+                                 <Checkbox value={'q34-3'}> Илрээгүй</Checkbox>
+                                 <Checkbox value={'q34-4'}> Илэрсэн</Checkbox>
                               </Checkbox.Group>
                            </th>
                            <th className="flex items-center mb-2" id="cls">
                               <p>НХБ:</p>
-                              <Checkbox.Group value={formData?.q5} className="ml-1">
-                                 <Checkbox value={'q5-2'}>Хэвийн</Checkbox>
-                                 <Checkbox value={'q5-2'}>Хэвийн бус</Checkbox>
+                              <Checkbox.Group value={formData?.q35} className="ml-1">
+                                 <Checkbox value={'q35-1'}>Хэвийн</Checkbox>
+                                 <Checkbox value={'q35-2'}>Хэвийн бус</Checkbox>
                               </Checkbox.Group>
                            </th>
                            <Table bordered className="story mb-0 h-fit absolute bottom-0 left-0">
