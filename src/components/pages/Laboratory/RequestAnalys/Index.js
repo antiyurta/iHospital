@@ -21,6 +21,8 @@ import { ReturnById } from '../Template/index';
 import AnswerBody from './AnswerBody';
 import { ListPatientInfo, TypeInfo } from '../../../ListInjection';
 import ServiceApi from '../../../../services/service/service';
+import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+import SealApi from '@ApiServices/healt-insurance/insurance';
 
 const ProcessEnum = {
    order: 'ORDER',
@@ -357,21 +359,61 @@ function Index() {
          console.log('asdasd1');
       }
    });
-   const changeExaminationProcess = () => {
-      Promise.all(
-         selectedRequestDtl.map(async (dtl) => {
-            const process = processUpper(dtl.process);
-            await ServiceApi.patchErequestDetail(dtl.id, {
-               process: process
-            });
-         })
-      )
-         .then(async () => {
-            await getErequestDtl(selectedRequest);
-         })
-         .then(async () => {
-            setIsRefresh(!isRefresh);
+   const changeExaminationProcess = async () => {
+      for await (const item of selectedRequestDtl) {
+         console.log('item =========>', item);
+         const process = processUpper(item.process);
+         if (process == 'TESTED') {
+            await InsuranceApi.saveHics({
+               patientRegno: item?.hicsSeal?.patient?.registerNumber,
+               patientFingerprint: 'finger',
+               patientFirstname: item?.hicsSeal?.patient?.firstName,
+               patientLastname: item?.hicsSeal?.patient?.lastName,
+               startDate: item?.sampleDate,
+               endDate: new Date(),
+               hicsServiceId: item?.hicsSeal?.hicsServiceId,
+               departNo: item?.hicsSeal?.departmentId,
+               departName: 'Урологийн кабинет',
+               isForeign: item?.hicsSeal?.patient?.isLocal ? 0 : 1,
+               freeTypeId: 0,
+               historyCode: item?.hicsSeal?.patientHistoryCode,
+               phoneNo: item?.hicsSeal?.patient?.phoneNo,
+               bloodType: item?.hicsSeal?.patient?.bloodType,
+               diagnosis: item?.hicsSeal?.diagnosis
+            })
+               .then(async (res) => {
+                  if (res.data.code == 200) {
+                     await SealApi.requestHicsSeal(item?.hicsSeal?.id, {
+                        hicsSealCode: res?.data?.result?.serviceNumber,
+                        process: res?.data?.result?.serviceNumber ? 1 : 0
+                     });
+                  } else {
+                     openNofi('error', res.data.description);
+                  }
+               })
+               .catch((err) => openNofi('error', err));
+         } else if (process == 'CONFIRMED') {
+            await SealApi.requestHicsSealSent(item?.hicsSeal?.id, {
+               patientFingerprint: 'test'
+            })
+               .then(async (res) => {
+                  if (res.data.code == 200) {
+                     await SealApi.requestHicsSeal(item?.hicsSeal?.id, {
+                        process: 2
+                     });
+                     openNofi('success', 'Амжилттай үйлчилгээ илгээлээ.');
+                  } else {
+                     openNofi('error', res.data?.description);
+                  }
+               })
+               .catch((err) => openNofi('error', err));
+         }
+         await ServiceApi.patchErequestDetail(item.id, {
+            process: process
          });
+      }
+      await getErequestDtl(selectedRequest);
+      setIsRefresh(!isRefresh);
    };
    var groupBarcode = selectedRequestDtl.reduce(function (r, a) {
       r[a.barcode] = r[a.barcode] || [];

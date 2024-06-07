@@ -22,6 +22,7 @@ import ServiceApi from '../../../services/service/service';
 import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
 import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
 import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
+import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 function IndexBefore({ type }) {
    const today = new Date();
@@ -41,6 +42,7 @@ function IndexBefore({ type }) {
    const [xRayMaterialList, setXRayMaterialList] = useState([]);
    const [usedMaterials, setUsedMaterials] = useState([{}]);
    const [id, setId] = useState(Number);
+   const [currentRow, setCurrentRow] = useState();
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const [spinner, setSpinner] = useState(false);
@@ -84,12 +86,6 @@ function IndexBefore({ type }) {
       if (info.file.status === 'done') {
          console.log(info.file.response.response.id);
          setPhotoIds([...photoIds, info.file.response.response.id]);
-         // Get this url from response in real world.
-         // setPhotoId(info.file.response.response.id);
-         // getBase64(info.file.originFileObj, (url) => {
-         //     setLoading(false);
-         //     setImageUrl(url);
-         // });
       }
    };
    const handleRemove = async (info) => {
@@ -103,19 +99,22 @@ function IndexBefore({ type }) {
          }
       });
    };
-   const newModal = (id, isPayment, usageType) => {
+   const newModal = (currentRow, isPayment, usageType) => {
+      console.log('currentRow =======>', currentRow);
       form.resetFields();
       if (usageType === 'OUT') {
          if (!isPayment) {
             openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
          } else {
-            setId(id);
+            setId(currentRow?.id);
+            setCurrentRow(currentRow);
             setEditMode(true);
             setPhotoIds([]);
             setXrayModal(true);
          }
       } else {
-         setId(id);
+         setId(currentRow?.id);
+         setCurrentRow(currentRow);
          setEditMode(true);
          setPhotoIds([]);
          setXrayModal(true);
@@ -124,6 +123,15 @@ function IndexBefore({ type }) {
    const onFinish = async (values) => {
       await ServiceApi.patchXrayRequest(id, values).then(({ data: { success } }) => {
          if (success) {
+            // InsuranceApi.saveHics({
+            //    patientRegno: currentRow?.patient?.registerNumber,
+            //    patientFingerprint: 'finger',
+            //    patientFirstname: currentRow?.patient?.firstName,
+            //    patientLastname: currentRow?.patient?.lastName,
+            //    startDate: currentRow?.createdAt,
+            //    endDate: data?.response?.updatedAt,
+            //    hicsServiceId: data?.response?.
+            // });
             setXrayModal(false);
             getXrayRequest(1, 10, today, today);
          }
@@ -310,10 +318,7 @@ function IndexBefore({ type }) {
                   })}
                </ul>
             ) : (
-               <Button
-                  type="primary"
-                  onClick={() => newModal(row.id, row?.isPayment || row?.isInsurance, row?.usageType)}
-               >
+               <Button type="primary" onClick={() => newModal(row, row?.isPayment || row?.isInsurance, row?.usageType)}>
                   Зураг оруулах
                </Button>
             );
