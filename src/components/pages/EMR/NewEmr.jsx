@@ -112,10 +112,7 @@ class NewEmr extends React.Component {
             isInsurance: this.props.IncomeEMRData.isInsurance,
             addHicsId: this.props.addHics.id,
             hicsSealId: this.props.hicsSeal.id,
-            diagnosis:
-               this.props.hicsSeal.hicsServiceId === 20120
-                  ? this.props.addHics?.diagnosis
-                  : this.props.hicsSeal?.diagnosis
+            diagnosis: this.props.addHics.diagnosis || this.props.hicsSeal.diagnosis
          }).then(async (response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');

@@ -217,6 +217,17 @@ function UTable(props) {
                      allowClear
                      showSearch
                      placeholder={element.label}
+                     onChange={(value, _option) => {
+                        if (typeof element.onChange === 'object') {
+                           const current = element.inputData?.find((item) => item[element.relValueIndex] === value);
+                           form.setFieldValue(
+                              [element.onChange.setValueIndex],
+                              current[element.onChange.setValueIndex]
+                           );
+                        } else {
+                           return undefined;
+                        }
+                     }}
                      optionFilterProp="children"
                      filterOption={(input, option) => {
                         return (option?.children ?? '').toLowerCase().includes(input?.toLowerCase());

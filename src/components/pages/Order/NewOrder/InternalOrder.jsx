@@ -26,6 +26,7 @@ import {
    selectCurrentHicsSeal,
    selectCurrentOtsData,
    setAddHics,
+   setHicsSeal,
    setOtsData
 } from '@Features/emrReducer';
 //api
@@ -41,7 +42,6 @@ const InternalOrder = (props) => {
    const addHics = useSelector(selectCurrentAddHics);
    const IncomeOTSData = useSelector(selectCurrentOtsData);
    const IncomeEMRData = useSelector(selectCurrentEmrData);
-   const [hicsExams, setHicsExams] = useState([]);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();
    const [showMedicine, setShowMedicine] = useState(false);
@@ -125,43 +125,42 @@ const InternalOrder = (props) => {
                      requestDate: dayjs(new Date()).format('YYYY-MM-DD'),
                      sealData: null
                   };
-                  if (item.examCode) {
+                  if (item.examCode && item.drgCode) {
                      const currentSeal = addHics || hicsSeal;
-                     const currentExam = hicsExams.find((exam) => exam.examCode === item.examCode);
-                     let newExam = currentExam;
                      const freeTypeId = 0;
                      const selectedIcdCode = currentSeal?.diagnosis?.icdCode || undefined;
-                     if (currentExam.drgCode && currentExam.serviceId === 20200) {
-                        const {
-                           data: { result, description, code }
-                        } = await HealtInsuranceApi.getHicsCostByField(20200, currentSeal.diagnosis.icdCode);
-                        if (code === 200) {
-                           const exam = result.find((item) => item.drgCode === currentExam.drgCode);
-                           newExam = exam;
-                           service.sealData = {
-                              serviceId: exam.serviceId,
-                              drgCode: exam.drgCode,
-                              oldServiceId: hicsSeal.hicsServiceId
-                           };
-                        } else {
-                           openNofi('error', 'Алдаа', description);
+                     const exam = await HealtInsuranceApi.getHicsCostByField(20200, currentSeal.diagnosis.icdCode).then(
+                        ({ data: { code, result, description } }) => {
+                           if (code === 200) {
+                              return result.find((resu) => resu.drgCode === item.drgCode);
+                           } else {
+                              openNofi('error', 'Алдаа', description);
+                              return null;
+                           }
                         }
-                     }
-                     service.amountCit = newExam?.amountCit || 0;
-                     service.amountHi = newExam?.amountHi || 0;
-                     service.price = newExam?.amountTotal || 0;
-                     service.oPrice = newExam?.amountTotal || 0;
-                     if (
-                        (newExam.amountCit > 0 && freeTypeId > 0) ||
-                        (newExam.amountCit > 0 &&
-                           selectedIcdCode &&
-                           ['A', 'B', 'P', 'F', 'O'].some(
-                              (char) => char.toLowerCase() === selectedIcdCode[0].toLowerCase()
-                           ))
-                     ) {
-                        service.amountCit = 0;
-                        service.price -= newExam?.amountCit;
-                        service.oPrice -= newExam?.amountCit;
+                     );
+                     if (exam) {
+                        service.sealData = {
+                           serviceId: exam.serviceId,
+                           drgCode: exam.drgCode,
+                           oldServiceId: hicsSeal.hicsServiceId
+                        };
+                        service.amountCit = exam?.amountCit || 0;
+                        service.amountHi = exam?.amountHi || 0;
+                        service.price = exam?.amountTotal || 0;
+                        service.oPrice = exam?.amountTotal || 0;
+                        if (
+                           (exam.amountCit > 0 && freeTypeId > 0) ||
+                           (exam.amountCit > 0 &&
+                              selectedIcdCode &&
+                              ['A', 'B', 'P', 'F', 'O'].some(
+                                 (char) => char.toLowerCase() === selectedIcdCode[0].toLowerCase()
+                              ))
+                        ) {
+                           service.amountCit = 0;
+                           service.price -= exam?.amountCit;
+                           service.oPrice -= exam?.amountCit;
+                        }
                      }
                   }
 
@@ -256,22 +255,32 @@ const InternalOrder = (props) => {
             console.log(err);
          });
    };
-   const updateAddHics = async (services) => {
-      if (hicsSeal?.hicsServiceId === 20120) {
+   const updateHics = async (type, services) => {
+      const apiMap = {
+         addHics: InsuranceApi.requestAddHics,
+         hicsSeal: InsuranceApi.requestHicsSeal
+      };
+      const idMap = {
+         addHics: addHics.id,
+         hicsSeal: hicsSeal.id
+      };
+      const dispatchMap = {
+         addHics: setAddHics,
+         hicsSeal: setHicsSeal
+      };
+      try {
+         const selectedApi = apiMap[type];
+         if (!selectedApi) throw new Error('Unknown service type');
          const exams = services.filter((service) => service.type === 0 || service.type === 1);
-         if (exams?.length > 0) {
-            await InsuranceApi.requestAddHics(addHics.id, {
-               amountCit: hicsSeal.amountCit,
-               amountHi: hicsSeal.amountHi,
-               amountTotal: hicsSeal.amountTotal,
-               hasExam: true,
-               diagnosis: hicsSeal.diagnosis
-            }).then(({ data: { response } }) => {
-               dispatch(setAddHics(response));
-            });
-         }
+         await selectedApi(idMap[type], {
+            hasExam: exams?.length > 0 ? true : false
+         }).then(({ data: { response } }) => {
+            dispatch(dispatchMap[type](response));
+            save(services);
+         });
+      } catch (error) {
+         console.log('err', error);
       }
-      save(services);
    };
 
    const inpatientRequestClick = async (values) => {
@@ -299,12 +308,6 @@ const InternalOrder = (props) => {
       handleclick(newServices);
    };
 
-   const getExams = async () => {
-      await HealtInsuranceApi.getHicsExam().then(({ data }) => {
-         setHicsExams(data?.result);
-      });
-   };
-
    useEffect(() => {
       // replaceOtsData([], 0);
       if (IncomeOTSData?.services?.length > 0) {
@@ -316,7 +319,6 @@ const InternalOrder = (props) => {
    }, [IncomeOTSData]);
    useEffect(() => {
       RenderCategories();
-      getExams();
    }, []);
    return (
       <div className="flex flex-col gap-3">
@@ -408,7 +410,11 @@ const InternalOrder = (props) => {
                               const newServices = services.filter(
                                  (service) => !service.requestId && !service.invoiceId
                               );
-                              updateAddHics(newServices);
+                              if (addHics?.checkupId >= 1) {
+                                 updateHics('addHics', newServices);
+                              } else {
+                                 updateHics('hicsSeal', newServices);
+                              }
                               orderForm.resetFields();
                               dispatch(delOtsData());
                            }
