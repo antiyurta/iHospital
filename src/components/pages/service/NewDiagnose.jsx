@@ -314,8 +314,8 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
          hicsSeal: InsuranceApi.requestHicsSeal
       };
       const idMap = {
-         addHics: addHics.id,
-         hicsSeal: hicsSeal.id
+         addHics: addHics?.id,
+         hicsSeal: hicsSeal?.id
       };
       const dispatchMap = {
          addHics: setAddHics,

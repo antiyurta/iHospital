@@ -139,10 +139,15 @@ class NewEmr extends React.Component {
       await this.getAddHics();
    }
    async componentWillUnmount() {
-      // this.props.delEmrData();
+      this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
+      const RenderIcon = ({ state }) => {
+         console.log('state', state);
+         if (state) return <FullscreenOutlined />;
+         return <FullscreenExitOutlined />;
+      };
       return (
          <EmrContextProvider>
             <div className="new-emr">
@@ -193,6 +198,20 @@ class NewEmr extends React.Component {
                         ) : null}
                      </div>
                   </div>
+                  {/* <div className="new-emr-body">
+                     <div className="bg-red-500 item-1">1</div>
+                     <div className="bg-blue-500 item-2">2</div>
+                     <OneWindow
+                        usageType={this.state.usageType}
+                        handleView={(state) => {
+                           this.setState({
+                              isExpandHistory: state ? !this.state.isExpandHistory : true,
+                              isExpandInspection: state ? !this.state.isExpandInspection : true,
+                              isExpandOneWindow: true
+                           });
+                        }}
+                     />
+                  </div> */}
                   {this.state.type === 'EMR' ? (
                      <div className="emr-body grid grid-cols-5 gap-2 p-2">
                         {this.state.isExpandHistory ? (
@@ -211,18 +230,12 @@ class NewEmr extends React.Component {
                                     <Button
                                        onClick={() => {
                                           this.setState({
-                                             isExpandHistory: true,
+                                             isExpandHistory: !this.state.isExpandHistory,
                                              isExpandInspection: !this.state.isExpandInspection,
                                              isExpandOneWindow: !this.state.isExpandOneWindow
                                           });
                                        }}
-                                       icon={
-                                          this.state.isExpandHistory ? (
-                                             <FullscreenOutlined />
-                                          ) : (
-                                             <FullscreenExitOutlined />
-                                          )
-                                       }
+                                       icon={<RenderIcon state={this.state.isExpandHistory} />}
                                     />
                                  </div>
                                  <div className="px-2">

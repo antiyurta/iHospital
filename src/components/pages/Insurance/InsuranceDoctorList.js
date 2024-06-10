@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, ConfigProvider, DatePicker, Form, Input, Modal, Progress, Select, Table, message } from 'antd';
+import {
+   Button,
+   Card,
+   ConfigProvider,
+   DatePicker,
+   Form,
+   Input,
+   InputNumber,
+   Modal,
+   Progress,
+   Select,
+   Table,
+   message
+} from 'antd';
 import { localMn, numberToCurrency, openNofi } from '../../common';
 import { EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
@@ -9,6 +22,7 @@ import moment from 'moment';
 import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';
 import healtInsuranceService from '../../../services/healt-insurance/healtInsurance';
 import apiInsurance from '../../../services/healt-insurance/insurance';
+import { ListPatientInfo } from '../../ListInjection';
 //request service uud
 
 const { RangePicker } = DatePicker;
@@ -30,6 +44,7 @@ function InsuranceDocterList() {
    const [filterForm] = Form.useForm();
    const [isLoading, setIsLoading] = useState(false);
    const [hicsGroups, setHicsGroups] = useState([]);
+   const [hicsService, setHicsService] = useState([]);
    const [isOpenReturnModal, setIsOpenReturnModal] = useState(false);
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    //
@@ -70,8 +85,9 @@ function InsuranceDocterList() {
       });
       setIsOpenEditModal(true);
    };
-   const returnInsurance = (serviceNumber) => {
+   const returnInsurance = (id, serviceNumber) => {
       returnForm.setFieldsValue({
+         hicsSealId: id,
          serviceNumber: serviceNumber
       });
       setIsOpenReturnModal(true);
@@ -109,6 +125,7 @@ function InsuranceDocterList() {
          .getHicsServiceGroup()
          .then(({ data }) => {
             if (data.code == 200) {
+               console.log('dada', data);
                setHicsGroups(data.result);
             } else {
                message.warn(data.description);
@@ -117,6 +134,11 @@ function InsuranceDocterList() {
          .catch((error) => {
             console.log(error);
          });
+   };
+   const getHicsService = async () => {
+      await healtInsuranceService.getHicsService().then(({ data }) => {
+         setHicsService(data.result);
+      });
    };
    const getInfoProcess = (process) => {
       if (process === 0) {
@@ -133,38 +155,48 @@ function InsuranceDocterList() {
    };
    const columns = [
       {
-         title: 'asd',
-         dataIndex: 'hicsServiceId'
-      },
-      {
          title: 'Эхэлсэн огноо',
          dataIndex: 'startAt',
+         width: 100,
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD hh:mm:ss');
+            if (text) {
+               return moment(text).format('YYYY-MM-DD hh:mm:ss');
+            }
+            return;
          }
       },
       {
          title: 'Дууссан огноо',
          dataIndex: 'endAt',
+         width: 100,
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD hh:mm:ss');
+            if (text) {
+               return moment(text).format('YYYY-MM-DD hh:mm:ss');
+            }
+            return;
          }
       },
       {
+         title: 'Өвчтөн',
+         dataIndex: 'patient',
+         width: 170,
+         render: (patient) => <ListPatientInfo patientData={patient} />
+      },
+      {
          title: 'Тасаг',
-         dataIndex: ['department', 'name']
-      },
-      {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName']
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName']
-      },
-      {
-         title: 'Регистр',
-         dataIndex: ['patient', 'registerNumber']
+         children: [
+            {
+               title: 'Нэр',
+               width: 150,
+               dataIndex: ['department', 'name']
+            },
+            {
+               title: 'Эмч',
+               dataIndex: 'patient',
+               width: 170,
+               render: (patient) => <ListPatientInfo patientData={patient} />
+            }
+         ]
       },
       {
          title: 'Хугацаа',
@@ -186,8 +218,10 @@ function InsuranceDocterList() {
          }
       },
       {
+         width: 100,
          title: 'Үйлчилгээний нэр',
-         dataIndex: 'groupId'
+         dataIndex: 'hicsServiceId',
+         render: (text) => hicsService.find((service) => service.id === text)?.name
       },
       {
          title: 'Урсгал',
@@ -218,7 +252,7 @@ function InsuranceDocterList() {
             if (text === 1 || text === 2 || text === 3) {
                return (
                   <Button
-                     onClick={() => returnInsurance(row.hicsSealCode)}
+                     onClick={() => returnInsurance(row.id, row.hicsSealCode)}
                      icon={<RollbackOutlined style={{ color: 'red' }} />}
                   />
                );
@@ -228,11 +262,12 @@ function InsuranceDocterList() {
    ];
    useEffect(() => {
       getList(1, 10, null);
+      getHicsService();
       getHicsGroups();
    }, []);
    return (
       <>
-         <div className="flex flex-col gap-3">
+         <div className="w-full h-screen bg-[#f5f6f7] p-3">
             <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                <div className="p-3">
                   <Form form={filterForm}>
@@ -285,7 +320,7 @@ function InsuranceDocterList() {
                      columns={columns}
                      dataSource={data}
                      pagination={{
-                        position: ['bottomCenter', 'topCenter'],
+                        position: ['bottomCenter'],
                         size: 'small',
                         current: meta.page,
                         total: meta.itemCount,
@@ -311,11 +346,12 @@ function InsuranceDocterList() {
             }}
          >
             <Form form={returnForm} layout="vertical">
-               <div className="hidden">
-                  <Form.Item name={'serviceNumber'}>
-                     <Input disabled={true} />
-                  </Form.Item>
-               </div>
+               <Form.Item hidden name={'hicsSealId'}>
+                  <InputNumber disabled={true} />
+               </Form.Item>
+               <Form.Item hidden name={'serviceNumber'}>
+                  <Input disabled={true} />
+               </Form.Item>
                <Form.Item
                   name={'reason'}
                   label="Буцаах болсон шалтгаан"

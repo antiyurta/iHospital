@@ -33,6 +33,7 @@ const RegisterPatient = ({ patientId, onFinish }) => {
                </Form.Item>
                <Form.Item
                   name="authType"
+                  className="white-radio"
                   label="Мэдээлэл татах төрөл"
                   rules={[{ required: true, message: 'Мэдээлэл татах төрөлөө сонгоно уу!' }]}
                >
@@ -258,10 +259,19 @@ const RegisterPatient = ({ patientId, onFinish }) => {
    }, [patientId]);
 
    return (
-      <Form form={form} onFinish={onFinish} layout="vertical">
-         <Steps current={current} items={steps.map(({ title, icon }) => ({ title, icon }))} />
-         <div className="steps-content ">{steps[current].content}</div>
-         <div className="steps-action" style={{ marginTop: 24 }}>
+      <Form form={form} onFinish={onFinish} layout="vertical" className="flex flex-col gap-2">
+         <Steps
+            style={{
+               padding: 6,
+               borderRadius: 12,
+               background: '#f5f6f7'
+            }}
+            size="small"
+            current={current}
+            items={steps.map(({ title, icon }) => ({ title, icon }))}
+         />
+         <div className="steps-content">{steps[current].content}</div>
+         <div className="steps-action">
             {current > 0 && (
                <Button style={{ margin: '0 8px' }} onClick={() => prev()} icon={<CaretLeftOutlined />}>
                   Өмнөх

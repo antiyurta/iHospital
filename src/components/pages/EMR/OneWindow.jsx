@@ -10,9 +10,11 @@ import DocumentViewer from './DocumentViewer';
 
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
+import { ExpandOutlined } from '@ant-design/icons';
 const OneWindow = (props) => {
    const { usageType, handleView } = props;
    const { isViewDocument } = useContext(EmrContext);
+   const [isMin, setMin] = useState(true);
    const [activeKey, setActiveKey] = useState(usageType === 'OUT' ? 0 : 2);
    const Render = useMemo(() => {
       if (activeKey === 0) {
@@ -34,8 +36,15 @@ const OneWindow = (props) => {
          {isViewDocument ? (
             <DocumentViewer />
          ) : (
+            // <div className={isMin ? 'one-window min' : 'one-window max'}>
             <div className="ambo-issuse-order">
+               {/* <ExpandOutlined
+                  onClick={() => {
+                     setMin(!isMin);
+                  }}
+               /> */}
                <div className="header">
+                  {/* {!isMin ? ( */}
                   <Splide
                      options={{
                         pagination: false,
@@ -83,11 +92,13 @@ const OneWindow = (props) => {
                         </>
                      )}
                   </Splide>
+                  {/* ) : null} */}
                </div>
                <div className="content overflow-auto">
                   <Render />
                </div>
             </div>
+            // </div>
          )}
       </>
    );

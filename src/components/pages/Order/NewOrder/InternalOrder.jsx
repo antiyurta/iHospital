@@ -42,6 +42,7 @@ const InternalOrder = (props) => {
    const addHics = useSelector(selectCurrentAddHics);
    const IncomeOTSData = useSelector(selectCurrentOtsData);
    const IncomeEMRData = useSelector(selectCurrentEmrData);
+   const [hicsExams, setHicsExams] = useState([]);
    const [isLoadingOrderTable, setIsLoadingOrderTable] = useState(false);
    const [orderForm] = Form.useForm();
    const [showMedicine, setShowMedicine] = useState(false);
@@ -125,41 +126,34 @@ const InternalOrder = (props) => {
                      requestDate: dayjs(new Date()).format('YYYY-MM-DD'),
                      sealData: null
                   };
-                  if (item.examCode && item.drgCode) {
+                  if (item.examCode) {
                      const currentSeal = addHics || hicsSeal;
                      const freeTypeId = 0;
-                     const selectedIcdCode = currentSeal?.diagnosis?.icdCode || undefined;
-                     const exam = await HealtInsuranceApi.getHicsCostByField(20200, currentSeal.diagnosis.icdCode).then(
-                        ({ data: { code, result, description } }) => {
-                           if (code === 200) {
-                              return result.find((resu) => resu.drgCode === item.drgCode);
-                           } else {
-                              openNofi('error', 'Алдаа', description);
-                              return null;
-                           }
+                     const currentIcdCode = currentSeal?.diagnosis?.icdCode;
+                     let currentExam = hicsExams.find((exam) => exam.examCode === item.examCode);
+                     if (currentExam) {
+                        if (currentExam.drgCode) {
+                           service.sealData = {
+                              serviceId: currentExam.serviceId,
+                              drgCode: currentExam.drgCode,
+                              oldServiceId: hicsSeal.hicsServiceId
+                           };
                         }
-                     );
-                     if (exam) {
-                        service.sealData = {
-                           serviceId: exam.serviceId,
-                           drgCode: exam.drgCode,
-                           oldServiceId: hicsSeal.hicsServiceId
-                        };
-                        service.amountCit = exam?.amountCit || 0;
-                        service.amountHi = exam?.amountHi || 0;
-                        service.price = exam?.amountTotal || 0;
-                        service.oPrice = exam?.amountTotal || 0;
+                        service.amountCit = currentExam?.amountCit || 0;
+                        service.amountHi = currentExam?.amountHi || 0;
+                        service.price = currentExam?.amountTotal || 0;
+                        service.oPrice = currentExam?.amountTotal || 0;
                         if (
-                           (exam.amountCit > 0 && freeTypeId > 0) ||
-                           (exam.amountCit > 0 &&
-                              selectedIcdCode &&
+                           (currentExam.amountCit > 0 && freeTypeId > 0) ||
+                           (currentExam.amountCit > 0 &&
+                              currentIcdCode &&
                               ['A', 'B', 'P', 'F', 'O'].some(
-                                 (char) => char.toLowerCase() === selectedIcdCode[0].toLowerCase()
+                                 (char) => char.toLowerCase() === currentIcdCode[0].toLowerCase()
                               ))
                         ) {
                            service.amountCit = 0;
-                           service.price -= exam?.amountCit;
-                           service.oPrice -= exam?.amountCit;
+                           service.price -= currentExam?.amountCit;
+                           service.oPrice -= currentExam?.amountCit;
                         }
                      }
                   }
@@ -308,6 +302,12 @@ const InternalOrder = (props) => {
       handleclick(newServices);
    };
 
+   const getExams = async () => {
+      await HealtInsuranceApi.getHicsExam().then(({ data }) => {
+         setHicsExams(data?.result);
+      });
+   };
+
    useEffect(() => {
       // replaceOtsData([], 0);
       if (IncomeOTSData?.services?.length > 0) {
@@ -319,6 +319,7 @@ const InternalOrder = (props) => {
    }, [IncomeOTSData]);
    useEffect(() => {
       RenderCategories();
+      getExams();
    }, []);
    return (
       <div className="flex flex-col gap-3">
