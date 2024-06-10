@@ -1,11 +1,37 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import Appointment from '../Appointment/Index';
-
 import reInspectionIcon from './NewOrder/reinspectionIcon.svg';
+//redux
+import { selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
+import moment from 'moment';
 
-function Reinspection({ selectedPatient, appointmentId }) {
+function Reinspection({ selectedPatient, appointmentId, hicsSealId }) {
+   const dispatch = useDispatch();
+   const incomeOtsData = useSelector(selectCurrentOtsData);
    const [isOpenMOdal, setIsOpenModal] = useState(false);
+   const setOTS = async (info, _doctor, res) => {
+      const data = {
+         description: undefined,
+         isCito: false,
+         name: info?.structureName,
+         oPrice: 0,
+         price: 0,
+         requestDate: moment().format('YYYY-MM-DD'),
+         specimen: undefined,
+         type: 9,
+         invoiceId: res.invoiceId,
+         requestId: res.id,
+         orderTime: `${info?.time?.start?.substr(0, 5)}->${info?.time?.end?.substr(0, 5)}`
+      };
+      dispatch(
+         setOtsData({
+            services: [...(incomeOtsData.services || []), data],
+            total: incomeOtsData.total
+         })
+      );
+   };
    return (
       <>
          <button
@@ -34,7 +60,12 @@ function Reinspection({ selectedPatient, appointmentId }) {
          >
             <Appointment
                selectedPatient={selectedPatient}
+               invoiceData={{
+                  isCheckInsurance: false,
+                  hicsSealId: hicsSealId
+               }}
                type={1}
+               handleClick={setOTS}
                prevAppointmentId={appointmentId}
                isExtraGrud={{
                   isCreate: true,

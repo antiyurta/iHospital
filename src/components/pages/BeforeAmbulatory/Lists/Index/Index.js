@@ -162,7 +162,6 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          } else if (type === 3) {
             data['usageType'] = 'OUT';
          }
-         console.log('end orj irne');
          dispatch(setEmrData(data));
          if (isDoctor) {
             navigate(`/main/emr`, {
@@ -218,21 +217,20 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       }
    };
    // 8.1
-   const hrefEMR = (row, sealResponse) => {
-      const data = {
+   const hrefEMR = async (row, sealResponse, addResponse) => {
+      console.log('end2 ', row, sealResponse, addResponse);
+      var data = {
          patientId: row.patientId,
          inspection: type === 2 ? 1 : row.inspectionType,
          type: row.type,
-         hicsSeal: row.hicsSeal || sealResponse?.data?.response,
-         parentHicsSeal: null,
+         hicsSealId: sealResponse?.id || row.hicsSealId,
+         addHicsId: addResponse?.id || row.addHicsId,
          startDate: row.startDate || new Date(),
          endDate: row.endDate,
          appointmentType: type,
          inspectionNoteId: row.inspectionNoteId,
          urgentInspectionNoteId: row.urgentInspectionNoteId,
          slotId: row.slotId,
-         invoiceId: row.invoiceId,
-         hicsServiceId: row.hicsSeal?.hicsServiceId,
          reasonComming: row.reasonComming,
          status: row.status,
          isInsurance: row.isInsurance
@@ -263,24 +261,31 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       }
       // uzleg ehleh tsag
       if (row.startDate === null && isDoctor) {
-         if (type === 1) {
-            AppointmentApi.patchPreOrder(row.id, {
-               slotId: row.slotId,
-               startDate: new Date()
-            });
-         } else if (type === 0) {
-            AppointmentApi.patchAppointment(row.id, {
+         try {
+            const apiMap = {
+               0: AppointmentApi.patchAppointment,
+               1: AppointmentApi.patchPreOrder
+            };
+            const selectedApi = apiMap[type];
+            if (!selectedApi) throw new Error('Unknown service type');
+            await selectedApi(row.id, {
+               slotId: row.id,
                startDate: new Date(),
-               slotId: row.slotId
+               hicsSealId: sealResponse?.id || null,
+               addHicsId: addResponse?.id || null
+            }).then(async ({ data: { success } }) => {
+               if (success && type != 1 && row.slotId && isDoctor && row.slot?.incomeDate === null) {
+                  ScheduleApi.patchSlot(row.slotId, {
+                     incomeDate: new Date(),
+                     slotStatus: 1
+                  });
+               }
             });
+            // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
+         } catch (error) {
+            console.log('error', error);
+            message.error(error.message || 'An error occurred');
          }
-      }
-      // status // 0 , 1, 2  0 bol iregu 1 bol irsn 2 bol uzlegt orson
-      if (type != 1 && row.slotId && isDoctor && row.slot?.incomeDate === null) {
-         ScheduleApi.patchSlot(row.slotId, {
-            incomeDate: new Date(),
-            slotStatus: 1
-         });
       }
       dispatch(setEmrData(data));
       if (isDoctor) {
@@ -293,6 +298,27 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          });
       }
    };
+
+   const CreateAddHics = async (row, result, hicsStartCode) => {
+      const maxCheckupId = row?.hicsSeal?.addHics?.reduce((maxId, checkup) => Math.max(maxId, checkup.checkupId), 0);
+      return await InsuranceApi.createAddHics({
+         checkupId: maxCheckupId ? maxCheckupId + 1 : 1,
+         departName: row.cabinet.name,
+         departNo: row.cabinetId?.toString(),
+         hicsSealId: row?.hicsSealId || result.id,
+         startDate: new Date(),
+         startCode: result.code || hicsStartCode
+      }).then(({ data: { response, success } }) => {
+         if (!success) {
+            openNofi('error', 'Амжилтгүй', 'Амжилтгүй');
+         }
+         return {
+            addResponse: response,
+            maxCheckupId: maxCheckupId + 1
+         };
+      });
+   };
+
    const CreateHicsSeal = async (row, result, groupId) => {
       await InsuranceApi.createHicsSeal({
          appointmentId: row.id,
@@ -303,25 +329,41 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          hicsStartCode: result.code,
          hicsServiceId: result?.hicsServiceId,
          groupId: groupId
-      }).then((response) => {
-         if (response.status != 201) {
-            openNofi('error', 'Амжилтгүй', response);
+      }).then(async ({ data: { response, success } }) => {
+         if (!success) {
+            openNofi('error', 'Амжилтгүй', '');
+         } else {
+            if (result.hicsServiceId === 20120 && !row.addHicsId) {
+               await CreateAddHics(row, response, result.code).then((data) => {
+                  hrefEMR(row, response, data.addResponse);
+               });
+            } else {
+               hrefEMR(row, response, null);
+            }
          }
-         hrefEMR(row, response);
       });
    };
+   /** 4.47 service */
    const startAmbulatory = async (values) => {
       await healthInsuranceApi
          .postStartHics({
             patientRegno: selectedRow.patient?.registerNumber,
             patientFingerprint: values.fingerprint,
-            hicsServiceId: values.hicsServiceId
+            hicsServiceId: values?.hicsServiceId || selectedRow?.hicsSeal?.hicsServiceId
          })
-         .then(({ data }) => {
+         .then(async ({ data }) => {
             if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);
             } else if (data.code === 200) {
-               CreateHicsSeal(selectedRow, data.result, 201);
+               if (selectedRow?.hicsSeal?.addHics?.length > 0) {
+                  // create add hics hiih
+                  await CreateAddHics(selectedRow, data.result, null).then((data) => {
+                     hrefEMR(selectedRow, null, data.addResponse);
+                  });
+               } else {
+                  // create seal hiih
+                  CreateHicsSeal(selectedRow, data.result, 201);
+               }
             }
          });
    };
@@ -472,9 +514,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             onOk={() =>
                startFormHics
                   .validateFields()
-                  .then((values) => {
-                     startAmbulatory(values);
-                  })
+                  .then(startAmbulatory)
                   .catch(({ errorFields }) => {
                      errorFields?.map((error) => message.error(error.errors[0]));
                   })
@@ -499,23 +539,25 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                         <Input />
                      </Finger>
                   </div>
-                  <Form.Item
-                     label="Т.Ү-ний дугаар"
-                     name="hicsServiceId"
-                     rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
-                     style={{
-                        width: '100%'
-                     }}
-                     className="mb-0"
-                  >
-                     <Select
-                        placeholder="Үйлчилгээний төрөл сонгох"
-                        options={hicsSupports.map((hicsSupport) => ({
-                           label: `${hicsSupport.name}->${hicsSupport.id}`,
-                           value: hicsSupport.id
-                        }))}
-                     />
-                  </Form.Item>
+                  {!selectedRow?.hicsSeal?.hicsServiceId ? (
+                     <Form.Item
+                        label="Т.Ү-ний дугаар"
+                        name="hicsServiceId"
+                        rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
+                        style={{
+                           width: '100%'
+                        }}
+                        className="mb-0"
+                     >
+                        <Select
+                           placeholder="Үйлчилгээний төрөл сонгох"
+                           options={hicsSupports.map((hicsSupport) => ({
+                              label: `${hicsSupport.name}->${hicsSupport.id}`,
+                              value: hicsSupport.id
+                           }))}
+                        />
+                     </Form.Item>
+                  ) : null}
                </div>
             </Form>
          </Modal>

@@ -8,7 +8,7 @@ import { WarningIcon } from '@Assets/index';
 //context
 import { EmrContextProvider } from '@Features/EmrContext';
 //redux
-import { delEmrData, delOtsData } from '@Features/emrReducer';
+import { delEmrData, delOtsData, setAddHics, setHicsSeal } from '@Features/emrReducer';
 //common
 import { openNofi } from '@Comman/common';
 //comp
@@ -22,20 +22,25 @@ import MainInPatient from './InPatient/MainInPatient';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import PatientInformation from '@Pages/PatientInformation';
 import MainPatientHistory from '@Pages/EMR/EPatientHistory/MainPatientHistory';
+import MainInpatientHistory from './EPatientHistory/MainInpatientHistory';
 //api
 import PaymentApi from '@ApiServices/payment/payment';
 import PmsPatientApi from '@ApiServices/pms/patient.api';
 import ServiceRequestApi from '@ApiServices/serviceRequest';
-import MainInpatientHistory from './EPatientHistory/MainInpatientHistory';
+import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 
 const getReduxDatas = (state) => {
    const IncomeEMRData = state.emrReducer.emrData;
+   const hicsSeal = state.emrReducer.hicsSeal;
+   const addHics = state.emrReducer.addHics;
    const token = state.authReducer.token;
    const employeeId = state.authReducer.userId;
-   return { IncomeEMRData, token, employeeId };
+   return { IncomeEMRData, hicsSeal, addHics, token, employeeId };
 };
 const dispatchReduxDatas = (dispatch) => {
    return {
+      setAddHics: (data) => dispatch(setAddHics(data)),
+      setHicsSeal: (data) => dispatch(setHicsSeal(data)),
       delEmrData: () => dispatch(delEmrData()),
       delOtsData: () => dispatch(delOtsData())
    };
@@ -62,6 +67,20 @@ class NewEmr extends React.Component {
          this.setState({ selectedPatient: response.data?.response });
       });
    }
+   async getHicsSeal() {
+      const { hicsSealId } = this.props.IncomeEMRData;
+      hicsSealId &&
+         (await InsuranceApi.getByIdHicsSeals(hicsSealId).then(({ data: { response } }) => {
+            this.props.setHicsSeal(response);
+         }));
+   }
+   async getAddHics() {
+      const { addHicsId } = this.props.IncomeEMRData;
+      addHicsId &&
+         (await InsuranceApi.getByIdAddHics(addHicsId).then(({ data: { response } }) => {
+            this.props.setAddHics(response);
+         }));
+   }
    handleTypeChange = ({ target: { value } }) => {
       // if (this.props.IncomeEMRData.endDate) {
       //    Modal.error({
@@ -77,22 +96,24 @@ class NewEmr extends React.Component {
    };
    saveOrder = async (value) => {
       if (value?.length > 0 || value) {
-         const data = {};
          if (this.props.IncomeEMRData.usageType === 'IN') {
-            data['inpatientRequestId'] = this.props.IncomeEMRData.inpatientRequestId;
             value?.map((item) => {
                item.inpatientPrice = item.price;
             });
-         } else {
-            data['appointmentId'] = this.props.IncomeEMRData.appointmentId;
          }
-         data['patientId'] = this.state.selectedPatient.id;
-         data['employeeId'] = this.props.employeeId;
-         data['requestDate'] = new Date();
-         data['usageType'] = this.props.IncomeEMRData.usageType;
-         data['services'] = value;
-         data['isInsurance'] = this.props.IncomeEMRData.isInsurance;
-         await ServiceRequestApi.post(data).then(async (response) => {
+         await ServiceRequestApi.post({
+            patientId: this.state.selectedPatient.id,
+            appointmentId: this.props.IncomeEMRData.appointmentId,
+            inpatientRequestId: this.props.IncomeEMRData.inpatientRequestId,
+            employeeId: this.props.employeeId,
+            requestDate: new Date(),
+            usageType: this.props.IncomeEMRData.usageType,
+            services: value,
+            isInsurance: this.props.IncomeEMRData.isInsurance,
+            addHicsId: this.props.addHics.id,
+            hicsSealId: this.props.hicsSeal.id,
+            diagnosis: this.props.addHics.diagnosis || this.props.hicsSeal.diagnosis
+         }).then(async (response) => {
             if (response.status === 201) {
                openNofi('success', 'Амжилттай', 'OTS амжилттай захиалла');
                this.props.delOtsData();
@@ -114,6 +135,8 @@ class NewEmr extends React.Component {
    };
    async componentDidMount() {
       await this.getByIdPatient();
+      await this.getHicsSeal();
+      await this.getAddHics();
    }
    async componentWillUnmount() {
       // this.props.delEmrData();

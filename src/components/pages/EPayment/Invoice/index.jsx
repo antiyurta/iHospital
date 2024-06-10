@@ -114,12 +114,7 @@ function Invoice() {
       if (selectedPatient && selectedPatient.length === 0) {
          openNofi('error', 'Анхааруулга', 'Өвчтөн сонгоогүй байна');
       } else if (value.length > 0) {
-         var stateIsCito = false;
-         value.map((item) => {
-            if (!item.isCito) {
-               stateIsCito = true;
-            }
-         });
+         const stateIsCito = !!value.find((item) => !item.isCito);
          await ServiceRequestApi.post({
             patientId: selectedPatient.id,
             requestDate: new Date(),

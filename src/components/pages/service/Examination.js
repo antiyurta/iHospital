@@ -106,9 +106,20 @@ function Examination() {
          isView: true,
          isSearch: false,
          input: 'select',
+         onChange: {
+            setValueIndex: 'drgCode'
+         },
          inputData: hicsExams,
          relIndex: 'examName',
          relValueIndex: 'examCode',
+         col: 12
+      },
+      {
+         index: 'drgCode',
+         label: 'drgCode',
+         isView: true,
+         isSearch: false,
+         input: 'input',
          col: 12
       }
    ];

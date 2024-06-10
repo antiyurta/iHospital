@@ -335,17 +335,7 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                      <Input />
                   </Form.Item>
                   {/*  */}
-                  <Form.Item
-                     label="Оношийн код"
-                     name={['diagnosis', 'icdCode']}
-                     className="mb-0"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Онош заавал'
-                        }
-                     ]}
-                  >
+                  <Form.Item label="Оношийн код" name={['diagnosis', 'icdCode']} className="mb-0">
                      <Select
                         allowClear
                         onClear={() => {
@@ -392,16 +382,7 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                   <Form.Item label="ICD-9 код" name={['diagnosis', 'icd9Code']}>
                      <Input />
                   </Form.Item>
-                  <Form.Item
-                     label="Оношийн хамааралтай бүлэг"
-                     name={['diagnosis', 'drgCode']}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Оношийн хамааралтай бүлэг'
-                        }
-                     ]}
-                  >
+                  <Form.Item label="Оношийн хамааралтай бүлэг" name={['diagnosis', 'drgCode']}>
                      <Select
                         onSelect={(value) => {
                            const current = drgCodes.find((drgCode) => drgCode.drgCode === value);
@@ -414,17 +395,7 @@ export const SendSaveHics = ({ form, hicsSeal, parentHicsSeal, inspectionNoteId,
                         options={drgCodes.map((drgCode) => ({ value: drgCode.drgCode, label: drgCode.drgName }))}
                      />
                   </Form.Item>
-                  <Form.Item
-                     label="Хүндрэлийн зэрэг"
-                     name={['diagnosis', 'abcType']}
-                     className="mb-0"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Хүндрэлийн зэрэг заавал'
-                        }
-                     ]}
-                  >
+                  <Form.Item label="Хүндрэлийн зэрэг" name={['diagnosis', 'abcType']} className="mb-0">
                      <Select
                         options={[
                            {

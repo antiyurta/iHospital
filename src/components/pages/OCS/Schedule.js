@@ -80,11 +80,11 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
       if (element.type === 2) {
          setAppointmentType(2);
          setIsOpenAppointment(true);
-         setInvoiceData({ invoiceId: element.id, type: element.type });
+         setInvoiceData({ invoiceId: element.id, type: element.type, isCheckInsurance: false });
       } else if (element.type === 1) {
          setAppointmentType(3);
          setIsOpenAppointment(true);
-         setInvoiceData({ invoiceId: element.id, type: element.type });
+         setInvoiceData({ invoiceId: element.id, type: element.type, isCheckInsurance: false });
       }
    };
    const transfer = (id) => {
@@ -375,14 +375,21 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                                  rowKey={'id'}
                                  bordered
                                  rowSelection={rowSelection}
+                                 scroll={{
+                                    y: 500
+                                 }}
                                  columns={[
                                     {
                                        title: 'Үйлчилгээ',
                                        render: (_, record) => {
                                           if (record.treatmentRequest?.qty) {
-                                             return <p>{record.name + ' ' + record.treatmentRequest?.qty + 'ш'}</p>;
+                                             return (
+                                                <p className="text-black">
+                                                   {record.name + ' ' + record.treatmentRequest?.qty + 'ш'}
+                                                </p>
+                                             );
                                           } else {
-                                             return record.name;
+                                             return <p className="text-black">{record.name}</p>;
                                           }
                                        }
                                        // service name iig name bolgow 2023/11/10
@@ -390,12 +397,16 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                                     },
                                     {
                                        title: 'Иргэн төлөх',
+                                       align: 'right',
                                        dataIndex: 'amount',
+                                       width: 150,
                                        render: (amount) => numberToCurrency(amount)
                                     },
                                     {
-                                       title: 'Даатгалаас төлөх',
+                                       title: 'Даатгал төлөх',
+                                       align: 'right',
                                        dataIndex: 'hicsAmount',
+                                       width: 150,
                                        render: (text) => numberToCurrency(text)
                                     }
                                  ]}

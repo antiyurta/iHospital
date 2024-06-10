@@ -18,9 +18,8 @@ import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 // enum
 import { InspectionEnum, ListIndexEnum } from '@Utils/enum';
 
-function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsServiceId }) {
+function DynamicContent({ props, incomeData, handleClick, isViewDiagnose }) {
    const dispatch = useDispatch();
-   console.log('end', incomeData);
    const employeeId = useSelector(selectCurrentUserId);
    const [form] = Form.useForm();
    const [editMode, setEditMode] = useState(false);
@@ -28,29 +27,6 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
    const [selectedInspectionNoteId, setSelectedInspectionNoteId] = useState(Number);
    const [loading, setLoading] = useState(false);
    const [serviceRequest, setServiceRequest] = useState([]);
-   // const DiagnoseHandleClick = (diagnosis, cost) => {
-   //    if (incomeData.usageType === 'OUT') {
-   //       if (cost?.length > 0) {
-   //          var data = {
-   //             hicsServiceId: hicsServiceId,
-   //             serviceId: incomeData.appointmentId,
-   //             serviceType: 5,
-   //             icdCode: cost[0]?.icd10Code,
-   //             icdCodeName: cost[0]?.icd10Name,
-   //             icd9Code: cost[0]?.icd9Code,
-   //             icd9Name: cost[0]?.icd9Name,
-   //             drgCode: cost[0]?.drgCode,
-   //             discountAmount: cost[0]?.amountHi,
-   //             payedAmount: cost[0]?.amountCit,
-   //             totalAmount: cost[0]?.amountTotal
-   //          };
-   //          const AddCode = diagnosis?.find((diagnose) => diagnose.diagnoseType === 3)?.code;
-   //          data['icdAddCode'] = AddCode;
-   //          jwtInterceopter.patch('insurance-seal', data);
-   //       }
-   //    }
-   //    form.setFieldValue('diagnosis', diagnosis);
-   // };
 
    const getInspectionNote = async () => {
       await EmrInspectionNoteApi.getById(incomeData.inspectionNoteId).then(({ data: { response } }) => {
@@ -308,84 +284,9 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose, hicsSe
                            <NewDiagnose
                               patientId={incomeData.patientId}
                               appointmentId={incomeData.appointmentId}
-                              hicsServiceId={hicsServiceId}
                               usageType={incomeData.usageType}
                               selectType={1}
                            />
-                           {/* <Diagnose
-                              form={form}
-                              handleClick={DiagnoseHandleClick}
-                              types={[0, 1, 2]}
-                              hicsServiceId={hicsServiceId}
-                              // type ene heregte bji OUT deer
-                              appointmentType={appointmentType}
-                           />
-                           <Form.List name="diagnosis">
-                              {(diagnose) => (
-                                 <Table
-                                    bordered
-                                    locale={{
-                                       emptyText: 'Дата байхгүй'
-                                    }}
-                                    dataSource={diagnose}
-                                    pagination={false}
-                                 >
-                                    <Column
-                                       dataIndex={'code'}
-                                       title="Код"
-                                       render={(_value, _row, index) => {
-                                          return (
-                                             <EditableFormItem name={[index, 'code']}>
-                                                <Input />
-                                             </EditableFormItem>
-                                          );
-                                       }}
-                                    />
-                                    <Column
-                                       dataIndex={'nameMn'}
-                                       title="Монгол нэр"
-                                       render={(_value, _row, index) => {
-                                          return (
-                                             <EditableFormItem name={[index, 'nameMn']}>
-                                                <Input />
-                                             </EditableFormItem>
-                                          );
-                                       }}
-                                    />
-                                    <Column
-                                       dataIndex={'diagnoseType'}
-                                       title="Оношийн төрөл"
-                                       render={(_value, _row, index) => {
-                                          return (
-                                             <EditableFormItemSelect name={[index, 'diagnoseType']}>
-                                                <Select
-                                                   style={{ width: '100%' }}
-                                                   options={[
-                                                      {
-                                                         label: 'Үндсэн',
-                                                         value: 0
-                                                      },
-                                                      {
-                                                         label: 'Урьдчилсан',
-                                                         value: 1
-                                                      },
-                                                      {
-                                                         label: 'Хавсрах онош',
-                                                         value: 2
-                                                      },
-                                                      {
-                                                         label: 'Дагалдах',
-                                                         value: 3
-                                                      }
-                                                   ]}
-                                                />
-                                             </EditableFormItemSelect>
-                                          );
-                                       }}
-                                    />
-                                 </Table>
-                              )}
-                           </Form.List> */}
                         </div>
                      </Soap>
                   ) : null}

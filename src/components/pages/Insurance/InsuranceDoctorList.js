@@ -133,6 +133,10 @@ function InsuranceDocterList() {
    };
    const columns = [
       {
+         title: 'asd',
+         dataIndex: 'hicsServiceId'
+      },
+      {
          title: 'Эхэлсэн огноо',
          dataIndex: 'startAt',
          render: (text) => {

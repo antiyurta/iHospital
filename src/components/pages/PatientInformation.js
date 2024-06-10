@@ -15,8 +15,8 @@ import {
 import { getAge } from '@Comman/common';
 import { getGender } from '@Utils/config/xypField';
 //apiF
-import localFileApi from '@ApiServices/file/local-file/local-file.api';
 import CountryApi from '@ApiServices/reference/country';
+import localFileApi from '@ApiServices/file/local-file/local-file.api';
 //extends
 const { Search } = Input;
 
@@ -176,9 +176,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         src={genderSymbolIcon}
                         alt="symbol"
                      />
-                     <p>{`${getGender(patient?.gender || undefined)} | ${getAge(
-                        patient?.registerNumber || undefined
-                     )}`}</p>
+                     <p>{`${getGender(patient?.gender || null)} | ${getAge(patient?.registerNumber || null)}`}</p>
                   </div>
                   <div className="flex flex-row gap-3">
                      <img

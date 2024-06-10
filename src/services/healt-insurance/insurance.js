@@ -24,9 +24,24 @@ class ApiInsurance {
    async createHicsSeal(data) {
       return await jwtInterceopter.post('hics-seal', data);
    }
-   /** Битүүмж илгээх */
+   /** Битүүмж update oruulah */
    async requestHicsSeal(id, data) {
       return await jwtInterceopter.patch(`hics-seal/${id}`, data);
+   }
+   /** Битүүмж илгээх -> Үзлэг дуусгах */
+   async requestHicsSealSent(id, data) {
+      return await jwtInterceopter.patch(`hics-seal/sent/${id}`, data);
+   }
+   /** Цогц дээр эмчин үзлэг нээх */
+   async createAddHics(data) {
+      return await jwtInterceopter.post('hics-seal-addHics', data);
+   }
+   async getByIdAddHics(id) {
+      return await jwtInterceopter.get(`hics-seal-addHics/${id}`);
+   }
+   /** Цогц дээр эмчин үзлэг засах */
+   async requestAddHics(id, data) {
+      return await jwtInterceopter.patch(`hics-seal-addHics/${id}`, data);
    }
    /** Эмнэлэг доторх битүүмжүүд дуудах */
    async getByIdHicsSeals(id) {

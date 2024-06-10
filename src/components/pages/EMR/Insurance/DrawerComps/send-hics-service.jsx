@@ -393,7 +393,12 @@ export const SendHics = (props) => {
                                                          </Form.Item>
                                                       </Col>
                                                       <Col span={11} offset={1}>
-                                                         <Form.Item label="ICD-10 код" name={[packge.name, 'icdCode']}>
+                                                         <Form.Item label="inDate" name={[packge.name, 'inDate']}>
+                                                            <DatePicker />
+                                                         </Form.Item>
+                                                      </Col>
+                                                      <Col span={11} offset={1}>
+                                                         <Form.Item label="ICD-10 код" name={[packge.name, 'icd10']}>
                                                             <Select
                                                                options={diagnosis.map((diagnose) => ({
                                                                   value: diagnose.code,

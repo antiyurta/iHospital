@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-const Clock = ({ startDate, endDate }) => {
+import moment from 'moment';
+const Clock = ({ startDate, endDate, isDisable }) => {
    const [time, setTime] = useState('00:00');
    const [count, setCount] = useState(0);
    const showTimer = (ms) => {
@@ -11,6 +12,14 @@ const Clock = ({ startDate, endDate }) => {
          .padStart(2, '0');
       setTime(minute + ':' + second);
    };
+   useEffect(() => {
+      const startMoment = moment(startDate);
+      const endMoment = moment();
+      const differenceInMinutes = endMoment.diff(startMoment, 'minutes');
+      if (differenceInMinutes >= 10) {
+         isDisable(false);
+      }
+   }, [time]);
    useEffect(() => {
       if (!endDate) {
          var id = setInterval(() => {

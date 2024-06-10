@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
 import { useSelector } from 'react-redux';
 //img
@@ -9,38 +9,26 @@ import SentService from './Insurance/sent-service';
 import DocumentIndex from './NewEmrSupport/document/Index';
 //redux
 import { selectPatient } from '@Features/patientReducer';
-import { selectCurrentEmrData } from '@Features/emrReducer';
+import { selectCurrentEmrData, selectCurrentHicsSeal } from '@Features/emrReducer';
 
 const NewEmrSupport = () => {
+   const navigate = useNavigate();
    const currentPatient = useSelector(selectPatient);
    const incomeEmrData = useSelector(selectCurrentEmrData);
-   console.log('incomeData=========>', incomeEmrData);
-   const [isOpenModalRequests, setIsOpenModalRequests] = useState(false);
+   const hicsSeal = useSelector(selectCurrentHicsSeal);
    const [isOpenModalHics, setIsOpenModalHics] = useState(false);
+   const [isOpenModalRequests, setIsOpenModalRequests] = useState(false);
    return (
       <div className="navbar">
          <div className="back">
-            {incomeEmrData.appointmentType === 3 ? (
-               <Link
-                  to={'/main/SurgeryList'}
-                  state={{
-                     isRead: true
-                  }}
-               >
-                  <img src={backArrow} alt="icon" />
-                  <p>Буцах</p>
-               </Link>
-            ) : (
-               <Link
-                  to={'/main/ambulatoryList'}
-                  state={{
-                     isRead: true
-                  }}
-               >
-                  <img src={backArrow} alt="icon" />
-                  <p>Буцах</p>
-               </Link>
-            )}
+            <a
+               onClick={() => {
+                  navigate(-1);
+               }}
+            >
+               <img src={backArrow} alt="icon" />
+               <p>Буцах</p>
+            </a>
          </div>
          <div className="emr-navbar">
             <button>Гарын авлага</button>
@@ -57,7 +45,7 @@ const NewEmrSupport = () => {
          >
             <SentService
                patient={currentPatient}
-               hicsSeal={incomeEmrData.hicsSeal}
+               hicsSeal={hicsSeal}
                parentHicsSeal={incomeEmrData.parentHicsSeal}
                inspectionNoteId={incomeEmrData.inspectionNoteId}
             />
@@ -103,4 +91,3 @@ const NewEmrSupport = () => {
    );
 };
 export default NewEmrSupport;
-
