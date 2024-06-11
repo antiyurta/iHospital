@@ -24,7 +24,7 @@ export const SendHospitalInfo = ({ form }) => {
    const renderFormItem = (label, name, rules, component) => (
       <Col span={11} offset={1}>
          <Form.Item name={name} label={label} rules={[{ required: true, message: 'Шаардлагатай талбар!' }, ...rules]}>
-            {component}
+            {component || <Input placeholder={label} />}
          </Form.Item>
       </Col>
    );
@@ -88,17 +88,37 @@ export const SendHospitalInfo = ({ form }) => {
                                     Салбарын мэдээлэл
                                  </h1>
                               </Col>
-                              {renderFormItem('Салбарын дугаар', [name, 'branchId'], [], <InputNumber />)}
-                              {renderFormItem('Салбарын нэр', [name, 'hospitalName'], [], <Input />)}
-                              {renderFormItem('Салбарын холбогдох утас', [name, 'hsPhone'], [], <Input />)}
-                              {renderFormItem('Холбоо барих хүний дугаар', [name, 'hsPersonPhone'], [], <Input />)}
-                              {renderFormItem('Салбарын имэйл хаяг', [name, 'hshsEmailSocial'], [], <Input />)}
-                              {renderFormItem('Салбарын сошиал хаяг', [name, 'hsSocial'], [], <Input />)}
-                              {renderFormItem('Салбарын хаяг, байршил', [name, 'address'], [], <Input />)}
-                              {renderFormItem('Салбарын өргөрөг', [name, 'hsLat'], [], <InputNumber />)}
-                              {renderFormItem('Салбарын уртраг', [name, 'hsLng'], [], <InputNumber />)}
-                              {renderFormItem('Салбарын цагийн хуваарь', [name, 'hsTimetable'], [], <Input />)}
-                              {renderFormItem('Салбарын нийт орны тоо', [name, 'hsCapacity'], [], <InputNumber />)}
+                              {renderFormItem(
+                                 'Салбарын дугаар',
+                                 [name, 'branchId'],
+                                 [],
+                                 <InputNumber placeholder="-----" />
+                              )}
+                              {renderFormItem('Салбарын нэр', [name, 'hospitalName'], [])}
+                              {renderFormItem('Салбарын холбогдох утас', [name, 'hsPhone'], [])}
+                              {renderFormItem('Холбоо барих хүний дугаар', [name, 'hsPersonPhone'], [])}
+                              {renderFormItem('Салбарын имэйл хаяг', [name, 'hshsEmailSocial'], [])}
+                              {renderFormItem('Салбарын сошиал хаяг', [name, 'hsSocial'], [])}
+                              {renderFormItem('Салбарын хаяг, байршил', [name, 'address'], [])}
+                              {renderFormItem(
+                                 'Салбарын өргөрөг',
+                                 [name, 'hsLat'],
+                                 [],
+                                 <InputNumber placeholder="-----" />
+                              )}
+                              {renderFormItem(
+                                 'Салбарын уртраг',
+                                 [name, 'hsLng'],
+                                 [],
+                                 <InputNumber placeholder="-----" />
+                              )}
+                              {renderFormItem('Салбарын цагийн хуваарь', [name, 'hsTimetable'], [])}
+                              {renderFormItem(
+                                 'Салбарын нийт орны тоо',
+                                 [name, 'hsCapacity'],
+                                 [],
+                                 <InputNumber placeholder="-----" />
+                              )}
                            </Fragment>
                         ))}
                         <div style={{ width: '100%', display: 'flex' }}>
