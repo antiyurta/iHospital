@@ -36,6 +36,9 @@ class ApiInsurance {
    async createAddHics(data) {
       return await jwtInterceopter.post('hics-seal-addHics', data);
    }
+   async deleteAddHics(id) {
+      return await jwtInterceopter.delete('hics-seal-addHics/' + id);
+   }
    async getByIdAddHics(id) {
       return await jwtInterceopter.get(`hics-seal-addHics/${id}`);
    }

@@ -27,18 +27,24 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          title: 'Төрөл',
          icon: <AuditOutlined />,
          content: (
-            <Form.Item
-               name="authType"
-               label="Мэдээлэл татах төрөл"
-               rules={[{ required: true, message: 'Мэдээлэл татах төрөлөө сонгоно уу!' }]}
-            >
-               <Radio.Group>
-                  <Radio.Button value={0}>Үйлчилүүлэгчээр бөглүүлэх</Radio.Button>
-                  <Radio.Button value={1}>OTP</Radio.Button>
-                  <Radio.Button value={2}>Тоон гарын үсэг</Radio.Button>
-                  <Radio.Button value={3}>Хурууны хээ</Radio.Button>
-               </Radio.Group>
-            </Form.Item>
+            <>
+               <Form.Item name="regnum" label="Pегистр" rules={[{ required: true, message: 'Регистр оруулна уу!' }]}>
+                  <Input />
+               </Form.Item>
+               <Form.Item
+                  name="authType"
+                  className="white-radio"
+                  label="Мэдээлэл татах төрөл"
+                  rules={[{ required: true, message: 'Мэдээлэл татах төрөлөө сонгоно уу!' }]}
+               >
+                  <Radio.Group>
+                     <Radio.Button value={0}>Үйлчилүүлэгчээр бөглүүлэх</Radio.Button>
+                     <Radio.Button value={1}>OTP</Radio.Button>
+                     <Radio.Button value={2}>Тоон гарын үсэг</Radio.Button>
+                     <Radio.Button value={3}>Хурууны хээ</Radio.Button>
+                  </Radio.Group>
+               </Form.Item>
+            </>
          )
       },
       {
@@ -46,12 +52,9 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          icon: <SolutionOutlined />,
          content: (
             <>
-               <Form.Item name="regnum" label="Pегистр" rules={[{ required: true, message: 'Регистр оруулна уу!' }]}>
-                  <Input />
-               </Form.Item>
                {form.getFieldValue('authType') == 1 && (
                   <Form.Item name="otp" label="OTP" rules={[{ required: true, message: 'OTP кодоо оруулна уу!' }]}>
-                     <Input />
+                     <Input onChange={(e) => e.target.value.length == 6 && checkOtp(e.target.value)} />
                   </Form.Item>
                )}
                {form.getFieldValue('authType') == 2 && (
@@ -127,19 +130,30 @@ const RegisterPatient = ({ patientId, onFinish }) => {
       form
          .validateFields()
          .then(() => {
-            if (current === 1) {
-               if (form.getFieldValue('authType') === 0) {
+            const authType = form.getFieldValue('authType');
+            const regnum = form.getFieldValue('regnum');
+            if (current === 0) {
+               if (authType == 1) {
+                  registerOtp(regnum);
+               }
+            } else if (current === 1) {
+               if (authType === 0) {
                   // manual registration
-                  getByRegno(form.getFieldValue('regnum'));
-               } else if (form.getFieldValue('authType') == 1) {
+                  getByRegno(regnum);
+               } else if (authType == 1) {
                   // otp registration
-               } else if (form.getFieldValue('authType') == 2) {
+                  sentXyp({
+                     regnum,
+                     authType,
+                     otp: form.getFieldValue('otp')
+                  });
+               } else if (authType == 2) {
                   // siganture registration
-               } else if (form.getFieldValue('authType') == 3) {
+               } else if (authType == 3) {
                   // finger registration
                   sentXyp({
-                     regnum: form.getFieldValue('regnum'),
-                     authType: 3,
+                     regnum,
+                     authType,
                      fingerprint: form.getFieldValue('citizenFinger'),
                      operator: {
                         regnum: form.getFieldValue('operatorRegnum'),
@@ -169,13 +183,32 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          })
          .finally(() => setIsLoading(false));
    };
+   const registerOtp = (regnum) => {
+      xypApi.registerOtp(regnum).then(({ data: { response } }) => {
+         if (response.return.resultCode != 0) {
+            openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+         } else {
+            openNofi('success', 'ХУР-сервис', response.return.resultMessage);
+         }
+      });
+   };
+   const checkOtp = async (otp) => {
+      const regnum = form.getFieldValue('regnum');
+      xypApi.checkOtp(regnum, otp).then(({ data: { response } }) => {
+         if (response.return.resultCode != 0) {
+            openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+         } else {
+            openNofi('success', 'ХУР-сервис', response.return.returnMessage);
+         }
+      });
+   };
    const sentXyp = async (values) => {
       setIsLoading(true);
       await xypApi
-         .post(values)
+         .citizenCard(values)
          .then(({ data: { response } }) => {
             if (response.return.resultCode != 0) {
-               openNofi('warning', response.return.resultMessage);
+               openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
             } else {
                const { response: newResponse, requestId, resultMessage } = response.return;
                form.setFieldsValue({
@@ -226,10 +259,19 @@ const RegisterPatient = ({ patientId, onFinish }) => {
    }, [patientId]);
 
    return (
-      <Form form={form} onFinish={onFinish} layout="vertical">
-         <Steps current={current} items={steps.map(({ title, icon }) => ({ title, icon }))} />
-         <div className="steps-content ">{steps[current].content}</div>
-         <div className="steps-action" style={{ marginTop: 24 }}>
+      <Form form={form} onFinish={onFinish} layout="vertical" className="flex flex-col gap-2">
+         <Steps
+            style={{
+               padding: 6,
+               borderRadius: 12,
+               background: '#f5f6f7'
+            }}
+            size="small"
+            current={current}
+            items={steps.map(({ title, icon }) => ({ title, icon }))}
+         />
+         <div className="steps-content">{steps[current].content}</div>
+         <div className="steps-action">
             {current > 0 && (
                <Button style={{ margin: '0 8px' }} onClick={() => prev()} icon={<CaretLeftOutlined />}>
                   Өмнөх

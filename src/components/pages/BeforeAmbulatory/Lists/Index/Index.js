@@ -218,7 +218,6 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
    };
    // 8.1
    const hrefEMR = async (row, sealResponse, addResponse) => {
-      console.log('end2 ', row, sealResponse, addResponse);
       var data = {
          patientId: row.patientId,
          inspection: type === 2 ? 1 : row.inspectionType,
@@ -287,6 +286,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             message.error(error.message || 'An error occurred');
          }
       }
+      console.log('set ==========> ', data);
       dispatch(setEmrData(data));
       if (isDoctor) {
          navigate(`/main/emr`, {
