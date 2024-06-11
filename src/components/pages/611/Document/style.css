@@ -19,3 +19,12 @@ table tbody > tr > th {
     padding: 0%;
    padding-left: 4px;
  }
+
+ .ant-checkbox-wrapper {
+   font-size: 12px !important;
+   color: rgba(0, 0, 0, 0.671);
+ }
+ .ant-checkbox-inner {
+   width: 14px !important;
+   height: 14px !important;
+ }
