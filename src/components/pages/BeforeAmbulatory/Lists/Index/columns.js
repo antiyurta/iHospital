@@ -56,7 +56,7 @@ const getTypeInfoSurgury = (id) => {
    }
 };
 
-const getTypeInfo = (type, begin, end) => {
+export const getTypeInfo = (type, begin, end) => {
    //1 yaralta shuud
    //2 shuud
    //3 urdcilsan

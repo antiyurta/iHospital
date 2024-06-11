@@ -14,7 +14,9 @@ const CT1Dotor = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr>
-                        <th colSpan={4} className="text-center font-bold ">ДОТРЫН ЭМЧИЙН ҮЗЛЭГ</th>
+                        <th colSpan={4} className="text-center font-bold ">
+                           ДОТРЫН ЭМЧИЙН ҮЗЛЭГ
+                        </th>
                      </tr>
                      <tr>
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
@@ -23,7 +25,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={4}>Харж ажиглах:</th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="child">
                            <p>Хамрын амьсгал</p>
                            <p>чөлөөтэй эсэх:</p>
                            <Checkbox.Group value={formData.q1} className="checkboxx ml-0">
@@ -47,7 +49,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q2-1-1-2'}>Захын</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Амьсгалд туслах булчингууд оролцож</p>
                            <p>байгаа эсэх:</p>
                            <Checkbox.Group value={formData.q3} className="ml-0">
@@ -69,7 +71,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q5-2'}>Жигд бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Цээжний хэлбэр:</p>
                            <Checkbox.Group value={formData?.q6} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q6-1'}>
@@ -88,7 +90,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q7-3'}>Холимог</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Цээжний 2 талд</p>
                            <p>амьсгал жигд оролцох</p>
                            <p>байдал:</p>
@@ -117,7 +119,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={2}>Тогшилт:</th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="child">
                            <p>Эмзэглэлтэй эсэх:</p>
                            <Checkbox.Group value={formData?.q9} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q9-1'}>
@@ -137,7 +139,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q10-2'}>Буурсан</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Дууны доргион:</p>
                            <Checkbox.Group value={formData?.q11} className="ml-0">
                               <Checkbox className="ml-2" value={'q11-1'}>
@@ -147,7 +149,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q11-3'}>Хүчтэй болсон</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Тогшилтын дуу:</p>
                            <Checkbox.Group value={formData?.q12} className="ml-0">
                               <Checkbox className="ml-2" value={'q12-1'}>
@@ -156,7 +158,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q12-2'}>Ижил бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Хэсэгт тогшилтын дуу:</p>
                            <Checkbox.Group value={formData?.q13} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q13-1'}>
@@ -171,7 +173,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={4}>Чагналт</th>
                      </tr>
                      <tr>
-                        <th colSpan={2}>
+                        <th colSpan={2} id="child">
                            <p>Амьсгал 2 талд:</p>
                            <Checkbox.Group value={formData?.q14} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q14-1'}>
@@ -215,7 +217,7 @@ const CT1Dotor = (props) => {
                               </span>
                            </p>
                         </th>
-                        <th colSpan={2}>
+                        <th colSpan={2} id="child">
                            <p>Нэмэлт шуугиантай эсэх:</p>
                            <Checkbox.Group value={formData?.q16} className="ml-0">
                               <Checkbox className="ml-2" value={'q16-1'}>
@@ -302,7 +304,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q18-10'}>Чихрийн шижин</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th colSpan={2}>
+                        <th colSpan={2} id="child">
                            <div className="inline-flex">
                               <div>
                                  <p>Арьсны хөхрөлттэй эсэх:</p>
@@ -371,7 +373,7 @@ const CT1Dotor = (props) => {
                         <th>Тогшилтоор</th>
                      </tr>
                      <tr>
-                        <th className="w-72">
+                        <th className="w-72" id="child">
                            <p>Зүрхний оройн түлхэлт Байрлал:</p>
                            <Checkbox.Group value={formData?.q23} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q23-1'}>
@@ -400,7 +402,7 @@ const CT1Dotor = (props) => {
                               </Checkbox.Group>
                            </div>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>
                               Давтамж:
                               <Input value={formData?.q26} className="amaraInput w-28" />
@@ -431,7 +433,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q29-2'}>Ижил бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Зүрхний (харьцангүй) хил хязгаар:</p>
                            <Checkbox.Group value={formData?.q30} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q30-1'}>
@@ -466,7 +468,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={2}>Чагналтаар</th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="child">
                            <p>Зүрхний авиа:</p>
                            <div className="inline-flex">
                               <p>Хэмнэл:</p>
@@ -597,7 +599,7 @@ const CT1Dotor = (props) => {
                               </Checkbox.Group>
                            </div>
                         </th>
-                        <th className="w-1/2">
+                        <th className="w-1/2" id="child">
                            <Checkbox.Group value={formData?.['q35-1-1']} className="ml-0">
                               <Checkbox className="ml-2" value={'q35-1-1-1'}>
                                  Шуугиангүй
@@ -719,7 +721,7 @@ const CT1Dotor = (props) => {
                         <th>Чагналтаар</th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="child">
                            <p>Хэл өнгөртэй эсэх:</p>
                            <Checkbox.Group value={formData?.q38} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q38-1'}>
@@ -748,7 +750,7 @@ const CT1Dotor = (props) => {
                               Хэлбэр <Input value={formData?.q42} className="amaraInput w-28" />
                            </p>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Хэвлий эмзэглэлтэй эсэх</p>
                            <Checkbox.Group value={formData?.q43} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q43-1'}>
@@ -764,7 +766,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q44-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Хэвлийн хэнгэрэгэн чимээ:</p>
                            <Checkbox.Group value={formData?.q45} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q45-1'}>
@@ -783,7 +785,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q46-3'}>Дүлий болсон</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Гэдэсний гүрвэлзэх хөдөлгөөн:</p>
                            <Checkbox.Group value={formData?.q47} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q47-1'}>
@@ -801,7 +803,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={4}>Гүнзгий тэмтрэлтээр:</th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="child">
                            <p>Тахир гэдэс - байрлал</p>
                            <Checkbox.Group value={formData?.q48} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q48-1'}>
@@ -824,7 +826,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q50-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Өгсөх болон уруудах гэдэс: - Байрлал</p>
                            <Checkbox.Group value={formData?.q51} className="ml-0">
                               <Checkbox className="ml-2" value={'q51-1'}>
@@ -847,7 +849,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q53-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Хөндлөн гэдэс: Байрлал</p>
                            <Checkbox.Group value={formData?.q54} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q54-1'}>
@@ -870,7 +872,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q56-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Цутгалан гэдэс: Байрлал</p>
                            <Checkbox.Group value={formData?.q57} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q57-1'}>
@@ -898,7 +900,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={4}>Элэг цөс, дэлүү</th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="child">
                            <p>Элэгний шинж тэмдгүүд:</p>
                            <Checkbox.Group value={formData?.q60} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q60-1'}>
@@ -932,7 +934,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q60-9'}>Элэгний бага шинж</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Элэгний хэмжээ тэмтрэлтээр:</p>
                            <Checkbox.Group value={formData?.q63} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q63-1'}>
@@ -955,7 +957,7 @@ const CT1Dotor = (props) => {
                               </span>
                            </p>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Дэлүүний хэмжээ тэмтрэлтээр:</p>
                            <Checkbox.Group value={formData?.q64} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q64-1'}>
@@ -993,7 +995,7 @@ const CT1Dotor = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
+                        <th id="child"> 
                            <p>Хоногийн шээсний гарц:</p>
                            <Checkbox.Group value={formData?.q65} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q65-1'}>
@@ -1003,7 +1005,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q65-3'}>Багассан</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th className="w-[110px]">
+                        <th className="w-[110px]" id="child">
                            <p>Шээсний өнгө:</p>
                            <Checkbox.Group value={formData?.q66} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q66-1'}>
@@ -1021,7 +1023,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q66-5'}>Тундасгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th className="w-[140px]">
+                        <th className="w-[140px]" id="child">
                            <p>Шөнө шээдэг эсэх:</p>
                            <Checkbox.Group value={formData?.q67} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q67-2'}>
@@ -1049,7 +1051,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q69-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th className="w-[150px]">
+                        <th className="w-[150px]" id="child">
                            <p>Дүлж шээдэг эсэх:</p>
                            <Checkbox.Group value={formData?.q70} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q70-1'}>
@@ -1065,7 +1067,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q71-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child"> 
                            <p>Бөөр тэмтрэлтээр:</p>
                            <Checkbox.Group value={formData?.q72} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q72-2'}>
@@ -1111,7 +1113,7 @@ const CT1Dotor = (props) => {
                         <th colSpan={3}>Мэдрэлийн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-64">
+                        <th className="w-64" id="child">
                            <p>Үнэрлэх мэдрэмж:</p>
                            <Checkbox.Group value={formData?.q74} className="ml-0">
                               <Checkbox className="ml-2" value={'q74-1'}>
@@ -1129,7 +1131,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q75-3'}>Буурсан</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Нүүрний 2 тал:</p>
                            <Checkbox.Group value={formData?.q76} className="ml-0">
                               <Checkbox className="ml-2 w-full" value={'q76-1'}>
@@ -1145,7 +1147,7 @@ const CT1Dotor = (props) => {
                               <Checkbox value={'q77-2'}>Хадгалагдаагүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>
+                        <th id="child">
                            <p>Мэдрэхүй:</p>
                            <div className="inline-flex">
                               <div>
@@ -1182,13 +1184,13 @@ const CT1Dotor = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th colSpan={3}>
+                        <th colSpan={3} id="child">
                            <p>Сэтгэцийн байдал:</p>
                            <p>{formData?.q81}</p>
                         </th>
                      </tr>
                      <tr>
-                        <th colSpan={3}>
+                        <th colSpan={3} id="child">
                            <p>Бусад: (Арьс, үе мөч, тунгалагийн тогтолцоо)</p>
                            <p>{formData?.q82}</p>
                         </th>

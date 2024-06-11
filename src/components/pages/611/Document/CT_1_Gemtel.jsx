@@ -71,8 +71,7 @@ const CT_1_Gemtel = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]">
-                           {' '}
+                        <th className="w-[220px]" id="child">
                            Амьсгал 1 минутанд
                            <Input
                               className="amaraInput w-10 mb-2"
@@ -125,18 +124,20 @@ const CT_1_Gemtel = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           Судасны цохилт 1 минутанд
-                           <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
+                        <th id="child">
+                           <p>
+                              Судасны цохилт 1 минутанд
+                              <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
+                              удаа
+                           </p>
+                           <p>
                               Хүчдэл дүүрэлт
                               <Input className="amaraInput w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
-                           </th>
+                           </p>
                         </th>
                         <th>
-                           <th>Тогшилтоор:</th>
-                           Зүрхний хил
+                           <p>Тогшилтоор:</p>
+                           <p id="child"> Зүрхний хил</p>
                            <Checkbox.Group value={formData?.q8}>
                               <Checkbox value={'q8-1'} className="ml-2">
                                  Хэвийн
@@ -163,8 +164,8 @@ const CT_1_Gemtel = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
-                           Зүрхний авиа
+                           <p>Чагналтаар::</p>
+                           <p id="child">Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q9}>
                               <Checkbox value={'q9-1'} className="ml-2">
                                  Тод
@@ -175,12 +176,11 @@ const CT_1_Gemtel = (props) => {
                               <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="child">
                               АД баруун талд
                               <Input className="amaraInput w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
-                              /
                            </th>
-                           <th>
+                           <th id="child">
                               Зүүн талд
                               <Input className="amaraInput w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
                            </th>
@@ -238,11 +238,11 @@ const CT_1_Gemtel = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           <p> Сонсох чадвахи:</p>
+                           <p id="child"> Сонсох чадвахи:</p>
                            <Checkbox.Group value={formData?.q14}>
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>
-                                 <p className='flex items-center gap-2'>
+                                 <p className="flex items-center gap-2">
                                     <p> Буурсан</p>
                                     <span className="text-[11px]">
                                        (
@@ -263,7 +263,7 @@ const CT_1_Gemtel = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <p>Рефлексүүд</p>
+                           <p id="child">Рефлексүүд</p>
                            <Checkbox.Group value={formData?.q15}>
                               <Checkbox value={'q15-1'}>Хадгалагдана</Checkbox>
                               <Checkbox value={'q15-2'}>Хадгалагдахгүй</Checkbox>
@@ -275,21 +275,23 @@ const CT_1_Gemtel = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th className="w-full">
+                        <th id="child">
+                           <p className="w-full">
                               Бусад
                               <Input
-                                 className="amaraInput w-[670px] mb-3"
+                                 className="amaraInput w-[670px] mb-1"
                                  value={formData?.q16}
                                  style={{ textAlign: 'center' }}
                               />
-                           </th>
-                           Сэтгэцийн байдал:
-                           <Input
-                              className="amaraInput w-[600px] mb-1"
-                              value={formData?.q17}
-                              style={{ textAlign: 'center' }}
-                           />
+                           </p>
+                           <p>
+                              Сэтгэцийн байдал:
+                              <Input
+                                 className="amaraInput w-[600px] mb-1"
+                                 value={formData?.q17}
+                                 style={{ textAlign: 'center' }}
+                              />
+                           </p>
                         </th>
                      </tr>
                   </thead>
@@ -313,25 +315,89 @@ const CT_1_Gemtel = (props) => {
                               <div></div>
                               <div></div>
                            </div>
-                           <div> Амьсгалын зам чөлөөтэй</div>
+                           <div id="child"> Амьсгалын зам чөлөөтэй</div>
                            <div className="flex gap-10 ">
-                              <div>Амьсгалж байгаа байдал</div>
+                              <div id="child">Амьсгалж байгаа байдал</div>
                            </div>
-                           <div> Эрүү нүүрний гэмтэл </div>
-                           <div> Эмчилгээ:</div>
-                           <div className="mt-6"> Хүзүү, нурууны үнэлгээ:</div>
-                           <div className="mt-6"> Хүзүү нурууны хөдөлгөөн хорих</div>
+                           <div id="child"> Эрүү нүүрний гэмтэл </div>
+                           <div id="child" className="flex ml-0 items-center">
+                              <p>Эмчилгээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q29}`}</p>
+                           </div>
+                           <div className="mt-6 ml-1 flex items-center">
+                              <p id="cls"> Хүзүү, нурууны үнэлгээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q29}`}</p>
+                           </div>
+                           <div className="mt-6" id="child">
+                              Хүзүү нурууны хөдөлгөөн хорих
+                           </div>
                         </th>
-                        <th className="w-[45%] border-l-0">
+                        <th className="w-[45%] border-l-0 ">
                            <div>
                               <div></div>
                               <div></div>
                            </div>
                            <div>
-                              <div> Тийм/үгүй</div>
-                              <div> Тийм/үгүй</div>
-                              <div> Тийм/үгүй</div>
-                              <div className="mt-20"> Тийм/үгүй</div>
+                              <div id="cls" className="mt-0">
+                                 <p>
+                                    <span className="text-[11px] ">
+                                       <Checkbox.Group value={formData?.['q18']} className="inline">
+                                          <Checkbox className="test " value={'q18-1'}>
+                                             <span className="text-[11px]">Тийм/</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                          <Checkbox className="ml-0 test" value={'q18-2'}>
+                                             <span className="text-[11px]">үгүй</span>
+                                          </Checkbox>
+                                          &nbsp;
+                                       </Checkbox.Group>
+                                    </span>
+                                 </p>
+                              </div>
+                              <div id="cls">
+                                 {' '}
+                                 <span className="text-[11px]">
+                                    <Checkbox.Group value={formData?.['q19']} className="inline">
+                                       <Checkbox className="test" value={'q19-1'}>
+                                          <span className="text-[11px]">Тийм/</span>
+                                       </Checkbox>
+                                       &nbsp;
+                                       <Checkbox className="ml-0 test" value={'q19-2'}>
+                                          <span className="text-[11px]">үгүй</span>
+                                       </Checkbox>
+                                       &nbsp;
+                                    </Checkbox.Group>
+                                 </span>
+                              </div>
+                              <div id="cls">
+                                 {' '}
+                                 <span className="text-[11px]">
+                                    <Checkbox.Group value={formData?.['q20']} className="inline">
+                                       <Checkbox className="test" value={'q20-1'}>
+                                          <span className="text-[11px]">Тийм/</span>
+                                       </Checkbox>
+                                       &nbsp;
+                                       <Checkbox className="ml-0 test" value={'q20-2'}>
+                                          <span className="text-[11px]">үгүй</span>
+                                       </Checkbox>
+                                       &nbsp;
+                                    </Checkbox.Group>
+                                 </span>
+                              </div>
+                              <div id="cls" className="mt-20">
+                                 <span className="text-[11px]">
+                                    <Checkbox.Group value={formData?.['q23']} className="inline">
+                                       <Checkbox className="test" value={'q23-1'}>
+                                          <span className="text-[11px]">Тийм/</span>
+                                       </Checkbox>
+                                       &nbsp;
+                                       <Checkbox className="ml-0 test" value={'q23-2'}>
+                                          <span className="text-[11px]">үгүй</span>
+                                       </Checkbox>
+                                       &nbsp;
+                                    </Checkbox.Group>
+                                 </span>
+                              </div>
                            </div>
                         </th>
                      </tr>
@@ -346,34 +412,62 @@ const CT_1_Gemtel = (props) => {
                         </th>
                      </tr>
                      <tr>
-                        <th rowSpan={4}></th>
-                        <th>Амьсгал</th>
-                        <th>Тусламжтай</th>
-                        <th>Өөрөө</th>
-                        <th></th>
-                        <th>Амьсгалын аппарат </th>
-                        <th>Тийм/үгүй</th>
+                        <th id="child" rowSpan={4}></th>
+                        <th id="child">Амьсгал</th>
+                        <th id="child">Тусламжтай</th>
+                        <th id="child">Өөрөө</th>
+                        <th id="child"></th>
+                        <th id="child">Амьсгалын аппарат </th>
+                        <th id="child">
+                           <span className="text-[11px]">
+                              <Checkbox.Group value={formData?.q25} className="inline">
+                                 <Checkbox className="test" value={'q25-1'}>
+                                    <span className="text-[11px]">Тийм/</span>
+                                 </Checkbox>
+                                 &nbsp;
+                                 <Checkbox className="ml-0 test" value={'q25-2'}>
+                                    <span className="text-[11px]">үгүй</span>
+                                 </Checkbox>
+                                 &nbsp;
+                              </Checkbox.Group>
+                           </span>
+                        </th>
                      </tr>
                      <tr>
-                        <th>Цээж рүү нэвтэрсэн гэмтэл</th>
+                        <th id="child">Цээж рүү нэвтэрсэн гэмтэл</th>
                         <th colSpan={2}>
-                           <Checkbox.Group>
-                              <Checkbox>Тийм</Checkbox>
-                              <Checkbox>Үгүй</Checkbox>
+                           <Checkbox.Group value={formData?.q24}>
+                              <Checkbox value={'q24-1'}>Тийм</Checkbox>
+                              <Checkbox value={'q24-2'}>Үгүй</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th></th>
-                        <th colSpan={2}>Хэмжээ:</th>
+                        <th id="child"></th>
+                        <th id="child" colSpan={2}>
+                           <div className="flex items-center">
+                              <p>Хэмжээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q30}`}</p>
+                           </div>
+                        </th>
                      </tr>
                      <tr className="h-16">
-                        <th colSpan={3}>Үзлэг:</th>
-                        <th></th>
-                        <th colSpan={4}></th>
+                        <th id="child" colSpan={3}>
+                           <div className="flex items-center ">
+                              <p>Үзлэг:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q29}`}</p>
+                           </div>
+                        </th>
+                        <th id="child"></th>
+                        <th id="child" colSpan={4}></th>
                      </tr>
                      <tr className="h-16">
-                        <th colSpan={3}>Эмчилгээ:</th>
-                        <th></th>
-                        <th colSpan={4}></th>
+                        <th id="child" colSpan={3}>
+                           <div className="flex items-center">
+                              <p>Эмчилгээ:</p>
+                              <p className="ml-4 underline " id="cls">{` ${formData?.q31}`}</p>
+                           </div>
+                        </th>
+                        <th id="child"></th>
+                        <th id="child" colSpan={4}></th>
                      </tr>
                   </thead>
                </Table>
@@ -391,35 +485,47 @@ const CT_1_Gemtel = (props) => {
                            </th>
                         </tr>
                         <tr>
-                           <th rowSpan={8}></th>
-                           <th colSpan={4}>Судасны лугшилт </th>
+                           <th id="child" rowSpan={8}></th>
+                           <th id="child" colSpan={4}>
+                              Судасны лугшилт{' '}
+                           </th>
                         </tr>
                         <tr>
-                           <th colSpan={4}>Цусны даралт </th>
+                           <th colSpan={4} id="child">
+                              Цусны даралт{' '}
+                           </th>
                         </tr>
                         <tr>
-                           <th colSpan={4}>Амьсгалын хэмжээ </th>
+                           <th colSpan={4} id="child">
+                              Амьсгалын хэмжээ{' '}
+                           </th>
                         </tr>
                         <tr>
-                           <th>Амьсгалын байдал</th>
-                           <th>Хэвийн</th>
-                           <th>Өнгөц</th>
-                           <th>Тасалданг</th>
+                           <th id="child">Амьсгалын байдал</th>
+                           <th id="child">Хэвийн</th>
+                           <th id="child">Өнгөц</th>
+                           <th id="child">Тасалданг</th>
                         </tr>
                         <tr>
-                           <th>Калиллярын дүүрэх хугацаа </th>
-                           <th>{data}</th>
-                           <th>{data2}</th>
-                           <th>байхгүй</th>
+                           <th id="child">Калиллярын дүүрэх хугацаа </th>
+                           <th id="child">{data}</th>
+                           <th id="child">{data2}</th>
+                           <th id="child">байхгүй</th>
                         </tr>
                         <tr>
-                           <th colSpan={4}>Температур</th>
+                           <th id="child" colSpan={4}>
+                              Температур
+                           </th>
                         </tr>
                         <tr>
-                           <th colSpan={4}>Мөчний хэлбэр алдагдсан </th>
+                           <th id="child" colSpan={4}>
+                              Мөчний хэлбэр алдагдсан{' '}
+                           </th>
                         </tr>
                         <tr>
-                           <th colSpan={4}>Гадагш цус алдалт</th>
+                           <th id="child" colSpan={4}>
+                              Гадагш цус алдалт
+                           </th>
                         </tr>
                      </thead>
                   </Table>
@@ -431,18 +537,26 @@ const CT_1_Gemtel = (props) => {
                            </th>
                         </tr>
                         <tr>
-                           <th colSpan={2}>Глазго-ийн кома </th>
+                           <th id="child" colSpan={2}>
+                              Глазго-ийн кома{' '}
+                           </th>
                         </tr>
                         <tr>
-                           <th colSpan={2}> шаталбар</th>
+                           <th id="child" colSpan={2}>
+                              {' '}
+                              шаталбар
+                           </th>
                         </tr>
                         <tr>
-                           <th colSpan={2} className="h-6">
+                           <th id="child" colSpan={2} className="h-6">
                               {' '}
                            </th>
                         </tr>
                         <tr>
-                           <th colSpan={2}> GCS _____ /15</th>
+                           <th colSpan={2} id="child">
+                              {' '}
+                              GCS _____ /15
+                           </th>
                         </tr>
                         <tr>
                            <th colSpan={2} className=" bg-neutral-300">
@@ -450,16 +564,16 @@ const CT_1_Gemtel = (props) => {
                            </th>
                         </tr>
                         <tr>
-                           <th>Баруун</th>
-                           <th>Зүүн</th>
+                           <th id="child">Баруун</th>
+                           <th id="child">Зүүн</th>
                         </tr>
                         <tr>
-                           <th>Хэмжээ</th>
-                           <th>Хэмжээ</th>
+                           <th id="child">Хэмжээ</th>
+                           <th id="child">Хэмжээ</th>
                         </tr>
                         <tr>
-                           <th>Хариу урвал</th>
-                           <th>Хариу урвал</th>
+                           <th id="child">Хариу урвал</th>
+                           <th id="child">Хариу урвал</th>
                         </tr>
                         <tr className="h-8" colSpan={2}>
                            <th colSpan={2}></th>
@@ -470,15 +584,21 @@ const CT_1_Gemtel = (props) => {
                      <div className="border-1 border-slate-950 text-center bg-neutral-300">
                         Глазго-ийн ком/шаталбар /оноо/
                      </div>
-                     <div className="flex text-[11px] font-family:Arial, Helvetica, sans-serif font-[500] h-[72.32px] ">
+                     <div className="flex text-[11px] font-family:Arial, Helvetica, sans-serif font-light h-[72.32px] ">
                         <div className="border-1  border-t-0 border-slate-950 relative flex items-center justify-center w-[30px] text-[11px] font-semibold  font-family: Arial,Helvetica, san-serif ">
                            <div className="-rotate-90 whitespace-nowrap h-fit ">Нүд нээх</div>
                         </div>
                         <div className="border-1 border-slate-950 border-t-0 border-l-0 text-[11px] font-semibold  font-family: Ari`al,Helvetica, san-serif w-[130px]">
-                           <div>Аяндаа</div>
-                           <div className="border-t-[1px] border-slate-950">Ярихад </div>
-                           <div className="border-t-[1px] border-slate-950">Өвтгөхөд </div>
-                           <div className="border-t-[1px] border-slate-950">Зүүгээр хатгахад </div>
+                           <div id="cls">Аяндаа</div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Ярихад{' '}
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Өвтгөхөд{' '}
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Зүүгээр хатгахад{' '}
+                           </div>
                         </div>
                         <div>
                            <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[18px] border-t-0">4</div>
@@ -492,18 +612,26 @@ const CT_1_Gemtel = (props) => {
                            <div className="-rotate-90 whitespace-nowrap h-fit ">Хэл яриа</div>
                         </div>
                         <div className="border-1 border-slate-950 border-t-0 border-l-0 text-[11px] font-semibold  font-family: Ari`al,Helvetica, san-serif w-[130px]">
-                           <div>Орон зай хугацааны баримжаатай</div>
-                           <div className="border-t-[1px] border-slate-950">Ойлгомжтой гэхдээ будилсан </div>
-                           <div className="border-t-[1px] border-slate-950">Тохироогүй үг хэлэх</div>
-                           <div className="border-t-[1px] border-slate-950">Ойлгомжгүй авиа гаргах </div>
-                           <div className="border-t-[1px] border-slate-950">Ярихгүй, дуу гаргахгүй </div>
+                           <div id="cls">Орон зай хугацааны баримжаатай</div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Ойлгомжтой гэхдээ будилсан{' '}
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Тохироогүй үг хэлэх
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Ойлгомжгүй авиа гаргах{' '}
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Ярихгүй, дуу гаргахгүй{' '}
+                           </div>
                         </div>
                         <div>
                            <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[34.85px] border-t-0">5</div>
                            <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.55px] border-t-0">4</div>
                            <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[18.18px] border-t-0">3</div>
-                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.45px] border-t-0">2</div>
-                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[20.20px] border-t-0">1</div>
+                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[18.45px] border-t-0">2</div>
+                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[38.20px] border-t-0">1</div>
                         </div>
                      </div>
                   </div>
@@ -514,7 +642,7 @@ const CT_1_Gemtel = (props) => {
                         <tr>
                            <th colSpan={4}>
                               <div className="flex items-center gap-4 ml-4">
-                                 <p> ЯТТасагт хийсэн эмчилгээ:</p>
+                                 <p id="child"> ЯТТасагт хийсэн эмчилгээ:</p>
                                  <Checkbox.Group>
                                     <Checkbox>Тийм</Checkbox>
                                     <Checkbox> Үгүй</Checkbox>
@@ -572,22 +700,30 @@ const CT_1_Gemtel = (props) => {
                            <div className="-rotate-90 whitespace-nowrap h-fit ">Хөдөлгөөний хариу үйлдэл</div>
                         </div>
                         <div className="border-1 border-slate-950 border-t-0 border-l-0 text-[11px] font-semibold  font-family: Ari`al,Helvetica, san-serif w-[130px]">
-                           <div>Заавараар хөдөлгөөн хийх</div>
-                           <div className="border-t-[1px] border-slate-950">
+                           <div id="cls">Заавараар хөдөлгөөн хийх</div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
                               Өвтгөхөд цочруулд хэсэг газрын хөдөлгөөн хийх
                            </div>
-                           <div className="border-t-[1px] border-slate-950">Өвтгөхөд татганах хариу өгөх</div>
-                           <div className="border-t-[1px] border-slate-950">Өвтгөхөд атийх хариу өгөх</div>
-                           <div className="border-t-[1px] border-slate-950">Өтгөхөд тэнийх хариу өгөх</div>
-                           <div className="border-t-[1px] border-slate-950">Өвтгөхөд ямар ч хариу өгөхгүй</div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Өвтгөхөд татганах хариу өгөх
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Өвтгөхөд атийх хариу өгөх
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Өтгөхөд тэнийх хариу өгөх
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              Өвтгөхөд ямар ч хариу өгөхгүй
+                           </div>
                         </div>
                         <div>
                            <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35px] border-t-0">6</div>
-                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[52.63px] border-t-0">5</div>
+                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.83px] border-t-0">5</div>
                            <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.35px] border-t-0">4</div>
-                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.75px] border-t-0">3</div>
-                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.50px] border-t-0">2</div>
-                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.85px] border-t-0">1</div>
+                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.65px] border-t-0">3</div>
+                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[35.10px] border-t-0">2</div>
+                           <div className="border-1 border-slate-950 border-l-0 w-[20px] h-[53.15px] border-t-0">1</div>
                         </div>
                      </div>
                      <div className="flex">
@@ -595,9 +731,13 @@ const CT_1_Gemtel = (props) => {
                            <div className="-rotate-90 whitespace-nowrap h-fit">Оноо</div>
                         </div>
                         <div className="border-1 border-slate-950 border-l-0 w-full border-t-0">
-                           <div>13-15 хөнгөн</div>
-                           <div className="border-t-[1px] border-slate-950">9-12 дунд </div>
-                           <div className="border-t-[1px] border-slate-950">3-8 хүнд</div>
+                           <div id="cls">13-15 хөнгөн</div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              9-12 дунд{' '}
+                           </div>
+                           <div id="cls" className="border-t-[1px] border-slate-950">
+                              3-8 хүнд
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -617,13 +757,19 @@ const CT_1_Gemtel = (props) => {
                            <div className="text-center font-[500] ">Толгой, нүүр болон хүзүү</div>
                         </div>
                         <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[80px] justify-end">
-                           <div className="text-center text-[13px] font-[500] ml-2">Нүд:</div>
-                           <div className="text-center text-[13px] font-[500] ml-2">Чихний хэнгэрэг:</div>
+                           <div className="text-center text-[13px] font-[300] ml-2 flex items-center">
+                              <p>Нүд:</p>
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q32}`}</p>
+                           </div>
+                           <div className="text-center text-[13px] font-[300] ml-2 flex items-center">
+                              <p>Чихний хэнгэрэг:</p>
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q33}`}</p>
+                           </div>
                         </div>
                      </div>
                      <div>
                         <div className="w-[300px] bg-neutral-300  border-1 border-slate-950">
-                           <div className="text-center font-[500] ">Цээж:</div>
+                           <div className="text-center font-[500] flex ">Цээж</div>
                         </div>
                         <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[80px] justify-end">
                            <Image src={ChestImg} alt="" width={120} />
@@ -631,11 +777,14 @@ const CT_1_Gemtel = (props) => {
                      </div>
                      <div>
                         <div className="w-[300px] bg-neutral-300  border-1 border-slate-950">
-                           <div className="text-center  font-[500]">Хэвлий:</div>
+                           <div className="text-center  font-[500]">Хэвлий</div>
                         </div>
-                        <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[110px] justify-end">
-                           <Image src={AbdomenImg} alt="" width={120} />
-                           <div className="text-center text-[13px] font-[500] ml-2 ">Шээсний зам:</div>
+                        <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[100px] justify-end">
+                           <Image src={AbdomenImg} alt="" width={100} />
+                           <div className="text-center text-[13px] font-[300] ml-2 flex items-center ">
+                              <p>Шээсний зам:</p>
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q34}`}</p>
+                           </div>
                         </div>
                      </div>
                      <div>
@@ -643,7 +792,9 @@ const CT_1_Gemtel = (props) => {
                            <div className="text-center font-[500]">Аарцаг</div>
                         </div>
                         <div className="w-[300px] flex flex-col items-start border-1 border-t-0 border-slate-950 h-[25px] ">
-                           <div className="text-center"></div>
+                           <div className="text-center">
+                              <p className="ml-2 underline " id="cls">{` ${formData?.q35}`}</p>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -659,11 +810,11 @@ const CT_1_Gemtel = (props) => {
                   <div className="flex flex-col gap-5">
                      <div>
                         <div className="w-[300px] flex flex-col items-start border-1  border-slate-950 h-[120px] justify-end">
-                           <div className=" text-[13px] font-[500] ml-2">Хярзан</div>
-                           <div className=" text-[13px] font-[500] ml-2">Шээсний сүв</div>
-                           <div className=" text-[13px] font-[500] ml-2">Шулуун гэдэсний үзлэг</div>
-                           <div className=" text-[13px] font-[500] ml-2">Бүдүүн гэдэсний реплекс </div>
-                           <div className=" text-[13px] font-[500] ml-2">Үтрээний үзлэг</div>
+                           <div className=" text-[13px] font-[300] ml-2">Хярзан</div>
+                           <div className=" text-[13px] font-[300] ml-2">Шээсний сүв</div>
+                           <div className=" text-[13px] font-[300] ml-2">Шулуун гэдэсний үзлэг</div>
+                           <div className=" text-[13px] font-[300] ml-2">Бүдүүн гэдэсний реплекс </div>
+                           <div className=" text-[13px] font-[300] ml-2">Үтрээний үзлэг</div>
                         </div>
                      </div>
                      <div>
@@ -690,28 +841,28 @@ const CT_1_Gemtel = (props) => {
                               </th>
                            </tr>
                            <tr>
-                              <th>Biceps </th>
-                              <th></th>
+                              <th id="cls">Biceps </th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th>Triceps</th>
-                              <th></th>
+                              <th id="cls">Triceps</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th>Supinator</th>
-                              <th></th>
+                              <th id="cls">Supinator</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th>Knee</th>
-                              <th></th>
+                              <th id="cls">Knee</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th>Ankle</th>
-                              <th></th>
+                              <th id="cls">Ankle</th>
+                              <th id="cls"></th>
                            </tr>
                            <tr>
-                              <th>Plantar</th>
-                              <th></th>
+                              <th id="cls">Plantar</th>
+                              <th id="cls"></th>
                            </tr>
                         </thead>
                      </Table>
@@ -729,14 +880,14 @@ const CT_1_Gemtel = (props) => {
                      <Table bordered className="story w-[300px]">
                         <thead>
                            <tr className="border-t-0">
-                              <th>
+                              <th id="cls">
                                  <p>Ясны гэмтэл</p>
                                  <p>Үений гэмтэл</p>
                                  <p>Судасны лугшилт</p>
                                  <p>Хүч</p>
                                  <p>Тонус</p>
                               </th>
-                              <th>
+                              <th id="cls">
                                  <p>Ясны гэмтэл</p>
                                  <p>Үений гэмтэл</p>
                                  <p>Судасны лугшилт</p>
@@ -757,44 +908,44 @@ const CT_1_Gemtel = (props) => {
                      </Table>
                      <Table bordered className="story w-[300px]">
                         <thead>
-                           <tr className="border-t-0">
+                           <tr className="border-t-0" id="cls">
                               <th>
-                                 <p>Ясны гэмтэл</p>
+                                 <p id="cls">Ясны гэмтэл</p>
                               </th>
                               <th>
-                                 <p>Ясны гэмтэл</p>
-                              </th>
-                           </tr>
-                           <tr>
-                              <th>
-                                 <p>Үений гэмтэл</p>
-                              </th>
-                              <th>
-                                 <p>Үений гэмтэл</p>
+                                 <p id="cls">Ясны гэмтэл</p>
                               </th>
                            </tr>
                            <tr>
                               <th>
-                                 <p>Судасны лугшилт</p>
+                                 <p id="cls">Үений гэмтэл</p>
                               </th>
                               <th>
-                                 <p>Судасны лугшилт</p>
-                              </th>
-                           </tr>
-                           <tr>
-                              <th>
-                                 <p>Хүч</p>
-                              </th>
-                              <th>
-                                 <p>Хүч</p>
+                                 <p id="cls">Үений гэмтэл</p>
                               </th>
                            </tr>
                            <tr>
                               <th>
-                                 <p>Тонус</p>
+                                 <p id="cls">Судасны лугшилт</p>
                               </th>
                               <th>
-                                 <p>Тонус</p>
+                                 <p id="cls">Судасны лугшилт</p>
+                              </th>
+                           </tr>
+                           <tr>
+                              <th>
+                                 <p id="cls">Хүч</p>
+                              </th>
+                              <th>
+                                 <p id="cls">Хүч</p>
+                              </th>
+                           </tr>
+                           <tr>
+                              <th>
+                                 <p id="cls">Тонус</p>
+                              </th>
+                              <th>
+                                 <p id="cls">Тонус</p>
                               </th>
                            </tr>
                         </thead>
@@ -813,28 +964,28 @@ const CT_1_Gemtel = (props) => {
                               </th>
                            </tr>
                            <tr>
-                              <th></th>
-                              <th>Biceps </th>
+                              <th id="cls"></th>
+                              <th id="cls">Biceps </th>
                            </tr>
                            <tr>
-                              <th></th>
-                              <th>Triceps</th>
+                              <th id="cls"></th>
+                              <th id="cls">Triceps</th>
                            </tr>
                            <tr>
-                              <th></th>
-                              <th>Supinator</th>
+                              <th id="cls"></th>
+                              <th id="cls">Supinator</th>
                            </tr>
                            <tr>
-                              <th></th>
-                              <th>Knee</th>
+                              <th id="cls"></th>
+                              <th id="cls">Knee</th>
                            </tr>
                            <tr>
-                              <th></th>
-                              <th>Ankle</th>
+                              <th id="cls"></th>
+                              <th id="cls">Ankle</th>
                            </tr>
                            <tr>
-                              <th></th>
-                              <th>Plantar</th>
+                              <th id="cls"></th>
+                              <th id="cls">Plantar</th>
                            </tr>
                         </thead>
                      </Table>
